@@ -156,9 +156,10 @@ const Index = () => {
       const yyyyMMDD = monday.toISOString().split("T")[0];
       setStudentData({
         language: "Telugu",
+        status: "registered",
         free_batch_start_date: yyyyMMDD,
         attendance: ["present", "present", "present"],
-        session_link: "https://www.youtube.com/c/Healthyday",
+        free_class_join_link: "https://www.youtube.com/c/Healthyday",
         referral_link: "healthyday.app/ref=preview123",
       });
       setAuthenticated(true);
@@ -172,9 +173,10 @@ const Index = () => {
       const yyyyMMDD = sixDaysAgo.toISOString().split("T")[0];
       setStudentData({
         language: "Telugu",
+        status: "registered",
         free_batch_start_date: yyyyMMDD,
         attendance: ["present", "present", "present", "present", "present", "present"],
-        session_link: "https://www.youtube.com/c/Healthyday",
+        free_class_join_link: "https://www.youtube.com/c/Healthyday",
         referral_link: "healthyday.app/ref=preview123",
       });
       setAuthenticated(true);
@@ -182,16 +184,36 @@ const Index = () => {
       return;
     }
     if (previewMode === "completed") {
-      setStudentData({ language: "Telugu", status: "14DaysCompleted" });
+      setStudentData({ language: "Telugu", status: "14 day completed" });
       setAuthenticated(true);
       setLoading(false);
       return;
     }
     if (previewMode === "onboarding") {
-      setStudentData({ language: "Telugu", free_batch_start_date: "2026-03-16" });
+      setStudentData({ language: "Telugu", status: "registered" });
       setAuthenticated(true);
       setLoading(false);
       return;
+    }
+    // ?preview=day1 … day14 — preview a specific batch day
+    if (previewMode && previewMode.startsWith("day")) {
+      const dayNum = Number(previewMode.slice(3));
+      if (dayNum >= 1 && dayNum <= 14) {
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - (dayNum - 1));
+        const yyyyMMDD = startDate.toISOString().split("T")[0];
+        setStudentData({
+          language: "Telugu",
+          status: "registered",
+          free_batch_start_date: yyyyMMDD,
+          attendance: Array(dayNum - 1).fill("present"),
+          free_class_join_link: "https://www.youtube.com/c/Healthyday",
+          referral_link: "healthyday.app/ref=preview123",
+        });
+        setAuthenticated(true);
+        setLoading(false);
+        return;
+      }
     }
     // ── NORMAL FLOW ───────────────────────────────────────────
     if (!mobile) {
@@ -239,7 +261,7 @@ const Index = () => {
     };
 
     fetchStudentData();
-  }, [mobile]);
+  }, [mobile, previewMode]);
 
   // --- Loading Screen ---
   if (loading) {
@@ -409,9 +431,10 @@ const Index = () => {
   };
 
   const batchInfo = getActiveBatchInfo(studentData?.free_batch_start_date);
+  const hasBatchAccess = studentData?.status === "registered" && batchInfo.isActive && !!studentData?.free_class_join_link;
 
   // --- Active Batch Dashboard (Week 1 or Week 2) ---
-  if (batchInfo.isActive) {
+  if (hasBatchAccess) {
     const { currentDay, week, dateRangeLabel } = batchInfo;
     const attendance: string[] = studentData?.attendance ?? [];
 
@@ -425,7 +448,7 @@ const Index = () => {
       return "green"; // present or assumed attended
     });
 
-    const sessionLink = studentData?.session_link ?? "https://www.youtube.com/c/Healthyday";
+    const sessionLink = studentData?.free_class_join_link ?? "https://www.youtube.com/c/Healthyday";
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
 
     const shareLink = mobile ? `https://healthyday.co.in/free-programmes?ref=91${mobile}` : referralLink;
@@ -458,31 +481,40 @@ const Index = () => {
       </div>
     );
 
-    // --- Sunday Special Bonus Session (Day 7 = Sunday of Week 1) ---
-    if (currentDay === 7) {
-      // Determine live state using IST time (UTC+5:30)
+    // --- Bonus Session Days (3, 5, 7, 10, 14) ---
+    const BONUS_DAYS = [3, 5, 7, 10, 14];
+    if (BONUS_DAYS.includes(currentDay)) {
+      const lang = studentData?.language === "English" ? "English" : "Telugu";
+      type BonusInfo = { name: string; fullName: string; startMin: number; videoId: string };
+      const bonusByDay: Record<number, Record<string, BonusInfo>> = {
+        3: {
+          Telugu: { name: "Telugu Face Yoga Session", fullName: "Telugu Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8" },
+          English: { name: "English Face Yoga Session", fullName: "English Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8" },
+        },
+        5: {
+          Telugu: { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "raCc7Z31LYw" },
+          English: { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "u1Hom0s7ibU" },
+        },
+        7: {
+          Telugu: { name: "Telugu Weight Loss Session", fullName: "Telugu Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8" },
+          English: { name: "English Weight Loss Session", fullName: "English Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8" },
+        },
+        10: {
+          Telugu: { name: "Telugu Breath Work Session", fullName: "Telugu Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8" },
+          English: { name: "English Breath Work Session", fullName: "English Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8" },
+        },
+        14: {
+          Telugu: { name: "Telugu Sleep Session", fullName: "Telugu Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8" },
+          English: { name: "English Sleep Session", fullName: "English Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8" },
+        },
+      };
+      const bonusSession = bonusByDay[currentDay][lang];
       const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
-      const istH = nowIST.getUTCHours();
-      const istM = nowIST.getUTCMinutes();
-      const totalMin = istH * 60 + istM;
-
-      const WL_START = 10 * 60 + 30;  // 10:30 AM
-      const WL_END = 12 * 60 + 30;  // 12:30 PM
-      const FY_START = 20 * 60 + 30;  // 8:30 PM
-      const FY_END = 22 * 60 + 30;  // 10:30 PM
-
-      const showFaceYoga = totalMin >= 16 * 60 + 30; // After 4:30 PM → switch to FY
-      const isWLLive = totalMin >= WL_START && totalMin < WL_END;
-      const isFYLive = totalMin >= FY_START && totalMin < FY_END;
-      const isLive = showFaceYoga ? isFYLive : isWLLive;
-
-      const sundaySession = showFaceYoga
-        ? { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", videoId: "SyjnCjDtNS8" }
-        : { name: "Weight Loss Orientation", fullName: "Weight Loss Orientation at 10:30 AM", videoId: "SyjnCjDtNS8" };
-
-      const nextSession = showFaceYoga
-        ? { when: "tomorrow at 5:30 AM", times: "5:30 AM  |  6:30 AM  |  7:30 AM  |  8:30 AM" }
-        : { when: "at 4:30 PM", times: "4:30 PM  |  5:30 PM  |  6:30 PM" };
+      const totalMin = nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
+      const isLive = totalMin >= bonusSession.startMin && totalMin < bonusSession.startMin + 30;
+      const isAMSession = bonusSession.startMin < 12 * 60;
+      const nextSlots = isAMSession ? ["4:30 PM", "5:30 PM", "6:30 PM"] : ["5:30 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
+      const nextWhen = isAMSession ? "at 4:30 PM" : "tomorrow at 5:30 AM";
 
       return (
         <div className="mx-auto w-[412px] min-h-screen bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
@@ -492,11 +524,11 @@ const Index = () => {
             <img src={logo} alt="Healthyday" className="h-7" />
           </header>
 
-          {/* Sunday Special Bonus Session */}
+          {/* Bonus Special Session */}
           <div style={{ padding: "24px 20px 0" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
               <h2 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>
-                Sunday Special Bonus Session
+                Bonus Special Session
               </h2>
               {isLive && (
                 <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
@@ -506,13 +538,12 @@ const Index = () => {
               )}
             </div>
 
-            {/* Video thumbnail + session label */}
             {isLive ? (
               <>
                 <div style={{ width: "372px", borderRadius: "12px", overflow: "hidden", background: "#000", position: "relative", marginBottom: "12px" }}>
                   <img
-                    src={`https://img.youtube.com/vi/${sundaySession.videoId}/maxresdefault.jpg`}
-                    alt={sundaySession.name}
+                    src={`https://img.youtube.com/vi/${bonusSession.videoId}/maxresdefault.jpg`}
+                    alt={bonusSession.name}
                     style={{ width: "372px", height: "204px", objectFit: "cover", opacity: 0.85, display: "block" }}
                   />
                   <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -521,7 +552,7 @@ const Index = () => {
                 </div>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
                   <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>
-                    {sundaySession.name}
+                    {bonusSession.name}
                   </span>
                   <a
                     href={sessionLink}
@@ -543,102 +574,71 @@ const Index = () => {
               </>
             ) : (
               <div style={{ marginBottom: "16px" }}>
-                {/* Video with flat bottom corners to connect with bar */}
                 <div style={{ width: "360px", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
                   <img
-                    src={`https://img.youtube.com/vi/${sundaySession.videoId}/maxresdefault.jpg`}
-                    alt={sundaySession.name}
+                    src={`https://img.youtube.com/vi/${bonusSession.videoId}/maxresdefault.jpg`}
+                    alt={bonusSession.name}
                     style={{ width: "360px", height: "197px", objectFit: "cover", opacity: 0.85, display: "block" }}
                   />
                   <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <PlayButton />
                   </div>
                 </div>
-                {/* Session name bar — attaches to video bottom */}
                 <div style={{
-                  width: "360px",
-                  height: "58px",
+                  width: "360px", height: "58px",
                   borderRadius: "0 0 12px 12px",
-                  border: "1.5px solid #E9E9E9",
-                  background: "#FFF",
+                  border: "1.5px solid #E9E9E9", background: "#FFF",
                   boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
-                  display: "flex",
-                  alignItems: "center",
-                  paddingLeft: "16px",
-                  boxSizing: "border-box",
+                  display: "flex", alignItems: "center", paddingLeft: "16px", boxSizing: "border-box",
                 }}>
                   <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>
-                    {sundaySession.fullName}
+                    {bonusSession.fullName}
                   </span>
                 </div>
               </div>
             )}
 
             {/* Next regular session card */}
-            {(() => {
-              const sundaySlots = showFaceYoga
-                ? ["5:30 AM", "6:30 AM", "7:30 AM", "8:30 AM"]
-                : ["4:30 PM", "5:30 PM", "6:30 PM"];
-              return (
+            <div style={{
+              width: "358px", height: "206px", borderRadius: "12px",
+              border: "1.5px solid #D2D2D2", background: "#FFF",
+              boxShadow: "-1px -1px 4px 0 rgba(0,0,0,0.10), 1px 1px 4px 0 rgba(0,0,0,0.10)",
+              padding: "16px", display: "flex", flexDirection: "column", justifyContent: "space-between", boxSizing: "border-box",
+            }}>
+              <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
                 <div style={{
-                  width: "358px",
-                  height: "206px",
-                  borderRadius: "12px",
-                  border: "1.5px solid #D2D2D2",
-                  background: "#FFF",
-                  boxShadow: "-1px -1px 4px 0 rgba(0,0,0,0.10), 1px 1px 4px 0 rgba(0,0,0,0.10)",
-                  padding: "16px",
-                  display: "flex",
-                  flexDirection: "column",
-                  justifyContent: "space-between",
-                  boxSizing: "border-box",
-                }}>
-                  {/* Top row: image left, title + subtitle right */}
-                  <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
-                    {/* Instructor image — replace <path-to-image> with actual image URL */}
-                    <div style={{
-                      width: "82px",
-                      height: "81px",
-                      aspectRatio: "82/81",
-                      borderRadius: "50%",
-                      flexShrink: 0,
-                      background: "url(/8ea326ab563adb61ccb99b953865cb3132c173ab.png) lightgray -5.311px -5.747px / 112.404% 113.525% no-repeat",
-                    }} />
-                    <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                      <div style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal", width: "231.658px" }}>
-                        Next regular session is {nextSession.when}
-                      </div>
-                      <div style={{ color: "#7990AC", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "24px", width: "244px" }}>
-                        Open the link during live timings
-                      </div>
-                    </div>
+                  width: "82px", height: "81px", aspectRatio: "82/81", borderRadius: "50%", flexShrink: 0,
+                  background: "url(/8ea326ab563adb61ccb99b953865cb3132c173ab.png) lightgray -5.311px -5.747px / 112.404% 113.525% no-repeat",
+                }} />
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                  <div style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal", width: "231.658px" }}>
+                    Next regular session is {nextWhen}
                   </div>
-
-                  {/* Time slots — all yellow (all upcoming for Sunday) */}
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0" }}>
-                    {sundaySlots.map((label, idx) => (
-                      <span key={label} style={{ display: "flex", alignItems: "center" }}>
-                        {idx > 0 && <span style={{ color: "#CCCBCB", fontFamily: "Outfit", fontSize: "18px", fontWeight: 800, margin: "0 8px" }}>|</span>}
-                        <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "18px", fontWeight: 800, lineHeight: "normal", textAlign: "center" }}>{label}</span>
-                      </span>
-                    ))}
-                  </div>
-
-                  {/* Note */}
-                  <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px" }}>
-                    <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
-                      <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
-                      <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
-                      <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D" />
-                      <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    </svg>
-                    <span style={{ color: "#747474", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "22px", textAlign: "center", width: "289.656px" }}>
-                      Note: No recordings are available for FREE batch
-                    </span>
+                  <div style={{ color: "#7990AC", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "24px", width: "244px" }}>
+                    Open the link during live timings
                   </div>
                 </div>
-              );
-            })()}
+              </div>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0" }}>
+                {nextSlots.map((label, idx) => (
+                  <span key={label} style={{ display: "flex", alignItems: "center" }}>
+                    {idx > 0 && <span style={{ color: "#CCCBCB", fontFamily: "Outfit", fontSize: "18px", fontWeight: 800, margin: "0 8px" }}>|</span>}
+                    <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "18px", fontWeight: 800, lineHeight: "normal", textAlign: "center" }}>{label}</span>
+                  </span>
+                ))}
+              </div>
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px" }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
+                  <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
+                  <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
+                  <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D" />
+                  <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span style={{ color: "#747474", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "22px", textAlign: "center", width: "289.656px" }}>
+                  Note: No recordings are available for FREE batch
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* 14 Days Attendance */}
@@ -655,6 +655,13 @@ const Index = () => {
                   <DayBox key={i} status={status} dayLabel={`Day ${i + 1}`} />
                 ))}
               </div>
+              {week === 2 && (
+                <div style={{ display: "flex", justifyContent: "space-between", marginTop: "14px" }}>
+                  {dayStatus.slice(7, 14).map((status, i) => (
+                    <DayBox key={i} status={status} dayLabel={`Day ${i + 8}`} />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
 
@@ -1059,7 +1066,7 @@ const Index = () => {
   }
 
   // --- 14 Days Completed Page ---
-  if (studentData?.status === "14DaysCompleted") {
+  if (studentData?.status === "14 day completed") {
     const referralLink = "healthyday.app/ref=ggtujev58";
     const shareLink = mobile ? `https://healthyday.co.in/free-programmes?ref=91${mobile}` : referralLink;
 
@@ -1450,7 +1457,7 @@ const Index = () => {
     );
   }
 
-  // --- Dashboard (for Telugu and English users) ---
+  // --- Onboarding Section: status="registered", batch not yet active or join link not set ---
   if (!authenticated) return null;
 
   const userLanguage = studentData?.language || "Telugu";
@@ -1475,8 +1482,21 @@ const Index = () => {
       <div className="flex flex-col items-center mt-6 gap-3">
         {/* Title */}
         <h2 style={{ width: "370px", fontFamily: "Outfit", fontSize: "20px", fontStyle: "normal", fontWeight: 700, lineHeight: "normal", margin: 0 }}>
-          <span style={{ color: "#FEAB27" }}>Your 14 Days FREE Yoga Batch starts on </span>
-          <span style={{ color: "#0D468B" }}>March 2nd</span>
+          {(() => {
+            const d = studentData?.free_batch_start_date;
+            if (!d) {
+              return <span style={{ color: "#FEAB27" }}>Your Free Batch Now Started! Get ready for 14 Days FREE Yoga</span>;
+            }
+            const date = new Date(d);
+            const months = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+            const day = date.getDate();
+            const suffix = [1,21,31].includes(day) ? "st" : [2,22].includes(day) ? "nd" : [3,23].includes(day) ? "rd" : "th";
+            const label = `${months[date.getMonth()]} ${day}${suffix}`;
+            return <>
+              <span style={{ color: "#FEAB27" }}>Your 14 Days FREE Yoga Batch starts on </span>
+              <span style={{ color: "#0D468B" }}>{label}</span>
+            </>;
+          })()}
         </h2>
 
         {/* Morning Session Card */}
