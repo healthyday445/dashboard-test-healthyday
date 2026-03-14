@@ -1,0 +1,18 @@
+[build]
+  publish = "dist"
+  command = "npm run build"
+
+# Proxy API calls to Cloud Run backend (force=true ensures this takes priority)
+[[redirects]]
+  from = "/api/student"
+  to = "https://get-student-details-773381060399.asia-south1.run.app/"
+  status = 200
+  force = true
+  [redirects.headers]
+    X-From = "Netlify"
+
+# SPA fallback - serve index.html for all other routes
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
