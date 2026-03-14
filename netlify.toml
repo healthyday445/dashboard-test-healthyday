@@ -4,8 +4,8 @@
 
 # Proxy API calls to Cloud Run backend (force=true ensures this takes priority)
 [[redirects]]
-  from = "/api/student"
-  to = "https://get-student-details-773381060399.asia-south1.run.app/"
+  from = "/api/*"
+  to = "https://healthyday-backend-773381060399.asia-south1.run.app/api/:splat"
   status = 200
   force = true
   [redirects.headers]
