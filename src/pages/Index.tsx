@@ -146,6 +146,13 @@ const Index = () => {
   const [authenticated, setAuthenticated] = useState(false);
 
   useEffect(() => {
+    // Helper: get local date string (YYYY-MM-DD) without UTC timezone shift
+    const toLocalDateStr = (d: Date) => {
+      const yyyy = d.getFullYear();
+      const mm = String(d.getMonth() + 1).padStart(2, "0");
+      const dd = String(d.getDate()).padStart(2, "0");
+      return `${yyyy}-${mm}-${dd}`;
+    };
     // ── PREVIEW MODE: bypass API ──────────────────────────────
     if (previewMode === "batch") {
       const today = new Date();
@@ -153,7 +160,7 @@ const Index = () => {
       const diffToMonday = day === 0 ? -6 : 1 - day;
       const monday = new Date(today);
       monday.setDate(today.getDate() + diffToMonday);
-      const yyyyMMDD = monday.toISOString().split("T")[0];
+      const yyyyMMDD = toLocalDateStr(monday);
       setStudentData({
         language: "Telugu",
         status: "registered",
@@ -170,7 +177,7 @@ const Index = () => {
       const today = new Date();
       const sixDaysAgo = new Date(today);
       sixDaysAgo.setDate(today.getDate() - 6);
-      const yyyyMMDD = sixDaysAgo.toISOString().split("T")[0];
+      const yyyyMMDD = toLocalDateStr(sixDaysAgo);
       setStudentData({
         language: "Telugu",
         status: "registered",
@@ -201,7 +208,7 @@ const Index = () => {
       if (dayNum >= 1 && dayNum <= 14) {
         const startDate = new Date();
         startDate.setDate(startDate.getDate() - (dayNum - 1));
-        const yyyyMMDD = startDate.toISOString().split("T")[0];
+        const yyyyMMDD = toLocalDateStr(startDate);
         setStudentData({
           language: "Telugu",
           status: "registered",
@@ -784,99 +791,87 @@ const Index = () => {
             ? (MORNING_SLOTS.some(s => s.label === nextSlot.label) ? MORNING_SLOTS : EVENING_SLOTS)
             : MORNING_SLOTS; // tomorrow: show morning slots
 
-          if (liveSlot) {
-            return (
-              <div style={{ padding: "24px 20px 0" }}>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-                  <h2 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Your Yoga Session</h2>
+          const nextLabel = nextSlot ? nextSlot.label : "5:30 AM";
+          const nextText = isTomorrow ? `tomorrow at ${nextLabel}` : `at ${nextLabel}`;
+          const noteText = liveSlot
+            ? "Note: Evening Yoga Session will start at 4:30 PM with the same link"
+            : `Next regular session is ${nextText}`;
+
+          return (
+            <div style={{ padding: "24px 20px 0" }}>
+              {/* Header */}
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+                <h2 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Your Yoga Session</h2>
+                {liveSlot && (
                   <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
                     <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
                     <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>LIVE</span>
                   </div>
-                </div>
-                <div style={{ width: "372px", borderRadius: "12px", overflow: "hidden", background: "#000", position: "relative", marginBottom: "12px" }}>
-                  <img src="https://img.youtube.com/vi/SyjnCjDtNS8/maxresdefault.jpg" alt="Yoga Session" style={{ width: "372px", height: "204px", objectFit: "cover", opacity: 0.85, display: "block" }} />
+                )}
+              </div>
+
+              {/* Session Card */}
+              <div style={{ width: "357px" }}>
+                {/* Thumbnail */}
+                <div style={{
+                  width: "357.03px",
+                  height: "186.534px",
+                  aspectRatio: "178/93",
+                  borderRadius: "12px 12px 0 0",
+                  background: "url(https://img.youtube.com/vi/SyjnCjDtNS8/maxresdefault.jpg) lightgray 50% / cover no-repeat",
+                  boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
+                  position: "relative",
+                }}>
                   <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <PlayButton />
                   </div>
                 </div>
-                <a href={sessionLink} target="_blank" rel="noopener noreferrer" style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "10px", width: "372px", height: "48px", borderRadius: "10px", background: "#FEAB27", textDecoration: "none", boxShadow: "0 2px 8px rgba(254,171,39,0.35)" }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z" /></svg>
-                  <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700 }}>JOIN SESSION</span>
-                </a>
+
+                {/* Bottom bar */}
+                <div style={{
+                  width: "357px",
+                  height: "67px",
+                  borderRadius: "0 0 12px 12px",
+                  border: "1.5px solid #E9E9E9",
+                  background: "#FFF",
+                  boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxSizing: "border-box",
+                }}>
+                  <a href={sessionLink} target="_blank" rel="noopener noreferrer" style={{
+                    width: "300px",
+                    height: "40px",
+                    borderRadius: "10px",
+                    background: "#FEAB27",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: "8px",
+                    textDecoration: "none",
+                  }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                    <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION</span>
+                  </a>
+                </div>
               </div>
-            );
-          }
 
-          // Not live — show Next Session card
-          const nextLabel = nextSlot ? nextSlot.label : "5:30 AM";
-          const nextText = isTomorrow ? `tomorrow at ${nextLabel}` : `at ${nextLabel}`;
-
-          return (
-            <div style={{ padding: "24px 20px 0" }}>
-              <h2 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, marginBottom: "12px" }}>Your Yoga Session</h2>
-
-              {/* Next Session Card */}
-              <div style={{
-                width: "358px",
-                height: "206px",
-                borderRadius: "12px",
-                border: "1.5px solid #D2D2D2",
-                background: "#FFF",
-                boxShadow: "-1px -1px 4px 0 rgba(0,0,0,0.10), 1px 1px 4px 0 rgba(0,0,0,0.10)",
-                padding: "16px",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                boxSizing: "border-box",
-              }}>
-                {/* Top row: image left, title + subtitle right */}
-                <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
-                  {/* Instructor image — replace <path-to-image> with actual image URL */}
-                  <div style={{
-                    width: "82px",
-                    height: "81px",
-                    aspectRatio: "82/81",
-                    borderRadius: "50%",
-                    flexShrink: 0,
-                    background: "url(/8ea326ab563adb61ccb99b953865cb3132c173ab.png) lightgray -5.311px -5.747px / 112.404% 113.525% no-repeat",
-                  }} />
-                  <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                    <div style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal", width: "231.658px" }}>
-                      Next regular session is {nextText}
-                    </div>
-                    <div style={{ color: "#7990AC", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "24px", width: "244px" }}>
-                      Open the link during live timings
-                    </div>
-                  </div>
-                </div>
-
-                {/* Time slots */}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0" }}>
-                  {displaySlots.map((slot, idx) => {
-                    const isPast = !isTomorrow && slot.end <= totalMin;
-                    const color = isPast ? "#CCCBCB" : "#FEAB27";
-                    return (
-                      <span key={slot.label} style={{ display: "flex", alignItems: "center" }}>
-                        {idx > 0 && <span style={{ color: "#CCCBCB", fontFamily: "Outfit", fontSize: "18px", fontWeight: 800, margin: "0 8px" }}>|</span>}
-                        <span style={{ color, fontFamily: "Outfit", fontSize: "18px", fontWeight: 800, lineHeight: "normal", textAlign: "center" }}>{slot.label}</span>
-                      </span>
-                    );
-                  })}
-                </div>
-
-                {/* Note */}
-                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px" }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
-                    <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
-                    <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
-                    <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D" />
-                    <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  <span style={{ color: "#747474", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "22px", textAlign: "center", width: "289.656px" }}>
-                    Note: No recordings are available for FREE batch
-                  </span>
-                </div>
+              {/* Note */}
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px", marginTop: "10px" }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
+                  <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D"/>
+                  <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D"/>
+                  <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D"/>
+                  <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                </svg>
+                <span style={{ width: "268px", color: "#747474", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "22px", textAlign: "center" }}>
+                  {noteText}
+                </span>
               </div>
             </div>
           );
