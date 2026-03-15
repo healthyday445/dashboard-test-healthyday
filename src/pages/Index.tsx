@@ -139,6 +139,7 @@ const Index = () => {
   const location = useLocation();
   const previewMode = new URLSearchParams(location.search).get("preview");
   const [showReferral, setShowReferral] = useState(true);
+  const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [studentData, setStudentData] = useState<any>(null);
@@ -755,6 +756,133 @@ const Index = () => {
             <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal", margin: 0 }}>Refer and Win!</h3>
             <p style={{ color: "#ADADAD", fontFamily: "Outfit", fontSize: "18px", fontWeight: 500, lineHeight: "normal", textAlign: "center", width: "286px", margin: 0 }}>Every active referral earn gifts and rewards for you</p>
           </div>
+
+          {/* Referral Status Popup Overlay */}
+          {showReferral && (
+            <div
+              onClick={() => setShowReferral(false)}
+              style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.5)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                style={{ width: "358px", borderRadius: "12px", background: "#0B2A4A", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}
+              >
+                <div className="flex items-center justify-between" style={{ marginBottom: "18px" }}>
+                  <span style={{ color: "#fff", fontSize: "13px", fontWeight: 700, letterSpacing: "1.2px" }}>REFERRAL STATUS</span>
+                  <button onClick={() => setShowReferral(false)} style={{ background: "none", border: "none", color: "#fff", fontSize: "18px", cursor: "pointer", padding: "0", lineHeight: 1 }}>✕</button>
+                </div>
+                {(() => {
+                  const refCount = studentData?.total_referral_count ?? 0;
+                  const maxRef = 20;
+                  const progressPct = Math.min(100, Math.round((refCount / maxRef) * 100));
+                  const reached10 = refCount >= 10;
+                  const reached20 = refCount >= 20;
+                  const earnedClasses = reached10 ? 20 : 0;
+                  const nextGoal = reached20 ? "All Claimed! 🎉" : reached10 ? "Healthyday T-shirt" : "10 Free Classes";
+                  return (
+                    <>
+                      <div style={{ position: "relative", marginBottom: "20px", padding: "0 4px" }}>
+                        <div style={{ position: "relative", height: "6px", display: "flex", alignItems: "center" }}>
+                          <div style={{ width: `${progressPct}%`, height: "6px", background: "#FEAB27", borderRadius: "3px" }} />
+                          <div style={{ width: `${100 - progressPct}%`, height: "6px", background: "#3A5068", borderRadius: "3px" }} />
+                        </div>
+                        <div style={{ position: "absolute", left: "0%", top: "-4px" }}>
+                          <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: refCount > 0 ? "#FEAB27" : "#FF3B30" }} />
+                        </div>
+                        <div style={{ position: "absolute", left: "50%", top: "-7px", transform: "translateX(-50%)" }}>
+                          {reached10 ? (
+                            <>
+                              <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
+                              <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap" }}>
+                                <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>10 Classes</div>
+                                <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Added</div>
+                              </div>
+                            </>
+                          ) : (
+                            <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #5A7A96" }}>
+                              <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="6" rx="1" fill="#8A9FB5" /><path d="M3 5V3C3 1.9 3.9 1 5 1C6.1 1 7 1.9 7 3V5" stroke="#8A9FB5" strokeWidth="1.2" /></svg>
+                            </div>
+                          )}
+                        </div>
+                        <div style={{ position: "absolute", left: "50%", top: "22px", transform: "translateX(-50%)" }}>
+                          <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "22px" }}>10 Referrals</div>
+                        </div>
+                        <div style={{ position: "absolute", left: "100%", top: "-7px", transform: "translateX(-50%)" }}>
+                          {reached20 ? (
+                            <>
+                              <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
+                              <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap", transform: "translateX(-8px)" }}>
+                                <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Healthyday</div>
+                                <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>T-shirt</div>
+                              </div>
+                            </>
+                          ) : (
+                            <>
+                              <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #5A7A96" }}>
+                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="6" rx="1" fill="#8A9FB5" /><path d="M3 5V3C3 1.9 3.9 1 5 1C6.1 1 7 1.9 7 3V5" stroke="#8A9FB5" strokeWidth="1.2" /></svg>
+                              </div>
+                              <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap", transform: "translateX(-8px)" }}>
+                                <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Healthyday</div>
+                                <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>T-shirt</div>
+                              </div>
+                            </>
+                          )}
+                        </div>
+                        <div style={{ position: "absolute", left: "100%", top: "22px", transform: "translateX(-50%)" }}>
+                          <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "22px" }}>20 Referrals</div>
+                        </div>
+                        {!reached20 && (
+                          <div style={{ position: "absolute", left: `${progressPct}%`, top: "-12px", transform: "translateX(-50%)" }}>
+                            <div style={{ textAlign: "center" }}>
+                              <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, marginBottom: "2px" }}>You are here</div>
+                              <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto", border: "2px solid #fff" }}>
+                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><path d="M5 0C2.24 0 0 2.24 0 5C0 8.5 5 12 5 12S10 8.5 10 5C10 2.24 7.76 0 5 0ZM5 6.5C4.17 6.5 3.5 5.83 3.5 5C3.5 4.17 4.17 3.5 5 3.5C5.83 3.5 6.5 4.17 6.5 5C6.5 5.83 5.83 6.5 5 6.5Z" fill="white" /></svg>
+                              </div>
+                            </div>
+                            <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "4px" }}>{refCount} Referrals</div>
+                          </div>
+                        )}
+                      </div>
+                      <div className="flex gap-2" style={{ marginTop: "62px" }}>
+                        <div style={{ flex: 1, background: "#0E3358", borderRadius: "10px", padding: "12px" }}>
+                          <div className="flex items-center gap-2" style={{ marginBottom: "8px" }}>
+                            <div style={{ width: "18px", height: "18px", borderRadius: "4px", background: earnedClasses > 0 ? "#34C759" : "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#fff" }}>{earnedClasses > 0 ? "✓" : "—"}</div>
+                            <div>
+                              <div style={{ color: "#8A9FB5", fontSize: "8px", fontWeight: 600, letterSpacing: "0.5px" }}>EARNED</div>
+                              <div style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{earnedClasses > 0 ? `${earnedClasses} FREE Classes Earned` : "No rewards yet"}</div>
+                            </div>
+                          </div>
+                          <div className="flex items-center gap-2">
+                            <div style={{ width: "18px", height: "18px", borderRadius: "4px", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#8A9FB5" }}>🚩</div>
+                            <div>
+                              <div style={{ color: "#8A9FB5", fontSize: "8px", fontWeight: 600, letterSpacing: "0.5px" }}>NEXT GOAL</div>
+                              <div style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{nextGoal}</div>
+                            </div>
+                          </div>
+                        </div>
+                        <div style={{ width: "80px", background: "#0E3358", borderRadius: "10px", padding: "12px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                          <div style={{ color: "#8A9FB5", fontSize: "9px", fontWeight: 600, letterSpacing: "0.5px", marginBottom: "4px" }}>STATUS</div>
+                          <div>
+                            <span style={{ color: "#FEAB27", fontSize: "32px", fontWeight: 800 }}>{refCount}</span>
+                            <span style={{ color: "#fff", fontSize: "18px", fontWeight: 700 }}>/20</span>
+                          </div>
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
+                <button
+                  onClick={() => navigate(`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`)}
+                  style={{ width: "100%", marginTop: "14px", padding: "14px", borderRadius: "10px", background: "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
+                >
+                  <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M13 8C14.66 8 15.99 6.66 15.99 5C15.99 3.34 14.66 2 13 2C11.34 2 10 3.34 10 5C10 6.66 11.34 8 13 8ZM7 8C8.66 8 9.99 6.66 9.99 5C9.99 3.34 8.66 2 7 2C5.34 2 4 3.34 4 5C4 6.66 5.34 8 7 8ZM7 10C4.67 10 0 11.17 0 13.5V16H14V13.5C14 11.17 9.33 10 7 10ZM13 10C12.71 10 12.38 10.02 12.03 10.05C13.19 10.89 14 12.02 14 13.5V16H20V13.5C20 11.17 15.33 10 13 10Z" fill="#0B2A4A" />
+                  </svg>
+                  <span style={{ color: "#0B2A4A", fontSize: "16px", fontWeight: 700, fontFamily: "Outfit" }}>Refer Now</span>
+                </button>
+              </div>
+            </div>
+          )}
         </div>
       );
     }
@@ -1056,6 +1184,133 @@ const Index = () => {
           <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal", margin: 0 }}>Refer and Win!</h3>
           <p style={{ color: "#ADADAD", fontFamily: "Outfit", fontSize: "18px", fontWeight: 500, lineHeight: "normal", textAlign: "center", width: "286px", margin: 0 }}>Every active referral earn gifts and rewards for you</p>
         </div>
+
+        {/* Referral Status Popup Overlay */}
+        {showReferral && (
+          <div
+            onClick={() => setShowReferral(false)}
+            style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.5)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{ width: "358px", borderRadius: "12px", background: "#0B2A4A", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}
+            >
+              <div className="flex items-center justify-between" style={{ marginBottom: "18px" }}>
+                <span style={{ color: "#fff", fontSize: "13px", fontWeight: 700, letterSpacing: "1.2px" }}>REFERRAL STATUS</span>
+                <button onClick={() => setShowReferral(false)} style={{ background: "none", border: "none", color: "#fff", fontSize: "18px", cursor: "pointer", padding: "0", lineHeight: 1 }}>✕</button>
+              </div>
+              {(() => {
+                const refCount = studentData?.total_referral_count ?? 0;
+                const maxRef = 20;
+                const progressPct = Math.min(100, Math.round((refCount / maxRef) * 100));
+                const reached10 = refCount >= 10;
+                const reached20 = refCount >= 20;
+                const earnedClasses = reached10 ? 20 : 0;
+                const nextGoal = reached20 ? "All Claimed! 🎉" : reached10 ? "Healthyday T-shirt" : "10 Free Classes";
+                return (
+                  <>
+                    <div style={{ position: "relative", marginBottom: "20px", padding: "0 4px" }}>
+                      <div style={{ position: "relative", height: "6px", display: "flex", alignItems: "center" }}>
+                        <div style={{ width: `${progressPct}%`, height: "6px", background: "#FEAB27", borderRadius: "3px" }} />
+                        <div style={{ width: `${100 - progressPct}%`, height: "6px", background: "#3A5068", borderRadius: "3px" }} />
+                      </div>
+                      <div style={{ position: "absolute", left: "0%", top: "-4px" }}>
+                        <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: refCount > 0 ? "#FEAB27" : "#FF3B30" }} />
+                      </div>
+                      <div style={{ position: "absolute", left: "50%", top: "-7px", transform: "translateX(-50%)" }}>
+                        {reached10 ? (
+                          <>
+                            <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
+                            <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap" }}>
+                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>10 Classes</div>
+                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Added</div>
+                            </div>
+                          </>
+                        ) : (
+                          <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #5A7A96" }}>
+                            <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="6" rx="1" fill="#8A9FB5" /><path d="M3 5V3C3 1.9 3.9 1 5 1C6.1 1 7 1.9 7 3V5" stroke="#8A9FB5" strokeWidth="1.2" /></svg>
+                          </div>
+                        )}
+                      </div>
+                      <div style={{ position: "absolute", left: "50%", top: "22px", transform: "translateX(-50%)" }}>
+                        <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "22px" }}>10 Referrals</div>
+                      </div>
+                      <div style={{ position: "absolute", left: "100%", top: "-7px", transform: "translateX(-50%)" }}>
+                        {reached20 ? (
+                          <>
+                            <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
+                            <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap", transform: "translateX(-8px)" }}>
+                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Healthyday</div>
+                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>T-shirt</div>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #5A7A96" }}>
+                              <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="6" rx="1" fill="#8A9FB5" /><path d="M3 5V3C3 1.9 3.9 1 5 1C6.1 1 7 1.9 7 3V5" stroke="#8A9FB5" strokeWidth="1.2" /></svg>
+                            </div>
+                            <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap", transform: "translateX(-8px)" }}>
+                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Healthyday</div>
+                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>T-shirt</div>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <div style={{ position: "absolute", left: "100%", top: "22px", transform: "translateX(-50%)" }}>
+                        <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "22px" }}>20 Referrals</div>
+                      </div>
+                      {!reached20 && (
+                        <div style={{ position: "absolute", left: `${progressPct}%`, top: "-12px", transform: "translateX(-50%)" }}>
+                          <div style={{ textAlign: "center" }}>
+                            <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, marginBottom: "2px" }}>You are here</div>
+                            <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto", border: "2px solid #fff" }}>
+                              <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><path d="M5 0C2.24 0 0 2.24 0 5C0 8.5 5 12 5 12S10 8.5 10 5C10 2.24 7.76 0 5 0ZM5 6.5C4.17 6.5 3.5 5.83 3.5 5C3.5 4.17 4.17 3.5 5 3.5C5.83 3.5 6.5 4.17 6.5 5C6.5 5.83 5.83 6.5 5 6.5Z" fill="white" /></svg>
+                            </div>
+                          </div>
+                          <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "4px" }}>{refCount} Referrals</div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex gap-2" style={{ marginTop: "62px" }}>
+                      <div style={{ flex: 1, background: "#0E3358", borderRadius: "10px", padding: "12px" }}>
+                        <div className="flex items-center gap-2" style={{ marginBottom: "8px" }}>
+                          <div style={{ width: "18px", height: "18px", borderRadius: "4px", background: earnedClasses > 0 ? "#34C759" : "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#fff" }}>{earnedClasses > 0 ? "✓" : "—"}</div>
+                          <div>
+                            <div style={{ color: "#8A9FB5", fontSize: "8px", fontWeight: 600, letterSpacing: "0.5px" }}>EARNED</div>
+                            <div style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{earnedClasses > 0 ? `${earnedClasses} FREE Classes Earned` : "No rewards yet"}</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div style={{ width: "18px", height: "18px", borderRadius: "4px", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#8A9FB5" }}>🚩</div>
+                          <div>
+                            <div style={{ color: "#8A9FB5", fontSize: "8px", fontWeight: 600, letterSpacing: "0.5px" }}>NEXT GOAL</div>
+                            <div style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{nextGoal}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div style={{ width: "80px", background: "#0E3358", borderRadius: "10px", padding: "12px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                        <div style={{ color: "#8A9FB5", fontSize: "9px", fontWeight: 600, letterSpacing: "0.5px", marginBottom: "4px" }}>STATUS</div>
+                        <div>
+                          <span style={{ color: "#FEAB27", fontSize: "32px", fontWeight: 800 }}>{refCount}</span>
+                          <span style={{ color: "#fff", fontSize: "18px", fontWeight: 700 }}>/20</span>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
+              <button
+                onClick={() => navigate(`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`)}
+                style={{ width: "100%", marginTop: "14px", padding: "14px", borderRadius: "10px", background: "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
+              >
+                <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13 8C14.66 8 15.99 6.66 15.99 5C15.99 3.34 14.66 2 13 2C11.34 2 10 3.34 10 5C10 6.66 11.34 8 13 8ZM7 8C8.66 8 9.99 6.66 9.99 5C9.99 3.34 8.66 2 7 2C5.34 2 4 3.34 4 5C4 6.66 5.34 8 7 8ZM7 10C4.67 10 0 11.17 0 13.5V16H14V13.5C14 11.17 9.33 10 7 10ZM13 10C12.71 10 12.38 10.02 12.03 10.05C13.19 10.89 14 12.02 14 13.5V16H20V13.5C20 11.17 15.33 10 13 10Z" fill="#0B2A4A" />
+                </svg>
+                <span style={{ color: "#0B2A4A", fontSize: "16px", fontWeight: 700, fontFamily: "Outfit" }}>Refer Now</span>
+              </button>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
@@ -1083,9 +1338,9 @@ const Index = () => {
     ];
 
     const plans = [
-      { name: "1 Year Plan", price: 1999, originalPrice: 5988, discount: 63, bestValue: true },
-      { name: "6 Months Plan", price: 1499, originalPrice: 2994, discount: 38, bestValue: false },
-      { name: "3 Months Plan", price: 999, originalPrice: 1497, discount: 25, bestValue: false },
+      { name: "1 Year Plan", price: 1999, originalPrice: 5988, discount: 63, bestValue: true, url: "https://healthyday.co.in/1-year-plan/" },
+      { name: "6 Months Plan", price: 1499, originalPrice: 2994, discount: 38, bestValue: false, url: "https://healthyday.co.in/6-months-plan/" },
+      { name: "3 Months Plan", price: 999, originalPrice: 1497, discount: 25, bestValue: false, url: "https://healthyday.co.in/3-months-plan/" },
     ];
 
     const features = [
@@ -1164,9 +1419,10 @@ const Index = () => {
               </span>
             </div>
 
-            <h2 style={{ width: "308px", fontFamily: "Outfit", fontSize: "25px", fontWeight: 800, lineHeight: "normal", margin: 0, textAlign: "center" }}>
-              <span style={{ color: "#000" }}>Your 14-Days FREE Classes are </span>
-              <span style={{ color: "#D70000" }}>completed</span>
+            <h2 style={{ width: "308px", margin: 0, textAlign: "center" }}>
+              <span style={{ color: "#000", fontFamily: "Outfit", fontSize: "25px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal" }}>Your </span>
+              <span style={{ color: "#D70000", fontFamily: "Outfit", fontSize: "25px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal" }}>14-Days FREE</span>
+              <span style={{ color: "#000", fontFamily: "Outfit", fontSize: "25px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal" }}> Classes are completed</span>
             </h2>
 
             <p style={{ width: "293px", color: "#7C7B7B", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, lineHeight: "18px", textAlign: "center", margin: 0 }}>
@@ -1189,20 +1445,23 @@ const Index = () => {
         <div style={{ padding: "24px 27px 0" }}>
           {
             plans.map((plan, idx) => {
-              const borderColor = plan.bestValue ? "#FEAB27" : idx === 1 ? "#3B82F6" : "#14B8A6";
+              const isSelected = selectedPlanIdx === idx;
               return (
                 <div
                   key={idx}
+                  onClick={() => setSelectedPlanIdx(idx)}
                   style={{
                     width: plan.bestValue ? "360px" : "358px",
                     minHeight: plan.bestValue ? "198px" : "160px",
                     borderRadius: "16px",
                     background: plan.bestValue ? "#0D468B" : "#FFF",
-                    border: plan.bestValue ? "none" : `2.5px solid ${borderColor}`,
+                    border: !plan.bestValue && isSelected ? "2.5px solid #0D468B" : "none",
                     boxShadow: plan.bestValue ? "none" : "0 4px 10px 2px rgba(0, 0, 0, 0.25)",
                     padding: plan.bestValue ? "0 2px 2px 2px" : "0",
                     marginBottom: "16px",
                     position: "relative",
+                    overflow: "hidden",
+                    cursor: "pointer",
                   }}
                 >
                   {/* Best Value Badge */}
@@ -1229,7 +1488,7 @@ const Index = () => {
                     style={{
                       padding: "16px 18px 18px",
                       background: "#fff",
-                      borderRadius: plan.bestValue ? "14px" : "0",
+                      borderRadius: plan.bestValue ? "14px" : "16px",
                       height: "100%"
                     }}
                   >
@@ -1259,30 +1518,47 @@ const Index = () => {
                       <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10.496px", fontWeight: 700, lineHeight: "normal", textTransform: "uppercase" }}>{plan.discount}% OFF</span>
                     </div>
                     {/* CTA Button */}
-                    <button
-                      style={{
-                        width: plan.bestValue ? "314px" : "100%",
-                        height: plan.bestValue ? "38px" : "auto",
-                        padding: plan.bestValue ? "0" : "14px",
-                        borderRadius: "10px",
-                        background: "#FEAB27",
-                        boxShadow: plan.bestValue ? "0 4px 4px 0 rgba(0, 0, 0, 0.25)" : "none",
-                        border: "none",
-                        cursor: "pointer",
-                        color: "#202020",
-                        fontSize: "14px",
-                        fontWeight: 700,
-                        fontFamily: "Outfit",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        margin: "0 auto"
-                      }}
-                    >
-                      <span style={{ width: "249.333px", height: "17.1px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        JOIN {plan.name.toUpperCase().replace(" PLAN", "")} PLAN
-                      </span>
-                    </button>
+                    {plan.bestValue ? (
+                      <button
+                        onClick={() => window.open(plan.url, "_blank")}
+                        style={{
+                          width: "314px",
+                          height: "32.3px",
+                          borderRadius: "30px",
+                          background: "#FEAB27",
+                          border: "none",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          margin: "0 auto",
+                        }}
+                      >
+                        <span style={{ width: "249.333px", height: "17.1px", color: "#202020", textAlign: "center", fontFamily: "Outfit", fontSize: "14px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal", textTransform: "uppercase", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          Join 1 YEAR PLAN
+                        </span>
+                      </button>
+                    ) : (
+                      <button
+                        onClick={() => window.open(plan.url, "_blank")}
+                        style={{
+                          width: "314px",
+                          height: "32.3px",
+                          borderRadius: "30px",
+                          background: "#FEAB27",
+                          border: "none",
+                          cursor: "pointer",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          margin: "0 auto",
+                        }}
+                      >
+                        <span style={{ width: "249.333px", height: "17.1px", color: "#202020", textAlign: "center", fontFamily: "Outfit", fontSize: "14px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal", textTransform: "uppercase", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          Join {plan.name.toUpperCase().replace(" PLAN", "")} PLAN
+                        </span>
+                      </button>
+                    )}
                   </div>
                 </div>
               );
@@ -1299,11 +1575,11 @@ const Index = () => {
           {/* Table */}
           <div style={{ position: "relative", width: "358px" }}>
 
-            {/* Highlighted 1-Year column background */}
+            {/* Highlighted column background — moves with selectedPlanIdx */}
             <div style={{
               position: "absolute",
               top: 0,
-              left: "calc(100% - 138px - 69px)",
+              left: selectedPlanIdx === 0 ? "calc(100% - 207px)" : selectedPlanIdx === 1 ? "calc(100% - 138px)" : "calc(100% - 69px)",
               width: "69px",
               height: "100%",
               borderRadius: "5px",
@@ -1375,8 +1651,8 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Refer & Earn */}
-        <div style={{ padding: "32px 27px 32px", display: "flex", justifyContent: "center" }}>
+        {/* Refer & Earn — only shown after popup is dismissed */}
+        {!showReferral && <div style={{ padding: "32px 27px 32px", display: "flex", justifyContent: "center" }}>
           <div
             style={{
               width: "358px",
@@ -1447,7 +1723,134 @@ const Index = () => {
               <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>Your Referrals →</span>
             </div>
           </div>
-        </div>
+        </div>}
+
+        {/* Referral Status Popup Overlay */}
+        {showReferral && (
+          <div
+            onClick={() => setShowReferral(false)}
+            style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.5)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}
+          >
+            <div
+              onClick={(e) => e.stopPropagation()}
+              style={{ width: "358px", borderRadius: "12px", background: "#0B2A4A", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}
+            >
+              <div className="flex items-center justify-between" style={{ marginBottom: "18px" }}>
+                <span style={{ color: "#fff", fontSize: "13px", fontWeight: 700, letterSpacing: "1.2px" }}>REFERRAL STATUS</span>
+                <button onClick={() => setShowReferral(false)} style={{ background: "none", border: "none", color: "#fff", fontSize: "18px", cursor: "pointer", padding: "0", lineHeight: 1 }}>✕</button>
+              </div>
+              {(() => {
+                const refCount = studentData?.total_referral_count ?? 0;
+                const maxRef = 20;
+                const progressPct = Math.min(100, Math.round((refCount / maxRef) * 100));
+                const reached10 = refCount >= 10;
+                const reached20 = refCount >= 20;
+                const earnedClasses = reached10 ? 20 : 0;
+                const nextGoal = reached20 ? "All Claimed! 🎉" : reached10 ? "Healthyday T-shirt" : "10 Free Classes";
+                return (
+                  <>
+                    <div style={{ position: "relative", marginBottom: "20px", padding: "0 4px" }}>
+                      <div style={{ position: "relative", height: "6px", display: "flex", alignItems: "center" }}>
+                        <div style={{ width: `${progressPct}%`, height: "6px", background: "#FEAB27", borderRadius: "3px" }} />
+                        <div style={{ width: `${100 - progressPct}%`, height: "6px", background: "#3A5068", borderRadius: "3px" }} />
+                      </div>
+                      <div style={{ position: "absolute", left: "0%", top: "-4px" }}>
+                        <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: refCount > 0 ? "#FEAB27" : "#FF3B30" }} />
+                      </div>
+                      <div style={{ position: "absolute", left: "50%", top: "-7px", transform: "translateX(-50%)" }}>
+                        {reached10 ? (
+                          <>
+                            <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
+                            <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap" }}>
+                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>10 Classes</div>
+                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Added</div>
+                            </div>
+                          </>
+                        ) : (
+                          <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #5A7A96" }}>
+                            <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="6" rx="1" fill="#8A9FB5" /><path d="M3 5V3C3 1.9 3.9 1 5 1C6.1 1 7 1.9 7 3V5" stroke="#8A9FB5" strokeWidth="1.2" /></svg>
+                          </div>
+                        )}
+                      </div>
+                      <div style={{ position: "absolute", left: "50%", top: "22px", transform: "translateX(-50%)" }}>
+                        <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "22px" }}>10 Referrals</div>
+                      </div>
+                      <div style={{ position: "absolute", left: "100%", top: "-7px", transform: "translateX(-50%)" }}>
+                        {reached20 ? (
+                          <>
+                            <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
+                            <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap", transform: "translateX(-8px)" }}>
+                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Healthyday</div>
+                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>T-shirt</div>
+                            </div>
+                          </>
+                        ) : (
+                          <>
+                            <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #5A7A96" }}>
+                              <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="6" rx="1" fill="#8A9FB5" /><path d="M3 5V3C3 1.9 3.9 1 5 1C6.1 1 7 1.9 7 3V5" stroke="#8A9FB5" strokeWidth="1.2" /></svg>
+                            </div>
+                            <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap", transform: "translateX(-8px)" }}>
+                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Healthyday</div>
+                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>T-shirt</div>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                      <div style={{ position: "absolute", left: "100%", top: "22px", transform: "translateX(-50%)" }}>
+                        <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "22px" }}>20 Referrals</div>
+                      </div>
+                      {!reached20 && (
+                        <div style={{ position: "absolute", left: `${progressPct}%`, top: "-12px", transform: "translateX(-50%)" }}>
+                          <div style={{ textAlign: "center" }}>
+                            <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, marginBottom: "2px" }}>You are here</div>
+                            <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto", border: "2px solid #fff" }}>
+                              <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><path d="M5 0C2.24 0 0 2.24 0 5C0 8.5 5 12 5 12S10 8.5 10 5C10 2.24 7.76 0 5 0ZM5 6.5C4.17 6.5 3.5 5.83 3.5 5C3.5 4.17 4.17 3.5 5 3.5C5.83 3.5 6.5 4.17 6.5 5C6.5 5.83 5.83 6.5 5 6.5Z" fill="white" /></svg>
+                            </div>
+                          </div>
+                          <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "4px" }}>{refCount} Referrals</div>
+                        </div>
+                      )}
+                    </div>
+                    <div className="flex gap-2" style={{ marginTop: "62px" }}>
+                      <div style={{ flex: 1, background: "#0E3358", borderRadius: "10px", padding: "12px" }}>
+                        <div className="flex items-center gap-2" style={{ marginBottom: "8px" }}>
+                          <div style={{ width: "18px", height: "18px", borderRadius: "4px", background: earnedClasses > 0 ? "#34C759" : "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#fff" }}>{earnedClasses > 0 ? "✓" : "—"}</div>
+                          <div>
+                            <div style={{ color: "#8A9FB5", fontSize: "8px", fontWeight: 600, letterSpacing: "0.5px" }}>EARNED</div>
+                            <div style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{earnedClasses > 0 ? `${earnedClasses} FREE Classes Earned` : "No rewards yet"}</div>
+                          </div>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div style={{ width: "18px", height: "18px", borderRadius: "4px", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#8A9FB5" }}>🚩</div>
+                          <div>
+                            <div style={{ color: "#8A9FB5", fontSize: "8px", fontWeight: 600, letterSpacing: "0.5px" }}>NEXT GOAL</div>
+                            <div style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{nextGoal}</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div style={{ width: "80px", background: "#0E3358", borderRadius: "10px", padding: "12px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
+                        <div style={{ color: "#8A9FB5", fontSize: "9px", fontWeight: 600, letterSpacing: "0.5px", marginBottom: "4px" }}>STATUS</div>
+                        <div>
+                          <span style={{ color: "#FEAB27", fontSize: "32px", fontWeight: 800 }}>{refCount}</span>
+                          <span style={{ color: "#fff", fontSize: "18px", fontWeight: 700 }}>/20</span>
+                        </div>
+                      </div>
+                    </div>
+                  </>
+                );
+              })()}
+              <button
+                onClick={() => navigate(`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`)}
+                style={{ width: "100%", marginTop: "14px", padding: "14px", borderRadius: "10px", background: "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
+              >
+                <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M13 8C14.66 8 15.99 6.66 15.99 5C15.99 3.34 14.66 2 13 2C11.34 2 10 3.34 10 5C10 6.66 11.34 8 13 8ZM7 8C8.66 8 9.99 6.66 9.99 5C9.99 3.34 8.66 2 7 2C5.34 2 4 3.34 4 5C4 6.66 5.34 8 7 8ZM7 10C4.67 10 0 11.17 0 13.5V16H14V13.5C14 11.17 9.33 10 7 10ZM13 10C12.71 10 12.38 10.02 12.03 10.05C13.19 10.89 14 12.02 14 13.5V16H20V13.5C20 11.17 15.33 10 13 10Z" fill="#0B2A4A" />
+                </svg>
+                <span style={{ color: "#0B2A4A", fontSize: "16px", fontWeight: 700, fontFamily: "Outfit" }}>Refer Now</span>
+              </button>
+            </div>
+          </div>
+        )}
       </div >
     );
   }
