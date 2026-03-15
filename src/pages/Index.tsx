@@ -1581,7 +1581,7 @@ const Index = () => {
               top: 0,
               left: selectedPlanIdx === 0 ? "calc(100% - 207px)" : selectedPlanIdx === 1 ? "calc(100% - 138px)" : "calc(100% - 69px)",
               width: "69px",
-              height: "100%",
+              height: "312px",
               borderRadius: "5px",
               border: "1px solid #0D468B",
               background: "#FFF5E5",
