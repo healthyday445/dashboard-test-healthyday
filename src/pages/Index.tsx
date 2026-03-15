@@ -457,6 +457,8 @@ const Index = () => {
     });
 
     const sessionLink = studentData?.free_class_join_link ?? "https://www.youtube.com/c/Healthyday";
+    const ytIdMatch = sessionLink.match(/(?:v=|youtu\.be\/|\/live\/)([a-zA-Z0-9_-]{11})/);
+    const sessionVideoId = ytIdMatch ? ytIdMatch[1] : null;
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
 
     const shareLink = mobile ? `https://healthyday.co.in/free-programmes?ref=91${mobile}` : referralLink;
@@ -679,57 +681,102 @@ const Index = () => {
               <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Referral Milestones</h3>
               <span onClick={() => navigate(`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`)} style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}>View More</span>
             </div>
-            <div style={{ borderRadius: "12px", background: "#FFF", boxShadow: "0 2px 12px 0 rgba(0,0,0,0.08)", padding: "20px 16px" }}>
-              <div style={{ position: "relative", paddingLeft: "36px" }}>
-                <div style={{ position: "absolute", left: "14px", top: "20px", bottom: "20px", width: "2px", background: "#E0E0E0" }} />
-                {/* Free Classes */}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
-                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                    <div style={{ position: "absolute", left: "4px", width: "22px", height: "22px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <span style={{ color: "#fff", fontSize: "11px", fontWeight: 700 }}>+20</span>
-                    </div>
-                    <div>
-                      <div style={{ color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 700 }}>Free Classes</div>
-                      <div style={{ color: "#888", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400 }}>10 Referrals</div>
-                    </div>
-                  </div>
-                  <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                    <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>CLAIMED</span>
-                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M20 6H17.82C17.93 5.69 18 5.35 18 5C18 3.34 16.66 2 15 2C13.95 2 13.04 2.54 12.5 3.35L12 4.02L11.5 3.34C10.96 2.54 10.05 2 9 2C7.34 2 6 3.34 6 5C6 5.35 6.07 5.69 6.18 6H4C2.89 6 2.01 6.89 2.01 8L2 19C2 20.11 2.89 21 4 21H20C21.11 21 22 20.11 22 19V8C22 6.89 21.11 6 20 6Z" fill="#FEAB27" /></svg>
-                  </div>
+            <div style={{
+              width: "360px",
+              height: "318px",
+              borderRadius: "16px",
+              background: "#FFF",
+              boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
+              padding: "20px 16px",
+              boxSizing: "border-box",
+            }}>
+              <div style={{ position: "relative" }}>
+                {/* Vertical SVG line */}
+                <div style={{ position: "absolute", left: "15px", top: "16px", zIndex: 0 }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="3" height="225" viewBox="0 0 3 225" fill="none">
+                    <line x1="1.5" y1="151.5" x2="1.5" y2="223.5" stroke="#DDDEDE" strokeWidth="3" strokeLinecap="round"/>
+                    <line x1="1.5" y1="1.5" x2="1.50001" y2="162.5" stroke="#DDDEDE" strokeWidth="3" strokeLinecap="round" strokeDasharray="6 6"/>
+                  </svg>
                 </div>
-                {/* You are here */}
-                <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
-                  <div style={{ display: "inline-flex", alignItems: "center", gap: "6px", background: "#FFF3D6", borderRadius: "20px", padding: "5px 14px", border: "1px solid #FEAB27" }}>
-                    <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#FEAB27" }} />
-                    <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>You are here</span>
-                  </div>
-                </div>
-                {/* T-shirt */}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+                {/* Milestone 1: Free Classes — CLAIMED */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px", position: "relative", zIndex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                    <div style={{ position: "absolute", left: "4px", width: "22px", height: "22px", borderRadius: "50%", background: "#fff", border: "2.5px solid #FEAB27", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#FEAB27" }} />
-                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none" style={{ flexShrink: 0 }}>
+                      <circle cx="16.5" cy="16.5" r="16.5" fill="#64A45E"/>
+                      <text x="16.5" y="21" textAnchor="middle" fontFamily="Outfit" fontSize="10" fontWeight="700" fill="white">+20</text>
+                    </svg>
                     <div>
-                      <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                        <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 700 }}>Healthyday T-shirt</span>
-                        <span>👕</span>
+                      <div>
+                        <span style={{ color: "#377456", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "normal" }}>+20</span>
+                        <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "normal" }}> Free Classes</span>
                       </div>
-                      <div style={{ color: "#888", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400 }}>20 Referrals</div>
+                      <div style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, lineHeight: "normal" }}>10 Referrals</div>
                     </div>
                   </div>
-                  <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>IN PROGRESS</span>
+                  <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                    <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, lineHeight: "normal" }}>CLAIMED</span>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11" fill="none">
+                      <path d="M5.5 3.27797V10.5M5.5 3.27797C5.29904 2.44989 4.95303 1.74191 4.50708 1.24642C4.06113 0.750936 3.53594 0.490906 3 0.500243C2.63164 0.500243 2.27837 0.646568 2.01791 0.907028C1.75744 1.16749 1.61111 1.52075 1.61111 1.88909C1.61111 2.25744 1.75744 2.6107 2.01791 2.87116C2.27837 3.13162 2.63164 3.27795 3 3.27795M5.5 3.27797C5.70096 2.44989 6.04697 1.74191 6.49292 1.24642C6.93888 0.750936 7.46406 0.490906 8 0.500243C8.36836 0.500243 8.72163 0.646568 8.98209 0.907028C9.24256 1.16749 9.38889 1.52075 9.38889 1.88909C9.38889 2.25744 9.24256 2.6107 8.98209 2.87116C8.72163 3.13162 8.36836 3.27795 8 3.27795M9.38889 5.50014V9.38892C9.38889 9.6836 9.27183 9.9662 9.06345 10.1746C8.85508 10.3829 8.57246 10.5 8.27778 10.5H2.72222C2.42754 10.5 2.14492 10.3829 1.93655 10.1746C1.72817 9.9662 1.61111 9.6836 1.61111 9.38892V5.50014M0.5 3.83351C0.5 3.68618 0.558532 3.54487 0.662718 3.44069C0.766905 3.3365 0.908213 3.27797 1.05556 3.27797H9.94444C10.0918 3.27797 10.2331 3.3365 10.3373 3.44069C10.4415 3.54487 10.5 3.68618 10.5 3.83351V4.9446C10.5 5.09193 10.4415 5.23324 10.3373 5.33742C10.2331 5.44161 10.0918 5.50014 9.94444 5.50014H1.05556C0.908213 5.50014 0.766905 5.44161 0.662718 5.33742C0.558532 5.23324 0.5 5.09193 0.5 4.9446V3.83351Z" stroke="#FEAB27" strokeLinecap="round" strokeLinejoin="round"/>
+                    </svg>
+                  </div>
                 </div>
-                {/* Special Gift */}
-                <div style={{ display: "flex", alignItems: "center" }}>
+                {/* You are here indicator */}
+                <div style={{ display: "flex", alignItems: "center", gap: "7px", marginBottom: "18px", position: "relative", zIndex: 1 }}>
+                  <div style={{ marginLeft: "-2.5px", flexShrink: 0 }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" fill="none">
+                      <g filter="url(#milestoneGlowA)">
+                        <circle cx="19" cy="19" r="13" fill="#FFDFAB"/>
+                      </g>
+                      <circle cx="18.9999" cy="18.9999" r="5.90909" fill="#FEAB27"/>
+                      <defs>
+                        <filter id="milestoneGlowA" x="0" y="0" width="38" height="38" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                          <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+                          <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                          <feGaussianBlur stdDeviation="3" result="effect1_foregroundBlur"/>
+                        </filter>
+                      </defs>
+                    </svg>
+                  </div>
+                  <div style={{ width: "106px", height: "28px", borderRadius: "20px", border: "1px solid #FEAB27", background: "rgba(254, 171, 39, 0.20)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, lineHeight: "normal" }}>You are here</span>
+                  </div>
+                </div>
+                {/* Milestone 2: Healthyday T-shirt — IN PROGRESS */}
+                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px", position: "relative", zIndex: 1 }}>
                   <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                    <div style={{ position: "absolute", left: "4px", width: "22px", height: "22px", borderRadius: "50%", background: "#E0E0E0", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <svg width="11" height="13" viewBox="0 0 11 13" fill="none"><rect x="1" y="5.5" width="9" height="7" rx="1.5" fill="#9E9E9E" /><path d="M3 5.5V3.5C3 2.12 4.12 1 5.5 1C6.88 1 8 2.12 8 3.5V5.5" stroke="#9E9E9E" strokeWidth="1.4" strokeLinecap="round" /></svg>
+                    <div style={{ position: "relative", flexShrink: 0, width: "33px", height: "33px" }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none">
+                        <circle cx="16.5" cy="16.5" r="14.5" fill="white" stroke="#FEAB27" strokeWidth="4"/>
+                      </svg>
+                      <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <path d="M5.3335 7.33333V4.66667C5.3335 3.95942 5.61445 3.28115 6.11454 2.78105C6.61464 2.28095 7.29292 2 8.00016 2C8.70741 2 9.38568 2.28095 9.88578 2.78105C10.3859 3.28115 10.6668 3.95942 10.6668 4.66667V7.33333M3.3335 8.66667C3.3335 8.31304 3.47397 7.97391 3.72402 7.72386C3.97407 7.47381 4.31321 7.33333 4.66683 7.33333H11.3335C11.6871 7.33333 12.0263 7.47381 12.2763 7.72386C12.5264 7.97391 12.6668 8.31304 12.6668 8.66667V12.6667C12.6668 13.0203 12.5264 13.3594 12.2763 13.6095C12.0263 13.8595 11.6871 14 11.3335 14H4.66683C4.31321 14 3.97407 13.8595 3.72402 13.6095C3.47397 13.3594 3.3335 13.0203 3.3335 12.6667V8.66667ZM7.3335 10.6667C7.3335 10.8435 7.40373 11.013 7.52876 11.1381C7.65378 11.2631 7.82335 11.3333 8.00016 11.3333C8.17697 11.3333 8.34654 11.2631 8.47157 11.1381C8.59659 11.013 8.66683 10.8435 8.66683 10.6667C8.66683 10.4899 8.59659 10.3203 8.47157 10.1953C8.34654 10.0702 8.17697 10 8.00016 10C7.82335 10 7.65378 10.0702 7.52876 10.1953C7.40373 10.3203 7.3335 10.4899 7.3335 10.6667Z" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
                     </div>
                     <div>
-                      <div style={{ color: "#BDBDBD", fontFamily: "Outfit", fontSize: "15px", fontWeight: 700 }}>Special Gift</div>
-                      <div style={{ color: "#BDBDBD", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400 }}>40 Referrals</div>
+                      <div style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "normal" }}>Healthyday T-shirt</div>
+                      <div style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, lineHeight: "normal" }}>20 Referrals</div>
+                    </div>
+                  </div>
+                  <span style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, lineHeight: "normal" }}>IN PROGRESS</span>
+                </div>
+                {/* Milestone 3: Special Gift — LOCKED */}
+                <div style={{ display: "flex", alignItems: "center", position: "relative", zIndex: 1 }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+                    <div style={{ position: "relative", flexShrink: 0, width: "33px", height: "33px" }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none">
+                        <circle cx="16.5" cy="16.5" r="16.5" fill="#DDDEDE"/>
+                      </svg>
+                      <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <path d="M5.3335 7.33333V4.66667C5.3335 3.95942 5.61445 3.28115 6.11454 2.78105C6.61464 2.28095 7.29292 2 8.00016 2C8.70741 2 9.38568 2.28095 9.88578 2.78105C10.3859 3.28115 10.6668 3.95942 10.6668 4.66667V7.33333M3.3335 8.66667C3.3335 8.31304 3.47397 7.97391 3.72402 7.72386C3.97407 7.47381 4.31321 7.33333 4.66683 7.33333H11.3335C11.6871 7.33333 12.0263 7.47381 12.2763 7.72386C12.5264 7.97391 12.6668 8.31304 12.6668 8.66667V12.6667C12.6668 13.0203 12.5264 13.3594 12.2763 13.6095C12.0263 13.8595 11.6871 14 11.3335 14H4.66683C4.31321 14 3.97407 13.8595 3.72402 13.6095C3.47397 13.3594 3.3335 13.0203 3.3335 12.6667V8.66667ZM7.3335 10.6667C7.3335 10.8435 7.40373 11.013 7.52876 11.1381C7.65378 11.2631 7.82335 11.3333 8.00016 11.3333C8.17697 11.3333 8.34654 11.2631 8.47157 11.1381C8.59659 11.013 8.66683 10.8435 8.66683 10.6667C8.66683 10.4899 8.59659 10.3203 8.47157 10.1953C8.34654 10.0702 8.17697 10 8.00016 10C7.82335 10 7.65378 10.0702 7.52876 10.1953C7.40373 10.3203 7.3335 10.4899 7.3335 10.6667Z" stroke="#A2A2A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
+                      </div>
+                    </div>
+                    <div>
+                      <div style={{ color: "#9A9797", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "normal" }}>Special Gift</div>
+                      <div style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, lineHeight: "normal" }}>40 Referrals</div>
                     </div>
                   </div>
                 </div>
@@ -941,19 +988,23 @@ const Index = () => {
               {/* Session Card */}
               <div style={{ width: "357px" }}>
                 {/* Thumbnail */}
-                <div style={{
-                  width: "357.03px",
-                  height: "186.534px",
-                  aspectRatio: "178/93",
-                  borderRadius: "12px 12px 0 0",
-                  background: "url(https://img.youtube.com/vi/SyjnCjDtNS8/maxresdefault.jpg) lightgray 50% / cover no-repeat",
-                  boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
-                  position: "relative",
-                }}>
-                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                    <PlayButton />
+                <a href={sessionLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none" }}>
+                  <div style={{
+                    width: "357.03px",
+                    height: "186.534px",
+                    aspectRatio: "178/93",
+                    borderRadius: "12px 12px 0 0",
+                    background: sessionVideoId
+                      ? `url(https://img.youtube.com/vi/${sessionVideoId}/maxresdefault.jpg) lightgray 50% / cover no-repeat`
+                      : "url(https://img.youtube.com/vi/SyjnCjDtNS8/maxresdefault.jpg) lightgray 50% / cover no-repeat",
+                    boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
+                    position: "relative",
+                  }}>
+                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <PlayButton />
+                    </div>
                   </div>
-                </div>
+                </a>
 
                 {/* Bottom bar */}
                 <div style={{
@@ -1051,116 +1102,116 @@ const Index = () => {
 
           {/* Milestones card */}
           <div style={{
-            borderRadius: "12px",
+            width: "360px",
+            height: "318px",
+            borderRadius: "16px",
             background: "#FFF",
-            boxShadow: "0 2px 12px 0 rgba(0,0,0,0.08)",
+            boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
             padding: "20px 16px",
+            boxSizing: "border-box",
           }}>
-            {/* Milestone list with vertical line */}
-            <div style={{ position: "relative", paddingLeft: "36px" }}>
-              {/* Vertical connector line */}
-              <div style={{
-                position: "absolute",
-                left: "14px",
-                top: "20px",
-                bottom: "20px",
-                width: "2px",
-                background: "#E0E0E0",
-              }} />
+            <div style={{ position: "relative" }}>
+
+              {/* Vertical SVG line */}
+              <div style={{ position: "absolute", left: "15px", top: "16px", zIndex: 0 }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="3" height="225" viewBox="0 0 3 225" fill="none">
+                  <line x1="1.5" y1="151.5" x2="1.5" y2="223.5" stroke="#DDDEDE" strokeWidth="3" strokeLinecap="round"/>
+                  <line x1="1.5" y1="1.5" x2="1.50001" y2="162.5" stroke="#DDDEDE" strokeWidth="3" strokeLinecap="round" strokeDasharray="6 6"/>
+                </svg>
+              </div>
 
               {/* Milestone 1: Free Classes — CLAIMED */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px", position: "relative", zIndex: 1 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  {/* Green circle icon */}
-                  <div style={{
-                    position: "absolute",
-                    left: "4px",
-                    width: "22px",
-                    height: "22px",
-                    borderRadius: "50%",
-                    background: "#34C759",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    <span style={{ color: "#fff", fontSize: "11px", fontWeight: 700 }}>+20</span>
-                  </div>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none" style={{ flexShrink: 0 }}>
+                    <circle cx="16.5" cy="16.5" r="16.5" fill="#64A45E"/>
+                    <text x="16.5" y="21" textAnchor="middle" fontFamily="Outfit" fontSize="10" fontWeight="700" fill="white">+20</text>
+                  </svg>
                   <div>
-                    <div style={{ color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 700 }}>Free Classes</div>
-                    <div style={{ color: "#888", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400 }}>10 Referrals</div>
+                    <div>
+                      <span style={{ color: "#377456", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "normal" }}>+20</span>
+                      <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "normal" }}> Free Classes</span>
+                    </div>
+                    <div style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, lineHeight: "normal" }}>10 Referrals</div>
                   </div>
                 </div>
-                {/* CLAIMED badge */}
-                <div style={{ display: "flex", alignItems: "center", gap: "5px" }}>
-                  <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>CLAIMED</span>
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 6H17.82C17.93 5.69 18 5.35 18 5C18 3.34 16.66 2 15 2C13.95 2 13.04 2.54 12.5 3.35L12 4.02L11.5 3.34C10.96 2.54 10.05 2 9 2C7.34 2 6 3.34 6 5C6 5.35 6.07 5.69 6.18 6H4C2.89 6 2.01 6.89 2.01 8L2 19C2 20.11 2.89 21 4 21H20C21.11 21 22 20.11 22 19V8C22 6.89 21.11 6 20 6Z" fill="#FEAB27" />
+                <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                  <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, lineHeight: "normal" }}>CLAIMED</span>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11" fill="none">
+                    <path d="M5.5 3.27797V10.5M5.5 3.27797C5.29904 2.44989 4.95303 1.74191 4.50708 1.24642C4.06113 0.750936 3.53594 0.490906 3 0.500243C2.63164 0.500243 2.27837 0.646568 2.01791 0.907028C1.75744 1.16749 1.61111 1.52075 1.61111 1.88909C1.61111 2.25744 1.75744 2.6107 2.01791 2.87116C2.27837 3.13162 2.63164 3.27795 3 3.27795M5.5 3.27797C5.70096 2.44989 6.04697 1.74191 6.49292 1.24642C6.93888 0.750936 7.46406 0.490906 8 0.500243C8.36836 0.500243 8.72163 0.646568 8.98209 0.907028C9.24256 1.16749 9.38889 1.52075 9.38889 1.88909C9.38889 2.25744 9.24256 2.6107 8.98209 2.87116C8.72163 3.13162 8.36836 3.27795 8 3.27795M9.38889 5.50014V9.38892C9.38889 9.6836 9.27183 9.9662 9.06345 10.1746C8.85508 10.3829 8.57246 10.5 8.27778 10.5H2.72222C2.42754 10.5 2.14492 10.3829 1.93655 10.1746C1.72817 9.9662 1.61111 9.6836 1.61111 9.38892V5.50014M0.5 3.83351C0.5 3.68618 0.558532 3.54487 0.662718 3.44069C0.766905 3.3365 0.908213 3.27797 1.05556 3.27797H9.94444C10.0918 3.27797 10.2331 3.3365 10.3373 3.44069C10.4415 3.54487 10.5 3.68618 10.5 3.83351V4.9446C10.5 5.09193 10.4415 5.23324 10.3373 5.33742C10.2331 5.44161 10.0918 5.50014 9.94444 5.50014H1.05556C0.908213 5.50014 0.766905 5.44161 0.662718 5.33742C0.558532 5.23324 0.5 5.09193 0.5 4.9446V3.83351Z" stroke="#FEAB27" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
                 </div>
               </div>
 
-              {/* "You are here" pill */}
-              <div style={{ display: "flex", justifyContent: "center", marginBottom: "20px" }}>
+              {/* You are here indicator */}
+              <div style={{ display: "flex", alignItems: "center", gap: "7px", marginBottom: "18px", position: "relative", zIndex: 1 }}>
+                <div style={{ marginLeft: "-2.5px", flexShrink: 0 }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="38" height="38" viewBox="0 0 38 38" fill="none">
+                    <g filter="url(#milestoneGlow)">
+                      <circle cx="19" cy="19" r="13" fill="#FFDFAB"/>
+                    </g>
+                    <circle cx="18.9999" cy="18.9999" r="5.90909" fill="#FEAB27"/>
+                    <defs>
+                      <filter id="milestoneGlow" x="0" y="0" width="38" height="38" filterUnits="userSpaceOnUse" colorInterpolationFilters="sRGB">
+                        <feFlood floodOpacity="0" result="BackgroundImageFix"/>
+                        <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+                        <feGaussianBlur stdDeviation="3" result="effect1_foregroundBlur"/>
+                      </filter>
+                    </defs>
+                  </svg>
+                </div>
                 <div style={{
-                  display: "inline-flex", alignItems: "center", gap: "6px",
-                  background: "#FFF3D6", borderRadius: "20px", padding: "5px 14px",
+                  width: "106px", height: "28px",
+                  borderRadius: "20px",
                   border: "1px solid #FEAB27",
+                  background: "rgba(254, 171, 39, 0.20)",
+                  display: "flex", alignItems: "center", justifyContent: "center",
                 }}>
-                  <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#FEAB27" }} />
-                  <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>You are here</span>
+                  <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, lineHeight: "normal" }}>You are here</span>
                 </div>
               </div>
 
               {/* Milestone 2: Healthyday T-shirt — IN PROGRESS */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "18px", position: "relative", zIndex: 1 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  {/* Orange circle (in-progress) */}
-                  <div style={{
-                    position: "absolute",
-                    left: "4px",
-                    width: "22px",
-                    height: "22px",
-                    borderRadius: "50%",
-                    background: "#fff",
-                    border: "2.5px solid #FEAB27",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    <div style={{ width: "8px", height: "8px", borderRadius: "50%", background: "#FEAB27" }} />
+                  <div style={{ position: "relative", flexShrink: 0, width: "33px", height: "33px" }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none">
+                      <circle cx="16.5" cy="16.5" r="14.5" fill="white" stroke="#FEAB27" strokeWidth="4"/>
+                    </svg>
+                    <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M5.3335 7.33333V4.66667C5.3335 3.95942 5.61445 3.28115 6.11454 2.78105C6.61464 2.28095 7.29292 2 8.00016 2C8.70741 2 9.38568 2.28095 9.88578 2.78105C10.3859 3.28115 10.6668 3.95942 10.6668 4.66667V7.33333M3.3335 8.66667C3.3335 8.31304 3.47397 7.97391 3.72402 7.72386C3.97407 7.47381 4.31321 7.33333 4.66683 7.33333H11.3335C11.6871 7.33333 12.0263 7.47381 12.2763 7.72386C12.5264 7.97391 12.6668 8.31304 12.6668 8.66667V12.6667C12.6668 13.0203 12.5264 13.3594 12.2763 13.6095C12.0263 13.8595 11.6871 14 11.3335 14H4.66683C4.31321 14 3.97407 13.8595 3.72402 13.6095C3.47397 13.3594 3.3335 13.0203 3.3335 12.6667V8.66667ZM7.3335 10.6667C7.3335 10.8435 7.40373 11.013 7.52876 11.1381C7.65378 11.2631 7.82335 11.3333 8.00016 11.3333C8.17697 11.3333 8.34654 11.2631 8.47157 11.1381C8.59659 11.013 8.66683 10.8435 8.66683 10.6667C8.66683 10.4899 8.59659 10.3203 8.47157 10.1953C8.34654 10.0702 8.17697 10 8.00016 10C7.82335 10 7.65378 10.0702 7.52876 10.1953C7.40373 10.3203 7.3335 10.4899 7.3335 10.6667Z" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
                   </div>
                   <div>
-                    <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-                      <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 700 }}>Healthyday T-shirt</span>
-                      <span>👕</span>
-                    </div>
-                    <div style={{ color: "#888", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400 }}>20 Referrals</div>
+                    <div style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "normal" }}>Healthyday T-shirt</div>
+                    <div style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, lineHeight: "normal" }}>20 Referrals</div>
                   </div>
                 </div>
-                {/* IN PROGRESS badge */}
-                <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>IN PROGRESS</span>
+                <span style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, lineHeight: "normal" }}>IN PROGRESS</span>
               </div>
 
-              {/* Milestone 3: Special Gift — locked */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              {/* Milestone 3: Special Gift — LOCKED */}
+              <div style={{ display: "flex", alignItems: "center", position: "relative", zIndex: 1 }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
-                  {/* Grey locked circle */}
-                  <div style={{
-                    position: "absolute",
-                    left: "4px",
-                    width: "22px",
-                    height: "22px",
-                    borderRadius: "50%",
-                    background: "#E0E0E0",
-                    display: "flex", alignItems: "center", justifyContent: "center",
-                  }}>
-                    <svg width="11" height="13" viewBox="0 0 11 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                      <rect x="1" y="5.5" width="9" height="7" rx="1.5" fill="#9E9E9E" />
-                      <path d="M3 5.5V3.5C3 2.12 4.12 1 5.5 1C6.88 1 8 2.12 8 3.5V5.5" stroke="#9E9E9E" strokeWidth="1.4" strokeLinecap="round" />
+                  <div style={{ position: "relative", flexShrink: 0, width: "33px", height: "33px" }}>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none">
+                      <circle cx="16.5" cy="16.5" r="16.5" fill="#DDDEDE"/>
                     </svg>
+                    <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                        <path d="M5.3335 7.33333V4.66667C5.3335 3.95942 5.61445 3.28115 6.11454 2.78105C6.61464 2.28095 7.29292 2 8.00016 2C8.70741 2 9.38568 2.28095 9.88578 2.78105C10.3859 3.28115 10.6668 3.95942 10.6668 4.66667V7.33333M3.3335 8.66667C3.3335 8.31304 3.47397 7.97391 3.72402 7.72386C3.97407 7.47381 4.31321 7.33333 4.66683 7.33333H11.3335C11.6871 7.33333 12.0263 7.47381 12.2763 7.72386C12.5264 7.97391 12.6668 8.31304 12.6668 8.66667V12.6667C12.6668 13.0203 12.5264 13.3594 12.2763 13.6095C12.0263 13.8595 11.6871 14 11.3335 14H4.66683C4.31321 14 3.97407 13.8595 3.72402 13.6095C3.47397 13.3594 3.3335 13.0203 3.3335 12.6667V8.66667ZM7.3335 10.6667C7.3335 10.8435 7.40373 11.013 7.52876 11.1381C7.65378 11.2631 7.82335 11.3333 8.00016 11.3333C8.17697 11.3333 8.34654 11.2631 8.47157 11.1381C8.59659 11.013 8.66683 10.8435 8.66683 10.6667C8.66683 10.4899 8.59659 10.3203 8.47157 10.1953C8.34654 10.0702 8.17697 10 8.00016 10C7.82335 10 7.65378 10.0702 7.52876 10.1953C7.40373 10.3203 7.3335 10.4899 7.3335 10.6667Z" stroke="#A2A2A2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </svg>
+                    </div>
                   </div>
                   <div>
-                    <div style={{ color: "#BDBDBD", fontFamily: "Outfit", fontSize: "15px", fontWeight: 700 }}>Special Gift</div>
-                    <div style={{ color: "#BDBDBD", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400 }}>40 Referrals</div>
+                    <div style={{ color: "#9A9797", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "normal" }}>Special Gift</div>
+                    <div style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, lineHeight: "normal" }}>40 Referrals</div>
                   </div>
                 </div>
               </div>
+
             </div>
           </div>
         </div>
