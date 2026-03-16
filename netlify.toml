@@ -2,14 +2,8 @@
   publish = "dist"
   command = "npm run build"
 
-# Proxy API calls to the correct backend
-[[redirects]]
-  from = "/api/student"
-  to = "https://healthyday-backend-773381060399.asia-south1.run.app/api/internal/student"
-  status = 200
-  force = true
-  [redirects.headers]
-    X-From = "Netlify"
+[functions]
+  directory = "netlify/functions"
 
 # SPA fallback - serve index.html for all other routes
 [[redirects]]

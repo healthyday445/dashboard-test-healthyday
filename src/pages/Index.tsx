@@ -244,15 +244,9 @@ const Index = () => {
       setLoading(true);
       setError(null);
       try {
-        const encodedMobile = `%2B91${mobile}`;
+        const encodedMobile = encodeURIComponent(`+91${mobile}`);
         const response = await fetch(
-          `/api/student?mobile=${encodedMobile}`,
-          {
-            method: "GET",
-            headers: {
-              "X-API-KEY": "HDB@020205",
-            },
-          }
+          `/.netlify/functions/student?mobile=${encodedMobile}`
         );
 
         if (!response.ok) {
