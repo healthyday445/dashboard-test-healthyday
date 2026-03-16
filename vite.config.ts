@@ -12,10 +12,11 @@ export default defineConfig(({ mode }) => ({
       overlay: false,
     },
     proxy: {
-      "/api/internal/student": {
+      "/api/student": {
         target: "https://healthyday-backend-773381060399.asia-south1.run.app",
         changeOrigin: true,
         secure: true,
+        rewrite: () => "/api/internal/student",
       },
     },
   },
