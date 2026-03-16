@@ -11,6 +11,14 @@
   [redirects.headers]
     X-From = "Netlify"
 
+[[redirects]]
+  from = "/api/internal/student"
+  to = "https://get-student-details-773381060399.asia-south1.run.app/"
+  status = 200
+  force = true
+  [redirects.headers]
+    X-From = "Netlify"
+
 # SPA fallback - serve index.html for all other routes
 [[redirects]]
   from = "/*"
