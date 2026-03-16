@@ -16,7 +16,7 @@ export default defineConfig(({ mode }) => ({
         target: "https://healthyday-backend-773381060399.asia-south1.run.app",
         changeOrigin: true,
         secure: true,
-        rewrite: () => "/api/internal/student",
+        rewrite: (path) => path.replace("/api/student", "/api/internal/student"),
       },
     },
   },
