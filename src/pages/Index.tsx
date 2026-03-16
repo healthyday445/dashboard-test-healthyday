@@ -246,7 +246,7 @@ const Index = () => {
       try {
         const encodedMobile = `%2B91${mobile}`;
         const response = await fetch(
-          `/api/internal/student?mobile=${encodedMobile}`,
+          `/api/student?mobile=${encodedMobile}`,
           {
             method: "GET",
             headers: {
