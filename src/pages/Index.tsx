@@ -439,7 +439,10 @@ const Index = () => {
   };
 
   const batchInfo = getActiveBatchInfo(studentData?.free_batch_start_date);
-  const hasBatchAccess = studentData?.status === "registered" && batchInfo.isActive && !!studentData?.free_class_join_link;
+  const studentStatus = studentData?.status;
+  const isOngoingStatus = studentStatus === "registered" || studentStatus === "14DaysOngoing";
+  const sessionJoinLink = studentData?.free_classes_joining_link || studentData?.free_class_join_link;
+  const hasBatchAccess = isOngoingStatus && batchInfo.isActive && !!sessionJoinLink;
 
   // --- Active Batch Dashboard (Week 1 or Week 2) ---
   if (hasBatchAccess) {
@@ -456,7 +459,7 @@ const Index = () => {
       return "green"; // present or assumed attended
     });
 
-    const sessionLink = studentData?.free_class_join_link ?? "https://www.youtube.com/c/Healthyday";
+    const sessionLink = sessionJoinLink ?? "https://www.youtube.com/c/Healthyday";
     const ytIdMatch = sessionLink.match(/(?:v=|youtu\.be\/|\/live\/)([a-zA-Z0-9_-]{11})/);
     const sessionVideoId = ytIdMatch ? ytIdMatch[1] : null;
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
@@ -994,12 +997,18 @@ const Index = () => {
                     height: "186.534px",
                     aspectRatio: "178/93",
                     borderRadius: "12px 12px 0 0",
-                    background: sessionVideoId
-                      ? `url(https://img.youtube.com/vi/${sessionVideoId}/maxresdefault.jpg) lightgray 50% / cover no-repeat`
-                      : "url(https://img.youtube.com/vi/SyjnCjDtNS8/maxresdefault.jpg) lightgray 50% / cover no-repeat",
+                    background: (() => {
+                      const lang = studentData?.language;
+                      if (lang === "English") return "url(/language%20English.jpg) lightgray 50% / cover no-repeat";
+                      if (lang === "Telugu") return "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat";
+                      return sessionVideoId
+                        ? `url(https://img.youtube.com/vi/${sessionVideoId}/maxresdefault.jpg) lightgray 50% / cover no-repeat`
+                        : "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat";
+                    })(),
                     boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
                     position: "relative",
                   }}>
+                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px", background: "rgba(0, 0, 0, 0.32)" }} />
                     <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <PlayButton />
                     </div>
@@ -1367,7 +1376,7 @@ const Index = () => {
   }
 
   // --- 14 Days Completed Page ---
-  if (studentData?.status === "14 day completed") {
+  if (studentData?.status === "14 day completed" || studentData?.status === "14DaysCompleted") {
     const referralLink = "healthyday.app/ref=ggtujev58";
     const shareLink = mobile ? `https://healthyday.co.in/free-programmes?ref=91${mobile}` : referralLink;
 
