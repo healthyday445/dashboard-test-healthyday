@@ -16,7 +16,12 @@ export default defineConfig(({ mode }) => ({
         target: "https://healthyday-backend-773381060399.asia-south1.run.app",
         changeOrigin: true,
         secure: true,
-        rewrite: () => "/api/internal/student",
+        rewrite: (path) => path.replace("/.netlify/functions/student", "/api/internal/student"),
+        configure: (proxy) => {
+          proxy.on("proxyReq", (proxyReq) => {
+            proxyReq.setHeader("X-API-KEY", "HDB@020205");
+          });
+        },
       },
     },
   },
