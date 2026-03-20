@@ -532,27 +532,27 @@ const Index = () => {
     const BONUS_DAYS = [3, 5, 7, 10, 14];
     if (BONUS_DAYS.includes(currentDay)) {
       const lang = studentData?.language === "English" ? "English" : "Telugu";
-      type BonusInfo = { name: string; fullName: string; startMin: number; videoId: string };
+      type BonusInfo = { name: string; fullName: string; startMin: number; videoId: string; sessionLink: string; thumbnail: string };
       const bonusByDay: Record<number, Record<string, BonusInfo>> = {
         3: {
-          Telugu: { name: "Telugu Face Yoga Session", fullName: "Telugu Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8" },
-          English: { name: "English Face Yoga Session", fullName: "English Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8" },
+          Telugu: { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga", thumbnail: "/bonus/faceyoga_tel.jpg" },
+          English: { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga_eng", thumbnail: "/bonus/faceyoga_eng.jpg" },
         },
         5: {
-          Telugu: { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "raCc7Z31LYw" },
-          English: { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "u1Hom0s7ibU" },
+          Telugu: { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "raCc7Z31LYw", sessionLink: "https://start.dailyyogawithjagan.com/meditation_tel", thumbnail: "/bonus/meditation_tel.jpg" },
+          English: { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "u1Hom0s7ibU", sessionLink: "https://start.dailyyogawithjagan.com/meditation_eng", thumbnail: "/bonus/meditation_eng.jpg" },
         },
         7: {
-          Telugu: { name: "Telugu Weight Loss Session", fullName: "Telugu Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8" },
-          English: { name: "English Weight Loss Session", fullName: "English Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8" },
+          Telugu: { name: "Weight Loss Session", fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession", thumbnail: "/bonus/weightlosssession.jpg" },
+          English: { name: "Weight Loss Session", fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession_eng", thumbnail: "/bonus/weightlosssession_eng.jpg" },
         },
         10: {
-          Telugu: { name: "Telugu Breath Work Session", fullName: "Telugu Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8" },
-          English: { name: "English Breath Work Session", fullName: "English Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8" },
+          Telugu: { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/breathwork", thumbnail: "/bonus/breathwork.jpg" },
+          English: { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/bw_eng", thumbnail: "/bonus/bw_eng.jpg" },
         },
         14: {
-          Telugu: { name: "Telugu Sleep Session", fullName: "Telugu Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8" },
-          English: { name: "English Sleep Session", fullName: "English Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8" },
+          Telugu: { name: "Sleep Session", fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/sleepsession", thumbnail: "/bonus/sleepsession.jpg" },
+          English: { name: "Sleep Session", fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/sleepsession_eng", thumbnail: "/bonus/sleepsession_eng.jpg" },
         },
       };
       const bonusSession = bonusByDay[currentDay][lang];
@@ -589,7 +589,7 @@ const Index = () => {
               <>
                 <a href={`https://youtu.be/${bonusSession.videoId}`} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "372px", borderRadius: "12px", overflow: "hidden", background: "#000", position: "relative", marginBottom: "12px" }}>
                   <img
-                    src={`https://img.youtube.com/vi/${bonusSession.videoId}/maxresdefault.jpg`}
+                    src={bonusSession.thumbnail}
                     alt={bonusSession.name}
                     style={{ width: "372px", height: "204px", objectFit: "cover", opacity: 0.85, display: "block" }}
                   />
@@ -602,7 +602,7 @@ const Index = () => {
                     {bonusSession.name}
                   </span>
                   <a
-                    href={sessionLink}
+                    href={bonusSession.sessionLink}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
@@ -621,9 +621,9 @@ const Index = () => {
               </>
             ) : (
               <div style={{ marginBottom: "16px" }}>
-                <a href={`https://youtu.be/${bonusSession.videoId}`} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "360px", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
+                <a href={bonusSession.sessionLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "360px", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
                   <img
-                    src={`https://img.youtube.com/vi/${bonusSession.videoId}/maxresdefault.jpg`}
+                    src={bonusSession.thumbnail}
                     alt={bonusSession.name}
                     style={{ width: "360px", height: "197px", objectFit: "cover", opacity: 0.85, display: "block" }}
                   />
