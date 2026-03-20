@@ -587,7 +587,7 @@ const Index = () => {
 
             {isLive ? (
               <>
-                <div style={{ width: "372px", borderRadius: "12px", overflow: "hidden", background: "#000", position: "relative", marginBottom: "12px" }}>
+                <a href={`https://youtu.be/${bonusSession.videoId}`} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "372px", borderRadius: "12px", overflow: "hidden", background: "#000", position: "relative", marginBottom: "12px" }}>
                   <img
                     src={`https://img.youtube.com/vi/${bonusSession.videoId}/maxresdefault.jpg`}
                     alt={bonusSession.name}
@@ -596,7 +596,7 @@ const Index = () => {
                   <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <PlayButton />
                   </div>
-                </div>
+                </a>
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
                   <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>
                     {bonusSession.name}
@@ -621,7 +621,7 @@ const Index = () => {
               </>
             ) : (
               <div style={{ marginBottom: "16px" }}>
-                <div style={{ width: "360px", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
+                <a href={`https://youtu.be/${bonusSession.videoId}`} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "360px", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
                   <img
                     src={`https://img.youtube.com/vi/${bonusSession.videoId}/maxresdefault.jpg`}
                     alt={bonusSession.name}
@@ -630,7 +630,7 @@ const Index = () => {
                   <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                     <PlayButton />
                   </div>
-                </div>
+                </a>
                 <div style={{
                   width: "360px", height: "58px",
                   borderRadius: "0 0 12px 12px",
