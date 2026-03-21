@@ -822,106 +822,121 @@ const Index = () => {
             >
               <div
                 onClick={(e) => e.stopPropagation()}
-                style={{ width: "358px", borderRadius: "12px", background: "#0B2A4A", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}
+                style={{ width: "min(412px, 95vw)", borderRadius: "12px 12px 0 0", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)" }}
               >
                 <div className="flex items-center justify-between" style={{ marginBottom: "18px" }}>
-                  <span style={{ color: "#fff", fontSize: "13px", fontWeight: 700, letterSpacing: "1.2px" }}>REFERRAL STATUS</span>
+                  <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, lineHeight: "normal" }}>REFER & WIN</span>
                   <button onClick={() => setShowReferral(false)} style={{ background: "none", border: "none", color: "#fff", fontSize: "18px", cursor: "pointer", padding: "0", lineHeight: 1 }}>✕</button>
                 </div>
                 {(() => {
                   const refCount = studentData?.total_referral_count ?? 0;
-                  const maxRef = 20;
-                  const progressPct = Math.min(100, Math.round((refCount / maxRef) * 100));
-                  const reached10 = refCount >= 10;
-                  const reached20 = refCount >= 20;
-                  const earnedClasses = reached10 ? 20 : 0;
-                  const nextGoal = reached20 ? "All Claimed! 🎉" : reached10 ? "Healthyday T-shirt" : "10 Free Classes";
+                  const milestones = [
+                    { count: 5, lines: ["+10 FREE", "Classes"] },
+                    { count: 10, lines: ["+20 FREE", "Classes"] },
+                    { count: 20, lines: ["Healthyday", "T-shirt"] },
+                    { count: 40, lines: ["Water", "Bottle"] },
+                    { count: 60, lines: ["Yoga Mat"] },
+                  ];
+                  const progressPct = Math.min(100, (refCount / 60) * 100);
+                  const nextMilestoneCount = milestones.find(m => refCount < m.count)?.count ?? 60;
                   return (
                     <>
-                      <div style={{ position: "relative", marginBottom: "20px", padding: "0 4px" }}>
-                        <div style={{ position: "relative", height: "6px", display: "flex", alignItems: "center" }}>
+                      {/* Progress track */}
+                      <div style={{ position: "relative", marginBottom: "70px", marginTop: "10px" }}>
+                        {/* Grey track */}
+                        <div style={{ height: "6px", background: "#AAA", borderRadius: "3px" }}>
                           <div style={{ width: `${progressPct}%`, height: "6px", background: "#FEAB27", borderRadius: "3px" }} />
-                          <div style={{ width: `${100 - progressPct}%`, height: "6px", background: "#3A5068", borderRadius: "3px" }} />
                         </div>
-                        <div style={{ position: "absolute", left: "0%", top: "-4px" }}>
-                          <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: refCount > 0 ? "#FEAB27" : "#FF3B30" }} />
+                        {/* Start: red circle */}
+                        <div style={{ position: "absolute", left: "0%", top: "50%", transform: "translate(-50%, -50%)" }}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none"><circle cx="9.5" cy="9.5" r="9.5" fill="#FF0000"/></svg>
                         </div>
-                        <div style={{ position: "absolute", left: "50%", top: "-7px", transform: "translateX(-50%)" }}>
-                          {reached10 ? (
-                            <>
-                              <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
-                              <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap" }}>
-                                <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>10 Classes</div>
-                                <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Added</div>
+                        {/* "0 Referrals" label */}
+                        <div style={{ position: "absolute", left: "0%", top: "18px", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                          <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>0 Referrals</span>
+                        </div>
+                        {/* Milestone dots */}
+                        {milestones.map((m) => {
+                          const pos = (m.count / 60) * 100;
+                          const reached = refCount >= m.count;
+                          return (
+                            <div key={m.count} style={{ position: "absolute", left: `${pos}%`, top: "50%", transform: "translate(-50%, -50%)" }}>
+                              {/* Label above */}
+                              <div style={{ position: "absolute", bottom: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                                {m.lines.map(line => <span key={line} style={{ display: "block", color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>{line}</span>)}
                               </div>
-                            </>
-                          ) : (
-                            <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #5A7A96" }}>
-                              <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="6" rx="1" fill="#8A9FB5" /><path d="M3 5V3C3 1.9 3.9 1 5 1C6.1 1 7 1.9 7 3V5" stroke="#8A9FB5" strokeWidth="1.2" /></svg>
-                            </div>
-                          )}
-                        </div>
-                        <div style={{ position: "absolute", left: "50%", top: "22px", transform: "translateX(-50%)" }}>
-                          <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "22px" }}>10 Referrals</div>
-                        </div>
-                        <div style={{ position: "absolute", left: "100%", top: "-7px", transform: "translateX(-50%)" }}>
-                          {reached20 ? (
-                            <>
-                              <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
-                              <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap", transform: "translateX(-8px)" }}>
-                                <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Healthyday</div>
-                                <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>T-shirt</div>
-                              </div>
-                            </>
-                          ) : (
-                            <>
-                              <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #5A7A96" }}>
-                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="6" rx="1" fill="#8A9FB5" /><path d="M3 5V3C3 1.9 3.9 1 5 1C6.1 1 7 1.9 7 3V5" stroke="#8A9FB5" strokeWidth="1.2" /></svg>
-                              </div>
-                              <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap", transform: "translateX(-8px)" }}>
-                                <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Healthyday</div>
-                                <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>T-shirt</div>
-                              </div>
-                            </>
-                          )}
-                        </div>
-                        <div style={{ position: "absolute", left: "100%", top: "22px", transform: "translateX(-50%)" }}>
-                          <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "22px" }}>20 Referrals</div>
-                        </div>
-                        {!reached20 && (
-                          <div style={{ position: "absolute", left: `${progressPct}%`, top: "-12px", transform: "translateX(-50%)" }}>
-                            <div style={{ textAlign: "center" }}>
-                              <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, marginBottom: "2px" }}>You are here</div>
-                              <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto", border: "2px solid #fff" }}>
-                                <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><path d="M5 0C2.24 0 0 2.24 0 5C0 8.5 5 12 5 12S10 8.5 10 5C10 2.24 7.76 0 5 0ZM5 6.5C4.17 6.5 3.5 5.83 3.5 5C3.5 4.17 4.17 3.5 5 3.5C5.83 3.5 6.5 4.17 6.5 5C6.5 5.83 5.83 6.5 5 6.5Z" fill="white" /></svg>
+                              {/* Dot */}
+                              {reached ? (
+                                <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
+                              ) : (
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                  <circle cx="12" cy="12" r="12" fill="#DDDEDE"/>
+                                  <path d="M10.4243 11.1512V9.21185C10.4243 8.6975 10.6286 8.2042 10.9923 7.8405C11.356 7.47679 11.8493 7.27246 12.3637 7.27246C12.878 7.27246 13.3713 7.47679 13.735 7.8405C14.0987 8.2042 14.3031 8.6975 14.3031 9.21185V11.1512M8.96973 12.1209C8.96973 11.8638 9.07189 11.6171 9.25374 11.4353C9.4356 11.2534 9.68224 11.1512 9.93942 11.1512H14.7879C15.0451 11.1512 15.2917 11.2534 15.4736 11.4353C15.6554 11.6171 15.7576 11.8638 15.7576 12.1209V15.03C15.7576 15.2872 15.6554 15.5339 15.4736 15.7157C15.2917 15.8976 15.0451 15.9997 14.7879 15.9997H9.93942C9.68224 15.9997 9.4356 15.8976 9.25374 15.7157C9.07189 15.5339 8.96973 15.2872 8.96973 15.03V12.1209ZM11.8788 13.5755C11.8788 13.7041 11.9299 13.8274 12.0208 13.9183C12.1118 14.0093 12.2351 14.0603 12.3637 14.0603C12.4923 14.0603 12.6156 14.0093 12.7065 13.9183C12.7974 13.8274 12.8485 13.7041 12.8485 13.5755C12.8485 13.4469 12.7974 13.3236 12.7065 13.2327C12.6156 13.1417 12.4923 13.0906 12.3637 13.0906C12.2351 13.0906 12.1118 13.1417 12.0208 13.2327C11.9299 13.3236 11.8788 13.4469 11.8788 13.5755Z" stroke="#A2A2A2" strokeLinecap="round" strokeLinejoin="round"/>
+                                </svg>
+                              )}
+                              {/* Label below */}
+                              <div style={{ position: "absolute", top: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                                <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>{m.count} Referrals</span>
                               </div>
                             </div>
-                            <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "4px" }}>{refCount} Referrals</div>
+                          );
+                        })}
+                        {/* You are here */}
+                        <div style={{ position: "absolute", left: `${progressPct}%`, bottom: "20px", transform: `translateX(${progressPct < 8 ? "0%" : progressPct > 92 ? "-100%" : "-50%"})` }}>
+                          <div style={{ width: "70px", textAlign: "center" }}>
+                            <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>You are here</div>
+                            <div style={{ display: "flex", justifyContent: "center" }}>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24" fill="none">
+                                <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" fill="white"/>
+                                <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" fill="white"/>
+                                <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                                <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            </div>
                           </div>
-                        )}
+                        </div>
                       </div>
-                      <div className="flex gap-2" style={{ marginTop: "62px" }}>
-                        <div style={{ flex: 1, background: "#0E3358", borderRadius: "10px", padding: "12px" }}>
-                          <div className="flex items-center gap-2" style={{ marginBottom: "8px" }}>
-                            <div style={{ width: "18px", height: "18px", borderRadius: "4px", background: earnedClasses > 0 ? "#34C759" : "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#fff" }}>{earnedClasses > 0 ? "✓" : "—"}</div>
+                      {/* Info Cards */}
+                      <div style={{ display: "flex", gap: "8px", marginBottom: "14px" }}>
+                        {/* Left card */}
+                        <div style={{ flex: 1, height: "95px", borderRadius: "20px", background: "#012550", padding: "10px 12px", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
+                          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            {refCount >= 5 ? (
+                              <div style={{ width: "25px", height: "25px", borderRadius: "5px", background: "#34C759", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>✓</div>
+                            ) : (
+                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
+                                <rect width="25" height="25" rx="5" fill="#3B516E"/>
+                                <path d="M17.0141 9.01406L9.0001 17M9.01416 9L17.0001 17.014" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            )}
                             <div>
-                              <div style={{ color: "#8A9FB5", fontSize: "8px", fontWeight: 600, letterSpacing: "0.5px" }}>EARNED</div>
-                              <div style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{earnedClasses > 0 ? `${earnedClasses} FREE Classes Earned` : "No rewards yet"}</div>
+                              <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "7px", fontWeight: 700, lineHeight: "normal" }}>EARNED</div>
+                              <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>
+                                {refCount >= 5 ? `+${Math.min(Math.floor(refCount / 5), 2) * 10} FREE Classes` : "No Reward Earned Yet"}
+                              </div>
                             </div>
                           </div>
-                          <div className="flex items-center gap-2">
-                            <div style={{ width: "18px", height: "18px", borderRadius: "4px", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#8A9FB5" }}>🚩</div>
+                          <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
+                              <rect opacity="0.5" width="25" height="25" rx="5" fill="#757E8C"/>
+                              <path d="M7.14258 7.026C7.85787 6.33769 8.81954 5.95215 9.82115 5.95215C10.8228 5.95215 11.7844 6.33769 12.4997 7.026C13.215 7.7143 14.1767 8.09984 15.1783 8.09984C16.1799 8.09984 17.1416 7.7143 17.8569 7.026V13.7879C17.1416 14.4762 16.1799 14.8617 15.1783 14.8617C14.1767 14.8617 13.215 14.4762 12.4997 13.7879C11.7844 13.0995 10.8228 12.714 9.82115 12.714C8.81954 12.714 7.85787 13.0995 7.14258 13.7879V7.026Z" fill="#D9D9D9"/>
+                              <path d="M7.14258 19.0474V13.7879" stroke="#D9D9D9" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M7.14258 13.7879C7.85787 13.0995 8.81954 12.714 9.82115 12.714C10.8228 12.714 11.7844 13.0995 12.4997 13.7879C13.215 14.4762 14.1767 14.8617 15.1783 14.8617C16.1799 14.8617 17.1416 14.4762 17.8569 13.7879V7.026" stroke="#D9D9D9" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
                             <div>
-                              <div style={{ color: "#8A9FB5", fontSize: "8px", fontWeight: 600, letterSpacing: "0.5px" }}>NEXT GOAL</div>
-                              <div style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{nextGoal}</div>
+                              <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "7px", fontWeight: 700, lineHeight: "normal" }}>NEXT GOAL</div>
+                              <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>
+                                {refCount >= 60 ? "All Claimed! 🎉" : milestones.find(m => refCount < m.count)?.lines.join(" ") ?? "All Claimed!"}
+                              </div>
                             </div>
                           </div>
                         </div>
-                        <div style={{ width: "80px", background: "#0E3358", borderRadius: "10px", padding: "12px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                          <div style={{ color: "#8A9FB5", fontSize: "9px", fontWeight: 600, letterSpacing: "0.5px", marginBottom: "4px" }}>STATUS</div>
+                        {/* Right card */}
+                        <div style={{ width: "115px", height: "95px", borderRadius: "20px", background: "#012550", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px" }}>
+                          <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "10px", fontWeight: 700, lineHeight: "normal" }}>STATUS</div>
                           <div>
-                            <span style={{ color: "#FEAB27", fontSize: "32px", fontWeight: 800 }}>{refCount}</span>
-                            <span style={{ color: "#fff", fontSize: "18px", fontWeight: 700 }}>/20</span>
+                            <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>{refCount}</span>
+                            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>/{nextMilestoneCount}</span>
                           </div>
                         </div>
                       </div>
@@ -930,12 +945,12 @@ const Index = () => {
                 })()}
                 <button
                   onClick={() => navigate(`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`)}
-                  style={{ width: "100%", marginTop: "14px", padding: "14px", borderRadius: "10px", background: "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
+                  style={{ width: "100%", height: "43px", borderRadius: "14px", background: (studentData?.total_referral_count ?? 0) === 0 ? "#FF0000" : "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", boxShadow: "0 0 10px 1px rgba(0,0,0,0.25)", backdropFilter: "blur(2px)", marginTop: "8px" }}
                 >
-                  <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M13 8C14.66 8 15.99 6.66 15.99 5C15.99 3.34 14.66 2 13 2C11.34 2 10 3.34 10 5C10 6.66 11.34 8 13 8ZM7 8C8.66 8 9.99 6.66 9.99 5C9.99 3.34 8.66 2 7 2C5.34 2 4 3.34 4 5C4 6.66 5.34 8 7 8ZM7 10C4.67 10 0 11.17 0 13.5V16H14V13.5C14 11.17 9.33 10 7 10ZM13 10C12.71 10 12.38 10.02 12.03 10.05C13.19 10.89 14 12.02 14 13.5V16H20V13.5C20 11.17 15.33 10 13 10Z" fill="#0B2A4A" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                    <path d="M1.25 16.4079V14.7237C1.25 13.8303 1.60489 12.9736 2.23659 12.3419C2.86829 11.7102 3.72506 11.3553 4.61842 11.3553H7.98684C8.79526 11.3553 9.53632 11.6399 10.1174 12.114M12.1974 1.35948C12.9219 1.54499 13.5641 1.96638 14.0227 2.55721C14.4814 3.14804 14.7303 3.8747 14.7303 4.62264C14.7303 5.37057 14.4814 6.09723 14.0227 6.68806C13.5641 7.27889 12.9219 7.70028 12.1974 7.88579M12.1974 14.7237H17.25M14.7237 12.1974V17.25M2.93421 4.61842C2.93421 5.51178 3.2891 6.36855 3.9208 7.00025C4.5525 7.63196 5.40927 7.98684 6.30263 7.98684C7.19599 7.98684 8.05276 7.63196 8.68447 7.00025C9.31617 6.36855 9.67105 5.51178 9.67105 4.61842C9.67105 3.72506 9.31617 2.86829 8.68447 2.23659C8.05276 1.60489 7.19599 1.25 6.30263 1.25C5.40927 1.25 4.5525 1.60489 3.9208 2.23659C3.2891 2.86829 2.93421 3.72506 2.93421 4.61842Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                   </svg>
-                  <span style={{ color: "#0B2A4A", fontSize: "16px", fontWeight: 700, fontFamily: "Outfit" }}>Refer Now</span>
+                  <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal" }}>Refer Now</span>
                 </button>
               </div>
             </div>
@@ -1202,106 +1217,121 @@ const Index = () => {
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              style={{ width: "358px", borderRadius: "12px", background: "#0B2A4A", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}
+              style={{ width: "min(412px, 95vw)", borderRadius: "12px 12px 0 0", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)" }}
             >
               <div className="flex items-center justify-between" style={{ marginBottom: "18px" }}>
-                <span style={{ color: "#fff", fontSize: "13px", fontWeight: 700, letterSpacing: "1.2px" }}>REFERRAL STATUS</span>
+                <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, lineHeight: "normal" }}>REFER & WIN</span>
                 <button onClick={() => setShowReferral(false)} style={{ background: "none", border: "none", color: "#fff", fontSize: "18px", cursor: "pointer", padding: "0", lineHeight: 1 }}>✕</button>
               </div>
               {(() => {
                 const refCount = studentData?.total_referral_count ?? 0;
-                const maxRef = 20;
-                const progressPct = Math.min(100, Math.round((refCount / maxRef) * 100));
-                const reached10 = refCount >= 10;
-                const reached20 = refCount >= 20;
-                const earnedClasses = reached10 ? 20 : 0;
-                const nextGoal = reached20 ? "All Claimed! 🎉" : reached10 ? "Healthyday T-shirt" : "10 Free Classes";
+                const milestones = [
+                  { count: 5, lines: ["+10 FREE", "Classes"] },
+                  { count: 10, lines: ["+20 FREE", "Classes"] },
+                  { count: 20, lines: ["Healthyday", "T-shirt"] },
+                  { count: 40, lines: ["Water", "Bottle"] },
+                  { count: 60, lines: ["Yoga Mat"] },
+                ];
+                const progressPct = Math.min(100, (refCount / 60) * 100);
+                const nextMilestoneCount = milestones.find(m => refCount < m.count)?.count ?? 60;
                 return (
                   <>
-                    <div style={{ position: "relative", marginBottom: "20px", padding: "0 4px" }}>
-                      <div style={{ position: "relative", height: "6px", display: "flex", alignItems: "center" }}>
+                    {/* Progress track */}
+                    <div style={{ position: "relative", marginBottom: "70px", marginTop: "10px" }}>
+                      {/* Grey track */}
+                      <div style={{ height: "6px", background: "#AAA", borderRadius: "3px" }}>
                         <div style={{ width: `${progressPct}%`, height: "6px", background: "#FEAB27", borderRadius: "3px" }} />
-                        <div style={{ width: `${100 - progressPct}%`, height: "6px", background: "#3A5068", borderRadius: "3px" }} />
                       </div>
-                      <div style={{ position: "absolute", left: "0%", top: "-4px" }}>
-                        <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: refCount > 0 ? "#FEAB27" : "#FF3B30" }} />
+                      {/* Start: red circle */}
+                      <div style={{ position: "absolute", left: "0%", top: "50%", transform: "translate(-50%, -50%)" }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none"><circle cx="9.5" cy="9.5" r="9.5" fill="#FF0000"/></svg>
                       </div>
-                      <div style={{ position: "absolute", left: "50%", top: "-7px", transform: "translateX(-50%)" }}>
-                        {reached10 ? (
-                          <>
-                            <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
-                            <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap" }}>
-                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>10 Classes</div>
-                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Added</div>
+                      {/* "0 Referrals" label */}
+                      <div style={{ position: "absolute", left: "0%", top: "18px", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                        <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>0 Referrals</span>
+                      </div>
+                      {/* Milestone dots */}
+                      {milestones.map((m) => {
+                        const pos = (m.count / 60) * 100;
+                        const reached = refCount >= m.count;
+                        return (
+                          <div key={m.count} style={{ position: "absolute", left: `${pos}%`, top: "50%", transform: "translate(-50%, -50%)" }}>
+                            {/* Label above */}
+                            <div style={{ position: "absolute", bottom: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                              {m.lines.map(line => <span key={line} style={{ display: "block", color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>{line}</span>)}
                             </div>
-                          </>
-                        ) : (
-                          <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #5A7A96" }}>
-                            <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="6" rx="1" fill="#8A9FB5" /><path d="M3 5V3C3 1.9 3.9 1 5 1C6.1 1 7 1.9 7 3V5" stroke="#8A9FB5" strokeWidth="1.2" /></svg>
-                          </div>
-                        )}
-                      </div>
-                      <div style={{ position: "absolute", left: "50%", top: "22px", transform: "translateX(-50%)" }}>
-                        <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "22px" }}>10 Referrals</div>
-                      </div>
-                      <div style={{ position: "absolute", left: "100%", top: "-7px", transform: "translateX(-50%)" }}>
-                        {reached20 ? (
-                          <>
-                            <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
-                            <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap", transform: "translateX(-8px)" }}>
-                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Healthyday</div>
-                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>T-shirt</div>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #5A7A96" }}>
-                              <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="6" rx="1" fill="#8A9FB5" /><path d="M3 5V3C3 1.9 3.9 1 5 1C6.1 1 7 1.9 7 3V5" stroke="#8A9FB5" strokeWidth="1.2" /></svg>
-                            </div>
-                            <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap", transform: "translateX(-8px)" }}>
-                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Healthyday</div>
-                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>T-shirt</div>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                      <div style={{ position: "absolute", left: "100%", top: "22px", transform: "translateX(-50%)" }}>
-                        <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "22px" }}>20 Referrals</div>
-                      </div>
-                      {!reached20 && (
-                        <div style={{ position: "absolute", left: `${progressPct}%`, top: "-12px", transform: "translateX(-50%)" }}>
-                          <div style={{ textAlign: "center" }}>
-                            <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, marginBottom: "2px" }}>You are here</div>
-                            <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto", border: "2px solid #fff" }}>
-                              <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><path d="M5 0C2.24 0 0 2.24 0 5C0 8.5 5 12 5 12S10 8.5 10 5C10 2.24 7.76 0 5 0ZM5 6.5C4.17 6.5 3.5 5.83 3.5 5C3.5 4.17 4.17 3.5 5 3.5C5.83 3.5 6.5 4.17 6.5 5C6.5 5.83 5.83 6.5 5 6.5Z" fill="white" /></svg>
+                            {/* Dot */}
+                            {reached ? (
+                              <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
+                            ) : (
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="12" fill="#DDDEDE"/>
+                                <path d="M10.4243 11.1512V9.21185C10.4243 8.6975 10.6286 8.2042 10.9923 7.8405C11.356 7.47679 11.8493 7.27246 12.3637 7.27246C12.878 7.27246 13.3713 7.47679 13.735 7.8405C14.0987 8.2042 14.3031 8.6975 14.3031 9.21185V11.1512M8.96973 12.1209C8.96973 11.8638 9.07189 11.6171 9.25374 11.4353C9.4356 11.2534 9.68224 11.1512 9.93942 11.1512H14.7879C15.0451 11.1512 15.2917 11.2534 15.4736 11.4353C15.6554 11.6171 15.7576 11.8638 15.7576 12.1209V15.03C15.7576 15.2872 15.6554 15.5339 15.4736 15.7157C15.2917 15.8976 15.0451 15.9997 14.7879 15.9997H9.93942C9.68224 15.9997 9.4356 15.8976 9.25374 15.7157C9.07189 15.5339 8.96973 15.2872 8.96973 15.03V12.1209ZM11.8788 13.5755C11.8788 13.7041 11.9299 13.8274 12.0208 13.9183C12.1118 14.0093 12.2351 14.0603 12.3637 14.0603C12.4923 14.0603 12.6156 14.0093 12.7065 13.9183C12.7974 13.8274 12.8485 13.7041 12.8485 13.5755C12.8485 13.4469 12.7974 13.3236 12.7065 13.2327C12.6156 13.1417 12.4923 13.0906 12.3637 13.0906C12.2351 13.0906 12.1118 13.1417 12.0208 13.2327C11.9299 13.3236 11.8788 13.4469 11.8788 13.5755Z" stroke="#A2A2A2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            )}
+                            {/* Label below */}
+                            <div style={{ position: "absolute", top: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>{m.count} Referrals</span>
                             </div>
                           </div>
-                          <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "4px" }}>{refCount} Referrals</div>
+                        );
+                      })}
+                      {/* You are here */}
+                      <div style={{ position: "absolute", left: `${progressPct}%`, bottom: "20px", transform: `translateX(${progressPct < 8 ? "0%" : progressPct > 92 ? "-100%" : "-50%"})` }}>
+                        <div style={{ width: "70px", textAlign: "center" }}>
+                          <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>You are here</div>
+                          <div style={{ display: "flex", justifyContent: "center" }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24" fill="none">
+                              <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" fill="white"/>
+                              <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" fill="white"/>
+                              <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </div>
                         </div>
-                      )}
+                      </div>
                     </div>
-                    <div className="flex gap-2" style={{ marginTop: "62px" }}>
-                      <div style={{ flex: 1, background: "#0E3358", borderRadius: "10px", padding: "12px" }}>
-                        <div className="flex items-center gap-2" style={{ marginBottom: "8px" }}>
-                          <div style={{ width: "18px", height: "18px", borderRadius: "4px", background: earnedClasses > 0 ? "#34C759" : "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#fff" }}>{earnedClasses > 0 ? "✓" : "—"}</div>
+                    {/* Info Cards */}
+                    <div style={{ display: "flex", gap: "8px", marginBottom: "14px" }}>
+                      {/* Left card */}
+                      <div style={{ flex: 1, height: "95px", borderRadius: "20px", background: "#012550", padding: "10px 12px", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          {refCount >= 5 ? (
+                            <div style={{ width: "25px", height: "25px", borderRadius: "5px", background: "#34C759", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>✓</div>
+                          ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
+                              <rect width="25" height="25" rx="5" fill="#3B516E"/>
+                              <path d="M17.0141 9.01406L9.0001 17M9.01416 9L17.0001 17.014" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          )}
                           <div>
-                            <div style={{ color: "#8A9FB5", fontSize: "8px", fontWeight: 600, letterSpacing: "0.5px" }}>EARNED</div>
-                            <div style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{earnedClasses > 0 ? `${earnedClasses} FREE Classes Earned` : "No rewards yet"}</div>
+                            <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "7px", fontWeight: 700, lineHeight: "normal" }}>EARNED</div>
+                            <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>
+                              {refCount >= 5 ? `+${Math.min(Math.floor(refCount / 5), 2) * 10} FREE Classes` : "No Reward Earned Yet"}
+                            </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <div style={{ width: "18px", height: "18px", borderRadius: "4px", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#8A9FB5" }}>🚩</div>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
+                            <rect opacity="0.5" width="25" height="25" rx="5" fill="#757E8C"/>
+                            <path d="M7.14258 7.026C7.85787 6.33769 8.81954 5.95215 9.82115 5.95215C10.8228 5.95215 11.7844 6.33769 12.4997 7.026C13.215 7.7143 14.1767 8.09984 15.1783 8.09984C16.1799 8.09984 17.1416 7.7143 17.8569 7.026V13.7879C17.1416 14.4762 16.1799 14.8617 15.1783 14.8617C14.1767 14.8617 13.215 14.4762 12.4997 13.7879C11.7844 13.0995 10.8228 12.714 9.82115 12.714C8.81954 12.714 7.85787 13.0995 7.14258 13.7879V7.026Z" fill="#D9D9D9"/>
+                            <path d="M7.14258 19.0474V13.7879" stroke="#D9D9D9" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M7.14258 13.7879C7.85787 13.0995 8.81954 12.714 9.82115 12.714C10.8228 12.714 11.7844 13.0995 12.4997 13.7879C13.215 14.4762 14.1767 14.8617 15.1783 14.8617C16.1799 14.8617 17.1416 14.4762 17.8569 13.7879V7.026" stroke="#D9D9D9" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
                           <div>
-                            <div style={{ color: "#8A9FB5", fontSize: "8px", fontWeight: 600, letterSpacing: "0.5px" }}>NEXT GOAL</div>
-                            <div style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{nextGoal}</div>
+                            <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "7px", fontWeight: 700, lineHeight: "normal" }}>NEXT GOAL</div>
+                            <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>
+                              {refCount >= 60 ? "All Claimed! 🎉" : milestones.find(m => refCount < m.count)?.lines.join(" ") ?? "All Claimed!"}
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div style={{ width: "80px", background: "#0E3358", borderRadius: "10px", padding: "12px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                        <div style={{ color: "#8A9FB5", fontSize: "9px", fontWeight: 600, letterSpacing: "0.5px", marginBottom: "4px" }}>STATUS</div>
+                      {/* Right card */}
+                      <div style={{ width: "115px", height: "95px", borderRadius: "20px", background: "#012550", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px" }}>
+                        <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "10px", fontWeight: 700, lineHeight: "normal" }}>STATUS</div>
                         <div>
-                          <span style={{ color: "#FEAB27", fontSize: "32px", fontWeight: 800 }}>{refCount}</span>
-                          <span style={{ color: "#fff", fontSize: "18px", fontWeight: 700 }}>/20</span>
+                          <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>{refCount}</span>
+                          <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>/{nextMilestoneCount}</span>
                         </div>
                       </div>
                     </div>
@@ -1310,12 +1340,12 @@ const Index = () => {
               })()}
               <button
                 onClick={() => navigate(`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`)}
-                style={{ width: "100%", marginTop: "14px", padding: "14px", borderRadius: "10px", background: "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
+                style={{ width: "100%", height: "43px", borderRadius: "14px", background: (studentData?.total_referral_count ?? 0) === 0 ? "#FF0000" : "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", boxShadow: "0 0 10px 1px rgba(0,0,0,0.25)", backdropFilter: "blur(2px)", marginTop: "8px" }}
               >
-                <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M13 8C14.66 8 15.99 6.66 15.99 5C15.99 3.34 14.66 2 13 2C11.34 2 10 3.34 10 5C10 6.66 11.34 8 13 8ZM7 8C8.66 8 9.99 6.66 9.99 5C9.99 3.34 8.66 2 7 2C5.34 2 4 3.34 4 5C4 6.66 5.34 8 7 8ZM7 10C4.67 10 0 11.17 0 13.5V16H14V13.5C14 11.17 9.33 10 7 10ZM13 10C12.71 10 12.38 10.02 12.03 10.05C13.19 10.89 14 12.02 14 13.5V16H20V13.5C20 11.17 15.33 10 13 10Z" fill="#0B2A4A" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                  <path d="M1.25 16.4079V14.7237C1.25 13.8303 1.60489 12.9736 2.23659 12.3419C2.86829 11.7102 3.72506 11.3553 4.61842 11.3553H7.98684C8.79526 11.3553 9.53632 11.6399 10.1174 12.114M12.1974 1.35948C12.9219 1.54499 13.5641 1.96638 14.0227 2.55721C14.4814 3.14804 14.7303 3.8747 14.7303 4.62264C14.7303 5.37057 14.4814 6.09723 14.0227 6.68806C13.5641 7.27889 12.9219 7.70028 12.1974 7.88579M12.1974 14.7237H17.25M14.7237 12.1974V17.25M2.93421 4.61842C2.93421 5.51178 3.2891 6.36855 3.9208 7.00025C4.5525 7.63196 5.40927 7.98684 6.30263 7.98684C7.19599 7.98684 8.05276 7.63196 8.68447 7.00025C9.31617 6.36855 9.67105 5.51178 9.67105 4.61842C9.67105 3.72506 9.31617 2.86829 8.68447 2.23659C8.05276 1.60489 7.19599 1.25 6.30263 1.25C5.40927 1.25 4.5525 1.60489 3.9208 2.23659C3.2891 2.86829 2.93421 3.72506 2.93421 4.61842Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <span style={{ color: "#0B2A4A", fontSize: "16px", fontWeight: 700, fontFamily: "Outfit" }}>Refer Now</span>
+                <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal" }}>Refer Now</span>
               </button>
             </div>
           </div>
@@ -1742,106 +1772,121 @@ const Index = () => {
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              style={{ width: "358px", borderRadius: "12px", background: "#0B2A4A", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", boxShadow: "0 20px 60px rgba(0,0,0,0.4)" }}
+              style={{ width: "min(412px, 95vw)", borderRadius: "12px 12px 0 0", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)" }}
             >
               <div className="flex items-center justify-between" style={{ marginBottom: "18px" }}>
-                <span style={{ color: "#fff", fontSize: "13px", fontWeight: 700, letterSpacing: "1.2px" }}>REFERRAL STATUS</span>
+                <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, lineHeight: "normal" }}>REFER & WIN</span>
                 <button onClick={() => setShowReferral(false)} style={{ background: "none", border: "none", color: "#fff", fontSize: "18px", cursor: "pointer", padding: "0", lineHeight: 1 }}>✕</button>
               </div>
               {(() => {
                 const refCount = studentData?.total_referral_count ?? 0;
-                const maxRef = 20;
-                const progressPct = Math.min(100, Math.round((refCount / maxRef) * 100));
-                const reached10 = refCount >= 10;
-                const reached20 = refCount >= 20;
-                const earnedClasses = reached10 ? 20 : 0;
-                const nextGoal = reached20 ? "All Claimed! 🎉" : reached10 ? "Healthyday T-shirt" : "10 Free Classes";
+                const milestones = [
+                  { count: 5, lines: ["+10 FREE", "Classes"] },
+                  { count: 10, lines: ["+20 FREE", "Classes"] },
+                  { count: 20, lines: ["Healthyday", "T-shirt"] },
+                  { count: 40, lines: ["Water", "Bottle"] },
+                  { count: 60, lines: ["Yoga Mat"] },
+                ];
+                const progressPct = Math.min(100, (refCount / 60) * 100);
+                const nextMilestoneCount = milestones.find(m => refCount < m.count)?.count ?? 60;
                 return (
                   <>
-                    <div style={{ position: "relative", marginBottom: "20px", padding: "0 4px" }}>
-                      <div style={{ position: "relative", height: "6px", display: "flex", alignItems: "center" }}>
+                    {/* Progress track */}
+                    <div style={{ position: "relative", marginBottom: "70px", marginTop: "10px" }}>
+                      {/* Grey track */}
+                      <div style={{ height: "6px", background: "#AAA", borderRadius: "3px" }}>
                         <div style={{ width: `${progressPct}%`, height: "6px", background: "#FEAB27", borderRadius: "3px" }} />
-                        <div style={{ width: `${100 - progressPct}%`, height: "6px", background: "#3A5068", borderRadius: "3px" }} />
                       </div>
-                      <div style={{ position: "absolute", left: "0%", top: "-4px" }}>
-                        <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: refCount > 0 ? "#FEAB27" : "#FF3B30" }} />
+                      {/* Start: red circle */}
+                      <div style={{ position: "absolute", left: "0%", top: "50%", transform: "translate(-50%, -50%)" }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none"><circle cx="9.5" cy="9.5" r="9.5" fill="#FF0000"/></svg>
                       </div>
-                      <div style={{ position: "absolute", left: "50%", top: "-7px", transform: "translateX(-50%)" }}>
-                        {reached10 ? (
-                          <>
-                            <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
-                            <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap" }}>
-                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>10 Classes</div>
-                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Added</div>
+                      {/* "0 Referrals" label */}
+                      <div style={{ position: "absolute", left: "0%", top: "18px", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                        <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>0 Referrals</span>
+                      </div>
+                      {/* Milestone dots */}
+                      {milestones.map((m) => {
+                        const pos = (m.count / 60) * 100;
+                        const reached = refCount >= m.count;
+                        return (
+                          <div key={m.count} style={{ position: "absolute", left: `${pos}%`, top: "50%", transform: "translate(-50%, -50%)" }}>
+                            {/* Label above */}
+                            <div style={{ position: "absolute", bottom: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                              {m.lines.map(line => <span key={line} style={{ display: "block", color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>{line}</span>)}
                             </div>
-                          </>
-                        ) : (
-                          <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #5A7A96" }}>
-                            <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="6" rx="1" fill="#8A9FB5" /><path d="M3 5V3C3 1.9 3.9 1 5 1C6.1 1 7 1.9 7 3V5" stroke="#8A9FB5" strokeWidth="1.2" /></svg>
-                          </div>
-                        )}
-                      </div>
-                      <div style={{ position: "absolute", left: "50%", top: "22px", transform: "translateX(-50%)" }}>
-                        <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "22px" }}>10 Referrals</div>
-                      </div>
-                      <div style={{ position: "absolute", left: "100%", top: "-7px", transform: "translateX(-50%)" }}>
-                        {reached20 ? (
-                          <>
-                            <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
-                            <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap", transform: "translateX(-8px)" }}>
-                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Healthyday</div>
-                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>T-shirt</div>
-                            </div>
-                          </>
-                        ) : (
-                          <>
-                            <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #5A7A96" }}>
-                              <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="6" rx="1" fill="#8A9FB5" /><path d="M3 5V3C3 1.9 3.9 1 5 1C6.1 1 7 1.9 7 3V5" stroke="#8A9FB5" strokeWidth="1.2" /></svg>
-                            </div>
-                            <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap", transform: "translateX(-8px)" }}>
-                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Healthyday</div>
-                              <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>T-shirt</div>
-                            </div>
-                          </>
-                        )}
-                      </div>
-                      <div style={{ position: "absolute", left: "100%", top: "22px", transform: "translateX(-50%)" }}>
-                        <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "22px" }}>20 Referrals</div>
-                      </div>
-                      {!reached20 && (
-                        <div style={{ position: "absolute", left: `${progressPct}%`, top: "-12px", transform: "translateX(-50%)" }}>
-                          <div style={{ textAlign: "center" }}>
-                            <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, marginBottom: "2px" }}>You are here</div>
-                            <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto", border: "2px solid #fff" }}>
-                              <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><path d="M5 0C2.24 0 0 2.24 0 5C0 8.5 5 12 5 12S10 8.5 10 5C10 2.24 7.76 0 5 0ZM5 6.5C4.17 6.5 3.5 5.83 3.5 5C3.5 4.17 4.17 3.5 5 3.5C5.83 3.5 6.5 4.17 6.5 5C6.5 5.83 5.83 6.5 5 6.5Z" fill="white" /></svg>
+                            {/* Dot */}
+                            {reached ? (
+                              <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
+                            ) : (
+                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="12" fill="#DDDEDE"/>
+                                <path d="M10.4243 11.1512V9.21185C10.4243 8.6975 10.6286 8.2042 10.9923 7.8405C11.356 7.47679 11.8493 7.27246 12.3637 7.27246C12.878 7.27246 13.3713 7.47679 13.735 7.8405C14.0987 8.2042 14.3031 8.6975 14.3031 9.21185V11.1512M8.96973 12.1209C8.96973 11.8638 9.07189 11.6171 9.25374 11.4353C9.4356 11.2534 9.68224 11.1512 9.93942 11.1512H14.7879C15.0451 11.1512 15.2917 11.2534 15.4736 11.4353C15.6554 11.6171 15.7576 11.8638 15.7576 12.1209V15.03C15.7576 15.2872 15.6554 15.5339 15.4736 15.7157C15.2917 15.8976 15.0451 15.9997 14.7879 15.9997H9.93942C9.68224 15.9997 9.4356 15.8976 9.25374 15.7157C9.07189 15.5339 8.96973 15.2872 8.96973 15.03V12.1209ZM11.8788 13.5755C11.8788 13.7041 11.9299 13.8274 12.0208 13.9183C12.1118 14.0093 12.2351 14.0603 12.3637 14.0603C12.4923 14.0603 12.6156 14.0093 12.7065 13.9183C12.7974 13.8274 12.8485 13.7041 12.8485 13.5755C12.8485 13.4469 12.7974 13.3236 12.7065 13.2327C12.6156 13.1417 12.4923 13.0906 12.3637 13.0906C12.2351 13.0906 12.1118 13.1417 12.0208 13.2327C11.9299 13.3236 11.8788 13.4469 11.8788 13.5755Z" stroke="#A2A2A2" strokeLinecap="round" strokeLinejoin="round"/>
+                              </svg>
+                            )}
+                            {/* Label below */}
+                            <div style={{ position: "absolute", top: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>{m.count} Referrals</span>
                             </div>
                           </div>
-                          <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "4px" }}>{refCount} Referrals</div>
+                        );
+                      })}
+                      {/* You are here */}
+                      <div style={{ position: "absolute", left: `${progressPct}%`, bottom: "20px", transform: `translateX(${progressPct < 8 ? "0%" : progressPct > 92 ? "-100%" : "-50%"})` }}>
+                        <div style={{ width: "70px", textAlign: "center" }}>
+                          <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>You are here</div>
+                          <div style={{ display: "flex", justifyContent: "center" }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24" fill="none">
+                              <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" fill="white"/>
+                              <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" fill="white"/>
+                              <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                              <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          </div>
                         </div>
-                      )}
+                      </div>
                     </div>
-                    <div className="flex gap-2" style={{ marginTop: "62px" }}>
-                      <div style={{ flex: 1, background: "#0E3358", borderRadius: "10px", padding: "12px" }}>
-                        <div className="flex items-center gap-2" style={{ marginBottom: "8px" }}>
-                          <div style={{ width: "18px", height: "18px", borderRadius: "4px", background: earnedClasses > 0 ? "#34C759" : "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#fff" }}>{earnedClasses > 0 ? "✓" : "—"}</div>
+                    {/* Info Cards */}
+                    <div style={{ display: "flex", gap: "8px", marginBottom: "14px" }}>
+                      {/* Left card */}
+                      <div style={{ flex: 1, height: "95px", borderRadius: "20px", background: "#012550", padding: "10px 12px", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          {refCount >= 5 ? (
+                            <div style={{ width: "25px", height: "25px", borderRadius: "5px", background: "#34C759", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>✓</div>
+                          ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
+                              <rect width="25" height="25" rx="5" fill="#3B516E"/>
+                              <path d="M17.0141 9.01406L9.0001 17M9.01416 9L17.0001 17.014" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          )}
                           <div>
-                            <div style={{ color: "#8A9FB5", fontSize: "8px", fontWeight: 600, letterSpacing: "0.5px" }}>EARNED</div>
-                            <div style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{earnedClasses > 0 ? `${earnedClasses} FREE Classes Earned` : "No rewards yet"}</div>
+                            <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "7px", fontWeight: 700, lineHeight: "normal" }}>EARNED</div>
+                            <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>
+                              {refCount >= 5 ? `+${Math.min(Math.floor(refCount / 5), 2) * 10} FREE Classes` : "No Reward Earned Yet"}
+                            </div>
                           </div>
                         </div>
-                        <div className="flex items-center gap-2">
-                          <div style={{ width: "18px", height: "18px", borderRadius: "4px", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#8A9FB5" }}>🚩</div>
+                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
+                            <rect opacity="0.5" width="25" height="25" rx="5" fill="#757E8C"/>
+                            <path d="M7.14258 7.026C7.85787 6.33769 8.81954 5.95215 9.82115 5.95215C10.8228 5.95215 11.7844 6.33769 12.4997 7.026C13.215 7.7143 14.1767 8.09984 15.1783 8.09984C16.1799 8.09984 17.1416 7.7143 17.8569 7.026V13.7879C17.1416 14.4762 16.1799 14.8617 15.1783 14.8617C14.1767 14.8617 13.215 14.4762 12.4997 13.7879C11.7844 13.0995 10.8228 12.714 9.82115 12.714C8.81954 12.714 7.85787 13.0995 7.14258 13.7879V7.026Z" fill="#D9D9D9"/>
+                            <path d="M7.14258 19.0474V13.7879" stroke="#D9D9D9" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M7.14258 13.7879C7.85787 13.0995 8.81954 12.714 9.82115 12.714C10.8228 12.714 11.7844 13.0995 12.4997 13.7879C13.215 14.4762 14.1767 14.8617 15.1783 14.8617C16.1799 14.8617 17.1416 14.4762 17.8569 13.7879V7.026" stroke="#D9D9D9" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
                           <div>
-                            <div style={{ color: "#8A9FB5", fontSize: "8px", fontWeight: 600, letterSpacing: "0.5px" }}>NEXT GOAL</div>
-                            <div style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{nextGoal}</div>
+                            <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "7px", fontWeight: 700, lineHeight: "normal" }}>NEXT GOAL</div>
+                            <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>
+                              {refCount >= 60 ? "All Claimed! 🎉" : milestones.find(m => refCount < m.count)?.lines.join(" ") ?? "All Claimed!"}
+                            </div>
                           </div>
                         </div>
                       </div>
-                      <div style={{ width: "80px", background: "#0E3358", borderRadius: "10px", padding: "12px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                        <div style={{ color: "#8A9FB5", fontSize: "9px", fontWeight: 600, letterSpacing: "0.5px", marginBottom: "4px" }}>STATUS</div>
+                      {/* Right card */}
+                      <div style={{ width: "115px", height: "95px", borderRadius: "20px", background: "#012550", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px" }}>
+                        <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "10px", fontWeight: 700, lineHeight: "normal" }}>STATUS</div>
                         <div>
-                          <span style={{ color: "#FEAB27", fontSize: "32px", fontWeight: 800 }}>{refCount}</span>
-                          <span style={{ color: "#fff", fontSize: "18px", fontWeight: 700 }}>/20</span>
+                          <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>{refCount}</span>
+                          <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>/{nextMilestoneCount}</span>
                         </div>
                       </div>
                     </div>
@@ -1850,12 +1895,12 @@ const Index = () => {
               })()}
               <button
                 onClick={() => navigate(`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`)}
-                style={{ width: "100%", marginTop: "14px", padding: "14px", borderRadius: "10px", background: "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px" }}
+                style={{ width: "100%", height: "43px", borderRadius: "14px", background: (studentData?.total_referral_count ?? 0) === 0 ? "#FF0000" : "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", boxShadow: "0 0 10px 1px rgba(0,0,0,0.25)", backdropFilter: "blur(2px)", marginTop: "8px" }}
               >
-                <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M13 8C14.66 8 15.99 6.66 15.99 5C15.99 3.34 14.66 2 13 2C11.34 2 10 3.34 10 5C10 6.66 11.34 8 13 8ZM7 8C8.66 8 9.99 6.66 9.99 5C9.99 3.34 8.66 2 7 2C5.34 2 4 3.34 4 5C4 6.66 5.34 8 7 8ZM7 10C4.67 10 0 11.17 0 13.5V16H14V13.5C14 11.17 9.33 10 7 10ZM13 10C12.71 10 12.38 10.02 12.03 10.05C13.19 10.89 14 12.02 14 13.5V16H20V13.5C20 11.17 15.33 10 13 10Z" fill="#0B2A4A" />
+                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                  <path d="M1.25 16.4079V14.7237C1.25 13.8303 1.60489 12.9736 2.23659 12.3419C2.86829 11.7102 3.72506 11.3553 4.61842 11.3553H7.98684C8.79526 11.3553 9.53632 11.6399 10.1174 12.114M12.1974 1.35948C12.9219 1.54499 13.5641 1.96638 14.0227 2.55721C14.4814 3.14804 14.7303 3.8747 14.7303 4.62264C14.7303 5.37057 14.4814 6.09723 14.0227 6.68806C13.5641 7.27889 12.9219 7.70028 12.1974 7.88579M12.1974 14.7237H17.25M14.7237 12.1974V17.25M2.93421 4.61842C2.93421 5.51178 3.2891 6.36855 3.9208 7.00025C4.5525 7.63196 5.40927 7.98684 6.30263 7.98684C7.19599 7.98684 8.05276 7.63196 8.68447 7.00025C9.31617 6.36855 9.67105 5.51178 9.67105 4.61842C9.67105 3.72506 9.31617 2.86829 8.68447 2.23659C8.05276 1.60489 7.19599 1.25 6.30263 1.25C5.40927 1.25 4.5525 1.60489 3.9208 2.23659C3.2891 2.86829 2.93421 3.72506 2.93421 4.61842Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
                 </svg>
-                <span style={{ color: "#0B2A4A", fontSize: "16px", fontWeight: 700, fontFamily: "Outfit" }}>Refer Now</span>
+                <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal" }}>Refer Now</span>
               </button>
             </div>
           </div>
@@ -2013,20 +2058,18 @@ const Index = () => {
           <div
             onClick={(e) => e.stopPropagation()}
             style={{
-              width: "358px",
-              borderRadius: "12px",
-              background: "#0B2A4A",
+              width: "min(412px, 95vw)",
+              borderRadius: "12px 12px 0 0",
+              background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
               padding: "16px",
               position: "relative",
               fontFamily: "Outfit, sans-serif",
-              boxShadow: "0 20px 60px rgba(0,0,0,0.4)",
+              boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)",
             }}
           >
             {/* Header */}
             <div className="flex items-center justify-between" style={{ marginBottom: "18px" }}>
-              <span style={{ color: "#fff", fontSize: "13px", fontWeight: 700, letterSpacing: "1.2px" }}>
-                REFERRAL STATUS
-              </span>
+              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, lineHeight: "normal" }}>REFER & WIN</span>
               <button
                 onClick={() => setShowReferral(false)}
                 style={{
@@ -2046,113 +2089,113 @@ const Index = () => {
             {/* Progress Bar — fully dynamic */}
             {(() => {
               const refCount = studentData?.total_referral_count ?? 0;
-              const maxRef = 20;
-              const progressPct = Math.min(100, Math.round((refCount / maxRef) * 100));
-              const reached10 = refCount >= 10;
-              const reached20 = refCount >= 20;
-              const earnedClasses = reached10 ? 20 : 0;
-              const nextGoal = reached20 ? "All Claimed! 🎉" : reached10 ? "Healthyday T-shirt" : "10 Free Classes";
-
+              const milestones = [
+                { count: 5, lines: ["+10 FREE", "Classes"] },
+                { count: 10, lines: ["+20 FREE", "Classes"] },
+                { count: 20, lines: ["Healthyday", "T-shirt"] },
+                { count: 40, lines: ["Water", "Bottle"] },
+                { count: 60, lines: ["Yoga Mat"] },
+              ];
+              const progressPct = Math.min(100, (refCount / 60) * 100);
+              const nextMilestoneCount = milestones.find(m => refCount < m.count)?.count ?? 60;
               return (
                 <>
-                  <div style={{ position: "relative", marginBottom: "20px", padding: "0 4px" }}>
-                    {/* Track */}
-                    <div style={{ position: "relative", height: "6px", display: "flex", alignItems: "center" }}>
+                  {/* Progress track */}
+                  <div style={{ position: "relative", marginBottom: "70px", marginTop: "10px" }}>
+                    {/* Grey track */}
+                    <div style={{ height: "6px", background: "#AAA", borderRadius: "3px" }}>
                       <div style={{ width: `${progressPct}%`, height: "6px", background: "#FEAB27", borderRadius: "3px" }} />
-                      <div style={{ width: `${100 - progressPct}%`, height: "6px", background: "#3A5068", borderRadius: "3px" }} />
                     </div>
-
-                    {/* Dot 1 - Start */}
-                    <div style={{ position: "absolute", left: "0%", top: "-4px" }}>
-                      <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: refCount > 0 ? "#FEAB27" : "#FF3B30" }} />
+                    {/* Start: red circle */}
+                    <div style={{ position: "absolute", left: "0%", top: "50%", transform: "translate(-50%, -50%)" }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none"><circle cx="9.5" cy="9.5" r="9.5" fill="#FF0000"/></svg>
                     </div>
-
-                    {/* Dot 2 - 10 Referrals */}
-                    <div style={{ position: "absolute", left: "50%", top: "-7px", transform: "translateX(-50%)" }}>
-                      {reached10 ? (
-                        <>
-                          <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
-                          <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap" }}>
-                            <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>10 Classes</div>
-                            <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Added</div>
+                    {/* "0 Referrals" label */}
+                    <div style={{ position: "absolute", left: "0%", top: "18px", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                      <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>0 Referrals</span>
+                    </div>
+                    {/* Milestone dots */}
+                    {milestones.map((m) => {
+                      const pos = (m.count / 60) * 100;
+                      const reached = refCount >= m.count;
+                      return (
+                        <div key={m.count} style={{ position: "absolute", left: `${pos}%`, top: "50%", transform: "translate(-50%, -50%)" }}>
+                          {/* Label above */}
+                          <div style={{ position: "absolute", bottom: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                            {m.lines.map(line => <span key={line} style={{ display: "block", color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>{line}</span>)}
                           </div>
-                        </>
-                      ) : (
-                        <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #5A7A96" }}>
-                          <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="6" rx="1" fill="#8A9FB5" /><path d="M3 5V3C3 1.9 3.9 1 5 1C6.1 1 7 1.9 7 3V5" stroke="#8A9FB5" strokeWidth="1.2" /></svg>
-                        </div>
-                      )}
-                    </div>
-                    {/* 10 Referrals label */}
-                    <div style={{ position: "absolute", left: "50%", top: "22px", transform: "translateX(-50%)" }}>
-                      <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "22px" }}>10 Referrals</div>
-                    </div>
-
-                    {/* Dot 3 - 20 Referrals (end) */}
-                    <div style={{ position: "absolute", left: "100%", top: "-7px", transform: "translateX(-50%)" }}>
-                      {reached20 ? (
-                        <>
-                          <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
-                          <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap", transform: "translateX(-8px)" }}>
-                            <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Healthyday</div>
-                            <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>T-shirt</div>
-                          </div>
-                        </>
-                      ) : (
-                        <>
-                          <div style={{ width: "20px", height: "20px", borderRadius: "50%", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", border: "2px solid #5A7A96" }}>
-                            <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><rect x="1" y="5" width="8" height="6" rx="1" fill="#8A9FB5" /><path d="M3 5V3C3 1.9 3.9 1 5 1C6.1 1 7 1.9 7 3V5" stroke="#8A9FB5" strokeWidth="1.2" /></svg>
-                          </div>
-                          <div style={{ textAlign: "center", marginTop: "4px", whiteSpace: "nowrap", transform: "translateX(-8px)" }}>
-                            <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>Healthyday</div>
-                            <div style={{ color: "#FEAB27", fontSize: "9px", fontWeight: 700 }}>T-shirt</div>
-                          </div>
-                        </>
-                      )}
-                    </div>
-                    {/* 20 Referrals label */}
-                    <div style={{ position: "absolute", left: "100%", top: "22px", transform: "translateX(-50%)" }}>
-                      <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "22px" }}>20 Referrals</div>
-                    </div>
-
-                    {/* "You are here" pin — positioned dynamically */}
-                    {!reached20 && (
-                      <div style={{ position: "absolute", left: `${progressPct}%`, top: "-12px", transform: "translateX(-50%)" }}>
-                        <div style={{ textAlign: "center" }}>
-                          <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, marginBottom: "2px" }}>You are here</div>
-                          <div style={{ width: "22px", height: "22px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto", border: "2px solid #fff" }}>
-                            <svg width="10" height="12" viewBox="0 0 10 12" fill="none"><path d="M5 0C2.24 0 0 2.24 0 5C0 8.5 5 12 5 12S10 8.5 10 5C10 2.24 7.76 0 5 0ZM5 6.5C4.17 6.5 3.5 5.83 3.5 5C3.5 4.17 4.17 3.5 5 3.5C5.83 3.5 6.5 4.17 6.5 5C6.5 5.83 5.83 6.5 5 6.5Z" fill="white" /></svg>
+                          {/* Dot */}
+                          {reached ? (
+                            <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
+                          ) : (
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                              <circle cx="12" cy="12" r="12" fill="#DDDEDE"/>
+                              <path d="M10.4243 11.1512V9.21185C10.4243 8.6975 10.6286 8.2042 10.9923 7.8405C11.356 7.47679 11.8493 7.27246 12.3637 7.27246C12.878 7.27246 13.3713 7.47679 13.735 7.8405C14.0987 8.2042 14.3031 8.6975 14.3031 9.21185V11.1512M8.96973 12.1209C8.96973 11.8638 9.07189 11.6171 9.25374 11.4353C9.4356 11.2534 9.68224 11.1512 9.93942 11.1512H14.7879C15.0451 11.1512 15.2917 11.2534 15.4736 11.4353C15.6554 11.6171 15.7576 11.8638 15.7576 12.1209V15.03C15.7576 15.2872 15.6554 15.5339 15.4736 15.7157C15.2917 15.8976 15.0451 15.9997 14.7879 15.9997H9.93942C9.68224 15.9997 9.4356 15.8976 9.25374 15.7157C9.07189 15.5339 8.96973 15.2872 8.96973 15.03V12.1209ZM11.8788 13.5755C11.8788 13.7041 11.9299 13.8274 12.0208 13.9183C12.1118 14.0093 12.2351 14.0603 12.3637 14.0603C12.4923 14.0603 12.6156 14.0093 12.7065 13.9183C12.7974 13.8274 12.8485 13.7041 12.8485 13.5755C12.8485 13.4469 12.7974 13.3236 12.7065 13.2327C12.6156 13.1417 12.4923 13.0906 12.3637 13.0906C12.2351 13.0906 12.1118 13.1417 12.0208 13.2327C11.9299 13.3236 11.8788 13.4469 11.8788 13.5755Z" stroke="#A2A2A2" strokeLinecap="round" strokeLinejoin="round"/>
+                            </svg>
+                          )}
+                          {/* Label below */}
+                          <div style={{ position: "absolute", top: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>{m.count} Referrals</span>
                           </div>
                         </div>
-                        <div style={{ color: "#fff", fontSize: "8px", fontWeight: 600, textAlign: "center", marginTop: "4px" }}>{refCount} Referrals</div>
+                      );
+                    })}
+                    {/* You are here */}
+                    <div style={{ position: "absolute", left: `${progressPct}%`, bottom: "20px", transform: `translateX(${progressPct < 8 ? "0%" : progressPct > 92 ? "-100%" : "-50%"})` }}>
+                      <div style={{ width: "70px", textAlign: "center" }}>
+                        <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>You are here</div>
+                        <div style={{ display: "flex", justifyContent: "center" }}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24" fill="none">
+                            <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" fill="white"/>
+                            <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" fill="white"/>
+                            <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                            <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        </div>
                       </div>
-                    )}
+                    </div>
                   </div>
-
                   {/* Info Cards */}
-                  <div className="flex gap-2" style={{ marginTop: "62px" }}>
-                    <div style={{ flex: 1, background: "#0E3358", borderRadius: "10px", padding: "12px" }}>
-                      <div className="flex items-center gap-2" style={{ marginBottom: "8px" }}>
-                        <div style={{ width: "18px", height: "18px", borderRadius: "4px", background: earnedClasses > 0 ? "#34C759" : "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#fff" }}>{earnedClasses > 0 ? "✓" : "—"}</div>
+                  <div style={{ display: "flex", gap: "8px", marginBottom: "14px" }}>
+                    {/* Left card */}
+                    <div style={{ flex: 1, height: "95px", borderRadius: "20px", background: "#012550", padding: "10px 12px", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        {refCount >= 5 ? (
+                          <div style={{ width: "25px", height: "25px", borderRadius: "5px", background: "#34C759", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>✓</div>
+                        ) : (
+                          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
+                            <rect width="25" height="25" rx="5" fill="#3B516E"/>
+                            <path d="M17.0141 9.01406L9.0001 17M9.01416 9L17.0001 17.014" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+                          </svg>
+                        )}
                         <div>
-                          <div style={{ color: "#8A9FB5", fontSize: "8px", fontWeight: 600, letterSpacing: "0.5px" }}>EARNED</div>
-                          <div style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{earnedClasses > 0 ? `${earnedClasses} FREE Classes Earned` : "No rewards yet"}</div>
+                          <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "7px", fontWeight: 700, lineHeight: "normal" }}>EARNED</div>
+                          <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>
+                            {refCount >= 5 ? `+${Math.min(Math.floor(refCount / 5), 2) * 10} FREE Classes` : "No Reward Earned Yet"}
+                          </div>
                         </div>
                       </div>
-                      <div className="flex items-center gap-2">
-                        <div style={{ width: "18px", height: "18px", borderRadius: "4px", background: "#3A5068", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "10px", color: "#8A9FB5" }}>🚩</div>
+                      <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
+                          <rect opacity="0.5" width="25" height="25" rx="5" fill="#757E8C"/>
+                          <path d="M7.14258 7.026C7.85787 6.33769 8.81954 5.95215 9.82115 5.95215C10.8228 5.95215 11.7844 6.33769 12.4997 7.026C13.215 7.7143 14.1767 8.09984 15.1783 8.09984C16.1799 8.09984 17.1416 7.7143 17.8569 7.026V13.7879C17.1416 14.4762 16.1799 14.8617 15.1783 14.8617C14.1767 14.8617 13.215 14.4762 12.4997 13.7879C11.7844 13.0995 10.8228 12.714 9.82115 12.714C8.81954 12.714 7.85787 13.0995 7.14258 13.7879V7.026Z" fill="#D9D9D9"/>
+                          <path d="M7.14258 19.0474V13.7879" stroke="#D9D9D9" strokeLinecap="round" strokeLinejoin="round"/>
+                          <path d="M7.14258 13.7879C7.85787 13.0995 8.81954 12.714 9.82115 12.714C10.8228 12.714 11.7844 13.0995 12.4997 13.7879C13.215 14.4762 14.1767 14.8617 15.1783 14.8617C16.1799 14.8617 17.1416 14.4762 17.8569 13.7879V7.026" stroke="#D9D9D9" strokeLinecap="round" strokeLinejoin="round"/>
+                        </svg>
                         <div>
-                          <div style={{ color: "#8A9FB5", fontSize: "8px", fontWeight: 600, letterSpacing: "0.5px" }}>NEXT GOAL</div>
-                          <div style={{ color: "#fff", fontSize: "12px", fontWeight: 700 }}>{nextGoal}</div>
+                          <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "7px", fontWeight: 700, lineHeight: "normal" }}>NEXT GOAL</div>
+                          <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>
+                            {refCount >= 60 ? "All Claimed! 🎉" : milestones.find(m => refCount < m.count)?.lines.join(" ") ?? "All Claimed!"}
+                          </div>
                         </div>
                       </div>
                     </div>
-
-                    <div style={{ width: "80px", background: "#0E3358", borderRadius: "10px", padding: "12px", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center" }}>
-                      <div style={{ color: "#8A9FB5", fontSize: "9px", fontWeight: 600, letterSpacing: "0.5px", marginBottom: "4px" }}>STATUS</div>
+                    {/* Right card */}
+                    <div style={{ width: "115px", height: "95px", borderRadius: "20px", background: "#012550", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px" }}>
+                      <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "10px", fontWeight: 700, lineHeight: "normal" }}>STATUS</div>
                       <div>
-                        <span style={{ color: "#FEAB27", fontSize: "32px", fontWeight: 800 }}>{refCount}</span>
-                        <span style={{ color: "#fff", fontSize: "18px", fontWeight: 700 }}>/20</span>
+                        <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>{refCount}</span>
+                        <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>/{nextMilestoneCount}</span>
                       </div>
                     </div>
                   </div>
@@ -2165,22 +2208,24 @@ const Index = () => {
               onClick={() => navigate(`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`)}
               style={{
                 width: "100%",
-                marginTop: "14px",
-                padding: "14px",
-                borderRadius: "10px",
-                background: "#FEAB27",
+                height: "43px",
+                borderRadius: "14px",
+                background: (studentData?.total_referral_count ?? 0) === 0 ? "#FF0000" : "#FEAB27",
                 border: "none",
                 cursor: "pointer",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
                 gap: "8px",
+                boxShadow: "0 0 10px 1px rgba(0,0,0,0.25)",
+                backdropFilter: "blur(2px)",
+                marginTop: "8px",
               }}
             >
-              <svg width="20" height="18" viewBox="0 0 20 18" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M13 8C14.66 8 15.99 6.66 15.99 5C15.99 3.34 14.66 2 13 2C11.34 2 10 3.34 10 5C10 6.66 11.34 8 13 8ZM7 8C8.66 8 9.99 6.66 9.99 5C9.99 3.34 8.66 2 7 2C5.34 2 4 3.34 4 5C4 6.66 5.34 8 7 8ZM7 10C4.67 10 0 11.17 0 13.5V16H14V13.5C14 11.17 9.33 10 7 10ZM13 10C12.71 10 12.38 10.02 12.03 10.05C13.19 10.89 14 12.02 14 13.5V16H20V13.5C20 11.17 15.33 10 13 10Z" fill="#0B2A4A" />
+              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                <path d="M1.25 16.4079V14.7237C1.25 13.8303 1.60489 12.9736 2.23659 12.3419C2.86829 11.7102 3.72506 11.3553 4.61842 11.3553H7.98684C8.79526 11.3553 9.53632 11.6399 10.1174 12.114M12.1974 1.35948C12.9219 1.54499 13.5641 1.96638 14.0227 2.55721C14.4814 3.14804 14.7303 3.8747 14.7303 4.62264C14.7303 5.37057 14.4814 6.09723 14.0227 6.68806C13.5641 7.27889 12.9219 7.70028 12.1974 7.88579M12.1974 14.7237H17.25M14.7237 12.1974V17.25M2.93421 4.61842C2.93421 5.51178 3.2891 6.36855 3.9208 7.00025C4.5525 7.63196 5.40927 7.98684 6.30263 7.98684C7.19599 7.98684 8.05276 7.63196 8.68447 7.00025C9.31617 6.36855 9.67105 5.51178 9.67105 4.61842C9.67105 3.72506 9.31617 2.86829 8.68447 2.23659C8.05276 1.60489 7.19599 1.25 6.30263 1.25C5.40927 1.25 4.5525 1.60489 3.9208 2.23659C3.2891 2.86829 2.93421 3.72506 2.93421 4.61842Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
               </svg>
-              <span style={{ color: "#0B2A4A", fontSize: "16px", fontWeight: 700, fontFamily: "Outfit" }}>Refer Now</span>
+              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal" }}>Refer Now</span>
             </button>
           </div>
         </div>
