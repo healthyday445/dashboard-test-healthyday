@@ -1128,8 +1128,8 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Note */}
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px", marginTop: "10px" }}>
+              {/* Note — hidden on bonus days since the card below already shows next session info */}
+              {!isBonusDay && <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px", marginTop: "10px" }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
                   <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
                   <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
@@ -1139,7 +1139,56 @@ const Index = () => {
                 <span style={{ width: "268px", color: "#747474", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "22px", textAlign: "center" }}>
                   {noteText}
                 </span>
-              </div>
+              </div>}
+
+              {/* Next regular session card — shown on bonus days */}
+              {isBonusDay && bonusSessionData && (() => {
+                const isAMBonus = bonusSessionData.startMin < 12 * 60;
+                const nextRegSlots = isAMBonus ? ["4:30 PM", "5:30 PM", "6:30 PM"] : ["5:30 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
+                const nextRegWhen = isAMBonus ? "at 4:30 PM" : "tomorrow at 5:30 AM";
+                return (
+                  <div style={{
+                    width: "358px", borderRadius: "12px", marginTop: "16px",
+                    border: "1.5px solid #D2D2D2", background: "#FFF",
+                    boxShadow: "-1px -1px 4px 0 rgba(0,0,0,0.10), 1px 1px 4px 0 rgba(0,0,0,0.10)",
+                    padding: "16px", boxSizing: "border-box", display: "flex", flexDirection: "column", gap: "12px",
+                  }}>
+                    <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+                      <div style={{
+                        width: "82px", height: "81px", borderRadius: "50%", flexShrink: 0,
+                        background: "url(/8ea326ab563adb61ccb99b953865cb3132c173ab.png) lightgray -5.311px -5.747px / 112.404% 113.525% no-repeat",
+                      }} />
+                      <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
+                        <div style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>
+                          Next regular session is {nextRegWhen}
+                        </div>
+                        <div style={{ color: "#7990AC", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "24px" }}>
+                          Open the link during live timings
+                        </div>
+                      </div>
+                    </div>
+                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0" }}>
+                      {nextRegSlots.map((label, idx) => (
+                        <span key={label} style={{ display: "flex", alignItems: "center" }}>
+                          {idx > 0 && <span style={{ color: "#CCCBCB", fontFamily: "Outfit", fontSize: "18px", fontWeight: 800, margin: "0 8px" }}>|</span>}
+                          <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "18px", fontWeight: 800 }}>{label}</span>
+                        </span>
+                      ))}
+                    </div>
+                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px" }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
+                        <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
+                        <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
+                        <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D" />
+                        <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      <span style={{ color: "#747474", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "22px", textAlign: "center", width: "289px" }}>
+                        Note: No recordings are available for FREE batch
+                      </span>
+                    </div>
+                  </div>
+                );
+              })()}
             </div>
           );
         })()}
