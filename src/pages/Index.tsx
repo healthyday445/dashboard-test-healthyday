@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
+import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 
 const MoonIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -209,6 +210,24 @@ const Index = () => {
     }
     if (previewMode === "onboarding") {
       setStudentData({ language: "Telugu", status: "registered" });
+      setAuthenticated(true);
+      setLoading(false);
+      return;
+    }
+    // ?preview=elapsed — preview ongoing user whose 14-day batch has elapsed
+    if (previewMode === "elapsed") {
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - 15); // batch started 15 days ago
+      const yyyyMMDD = toLocalDateStr(startDate);
+      setStudentData({
+        language: "Telugu",
+        status: "registered",
+        free_batch_start_date: yyyyMMDD,
+        attendance: ["present", "present", "present", "present", "present", "present", "present",
+                     "present", "present", "present", "absent", "present", "present", "present"],
+        free_class_join_link: "https://www.youtube.com/c/Healthyday",
+        referral_link: "healthyday.app/ref=preview123",
+      });
       setAuthenticated(true);
       setLoading(false);
       return;
@@ -1222,6 +1241,11 @@ const Index = () => {
           </div>
         </div>
 
+        {/* Week 2 Pricing & Comparison */}
+        {week === 2 && (
+          <PricingAndComparisonSection selectedPlanIdx={selectedPlanIdx} setSelectedPlanIdx={setSelectedPlanIdx} daysLeft={Math.max(0, 15 - currentDay)} />
+        )}
+
         {/* Referral Milestones Section */}
         {(() => {
           const refCount = studentData?.total_referral_count ?? 0;
@@ -1470,8 +1494,20 @@ const Index = () => {
     );
   }
 
+  // --- Detect ongoing users whose 14-day batch has elapsed ---
+  const batchElapsed = (() => {
+    if (!studentData?.free_batch_start_date) return false;
+    const batchStart = new Date(studentData?.free_batch_start_date);
+    batchStart.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const diffDays = Math.floor((today.getTime() - batchStart.getTime()) / 86400000);
+    return diffDays >= 14;
+  })();
+  const show14DayCompleted = (studentData?.status === "14 day completed" || studentData?.status === "14DaysCompleted") || (isOngoingStatus && batchElapsed);
+
   // --- 14 Days Completed Page ---
-  if (studentData?.status === "14 day completed" || studentData?.status === "14DaysCompleted") {
+  if (show14DayCompleted) {
     const referralLink = "healthyday.app/ref=ggtujev58";
     const shareLink = mobile ? `https://healthyday.co.in/free-programmes?ref=91${mobile}` : referralLink;
 
