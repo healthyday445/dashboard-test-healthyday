@@ -1522,326 +1522,46 @@ const Index = () => {
       window.open(`https://wa.me/?text=${message}`, "_blank");
     };
 
-    // Sample attendance data: "green" = attended, "orange" = partial, "red" = missed
-    const attendanceData = [
-      "green", "green", "orange", "green", "green", "green", "green",
-      "green", "green", "green", "red", "green", "green", "green",
-    ];
+    const attendance: string[] = studentData?.attendance ?? [];
+    const completedDayStatus = Array.from({ length: 14 }, (_, i) => {
+      const dayNum = i + 1;
+      const didJoin = joinedDays.includes(dayNum);
+      const raw = attendance[i];
+      if (didJoin || raw === 'present') return 'green';
+      return 'yellow'; // not attended
+    });
 
-    const plans = [
-      { name: "1 Year Plan", price: 1999, originalPrice: 5988, discount: 63, bestValue: true, url: "https://healthyday.co.in/1-year-plan/" },
-      { name: "6 Months Plan", price: 1499, originalPrice: 2994, discount: 38, bestValue: false, url: "https://healthyday.co.in/6-months-plan/" },
-      { name: "3 Months Plan", price: 999, originalPrice: 1497, discount: 25, bestValue: false, url: "https://healthyday.co.in/3-months-plan/" },
-    ];
-
-    const features = [
-      { name: "Daily YOGA", year: true, sixMonth: true, threeMonth: true },
-      { name: "24-Hour Recording", year: true, sixMonth: true, threeMonth: true },
-      { name: "Reminders & Tracking", year: true, sixMonth: true, threeMonth: true },
-      { name: "108 Surya Namaskar", year: true, sixMonth: true, threeMonth: false },
-      { name: "Breath Mastery", year: true, sixMonth: true, threeMonth: false },
-      { name: "Face YOGA", year: true, sixMonth: false, threeMonth: false },
-      { name: "Masterclass", year: true, sixMonth: false, threeMonth: false },
-    ];
-
-    const CheckIcon = () => (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="10" cy="10" r="10" fill="#34C759" />
-        <path d="M6 10L9 13L14 7" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
-    );
-
-    const CrossIcon = () => (
-      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="10" cy="10" r="10" fill="#FF3B30" />
-        <path d="M7 7L13 13M13 7L7 13" stroke="white" strokeWidth="2" strokeLinecap="round" />
-      </svg>
-    );
+    const completedDateRangeLabel = (() => {
+      if (!studentData?.free_batch_start_date) return '';
+      const batchStart = new Date(studentData?.free_batch_start_date);
+      const batchEnd = new Date(batchStart);
+      batchEnd.setDate(batchStart.getDate() + 13);
+      const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+      const MON_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+      const fmt = (d: Date) => `${DAY_NAMES[d.getDay()]}, ${MON_NAMES[d.getMonth()]} ${String(d.getDate()).padStart(2, "0")}`;
+      return `${fmt(batchStart)} – ${fmt(batchEnd)}`;
+    })();
 
     return (
-      <div className="mx-auto w-[412px] min-h-screen bg-background" style={{ fontFamily: "Outfit, sans-serif" }}>
+      <div className="mx-auto w-[412px] min-h-screen bg-background" style={{ fontFamily: 'Outfit, sans-serif' }}>
         {/* Header */}
         <header
           className="flex w-[412px] h-[68px] items-center bg-background"
           style={{
-            padding: "20px 247px 20px 20px",
-            boxShadow: "0 4px 30px 0 rgba(0, 0, 0, 0.10)",
+            padding: '20px 247px 20px 20px',
+            boxShadow: '0 4px 30px 0 rgba(0, 0, 0, 0.10)',
           }}
         >
           <img src={logo} alt="Healthyday" className="h-7" />
         </header>
 
-        {/* Trial Ended Banner */}
-        <div className="flex justify-center mt-6">
-          <div
-            style={{
-              width: "358px",
-              borderRadius: "12px",
-              background: "#FFF",
-              boxShadow: "-1px -1px 4px 0 rgba(0, 0, 0, 0.08), 1px 1px 4px 0 rgba(0, 0, 0, 0.08)",
-              padding: "24px 20px",
-              textAlign: "center",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "12px",
-            }}
-          >
-            {/* Badge */}
-            <div
-              style={{
-                width: "129px",
-                height: "30px",
-                borderRadius: "40px",
-                border: "0.25px solid #DA8D8D",
-                background: "#FFEDED",
-                display: "inline-flex",
-                alignItems: "center",
-                justifyContent: "center",
-                gap: "5px",
-              }}
-            >
-              <svg xmlns="http://www.w3.org/2000/svg" width="11" height="11" viewBox="0 0 11 11" fill="none">
-                <circle cx="5.5" cy="5.5" r="5" stroke="#B71C1C" strokeWidth="1" />
-                <path d="M5.5 3.5V5.5M5.5 7.5H5.505" stroke="#B71C1C" strokeWidth="1" strokeLinecap="round" />
-              </svg>
-              <span style={{ color: "#B71C1C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 800, lineHeight: "22px", letterSpacing: "0.88px" }}>
-                TRIAL ENDED
-              </span>
-            </div>
-
-            <h2 style={{ width: "308px", margin: 0, textAlign: "center" }}>
-              <span style={{ color: "#000", fontFamily: "Outfit", fontSize: "25px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal" }}>Your </span>
-              <span style={{ color: "#D70000", fontFamily: "Outfit", fontSize: "25px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal" }}>14-Days FREE</span>
-              <span style={{ color: "#000", fontFamily: "Outfit", fontSize: "25px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal" }}> Classes are completed</span>
-            </h2>
-
-            <p style={{ width: "293px", color: "#7C7B7B", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, lineHeight: "18px", textAlign: "center", margin: 0 }}>
-              Get a subscription now to continue your Yoga journey without interruption.
-            </p>
-          </div>
-        </div>
-
-        {/* Join Our Community */}
-        <div style={{ padding: "32px 27px 0", textAlign: "center" }}>
-          <p style={{ width: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 700, lineHeight: "normal", marginBottom: "2px" }}>
-            Join our community for
-          </p>
-          <h3 style={{ width: "221px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal" }}>
-            DAILY YOGA SESSIONS
-          </h3>
-        </div>
-
-        {/* Pricing Plans */}
-        <div style={{ padding: "24px 27px 0" }}>
-          {
-            plans.map((plan, idx) => {
-              const isSelected = selectedPlanIdx === idx;
-              return (
-                <div
-                  key={idx}
-                  onClick={() => setSelectedPlanIdx(idx)}
-                  style={{
-                    width: plan.bestValue ? "360px" : "358px",
-                    minHeight: plan.bestValue ? "198px" : "160px",
-                    borderRadius: "16px",
-                    background: plan.bestValue ? "#0D468B" : "#FFF",
-                    border: !plan.bestValue && isSelected ? "2.5px solid #0D468B" : "none",
-                    boxShadow: plan.bestValue ? "none" : "0 4px 10px 2px rgba(0, 0, 0, 0.25)",
-                    padding: plan.bestValue ? "0 2px 2px 2px" : "0",
-                    marginBottom: "16px",
-                    position: "relative",
-                    overflow: "hidden",
-                    cursor: "pointer",
-                  }}
-                >
-                  {/* Best Value Badge */}
-                  {plan.bestValue && (
-                    <div
-                      style={{
-                        padding: "10px 16px",
-                        display: "flex",
-                        alignItems: "center",
-                        gap: "6px",
-                      }}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M17.5 9.16917H17.3534L15.8342 4.725L2.79504 9.16917L2.50004 9.16667M2.08337 9.17H2.50004L11.7884 1.75L14.1359 5.04167" stroke="#FEAB27" strokeWidth="2" strokeLinecap="square" />
-                        <path d="M12.0834 13.3333C12.0834 13.8859 11.8639 14.4158 11.4732 14.8065C11.0825 15.1972 10.5526 15.4167 10.0001 15.4167C9.44755 15.4167 8.91764 15.1972 8.52694 14.8065C8.13624 14.4158 7.91675 13.8859 7.91675 13.3333C7.91675 12.7808 8.13624 12.2509 8.52694 11.8602C8.91764 11.4695 9.44755 11.25 10.0001 11.25C10.5526 11.25 11.0825 11.4695 11.4732 11.8602C11.8639 12.2509 12.0834 12.7808 12.0834 13.3333Z" stroke="#FEAB27" strokeWidth="2" strokeLinecap="square" />
-                        <path d="M17.9167 9.16699V17.5003H2.08337V9.16699H17.9167Z" stroke="#FEAB27" strokeWidth="2" strokeLinecap="square" />
-                        <path d="M2.08337 9.16699H3.75004C3.75004 9.60902 3.57445 10.0329 3.26189 10.3455C2.94932 10.6581 2.5254 10.8337 2.08337 10.8337V9.16699ZM17.9167 9.16699H16.25C16.25 9.60902 16.4256 10.0329 16.7382 10.3455C17.0508 10.6581 17.4747 10.8337 17.9167 10.8337V9.16699ZM2.08337 17.5003H3.75171C3.75193 17.2812 3.70892 17.0641 3.62516 16.8616C3.5414 16.6591 3.41852 16.4751 3.26355 16.3201C3.10859 16.1652 2.92459 16.0423 2.72208 15.9585C2.51957 15.8748 2.30252 15.8318 2.08337 15.832V17.5003ZM17.9167 17.5003H16.25C16.25 17.0583 16.4256 16.6344 16.7382 16.3218C17.0508 16.0093 17.4747 15.8337 17.9167 15.8337V17.5003Z" stroke="#FEAB27" strokeWidth="2" strokeLinecap="square" />
-                      </svg>
-                      <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, lineHeight: "normal" }}>Best Value</span>
-                    </div>
-                  )}
-
-                  <div
-                    style={{
-                      padding: "16px 18px 18px",
-                      background: "#fff",
-                      borderRadius: plan.bestValue ? "14px" : "16px",
-                      height: "100%"
-                    }}
-                  >
-                    <h4 style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal", marginBottom: "8px" }}>{plan.name}</h4>
-                    <div className="flex items-center gap-3" style={{ marginBottom: "8px" }}>
-                      <span style={{ color: "#809AB9", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, lineHeight: "normal", textDecoration: "line-through" }}>
-                        ₹{plan.originalPrice}/-
-                      </span>
-                      <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "30px", fontWeight: 700, lineHeight: "normal" }}>
-                        ₹{plan.price}/-
-                      </span>
-                    </div>
-                    {/* Discount badge */}
-                    <div
-                      style={{
-                        display: "inline-flex",
-                        height: "18.167px",
-                        padding: "2px 10px",
-                        justifyContent: "center",
-                        alignItems: "center",
-                        gap: "10px",
-                        borderRadius: "10.093px",
-                        background: "#F00",
-                        marginBottom: "16px",
-                      }}
-                    >
-                      <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10.496px", fontWeight: 700, lineHeight: "normal", textTransform: "uppercase" }}>{plan.discount}% OFF</span>
-                    </div>
-                    {/* CTA Button */}
-                    {plan.bestValue ? (
-                      <button
-                        onClick={() => window.open(plan.url, "_blank")}
-                        style={{
-                          width: "314px",
-                          height: "32.3px",
-                          borderRadius: "30px",
-                          background: "#FEAB27",
-                          border: "none",
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          margin: "0 auto",
-                        }}
-                      >
-                        <span style={{ width: "249.333px", height: "17.1px", color: "#202020", textAlign: "center", fontFamily: "Outfit", fontSize: "14px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal", textTransform: "uppercase", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          Join 1 YEAR PLAN
-                        </span>
-                      </button>
-                    ) : (
-                      <button
-                        onClick={() => window.open(plan.url, "_blank")}
-                        style={{
-                          width: "314px",
-                          height: "32.3px",
-                          borderRadius: "30px",
-                          background: "#FEAB27",
-                          border: "none",
-                          cursor: "pointer",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          margin: "0 auto",
-                        }}
-                      >
-                        <span style={{ width: "249.333px", height: "17.1px", color: "#202020", textAlign: "center", fontFamily: "Outfit", fontSize: "14px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal", textTransform: "uppercase", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          Join {plan.name.toUpperCase().replace(" PLAN", "")} PLAN
-                        </span>
-                      </button>
-                    )}
-                  </div>
-                </div>
-              );
-            })
-          }
-        </div>
-
-        {/* Compare and Choose */}
-        <div style={{ padding: "16px 27px 0" }}>
-          <h3 style={{ width: "343px", color: "#0D468B", fontSize: "24px", fontWeight: 600, fontFamily: "Outfit", textAlign: "center", marginBottom: "20px", margin: "0 auto 20px" }}>
-            Compare and choose your plan!
-          </h3>
-
-          {/* Table */}
-          <div style={{ position: "relative", width: "358px" }}>
-
-            {/* Highlighted column background — moves with selectedPlanIdx */}
-            <div style={{
-              position: "absolute",
-              top: 0,
-              left: selectedPlanIdx === 0 ? "calc(100% - 207px)" : selectedPlanIdx === 1 ? "calc(100% - 138px)" : "calc(100% - 69px)",
-              width: "69px",
-              height: "312px",
-              borderRadius: "5px",
-              border: "1px solid #0D468B",
-              background: "#FFF5E5",
-              zIndex: 0,
-            }} />
-
-            {/* Header Row */}
-            <div style={{ display: "flex", alignItems: "center", paddingBottom: "10px", position: "relative", zIndex: 1 }}>
-              <div style={{ flex: 1, color: "#919191", fontFamily: "Outfit", fontSize: "10px", fontWeight: 700, lineHeight: "normal" }}>Features</div>
-              <div style={{ width: "69px", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 600, lineHeight: "normal" }}>1 Year</div>
-              <div style={{ width: "69px", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 600, lineHeight: "normal" }}>6 Months</div>
-              <div style={{ width: "69px", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 600, lineHeight: "normal" }}>3 Months</div>
-            </div>
-
-            {/* Feature Rows */}
-            {features.map((feature, idx) => (
-              <div
-                key={idx}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: "10px 0",
-                  borderTop: "1px solid #F0F0F0",
-                  position: "relative",
-                  zIndex: 1,
-                }}
-              >
-                <div style={{ flex: 1, color: "#202020", fontFamily: "Outfit", fontSize: "12px", fontWeight: 600, lineHeight: "normal" }}>{feature.name}</div>
-                <div style={{ width: "69px", display: "flex", justifyContent: "center" }}>
-                  {feature.year ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="15" viewBox="0 0 18 15" fill="none">
-                      <path d="M14.7343 0L6.82974 10.356L2.1564 5.7154L0 7.85826L7.18689 15L17.2512 2.14286L14.7343 0Z" fill="#0D468B" />
-                      <path d="M14.7343 0L6.82974 10.356L2.1564 5.7154L0 7.85826L7.18689 15L17.2512 2.14286L14.7343 0Z" fill="black" fillOpacity="0.2" />
-                    </svg>
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M12.4136 0.508815C12.563 0.350874 12.7425 0.224485 12.9416 0.137118C13.1407 0.0497516 13.3552 0.00318029 13.5726 0.000157267C13.79 -0.00286575 14.0057 0.0377209 14.2072 0.119518C14.4086 0.201315 14.5916 0.322663 14.7453 0.476389C14.899 0.630114 15.0204 0.813098 15.1022 1.01452C15.184 1.21595 15.2245 1.43173 15.2215 1.64911C15.2185 1.86649 15.1719 2.08106 15.0846 2.28013C14.9972 2.4792 14.8708 2.65874 14.7129 2.80813L9.94733 7.57376C9.94102 7.58005 9.93601 7.58753 9.9326 7.59577C9.92918 7.604 9.92742 7.61283 9.92742 7.62174C9.92742 7.63065 9.92918 7.63948 9.9326 7.64771C9.93601 7.65595 9.94102 7.66343 9.94733 7.66972L14.7129 12.4353C14.8659 12.5859 14.9877 12.7653 15.0711 12.9631C15.1545 13.161 15.1979 13.3734 15.1988 13.5881C15.1997 13.8028 15.1581 14.0156 15.0763 14.2141C14.9946 14.4126 14.8743 14.593 14.7225 14.7449C14.5707 14.8967 14.3904 15.017 14.1919 15.0988C13.9933 15.1806 13.7806 15.2222 13.5659 15.2214C13.3512 15.2205 13.1388 15.1772 12.9409 15.0938C12.7431 15.0105 12.5636 14.8888 12.413 14.7357L7.64751 9.97012C7.64121 9.96381 7.63374 9.95881 7.6255 9.95539C7.61727 9.95197 7.60844 9.95021 7.59953 9.95021C7.59062 9.95021 7.58179 9.95197 7.57356 9.95539C7.56532 9.95881 7.55784 9.96381 7.55155 9.97012L2.78601 14.7357C2.63545 14.8888 2.45607 15.0106 2.25823 15.094C2.06038 15.1774 1.84798 15.2208 1.63328 15.2217C1.41857 15.2226 1.20582 15.1809 1.00728 15.0992C0.808743 15.0175 0.628353 14.8972 0.476516 14.7454C0.324679 14.5936 0.2044 14.4133 0.122616 14.2147C0.0408328 14.0162 -0.000836142 13.8035 1.27127e-05 13.5888C0.000861567 13.374 0.0442115 13.1616 0.127562 12.9638C0.210913 12.7659 0.332614 12.5865 0.485647 12.4359L5.25119 7.67026C5.2575 7.66397 5.2625 7.65649 5.26592 7.64826C5.26934 7.64002 5.2711 7.6312 5.2711 7.62228C5.2711 7.61337 5.26934 7.60454 5.26592 7.59631C5.2625 7.58807 5.2575 7.5806 5.25119 7.5743L0.485647 2.80868C0.184692 2.50285 0.0167751 2.09048 0.0184715 1.66141C0.0201678 1.23233 0.19134 0.82131 0.494704 0.51787C0.798067 0.21443 1.20904 0.0431577 1.63811 0.0413602C2.06718 0.0395627 2.47957 0.207386 2.78547 0.508273L7.55101 5.2739C7.5573 5.28021 7.56478 5.28522 7.57301 5.28863C7.58125 5.29205 7.59007 5.29381 7.59899 5.29381C7.6079 5.29381 7.61673 5.29205 7.62496 5.28863C7.63319 5.28522 7.64067 5.28021 7.64697 5.2739L12.4136 0.508815Z" fill="#FF0000" />
-                    </svg>
-                  )}
-                </div>
-                <div style={{ width: "69px", display: "flex", justifyContent: "center" }}>
-                  {feature.sixMonth ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="15" viewBox="0 0 18 15" fill="none">
-                      <path d="M14.7343 0L6.82974 10.356L2.1564 5.7154L0 7.85826L7.18689 15L17.2512 2.14286L14.7343 0Z" fill="#0D468B" />
-                      <path d="M14.7343 0L6.82974 10.356L2.1564 5.7154L0 7.85826L7.18689 15L17.2512 2.14286L14.7343 0Z" fill="black" fillOpacity="0.2" />
-                    </svg>
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M12.4136 0.508815C12.563 0.350874 12.7425 0.224485 12.9416 0.137118C13.1407 0.0497516 13.3552 0.00318029 13.5726 0.000157267C13.79 -0.00286575 14.0057 0.0377209 14.2072 0.119518C14.4086 0.201315 14.5916 0.322663 14.7453 0.476389C14.899 0.630114 15.0204 0.813098 15.1022 1.01452C15.184 1.21595 15.2245 1.43173 15.2215 1.64911C15.2185 1.86649 15.1719 2.08106 15.0846 2.28013C14.9972 2.4792 14.8708 2.65874 14.7129 2.80813L9.94733 7.57376C9.94102 7.58005 9.93601 7.58753 9.9326 7.59577C9.92918 7.604 9.92742 7.61283 9.92742 7.62174C9.92742 7.63065 9.92918 7.63948 9.9326 7.64771C9.93601 7.65595 9.94102 7.66343 9.94733 7.66972L14.7129 12.4353C14.8659 12.5859 14.9877 12.7653 15.0711 12.9631C15.1545 13.161 15.1979 13.3734 15.1988 13.5881C15.1997 13.8028 15.1581 14.0156 15.0763 14.2141C14.9946 14.4126 14.8743 14.593 14.7225 14.7449C14.5707 14.8967 14.3904 15.017 14.1919 15.0988C13.9933 15.1806 13.7806 15.2222 13.5659 15.2214C13.3512 15.2205 13.1388 15.1772 12.9409 15.0938C12.7431 15.0105 12.5636 14.8888 12.413 14.7357L7.64751 9.97012C7.64121 9.96381 7.63374 9.95881 7.6255 9.95539C7.61727 9.95197 7.60844 9.95021 7.59953 9.95021C7.59062 9.95021 7.58179 9.95197 7.57356 9.95539C7.56532 9.95881 7.55784 9.96381 7.55155 9.97012L2.78601 14.7357C2.63545 14.8888 2.45607 15.0106 2.25823 15.094C2.06038 15.1774 1.84798 15.2208 1.63328 15.2217C1.41857 15.2226 1.20582 15.1809 1.00728 15.0992C0.808743 15.0175 0.628353 14.8972 0.476516 14.7454C0.324679 14.5936 0.2044 14.4133 0.122616 14.2147C0.0408328 14.0162 -0.000836142 13.8035 1.27127e-05 13.5888C0.000861567 13.374 0.0442115 13.1616 0.127562 12.9638C0.210913 12.7659 0.332614 12.5865 0.485647 12.4359L5.25119 7.67026C5.2575 7.66397 5.2625 7.65649 5.26592 7.64826C5.26934 7.64002 5.2711 7.6312 5.2711 7.62228C5.2711 7.61337 5.26934 7.60454 5.26592 7.59631C5.2625 7.58807 5.2575 7.5806 5.25119 7.5743L0.485647 2.80868C0.184692 2.50285 0.0167751 2.09048 0.0184715 1.66141C0.0201678 1.23233 0.19134 0.82131 0.494704 0.51787C0.798067 0.21443 1.20904 0.0431577 1.63811 0.0413602C2.06718 0.0395627 2.47957 0.207386 2.78547 0.508273L7.55101 5.2739C7.5573 5.28021 7.56478 5.28522 7.57301 5.28863C7.58125 5.29205 7.59007 5.29381 7.59899 5.29381C7.6079 5.29381 7.61673 5.29205 7.62496 5.28863C7.63319 5.28522 7.64067 5.28021 7.64697 5.2739L12.4136 0.508815Z" fill="#FF0000" />
-                    </svg>
-                  )}
-                </div>
-                <div style={{ width: "69px", display: "flex", justifyContent: "center" }}>
-                  {feature.threeMonth ? (
-                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="15" viewBox="0 0 18 15" fill="none">
-                      <path d="M14.7343 0L6.82974 10.356L2.1564 5.7154L0 7.85826L7.18689 15L17.2512 2.14286L14.7343 0Z" fill="#0D468B" />
-                      <path d="M14.7343 0L6.82974 10.356L2.1564 5.7154L0 7.85826L7.18689 15L17.2512 2.14286L14.7343 0Z" fill="black" fillOpacity="0.2" />
-                    </svg>
-                  ) : (
-                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M12.4136 0.508815C12.563 0.350874 12.7425 0.224485 12.9416 0.137118C13.1407 0.0497516 13.3552 0.00318029 13.5726 0.000157267C13.79 -0.00286575 14.0057 0.0377209 14.2072 0.119518C14.4086 0.201315 14.5916 0.322663 14.7453 0.476389C14.899 0.630114 15.0204 0.813098 15.1022 1.01452C15.184 1.21595 15.2245 1.43173 15.2215 1.64911C15.2185 1.86649 15.1719 2.08106 15.0846 2.28013C14.9972 2.4792 14.8708 2.65874 14.7129 2.80813L9.94733 7.57376C9.94102 7.58005 9.93601 7.58753 9.9326 7.59577C9.92918 7.604 9.92742 7.61283 9.92742 7.62174C9.92742 7.63065 9.92918 7.63948 9.9326 7.64771C9.93601 7.65595 9.94102 7.66343 9.94733 7.66972L14.7129 12.4353C14.8659 12.5859 14.9877 12.7653 15.0711 12.9631C15.1545 13.161 15.1979 13.3734 15.1988 13.5881C15.1997 13.8028 15.1581 14.0156 15.0763 14.2141C14.9946 14.4126 14.8743 14.593 14.7225 14.7449C14.5707 14.8967 14.3904 15.017 14.1919 15.0988C13.9933 15.1806 13.7806 15.2222 13.5659 15.2214C13.3512 15.2205 13.1388 15.1772 12.9409 15.0938C12.7431 15.0105 12.5636 14.8888 12.413 14.7357L7.64751 9.97012C7.64121 9.96381 7.63374 9.95881 7.6255 9.95539C7.61727 9.95197 7.60844 9.95021 7.59953 9.95021C7.59062 9.95021 7.58179 9.95197 7.57356 9.95539C7.56532 9.95881 7.55784 9.96381 7.55155 9.97012L2.78601 14.7357C2.63545 14.8888 2.45607 15.0106 2.25823 15.094C2.06038 15.1774 1.84798 15.2208 1.63328 15.2217C1.41857 15.2226 1.20582 15.1809 1.00728 15.0992C0.808743 15.0175 0.628353 14.8972 0.476516 14.7454C0.324679 14.5936 0.2044 14.4133 0.122616 14.2147C0.0408328 14.0162 -0.000836142 13.8035 1.27127e-05 13.5888C0.000861567 13.374 0.0442115 13.1616 0.127562 12.9638C0.210913 12.7659 0.332614 12.5865 0.485647 12.4359L5.25119 7.67026C5.2575 7.66397 5.2625 7.65649 5.26592 7.64826C5.26934 7.64002 5.2711 7.6312 5.2711 7.62228C5.2711 7.61337 5.26934 7.60454 5.26592 7.59631C5.2625 7.58807 5.2575 7.5806 5.25119 7.5743L0.485647 2.80868C0.184692 2.50285 0.0167751 2.09048 0.0184715 1.66141C0.0201678 1.23233 0.19134 0.82131 0.494704 0.51787C0.798067 0.21443 1.20904 0.0431577 1.63811 0.0413602C2.06718 0.0395627 2.47957 0.207386 2.78547 0.508273L7.55101 5.2739C7.5573 5.28021 7.56478 5.28522 7.57301 5.28863C7.58125 5.29205 7.59007 5.29381 7.59899 5.29381C7.6079 5.29381 7.61673 5.29205 7.62496 5.28863C7.63319 5.28522 7.64067 5.28021 7.64697 5.2739L12.4136 0.508815Z" fill="#FF0000" />
-                    </svg>
-                  )}
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-
+        <PricingAndComparisonSection 
+          selectedPlanIdx={selectedPlanIdx} 
+          setSelectedPlanIdx={setSelectedPlanIdx} 
+          daysLeft={0} 
+          completedDateRangeLabel={completedDateRangeLabel}
+          completedDayStatus={completedDayStatus}
+        />
         {/* Refer & Earn — only shown after popup is dismissed */}
         {!showReferral && <div style={{ padding: "32px 27px 32px", display: "flex", justifyContent: "center" }}>
           <div
