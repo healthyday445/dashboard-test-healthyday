@@ -2,427 +2,399 @@ import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 
-const referrals = [
-    { name: "T Raviskrishna", phone: "+91 98 ******12", status: "ACTIVE" },
-    { name: "Kiran Narayana", phone: "+91 98 ******12", status: "ACTIVE" },
-    { name: "Meera Sharma", phone: "+91 98 ******12", status: "PENDING" },
-    { name: "Srikant S.", phone: "+91 98 ******12", status: "PENDING" },
-];
+const Referral = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const referralCount = Number(searchParams.get("count")) || Number(sessionStorage.getItem("total_referral_count")) || 0;
+  const referrerMobile = searchParams.get("mobile") || sessionStorage.getItem("referrer_mobile") || "";
+  const [copied, setCopied] = useState(false);
 
-const PersonIcon = () => (
-    <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="14" cy="14" r="14" fill="#FFF3D6" />
-        <path
-            d="M14 8C15.1 8 16 8.9 16 10C16 11.1 15.1 12 14 12C12.9 12 12 11.1 12 10C12 8.9 12.9 8 14 8ZM14 18C16.7 18 19.8 19.29 20 20H8C8.23 19.29 11.3 18 14 18ZM14 6C11.79 6 10 7.79 10 10C10 12.21 11.79 14 14 14C16.21 14 18 12.21 18 10C18 7.79 16.21 6 14 6ZM14 16C11.33 16 6 17.34 6 20V22H22V20C22 17.34 16.67 16 14 16Z"
-            fill="#FEAB27"
-        />
-    </svg>
-);
+  const shareLink = referrerMobile
+    ? `https://healthyday.co.in/free-programmes?ref=91${referrerMobile}`
+    : "healthyday.app/ref=ggtujev58";
 
-const StepIcon = ({ type }: { type: "link" | "register" | "gift" }) => {
-    const bgColor = "#FFF3D6";
-    const iconColor = "#FEAB27";
+  const displayLink = "healthyday.app/ref=ggtujev58";
 
-    return (
+  const handleCopy = () => {
+    navigator.clipboard.writeText(shareLink);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleWhatsApp = () => {
+    const message = encodeURIComponent(
+      `Join me on Healthyday! Use my referral link: ${shareLink}`
+    );
+    window.open(`https://wa.me/?text=${message}`, "_blank");
+  };
+
+  return (
+    <div
+      className="mx-auto w-[412px] min-h-screen"
+      style={{ fontFamily: "Outfit, sans-serif", background: "#FFF" }}
+    >
+      {/* Header */}
+      <header
+        className="flex w-[412px] h-[68px] items-center"
+        style={{
+          padding: "20px",
+          background: "#FFF",
+          boxShadow: "0 4px 30px 0 rgba(0,0,0,0.10)",
+        }}
+      >
+        <button
+          onClick={() => navigate(-1)}
+          style={{
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            marginRight: "12px",
+            padding: "4px",
+          }}
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+            <path d="M20 11H7.83L13.42 5.41L12 4L4 12L12 20L13.41 18.59L7.83 13H20V11Z" fill="#202020" />
+          </svg>
+        </button>
+        <img src={logo} alt="Healthyday" className="h-7" />
+      </header>
+
+      {/* Main Content */}
+      <div style={{ padding: "24px 20px 0" }}>
+        {/* Blue Share Card */}
         <div
+          style={{
+            width: "360px",
+            borderRadius: "16px",
+            background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
+            boxShadow: "0 0 10px rgba(0,0,0,0.25)",
+            padding: "26px 19px",
+            boxSizing: "border-box",
+          }}
+        >
+          {/* Share this link label */}
+          <div
             style={{
-                width: "44px",
-                height: "44px",
-                borderRadius: "50%",
-                background: bgColor,
+              color: "#FFF",
+              fontFamily: "Outfit",
+              fontSize: "16px",
+              fontWeight: 600,
+              marginBottom: "11px",
+            }}
+          >
+            Share this link
+          </div>
+
+          {/* Link input */}
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              borderRadius: "8px",
+              background: "#FFF",
+              border: "1.2px solid #B4B4B4",
+              padding: "9px 12px 11px 18px",
+              marginBottom: "16px",
+              boxSizing: "border-box",
+            }}
+          >
+            <span
+              style={{
+                color: "#8E8E8E",
+                fontFamily: "Outfit",
+                fontSize: "15px",
+                fontWeight: 400,
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "nowrap",
+                flex: 1,
+              }}
+            >
+              {displayLink}
+            </span>
+            <button
+              onClick={handleCopy}
+              style={{
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                padding: "0",
+                flexShrink: 0,
+                marginLeft: "8px",
+              }}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#8E8E8E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                <path d="M5 15H4a2 2 0 01-2-2V4a2 2 0 012-2h9a2 2 0 012 2v1" />
+              </svg>
+            </button>
+          </div>
+
+          {/* Buttons Row */}
+          <div style={{ display: "flex", gap: "12px" }}>
+            {/* Copy Link Button */}
+            <button
+              onClick={handleCopy}
+              style={{
+                flex: 1,
+                height: "40px",
+                borderRadius: "10px",
+                background: "#FEAB27",
+                border: "none",
+                cursor: "pointer",
+                boxShadow: "0 4px 4px rgba(0,0,0,0.25)",
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                flexShrink: 0,
-            }}
-        >
-            {type === "link" && (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M17 7H13V9H17C18.65 9 20 10.35 20 12C20 13.65 18.65 15 17 15H13V17H17C19.76 17 22 14.76 22 12C22 9.24 19.76 7 17 7ZM11 15H7C5.35 15 4 13.65 4 12C4 10.35 5.35 9 7 9H11V7H7C4.24 7 2 9.24 2 12C2 14.76 4.24 17 7 17H11V15ZM8 11H16V13H8V11Z" fill={iconColor} />
-                </svg>
-            )}
-            {type === "register" && (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M16 11C17.66 11 18.99 9.66 18.99 8C18.99 6.34 17.66 5 16 5C14.34 5 13 6.34 13 8C13 9.66 14.34 11 16 11ZM8 11C9.66 11 10.99 9.66 10.99 8C10.99 6.34 9.66 5 8 5C6.34 5 5 6.34 5 8C5 9.66 6.34 11 8 11ZM8 13C5.67 13 1 14.17 1 16.5V19H15V16.5C15 14.17 10.33 13 8 13ZM16 13C15.71 13 15.38 13.02 15.03 13.05C16.19 13.89 17 15.02 17 16.5V19H23V16.5C23 14.17 18.33 13 16 13Z" fill={iconColor} />
-                </svg>
-            )}
-            {type === "gift" && (
-                <svg width="22" height="22" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                    <path d="M20 6H17.82C17.93 5.69 18 5.35 18 5C18 3.34 16.66 2 15 2C13.95 2 13.04 2.54 12.5 3.35L12 4.02L11.5 3.34C10.96 2.54 10.05 2 9 2C7.34 2 6 3.34 6 5C6 5.35 6.07 5.69 6.18 6H4C2.89 6 2.01 6.89 2.01 8L2 19C2 20.11 2.89 21 4 21H20C21.11 21 22 20.11 22 19V8C22 6.89 21.11 6 20 6ZM15 4C15.55 4 16 4.45 16 5C16 5.55 15.55 6 15 6C14.45 6 14 5.55 14 5C14 4.45 14.45 4 15 4ZM9 4C9.55 4 10 4.45 10 5C10 5.55 9.55 6 9 6C8.45 6 8 5.55 8 5C8 4.45 8.45 4 9 4ZM20 19H4V17H20V19ZM20 14H4V8H9.08L7 10.83L8.62 12L11 8.76L12 7.4L13 8.76L15.38 12L17 10.83L14.92 8H20V14Z" fill={iconColor} />
-                </svg>
-            )}
-        </div>
-    );
-};
-
-const Referral = () => {
-    const navigate = useNavigate();
-    const location = useLocation();
-    const searchParams = new URLSearchParams(location.search);
-    const referralCount = Number(searchParams.get("count")) || Number(sessionStorage.getItem("total_referral_count")) || 0;
-    const referrerMobile = searchParams.get("mobile") || sessionStorage.getItem("referrer_mobile") || "";
-    const [copied, setCopied] = useState(false);
-    const referralLink = "healthyday.app/ref=ggtujev58";
-
-    const shareLink = referrerMobile ? `https://healthyday.co.in/free-programmes?ref=91${referrerMobile}` : referralLink;
-
-    const handleCopy = () => {
-        navigator.clipboard.writeText(shareLink);
-        setCopied(true);
-        setTimeout(() => setCopied(false), 2000);
-    };
-
-    const handleWhatsApp = () => {
-        const message = encodeURIComponent(
-            `Join me on Healthyday! Use my referral link: ${shareLink}`
-        );
-        window.open(`https://wa.me/?text=${message}`, "_blank");
-    };
-
-    return (
-        <div
-            className="mx-auto w-[412px] min-h-screen"
-            style={{
-                fontFamily: "Outfit, sans-serif",
-                background: "linear-gradient(180deg, #FFF8EB 0%, #FFFFFF 30%)",
-            }}
-        >
-            {/* Header */}
-            <header
-                className="flex w-[412px] h-[68px] items-center"
-                style={{
-                    padding: "20px",
-                    background: "#FFFFFF",
-                    boxShadow: "0 4px 30px 0 rgba(0, 0, 0, 0.10)",
-                }}
+                gap: "4px",
+              }}
             >
-                <button
-                    onClick={() => navigate("/")}
-                    style={{
-                        background: "none",
-                        border: "none",
-                        cursor: "pointer",
-                        marginRight: "12px",
-                        padding: "4px",
-                    }}
-                >
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M20 11H7.83L13.42 5.41L12 4L4 12L12 20L13.41 18.59L7.83 13H20V11Z" fill="#202020" />
-                    </svg>
-                </button>
-                <img src={logo} alt="Healthyday" className="h-7" />
-            </header>
+              <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 24 24" fill="none" stroke="#FFF" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="18" cy="5" r="3" />
+                <circle cx="6" cy="12" r="3" />
+                <circle cx="18" cy="19" r="3" />
+                <line x1="8.59" y1="13.51" x2="15.42" y2="17.49" />
+                <line x1="15.41" y1="6.51" x2="8.59" y2="10.49" />
+              </svg>
+              <span
+                style={{
+                  color: "#FFF",
+                  fontFamily: "Outfit",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                }}
+              >
+                {copied ? "Copied!" : "Copy Link"}
+              </span>
+            </button>
 
-            {/* Referral Status Banner */}
-            <div className="flex justify-center" style={{ marginTop: "20px" }}>
-                <div
-                    style={{
-                        width: "358px",
-                        borderRadius: "16px",
-                        background: "linear-gradient(135deg, #FEAB27 0%, #F59E0B 100%)",
-                        padding: "20px 24px",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "space-between",
-                    }}
-                >
-                    <div>
-                        <div
-                            style={{
-                                color: "rgba(255,255,255,0.85)",
-                                fontSize: "10px",
-                                fontWeight: 600,
-                                letterSpacing: "1px",
-                                marginBottom: "4px",
-                            }}
-                        >
-                            REFERRAL STATUS
-                        </div>
-                        <div style={{ color: "#fff", fontSize: "22px", fontWeight: 800 }}>
-                            Your Referrals
-                        </div>
-                    </div>
-                    <div
-                        style={{
-                            width: "52px",
-                            height: "52px",
-                            borderRadius: "12px",
-                            background: "#0B2A4A",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            color: "#fff",
-                            fontSize: "24px",
-                            fontWeight: 800,
-                        }}
-                    >
-                        {referralCount}
-                    </div>
-                </div>
-            </div>
-
-            {/* How to refer Section */}
-            <div style={{ padding: "28px 27px 0" }}>
-                <h2
-                    style={{
-                        color: "#202020",
-                        fontSize: "20px",
-                        fontWeight: 700,
-                        textAlign: "center",
-                        marginBottom: "24px",
-                    }}
-                >
-                    How to refer?
-                </h2>
-
-                {/* Steps */}
-                <div style={{ position: "relative", paddingLeft: "0" }}>
-                    {/* Step 1 */}
-                    <div className="flex items-start gap-3" style={{ marginBottom: "6px" }}>
-                        <div className="flex flex-col items-center">
-                            <StepIcon type="link" />
-                            <div
-                                style={{
-                                    width: "2px",
-                                    height: "28px",
-                                    background: "#E5E5E5",
-                                    margin: "4px 0",
-                                }}
-                            />
-                        </div>
-                        <div style={{ paddingTop: "4px" }}>
-                            <div style={{ color: "#202020", fontSize: "15px", fontWeight: 700 }}>
-                                Forward your link
-                            </div>
-                            <div style={{ color: "#888", fontSize: "12px", fontWeight: 400, marginTop: "2px" }}>
-                                Send your unique link to your family & friends
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Step 2 */}
-                    <div className="flex items-start gap-3" style={{ marginBottom: "6px" }}>
-                        <div className="flex flex-col items-center">
-                            <StepIcon type="register" />
-                            <div
-                                style={{
-                                    width: "2px",
-                                    height: "28px",
-                                    background: "#E5E5E5",
-                                    margin: "4px 0",
-                                }}
-                            />
-                        </div>
-                        <div style={{ paddingTop: "4px" }}>
-                            <div style={{ color: "#202020", fontSize: "15px", fontWeight: 700 }}>
-                                Friends Register
-                            </div>
-                            <div style={{ color: "#888", fontSize: "12px", fontWeight: 400, marginTop: "2px" }}>
-                                Ask them to register for the next FREE Batch
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Step 3 */}
-                    <div className="flex items-start gap-3">
-                        <StepIcon type="gift" />
-                        <div style={{ paddingTop: "4px" }}>
-                            <div style={{ color: "#202020", fontSize: "15px", fontWeight: 700 }}>
-                                Win FREE Classes & Gifts
-                            </div>
-                            <div style={{ color: "#888", fontSize: "12px", fontWeight: 400, marginTop: "2px" }}>
-                                Get 10 FREE Classes on first 5 Referrals
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            {/* Referral Link Card */}
-            <div className="flex justify-center" style={{ marginTop: "28px" }}>
-                <div
-                    style={{
-                        width: "358px",
-                        borderRadius: "16px",
-                        background: "linear-gradient(135deg, #0B2A4A 0%, #0E3358 100%)",
-                        padding: "20px",
-                    }}
-                >
-                    <div
-                        style={{
-                            color: "#fff",
-                            fontSize: "16px",
-                            fontWeight: 700,
-                            marginBottom: "14px",
-                        }}
-                    >
-                        Your Referral Link
-                    </div>
-
-                    {/* Link display */}
-                    <div
-                        className="flex items-center justify-between"
-                        style={{
-                            background: "#fff",
-                            borderRadius: "10px",
-                            padding: "12px 14px",
-                            marginBottom: "14px",
-                        }}
-                    >
-                        <span
-                            style={{
-                                color: "#555",
-                                fontSize: "13px",
-                                fontWeight: 500,
-                                overflow: "hidden",
-                                textOverflow: "ellipsis",
-                                whiteSpace: "nowrap",
-                            }}
-                        >
-                            {referralLink}
-                        </span>
-                        <button
-                            onClick={handleCopy}
-                            style={{
-                                background: "none",
-                                border: "none",
-                                cursor: "pointer",
-                                padding: "2px",
-                                flexShrink: 0,
-                            }}
-                        >
-                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="#999" />
-                            </svg>
-                        </button>
-                    </div>
-
-                    {/* Buttons */}
-                    <div className="flex gap-3">
-                        <button
-                            onClick={handleCopy}
-                            style={{
-                                flex: 1,
-                                padding: "12px",
-                                borderRadius: "10px",
-                                background: "#34C759",
-                                border: "none",
-                                cursor: "pointer",
-                                color: "#fff",
-                                fontSize: "13px",
-                                fontWeight: 700,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: "6px",
-                            }}
-                        >
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M16 1H4C2.9 1 2 1.9 2 3V17H4V3H16V1ZM19 5H8C6.9 5 6 5.9 6 7V21C6 22.1 6.9 23 8 23H19C20.1 23 21 22.1 21 21V7C21 5.9 20.1 5 19 5ZM19 21H8V7H19V21Z" fill="white" />
-                            </svg>
-                            {copied ? "Copied!" : "Copy Link"}
-                        </button>
-                        <button
-                            onClick={handleWhatsApp}
-                            style={{
-                                flex: 1,
-                                padding: "12px",
-                                borderRadius: "10px",
-                                background: "#F97316",
-                                border: "none",
-                                cursor: "pointer",
-                                color: "#fff",
-                                fontSize: "13px",
-                                fontWeight: 700,
-                                display: "flex",
-                                alignItems: "center",
-                                justifyContent: "center",
-                                gap: "6px",
-                            }}
-                        >
-                            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M17.472 14.382C17.177 14.233 15.746 13.527 15.474 13.427C15.202 13.328 15.002 13.278 14.802 13.577C14.602 13.875 14.038 14.531 13.862 14.731C13.686 14.931 13.51 14.956 13.215 14.807C12.92 14.658 11.978 14.348 10.862 13.349C9.993 12.571 9.406 11.612 9.23 11.314C9.054 11.015 9.21 10.854 9.357 10.707C9.49 10.575 9.652 10.364 9.801 10.188C9.95 10.012 10 9.887 10.1 9.687C10.2 9.487 10.15 9.312 10.075 9.163C10 9.013 9.413 7.578 9.165 6.981C8.923 6.399 8.677 6.479 8.493 6.469C8.317 6.46 8.117 6.458 7.917 6.458C7.717 6.458 7.397 6.533 7.125 6.832C6.853 7.131 6.098 7.837 6.098 9.272C6.098 10.707 7.15 12.093 7.299 12.293C7.448 12.493 9.403 15.508 12.327 16.767C13.033 17.074 13.588 17.256 14.019 17.391C14.727 17.614 15.371 17.581 15.88 17.504C16.449 17.418 17.619 16.792 17.867 16.108C18.115 15.424 18.115 14.834 18.04 14.71C17.965 14.585 17.765 14.511 17.472 14.362V14.382ZM12.025 21.785H12.021C10.241 21.785 8.497 21.308 6.976 20.408L6.638 20.206L2.872 21.195L3.878 17.525L3.655 17.175C2.668 15.601 2.147 13.789 2.148 11.927C2.15 6.482 6.555 2.077 12.029 2.077C14.687 2.078 17.191 3.113 19.069 4.996C20.947 6.879 21.974 9.386 21.973 12.048C21.97 17.493 17.565 21.898 12.025 21.898V21.785ZM20.478 3.594C18.226 1.335 15.213 0.077 12.025 0.077C5.462 0.077 0.15 5.389 0.148 11.952C0.147 14.048 0.7 16.094 1.748 17.889L0.045 24L6.301 22.336C8.031 23.286 9.989 23.786 11.985 23.787H11.99C18.553 23.787 23.865 18.475 23.867 11.912C23.868 8.727 22.618 5.718 20.366 3.459L20.478 3.594Z" fill="white" />
-                            </svg>
-                            Share on Whatsapp
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            {/* Your Recent Referrals */}
-            <div style={{ padding: "28px 27px 32px" }}>
-                <div className="flex items-center justify-between" style={{ marginBottom: "16px" }}>
-                    <h3 style={{ color: "#202020", fontSize: "18px", fontWeight: 700 }}>
-                        Your Recent Referrals
-                    </h3>
-                    <span
-                        style={{
-                            color: "#34C759",
-                            fontSize: "14px",
-                            fontWeight: 600,
-                            cursor: "pointer",
-                        }}
-                    >
-                        View All
-                    </span>
-                </div>
-
-                {/* Referral cards */}
-                <div
-                    style={{
-                        borderRadius: "14px",
-                        border: "1px solid #F0F0F0",
-                        overflow: "hidden",
-                        background: "#fff",
-                    }}
-                >
-                    {referrals.map((referral, index) => (
-                        <div
-                            key={index}
-                            className="flex items-center justify-between"
-                            style={{
-                                padding: "14px 16px",
-                                borderBottom: index < referrals.length - 1 ? "1px solid #F5F5F5" : "none",
-                            }}
-                        >
-                            <div className="flex items-center gap-3">
-                                <PersonIcon />
-                                <div>
-                                    <div style={{ color: "#202020", fontSize: "14px", fontWeight: 700 }}>
-                                        {referral.name}
-                                    </div>
-                                    <div style={{ color: "#999", fontSize: "11px", fontWeight: 400, marginTop: "2px" }}>
-                                        {referral.phone}
-                                    </div>
-                                </div>
-                            </div>
-                            <span
-                                style={{
-                                    fontSize: "10px",
-                                    fontWeight: 700,
-                                    padding: "4px 12px",
-                                    borderRadius: "20px",
-                                    ...(referral.status === "ACTIVE"
-                                        ? {
-                                            color: "#34C759",
-                                            background: "#E8F9ED",
-                                            border: "1px solid #34C759",
-                                        }
-                                        : {
-                                            color: "#888",
-                                            background: "#F5F5F5",
-                                            border: "1px solid #E0E0E0",
-                                        }),
-                                }}
-                            >
-                                {referral.status}
-                            </span>
-                        </div>
-                    ))}
-                </div>
-            </div>
+            {/* Share on WhatsApp Button */}
+            <button
+              onClick={handleWhatsApp}
+              style={{
+                flex: 1,
+                height: "40px",
+                borderRadius: "10px",
+                background: "#57D063",
+                border: "none",
+                cursor: "pointer",
+                boxShadow: "0 4px 4px rgba(0,0,0,0.25)",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: "4px",
+              }}
+            >
+              <img
+                src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAYAAACNiR0NAAAACXBIWXMAAAsTAAALEwEAmpwYAAABbUlEQVQ4ja2UPUsDQRCGn7t4SUSwsLGwEIuAhWBhYSFYWPgL/AX+A3+BhYWFhYWFhYWFhaWFhYWggoWghYUgRBFFBSUXz2J3k72928TKYWF3Z955Z3ZnxogIVWDAgIqoeIRYRAQRwSmcBwZSBE7gnxj6QH++MJdAXAvqBkSbALOBc8AusAuYC+cJFoGVQBzRAmsGxIHFGiOYAbYATQHT8FxxApaBScAN2PVBYxFhE7gjLHRDu8Cx/BYwAUwAi8Ar1hMRpSJb3gbNAEPA4cQ3MdDzwm3gJLClwDjwEd2Lk5xPFwGvic+FcWtA7N4OTJwH9jzwC7VCTwDlIvsCLARblcNUJ2MZmE0GUVGCgBLBmpOoZYdWcqJiNIARst7KSqbxEsZTVYD5YDRfFsFtitImKt8D2S9nMfWgXH8YZVFZKRDOuFpK3uSFjKzPPsJvIEtPCtO4Z0r+gUeAVs0fh+MBFd+0wVnlMjLQ8/wE9r1PgH2LXQQAAAABJRU5ErkJggg=="
+                alt="WhatsApp"
+                style={{ width: "15px", height: "15px", objectFit: "cover" }}
+              />
+              <span
+                style={{
+                  color: "#FFF",
+                  fontFamily: "Outfit",
+                  fontSize: "14px",
+                  fontWeight: 500,
+                }}
+              >
+                Share on Whatsapp
+              </span>
+            </button>
+          </div>
         </div>
-    );
+
+        {/* How to refer? Section */}
+        <div style={{ marginTop: "40px", padding: "0 0px" }}>
+          <h3
+            style={{
+              color: "#202020",
+              fontFamily: "Outfit",
+              fontSize: "24px",
+              fontWeight: 600,
+              textAlign: "center",
+              marginBottom: "24px",
+              margin: "0 0 24px 0",
+            }}
+          >
+            How to refer?
+          </h3>
+
+          <div style={{ display: "flex", flexDirection: "column", gap: "1px" }}>
+            {/* Step 1 */}
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "23px" }}>
+              <div style={{ width: "40px", height: "40px", flexShrink: 0 }}>
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                  <circle cx="20" cy="20" r="20" fill="#FFF3D6" />
+                  <path d="M27 14H23V16H27C28.65 16 30 17.35 30 19C30 20.65 28.65 22 27 22H23V24H27C29.76 24 32 21.76 32 19C32 16.24 29.76 14 27 14ZM17 22H13C11.35 22 10 20.65 10 19C10 17.35 11.35 16 13 16H17V14H13C10.24 14 8 16.24 8 19C8 21.76 10.24 24 13 24H17V22ZM14 18H26V20H14V18Z" fill="#FEAB27" />
+                </svg>
+              </div>
+              <div style={{ flex: 1, paddingTop: "2px" }}>
+                <div
+                  style={{
+                    fontFamily: "Outfit",
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  Forward your link
+                </div>
+                <div
+                  style={{
+                    color: "#8C8C8C",
+                    fontFamily: "Outfit",
+                    fontSize: "12px",
+                    fontWeight: 500,
+                    marginTop: "1px",
+                  }}
+                >
+                  Send your unique link to your family & friends
+                </div>
+              </div>
+            </div>
+
+            {/* Line 1 */}
+            <div style={{ paddingLeft: "19px", height: "45px", display: "flex", alignItems: "flex-start" }}>
+              <div style={{ width: "3px", height: "48px", borderRight: "3px solid #BFBFBF", boxSizing: "border-box" }} />
+            </div>
+
+            {/* Step 2 */}
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "23px" }}>
+              <div style={{ width: "40px", height: "40px", flexShrink: 0 }}>
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                  <circle cx="20" cy="20" r="20" fill="#FFF3D6" />
+                  <path d="M24 18C25.66 18 26.99 16.66 26.99 15C26.99 13.34 25.66 12 24 12C22.34 12 21 13.34 21 15C21 16.66 22.34 18 24 18ZM16 18C17.66 18 18.99 16.66 18.99 15C18.99 13.34 17.66 12 16 12C14.34 12 13 13.34 13 15C13 16.66 14.34 18 16 18ZM16 20C13.67 20 9 21.17 9 23.5V26H23V23.5C23 21.17 18.33 20 16 20ZM24 20C23.71 20 23.38 20.02 23.03 20.05C24.19 20.89 25 22.02 25 23.5V26H31V23.5C31 21.17 26.33 20 24 20Z" fill="#FEAB27" />
+                </svg>
+              </div>
+              <div style={{ flex: 1, paddingTop: "2px" }}>
+                <div
+                  style={{
+                    fontFamily: "Outfit",
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  Friends Register
+                </div>
+                <div
+                  style={{
+                    color: "#8C8C8C",
+                    fontFamily: "Outfit",
+                    fontSize: "12px",
+                    fontWeight: 500,
+                    marginTop: "1px",
+                  }}
+                >
+                  Ask them to register for the next FREE Batch
+                </div>
+              </div>
+            </div>
+
+            {/* Line 2 */}
+            <div style={{ paddingLeft: "19px", height: "45px", display: "flex", alignItems: "flex-start" }}>
+              <div style={{ width: "3px", height: "48px", borderRight: "3px solid #BFBFBF", boxSizing: "border-box" }} />
+            </div>
+
+            {/* Step 3 */}
+            <div style={{ display: "flex", alignItems: "flex-start", gap: "23px" }}>
+              <div style={{ width: "40px", height: "40px", flexShrink: 0 }}>
+                <svg width="40" height="40" viewBox="0 0 40 40" fill="none">
+                  <circle cx="20" cy="20" r="20" fill="#FFF3D6" />
+                  <path d="M28 13H25.82C25.93 12.69 26 12.35 26 12C26 10.34 24.66 9 23 9C21.95 9 21.04 9.54 20.5 10.35L20 11.02L19.5 10.34C18.96 9.54 18.05 9 17 9C15.34 9 14 10.34 14 12C14 12.35 14.07 12.69 14.18 13H12C10.89 13 10.01 13.89 10.01 15L10 26C10 27.11 10.89 28 12 28H28C29.11 28 30 27.11 30 26V15C30 13.89 29.11 13 28 13ZM23 11C23.55 11 24 11.45 24 12C24 12.55 23.55 13 23 13C22.45 13 22 12.55 22 12C22 11.45 22.45 11 23 11ZM17 11C17.55 11 18 11.45 18 12C18 12.55 17.55 13 17 13C16.45 13 16 12.55 16 12C16 11.45 16.45 11 17 11ZM28 26H12V24H28V26ZM28 21H12V15H17.08L15 17.83L16.62 19L19 15.76L20 14.4L21 15.76L23.38 19L25 17.83L22.92 15H28V21Z" fill="#FEAB27" />
+                </svg>
+              </div>
+              <div style={{ flex: 1, paddingTop: "2px" }}>
+                <div
+                  style={{
+                    fontFamily: "Outfit",
+                    fontSize: "16px",
+                    fontWeight: 600,
+                    background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }}
+                >
+                  Win FREE Classes & Gifts
+                </div>
+                <div
+                  style={{
+                    color: "#8C8C8C",
+                    fontFamily: "Outfit",
+                    fontSize: "12px",
+                    fontWeight: 500,
+                    marginTop: "1px",
+                  }}
+                >
+                  Get 10 FREE Classes on first 5 Referrals
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Refer and Win Bottom Section */}
+      <div
+        style={{
+          padding: "31px 20px 98px",
+          textAlign: "center",
+          display: "flex",
+          flexDirection: "column",
+          alignItems: "center",
+          gap: "12px",
+        }}
+      >
+        <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none">
+          <circle cx="50" cy="50" r="50" fill="#FFF5E5" />
+          <path d="M33.2979 32.2937H37.8857H33.2979Z" fill="#FEAB27" />
+          <path d="M35.5918 30V34.5875V30Z" fill="#FEAB27" />
+          <path d="M50.502 30L49.3551 34.5875L50.502 30Z" fill="#FEAB27" />
+          <path d="M65.4122 32.2937H70H65.4122Z" fill="#FEAB27" />
+          <path d="M67.7061 30V34.5875V30Z" fill="#FEAB27" />
+          <path d="M58.5306 41.4687L56.2367 43.7625L58.5306 41.4687Z" fill="#FEAB27" />
+          <path d="M65.4122 50.6437L70 49.4968L65.4122 50.6437Z" fill="#FEAB27" />
+          <path d="M65.4122 64.4062H70H65.4122Z" fill="#FEAB27" />
+          <path d="M67.7061 62.1124V66.6999V62.1124Z" fill="#FEAB27" />
+          <path d="M56.2367 58.7131L41.2852 43.7625L31.2151 65.7366C31.016 66.1632 30.9531 66.6408 31.0348 67.1044C31.1165 67.568 31.339 67.9953 31.6719 68.3282C32.0048 68.6611 32.4321 68.8835 32.8957 68.9652C33.3594 69.0469 33.837 68.984 34.2636 68.7849L56.2367 58.7131Z" fill="#FEAB27" />
+          <path d="M33.2979 32.2937H37.8857M35.5918 30V34.5875M50.502 30L49.3551 34.5875M65.4122 32.2937H70M67.7061 30V34.5875M58.5306 41.4687L56.2367 43.7625M65.4122 50.6437L70 49.4968M65.4122 64.4062H70M67.7061 62.1124V66.6999M56.2367 58.7131L41.2852 43.7625L31.2151 65.7366C31.016 66.1632 30.9531 66.6408 31.0348 67.1044C31.1165 67.568 31.339 67.9953 31.6719 68.3282C32.0048 68.6611 32.4321 68.8835 32.8957 68.9652C33.3594 69.0469 33.837 68.984 34.2636 68.7849L56.2367 58.7131Z" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+        </svg>
+        <div style={{ display: "flex", flexDirection: "column", gap: "5px", alignItems: "center" }}>
+          <b
+            style={{
+              color: "#000",
+              fontFamily: "Outfit",
+              fontSize: "18px",
+              fontWeight: 700,
+              lineHeight: "normal",
+            }}
+          >
+            Refer and Win!
+          </b>
+          <div
+            style={{
+              color: "#ADADAD",
+              fontFamily: "Outfit",
+              fontSize: "18px",
+              fontWeight: 500,
+              lineHeight: "normal",
+              textAlign: "center",
+              width: "286px",
+            }}
+          >
+            Every active referral earn gifts and rewards for you
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 };
 
 export default Referral;
