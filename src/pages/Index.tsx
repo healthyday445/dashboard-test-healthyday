@@ -214,7 +214,7 @@ const Index = () => {
       setLoading(false);
       return;
     }
-    // ?preview=elapsed â€” preview ongoing user whose 14-day batch has elapsed
+    // ?preview=elapsed — preview ongoing user whose 14-day batch has elapsed
     if (previewMode === "elapsed") {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - 15); // batch started 15 days ago
@@ -232,7 +232,7 @@ const Index = () => {
       setLoading(false);
       return;
     }
-    // ?preview=day1 â€¦ day14 â€” preview a specific batch day
+    // ?preview=day1 … day14 — preview a specific batch day
     if (previewMode && previewMode.startsWith("day")) {
       const dayNum = Number(previewMode.slice(3));
       if (dayNum >= 1 && dayNum <= 14) {
@@ -403,14 +403,14 @@ const Index = () => {
                 fontSize: "28px",
               }}
             >
-              ðŸŒ
+              🌍
             </div>
             <h2 style={{ color: "#202020", fontSize: "22px", fontWeight: 700, marginBottom: "8px" }}>
               English is Coming Soon!
             </h2>
             <p style={{ color: "#888", fontSize: "14px", fontWeight: 400, lineHeight: "1.5", marginBottom: "24px" }}>
               We're currently available in <strong style={{ color: "#FEAB27" }}>Telugu</strong> only.
-              English support is on the way â€” stay tuned!
+              English support is on the way — stay tuned!
             </p>
             <div
               style={{
@@ -467,7 +467,7 @@ const Index = () => {
       isActive: true as const,
       currentDay,
       week,
-      dateRangeLabel: `${fmt(batchStart)} â€“ ${fmt(batchEnd)}`,
+      dateRangeLabel: `${fmt(batchStart)} — ${fmt(batchEnd)}`,
     };
   };
 
@@ -756,15 +756,22 @@ const Index = () => {
                       {/* Vertical line */}
                       <div style={{ position: "absolute", left: "15px", top: "16px", bottom: "16px", width: "3px", background: "#DDDEDE", borderRadius: "2px", zIndex: 0 }} />
                       {/* "You are here" row at the very top */}
-                      <div style={{ display: "flex", alignItems: "center", gap: "7px", marginBottom: "14px", position: "relative", zIndex: 1 }}>
-                        <div style={{ marginLeft: "-2.5px", flexShrink: 0, width: "38px", height: "38px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: refCount > 0 ? "#FEAB27" : "#FF3B30" }} />
-                        </div>
-                        <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700 }}>{refCount} Referrals</span>
-                        <div style={{ height: "28px", borderRadius: "20px", border: "1px solid #FEAB27", background: "rgba(254,171,39,0.20)", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 12px" }}>
-                          <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600 }}>You are here</span>
-                        </div>
-                      </div>
+                      {(() => {
+                        const indicatorColor = refCount === 0 ? "#FF0000" : "#FEAB27";
+                        return (
+                          <div style={{ display: "flex", alignItems: "center", gap: "7px", marginBottom: "14px", position: "relative", zIndex: 1 }}>
+                            <div style={{ marginLeft: "-2.5px", flexShrink: 0, width: "38px", height: "38px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" style={{ aspectRatio: "1/1" }}>
+                                <circle cx="11" cy="11" r="11" fill={indicatorColor} />
+                              </svg>
+                            </div>
+                            <span style={{ color: indicatorColor, fontFamily: "Outfit", fontSize: "16px", fontWeight: 600 }}>{refCount} Referrals</span>
+                            <div style={{ width: "106px", height: "28px", borderRadius: "20px", border: `1px solid ${indicatorColor}`, background: "rgba(254,171,39,0.20)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <span style={{ color: indicatorColor, fontFamily: "Outfit", fontSize: "14px", fontWeight: 600 }}>You are here</span>
+                            </div>
+                          </div>
+                        );
+                      })()}
                       {/* Milestone rows */}
                       {milestones.map((m, idx) => {
                         const claimed = refCount >= m.refs;
@@ -800,7 +807,7 @@ const Index = () => {
                               </div>
                             </div>
                             {claimed && (
-                              <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>CLAIMED ðŸŽ</span>
+                              <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>CLAIMED 🎁</span>
                             )}
                             {isNext && (
                               <span style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>IN PROGRESS</span>
@@ -937,7 +944,7 @@ const Index = () => {
           <img src={logo} alt="Healthyday" className="h-7" />
         </header>
 
-        {/* Your Yoga Session â€” live/not-live */}
+        {/* Your Yoga Session — live/not-live */}
         {(() => {
           const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
           const totalMin = nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
@@ -1086,7 +1093,7 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Note â€” hidden on bonus days since the card below already shows next session info */}
+              {/* Note — hidden on bonus days since the card below already shows next session info */}
               {!isBonusDay && <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px", marginTop: "10px" }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
                   <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
@@ -1099,7 +1106,7 @@ const Index = () => {
                 </span>
               </div>}
 
-              {/* Next regular session card â€” shown on bonus days */}
+              {/* Next regular session card — shown on bonus days */}
               {isBonusDay && bonusSessionData && (() => {
                 const isAMBonus = bonusSessionData.startMin < 12 * 60;
                 const nextRegSlots = isAMBonus ? ["4:30 PM", "5:30 PM", "6:30 PM"] : ["5:30 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
@@ -1169,7 +1176,7 @@ const Index = () => {
                 <DayBox key={i} status={status} dayLabel={`Day ${i + 1}`} />
               ))}
             </div>
-            {/* Row 2: Days 8-14 â€” only shown in week 2 */}
+            {/* Row 2: Days 8-14 — only shown in week 2 */}
             {week === 2 && (
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 {dayStatus.slice(7, 14).map((status, i) => (
@@ -1205,15 +1212,22 @@ const Index = () => {
               <div style={{ width: "360px", borderRadius: "16px", background: "#FFF", boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)", padding: "20px 16px", boxSizing: "border-box" }}>
                 <div style={{ position: "relative" }}>
                   <div style={{ position: "absolute", left: "15px", top: "16px", bottom: "16px", width: "3px", background: "#DDDEDE", borderRadius: "2px", zIndex: 0 }} />
-                  <div style={{ display: "flex", alignItems: "center", gap: "7px", marginBottom: "14px", position: "relative", zIndex: 1 }}>
-                    <div style={{ marginLeft: "-2.5px", flexShrink: 0, width: "38px", height: "38px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <div style={{ width: "14px", height: "14px", borderRadius: "50%", background: refCount > 0 ? "#FEAB27" : "#FF3B30" }} />
-                    </div>
-                    <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700 }}>{refCount} Referrals</span>
-                    <div style={{ height: "28px", borderRadius: "20px", border: "1px solid #FEAB27", background: "rgba(254,171,39,0.20)", display: "flex", alignItems: "center", justifyContent: "center", padding: "0 12px" }}>
-                      <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600 }}>You are here</span>
-                    </div>
-                  </div>
+                  {(() => {
+                    const indicatorColor = refCount === 0 ? "#FF0000" : "#FEAB27";
+                    return (
+                      <div style={{ display: "flex", alignItems: "center", gap: "7px", marginBottom: "14px", position: "relative", zIndex: 1 }}>
+                        <div style={{ marginLeft: "-2.5px", flexShrink: 0, width: "38px", height: "38px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" style={{ aspectRatio: "1/1" }}>
+                            <circle cx="11" cy="11" r="11" fill={indicatorColor} />
+                          </svg>
+                        </div>
+                        <span style={{ color: indicatorColor, fontFamily: "Outfit", fontSize: "16px", fontWeight: 600 }}>{refCount} Referrals</span>
+                        <div style={{ width: "106px", height: "28px", borderRadius: "20px", border: `1px solid ${indicatorColor}`, background: "rgba(254,171,39,0.20)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <span style={{ color: indicatorColor, fontFamily: "Outfit", fontSize: "14px", fontWeight: 600 }}>You are here</span>
+                        </div>
+                      </div>
+                    );
+                  })()}
                   {milestones.map((m, idx) => {
                     const claimed = refCount >= m.refs;
                     const isNext = idx === nextIdx;
@@ -1245,7 +1259,7 @@ const Index = () => {
                             <div style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500 }}>{m.refs} Referrals</div>
                           </div>
                         </div>
-                        {claimed && <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>CLAIMED ðŸŽ</span>}
+                        {claimed && <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>CLAIMED 🎁</span>}
                         {isNext && <span style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>IN PROGRESS</span>}
                       </div>
                     );
@@ -1278,7 +1292,7 @@ const Index = () => {
           <p style={{ color: "#ADADAD", fontFamily: "Outfit", fontSize: "18px", fontWeight: 500, lineHeight: "normal", textAlign: "center", width: "286px", margin: 0 }}>Every active referral earn gifts and rewards for you</p>
         </div>
 
-        {/* Referral Status Popup Overlay â€” 14DaysOngoing simplified */}
+        {/* Referral Status Popup Overlay — 14DaysOngoing simplified */}
         {showReferral && (
           <div
             onClick={() => setShowReferral(false)}
@@ -1417,7 +1431,7 @@ const Index = () => {
       const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
       const MON_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       const fmt = (d: Date) => `${DAY_NAMES[d.getDay()]}, ${MON_NAMES[d.getMonth()]} ${String(d.getDate()).padStart(2, "0")}`;
-      return `${fmt(batchStart)} â€“ ${fmt(batchEnd)}`;
+      return `${fmt(batchStart)} — ${fmt(batchEnd)}`;
     })();
 
     return (
@@ -1440,7 +1454,7 @@ const Index = () => {
           completedDateRangeLabel={completedDateRangeLabel}
           completedDayStatus={completedDayStatus}
         />
-        {/* Refer & Earn â€” only shown after popup is dismissed */}
+        {/* Refer & Earn — only shown after popup is dismissed */}
         {!showReferral && <div style={{ padding: "32px 27px 32px", display: "flex", justifyContent: "center" }}>
           <div
             style={{
@@ -1454,7 +1468,7 @@ const Index = () => {
               gap: "12px",
             }}
           >
-            {/* Title + subtitle â€” left aligned */}
+            {/* Title + subtitle — left aligned */}
             <div>
               <h3 style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "21px", fontWeight: 700, lineHeight: "normal", margin: "0 0 4px" }}>
                 Refer &amp; Earn
@@ -1481,7 +1495,7 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Buttons â€” side by side */}
+            {/* Buttons — side by side */}
             <div style={{ display: "flex", gap: "10px" }}>
               <button
                 onClick={handleCopyLink}
@@ -1507,7 +1521,7 @@ const Index = () => {
               </button>
             </div>
 
-            {/* Your Referrals Link â€” centered */}
+            {/* Your Referrals Link — centered */}
             <div style={{ textAlign: "center", cursor: "pointer", paddingTop: "4px" }} onClick={() => navigate(`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`)}>
               <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>Your Referrals â†’</span>
             </div>
@@ -1626,7 +1640,7 @@ const Index = () => {
                           <div>
                             <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "7px", fontWeight: 700, lineHeight: "normal" }}>NEXT GOAL</div>
                             <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>
-                              {refCount >= 60 ? "All Claimed! ðŸŽ‰" : milestones.find(m => refCount < m.count)?.lines.join(" ") ?? "All Claimed!"}
+                              {refCount >= 60 ? "All Claimed! 🎉" : milestones.find(m => refCount < m.count)?.lines.join(" ") ?? "All Claimed!"}
                             </div>
                           </div>
                         </div>
@@ -1732,7 +1746,7 @@ const Index = () => {
 
         {/* Evening Session Card */}
         <div style={{ width: "342px", height: "93px", borderRadius: "10px", border: "0.5px solid #56A2FF", background: "#F6F8FF", boxShadow: "-1px -1px 4px 0 rgba(205,205,205,0.10), 1px 1px 4px 0 rgba(205,205,205,0.10)", display: "flex", alignItems: "center", padding: "0 12px", gap: "12px" }}>
-          {/* Moon icon box â€” full SVG with border built in */}
+          {/* Moon icon box — full SVG with border built in */}
           <svg xmlns="http://www.w3.org/2000/svg" width="54" height="53" viewBox="0 0 54 53" fill="none" style={{ flexShrink: 0 }}>
             <rect x="0.25" y="0.25" width="53.5" height="52.5" rx="4.75" fill="white" stroke="#56A2FF" strokeWidth="0.5" />
             <path d="M40.9435 30.7208C39.2042 36.7657 33.5727 41 27.2569 41C19.4013 41 13 34.5987 13 26.7431C13 20.4273 17.2343 14.7958 23.2792 13.0565C23.8638 12.8854 24.4911 13.1135 24.8475 13.5982C25.1896 14.0972 25.1896 14.7673 24.8332 15.252C23.6214 16.9486 22.9798 18.9446 22.9798 21.0403C22.9798 26.5435 27.4565 31.0202 32.9597 31.0202C35.0554 31.0202 37.0514 30.3786 38.748 29.1668C39.2327 28.8104 39.9028 28.8104 40.4018 29.1525C40.8865 29.5089 41.1146 30.1362 40.9435 30.7208Z" fill="#5462F0" />
