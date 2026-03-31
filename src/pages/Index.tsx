@@ -165,7 +165,7 @@ const Index = () => {
       const dd = String(d.getDate()).padStart(2, "0");
       return `${yyyy}-${mm}-${dd}`;
     };
-    // ── PREVIEW MODE: bypass API ──────────────────────────────
+    // â”€â”€ PREVIEW MODE: bypass API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     if (previewMode === "batch") {
       const today = new Date();
       const day = today.getDay();
@@ -214,7 +214,7 @@ const Index = () => {
       setLoading(false);
       return;
     }
-    // ?preview=elapsed — preview ongoing user whose 14-day batch has elapsed
+    // ?preview=elapsed â€” preview ongoing user whose 14-day batch has elapsed
     if (previewMode === "elapsed") {
       const startDate = new Date();
       startDate.setDate(startDate.getDate() - 15); // batch started 15 days ago
@@ -232,7 +232,7 @@ const Index = () => {
       setLoading(false);
       return;
     }
-    // ?preview=day1 … day14 — preview a specific batch day
+    // ?preview=day1 â€¦ day14 â€” preview a specific batch day
     if (previewMode && previewMode.startsWith("day")) {
       const dayNum = Number(previewMode.slice(3));
       if (dayNum >= 1 && dayNum <= 14) {
@@ -252,7 +252,7 @@ const Index = () => {
         return;
       }
     }
-    // ── NORMAL FLOW ───────────────────────────────────────────
+    // â”€â”€ NORMAL FLOW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     if (!mobile) {
       setLoading(false);
       setError("No mobile number provided. Please visit /<mobile_number> to login.");
@@ -403,14 +403,14 @@ const Index = () => {
                 fontSize: "28px",
               }}
             >
-              🌐
+              ðŸŒ
             </div>
             <h2 style={{ color: "#202020", fontSize: "22px", fontWeight: 700, marginBottom: "8px" }}>
               English is Coming Soon!
             </h2>
             <p style={{ color: "#888", fontSize: "14px", fontWeight: 400, lineHeight: "1.5", marginBottom: "24px" }}>
               We're currently available in <strong style={{ color: "#FEAB27" }}>Telugu</strong> only.
-              English support is on the way — stay tuned!
+              English support is on the way â€” stay tuned!
             </p>
             <div
               style={{
@@ -467,7 +467,7 @@ const Index = () => {
       isActive: true as const,
       currentDay,
       week,
-      dateRangeLabel: `${fmt(batchStart)} – ${fmt(batchEnd)}`,
+      dateRangeLabel: `${fmt(batchStart)} â€“ ${fmt(batchEnd)}`,
     };
   };
 
@@ -800,7 +800,7 @@ const Index = () => {
                               </div>
                             </div>
                             {claimed && (
-                              <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>CLAIMED 🎁</span>
+                              <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>CLAIMED ðŸŽ</span>
                             )}
                             {isNext && (
                               <span style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>IN PROGRESS</span>
@@ -834,148 +834,87 @@ const Index = () => {
               <p style={{ color: "#ADADAD", fontFamily: "Outfit", fontSize: "18px", fontWeight: 500, lineHeight: "normal", textAlign: "center", width: "286px", margin: 0 }}>Every active referral earn gifts and rewards for you</p>
             </div>
 
-            {/* Referral Status Popup Overlay */}
+            {/* Referral Status Popup Overlay â€” 14DaysOngoing simplified */}
             {showReferral && (
               <div
                 onClick={() => setShowReferral(false)}
-                style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.5)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}
+                style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.5)", zIndex: 1000, display: "flex", alignItems: "flex-end", justifyContent: "center" }}
               >
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  style={{ width: "min(412px, 95vw)", borderRadius: "12px 12px 0 0", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)" }}
+                  style={{ width: "412px", maxWidth: "95vw", height: "200px", borderRadius: "12px 12px 0 0", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", display: "flex", flexDirection: "column", justifyContent: "space-between", boxSizing: "border-box" }}
                 >
-                  <div className="flex items-center justify-between" style={{ marginBottom: "78px" }}>
+                  {/* Header */}
+                  <div className="flex items-center justify-between">
                     <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, lineHeight: "normal" }}>REFER & WIN</span>
-                    <button onClick={() => setShowReferral(false)} style={{ background: "none", border: "none", color: "#fff", fontSize: "18px", cursor: "pointer", padding: "0", lineHeight: 1 }}>✕</button>
+                    <button onClick={() => setShowReferral(false)} style={{ background: "none", border: "none", cursor: "pointer", padding: "0", lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center" }}><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 12 12" fill="none" style={{ aspectRatio: "1/1" }}><path d="M11 1L1 11M1 1L11 11" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
                   </div>
+                  {/* Progress Bar */}
                   {(() => {
                     const refCount = studentData?.total_referral_count ?? 0;
                     const allMilestones = [
-                      { count: 5, lines: ["+10 FREE", "Classes"] },
-                      { count: 10, lines: ["+20 FREE", "Classes"] },
-                      { count: 20, lines: ["Healthyday", "T-shirt"] },
-                      { count: 40, lines: ["Water", "Bottle"] },
-                      { count: 60, lines: ["Yoga Mat"] },
+                      { count: 5, label: "+10 FREE Classes" },
+                      { count: 10, label: "+20 FREE Classes" },
                     ];
-                    // Determine which window to show based on user's progress
-                    const windowStart = refCount >= 20 ? 20 : 0;
-                    const windowEnd = refCount >= 20 ? 60 : 20;
-                    const milestones = allMilestones.filter(m => m.count > windowStart && m.count <= windowEnd);
-                    const windowRange = windowEnd - windowStart;
-                    const clampedRef = Math.max(windowStart, Math.min(refCount, windowEnd));
-                    const progressPct = Math.min(100, ((clampedRef - windowStart) / windowRange) * 100);
-                    const nextMilestoneCount = allMilestones.find(m => refCount < m.count)?.count ?? 60;
+                    const windowEnd = 13;
+                    const progressPct = Math.min(100, (refCount / windowEnd) * 100);
                     return (
-                      <>
-                        {/* Progress track */}
-                        <div style={{ position: "relative", marginBottom: "70px", marginTop: "10px" }}>
-                          {/* Grey track */}
-                          <div style={{ height: "6px", background: "#AAA", borderRadius: "3px" }}>
-                            <div style={{ width: `${progressPct}%`, height: "6px", background: "#FEAB27", borderRadius: "3px" }} />
+                      <div style={{ position: "relative", marginTop: "60px", marginBottom: "40px" }}>
+                        {/* Grey track */}
+                        <div style={{ height: "6px", background: "#AAA", borderRadius: "3px", marginLeft: "9%" }}>
+                          <div style={{ width: `${progressPct}%`, height: "6px", background: "#FEAB27", borderRadius: "3px" }} />
+                        </div>
+                        {/* Red circle on track at 0 position */}
+                        <div style={{ position: "absolute", left: "9%", top: "50%", transform: "translate(-50%, -50%)" }}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none"><circle cx="9.5" cy="9.5" r="9.5" fill="#FF0000" /></svg>
+                          {/* "You are here" + pin above */}
+                          <div style={{ position: "absolute", bottom: "100%", left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "4px" }}>
+                            <div style={{ width: "70px", textAlign: "center", color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontStyle: "normal", fontWeight: 700, lineHeight: "normal", marginBottom: "6px" }}>You are here</div>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22" viewBox="0 0 21 24" fill="none">
+                              <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" fill="white" />
+                              <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" fill="white" />
+                              <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
                           </div>
-                          {/* Start circle */}
-                          <div style={{ position: "absolute", left: "0%", top: "50%", transform: "translate(-50%, -50%)" }}>
-                            {windowStart === 0 ? (
-                              <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none"><circle cx="9.5" cy="9.5" r="9.5" fill="#FF0000" /></svg>
-                            ) : (
-                              <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
-                            )}
-                          </div>
-                          {/* Start label */}
-                          <div style={{ position: "absolute", left: "0%", top: "18px", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
-                            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>{windowStart} Referrals</span>
-                          </div>
-                          {/* Milestone dots */}
-                          {milestones.map((m) => {
-                            const pos = ((m.count - windowStart) / windowRange) * 100;
-                            const reached = refCount >= m.count;
-                            return (
-                              <div key={m.count} style={{ position: "absolute", left: `${pos}%`, top: "50%", transform: "translate(-50%, -50%)" }}>
-                                {/* Label above */}
-                                <div style={{ position: "absolute", bottom: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
-                                  {m.lines.map(line => <span key={line} style={{ display: "block", color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>{line}</span>)}
-                                </div>
-                                {/* Dot */}
-                                {reached ? (
-                                  <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
-                                ) : (
-                                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <circle cx="12" cy="12" r="12" fill="#DDDEDE" />
-                                    <path d="M10.4243 11.1512V9.21185C10.4243 8.6975 10.6286 8.2042 10.9923 7.8405C11.356 7.47679 11.8493 7.27246 12.3637 7.27246C12.878 7.27246 13.3713 7.47679 13.735 7.8405C14.0987 8.2042 14.3031 8.6975 14.3031 9.21185V11.1512M8.96973 12.1209C8.96973 11.8638 9.07189 11.6171 9.25374 11.4353C9.4356 11.2534 9.68224 11.1512 9.93942 11.1512H14.7879C15.0451 11.1512 15.2917 11.2534 15.4736 11.4353C15.6554 11.6171 15.7576 11.8638 15.7576 12.1209V15.03C15.7576 15.2872 15.6554 15.5339 15.4736 15.7157C15.2917 15.8976 15.0451 15.9997 14.7879 15.9997H9.93942C9.68224 15.9997 9.4356 15.8976 9.25374 15.7157C9.07189 15.5339 8.96973 15.2872 8.96973 15.03V12.1209ZM11.8788 13.5755C11.8788 13.7041 11.9299 13.8274 12.0208 13.9183C12.1118 14.0093 12.2351 14.0603 12.3637 14.0603C12.4923 14.0603 12.6156 14.0093 12.7065 13.9183C12.7974 13.8274 12.8485 13.7041 12.8485 13.5755C12.8485 13.4469 12.7974 13.3236 12.7065 13.2327C12.6156 13.1417 12.4923 13.0906 12.3637 13.0906C12.2351 13.0906 12.1118 13.1417 12.0208 13.2327C11.9299 13.3236 11.8788 13.4469 11.8788 13.5755Z" stroke="#A2A2A2" strokeLinecap="round" strokeLinejoin="round" />
-                                  </svg>
-                                )}
-                                {/* Label below */}
-                                <div style={{ position: "absolute", top: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
-                                  <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>{m.count} Referrals</span>
-                                </div>
-                              </div>
-                            );
-                          })}
-                          {/* You are here */}
-                          <div style={{ position: "absolute", left: `${progressPct}%`, bottom: "20px", transform: `translateX(${progressPct < 8 ? "0%" : progressPct > 92 ? "-100%" : "-50%"})`, display: milestones.some(m => m.count === refCount) ? "none" : undefined }}>
-                            <div style={{ width: "70px", textAlign: "center" }}>
-                              <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, marginBottom: "10px" }}>You are here</div>
-                              <div style={{ display: "flex", justifyContent: "center" }}>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24" fill="none">
-                                  <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" fill="white" />
-                                  <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" fill="white" />
-                                  <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                  <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                </svg>
-                              </div>
-                            </div>
+                          {/* 0 Referrals label below */}
+                          <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", marginTop: "6px", textAlign: "center", whiteSpace: "nowrap" }}>
+                            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>0 Referrals</span>
                           </div>
                         </div>
-                        {/* Info Cards */}
-                        <div style={{ display: "flex", gap: "8px", marginBottom: "14px" }}>
-                          {/* Left card */}
-                          <div style={{ flex: 1, height: "95px", borderRadius: "20px", background: "#012550", padding: "10px 12px", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
-                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                              {refCount >= 5 ? (
-                                <div style={{ width: "25px", height: "25px", borderRadius: "5px", background: "#34C759", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>✓</div>
+                        {/* Milestone dots */}
+                        {allMilestones.map((m) => {
+                          const pos = (m.count / windowEnd) * 100;
+                          const reached = refCount >= m.count;
+                          return (
+                            <div key={m.count} style={{ position: "absolute", left: `${pos}%`, top: "50%", transform: "translate(-50%, -50%)" }}>
+                              {/* Label above */}
+                              <div style={{ position: "absolute", bottom: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                                <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>{m.label}</span>
+                              </div>
+                              {/* Dot */}
+                              {reached ? (
+                                <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>âœ“</div>
                               ) : (
-                                <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
-                                  <rect width="25" height="25" rx="5" fill="#3B516E" />
-                                  <path d="M17.0141 9.01406L9.0001 17M9.01416 9L17.0001 17.014" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                  <circle cx="12" cy="12" r="12" fill="#DDDEDE" />
+                                  <path d="M10.4243 11.1512V9.21185C10.4243 8.6975 10.6286 8.2042 10.9923 7.8405C11.356 7.47679 11.8493 7.27246 12.3637 7.27246C12.878 7.27246 13.3713 7.47679 13.735 7.8405C14.0987 8.2042 14.3031 8.6975 14.3031 9.21185V11.1512M8.96973 12.1209C8.96973 11.8638 9.07189 11.6171 9.25374 11.4353C9.4356 11.2534 9.68224 11.1512 9.93942 11.1512H14.7879C15.0451 11.1512 15.2917 11.2534 15.4736 11.4353C15.6554 11.6171 15.7576 11.8638 15.7576 12.1209V15.03C15.7576 15.2872 15.6554 15.5339 15.4736 15.7157C15.2917 15.8976 15.0451 15.9997 14.7879 15.9997H9.93942C9.68224 15.9997 9.4356 15.8976 9.25374 15.7157C9.07189 15.5339 8.96973 15.2872 8.96973 15.03V12.1209ZM11.8788 13.5755C11.8788 13.7041 11.9299 13.8274 12.0208 13.9183C12.1118 14.0093 12.2351 14.0603 12.3637 14.0603C12.4923 14.0603 12.6156 14.0093 12.7065 13.9183C12.7974 13.8274 12.8485 13.7041 12.8485 13.5755C12.8485 13.4469 12.7974 13.3236 12.7065 13.2327C12.6156 13.1417 12.4923 13.0906 12.3637 13.0906C12.2351 13.0906 12.1118 13.1417 12.0208 13.2327C11.9299 13.3236 11.8788 13.4469 11.8788 13.5755Z" stroke="#A2A2A2" strokeLinecap="round" strokeLinejoin="round" />
                                 </svg>
                               )}
-                              <div>
-                                <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "7px", fontWeight: 700, lineHeight: "normal" }}>EARNED</div>
-                                <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>
-                                  {refCount >= 5 ? `+${Math.min(Math.floor(refCount / 5), 2) * 10} FREE Classes` : "No Reward Earned Yet"}
-                                </div>
+                              {/* Label below */}
+                              <div style={{ position: "absolute", top: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                                <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>{m.count} Referrals</span>
                               </div>
                             </div>
-                            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
-                                <rect opacity="0.5" width="25" height="25" rx="5" fill="#757E8C" />
-                                <path d="M7.14258 7.026C7.85787 6.33769 8.81954 5.95215 9.82115 5.95215C10.8228 5.95215 11.7844 6.33769 12.4997 7.026C13.215 7.7143 14.1767 8.09984 15.1783 8.09984C16.1799 8.09984 17.1416 7.7143 17.8569 7.026V13.7879C17.1416 14.4762 16.1799 14.8617 15.1783 14.8617C14.1767 14.8617 13.215 14.4762 12.4997 13.7879C11.7844 13.0995 10.8228 12.714 9.82115 12.714C8.81954 12.714 7.85787 13.0995 7.14258 13.7879V7.026Z" fill="#D9D9D9" />
-                                <path d="M7.14258 19.0474V13.7879" stroke="#D9D9D9" strokeLinecap="round" strokeLinejoin="round" />
-                                <path d="M7.14258 13.7879C7.85787 13.0995 8.81954 12.714 9.82115 12.714C10.8228 12.714 11.7844 13.0995 12.4997 13.7879C13.215 14.4762 14.1767 14.8617 15.1783 14.8617C16.1799 14.8617 17.1416 14.4762 17.8569 13.7879V7.026" stroke="#D9D9D9" strokeLinecap="round" strokeLinejoin="round" />
-                              </svg>
-                              <div>
-                                <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "7px", fontWeight: 700, lineHeight: "normal" }}>NEXT GOAL</div>
-                                <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>
-                                  {refCount >= 60 ? "All Claimed! 🎉" : allMilestones.find(m => refCount < m.count)?.lines.join(" ") ?? "All Claimed!"}
-                                </div>
-                              </div>
-                            </div>
-                          </div>
-                          {/* Right card */}
-                          <div style={{ width: "115px", height: "95px", borderRadius: "20px", background: "#012550", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px" }}>
-                            <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "10px", fontWeight: 700, lineHeight: "normal" }}>STATUS</div>
-                            <div>
-                              <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>{refCount}</span>
-                              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>/{nextMilestoneCount}</span>
-                            </div>
-                          </div>
-                        </div>
-                      </>
+                          );
+                        })}
+                      </div>
                     );
                   })()}
+                  {/* Refer Now Button */}
                   <button
                     onClick={() => navigate(`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`)}
-                    style={{ width: "100%", height: "43px", borderRadius: "14px", background: (studentData?.total_referral_count ?? 0) === 0 ? "#FF0000" : "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", boxShadow: "0 0 10px 1px rgba(0,0,0,0.25)", backdropFilter: "blur(2px)", marginTop: "8px" }}
+                    style={{ width: "100%", height: "43px", borderRadius: "14px", background: "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", boxShadow: "0 0 10px 1px rgba(0,0,0,0.25)", backdropFilter: "blur(2px)" }}
                   >
                     <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
                       <path d="M1.25 16.4079V14.7237C1.25 13.8303 1.60489 12.9736 2.23659 12.3419C2.86829 11.7102 3.72506 11.3553 4.61842 11.3553H7.98684C8.79526 11.3553 9.53632 11.6399 10.1174 12.114M12.1974 1.35948C12.9219 1.54499 13.5641 1.96638 14.0227 2.55721C14.4814 3.14804 14.7303 3.8747 14.7303 4.62264C14.7303 5.37057 14.4814 6.09723 14.0227 6.68806C13.5641 7.27889 12.9219 7.70028 12.1974 7.88579M12.1974 14.7237H17.25M14.7237 12.1974V17.25M2.93421 4.61842C2.93421 5.51178 3.2891 6.36855 3.9208 7.00025C4.5525 7.63196 5.40927 7.98684 6.30263 7.98684C7.19599 7.98684 8.05276 7.63196 8.68447 7.00025C9.31617 6.36855 9.67105 5.51178 9.67105 4.61842C9.67105 3.72506 9.31617 2.86829 8.68447 2.23659C8.05276 1.60489 7.19599 1.25 6.30263 1.25C5.40927 1.25 4.5525 1.60489 3.9208 2.23659C3.2891 2.86829 2.93421 3.72506 2.93421 4.61842Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -998,7 +937,7 @@ const Index = () => {
           <img src={logo} alt="Healthyday" className="h-7" />
         </header>
 
-        {/* Your Yoga Session — live/not-live */}
+        {/* Your Yoga Session â€” live/not-live */}
         {(() => {
           const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
           const totalMin = nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
@@ -1147,7 +1086,7 @@ const Index = () => {
                 </div>
               </div>
 
-              {/* Note — hidden on bonus days since the card below already shows next session info */}
+              {/* Note â€” hidden on bonus days since the card below already shows next session info */}
               {!isBonusDay && <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px", marginTop: "10px" }}>
                 <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
                   <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
@@ -1160,7 +1099,7 @@ const Index = () => {
                 </span>
               </div>}
 
-              {/* Next regular session card — shown on bonus days */}
+              {/* Next regular session card â€” shown on bonus days */}
               {isBonusDay && bonusSessionData && (() => {
                 const isAMBonus = bonusSessionData.startMin < 12 * 60;
                 const nextRegSlots = isAMBonus ? ["4:30 PM", "5:30 PM", "6:30 PM"] : ["5:30 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
@@ -1230,7 +1169,7 @@ const Index = () => {
                 <DayBox key={i} status={status} dayLabel={`Day ${i + 1}`} />
               ))}
             </div>
-            {/* Row 2: Days 8-14 — only shown in week 2 */}
+            {/* Row 2: Days 8-14 â€” only shown in week 2 */}
             {week === 2 && (
               <div style={{ display: "flex", justifyContent: "space-between" }}>
                 {dayStatus.slice(7, 14).map((status, i) => (
@@ -1306,7 +1245,7 @@ const Index = () => {
                             <div style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500 }}>{m.refs} Referrals</div>
                           </div>
                         </div>
-                        {claimed && <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>CLAIMED 🎁</span>}
+                        {claimed && <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>CLAIMED ðŸŽ</span>}
                         {isNext && <span style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>IN PROGRESS</span>}
                       </div>
                     );
@@ -1339,148 +1278,87 @@ const Index = () => {
           <p style={{ color: "#ADADAD", fontFamily: "Outfit", fontSize: "18px", fontWeight: 500, lineHeight: "normal", textAlign: "center", width: "286px", margin: 0 }}>Every active referral earn gifts and rewards for you</p>
         </div>
 
-        {/* Referral Status Popup Overlay */}
+        {/* Referral Status Popup Overlay â€” 14DaysOngoing simplified */}
         {showReferral && (
           <div
             onClick={() => setShowReferral(false)}
-            style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.5)", zIndex: 1000, display: "flex", alignItems: "center", justifyContent: "center" }}
+            style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.5)", zIndex: 1000, display: "flex", alignItems: "flex-end", justifyContent: "center" }}
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              style={{ width: "min(412px, 95vw)", borderRadius: "12px 12px 0 0", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)" }}
+              style={{ width: "412px", maxWidth: "95vw", height: "200px", borderRadius: "12px 12px 0 0", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", display: "flex", flexDirection: "column", justifyContent: "space-between", boxSizing: "border-box" }}
             >
-              <div className="flex items-center justify-between" style={{ marginBottom: "78px" }}>
+              {/* Header */}
+              <div className="flex items-center justify-between">
                 <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, lineHeight: "normal" }}>REFER & WIN</span>
-                <button onClick={() => setShowReferral(false)} style={{ background: "none", border: "none", color: "#fff", fontSize: "18px", cursor: "pointer", padding: "0", lineHeight: 1 }}>✕</button>
+                <button onClick={() => setShowReferral(false)} style={{ background: "none", border: "none", cursor: "pointer", padding: "0", lineHeight: 1, display: "flex", alignItems: "center", justifyContent: "center" }}><svg xmlns="http://www.w3.org/2000/svg" width="10" height="10" viewBox="0 0 12 12" fill="none" style={{ aspectRatio: "1/1" }}><path d="M11 1L1 11M1 1L11 11" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg></button>
               </div>
+              {/* Progress Bar */}
               {(() => {
                 const refCount = studentData?.total_referral_count ?? 0;
                 const allMilestones = [
-                  { count: 5, lines: ["+10 FREE", "Classes"] },
-                  { count: 10, lines: ["+20 FREE", "Classes"] },
-                  { count: 20, lines: ["Healthyday", "T-shirt"] },
-                  { count: 40, lines: ["Water", "Bottle"] },
-                  { count: 60, lines: ["Yoga Mat"] },
+                  { count: 5, label: "+10 FREE Classes" },
+                  { count: 10, label: "+20 FREE Classes" },
                 ];
-                // Determine which window to show based on user's progress
-                const windowStart = refCount >= 20 ? 20 : 0;
-                const windowEnd = refCount >= 20 ? 60 : 20;
-                const milestones = allMilestones.filter(m => m.count > windowStart && m.count <= windowEnd);
-                const windowRange = windowEnd - windowStart;
-                const clampedRef = Math.max(windowStart, Math.min(refCount, windowEnd));
-                const progressPct = Math.min(100, ((clampedRef - windowStart) / windowRange) * 100);
-                const nextMilestoneCount = allMilestones.find(m => refCount < m.count)?.count ?? 60;
+                const windowEnd = 13;
+                const progressPct = Math.min(100, (refCount / windowEnd) * 100);
                 return (
-                  <>
-                    {/* Progress track */}
-                    <div style={{ position: "relative", marginBottom: "70px", marginTop: "10px" }}>
-                      {/* Grey track */}
-                      <div style={{ height: "6px", background: "#AAA", borderRadius: "3px" }}>
-                        <div style={{ width: `${progressPct}%`, height: "6px", background: "#FEAB27", borderRadius: "3px" }} />
+                  <div style={{ position: "relative", marginTop: "60px", marginBottom: "40px" }}>
+                    {/* Grey track */}
+                    <div style={{ height: "6px", background: "#AAA", borderRadius: "3px", marginLeft: "9%" }}>
+                      <div style={{ width: `${progressPct}%`, height: "6px", background: "#FEAB27", borderRadius: "3px" }} />
+                    </div>
+                    {/* Red circle on track at 0 position */}
+                    <div style={{ position: "absolute", left: "9%", top: "50%", transform: "translate(-50%, -50%)" }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none"><circle cx="9.5" cy="9.5" r="9.5" fill="#FF0000" /></svg>
+                      {/* "You are here" + pin above */}
+                      <div style={{ position: "absolute", bottom: "100%", left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "4px" }}>
+                        <div style={{ width: "70px", textAlign: "center", color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontStyle: "normal", fontWeight: 700, lineHeight: "normal", marginBottom: "6px" }}>You are here</div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="22" viewBox="0 0 21 24" fill="none">
+                          <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" fill="white" />
+                          <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" fill="white" />
+                          <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
                       </div>
-                      {/* Start circle */}
-                      <div style={{ position: "absolute", left: "0%", top: "50%", transform: "translate(-50%, -50%)" }}>
-                        {windowStart === 0 ? (
-                          <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none"><circle cx="9.5" cy="9.5" r="9.5" fill="#FF0000" /></svg>
-                        ) : (
-                          <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
-                        )}
-                      </div>
-                      {/* Start label */}
-                      <div style={{ position: "absolute", left: "0%", top: "18px", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
-                        <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>{windowStart} Referrals</span>
-                      </div>
-                      {/* Milestone dots */}
-                      {milestones.map((m) => {
-                        const pos = ((m.count - windowStart) / windowRange) * 100;
-                        const reached = refCount >= m.count;
-                        return (
-                          <div key={m.count} style={{ position: "absolute", left: `${pos}%`, top: "50%", transform: "translate(-50%, -50%)" }}>
-                            {/* Label above */}
-                            <div style={{ position: "absolute", bottom: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
-                              {m.lines.map(line => <span key={line} style={{ display: "block", color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>{line}</span>)}
-                            </div>
-                            {/* Dot */}
-                            {reached ? (
-                              <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
-                            ) : (
-                              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <circle cx="12" cy="12" r="12" fill="#DDDEDE" />
-                                <path d="M10.4243 11.1512V9.21185C10.4243 8.6975 10.6286 8.2042 10.9923 7.8405C11.356 7.47679 11.8493 7.27246 12.3637 7.27246C12.878 7.27246 13.3713 7.47679 13.735 7.8405C14.0987 8.2042 14.3031 8.6975 14.3031 9.21185V11.1512M8.96973 12.1209C8.96973 11.8638 9.07189 11.6171 9.25374 11.4353C9.4356 11.2534 9.68224 11.1512 9.93942 11.1512H14.7879C15.0451 11.1512 15.2917 11.2534 15.4736 11.4353C15.6554 11.6171 15.7576 11.8638 15.7576 12.1209V15.03C15.7576 15.2872 15.6554 15.5339 15.4736 15.7157C15.2917 15.8976 15.0451 15.9997 14.7879 15.9997H9.93942C9.68224 15.9997 9.4356 15.8976 9.25374 15.7157C9.07189 15.5339 8.96973 15.2872 8.96973 15.03V12.1209ZM11.8788 13.5755C11.8788 13.7041 11.9299 13.8274 12.0208 13.9183C12.1118 14.0093 12.2351 14.0603 12.3637 14.0603C12.4923 14.0603 12.6156 14.0093 12.7065 13.9183C12.7974 13.8274 12.8485 13.7041 12.8485 13.5755C12.8485 13.4469 12.7974 13.3236 12.7065 13.2327C12.6156 13.1417 12.4923 13.0906 12.3637 13.0906C12.2351 13.0906 12.1118 13.1417 12.0208 13.2327C11.9299 13.3236 11.8788 13.4469 11.8788 13.5755Z" stroke="#A2A2A2" strokeLinecap="round" strokeLinejoin="round" />
-                              </svg>
-                            )}
-                            {/* Label below */}
-                            <div style={{ position: "absolute", top: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
-                              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>{m.count} Referrals</span>
-                            </div>
-                          </div>
-                        );
-                      })}
-                      {/* You are here */}
-                      <div style={{ position: "absolute", left: `${progressPct}%`, bottom: "48px", transform: `translateX(${progressPct < 8 ? "0%" : progressPct > 92 ? "-100%" : "-50%"})`, display: milestones.some(m => m.count === refCount) ? "none" : undefined }}>
-                        <div style={{ width: "70px", textAlign: "center" }}>
-                          <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, marginBottom: "8px" }}>You are here</div>
-                          <div style={{ display: "flex", justifyContent: "center" }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24" fill="none">
-                              <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" fill="white" />
-                              <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" fill="white" />
-                              <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                              <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                          </div>
-                        </div>
+                      {/* 0 Referrals label below */}
+                      <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", marginTop: "6px", textAlign: "center", whiteSpace: "nowrap" }}>
+                        <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>0 Referrals</span>
                       </div>
                     </div>
-                    {/* Info Cards */}
-                    <div style={{ display: "flex", gap: "8px", marginBottom: "14px" }}>
-                      {/* Left card */}
-                      <div style={{ flex: 1, height: "95px", borderRadius: "20px", background: "#012550", padding: "10px 12px", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                          {refCount >= 5 ? (
-                            <div style={{ width: "25px", height: "25px", borderRadius: "5px", background: "#34C759", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>✓</div>
+                    {/* Milestone dots */}
+                    {allMilestones.map((m) => {
+                      const pos = (m.count / windowEnd) * 100;
+                      const reached = refCount >= m.count;
+                      return (
+                        <div key={m.count} style={{ position: "absolute", left: `${pos}%`, top: "50%", transform: "translate(-50%, -50%)" }}>
+                          {/* Label above */}
+                          <div style={{ position: "absolute", bottom: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>{m.label}</span>
+                          </div>
+                          {/* Dot */}
+                          {reached ? (
+                            <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>âœ“</div>
                           ) : (
-                            <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
-                              <rect width="25" height="25" rx="5" fill="#3B516E" />
-                              <path d="M17.0141 9.01406L9.0001 17M9.01416 9L17.0001 17.014" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                              <circle cx="12" cy="12" r="12" fill="#DDDEDE" />
+                              <path d="M10.4243 11.1512V9.21185C10.4243 8.6975 10.6286 8.2042 10.9923 7.8405C11.356 7.47679 11.8493 7.27246 12.3637 7.27246C12.878 7.27246 13.3713 7.47679 13.735 7.8405C14.0987 8.2042 14.3031 8.6975 14.3031 9.21185V11.1512M8.96973 12.1209C8.96973 11.8638 9.07189 11.6171 9.25374 11.4353C9.4356 11.2534 9.68224 11.1512 9.93942 11.1512H14.7879C15.0451 11.1512 15.2917 11.2534 15.4736 11.4353C15.6554 11.6171 15.7576 11.8638 15.7576 12.1209V15.03C15.7576 15.2872 15.6554 15.5339 15.4736 15.7157C15.2917 15.8976 15.0451 15.9997 14.7879 15.9997H9.93942C9.68224 15.9997 9.4356 15.8976 9.25374 15.7157C9.07189 15.5339 8.96973 15.2872 8.96973 15.03V12.1209ZM11.8788 13.5755C11.8788 13.7041 11.9299 13.8274 12.0208 13.9183C12.1118 14.0093 12.2351 14.0603 12.3637 14.0603C12.4923 14.0603 12.6156 14.0093 12.7065 13.9183C12.7974 13.8274 12.8485 13.7041 12.8485 13.5755C12.8485 13.4469 12.7974 13.3236 12.7065 13.2327C12.6156 13.1417 12.4923 13.0906 12.3637 13.0906C12.2351 13.0906 12.1118 13.1417 12.0208 13.2327C11.9299 13.3236 11.8788 13.4469 11.8788 13.5755Z" stroke="#A2A2A2" strokeLinecap="round" strokeLinejoin="round" />
                             </svg>
                           )}
-                          <div>
-                            <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "7px", fontWeight: 700, lineHeight: "normal" }}>EARNED</div>
-                            <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>
-                              {refCount >= 5 ? `+${Math.min(Math.floor(refCount / 5), 2) * 10} FREE Classes` : "No Reward Earned Yet"}
-                            </div>
+                          {/* Label below */}
+                          <div style={{ position: "absolute", top: "28px", left: "50%", transform: "translateX(-50%)", textAlign: "center", whiteSpace: "nowrap" }}>
+                            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500 }}>{m.count} Referrals</span>
                           </div>
                         </div>
-                        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
-                            <rect opacity="0.5" width="25" height="25" rx="5" fill="#757E8C" />
-                            <path d="M7.14258 7.026C7.85787 6.33769 8.81954 5.95215 9.82115 5.95215C10.8228 5.95215 11.7844 6.33769 12.4997 7.026C13.215 7.7143 14.1767 8.09984 15.1783 8.09984C16.1799 8.09984 17.1416 7.7143 17.8569 7.026V13.7879C17.1416 14.4762 16.1799 14.8617 15.1783 14.8617C14.1767 14.8617 13.215 14.4762 12.4997 13.7879C11.7844 13.0995 10.8228 12.714 9.82115 12.714C8.81954 12.714 7.85787 13.0995 7.14258 13.7879V7.026Z" fill="#D9D9D9" />
-                            <path d="M7.14258 19.0474V13.7879" stroke="#D9D9D9" strokeLinecap="round" strokeLinejoin="round" />
-                            <path d="M7.14258 13.7879C7.85787 13.0995 8.81954 12.714 9.82115 12.714C10.8228 12.714 11.7844 13.0995 12.4997 13.7879C13.215 14.4762 14.1767 14.8617 15.1783 14.8617C16.1799 14.8617 17.1416 14.4762 17.8569 13.7879V7.026" stroke="#D9D9D9" strokeLinecap="round" strokeLinejoin="round" />
-                          </svg>
-                          <div>
-                            <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "7px", fontWeight: 700, lineHeight: "normal" }}>NEXT GOAL</div>
-                            <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>
-                              {refCount >= 60 ? "All Claimed! 🎉" : allMilestones.find(m => refCount < m.count)?.lines.join(" ") ?? "All Claimed!"}
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                      {/* Right card */}
-                      <div style={{ width: "115px", height: "95px", borderRadius: "20px", background: "#012550", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "2px" }}>
-                        <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "10px", fontWeight: 700, lineHeight: "normal" }}>STATUS</div>
-                        <div>
-                          <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>{refCount}</span>
-                          <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>/{nextMilestoneCount}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </>
+                      );
+                    })}
+                  </div>
                 );
               })()}
+              {/* Refer Now Button */}
               <button
                 onClick={() => navigate(`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`)}
-                style={{ width: "100%", height: "43px", borderRadius: "14px", background: (studentData?.total_referral_count ?? 0) === 0 ? "#FF0000" : "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", boxShadow: "0 0 10px 1px rgba(0,0,0,0.25)", backdropFilter: "blur(2px)", marginTop: "8px" }}
+                style={{ width: "100%", height: "43px", borderRadius: "14px", background: "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", boxShadow: "0 0 10px 1px rgba(0,0,0,0.25)", backdropFilter: "blur(2px)" }}
               >
                 <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
                   <path d="M1.25 16.4079V14.7237C1.25 13.8303 1.60489 12.9736 2.23659 12.3419C2.86829 11.7102 3.72506 11.3553 4.61842 11.3553H7.98684C8.79526 11.3553 9.53632 11.6399 10.1174 12.114M12.1974 1.35948C12.9219 1.54499 13.5641 1.96638 14.0227 2.55721C14.4814 3.14804 14.7303 3.8747 14.7303 4.62264C14.7303 5.37057 14.4814 6.09723 14.0227 6.68806C13.5641 7.27889 12.9219 7.70028 12.1974 7.88579M12.1974 14.7237H17.25M14.7237 12.1974V17.25M2.93421 4.61842C2.93421 5.51178 3.2891 6.36855 3.9208 7.00025C4.5525 7.63196 5.40927 7.98684 6.30263 7.98684C7.19599 7.98684 8.05276 7.63196 8.68447 7.00025C9.31617 6.36855 9.67105 5.51178 9.67105 4.61842C9.67105 3.72506 9.31617 2.86829 8.68447 2.23659C8.05276 1.60489 7.19599 1.25 6.30263 1.25C5.40927 1.25 4.5525 1.60489 3.9208 2.23659C3.2891 2.86829 2.93421 3.72506 2.93421 4.61842Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -1539,7 +1417,7 @@ const Index = () => {
       const DAY_NAMES = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
       const MON_NAMES = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
       const fmt = (d: Date) => `${DAY_NAMES[d.getDay()]}, ${MON_NAMES[d.getMonth()]} ${String(d.getDate()).padStart(2, "0")}`;
-      return `${fmt(batchStart)} – ${fmt(batchEnd)}`;
+      return `${fmt(batchStart)} â€“ ${fmt(batchEnd)}`;
     })();
 
     return (
@@ -1562,7 +1440,7 @@ const Index = () => {
           completedDateRangeLabel={completedDateRangeLabel}
           completedDayStatus={completedDayStatus}
         />
-        {/* Refer & Earn — only shown after popup is dismissed */}
+        {/* Refer & Earn â€” only shown after popup is dismissed */}
         {!showReferral && <div style={{ padding: "32px 27px 32px", display: "flex", justifyContent: "center" }}>
           <div
             style={{
@@ -1576,7 +1454,7 @@ const Index = () => {
               gap: "12px",
             }}
           >
-            {/* Title + subtitle — left aligned */}
+            {/* Title + subtitle â€” left aligned */}
             <div>
               <h3 style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "21px", fontWeight: 700, lineHeight: "normal", margin: "0 0 4px" }}>
                 Refer &amp; Earn
@@ -1603,7 +1481,7 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Buttons — side by side */}
+            {/* Buttons â€” side by side */}
             <div style={{ display: "flex", gap: "10px" }}>
               <button
                 onClick={handleCopyLink}
@@ -1629,9 +1507,9 @@ const Index = () => {
               </button>
             </div>
 
-            {/* Your Referrals Link — centered */}
+            {/* Your Referrals Link â€” centered */}
             <div style={{ textAlign: "center", cursor: "pointer", paddingTop: "4px" }} onClick={() => navigate(`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`)}>
-              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>Your Referrals →</span>
+              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>Your Referrals â†’</span>
             </div>
           </div>
         </div>}
@@ -1648,7 +1526,7 @@ const Index = () => {
             >
               <div className="flex items-center justify-between" style={{ marginBottom: "78px" }}>
                 <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, lineHeight: "normal" }}>REFER & WIN</span>
-                <button onClick={() => setShowReferral(false)} style={{ background: "none", border: "none", color: "#fff", fontSize: "18px", cursor: "pointer", padding: "0", lineHeight: 1 }}>✕</button>
+                <button onClick={() => setShowReferral(false)} style={{ background: "none", border: "none", color: "#fff", fontSize: "18px", cursor: "pointer", padding: "0", lineHeight: 1 }}>âœ•</button>
               </div>
               {(() => {
                 const refCount = studentData?.total_referral_count ?? 0;
@@ -1689,7 +1567,7 @@ const Index = () => {
                             </div>
                             {/* Dot */}
                             {reached ? (
-                              <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
+                              <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>âœ“</div>
                             ) : (
                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <circle cx="12" cy="12" r="12" fill="#DDDEDE" />
@@ -1724,7 +1602,7 @@ const Index = () => {
                       <div style={{ flex: 1, height: "95px", borderRadius: "20px", background: "#012550", padding: "10px 12px", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                           {refCount >= 5 ? (
-                            <div style={{ width: "25px", height: "25px", borderRadius: "5px", background: "#34C759", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>✓</div>
+                            <div style={{ width: "25px", height: "25px", borderRadius: "5px", background: "#34C759", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>âœ“</div>
                           ) : (
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
                               <rect width="25" height="25" rx="5" fill="#3B516E" />
@@ -1748,7 +1626,7 @@ const Index = () => {
                           <div>
                             <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "7px", fontWeight: 700, lineHeight: "normal" }}>NEXT GOAL</div>
                             <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>
-                              {refCount >= 60 ? "All Claimed! 🎉" : milestones.find(m => refCount < m.count)?.lines.join(" ") ?? "All Claimed!"}
+                              {refCount >= 60 ? "All Claimed! ðŸŽ‰" : milestones.find(m => refCount < m.count)?.lines.join(" ") ?? "All Claimed!"}
                             </div>
                           </div>
                         </div>
@@ -1854,7 +1732,7 @@ const Index = () => {
 
         {/* Evening Session Card */}
         <div style={{ width: "342px", height: "93px", borderRadius: "10px", border: "0.5px solid #56A2FF", background: "#F6F8FF", boxShadow: "-1px -1px 4px 0 rgba(205,205,205,0.10), 1px 1px 4px 0 rgba(205,205,205,0.10)", display: "flex", alignItems: "center", padding: "0 12px", gap: "12px" }}>
-          {/* Moon icon box — full SVG with border built in */}
+          {/* Moon icon box â€” full SVG with border built in */}
           <svg xmlns="http://www.w3.org/2000/svg" width="54" height="53" viewBox="0 0 54 53" fill="none" style={{ flexShrink: 0 }}>
             <rect x="0.25" y="0.25" width="53.5" height="52.5" rx="4.75" fill="white" stroke="#56A2FF" strokeWidth="0.5" />
             <path d="M40.9435 30.7208C39.2042 36.7657 33.5727 41 27.2569 41C19.4013 41 13 34.5987 13 26.7431C13 20.4273 17.2343 14.7958 23.2792 13.0565C23.8638 12.8854 24.4911 13.1135 24.8475 13.5982C25.1896 14.0972 25.1896 14.7673 24.8332 15.252C23.6214 16.9486 22.9798 18.9446 22.9798 21.0403C22.9798 26.5435 27.4565 31.0202 32.9597 31.0202C35.0554 31.0202 37.0514 30.3786 38.748 29.1668C39.2327 28.8104 39.9028 28.8104 40.4018 29.1525C40.8865 29.5089 41.1146 30.1362 40.9435 30.7208Z" fill="#5462F0" />
@@ -1929,7 +1807,7 @@ const Index = () => {
             }}
           >
             <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal" }}>View all videos</span>
-            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "25px", fontWeight: 500, lineHeight: "normal", width: "12px", height: "23px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>→</span>
+            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "25px", fontWeight: 500, lineHeight: "normal", width: "12px", height: "23px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>â†’</span>
           </a>
         </div>
       </div>
@@ -1984,7 +1862,7 @@ const Index = () => {
                   lineHeight: 1,
                 }}
               >
-                ✕
+                âœ•
               </button>
             </div>
 
@@ -2033,7 +1911,7 @@ const Index = () => {
                         </div>
                         {/* Dot */}
                         {reached ? (
-                          <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
+                          <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>âœ“</div>
                         ) : (
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <circle cx="12" cy="12" r="12" fill="#DDDEDE" />
@@ -2060,7 +1938,7 @@ const Index = () => {
                   <div style={{ flex: 1, height: "95px", borderRadius: "20px", background: "#012550", padding: "10px 12px", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       {refCount >= 5 ? (
-                        <div style={{ width: "25px", height: "25px", borderRadius: "5px", background: "#34C759", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>✓</div>
+                        <div style={{ width: "25px", height: "25px", borderRadius: "5px", background: "#34C759", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>âœ“</div>
                       ) : (
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
                           <rect width="25" height="25" rx="5" fill="#3B516E" />
