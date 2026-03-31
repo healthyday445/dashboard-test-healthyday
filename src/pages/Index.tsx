@@ -689,8 +689,8 @@ const Index = () => {
                 <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0" }}>
                   {nextSlots.map((label, idx) => (
                     <span key={label} style={{ display: "flex", alignItems: "center" }}>
-                      {idx > 0 && <span style={{ color: "#CCCBCB", fontFamily: "Outfit", fontSize: "18px", fontWeight: 800, margin: "0 8px" }}>|</span>}
-                      <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "18px", fontWeight: 800, lineHeight: "normal", textAlign: "center" }}>{label}</span>
+                      {idx > 0 && <span style={{ color: "#CCCBCB", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal", margin: "0 8px" }}>|</span>}
+                      <span style={{ color: "#FEAB27", textAlign: "center", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal" }}>{label}</span>
                     </span>
                   ))}
                 </div>
@@ -1128,8 +1128,8 @@ const Index = () => {
                     <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0" }}>
                       {nextRegSlots.map((label, idx) => (
                         <span key={label} style={{ display: "flex", alignItems: "center" }}>
-                          {idx > 0 && <span style={{ color: "#CCCBCB", fontFamily: "Outfit", fontSize: "18px", fontWeight: 800, margin: "0 8px" }}>|</span>}
-                          <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "18px", fontWeight: 800 }}>{label}</span>
+                          {idx > 0 && <span style={{ color: "#CCCBCB", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal", margin: "0 8px" }}>|</span>}
+                          <span style={{ color: "#FEAB27", textAlign: "center", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal" }}>{label}</span>
                         </span>
                       ))}
                     </div>
@@ -1526,7 +1526,7 @@ const Index = () => {
             >
               <div className="flex items-center justify-between" style={{ marginBottom: "78px" }}>
                 <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, lineHeight: "normal" }}>REFER & WIN</span>
-                <button onClick={() => setShowReferral(false)} style={{ background: "none", border: "none", color: "#fff", fontSize: "18px", cursor: "pointer", padding: "0", lineHeight: 1 }}>âœ•</button>
+                <button onClick={() => setShowReferral(false)} style={{ background: "none", border: "none", color: "#fff", fontSize: "18px", cursor: "pointer", padding: "0", lineHeight: 1 }}>X</button>
               </div>
               {(() => {
                 const refCount = studentData?.total_referral_count ?? 0;
@@ -1862,7 +1862,7 @@ const Index = () => {
                   lineHeight: 1,
                 }}
               >
-                âœ•
+                X
               </button>
             </div>
 
