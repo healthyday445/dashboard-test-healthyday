@@ -834,15 +834,15 @@ const Index = () => {
               <p style={{ color: "#ADADAD", fontFamily: "Outfit", fontSize: "18px", fontWeight: 500, lineHeight: "normal", textAlign: "center", width: "286px", margin: 0 }}>Every active referral earn gifts and rewards for you</p>
             </div>
 
-            {/* Referral Status Popup Overlay â€” 14DaysOngoing simplified */}
+            {/* Referral Status Popup Overlay — 14DaysOngoing simplified */}
             {showReferral && (
               <div
                 onClick={() => setShowReferral(false)}
-                style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.5)", zIndex: 1000, display: "flex", alignItems: "flex-end", justifyContent: "center" }}
+                style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.5)", zIndex: 1000, display: "flex", alignItems: "flex-start", justifyContent: "center" }}
               >
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  style={{ width: "412px", maxWidth: "95vw", height: "200px", borderRadius: "12px 12px 0 0", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", display: "flex", flexDirection: "column", justifyContent: "space-between", boxSizing: "border-box" }}
+                  style={{ width: "412px", maxWidth: "95vw", height: "200px", marginTop: "650px", borderRadius: "12px 12px 0 0", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", display: "flex", flexDirection: "column", justifyContent: "space-between", boxSizing: "border-box" }}
                 >
                   {/* Header */}
                   <div className="flex items-center justify-between">
@@ -1282,11 +1282,11 @@ const Index = () => {
         {showReferral && (
           <div
             onClick={() => setShowReferral(false)}
-            style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.5)", zIndex: 1000, display: "flex", alignItems: "flex-end", justifyContent: "center" }}
+            style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.5)", zIndex: 1000, display: "flex", alignItems: "flex-start", justifyContent: "center" }}
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              style={{ width: "412px", maxWidth: "95vw", height: "200px", borderRadius: "12px 12px 0 0", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", display: "flex", flexDirection: "column", justifyContent: "space-between", boxSizing: "border-box" }}
+              style={{ width: "412px", maxWidth: "95vw", height: "200px", marginTop: "650px", borderRadius: "12px 12px 0 0", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", display: "flex", flexDirection: "column", justifyContent: "space-between", boxSizing: "border-box" }}
             >
               {/* Header */}
               <div className="flex items-center justify-between">
