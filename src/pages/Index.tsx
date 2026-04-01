@@ -473,14 +473,22 @@ const Index = () => {
 
   const batchInfo = getActiveBatchInfo(studentData?.free_batch_start_date);
   const studentStatus = studentData?.status;
-  const isOngoingStatus = studentStatus === "registered" || studentStatus === "14DaysOngoing";
+  const isOngoingStatus = studentStatus === "registered" || studentStatus === "14DaysOngoing" || studentStatus === "14daysongoing";
+  const isPaid = studentStatus === "paid";
+  const paidInActiveBatch = isPaid && batchInfo.isActive;
   const sessionJoinLink = studentData?.free_classes_joining_link || studentData?.free_class_join_link;
-  const hasBatchAccess = isOngoingStatus && batchInfo.isActive && !!sessionJoinLink;
+  const hasBatchAccess = (isOngoingStatus || paidInActiveBatch) && batchInfo.isActive && !!sessionJoinLink;
 
   // --- Active Batch Dashboard (Week 1 or Week 2) ---
   if (hasBatchAccess) {
     const { currentDay, week, dateRangeLabel } = batchInfo;
-    const attendance: string[] = studentData?.attendance ?? [];
+
+    // Resolve free batch attendance from free_batches[].attendance_tracker
+    const freeBatches: any[] = studentData?.free_batches ?? [];
+    const activeBatchEntry = freeBatches.find(b => b.start_date === studentData?.free_batch_start_date) ?? freeBatches[freeBatches.length - 1];
+    const attendedDates = new Set<string>(activeBatchEntry?.attendance_tracker ?? []);
+    const batchOrigin = new Date(studentData?.free_batch_start_date!);
+    batchOrigin.setHours(0, 0, 0, 0);
 
     // --- Join tracking ---
     const markTodayJoined = () => {
@@ -495,12 +503,12 @@ const Index = () => {
     const dayStatus = Array.from({ length: 14 }, (_, i) => {
       const dayNum = i + 1;
       if (dayNum > currentDay) return "future";
-      // Check if user clicked JOIN SESSION for this day
       const didJoin = joinedDays.includes(dayNum);
-      // Also check server attendance
-      const raw = attendance[i];
-      if (didJoin || raw === "present") return "green";
-      return "yellow"; // not attended
+      const d = new Date(batchOrigin);
+      d.setDate(batchOrigin.getDate() + i);
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      if (didJoin || attendedDates.has(dateStr)) return "green";
+      return "yellow";
     });
 
     const sessionLink = sessionJoinLink ?? "https://www.youtube.com/c/Healthyday";
@@ -749,7 +757,17 @@ const Index = () => {
                 <div style={{ padding: "28px 20px 0" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
                     <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Referral Milestones</h3>
-                    <span onClick={() => navigate(`/referral?count=${refCount}&mobile=${mobile || ""}`)} style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}>View More</span>
+                    <span
+                      onClick={() => {
+                        const dest = (refCount > 0 && (studentStatus === "14DaysOngoing" || studentStatus === "14daysongoing"))
+                          ? `/referral-status?count=${refCount}&mobile=${mobile || ""}`
+                          : `/referral?count=${refCount}&mobile=${mobile || ""}`;
+                        navigate(dest);
+                      }}
+                      style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
+                    >
+                      View More
+                    </span>
                   </div>
                   <div style={{ width: "360px", borderRadius: "16px", background: "#FFF", boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)", padding: "20px 16px", boxSizing: "border-box" }}>
                     <div style={{ position: "relative" }}>
@@ -1001,55 +1019,86 @@ const Index = () => {
                 )}
               </div>
 
-              {/* Session Card */}
-              <div style={{ width: "357px" }}>
-                {/* Thumbnail */}
-                <a href={showBonus && bonusSessionData ? bonusSessionData.sessionLink : sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{ display: "block", textDecoration: "none" }}>
-                  <div style={{
-                    width: "357.03px",
-                    height: "186.534px",
-                    aspectRatio: "178/93",
-                    borderRadius: "12px 12px 0 0",
-                    background: (() => {
-                      if (showBonus && bonusSessionData) return `url(${bonusSessionData.thumbnail}) lightgray 50% / cover no-repeat`;
-                      const lang = studentData?.language;
-                      if (lang === "English") return "url(/language%20English.jpg) lightgray 50% / cover no-repeat";
-                      if (lang === "Telugu") return "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat";
-                      return sessionVideoId
-                        ? `url(https://img.youtube.com/vi/${sessionVideoId}/maxresdefault.jpg) lightgray 50% / cover no-repeat`
-                        : "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat";
-                    })(),
-                    boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
-                    position: "relative",
-                  }}>
-                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px", background: "rgba(0, 0, 0, 0.32)" }} />
-                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <PlayButton />
+              {/* Session Card — hidden after bonus is done */}
+              {!(isBonusDay && bonusSessionData && totalMin >= bonusSessionData.startMin + 45) && (
+                <div style={{ width: "357px" }}>
+                  {/* Thumbnail */}
+                  <a href={showBonus && bonusSessionData ? bonusSessionData.sessionLink : sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{ display: "block", textDecoration: "none" }}>
+                    <div style={{
+                      width: "357.03px",
+                      height: "186.534px",
+                      aspectRatio: "178/93",
+                      borderRadius: "12px 12px 0 0",
+                      background: (() => {
+                        if (showBonus && bonusSessionData) return `url(${bonusSessionData.thumbnail}) lightgray 50% / cover no-repeat`;
+                        const lang = studentData?.language;
+                        if (lang === "English") return "url(/language%20English.jpg) lightgray 50% / cover no-repeat";
+                        if (lang === "Telugu") return "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat";
+                        return sessionVideoId
+                          ? `url(https://img.youtube.com/vi/${sessionVideoId}/maxresdefault.jpg) lightgray 50% / cover no-repeat`
+                          : "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat";
+                      })(),
+                      boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
+                      position: "relative",
+                    }}>
+                      <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px", background: "rgba(0, 0, 0, 0.32)" }} />
+                      <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                        <PlayButton />
+                      </div>
                     </div>
-                  </div>
-                </a>
+                  </a>
 
-                {/* Bottom bar */}
-                <div style={{
-                  width: "357px",
-                  height: "67px",
-                  borderRadius: "0 0 12px 12px",
-                  border: "1.5px solid #E9E9E9",
-                  background: "#FFF",
-                  boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  boxSizing: "border-box",
-                  paddingLeft: "16px",
-                }}>
-                  {(() => {
-                    // 30 min before bonus: show JOIN button linking to bonus
-                    if (showBonus && bonusSessionData) {
+                  {/* Bottom bar */}
+                  <div style={{
+                    width: "357px",
+                    height: "67px",
+                    borderRadius: "0 0 12px 12px",
+                    border: "1.5px solid #E9E9E9",
+                    background: "#FFF",
+                    boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    boxSizing: "border-box",
+                    paddingLeft: "16px",
+                  }}>
+                    {(() => {
+                      // 30 min before bonus: show JOIN button linking to bonus
+                      if (showBonus && bonusSessionData) {
+                        return (
+                          <a href={bonusSessionData.sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{
+                            width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27",
+                            display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none",
+                          }}>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                              <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </svg>
+                            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION</span>
+                          </a>
+                        );
+                      }
+                      // Bonus day but outside 30-min window: show bonus session name text
+                      if (isBonusDay && bonusSessionData) {
+                        return (
+                          <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>
+                            {bonusSessionData.fullName}
+                          </span>
+                        );
+                      }
+                      // Regular day: show JOIN SESSION with API link
                       return (
-                        <a href={bonusSessionData.sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{
-                          width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27",
-                          display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none",
+                        <a href={sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{
+                          width: "300px",
+                          height: "40px",
+                          borderRadius: "10px",
+                          background: "#FEAB27",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                          gap: "8px",
+                          textDecoration: "none",
                         }}>
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -1059,39 +1108,10 @@ const Index = () => {
                           <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION</span>
                         </a>
                       );
-                    }
-                    // Bonus day but outside 30-min window: show bonus session name text
-                    if (isBonusDay && bonusSessionData) {
-                      return (
-                        <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>
-                          {bonusSessionData.fullName}
-                        </span>
-                      );
-                    }
-                    // Regular day: show JOIN SESSION with API link
-                    return (
-                      <a href={sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{
-                        width: "300px",
-                        height: "40px",
-                        borderRadius: "10px",
-                        background: "#FEAB27",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        gap: "8px",
-                        textDecoration: "none",
-                      }}>
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                          <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </svg>
-                        <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION</span>
-                      </a>
-                    );
-                  })()}
+                    })()}
+                  </div>
                 </div>
-              </div>
+              )}
 
               {/* Note — hidden on bonus days since the card below already shows next session info */}
               {!isBonusDay && <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px", marginTop: "10px" }}>
@@ -1207,7 +1227,17 @@ const Index = () => {
             <div style={{ padding: "28px 20px 0" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
                 <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Referral Milestones</h3>
-                <span onClick={() => navigate(`/referral?count=${refCount}&mobile=${mobile || ""}`)} style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}>View More</span>
+                <span
+                  onClick={() => {
+                    const dest = (refCount > 0 && (studentStatus === "14DaysOngoing" || studentStatus === "14daysongoing"))
+                      ? `/referral-status?count=${refCount}&mobile=${mobile || ""}`
+                      : `/referral?count=${refCount}&mobile=${mobile || ""}`;
+                    navigate(dest);
+                  }}
+                  style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
+                >
+                  View More
+                </span>
               </div>
               <div style={{ width: "360px", borderRadius: "16px", background: "#FFF", boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)", padding: "20px 16px", boxSizing: "border-box" }}>
                 <div style={{ position: "relative" }}>
@@ -1414,13 +1444,19 @@ const Index = () => {
       window.open(`https://wa.me/?text=${message}`, "_blank");
     };
 
-    const attendance: string[] = studentData?.attendance ?? [];
+    const completedFreeBatches: any[] = studentData?.free_batches ?? [];
+    const completedBatchEntry = completedFreeBatches.find(b => b.start_date === studentData?.free_batch_start_date) ?? completedFreeBatches[completedFreeBatches.length - 1];
+    const completedAttendedDates = new Set<string>(completedBatchEntry?.attendance_tracker ?? []);
+    const completedBatchOrigin = new Date(studentData?.free_batch_start_date!);
+    completedBatchOrigin.setHours(0, 0, 0, 0);
     const completedDayStatus = Array.from({ length: 14 }, (_, i) => {
       const dayNum = i + 1;
       const didJoin = joinedDays.includes(dayNum);
-      const raw = attendance[i];
-      if (didJoin || raw === 'present') return 'green';
-      return 'yellow'; // not attended
+      const d = new Date(completedBatchOrigin);
+      d.setDate(completedBatchOrigin.getDate() + i);
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      if (didJoin || completedAttendedDates.has(dateStr)) return "green";
+      return "yellow";
     });
 
     const completedDateRangeLabel = (() => {
