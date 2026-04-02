@@ -6,6 +6,7 @@ import logo from "@/assets/Primary_logo.svg";
 
 interface ApiReferral {
   referred_mobile: string;
+  referred_name: string;
   referral_date: string;
   is_redeemed_for_free_classes: boolean;
   is_redeemed_for_gift: boolean;
@@ -59,14 +60,7 @@ const LockIcon = ({ color = "#A2A2A2" }: { color?: string }) => (
   </svg>
 );
 
-const PersonIcon = () => (
-  <svg width="10" height="14" viewBox="0 0 10 14" fill="none">
-    <path
-      d="M5 7C6.657 7 8 5.657 8 4C8 2.343 6.657 1 5 1C3.343 1 2 2.343 2 4C2 5.657 3.343 7 5 7ZM5 8.5C2.493 8.5 0 9.75 0 11.5V13H10V11.5C10 9.75 7.507 8.5 5 8.5Z"
-      fill="#A2A2A2"
-    />
-  </svg>
-);
+;
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
@@ -86,6 +80,7 @@ const ReferralStatus = () => {
 
   const [apiData, setApiData] = useState<ReferralsApiData | null>(null);
   const [loading, setLoading] = useState(true);
+  const [apiError, setApiError] = useState<string | null>(null);
 
   const shareLink = mobile
     ? `https://healthyday.co.in/free-programmes?ref=91${mobile}`
@@ -97,7 +92,7 @@ const ReferralStatus = () => {
     fetch(`/.netlify/functions/referrals?mobile=${encodedMobile}`)
       .then((r) => r.json())
       .then((data: ReferralsApiData) => setApiData(data))
-      .catch(() => { })
+      .catch((err) => setApiError(String(err)))
       .finally(() => setLoading(false));
   }, [mobile]);
 
@@ -133,13 +128,13 @@ const ReferralStatus = () => {
 
   return (
     <div
-      className="mx-auto w-[412px] min-h-screen"
-      style={{ fontFamily: "Outfit, sans-serif", background: "#FFF", overflowX: "hidden" }}
+      className="mx-auto min-h-screen"
+      style={{ fontFamily: "Outfit, sans-serif", background: "#FFF", overflowX: "hidden", maxWidth: "412px", width: "100%" }}
     >
       {/* ── Header ── */}
       <header
         style={{
-          width: "412px",
+          width: "100%",
           height: "68px",
           display: "flex",
           alignItems: "center",
@@ -154,7 +149,7 @@ const ReferralStatus = () => {
       </header>
 
       {/* ── Score Card ── */}
-      <div style={{ padding: "0 26px 9px" }}>
+      <div style={{ padding: "31px 26px 9px" }}>
         <div
           style={{
             borderRadius: "12px",
@@ -358,7 +353,13 @@ const ReferralStatus = () => {
           </h3>
         </div>
 
-        {!loading && referrals.length === 0 && (
+        {!loading && apiError && (
+          <p style={{ color: "#E53935", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, textAlign: "center", margin: "0 0 20px" }}>
+            Error: {apiError}
+          </p>
+        )}
+
+        {!loading && !apiError && referrals.length === 0 && (
           <p style={{ color: "#ADADAD", fontFamily: "Outfit", fontSize: "14px", fontWeight: 500, textAlign: "center", margin: "0 0 20px" }}>
             No referrals yet. Share your link to get started!
           </p>
@@ -389,22 +390,15 @@ const ReferralStatus = () => {
                 >
                   <div style={{ display: "flex", alignItems: "center", gap: "17px" }}>
                     {/* Avatar */}
-                    <div
-                      style={{
-                        width: "36px",
-                        height: "36px",
-                        borderRadius: "50%",
-                        background: "#F3F4F7",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        flexShrink: 0,
-                      }}
-                    >
-                      <PersonIcon />
-                    </div>
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none" style={{ flexShrink: 0 }}>
+                      <circle cx="18" cy="18" r="18" fill="#F3F4F7"/>
+                      <g transform="translate(12, 9.5)">
+                        <path d="M1 16V14.3333C1 13.4493 1.35119 12.6014 1.97631 11.9763C2.60143 11.3512 3.44928 11 4.33333 11H7.66667C8.55072 11 9.39857 11.3512 10.0237 11.9763C10.6488 12.6014 11 13.4493 11 14.3333V16M2.66667 4.33333C2.66667 5.21739 3.01786 6.06523 3.64298 6.69036C4.2681 7.31548 5.11594 7.66667 6 7.66667C6.88405 7.66667 7.7319 7.31548 8.35702 6.69036C8.98214 6.06523 9.33333 5.21739 9.33333 4.33333C9.33333 3.44928 8.98214 2.60143 8.35702 1.97631C7.7319 1.35119 6.88405 1 6 1C5.11594 1 4.2681 1.35119 3.64298 1.97631C3.01786 2.60143 2.66667 3.44928 2.66667 4.33333Z" stroke="#0D468B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                        <path d="M1 16V14.3333C1 13.4493 1.35119 12.6014 1.97631 11.9763C2.60143 11.3512 3.44928 11 4.33333 11H7.66667C8.55072 11 9.39857 11.3512 10.0237 11.9763C10.6488 12.6014 11 13.4493 11 14.3333V16M2.66667 4.33333C2.66667 5.21739 3.01786 6.06523 3.64298 6.69036C4.2681 7.31548 5.11594 7.66667 6 7.66667C6.88405 7.66667 7.7319 7.31548 8.35702 6.69036C8.98214 6.06523 9.33333 5.21739 9.33333 4.33333C9.33333 3.44928 8.98214 2.60143 8.35702 1.97631C7.7319 1.35119 6.88405 1 6 1C5.11594 1 4.2681 1.35119 3.64298 1.97631C3.01786 2.60143 2.66667 3.44928 2.66667 4.33333Z" stroke="black" strokeOpacity="0.2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+                      </g>
+                    </svg>
                     <div>
-                      {/* Masked mobile as primary identifier */}
+                      {/* Name as primary identifier */}
                       <div
                         style={{
                           fontFamily: "Outfit",
@@ -415,11 +409,11 @@ const ReferralStatus = () => {
                           WebkitTextFillColor: "transparent",
                         }}
                       >
-                        {maskMobile(ref.referred_mobile)}
+                        {ref.referred_name || maskMobile(ref.referred_mobile)}
                       </div>
-                      {/* Referral date */}
+                      {/* Masked mobile + referral date */}
                       <div style={{ color: "#A2A2A2", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, marginTop: "2px" }}>
-                        Joined {formatDate(ref.referral_date)}
+                        {ref.referred_name && `${maskMobile(ref.referred_mobile)} · `}Joined {formatDate(ref.referral_date)}
                       </div>
                     </div>
                   </div>
@@ -427,16 +421,20 @@ const ReferralStatus = () => {
                   {/* Status badge */}
                   <div
                     style={{
+                      width: "58px",
+                      height: "21px",
                       borderRadius: "3px",
-                      background: ref.is_redeemed_for_free_classes ? "#C7FFDA" : "#E0E0E0",
-                      padding: "4px 11px",
+                      background: "#C7FFDA",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                       fontFamily: "Outfit",
                       fontSize: "10px",
                       fontWeight: 600,
-                      color: ref.is_redeemed_for_free_classes ? "#287E54" : "#7B7F7D",
+                      color: "#287E54",
                     }}
                   >
-                    {ref.is_redeemed_for_free_classes ? "ACTIVE" : "PENDING"}
+                    ACTIVE
                   </div>
                 </div>
               </div>

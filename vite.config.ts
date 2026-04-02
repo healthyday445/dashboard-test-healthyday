@@ -23,6 +23,17 @@ export default defineConfig(({ mode }) => ({
           });
         },
       },
+      "/.netlify/functions/referrals": {
+        target: "https://healthyday-backend-773381060399.asia-south1.run.app",
+        changeOrigin: true,
+        secure: true,
+        rewrite: (path) => path.replace("/.netlify/functions/referrals", "/api/internal/student/referrals"),
+        configure: (proxy) => {
+          proxy.on("proxyReq", (proxyReq) => {
+            proxyReq.setHeader("X-API-KEY", "HDB@020205");
+          });
+        },
+      },
     },
   },
   plugins: [react(), mode === "development" && componentTagger()].filter(Boolean),
