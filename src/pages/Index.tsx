@@ -919,7 +919,7 @@ const Index = () => {
                               </div>
                               {/* Dot */}
                               {reached ? (
-                                <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>âœ“</div>
+                                <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
                               ) : (
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                   <circle cx="12" cy="12" r="12" fill="#DDDEDE" />
@@ -1382,7 +1382,7 @@ const Index = () => {
                           </div>
                           {/* Dot */}
                           {reached ? (
-                            <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>âœ“</div>
+                            <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
                           ) : (
                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                               <circle cx="12" cy="12" r="12" fill="#DDDEDE" />
@@ -1617,7 +1617,7 @@ const Index = () => {
                             </div>
                             {/* Dot */}
                             {reached ? (
-                              <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>âœ“</div>
+                              <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
                             ) : (
                               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                                 <circle cx="12" cy="12" r="12" fill="#DDDEDE" />
@@ -1652,7 +1652,7 @@ const Index = () => {
                       <div style={{ flex: 1, height: "95px", borderRadius: "20px", background: "#012550", padding: "10px 12px", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
                         <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                           {refCount >= 5 ? (
-                            <div style={{ width: "25px", height: "25px", borderRadius: "5px", background: "#34C759", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>âœ“</div>
+                            <div style={{ width: "25px", height: "25px", borderRadius: "5px", background: "#34C759", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>✓</div>
                           ) : (
                             <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
                               <rect width="25" height="25" rx="5" fill="#3B516E" />
@@ -1961,7 +1961,7 @@ const Index = () => {
                         </div>
                         {/* Dot */}
                         {reached ? (
-                          <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>âœ“</div>
+                          <div style={{ width: "24px", height: "24px", borderRadius: "50%", background: "#34C759", display: "flex", alignItems: "center", justifyContent: "center", fontSize: "11px", color: "#fff", fontWeight: 700 }}>✓</div>
                         ) : (
                           <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
                             <circle cx="12" cy="12" r="12" fill="#DDDEDE" />
@@ -1988,7 +1988,7 @@ const Index = () => {
                   <div style={{ flex: 1, height: "95px", borderRadius: "20px", background: "#012550", padding: "10px 12px", boxSizing: "border-box", display: "flex", flexDirection: "column", justifyContent: "space-around" }}>
                     <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                       {refCount >= 5 ? (
-                        <div style={{ width: "25px", height: "25px", borderRadius: "5px", background: "#34C759", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>âœ“</div>
+                        <div style={{ width: "25px", height: "25px", borderRadius: "5px", background: "#34C759", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center", fontSize: "14px" }}>✓</div>
                       ) : (
                         <svg xmlns="http://www.w3.org/2000/svg" width="25" height="25" viewBox="0 0 25 25" fill="none" style={{ flexShrink: 0 }}>
                           <rect width="25" height="25" rx="5" fill="#3B516E" />
