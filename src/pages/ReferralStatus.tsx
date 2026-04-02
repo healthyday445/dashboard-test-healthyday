@@ -484,8 +484,8 @@ const ReferralStatus = () => {
         {/* Free Classes pair (unlocks every 5 refs) */}
         <div style={{ display: "flex", gap: "12px", marginBottom: "11px" }}>
           {([
-            { label: "+10 Free Classes", refs: "5 Referrals", need: 5 },
-            { label: "+20 Free Classes", refs: "10 Referrals", need: 10 },
+            { label: "+10 Free Classes", refs: "5 Referrals", need: 5, img: "/pose 8 1.png" },
+            { label: "+20 Free Classes", refs: "10 Referrals", need: 10, img: "/pose 8 1 (1).png" },
           ] as const).map((reward, i) => {
             const unlocked = totalRefs >= reward.need;
             return (
@@ -494,9 +494,9 @@ const ReferralStatus = () => {
                   style={{
                     borderRadius: "12px",
                     height: "166px",
-                    background: unlocked
-                      ? "linear-gradient(135deg, #1a6e15 0%, #64A45E 100%)"
-                      : "linear-gradient(135deg, #DDDEDE 0%, #B0B0B0 100%)",
+                    backgroundImage: `url("${reward.img}")`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
                     display: "flex",
                     alignItems: "flex-start",
                     padding: "10px",
@@ -504,16 +504,17 @@ const ReferralStatus = () => {
                     overflow: "hidden",
                   }}
                 >
+                  {!unlocked && (
+                    <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.45)", borderRadius: "12px" }} />
+                  )}
                   {unlocked ? (
-                    <div style={{ borderRadius: "30px", background: "#22C55E", padding: "6px 10px 6px 11px" }}>
-                      <span style={{ fontFamily: "Outfit", fontSize: "9px", fontWeight: 600, color: "#FFF" }}>
-                        UNLOCKED
-                      </span>
+                    <div style={{ width: "71px", height: "23px", borderRadius: "30px", background: "#22C55E", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", zIndex: 1 }}>
+                      <span style={{ fontFamily: "Outfit", fontSize: "9px", fontWeight: 600, color: "#FFF" }}>UNLOCKED</span>
                     </div>
                   ) : (
-                    <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none">
-                        <path d="M8 11V7C8 5.939 8.421 4.922 9.172 4.172C9.922 3.421 10.939 3 12 3C13.061 3 14.078 3.421 14.828 4.172C15.579 4.922 16 5.939 16 7V11M5 12C5 11.47 5.211 10.961 5.586 10.586C5.961 10.211 6.47 10 7 10H17C17.53 10 18.039 10.211 18.414 10.586C18.789 10.961 19 11.47 19 12V19C19 19.53 18.789 20.039 18.414 20.414C18.039 20.789 17.53 21 17 21H7C6.47 21 5.961 20.789 5.586 20.414C5.211 20.039 5 19.53 5 19V12Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 1 }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                        <path d="M12 16.5V10.5C12 8.9087 12.6321 7.38258 13.7574 6.25736C14.8826 5.13214 16.4087 4.5 18 4.5C19.5913 4.5 21.1174 5.13214 22.2426 6.25736C23.3679 7.38258 24 8.9087 24 10.5V16.5M7.5 19.5C7.5 18.7044 7.81607 17.9413 8.37868 17.3787C8.94129 16.8161 9.70435 16.5 10.5 16.5H25.5C26.2956 16.5 27.0587 16.8161 27.6213 17.3787C28.1839 17.9413 28.5 18.7044 28.5 19.5V28.5C28.5 29.2956 28.1839 30.0587 27.6213 30.6213C27.0587 31.1839 26.2956 31.5 25.5 31.5H10.5C9.70435 31.5 8.94129 31.1839 8.37868 30.6213C7.81607 30.0587 7.5 29.2956 7.5 28.5V19.5ZM16.5 24C16.5 24.3978 16.658 24.7794 16.9393 25.0607C17.2206 25.342 17.6022 25.5 18 25.5C18.3978 25.5 18.7794 25.342 19.0607 25.0607C19.342 24.7794 19.5 24.3978 19.5 24C19.5 23.6022 19.342 23.2206 19.0607 22.9393C18.7794 22.658 18.3978 22.5 18 22.5C17.6022 22.5 17.2206 22.658 16.9393 22.9393C16.658 23.2206 16.5 23.6022 16.5 24Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
                   )}
@@ -543,7 +544,6 @@ const ReferralStatus = () => {
                     Claimed
                   </button>
                 )}
-                {/* "X more needed" hint when not yet unlocked */}
                 {!unlocked && refsForNextClasses !== null && i === 0 && (
                   <p style={{ margin: "4px 0 0", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500, color: "#9C9C9C" }}>
                     {refsForNextClasses} more needed
@@ -557,8 +557,8 @@ const ReferralStatus = () => {
         {/* Gift pair (unlocks at 20 and 40 refs) */}
         <div style={{ display: "flex", gap: "12px" }}>
           {([
-            { label: "Healthyday T-shirt", refs: "20 Referrals", need: 20 },
-            { label: "Special Gift", refs: "40 Referrals", need: 40 },
+            { label: "Healthyday T-shirt", refs: "20 Referrals", need: 20, img: "/unsplash_GkXJisd5W1M.png" },
+            { label: "Special Gift", refs: "40 Referrals", need: 40, img: "/unsplash_mSJsiQCm6og.png" },
           ] as const).map((reward, i) => {
             const progress = Math.min(100, (totalRefs / reward.need) * 100);
             const unlocked = totalRefs >= reward.need;
@@ -568,9 +568,9 @@ const ReferralStatus = () => {
                   style={{
                     borderRadius: "12px",
                     height: "166px",
-                    background: unlocked
-                      ? "linear-gradient(135deg, #1a6e15 0%, #64A45E 100%)"
-                      : "linear-gradient(135deg, #6B7280 0%, #9CA3AF 100%)",
+                    backgroundImage: `url("${reward.img}")`,
+                    backgroundSize: "cover",
+                    backgroundPosition: "center",
                     position: "relative",
                     overflow: "hidden",
                   }}
@@ -579,15 +579,15 @@ const ReferralStatus = () => {
                     <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.50)", borderRadius: "12px" }} />
                   )}
                   {unlocked ? (
-                    <div style={{ padding: "10px" }}>
-                      <div style={{ borderRadius: "30px", background: "#22C55E", padding: "6px 10px 6px 11px", display: "inline-block" }}>
+                    <div style={{ padding: "10px", position: "relative", zIndex: 1 }}>
+                      <div style={{ width: "71px", height: "23px", borderRadius: "30px", background: "#22C55E", display: "flex", alignItems: "center", justifyContent: "center" }}>
                         <span style={{ fontFamily: "Outfit", fontSize: "9px", fontWeight: 600, color: "#FFF" }}>UNLOCKED</span>
                       </div>
                     </div>
                   ) : (
                     <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 2 }}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none">
-                        <path d="M8 11V7C8 5.939 8.421 4.922 9.172 4.172C9.922 3.421 10.939 3 12 3C13.061 3 14.078 3.421 14.828 4.172C15.579 4.922 16 5.939 16 7V11M5 12C5 11.47 5.211 10.961 5.586 10.586C5.961 10.211 6.47 10 7 10H17C17.53 10 18.039 10.211 18.414 10.586C18.789 10.961 19 11.47 19 12V19C19 19.53 18.789 20.039 18.414 20.414C18.039 20.789 17.53 21 17 21H7C6.47 21 5.961 20.789 5.586 20.414C5.211 20.039 5 19.53 5 19V12Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
+                        <path d="M12 16.5V10.5C12 8.9087 12.6321 7.38258 13.7574 6.25736C14.8826 5.13214 16.4087 4.5 18 4.5C19.5913 4.5 21.1174 5.13214 22.2426 6.25736C23.3679 7.38258 24 8.9087 24 10.5V16.5M7.5 19.5C7.5 18.7044 7.81607 17.9413 8.37868 17.3787C8.94129 16.8161 9.70435 16.5 10.5 16.5H25.5C26.2956 16.5 27.0587 16.8161 27.6213 17.3787C28.1839 17.9413 28.5 18.7044 28.5 19.5V28.5C28.5 29.2956 28.1839 30.0587 27.6213 30.6213C27.0587 31.1839 26.2956 31.5 25.5 31.5H10.5C9.70435 31.5 8.94129 31.1839 8.37868 30.6213C7.81607 30.0587 7.5 29.2956 7.5 28.5V19.5ZM16.5 24C16.5 24.3978 16.658 24.7794 16.9393 25.0607C17.2206 25.342 17.6022 25.5 18 25.5C18.3978 25.5 18.7794 25.342 19.0607 25.0607C19.342 24.7794 19.5 24.3978 19.5 24C19.5 23.6022 19.342 23.2206 19.0607 22.9393C18.7794 22.658 18.3978 22.5 18 22.5C17.6022 22.5 17.2206 22.658 16.9393 22.9393C16.658 23.2206 16.5 23.6022 16.5 24Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
                       </svg>
                     </div>
                   )}
@@ -598,7 +598,6 @@ const ReferralStatus = () => {
                 <b style={{ fontFamily: "Outfit", fontSize: "14px", color: "#FEAB27", display: "block" }}>
                   {reward.refs}
                 </b>
-                {/* Progress bar */}
                 {!unlocked && (
                   <div style={{ marginTop: "6px" }}>
                     <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
