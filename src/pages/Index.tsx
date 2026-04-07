@@ -1559,7 +1559,7 @@ const Index = () => {
 
             {/* Your Referrals Link — centered */}
             <div style={{ textAlign: "center", cursor: "pointer", paddingTop: "4px" }} onClick={() => navigate(`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`)}>
-              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>Your Referrals â†’</span>
+              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>Your Referrals {"\u2192"}</span>
             </div>
           </div>
         </div>}
@@ -1857,7 +1857,7 @@ const Index = () => {
             }}
           >
             <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal" }}>View all videos</span>
-            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "25px", fontWeight: 500, lineHeight: "normal", width: "12px", height: "23px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>â†’</span>
+            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "25px", fontWeight: 500, lineHeight: "normal", width: "12px", height: "23px", display: "inline-flex", alignItems: "center", justifyContent: "center" }}>{"\u2192"}</span>
           </a>
         </div>
       </div>
