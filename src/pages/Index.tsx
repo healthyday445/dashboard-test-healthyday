@@ -877,11 +877,15 @@ const Index = () => {
                   {/* Progress Bar */}
                   {(() => {
                     const refCount = studentData?.total_referral_count ?? 0;
-                    const allMilestones = [
-                      { count: 5, label: "+10 FREE Classes" },
-                      { count: 10, label: "+20 FREE Classes" },
+                    // Sliding milestone windows — auto-selects based on progress
+                    const milestoneWindows = [
+                      { milestones: [{ count: 5, label: "+10 FREE Classes" }, { count: 10, label: "+20 FREE Classes" }], windowEnd: 13 },
+                      { milestones: [{ count: 20, label: "WIN Healthyday T-shirt" }, { count: 40, label: "Water Bottle" }, { count: 60, label: "Yoga Mat" }], windowEnd: 65 },
                     ];
-                    const windowEnd = 13;
+                    const activeWinIdx = milestoneWindows.findIndex(w => w.milestones.some(m => refCount < m.count));
+                    const activeWin = milestoneWindows[activeWinIdx === -1 ? milestoneWindows.length - 1 : activeWinIdx];
+                    const allMilestones = activeWin.milestones;
+                    const windowEnd = activeWin.windowEnd;
                     const progressPct = Math.min(100, (refCount / windowEnd) * 100);
                     // Dynamic indicator: merge onto highest reached milestone, else standalone
                     const reachedMs = allMilestones.filter(m => refCount >= m.count);
@@ -1351,11 +1355,15 @@ const Index = () => {
               {/* Progress Bar */}
               {(() => {
                 const refCount = studentData?.total_referral_count ?? 0;
-                const allMilestones = [
-                  { count: 5, label: "+10 FREE Classes" },
-                  { count: 10, label: "+20 FREE Classes" },
+                // Sliding milestone windows — auto-selects based on progress
+                const milestoneWindows = [
+                  { milestones: [{ count: 5, label: "+10 FREE Classes" }, { count: 10, label: "+20 FREE Classes" }], windowEnd: 13 },
+                  { milestones: [{ count: 20, label: "WIN Healthyday T-shirt" }, { count: 40, label: "Water Bottle" }, { count: 60, label: "Yoga Mat" }], windowEnd: 65 },
                 ];
-                const windowEnd = 13;
+                const activeWinIdx = milestoneWindows.findIndex(w => w.milestones.some(m => refCount < m.count));
+                const activeWin = milestoneWindows[activeWinIdx === -1 ? milestoneWindows.length - 1 : activeWinIdx];
+                const allMilestones = activeWin.milestones;
+                const windowEnd = activeWin.windowEnd;
                 const progressPct = Math.min(100, (refCount / windowEnd) * 100);
                 const reachedMs = allMilestones.filter(m => refCount >= m.count);
                 const mergedMs = reachedMs.length > 0 ? reachedMs[reachedMs.length - 1] : null;
