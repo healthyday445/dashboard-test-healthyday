@@ -1273,7 +1273,9 @@ const Index = () => {
         )}
 
         {/* Referral Milestones Section */}
-        {(() => {
+        {week === 1 && (
+          <>
+            {(() => {
           const refCount = studentData?.total_referral_count ?? 0;
           const milestones = [
             { label: "10 Free Classes", reward: "+10", refs: 5 },
@@ -1381,6 +1383,91 @@ const Index = () => {
           <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal", margin: 0 }}>Refer and Win!</h3>
           <p style={{ color: "#ADADAD", fontFamily: "Outfit", fontSize: "18px", fontWeight: 500, lineHeight: "normal", textAlign: "center", width: "286px", margin: 0 }}>Every active referral earn gifts and rewards for you</p>
         </div>
+          </>
+        )}
+
+        {week === 2 && (
+          <>
+            {/* Want More FREE Classes heading */}
+            <div style={{ padding: "32px 27px 0", textAlign: "center" }}>
+              <div style={{ width: "358px", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
+              <p style={{ width: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
+            </div>
+            {/* Refer & Earn */}
+            <div style={{ padding: "32px 27px 32px", display: "flex", justifyContent: "center" }}>
+              <div
+                style={{
+                  width: "358px",
+                  borderRadius: "16px",
+                  background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
+                  boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
+                  padding: "20px",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: "12px",
+                }}
+              >
+                {/* Title + subtitle — left aligned */}
+                <div>
+                  <h3 style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "21px", fontWeight: 700, lineHeight: "normal", margin: "0 0 4px" }}>
+                    Refer &amp; Earn
+                  </h3>
+                  <p style={{ color: "#FFFCFC", fontFamily: "Outfit", fontSize: "14px", fontWeight: 400, lineHeight: "normal", margin: 0 }}>
+                    Invite your friends &amp; family and get exciting gifts!
+                  </p>
+                </div>
+
+                {/* Share Link */}
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, lineHeight: "normal" }}>SHARE THIS LINK</span>
+                  <div style={{ width: "100%", height: "48px", borderRadius: "8px", border: "1.218px solid #B4B4B4", background: "#FFF", display: "flex", alignItems: "center", padding: "0 12px", gap: "8px" }}>
+                    <span style={{ color: "#8E8E8E", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "normal", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap", flex: 1 }}>
+                      {shareLink}
+                    </span>
+                    {/* Inline copy icon */}
+                    <button onClick={handleCopyLink} style={{ background: "none", border: "none", cursor: "pointer", padding: "0", display: "flex", alignItems: "center", flexShrink: 0 }}>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8E8E8E" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                        <rect x="9" y="9" width="13" height="13" rx="2" ry="2" />
+                        <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1" />
+                      </svg>
+                    </button>
+                  </div>
+                </div>
+
+                {/* Buttons — side by side */}
+                <div style={{ display: "flex", gap: "10px" }}>
+                  <button
+                    onClick={handleCopyLink}
+                    style={{ flex: 1, height: "40px", borderRadius: "8px", background: "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "7px", boxShadow: "0 4px 4px 0 rgba(0,0,0,0.25)" }}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none">
+                      <g clipPath="url(#clip_copy)">
+                        <path d="M6.49744 4.3332C5.58188 4.14913 4.63123 4.27241 3.79274 4.68395C2.95425 5.0955 2.27469 5.77233 1.85933 6.60964C1.44396 7.44695 1.31596 8.39801 1.49515 9.31552C1.67434 10.233 2.15073 11.0658 2.85052 11.6848C3.55031 12.3039 4.43447 12.6746 5.36605 12.7397C6.29763 12.8048 7.22465 12.5605 8.00354 12.0448C8.78243 11.5291 9.36972 10.7706 9.67446 9.8869C9.9792 9.0032 9.98438 8.04356 9.6892 7.15662M10.481 12.6674C11.3975 12.8525 12.3494 12.7294 13.1889 12.3173C14.0284 11.9053 14.7086 11.2273 15.1238 10.3887C15.539 9.55001 15.666 8.59759 15.4852 7.67925C15.3043 6.76091 14.8257 5.92803 14.1236 5.30989C13.4215 4.69175 12.5352 4.32294 11.6023 4.2607C10.6694 4.19846 9.74209 4.44628 8.96427 4.96569C8.18646 5.4851 7.60168 6.24704 7.30071 7.13324C6.99975 8.01943 6.99943 8.98031 7.29982 9.8667" stroke="white" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                      </g>
+                      <defs><clipPath id="clip_copy"><rect width="16.9812" height="17" fill="white" /></clipPath></defs>
+                    </svg>
+                    <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 500 }}>Copy Link</span>
+                  </button>
+
+                  <button
+                    onClick={handleWhatsAppShare}
+                    style={{ flex: 1, height: "40px", borderRadius: "8px", background: "#25D366", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "7px", boxShadow: "0 4px 4px 0 rgba(0,0,0,0.25)" }}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 24 24" fill="white">
+                      <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z" />
+                    </svg>
+                    <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 500 }}>Share on Whatsapp</span>
+                  </button>
+                </div>
+
+                {/* Your Referrals Link — centered */}
+                <div style={{ textAlign: "center", cursor: "pointer", paddingTop: "4px" }} onClick={() => navigate(`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`)}>
+                  <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>Your Referrals {"\u2192"}</span>
+                </div>
+              </div>
+            </div>
+          </>
+        )}
 
         {/* Referral Status Popup Overlay — 14DaysOngoing simplified */}
         {showReferral && (
@@ -1571,6 +1658,7 @@ const Index = () => {
         />
         {/* Want More FREE Classes heading */}
         <div style={{ padding: "32px 27px 0", textAlign: "center" }}>
+          <div style={{ width: "358px", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
           <p style={{ width: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
         </div>
         {/* Refer & Earn */}
