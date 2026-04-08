@@ -30,7 +30,7 @@ const CompletedDayBox = ({ status, dayLabel }: { status: string; dayLabel: strin
   </div>
 );
 
-export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanIdx, daysLeft, completedDateRangeLabel, completedDayStatus }: any) => {
+export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanIdx, daysLeft, completedDateRangeLabel, completedDayStatus, hideDaysLeft }: any) => {
   return (
     <>
       {completedDayStatus && (
@@ -48,7 +48,7 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
         </div>
       )}
 
-      {/* Days Left Banner */}
+      {!hideDaysLeft && (
       <div style={{ padding: completedDayStatus ? "28px 20px 0" : "24px 20px 0", textAlign: "center" }}>
         {completedDayStatus ? (
           <div style={{ width: "372px", borderRadius: "16px", background: "linear-gradient(180deg, #0D468B 0%, #072D5A 100%)", padding: "28px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
@@ -65,6 +65,7 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
           </>
         )}
       </div>
+      )}
 
       <div style={{ padding: "32px 27px 0", textAlign: "center" }}>
         <p style={{ width: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 700, lineHeight: "normal", marginBottom: "2px" }}>Join our community for</p>
