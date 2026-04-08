@@ -58,22 +58,16 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
           </div>
         ) : (
           <>
-            <div style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal", display: "flex", alignItems: "center", justifyContent: "center", gap: "6px" }}>
-              <span style={{ fontSize: "24px", fontWeight: 800 }}>{daysLeft}</span> <span>Days Left in your FREE Yoga</span>
-            </div>
-            <div style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700, marginTop: "4px", textTransform: "uppercase", letterSpacing: "0.5px" }}>JOIN DAILY CLASSES</div>
+            <p style={{ width: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontStyle: "normal", fontWeight: 700, lineHeight: "normal" }}>
+              {daysLeft} Days Left in your FREE Yoga
+            </p>
+            <h3 style={{ width: "221px", margin: "4px auto 0", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "20px", fontStyle: "normal", fontWeight: 700, lineHeight: "normal" }}>JOIN DAILY CLASSES</h3>
           </>
         )}
       </div>
       )}
 
       <div style={{ padding: "32px 27px 0", textAlign: "center" }}>
-        {!hideDaysLeft && (
-          <>
-            <p style={{ width: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 700, lineHeight: "normal", marginBottom: "2px" }}>Join our community for</p>
-            <h3 style={{ width: "221px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal" }}>DAILY YOGA SESSIONS</h3>
-          </>
-        )}
       </div>
 
       <div style={{ padding: "24px 27px 0" }}>
@@ -103,7 +97,7 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
       <div style={{ padding: "16px 27px 0" }}>
         <h3 style={{ width: "343px", color: "#0D468B", fontSize: "24px", fontWeight: 600, fontFamily: "Outfit", textAlign: "center", marginBottom: "20px", margin: "0 auto 20px" }}>Compare and choose your plan!</h3>
         <div style={{ position: "relative", width: "358px" }}>
-          <div style={{ position: "absolute", top: 0, left: selectedPlanIdx === 0 ? "calc(100% - 207px)" : selectedPlanIdx === 1 ? "calc(100% - 138px)" : "calc(100% - 69px)", width: "69px", height: "312px", borderRadius: "5px", border: "1px solid #0D468B", background: "#FFF5E5", zIndex: 0 }} />
+          <div style={{ position: "absolute", top: 0, left: selectedPlanIdx === 0 ? "calc(100% - 207px)" : selectedPlanIdx === 1 ? "calc(100% - 138px)" : "calc(100% - 69px)", width: "69px", height: "284px", borderRadius: "5px", border: "1px solid #0D468B", background: "#FFF5E5", zIndex: 0 }} />
           <div style={{ display: "flex", alignItems: "center", paddingBottom: "10px", position: "relative", zIndex: 1 }}>
             <div style={{ flex: 1, color: "#919191", fontFamily: "Outfit", fontSize: "10px", fontWeight: 700, lineHeight: "normal" }}>Features</div>
             <div style={{ width: "69px", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 600, lineHeight: "normal" }}>1 Year</div>
@@ -111,7 +105,7 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
             <div style={{ width: "69px", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 600, lineHeight: "normal" }}>3 Months</div>
           </div>
           {features.map((feature, idx) => (
-            <div key={idx} style={{ display: "flex", alignItems: "center", padding: "10px 0", borderTop: "1px solid #F0F0F0", position: "relative", zIndex: 1 }}>
+            <div key={idx} style={{ display: "flex", alignItems: "center", padding: "10px 0", borderTop: "none", position: "relative", zIndex: 1 }}>
               <div style={{ flex: 1, color: "#202020", fontFamily: "Outfit", fontSize: "12px", fontWeight: 600, lineHeight: "normal" }}>{feature.name}</div>
               <div style={{ width: "69px", display: "flex", justifyContent: "center" }}>
                 {feature.year ? (
