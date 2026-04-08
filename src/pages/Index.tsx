@@ -3,6 +3,66 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 
+// ─── Dynamic Milestone Window System ───────────────────────────────────────────
+// Shows only 2 milestones at a time and clamps indicator position to guarantee
+// minimum spacing between labels. Prevents all text/icon collisions.
+const ALL_REF_MILESTONES = [
+  { count: 5, label: "+10 FREE Classes", lines: ["+10 FREE", "Classes"] },
+  { count: 10, label: "+20 FREE Classes", lines: ["+20 FREE", "Classes"] },
+  { count: 20, label: "Healthyday T-shirt", lines: ["Healthyday", "T-shirt"] },
+  { count: 40, label: "Water Bottle", lines: ["Water", "Bottle"] },
+  { count: 60, label: "Yoga Mat", lines: ["Yoga Mat"] },
+];
+
+function getRefWindow(refCount: number) {
+  const nextIdx = ALL_REF_MILESTONES.findIndex(m => refCount < m.count);
+
+  let milestones: typeof ALL_REF_MILESTONES;
+  let windowEnd: number;
+
+  if (nextIdx === -1) {
+    // All milestones completed — show last two
+    milestones = ALL_REF_MILESTONES.slice(-2);
+    windowEnd = 65;
+  } else if (nextIdx <= 1) {
+    // Early stage (0–12 referrals): show [5, 10]
+    milestones = ALL_REF_MILESTONES.slice(0, 2);
+    windowEnd = 13;
+  } else {
+    // Show next + one future milestone (max 2 for clean spacing)
+    const end = Math.min(nextIdx + 2, ALL_REF_MILESTONES.length);
+    milestones = ALL_REF_MILESTONES.slice(nextIdx, end);
+    const last = milestones[milestones.length - 1];
+    windowEnd = Math.round(last.count * 1.1);
+  }
+
+  // --- Indicator position with minimum-gap enforcement ---
+  const reachedMs = milestones.filter(m => refCount >= m.count);
+  const mergedMs = reachedMs.length > 0 ? reachedMs[reachedMs.length - 1] : null;
+  const showStandalone = !mergedMs;
+
+  const naturalPos = refCount === 0 ? 9 : Math.max(9, (refCount / windowEnd) * 100);
+  const nextMs = milestones.find(m => refCount < m.count);
+  const nextMsPos = nextMs ? (nextMs.count / windowEnd) * 100 : 100;
+  const MIN_GAP = 25; // 25% of track width — guarantees ~85px on a 340px track
+
+  let indicatorPos = naturalPos;
+  if (showStandalone && nextMs && (nextMsPos - naturalPos) < MIN_GAP) {
+    indicatorPos = Math.max(9, nextMsPos - MIN_GAP);
+  }
+
+  return {
+    milestones,
+    windowEnd,
+    indicatorPos,
+    progressPct: Math.min(100, indicatorPos),
+    mergedMs,
+    showStandalone,
+    indicatorColor: refCount === 0 ? "#FF0000" : "#FEAB27",
+  };
+}
+// ────────────────────────────────────────────────────────────────────────────────
+
 const MoonIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
     <path d="M15.9677 10.1262C14.9738 13.5804 11.7558 16 8.1468 16C3.65791 16 0 12.3421 0 7.8532C0 4.24417 2.4196 1.02618 5.87384 0.0322749C6.20786 -0.0654867 6.56632 0.064862 6.76999 0.341853C6.96551 0.626991 6.96551 1.00989 6.76184 1.28688C6.06937 2.25635 5.70276 3.3969 5.70276 4.59448C5.70276 7.73915 8.26085 10.2972 11.4055 10.2972C12.6031 10.2972 13.7436 9.93064 14.7131 9.23816C14.9901 9.03449 15.373 9.03449 15.6581 9.23001C15.9351 9.43368 16.0655 9.79214 15.9677 10.1262Z" fill="#5462F0" />
@@ -877,22 +937,7 @@ const Index = () => {
                   {/* Progress Bar */}
                   {(() => {
                     const refCount = studentData?.total_referral_count ?? 0;
-                    // Sliding milestone windows — auto-selects based on progress
-                    const milestoneWindows = [
-                      { milestones: [{ count: 5, label: "+10 FREE Classes" }, { count: 10, label: "+20 FREE Classes" }], windowEnd: 13 },
-                      { milestones: [{ count: 20, label: "WIN Healthyday T-shirt" }, { count: 40, label: "Water Bottle" }, { count: 60, label: "Yoga Mat" }], windowEnd: 65 },
-                    ];
-                    const activeWinIdx = milestoneWindows.findIndex(w => w.milestones.some(m => refCount < m.count));
-                    const activeWin = milestoneWindows[activeWinIdx === -1 ? milestoneWindows.length - 1 : activeWinIdx];
-                    const allMilestones = activeWin.milestones;
-                    const windowEnd = activeWin.windowEnd;
-                    const progressPct = Math.min(100, (refCount / windowEnd) * 100);
-                    // Dynamic indicator: merge onto highest reached milestone, else standalone
-                    const reachedMs = allMilestones.filter(m => refCount >= m.count);
-                    const mergedMs = reachedMs.length > 0 ? reachedMs[reachedMs.length - 1] : null;
-                    const showStandalone = !mergedMs;
-                    const indicatorPos = refCount === 0 ? 9 : Math.max(9, (refCount / windowEnd) * 100);
-                    const indicatorColor = refCount === 0 ? "#FF0000" : "#FEAB27";
+                    const { milestones: allMilestones, windowEnd, indicatorPos, progressPct, mergedMs, showStandalone, indicatorColor } = getRefWindow(refCount);
                     const pinSvg = <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" viewBox="0 0 21 24" fill="none"><path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" fill="white" /><path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" fill="white" /><path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>;
                     return (
                       <div style={{ position: "relative", marginTop: "60px", marginBottom: "40px" }}>
@@ -900,12 +945,12 @@ const Index = () => {
                         <div style={{ height: "6px", background: "#AAA", borderRadius: "3px", marginLeft: "9%" }}>
                           <div style={{ width: `${progressPct}%`, height: "6px", background: "#FEAB27", borderRadius: "3px" }} />
                         </div>
-                        {/* Standalone indicator — only when NOT merged with a milestone */}
+                        {/* Standalone indicator */}
                         {showStandalone && (
                           <div style={{ position: "absolute", left: `${indicatorPos}%`, top: "50%", transform: "translate(-50%, -50%)" }}>
                             <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none"><circle cx="9.5" cy="9.5" r="9.5" fill={indicatorColor} /></svg>
                             <div style={{ position: "absolute", bottom: "100%", left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "4px" }}>
-                              <div style={{ width: "70px", textAlign: "center", color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontStyle: "normal", fontWeight: 700, lineHeight: "normal", marginBottom: "6px" }}>You are here</div>
+                              <div style={{ width: "70px", textAlign: "center", color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, lineHeight: "normal", marginBottom: "6px", whiteSpace: "nowrap" }}>You are here</div>
                               {pinSvg}
                             </div>
                             <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", marginTop: "6px", textAlign: "center", whiteSpace: "nowrap" }}>
@@ -1355,21 +1400,7 @@ const Index = () => {
               {/* Progress Bar */}
               {(() => {
                 const refCount = studentData?.total_referral_count ?? 0;
-                // Sliding milestone windows — auto-selects based on progress
-                const milestoneWindows = [
-                  { milestones: [{ count: 5, label: "+10 FREE Classes" }, { count: 10, label: "+20 FREE Classes" }], windowEnd: 13 },
-                  { milestones: [{ count: 20, label: "WIN Healthyday T-shirt" }, { count: 40, label: "Water Bottle" }, { count: 60, label: "Yoga Mat" }], windowEnd: 65 },
-                ];
-                const activeWinIdx = milestoneWindows.findIndex(w => w.milestones.some(m => refCount < m.count));
-                const activeWin = milestoneWindows[activeWinIdx === -1 ? milestoneWindows.length - 1 : activeWinIdx];
-                const allMilestones = activeWin.milestones;
-                const windowEnd = activeWin.windowEnd;
-                const progressPct = Math.min(100, (refCount / windowEnd) * 100);
-                const reachedMs = allMilestones.filter(m => refCount >= m.count);
-                const mergedMs = reachedMs.length > 0 ? reachedMs[reachedMs.length - 1] : null;
-                const showStandalone = !mergedMs;
-                const indicatorPos = refCount === 0 ? 9 : Math.max(9, (refCount / windowEnd) * 100);
-                const indicatorColor = refCount === 0 ? "#FF0000" : "#FEAB27";
+                const { milestones: allMilestones, windowEnd, indicatorPos, progressPct, mergedMs, showStandalone, indicatorColor } = getRefWindow(refCount);
                 const pinSvg = <svg xmlns="http://www.w3.org/2000/svg" width="16" height="18" viewBox="0 0 21 24" fill="none"><path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" fill="white" /><path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" fill="white" /><path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>;
                 return (
                   <div style={{ position: "relative", marginTop: "60px", marginBottom: "40px" }}>
@@ -1377,12 +1408,12 @@ const Index = () => {
                     <div style={{ height: "6px", background: "#AAA", borderRadius: "3px", marginLeft: "9%" }}>
                       <div style={{ width: `${progressPct}%`, height: "6px", background: "#FEAB27", borderRadius: "3px" }} />
                     </div>
-                    {/* Standalone indicator — only when NOT merged with a milestone */}
+                    {/* Standalone indicator */}
                     {showStandalone && (
                       <div style={{ position: "absolute", left: `${indicatorPos}%`, top: "50%", transform: "translate(-50%, -50%)" }}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none"><circle cx="9.5" cy="9.5" r="9.5" fill={indicatorColor} /></svg>
                         <div style={{ position: "absolute", bottom: "100%", left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", marginBottom: "4px" }}>
-                          <div style={{ width: "70px", textAlign: "center", color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontStyle: "normal", fontWeight: 700, lineHeight: "normal", marginBottom: "6px" }}>You are here</div>
+                          <div style={{ width: "70px", textAlign: "center", color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, lineHeight: "normal", marginBottom: "6px", whiteSpace: "nowrap" }}>You are here</div>
                           {pinSvg}
                         </div>
                         <div style={{ position: "absolute", top: "100%", left: "50%", transform: "translateX(-50%)", marginTop: "6px", textAlign: "center", whiteSpace: "nowrap" }}>
@@ -1606,15 +1637,7 @@ const Index = () => {
               </div>
               {(() => {
                 const refCount = studentData?.total_referral_count ?? 0;
-                const milestones = [
-                  { count: 5, lines: ["+10 FREE", "Classes"] },
-                  { count: 10, lines: ["+20 FREE", "Classes"] },
-                  { count: 20, lines: ["Healthyday", "T-shirt"] },
-                  { count: 40, lines: ["Water", "Bottle"] },
-                  { count: 60, lines: ["Yoga Mat"] },
-                ];
-                const progressPct = Math.min(100, (refCount / 60) * 100);
-                const nextMilestoneCount = milestones.find(m => refCount < m.count)?.count ?? 60;
+                const { milestones, windowEnd, indicatorPos, progressPct, showStandalone } = getRefWindow(refCount);
                 return (
                   <>
                     {/* Progress track */}
@@ -1633,7 +1656,7 @@ const Index = () => {
                       </div>
                       {/* Milestone dots */}
                       {milestones.map((m) => {
-                        const pos = (m.count / 60) * 100;
+                        const pos = (m.count / windowEnd) * 100;
                         const reached = refCount >= m.count;
                         return (
                           <div key={m.count} style={{ position: "absolute", left: `${pos}%`, top: "50%", transform: "translate(-50%, -50%)" }}>
@@ -1658,19 +1681,21 @@ const Index = () => {
                         );
                       })}
                       {/* You are here */}
-                      <div style={{ position: "absolute", left: `${progressPct}%`, bottom: "48px", transform: `translateX(${progressPct < 8 ? "0%" : progressPct > 92 ? "-100%" : "-50%"})`, display: milestones.some(m => m.count === refCount) ? "none" : undefined }}>
-                        <div style={{ width: "70px", textAlign: "center" }}>
-                          <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, marginBottom: "8px" }}>You are here</div>
-                          <div style={{ display: "flex", justifyContent: "center" }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24" fill="none">
-                              <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" fill="white" />
-                              <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" fill="white" />
-                              <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                              <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
+                      {showStandalone && (
+                        <div style={{ position: "absolute", left: `${indicatorPos}%`, bottom: "48px", transform: `translateX(${indicatorPos < 8 ? "0%" : indicatorPos > 92 ? "-100%" : "-50%"})` }}>
+                          <div style={{ width: "70px", textAlign: "center" }}>
+                            <div style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, marginBottom: "8px" }}>You are here</div>
+                            <div style={{ display: "flex", justifyContent: "center" }}>
+                              <svg xmlns="http://www.w3.org/2000/svg" width="21" height="24" viewBox="0 0 21 24" fill="none">
+                                <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" fill="white" />
+                                <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" fill="white" />
+                                <path d="M6.9375 10.521C6.9375 11.4679 7.31283 12.3761 7.98093 13.0457C8.64903 13.7153 9.55516 14.0915 10.5 14.0915C11.4448 14.0915 12.351 13.7153 13.0191 13.0457C13.6872 12.3761 14.0625 11.4679 14.0625 10.521C14.0625 9.57403 13.6872 8.66585 13.0191 7.99625C12.351 7.32665 11.4448 6.95048 10.5 6.95048C9.55516 6.95048 8.64903 7.32665 7.98093 7.99625C7.31283 8.66585 6.9375 9.57403 6.9375 10.521Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                                <path d="M17.2177 17.2538L12.1791 22.3037C11.7338 22.7495 11.1301 23 10.5006 23C9.87112 23 9.26739 22.7495 8.82206 22.3037L3.78232 17.2538C2.45377 15.9222 1.54903 14.2256 1.18251 12.3787C0.815988 10.5317 1.00415 8.61734 1.7232 6.87757C2.44224 5.1378 3.65988 3.6508 5.22214 2.6046C6.78439 1.5584 8.6211 1 10.5 1C12.3789 1 14.2156 1.5584 15.7779 2.6046C17.3401 3.6508 18.5578 5.1378 19.2768 6.87757C19.9959 8.61734 20.184 10.5317 19.8175 12.3787C19.451 14.2256 18.5462 15.9222 17.2177 17.2538Z" stroke="#0A386F" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                              </svg>
+                            </div>
                           </div>
                         </div>
-                      </div>
+                      )}
                     </div>
                     {/* Info Cards */}
                     <div style={{ display: "flex", gap: "8px", marginBottom: "14px" }}>
@@ -1712,7 +1737,7 @@ const Index = () => {
                         <div style={{ color: "#AAA", fontFamily: "Outfit", fontSize: "10px", fontWeight: 700, lineHeight: "normal" }}>STATUS</div>
                         <div>
                           <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>{refCount}</span>
-                          <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>/{nextMilestoneCount}</span>
+                          <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "35px", fontWeight: 800, lineHeight: "normal" }}>/{milestones.find(m => refCount < m.count)?.count ?? 60}</span>
                         </div>
                       </div>
                     </div>
