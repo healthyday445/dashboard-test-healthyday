@@ -68,8 +68,12 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
       )}
 
       <div style={{ padding: "32px 27px 0", textAlign: "center" }}>
-        <p style={{ width: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 700, lineHeight: "normal", marginBottom: "2px" }}>Join our community for</p>
-        <h3 style={{ width: "221px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal" }}>DAILY YOGA SESSIONS</h3>
+        {!hideDaysLeft && (
+          <>
+            <p style={{ width: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 700, lineHeight: "normal", marginBottom: "2px" }}>Join our community for</p>
+            <h3 style={{ width: "221px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal" }}>DAILY YOGA SESSIONS</h3>
+          </>
+        )}
       </div>
 
       <div style={{ padding: "24px 27px 0" }}>

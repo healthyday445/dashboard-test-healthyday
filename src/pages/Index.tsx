@@ -1540,12 +1540,39 @@ const Index = () => {
           <img src={logo} alt="Healthyday" className="h-7" />
         </header>
 
+        {/* 14-Days Completed Banner */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "28px 20px 0", gap: "12px" }}>
+          {/* Red pill badge */}
+          <div style={{
+            width: "129px", height: "30px", borderRadius: "40px",
+            border: "0.25px solid #DA8D8D", background: "#FFEDED",
+            display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
+          }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ width: "11px", height: "11px", aspectRatio: "1/1" }}>
+              <path d="M6 4.16667H6.00611M5.38889 6H6V8.44444H6.61111M0.5 6C0.5 6.72227 0.642262 7.43747 0.918663 8.10476C1.19506 8.77205 1.60019 9.37836 2.11091 9.88909C2.62163 10.3998 3.22795 10.8049 3.89524 11.0813C4.56253 11.3577 5.27773 11.5 6 11.5C6.72227 11.5 7.43747 11.3577 8.10476 11.0813C8.77205 10.8049 9.37836 10.3998 9.88909 9.88909C10.3998 9.37836 10.8049 8.77205 11.0813 8.10476C11.3577 7.43747 11.5 6.72227 11.5 6C11.5 4.54131 10.9205 3.14236 9.88909 2.11091C8.85764 1.07946 7.45869 0.5 6 0.5C4.54131 0.5 3.14236 1.07946 2.11091 2.11091C1.07946 3.14236 0.5 4.54131 0.5 6Z" stroke="#B71C1C" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span style={{ color: "#B71C1C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 800, lineHeight: "22px", letterSpacing: "0.88px" }}>TRIAL ENDED</span>
+          </div>
+          {/* Title */}
+          <p style={{ width: "308px", color: "#000", textAlign: "center", fontFamily: "Outfit", fontSize: "25px", fontWeight: 800, lineHeight: "normal", margin: 0 }}>
+            Your <span style={{ color: "#D70000" }}>14-Days FREE</span> Classes are completed
+          </p>
+          {/* Subtitle */}
+          <p style={{ width: "293px", color: "#7C7B7B", textAlign: "center", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, lineHeight: "18px", margin: 0 }}>
+            Get a subscription now to continue your Yoga journey without interruption.
+          </p>
+        </div>
+
         <PricingAndComparisonSection
           selectedPlanIdx={selectedPlanIdx}
           setSelectedPlanIdx={setSelectedPlanIdx}
           daysLeft={0}
           hideDaysLeft={true}
         />
+        {/* Want More FREE Classes heading */}
+        <div style={{ padding: "32px 27px 0", textAlign: "center" }}>
+          <p style={{ width: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
+        </div>
         {/* Refer & Earn */}
         {<div style={{ padding: "32px 27px 32px", display: "flex", justifyContent: "center" }}>
           <div
