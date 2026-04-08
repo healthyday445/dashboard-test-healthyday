@@ -812,7 +812,22 @@ const Index = () => {
               ];
               // Find the first unclaimed milestone index
               const nextIdx = milestones.findIndex(m => refCount < m.refs);
-              const lineH = milestones.length * 52;
+              // Build rows: insert "You are here" before first unclaimed milestone
+              type MRow2 = { type: "milestone"; m: typeof milestones[0]; claimed: boolean; isNext: boolean };
+              type HRow2 = { type: "here" };
+              type Row2 = MRow2 | HRow2;
+              const rows2: Row2[] = [];
+              let hereInserted2 = false;
+              milestones.forEach((m, idx) => {
+                const claimed = refCount >= m.refs;
+                const isNext = idx === nextIdx;
+                if (idx === nextIdx && !hereInserted2 && refCount > 0) {
+                  rows2.push({ type: "here" });
+                  hereInserted2 = true;
+                }
+                rows2.push({ type: "milestone", m, claimed, isNext });
+              });
+              if (!hereInserted2 && refCount > 0) rows2.push({ type: "here" }); // all claimed
               return (
                 <div style={{ padding: "28px 20px 0" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
@@ -831,31 +846,27 @@ const Index = () => {
                   </div>
                   <div style={{ width: "360px", borderRadius: "16px", background: "#FFF", boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)", padding: "20px 16px", boxSizing: "border-box" }}>
                     <div style={{ position: "relative" }}>
-                      {/* Vertical line */}
+                      {/* Vertical connecting line */}
                       <div style={{ position: "absolute", left: "15px", top: "16px", bottom: "16px", width: "3px", background: "#DDDEDE", borderRadius: "2px", zIndex: 0 }} />
-                      {/* "You are here" row at the very top */}
-                      {(() => {
-                        const indicatorColor = refCount === 0 ? "#FF0000" : "#FEAB27";
-                        return (
-                          <div style={{ display: "flex", alignItems: "center", gap: "7px", marginBottom: "14px", position: "relative", zIndex: 1 }}>
-                            <div style={{ marginLeft: "-2.5px", flexShrink: 0, width: "38px", height: "38px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none" style={{ aspectRatio: "1/1" }}>
-                                <circle cx="11" cy="11" r="11" fill={indicatorColor} />
-                              </svg>
+                      {/* Dynamic rows: "You are here" inserted before first unclaimed milestone */}
+                      {rows2.map((row, ri) => {
+                        if (row.type === "here") {
+                          return (
+                            <div key="here" style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "14px", position: "relative", zIndex: 1 }}>
+                              <div style={{ flexShrink: 0, width: "33px", height: "24px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                                <div style={{ width: "12px", height: "12px", borderRadius: "50%", background: "#FEAB27", boxShadow: "0 0 0 4px rgba(254,171,39,0.25)" }} />
+                              </div>
+                              <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600 }}>{refCount} Referrals</span>
+                              <div style={{ height: "21px", borderRadius: "20px", border: "1px solid #FEAB27", background: "rgba(254,171,39,0.20)", display: "flex", alignItems: "center", padding: "0 10px" }}>
+                                <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "12px", fontWeight: 600 }}>You are here</span>
+                              </div>
                             </div>
-                            <span style={{ color: indicatorColor, fontFamily: "Outfit", fontSize: "16px", fontWeight: 600 }}>{refCount} Referrals</span>
-                            <div style={{ width: "106px", height: "28px", borderRadius: "20px", border: `1px solid ${indicatorColor}`, background: "rgba(254,171,39,0.20)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                              <span style={{ color: indicatorColor, fontFamily: "Outfit", fontSize: "14px", fontWeight: 600 }}>You are here</span>
-                            </div>
-                          </div>
-                        );
-                      })()}
-                      {/* Milestone rows */}
-                      {milestones.map((m, idx) => {
-                        const claimed = refCount >= m.refs;
-                        const isNext = idx === nextIdx;
+                          );
+                        }
+                        const { m, claimed, isNext } = row as MRow2;
+                        const isLastRow = ri === rows2.length - 1;
                         return (
-                          <div key={idx} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: idx < milestones.length - 1 ? "14px" : "0", position: "relative", zIndex: 1 }}>
+                          <div key={m.refs} style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: isLastRow ? 0 : "14px", position: "relative", zIndex: 1 }}>
                             <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
                               {claimed ? (
                                 <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none" style={{ flexShrink: 0 }}>
@@ -878,7 +889,7 @@ const Index = () => {
                                 </div>
                               )}
                               <div>
-                                <div style={{ fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "normal", color: claimed ? "#202020" : isNext ? "#FEAB27" : "#9A9797" }}>
+                                <div style={{ fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "normal", color: claimed ? "#377456" : isNext ? "#FEAB27" : "#9A9797" }}>
                                   {claimed && m.reward ? <><span style={{ color: "#377456" }}>{m.reward}</span> Free Classes</> : m.label}
                                 </div>
                                 <div style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500 }}>{m.refs} Referrals</div>
@@ -888,7 +899,7 @@ const Index = () => {
                               <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>CLAIMED 🎁</span>
                             )}
                             {isNext && (
-                              <span style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>IN PROGRESS</span>
+                              <span style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>NEXT GOAL</span>
                             )}
                           </div>
                         );
