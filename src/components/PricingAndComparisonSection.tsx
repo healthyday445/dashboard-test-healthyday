@@ -102,8 +102,8 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
           <div style={{ display: "flex", alignItems: "center", paddingBottom: "10px", position: "relative", zIndex: 1 }}>
             <div style={{ flex: 1, color: "#919191", fontFamily: "Outfit", fontSize: "10px", fontWeight: 700, lineHeight: "normal" }}>Features</div>
             <div style={{ width: "22%", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>1 Year</div>
-            <div style={{ width: "22%", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>6 Mon</div>
-            <div style={{ width: "22%", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>3 Mon</div>
+            <div style={{ width: "22%", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>6 Months</div>
+            <div style={{ width: "22%", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>3 Months</div>
           </div>
           {features.map((feature, idx) => (
             <div key={idx} style={{ display: "flex", alignItems: "center", padding: "10px 0", borderTop: "none", position: "relative", zIndex: 1 }}>
