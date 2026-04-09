@@ -36,7 +36,7 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
       {completedDayStatus && (
         <div style={{ padding: "28px 20px 0" }}>
           <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, marginBottom: "12px" }}>Your 14 Days Attendance</h3>
-          <div style={{ width: "372px", borderRadius: "15px", border: "1px solid #FFC76F", padding: "16px 12px", background: "#FFE5BA" }}>
+          <div style={{ width: "100%", borderRadius: "15px", border: "1px solid #FFC76F", padding: "16px 12px", background: "#FFE5BA", boxSizing: "border-box" }}>
             {completedDateRangeLabel && <p style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700, marginBottom: "14px" }}>{completedDateRangeLabel}</p>}
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "14px" }}>
               {completedDayStatus.slice(0, 7).map((status: any, i: number) => <CompletedDayBox key={i} status={status} dayLabel={`Day ${i + 1}`} />)}
@@ -51,7 +51,7 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
       {!hideDaysLeft && (
       <div style={{ padding: completedDayStatus ? "28px 20px 0" : "24px 20px 0", textAlign: "center" }}>
         {completedDayStatus ? (
-          <div style={{ width: "372px", borderRadius: "16px", background: "linear-gradient(180deg, #0D468B 0%, #072D5A 100%)", padding: "28px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
+          <div style={{ width: "100%", borderRadius: "16px", background: "linear-gradient(180deg, #0D468B 0%, #072D5A 100%)", padding: "28px 20px", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px", boxSizing: "border-box" }}>
             <div style={{ display: "flex", alignItems: "baseline", gap: "6px" }}><span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "48px", fontWeight: 800, lineHeight: "1" }}>{daysLeft}</span><span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700 }}>Days Left in your</span></div>
             <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "20px", fontWeight: 800, lineHeight: "normal" }}>FREE Yoga</span>
             <span style={{ color: "#FFFFFFAA", fontFamily: "Outfit", fontSize: "14px", fontWeight: 500, marginTop: "2px" }}>JOIN DAILY CLASSES</span>
@@ -74,7 +74,7 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
         {plans.map((plan, idx) => {
           const isSelected = selectedPlanIdx === idx;
           return (
-            <div key={idx} onClick={() => setSelectedPlanIdx(idx)} style={{ width: plan.bestValue ? "360px" : "358px", minHeight: plan.bestValue ? "198px" : "160px", borderRadius: "16px", background: plan.bestValue ? "#0D468B" : "#FFF", border: !plan.bestValue && isSelected ? "2.5px solid #0D468B" : "none", boxShadow: plan.bestValue ? "none" : "0 4px 10px 2px rgba(0, 0, 0, 0.25)", padding: plan.bestValue ? "0 2px 2px 2px" : "0", marginBottom: "16px", position: "relative", overflow: "hidden", cursor: "pointer" }}>
+            <div key={idx} onClick={() => setSelectedPlanIdx(idx)} style={{ width: "100%", minHeight: plan.bestValue ? "198px" : "160px", borderRadius: "16px", background: plan.bestValue ? "#0D468B" : "#FFF", border: !plan.bestValue && isSelected ? "2.5px solid #0D468B" : "none", boxShadow: plan.bestValue ? "none" : "0 4px 10px 2px rgba(0, 0, 0, 0.25)", padding: plan.bestValue ? "0 2px 2px 2px" : "0", marginBottom: "16px", position: "relative", overflow: "hidden", cursor: "pointer", boxSizing: "border-box" }}>
               {plan.bestValue && (
                 <div style={{ padding: "10px 16px", display: "flex", alignItems: "center", gap: "6px" }}>
                   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M17.5 9.16917H17.3534L15.8342 4.725L2.79504 9.16917L2.50004 9.16667M2.08337 9.17H2.50004L11.7884 1.75L14.1359 5.04167" stroke="#FEAB27" strokeWidth="2" strokeLinecap="square" /><path d="M12.0834 13.3333C12.0834 13.8859 11.8639 14.4158 11.4732 14.8065C11.0825 15.1972 10.5526 15.4167 10.0001 15.4167C9.44755 15.4167 8.91764 15.1972 8.52694 14.8065C8.13624 14.4158 7.91675 13.8859 7.91675 13.3333C7.91675 12.7808 8.13624 12.2509 8.52694 11.8602C8.91764 11.4695 9.44755 11.25 10.0001 11.25C10.5526 11.25 11.0825 11.4695 11.4732 11.8602C11.8639 12.2509 12.0834 12.7808 12.0834 13.3333Z" stroke="#FEAB27" strokeWidth="2" strokeLinecap="square" /><path d="M17.9167 9.16699V17.5003H2.08337V9.16699H17.9167Z" stroke="#FEAB27" strokeWidth="2" strokeLinecap="square" /><path d="M2.08337 9.16699H3.75004C3.75004 9.60902 3.57445 10.0329 3.26189 10.3455C2.94932 10.6581 2.5254 10.8337 2.08337 10.8337V9.16699ZM17.9167 9.16699H16.25C16.25 9.60902 16.4256 10.0329 16.7382 10.3455C17.0508 10.6581 17.4747 10.8337 17.9167 10.8337V9.16699ZM2.08337 17.5003H3.75171C3.75193 17.2812 3.70892 17.0641 3.62516 16.8616C3.5414 16.6591 3.41852 16.4751 3.26355 16.3201C3.10859 16.1652 2.92459 16.0423 2.72208 15.9585C2.51957 15.8748 2.30252 15.8318 2.08337 15.832V17.5003ZM17.9167 17.5003H16.25C16.25 17.0583 16.4256 16.6344 16.7382 16.3218C17.0508 16.0093 17.4747 15.8337 17.9167 15.8337V17.5003Z" stroke="#FEAB27" strokeWidth="2" strokeLinecap="square" /></svg>
@@ -85,7 +85,7 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
                 <h4 style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal", marginBottom: "8px" }}>{plan.name}</h4>
                 <div className="flex items-center gap-3" style={{ marginBottom: "8px" }}><span style={{ color: "#809AB9", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, lineHeight: "normal", textDecoration: "line-through" }}>₹{plan.originalPrice}/-</span><span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "30px", fontWeight: 700, lineHeight: "normal" }}>₹{plan.price}/-</span></div>
                 <div style={{ display: "inline-flex", height: "18.167px", padding: "2px 10px", justifyContent: "center", alignItems: "center", gap: "10px", borderRadius: "10.093px", background: "#F00", marginBottom: "16px" }}><span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10.496px", fontWeight: 700, lineHeight: "normal", textTransform: "uppercase" }}>{plan.discount}% OFF</span></div>
-                <button onClick={() => window.open(plan.url, "_blank")} style={{ width: "314px", height: "32.3px", borderRadius: "30px", background: "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto" }}>
+                <button onClick={() => window.open(plan.url, "_blank")} style={{ width: "100%", maxWidth: "314px", height: "32.3px", borderRadius: "30px", background: "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto" }}>
                   <span style={{ width: "249.333px", height: "17.1px", color: "#202020", textAlign: "center", fontFamily: "Outfit", fontSize: "14px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal", textTransform: "uppercase", display: "flex", alignItems: "center", justifyContent: "center" }}>Join {plan.bestValue ? "1 YEAR" : plan.name.toUpperCase().replace(" PLAN", "")} PLAN</span>
                 </button>
               </div>
@@ -96,7 +96,7 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
 
       <div style={{ padding: "16px 27px 0" }}>
         <h3 style={{ width: "343px", color: "#0D468B", fontSize: "24px", fontWeight: 600, fontFamily: "Outfit", textAlign: "center", marginBottom: "20px", margin: "0 auto 20px" }}>Compare and choose your plan!</h3>
-        <div style={{ position: "relative", width: "358px" }}>
+        <div style={{ position: "relative", width: "100%" }}>
           <div style={{ position: "absolute", top: 0, left: selectedPlanIdx === 0 ? "calc(100% - 207px)" : selectedPlanIdx === 1 ? "calc(100% - 138px)" : "calc(100% - 69px)", width: "69px", height: "284px", borderRadius: "5px", border: "1px solid #0D468B", background: "#FFF5E5", zIndex: 0 }} />
           <div style={{ display: "flex", alignItems: "center", paddingBottom: "10px", position: "relative", zIndex: 1 }}>
             <div style={{ flex: 1, color: "#919191", fontFamily: "Outfit", fontSize: "10px", fontWeight: 700, lineHeight: "normal" }}>Features</div>

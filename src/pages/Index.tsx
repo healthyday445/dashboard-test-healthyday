@@ -141,24 +141,25 @@ const VideoCard = ({ video }: { video: (typeof teluguVideos)[0] }) => {
   const [playing, setPlaying] = useState(false);
 
   return (
-    <div className="block">
-      <div className="relative overflow-hidden" style={{ width: "342px", height: "188px", borderRadius: "12px" }}>
+    <div className="block" style={{ width: "100%" }}>
+      <div className="relative overflow-hidden" style={{ width: "100%", aspectRatio: "342/188", borderRadius: "12px" }}>
         {playing ? (
           <iframe
-            width="342"
-            height="188"
+            width="100%"
+            height="100%"
             src={`https://www.youtube.com/embed/${video.id}?autoplay=1`}
             title={video.title}
             allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
             allowFullScreen
             className="w-full h-full border-0"
+            style={{ position: "absolute", top: 0, left: 0, width: "100%", height: "100%" }}
           />
         ) : (
           <div className="cursor-pointer relative w-full h-full" onClick={() => setPlaying(true)}>
             <img
               src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
               alt={video.title}
-              style={{ width: "342px", height: "188px", objectFit: "cover", display: "block" }}
+              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
             />
             {/* Dark overlay */}
             <div
@@ -166,8 +167,8 @@ const VideoCard = ({ video }: { video: (typeof teluguVideos)[0] }) => {
                 position: "absolute",
                 top: 0,
                 left: 0,
-                width: "342px",
-                height: "188px",
+                right: 0,
+                bottom: 0,
                 borderRadius: "12px",
                 background: "rgba(0, 0, 0, 0.32)",
               }}
@@ -368,7 +369,7 @@ const Index = () => {
   if (loading) {
     return (
       <div
-        className="mx-auto w-[412px] min-h-screen bg-background flex flex-col items-center justify-center"
+        className="hd-page bg-background flex flex-col items-center justify-center"
         style={{ fontFamily: "Outfit, sans-serif" }}
       >
         <img src={logo} alt="Healthyday" className="h-10 mb-8" />
@@ -394,7 +395,7 @@ const Index = () => {
   if (error) {
     return (
       <div
-        className="mx-auto w-[412px] min-h-screen bg-background flex flex-col items-center justify-center"
+        className="hd-page bg-background flex flex-col items-center justify-center"
         style={{ fontFamily: "Outfit, sans-serif" }}
       >
         <img src={logo} alt="Healthyday" className="h-10 mb-8" />
@@ -421,7 +422,7 @@ const Index = () => {
   if (showComingSoon) {
     return (
       <div
-        className="mx-auto w-[412px] min-h-screen bg-background flex items-center justify-center"
+        className="hd-page bg-background flex items-center justify-center"
         style={{ fontFamily: "Outfit, sans-serif" }}
       >
         <div
@@ -652,10 +653,9 @@ const Index = () => {
         const nextSlots = isAMSession ? ["4:30 PM", "5:30 PM", "6:30 PM"] : ["5:30 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
         const nextWhen = isAMSession ? "at 4:30 PM" : "tomorrow at 5:30 AM";
         return (
-          <div className="mx-auto w-[412px] min-h-screen bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
+          <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
             {/* Header */}
-            <header className="flex w-[412px] h-[68px] items-center bg-white"
-              style={{ padding: "20px", boxShadow: "0 4px 30px 0 rgba(0,0,0,0.10)" }}>
+            <header className="hd-header bg-white">
               <img src={logo} alt="Healthyday" className="h-7" />
             </header>
 
@@ -675,11 +675,11 @@ const Index = () => {
 
               {isLive ? (
                 <>
-                  <a href={`https://youtu.be/${bonusSession.videoId}`} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "372px", borderRadius: "12px", overflow: "hidden", background: "#000", position: "relative", marginBottom: "12px" }}>
+                  <a href={`https://youtu.be/${bonusSession.videoId}`} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px", overflow: "hidden", background: "#000", position: "relative", marginBottom: "12px" }}>
                     <img
                       src={bonusSession.thumbnail}
                       alt={bonusSession.name}
-                      style={{ width: "372px", height: "204px", objectFit: "cover", opacity: 0.85, display: "block" }}
+                      style={{ width: "100%", height: "auto", aspectRatio: "372/204", objectFit: "cover", opacity: 0.85, display: "block" }}
                     />
                     <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <PlayButton />
@@ -709,18 +709,18 @@ const Index = () => {
                 </>
               ) : (
                 <div style={{ marginBottom: "16px" }}>
-                  <a href={bonusSession.sessionLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "360px", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
+                  <a href={bonusSession.sessionLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
                     <img
                       src={bonusSession.thumbnail}
                       alt={bonusSession.name}
-                      style={{ width: "360px", height: "197px", objectFit: "cover", opacity: 0.85, display: "block" }}
+                      style={{ width: "100%", height: "auto", aspectRatio: "360/197", objectFit: "cover", opacity: 0.85, display: "block" }}
                     />
                     <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <PlayButton />
                     </div>
                   </a>
                   <div style={{
-                    width: "360px", height: "58px",
+                    width: "100%", height: "58px",
                     borderRadius: "0 0 12px 12px",
                     border: "1.5px solid #E9E9E9", background: "#FFF",
                     boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
@@ -735,7 +735,7 @@ const Index = () => {
 
               {/* Next regular session card */}
               <div style={{
-                width: "358px", height: "206px", borderRadius: "12px",
+                width: "100%", height: "auto", borderRadius: "12px",
                 border: "1.5px solid #D2D2D2", background: "#FFF",
                 boxShadow: "-1px -1px 4px 0 rgba(0,0,0,0.10), 1px 1px 4px 0 rgba(0,0,0,0.10)",
                 padding: "16px", display: "flex", flexDirection: "column", justifyContent: "space-between", boxSizing: "border-box",
@@ -781,7 +781,7 @@ const Index = () => {
               <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, marginBottom: "12px" }}>
                 Your 14 Days Attendance
               </h3>
-              <div style={{ width: "372px", borderRadius: "15px", border: "1px solid #FFC76F", padding: "16px 12px", background: "#FFE5BA" }}>
+              <div style={{ width: "100%", borderRadius: "15px", border: "1px solid #FFC76F", padding: "16px 12px", background: "#FFE5BA", boxSizing: "border-box" }}>
                 <p style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700, marginBottom: "14px" }}>
                   {dateRangeLabel}
                 </p>
@@ -844,7 +844,7 @@ const Index = () => {
                       View More
                     </span>
                   </div>
-                  <div style={{ width: "360px", borderRadius: "16px", background: "#FFF", boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)", padding: "20px 16px", boxSizing: "border-box" }}>
+                  <div style={{ width: "100%", borderRadius: "16px", background: "#FFF", boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)", padding: "20px 16px", boxSizing: "border-box" }}>
                     <div style={{ position: "relative" }}>
                       {/* Vertical connecting line */}
                       <div style={{ position: "absolute", left: "15px", top: "16px", bottom: "16px", width: "3px", background: "#DDDEDE", borderRadius: "2px", zIndex: 0 }} />
@@ -934,11 +934,11 @@ const Index = () => {
             {week === 2 && (
               <>
                 <div style={{ padding: "32px 27px 0", textAlign: "center" }}>
-                  <div style={{ width: "358px", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
+                  <div style={{ width: "100%", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
                   <p style={{ width: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
                 </div>
                 <div style={{ padding: "32px 27px 32px", display: "flex", justifyContent: "center" }}>
-                  <div style={{ width: "358px", borderRadius: "16px", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)", padding: "20px", display: "flex", flexDirection: "column", gap: "12px" }}>
+                  <div style={{ width: "100%", borderRadius: "16px", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)", padding: "20px", display: "flex", flexDirection: "column", gap: "12px" }}>
                     <div>
                       <h3 style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "21px", fontWeight: 700, lineHeight: "normal", margin: "0 0 4px" }}>Refer &amp; Earn</h3>
                       <p style={{ color: "#FFFCFC", fontFamily: "Outfit", fontSize: "14px", fontWeight: 400, lineHeight: "normal", margin: 0 }}>Invite your friends &amp; family and get exciting gifts!</p>
@@ -974,11 +974,12 @@ const Index = () => {
             {week === 1 && showReferral && (
               <div
                 onClick={() => setShowReferral(false)}
-                style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.5)", zIndex: 1000, display: "flex", alignItems: "flex-start", justifyContent: "center" }}
+                className="hd-popup-overlay"
               >
                 <div
                   onClick={(e) => e.stopPropagation()}
-                  style={{ width: "412px", maxWidth: "95vw", height: "200px", marginTop: "650px", borderRadius: "12px 12px 0 0", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", display: "flex", flexDirection: "column", justifyContent: "space-between", boxSizing: "border-box" }}
+                  className="hd-popup-content"
+                  style={{ height: "200px" }}
                 >
                   {/* Header */}
                   <div className="flex items-center justify-between">
@@ -1066,10 +1067,9 @@ const Index = () => {
     } // end if (BONUS_DAYS)
 
     return (
-      <div className="mx-auto w-[412px] min-h-screen bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
+      <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
         {/* Header */}
-        <header className="flex w-[412px] h-[68px] items-center bg-white"
-          style={{ padding: "20px", boxShadow: "0 4px 30px 0 rgba(0,0,0,0.10)" }}>
+        <header className="hd-header bg-white">
           <img src={logo} alt="Healthyday" className="h-7" />
         </header>
 
@@ -1132,12 +1132,12 @@ const Index = () => {
 
               {/* Session Card — hidden after bonus is done */}
               {!(isBonusDay && bonusSessionData && totalMin >= bonusSessionData.startMin + 45) && (
-                <div style={{ width: "357px" }}>
+                <div style={{ width: "100%" }}>
                   {/* Thumbnail */}
                   <a href={showBonus && bonusSessionData ? bonusSessionData.sessionLink : sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{ display: "block", textDecoration: "none" }}>
                     <div style={{
-                      width: "357.03px",
-                      height: "186.534px",
+                      width: "100%",
+                      height: "auto",
                       aspectRatio: "178/93",
                       borderRadius: "12px 12px 0 0",
                       background: (() => {
@@ -1161,7 +1161,7 @@ const Index = () => {
 
                   {/* Bottom bar */}
                   <div style={{
-                    width: "357px",
+                    width: "100%",
                     height: "67px",
                     borderRadius: "0 0 12px 12px",
                     border: "1.5px solid #E9E9E9",
@@ -1244,7 +1244,7 @@ const Index = () => {
                 const nextRegWhen = isAMBonus ? "at 4:30 PM" : "tomorrow at 5:30 AM";
                 return (
                   <div style={{
-                    width: "358px", borderRadius: "12px", marginTop: "16px",
+                    width: "100%", borderRadius: "12px", marginTop: "16px",
                     border: "1.5px solid #D2D2D2", background: "#FFF",
                     boxShadow: "-1px -1px 4px 0 rgba(0,0,0,0.10), 1px 1px 4px 0 rgba(0,0,0,0.10)",
                     padding: "16px", boxSizing: "border-box", display: "flex", flexDirection: "column", gap: "12px",
@@ -1295,8 +1295,8 @@ const Index = () => {
             Your 14 Days Attendance
           </h3>
           <div style={{
-            width: "372px", borderRadius: "15px",
-            border: "1px solid #FFC76F", padding: "16px 12px", background: "#FFE5BA",
+            width: "100%", borderRadius: "15px",
+            border: "1px solid #FFC76F", padding: "16px 12px", background: "#FFE5BA", boxSizing: "border-box",
           }}>
             <p style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700, marginBottom: "14px" }}>
               {dateRangeLabel}
@@ -1352,7 +1352,7 @@ const Index = () => {
                       View More
                     </span>
                   </div>
-                  <div style={{ width: "360px", borderRadius: "16px", background: "#FFF", boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)", padding: "20px 16px", boxSizing: "border-box" }}>
+                  <div style={{ width: "100%", borderRadius: "16px", background: "#FFF", boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)", padding: "20px 16px", boxSizing: "border-box" }}>
                     <div style={{ position: "relative" }}>
                       <div style={{ position: "absolute", left: "15px", top: "16px", bottom: "16px", width: "3px", background: "#DDDEDE", borderRadius: "2px", zIndex: 0 }} />
                       {(() => {
@@ -1441,14 +1441,14 @@ const Index = () => {
           <>
             {/* Want More FREE Classes heading */}
             <div style={{ padding: "32px 27px 0", textAlign: "center" }}>
-              <div style={{ width: "358px", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
+              <div style={{ width: "100%", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
               <p style={{ width: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
             </div>
             {/* Refer & Earn */}
             <div style={{ padding: "32px 27px 32px", display: "flex", justifyContent: "center" }}>
               <div
                 style={{
-                  width: "358px",
+                  width: "100%",
                   borderRadius: "16px",
                   background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
                   boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
@@ -1524,11 +1524,12 @@ const Index = () => {
         {showReferral && (
           <div
             onClick={() => setShowReferral(false)}
-            style={{ position: "fixed", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.5)", zIndex: 1000, display: "flex", alignItems: "flex-start", justifyContent: "center" }}
+            className="hd-popup-overlay"
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              style={{ width: "412px", maxWidth: "95vw", height: "200px", marginTop: "650px", borderRadius: "12px 12px 0 0", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)", padding: "16px", position: "relative", fontFamily: "Outfit, sans-serif", display: "flex", flexDirection: "column", justifyContent: "space-between", boxSizing: "border-box" }}
+              className="hd-popup-content"
+              style={{ height: "200px" }}
             >
               {/* Header */}
               <div className="flex items-center justify-between">
@@ -1666,14 +1667,10 @@ const Index = () => {
     })();
 
     return (
-      <div className="mx-auto w-[412px] min-h-screen bg-background" style={{ fontFamily: 'Outfit, sans-serif' }}>
+      <div className="hd-page bg-background" style={{ fontFamily: 'Outfit, sans-serif' }}>
         {/* Header */}
         <header
-          className="flex w-[412px] h-[68px] items-center bg-background"
-          style={{
-            padding: '20px 247px 20px 20px',
-            boxShadow: '0 4px 30px 0 rgba(0, 0, 0, 0.10)',
-          }}
+          className="hd-header bg-background"
         >
           <img src={logo} alt="Healthyday" className="h-7" />
         </header>
@@ -1709,14 +1706,14 @@ const Index = () => {
         />
         {/* Want More FREE Classes heading */}
         <div style={{ padding: "32px 27px 0", textAlign: "center" }}>
-          <div style={{ width: "358px", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
+          <div style={{ width: "100%", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
           <p style={{ width: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
         </div>
         {/* Refer & Earn */}
         {<div style={{ padding: "32px 27px 32px", display: "flex", justifyContent: "center" }}>
           <div
             style={{
-              width: "358px",
+              width: "100%",
               borderRadius: "16px",
               background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
               boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
@@ -1801,13 +1798,9 @@ const Index = () => {
     : "https://www.youtube.com/@healthydayyoga";
 
   return (
-    <div className="mx-auto w-[412px] min-h-[1740px] bg-background" style={{ fontFamily: "Outfit, sans-serif" }}>
+    <div className="hd-page bg-background" style={{ fontFamily: "Outfit, sans-serif" }}>
       <header
-        className="flex w-[411px] h-[68px] items-center bg-background"
-        style={{
-          padding: "20px 247px 20px 20px",
-          boxShadow: "0 4px 30px 0 rgba(0, 0, 0, 0.10)",
-        }}
+        className="hd-header bg-background"
       >
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
@@ -1815,7 +1808,7 @@ const Index = () => {
       {/* Onboarding Card */}
       <div className="flex flex-col items-center mt-6 gap-3">
         {/* Title */}
-        <h2 style={{ width: "370px", textAlign: "center", fontFamily: "Outfit", fontSize: "20px", fontStyle: "normal", fontWeight: 700, lineHeight: "normal", margin: 0 }}>
+        <h2 style={{ width: "100%", maxWidth: "370px", textAlign: "center", fontFamily: "Outfit", fontSize: "20px", fontStyle: "normal", fontWeight: 700, lineHeight: "normal", margin: 0 }}>
           {(() => {
             const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
             const getSuffix = (day: number) => [1, 21, 31].includes(day) ? "st" : [2, 22].includes(day) ? "nd" : [3, 23].includes(day) ? "rd" : "th";
@@ -1844,7 +1837,7 @@ const Index = () => {
         </h2>
 
         {/* Morning Session Card */}
-        <div style={{ width: "342px", height: "93px", borderRadius: "10px", border: "0.5px solid #FFCD7E", background: "#FFFDF5", boxShadow: "-1px -1px 4px 0 rgba(205,205,205,0.10), 1px 1px 4px 0 rgba(205,205,205,0.10)", display: "flex", alignItems: "center", padding: "0 12px", gap: "12px" }}>
+        <div style={{ width: "100%", maxWidth: "342px", height: "93px", borderRadius: "10px", border: "0.5px solid #FFCD7E", background: "#FFFDF5", boxShadow: "-1px -1px 4px 0 rgba(205,205,205,0.10), 1px 1px 4px 0 rgba(205,205,205,0.10)", display: "flex", alignItems: "center", padding: "0 12px", gap: "12px", boxSizing: "border-box" }}>
           {/* Sun icon box */}
           <div style={{ width: "54px", height: "53px", borderRadius: "5px", border: "0.5px solid #FFCD7E", background: "#FFF", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
             <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35" fill="none">
@@ -1863,7 +1856,7 @@ const Index = () => {
         </div>
 
         {/* Evening Session Card */}
-        <div style={{ width: "342px", height: "93px", borderRadius: "10px", border: "0.5px solid #56A2FF", background: "#F6F8FF", boxShadow: "-1px -1px 4px 0 rgba(205,205,205,0.10), 1px 1px 4px 0 rgba(205,205,205,0.10)", display: "flex", alignItems: "center", padding: "0 12px", gap: "12px" }}>
+        <div style={{ width: "100%", maxWidth: "342px", height: "93px", borderRadius: "10px", border: "0.5px solid #56A2FF", background: "#F6F8FF", boxShadow: "-1px -1px 4px 0 rgba(205,205,205,0.10), 1px 1px 4px 0 rgba(205,205,205,0.10)", display: "flex", alignItems: "center", padding: "0 12px", gap: "12px", boxSizing: "border-box" }}>
           {/* Moon icon box — full SVG with border built in */}
           <svg xmlns="http://www.w3.org/2000/svg" width="54" height="53" viewBox="0 0 54 53" fill="none" style={{ flexShrink: 0 }}>
             <rect x="0.25" y="0.25" width="53.5" height="52.5" rx="4.75" fill="white" stroke="#56A2FF" strokeWidth="0.5" />
@@ -1879,7 +1872,7 @@ const Index = () => {
         </div>
 
         {/* Info note */}
-        <div style={{ width: "342px", display: "flex", alignItems: "flex-start", gap: "6px" }}>
+        <div style={{ width: "100%", maxWidth: "342px", display: "flex", alignItems: "flex-start", gap: "6px" }}>
           <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
             <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
             <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
@@ -1948,36 +1941,13 @@ const Index = () => {
       {showReferral && (
         <div
           onClick={() => setShowReferral(false)}
-          style={{
-            position: "fixed",
-            top: 0,
-            left: 0,
-            right: 0,
-            bottom: 0,
-            background: "rgba(0, 0, 0, 0.5)",
-            zIndex: 1000,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
+          className="hd-popup-overlay"
+          style={{ alignItems: "center" }}
         >
           <div
             onClick={(e) => e.stopPropagation()}
-            style={{
-              width: "412px",
-              maxWidth: "95vw",
-              height: "336px",
-              borderRadius: "12px 12px 0 0",
-              background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
-              boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)",
-              padding: "16px",
-              position: "relative",
-              fontFamily: "Outfit, sans-serif",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              boxSizing: "border-box",
-            }}
+            className="hd-popup-content"
+            style={{ height: "336px" }}
           >
             {/* Header */}
             <div className="flex items-center justify-between">
