@@ -31,17 +31,13 @@ const Referral = () => {
 
   return (
     <div
-      className="mx-auto w-[412px] min-h-screen"
+      className="hd-page"
       style={{ fontFamily: "Outfit, sans-serif", background: "#FFF" }}
     >
       {/* Header */}
       <header
-        className="flex w-[412px] h-[68px] items-center"
-        style={{
-          padding: "20px",
-          background: "#FFF",
-          boxShadow: "0 4px 30px 0 rgba(0,0,0,0.10)",
-        }}
+        className="hd-header"
+        style={{ background: "#FFF" }}
       >
         <button
           onClick={() => navigate(-1)}
@@ -65,7 +61,7 @@ const Referral = () => {
         {/* Blue Share Card */}
         <div
           style={{
-            width: "360px",
+            width: "100%",
             borderRadius: "16px",
             background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
             boxShadow: "0 0 10px rgba(0,0,0,0.25)",
@@ -393,7 +389,8 @@ const Referral = () => {
               fontWeight: 500,
               lineHeight: "normal",
               textAlign: "center",
-              width: "286px",
+              width: "100%",
+              maxWidth: "286px",
             }}
           >
             Every active referral earn gifts and rewards for you

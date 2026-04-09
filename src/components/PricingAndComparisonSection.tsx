@@ -58,19 +58,19 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
           </div>
         ) : (
           <>
-            <p style={{ width: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontStyle: "normal", fontWeight: 700, lineHeight: "normal" }}>
+            <p style={{ width: "100%", maxWidth: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontStyle: "normal", fontWeight: 700, lineHeight: "normal" }}>
               {daysLeft} Days Left in your FREE Yoga
             </p>
-            <h3 style={{ width: "221px", margin: "4px auto 0", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "20px", fontStyle: "normal", fontWeight: 700, lineHeight: "normal" }}>JOIN DAILY CLASSES</h3>
+            <h3 style={{ width: "100%", maxWidth: "221px", margin: "4px auto 0", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "20px", fontStyle: "normal", fontWeight: 700, lineHeight: "normal" }}>JOIN DAILY CLASSES</h3>
           </>
         )}
       </div>
       )}
 
-      <div style={{ padding: "32px 27px 0", textAlign: "center" }}>
+      <div style={{ padding: "32px 20px 0", textAlign: "center" }}>
       </div>
 
-      <div style={{ padding: "24px 27px 0" }}>
+      <div style={{ padding: "24px 20px 0" }}>
         {plans.map((plan, idx) => {
           const isSelected = selectedPlanIdx === idx;
           return (
@@ -86,7 +86,7 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
                 <div className="flex items-center gap-3" style={{ marginBottom: "8px" }}><span style={{ color: "#809AB9", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, lineHeight: "normal", textDecoration: "line-through" }}>₹{plan.originalPrice}/-</span><span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "30px", fontWeight: 700, lineHeight: "normal" }}>₹{plan.price}/-</span></div>
                 <div style={{ display: "inline-flex", height: "18.167px", padding: "2px 10px", justifyContent: "center", alignItems: "center", gap: "10px", borderRadius: "10.093px", background: "#F00", marginBottom: "16px" }}><span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10.496px", fontWeight: 700, lineHeight: "normal", textTransform: "uppercase" }}>{plan.discount}% OFF</span></div>
                 <button onClick={() => window.open(plan.url, "_blank")} style={{ width: "100%", maxWidth: "314px", height: "32.3px", borderRadius: "30px", background: "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", margin: "0 auto" }}>
-                  <span style={{ width: "249.333px", height: "17.1px", color: "#202020", textAlign: "center", fontFamily: "Outfit", fontSize: "14px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal", textTransform: "uppercase", display: "flex", alignItems: "center", justifyContent: "center" }}>Join {plan.bestValue ? "1 YEAR" : plan.name.toUpperCase().replace(" PLAN", "")} PLAN</span>
+                  <span style={{ color: "#202020", textAlign: "center", fontFamily: "Outfit", fontSize: "14px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal", textTransform: "uppercase", display: "flex", alignItems: "center", justifyContent: "center" }}>Join {plan.bestValue ? "1 YEAR" : plan.name.toUpperCase().replace(" PLAN", "")} PLAN</span>
                 </button>
               </div>
             </div>
@@ -94,34 +94,35 @@ export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanId
         })}
       </div>
 
-      <div style={{ padding: "16px 27px 0" }}>
-        <h3 style={{ width: "343px", color: "#0D468B", fontSize: "24px", fontWeight: 600, fontFamily: "Outfit", textAlign: "center", marginBottom: "20px", margin: "0 auto 20px" }}>Compare and choose your plan!</h3>
+      <div style={{ padding: "16px 20px 0" }}>
+        <h3 style={{ width: "100%", color: "#0D468B", fontSize: "24px", fontWeight: 600, fontFamily: "Outfit", textAlign: "center", marginBottom: "20px", margin: "0 auto 20px" }}>Compare and choose your plan!</h3>
         <div style={{ position: "relative", width: "100%" }}>
-          <div style={{ position: "absolute", top: 0, left: selectedPlanIdx === 0 ? "calc(100% - 207px)" : selectedPlanIdx === 1 ? "calc(100% - 138px)" : "calc(100% - 69px)", width: "69px", height: "284px", borderRadius: "5px", border: "1px solid #0D468B", background: "#FFF5E5", zIndex: 0 }} />
+          {/* Highlight column — uses percentage positioning */}
+          <div style={{ position: "absolute", top: 0, left: selectedPlanIdx === 0 ? "calc(100% - 66%)" : selectedPlanIdx === 1 ? "calc(100% - 44%)" : "calc(100% - 22%)", width: "22%", height: "100%", borderRadius: "5px", border: "1px solid #0D468B", background: "#FFF5E5", zIndex: 0 }} />
           <div style={{ display: "flex", alignItems: "center", paddingBottom: "10px", position: "relative", zIndex: 1 }}>
             <div style={{ flex: 1, color: "#919191", fontFamily: "Outfit", fontSize: "10px", fontWeight: 700, lineHeight: "normal" }}>Features</div>
-            <div style={{ width: "69px", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 600, lineHeight: "normal" }}>1 Year</div>
-            <div style={{ width: "69px", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 600, lineHeight: "normal" }}>6 Months</div>
-            <div style={{ width: "69px", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 600, lineHeight: "normal" }}>3 Months</div>
+            <div style={{ width: "22%", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>1 Year</div>
+            <div style={{ width: "22%", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>6 Mon</div>
+            <div style={{ width: "22%", textAlign: "center", color: "#202020", fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, lineHeight: "normal" }}>3 Mon</div>
           </div>
           {features.map((feature, idx) => (
             <div key={idx} style={{ display: "flex", alignItems: "center", padding: "10px 0", borderTop: "none", position: "relative", zIndex: 1 }}>
               <div style={{ flex: 1, color: "#202020", fontFamily: "Outfit", fontSize: "12px", fontWeight: 600, lineHeight: "normal" }}>{feature.name}</div>
-              <div style={{ width: "69px", display: "flex", justifyContent: "center" }}>
+              <div style={{ width: "22%", display: "flex", justifyContent: "center" }}>
                 {feature.year ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="15" viewBox="0 0 18 15" fill="none"><path d="M14.7343 0L6.82974 10.356L2.1564 5.7154L0 7.85826L7.18689 15L17.2512 2.14286L14.7343 0Z" fill="#0D468B" /></svg>
                 ) : (
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12.41 0.5C12.56 0.35 12.74 0.22 12.94 0.14C13.14 0.05 13.36 0 13.57 0C13.79 0 14.01 0.04 14.21 0.12C14.41 0.2 14.59 0.32 14.75 0.48C14.9 0.63 15.02 0.81 15.1 1.01C15.18 1.22 15.22 1.43 15.22 1.65C15.22 1.87 15.17 2.08 15.08 2.28C15 2.48 14.87 2.66 14.71 2.81L9.95 7.57C9.94 7.58 9.94 7.59 9.93 7.6C9.93 7.6 9.93 7.61 9.93 7.62C9.93 7.63 9.93 7.64 9.93 7.65C9.94 7.66 9.94 7.66 9.95 7.67L14.71 12.44C14.87 12.59 14.99 12.77 15.07 12.96C15.15 13.16 15.2 13.37 15.2 13.59C15.2 13.8 15.16 14.02 15.08 14.21C15 14.41 14.87 14.59 14.72 14.74C14.57 14.9 14.39 15.02 14.19 15.1C13.99 15.18 13.78 15.22 13.57 15.22C13.35 15.22 13.14 15.18 12.94 15.09C12.74 15.01 12.56 14.89 12.41 14.74L7.65 9.97C7.64 9.96 7.63 9.96 7.63 9.96C7.62 9.95 7.61 9.95 7.6 9.95C7.59 9.95 7.58 9.95 7.57 9.96C7.57 9.96 7.56 9.96 7.55 9.97L2.79 14.74C2.64 14.89 2.46 15.01 2.26 15.09C2.06 15.18 1.85 15.22 1.63 15.22C1.42 15.22 1.21 15.18 1.01 15.1C0.81 15.02 0.63 14.9 0.48 14.75C0.32 14.59 0.2 14.41 0.12 14.21C0.04 14.02 0 13.8 0 13.59C0 13.37 0.04 13.16 0.13 12.96C0.21 12.77 0.33 12.59 0.49 12.44L5.25 7.67C5.26 7.66 5.26 7.66 5.27 7.65C5.27 7.64 5.27 7.63 5.27 7.62C5.27 7.61 5.27 7.6 5.27 7.6C5.26 7.59 5.26 7.58 5.25 7.57L0.49 2.81C0.18 2.5 0.02 2.09 0.02 1.66C0.02 1.23 0.19 0.82 0.49 0.52C0.8 0.21 1.21 0.04 1.64 0.04C2.07 0.04 2.48 0.21 2.79 0.51L7.55 5.27C7.56 5.28 7.56 5.29 7.57 5.29C7.58 5.29 7.59 5.29 7.6 5.29C7.61 5.29 7.62 5.29 7.62 5.29C7.63 5.29 7.64 5.28 7.65 5.27L12.41 0.5Z" fill="#FF0000" /></svg>
                 )}
               </div>
-              <div style={{ width: "69px", display: "flex", justifyContent: "center" }}>
+              <div style={{ width: "22%", display: "flex", justifyContent: "center" }}>
                 {feature.sixMonth ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="15" viewBox="0 0 18 15" fill="none"><path d="M14.7343 0L6.82974 10.356L2.1564 5.7154L0 7.85826L7.18689 15L17.2512 2.14286L14.7343 0Z" fill="#0D468B" /></svg>
                 ) : (
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M12.41 0.5C12.56 0.35 12.74 0.22 12.94 0.14C13.14 0.05 13.36 0 13.57 0C13.79 0 14.01 0.04 14.21 0.12C14.41 0.2 14.59 0.32 14.75 0.48C14.9 0.63 15.02 0.81 15.1 1.01C15.18 1.22 15.22 1.43 15.22 1.65C15.22 1.87 15.17 2.08 15.08 2.28C15 2.48 14.87 2.66 14.71 2.81L9.95 7.57C9.94 7.58 9.94 7.59 9.93 7.6C9.93 7.6 9.93 7.61 9.93 7.62C9.93 7.63 9.93 7.64 9.93 7.65C9.94 7.66 9.94 7.66 9.95 7.67L14.71 12.44C14.87 12.59 14.99 12.77 15.07 12.96C15.15 13.16 15.2 13.37 15.2 13.59C15.2 13.8 15.16 14.02 15.08 14.21C15 14.41 14.87 14.59 14.72 14.74C14.57 14.9 14.39 15.02 14.19 15.1C13.99 15.18 13.78 15.22 13.57 15.22C13.35 15.22 13.14 15.18 12.94 15.09C12.74 15.01 12.56 14.89 12.41 14.74L7.65 9.97C7.64 9.96 7.63 9.96 7.63 9.96C7.62 9.95 7.61 9.95 7.6 9.95C7.59 9.95 7.58 9.95 7.57 9.96C7.57 9.96 7.56 9.96 7.55 9.97L2.79 14.74C2.64 14.89 2.46 15.01 2.26 15.09C2.06 15.18 1.85 15.22 1.63 15.22C1.42 15.22 1.21 15.18 1.01 15.1C0.81 15.02 0.63 14.9 0.48 14.75C0.32 14.59 0.2 14.41 0.12 14.21C0.04 14.02 0 13.8 0 13.59C0 13.37 0.04 13.16 0.13 12.96C0.21 12.77 0.33 12.59 0.49 12.44L5.25 7.67C5.26 7.66 5.26 7.66 5.27 7.65C5.27 7.64 5.27 7.63 5.27 7.62C5.27 7.61 5.27 7.6 5.27 7.6C5.26 7.59 5.26 7.58 5.25 7.57L0.49 2.81C0.18 2.5 0.02 2.09 0.02 1.66C0.02 1.23 0.19 0.82 0.49 0.52C0.8 0.21 1.21 0.04 1.64 0.04C2.07 0.04 2.48 0.21 2.79 0.51L7.55 5.27C7.56 5.28 7.56 5.29 7.57 5.29C7.58 5.29 7.59 5.29 7.6 5.29C7.61 5.29 7.62 5.29 7.62 5.29C7.63 5.29 7.64 5.28 7.65 5.27L12.41 0.5Z" fill="#FF0000" /></svg>
                 )}
               </div>
-              <div style={{ width: "69px", display: "flex", justifyContent: "center" }}>
+              <div style={{ width: "22%", display: "flex", justifyContent: "center" }}>
                 {feature.threeMonth ? (
                   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="15" viewBox="0 0 18 15" fill="none"><path d="M14.7343 0L6.82974 10.356L2.1564 5.7154L0 7.85826L7.18689 15L17.2512 2.14286L14.7343 0Z" fill="#0D468B" /></svg>
                 ) : (
