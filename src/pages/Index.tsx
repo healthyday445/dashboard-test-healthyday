@@ -869,7 +869,7 @@ const Index = () => {
                               <div key="here" style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "14px", position: "relative", zIndex: 1 }}>
                                 <div style={{ flexShrink: 0, width: "33px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                   <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                                    <circle cx="11" cy="11" r="11" fill="#FF0000"/>
+                                    <circle cx="11" cy="11" r="11" fill="#FF0000" />
                                   </svg>
                                 </div>
                                 <span style={{ color: "#F00", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 600, lineHeight: "normal" }}>
@@ -1409,7 +1409,7 @@ const Index = () => {
                                 <div key="here" style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "14px", position: "relative", zIndex: 1 }}>
                                   <div style={{ flexShrink: 0, width: "33px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                                     <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                                      <circle cx="11" cy="11" r="11" fill="#FF0000"/>
+                                      <circle cx="11" cy="11" r="11" fill="#FF0000" />
                                     </svg>
                                   </div>
                                   <span style={{ color: "#F00", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 600, lineHeight: "normal" }}>
@@ -1884,7 +1884,7 @@ const Index = () => {
                       <div key="here" style={{ display: "flex", alignItems: "center", gap: "12px", marginBottom: "14px", position: "relative", zIndex: 1 }}>
                         <div style={{ flexShrink: 0, width: "33px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                           <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
-                            <circle cx="11" cy="11" r="11" fill="#FF0000"/>
+                            <circle cx="11" cy="11" r="11" fill="#FF0000" />
                           </svg>
                         </div>
                         <span style={{ color: "#F00", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 600, lineHeight: "normal" }}>
