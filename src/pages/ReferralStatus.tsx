@@ -118,13 +118,13 @@ const ReferralStatus = () => {
   MILESTONES.forEach((m, idx) => {
     const claimed = totalRefs >= m.refs;
     const isNext = idx === nextIdx;
-    if (idx === nextIdx && !hereInserted && totalRefs > 0) {
+    if (idx === nextIdx && !hereInserted) {
       rows.push({ type: "here" });
       hereInserted = true;
     }
     rows.push({ type: "milestone", m, claimed, isNext });
   });
-  if (!hereInserted && totalRefs > 0) rows.push({ type: "here" }); // all claimed
+  if (!hereInserted) rows.push({ type: "here" }); // all claimed
 
   return (
     <div
@@ -226,6 +226,54 @@ const ReferralStatus = () => {
 
             {rows.map((row, ri) => {
               if (row.type === "here") {
+                if (totalRefs === 0) {
+                  return (
+                    <div
+                      key="here"
+                      style={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "12px",
+                        marginBottom: "14px",
+                        position: "relative",
+                        zIndex: 1,
+                      }}
+                    >
+                      <div
+                        style={{
+                          flexShrink: 0,
+                          width: "33px",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" viewBox="0 0 22 22" fill="none">
+                          <circle cx="11" cy="11" r="11" fill="#FF0000"/>
+                        </svg>
+                      </div>
+                      <span style={{ color: "#F00", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 600, lineHeight: "normal" }}>
+                        0 Referrals
+                      </span>
+                      <div
+                        style={{
+                          width: "106px",
+                          height: "28px",
+                          borderRadius: "20px",
+                          border: "1px solid #F00",
+                          background: "rgba(254, 171, 39, 0.20)",
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "center",
+                        }}
+                      >
+                        <span style={{ color: "#F00", textAlign: "center", fontFamily: "Outfit", fontSize: "14px", fontStyle: "normal", fontWeight: 600, lineHeight: "normal" }}>
+                          You are here
+                        </span>
+                      </div>
+                    </div>
+                  );
+                }
                 return (
                   <div
                     key="here"
@@ -335,7 +383,7 @@ const ReferralStatus = () => {
                   )}
                   {isNext && (
                     <span style={{ color: "#9C9C9C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700 }}>
-                      NEXT GOAL
+                      IN PROGRESS
                     </span>
                   )}
                 </div>
