@@ -231,6 +231,36 @@ const Index = () => {
       setLoading(false);
       return;
     }
+    if (previewMode === "paidendsoon") {
+      const endDate = new Date();
+      endDate.setDate(endDate.getDate() + 3); // plan ends in 3 days
+      const planEnd = toLocalDateStr(endDate);
+      setStudentData({
+        language: "Telugu",
+        status: "paid",
+        paid_classes_joining_link: "https://www.youtube.com/c/Healthyday",
+        referral_link: "healthyday.app/ref=preview123",
+        total_referral_count: 3,
+        attendance_tracker: [],
+        plan_end_date: planEnd,
+      });
+      setAuthenticated(true);
+      setLoading(false);
+      return;
+    }
+    if (previewMode === "pastdue") {
+      setStudentData({
+        language: "Telugu",
+        status: "pastdue",
+        plan_expired_date: "2025-03-03",
+        referral_link: "healthyday.app/ref=preview123",
+        total_referral_count: 3,
+        attendance_tracker: [],
+      });
+      setAuthenticated(true);
+      setLoading(false);
+      return;
+    }
     // ?preview=elapsed — preview ongoing user whose 14-day batch has elapsed
     if (previewMode === "elapsed") {
       const startDate = new Date();
@@ -1241,6 +1271,17 @@ const Index = () => {
                       [990, 1050], [1050, 1110], [1110, 1170],
     ].some(([s, e]) => totalMin >= s && totalMin < e);
 
+                      // Plan renewal detection (3 days before plan ends)
+                      const planEndDate = studentData?.plan_end_date ? new Date(studentData.plan_end_date) : null;
+                      const daysUntilPlanEnds = (() => {
+                        if (!planEndDate) return null;
+                        const todayDate = new Date();
+                        todayDate.setHours(0, 0, 0, 0);
+                        planEndDate.setHours(0, 0, 0, 0);
+                        return Math.ceil((planEndDate.getTime() - todayDate.getTime()) / 86400000);
+                      })();
+                      const showPlanRenewal = daysUntilPlanEnds !== null && daysUntilPlanEnds <= 3 && daysUntilPlanEnds >= 0;
+
                       // Weekly attendance (Mon-Sun)
                       const today = new Date();
                       const todayDow = today.getDay();
@@ -1399,6 +1440,7 @@ const Index = () => {
                           </div>
 
                           {/* Referral Milestones */}
+                          {!showPlanRenewal && (
                           <div style={{ padding: "28px 20px 0" }}>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
                               <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Referral Milestones</h3>
@@ -1413,8 +1455,10 @@ const Index = () => {
                               <ReferralMilestonesCard refCount={refCount} milestones={milestones} nextLabel="NEXT GOAL" />
                             </div>
                           </div>
+                          )}
 
                           {/* Refer and Win Footer */}
+                          {!showPlanRenewal && (
                           <div
                             style={{ padding: "28px 63px 40px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", cursor: "pointer" }}
                             onClick={() => navigate(`/referral?count=${refCount}&mobile=${mobile || ""}`)}
@@ -1427,17 +1471,212 @@ const Index = () => {
                             <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal", margin: 0 }}>Refer and Win!</h3>
                             <p style={{ color: "#ADADAD", fontFamily: "Outfit", fontSize: "18px", fontWeight: 500, lineHeight: "normal", textAlign: "center", margin: 0 }}>Every active referral earn gifts and rewards for you</p>
                           </div>
+                          )}
+
+                          {/* Plan Renewal Section (shows 3 days before plan ends) */}
+                          {showPlanRenewal && (
+                            <>
+                              {/* Your Plan ends warning */}
+                              <div style={{ padding: "0 20px", textAlign: "center" }}>
+                                <p style={{
+                                  width: "100%",
+                                  maxWidth: "343px",
+                                  color: "#F00",
+                                  textAlign: "center",
+                                  fontFamily: "Outfit",
+                                  fontSize: "24px",
+                                  fontWeight: 700,
+                                  lineHeight: "normal",
+                                  margin: "0 auto 12px",
+                                }}>
+                                  Your Plan ends in {daysUntilPlanEnds} {daysUntilPlanEnds === 1 ? "Day" : "Days"}
+                                </p>
+                                <p style={{
+                                  width: "221px",
+                                  color: "#0D468B",
+                                  textAlign: "center",
+                                  fontFamily: "Outfit",
+                                  fontSize: "20px",
+                                  fontWeight: 700,
+                                  lineHeight: "normal",
+                                  margin: "0 auto 20px",
+                                }}>
+                                  RENEW NOW!
+                                </p>
+                              </div>
+
+                              {/* Pricing Section */}
+                              <PricingAndComparisonSection
+                                selectedPlanIdx={selectedPlanIdx}
+                                setSelectedPlanIdx={setSelectedPlanIdx}
+                                daysLeft={daysUntilPlanEnds ?? 0}
+                                hideDaysLeft={true}
+                              />
+
+                              {/* Separator */}
+                              <div style={{ padding: "32px 20px 0", textAlign: "center" }}>
+                                <div style={{ width: "100%", maxWidth: "358px", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
+                                <p style={{
+                                  width: "100%",
+                                  maxWidth: "343px",
+                                  margin: "0 auto",
+                                  color: "#0D468B",
+                                  textAlign: "center",
+                                  fontFamily: "Outfit",
+                                  fontSize: "24px",
+                                  fontWeight: 600,
+                                  lineHeight: "normal",
+                                }}>
+                                  Want More FREE Classes?
+                                </p>
+                              </div>
+
+                              {/* Share Referral Actions */}
+                              <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
+                                <div style={{
+                                  width: "100%",
+                                  maxWidth: "358px",
+                                  boxSizing: "border-box",
+                                  borderRadius: "16px",
+                                  background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
+                                  boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
+                                  padding: "20px 16px",
+                                }}>
+                                  <ShareReferralActions
+                                    shareLink={shareLink}
+                                    referralsUrl={`/referral-status?count=${refCount}&mobile=${mobile || ""}`}
+                                  />
+                                </div>
+                              </div>
+                            </>
+                          )}
 
                           {/* Referral Status Popup Overlay */}
-                          {showReferral && (
+                          {!showPlanRenewal && showReferral && (
                             <ReferWinPopup
                               refCount={refCount}
                               onClose={() => setShowReferral(false)}
-                              referNowUrl={`/referral?count=${refCount}&mobile=${mobile || ""}`}
+referNowUrl={`/referral?count=${refCount}&mobile=${mobile || ""}`}
                             />
                           )}
                         </div>
                         );
+  }
+
+  // --- Past Due / Subscription Expired Dashboard ---
+  if (studentStatus === "pastdue") {
+    // Format expired date
+    const expiredDateRaw = studentData?.plan_expired_date;
+    const formatExpiredDate = (dateStr: string) => {
+      if (!dateStr) return "recently";
+      const d = new Date(dateStr);
+      const day = d.getDate();
+      const suffix = day === 1 || day === 21 || day === 31 ? "st" : day === 2 || day === 22 ? "nd" : day === 3 || day === 23 ? "rd" : "th";
+      const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+      return `${day}${suffix} ${months[d.getMonth()]}`;
+    };
+    const expiredDateLabel = formatExpiredDate(expiredDateRaw);
+
+    return (
+      <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
+        {/* Header */}
+        <header className="hd-header bg-white">
+          <img src={logo} alt="Healthyday" className="h-7" />
+        </header>
+
+        <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
+          {/* SUBSCRIPTION EXPIRED Badge */}
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            gap: "6px",
+            width: "fit-content",
+            height: "30px",
+            borderRadius: "40px",
+            border: "0.25px solid #DA8D8D",
+            background: "#FFEDED",
+            padding: "0 14px",
+            marginTop: "20px",
+          }}>
+            <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
+              <path d="M6.125 4.29167H6.13111M5.51389 6.125H6.125V8.56944H6.73611M0.625 6.125C0.625 6.84727 0.767262 7.56247 1.04366 8.22976C1.32006 8.89705 1.72519 9.50336 2.23591 10.0141C2.74663 10.5248 3.35295 10.9299 4.02024 11.2063C4.68753 11.4827 5.40273 11.625 6.125 11.625C6.84727 11.625 7.56247 11.4827 8.22976 11.2063C8.89705 10.9299 9.50336 10.5248 10.0141 10.0141C10.5248 9.50336 10.9299 8.89705 11.2063 8.22976C11.4827 7.56247 11.625 6.84727 11.625 6.125C11.625 4.66631 11.0455 3.26736 10.0141 2.23591C8.98264 1.20446 7.58369 0.625 6.125 0.625C4.66631 0.625 3.26736 1.20446 2.23591 2.23591C1.20446 3.26736 0.625 4.66631 0.625 6.125Z" stroke="#B71C1C" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span style={{
+              color: "#B71C1C",
+              fontFamily: "Outfit",
+              fontSize: "11px",
+              fontWeight: 800,
+              lineHeight: "22px",
+              letterSpacing: "0.88px",
+            }}>
+              SUBSCRIPTION EXPIRED
+            </span>
+          </div>
+
+          {/* Expired Plan Card */}
+          <div style={{
+            width: "100%",
+            maxWidth: "357px",
+            borderRadius: "10px",
+            border: "1px solid #949494",
+            background: "#FFF5E5",
+            padding: "16px 20px",
+            boxSizing: "border-box",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            marginTop: "20px",
+          }}>
+            <div style={{ maxWidth: "259px" }}>
+              <span style={{
+                color: "#000",
+                fontFamily: "Outfit",
+                fontSize: "20px",
+                fontWeight: 600,
+                lineHeight: "normal",
+              }}>
+                Your Yoga Plan{" "}
+              </span>
+              <span style={{
+                color: "#D70000",
+                fontFamily: "Outfit",
+                fontSize: "20px",
+                fontWeight: 600,
+                lineHeight: "normal",
+              }}>
+                Expired on {expiredDateLabel}
+              </span>
+            </div>
+            <svg xmlns="http://www.w3.org/2000/svg" width="36" height="32" viewBox="0 0 36 32" fill="none" style={{ flexShrink: 0 }}>
+              <path d="M17.7497 11.9817V18.4451M17.7497 23.2927H17.7657M15.1311 3.2418L2.16043 25.1109C1.89304 25.5785 1.75154 26.1086 1.75001 26.6486C1.74848 27.1885 1.88697 27.7195 2.1517 28.1886C2.41643 28.6578 2.79818 29.0488 3.25898 29.3227C3.71978 29.5966 4.24356 29.7439 4.77823 29.75H30.7227C31.2571 29.7438 31.7806 29.5964 32.2412 29.3226C32.7018 29.0487 33.0834 28.658 33.3481 28.1891C33.6128 27.7202 33.7513 27.1895 33.75 26.6497C33.7487 26.11 33.6075 25.58 33.3405 25.1125L20.3699 3.24018C20.097 2.78532 19.7125 2.40921 19.2537 2.14818C18.7949 1.88714 18.2771 1.75 17.7505 1.75C17.2238 1.75 16.7061 1.88714 16.2472 2.14818C15.7884 2.40921 15.4039 2.78532 15.1311 3.24018V3.2418Z" stroke="#D70000" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+          </div>
+
+          {/* Renew Now to Continue */}
+          <p style={{
+            color: "#0D468B",
+            textAlign: "center",
+            fontFamily: "Outfit",
+            fontSize: "24px",
+            fontWeight: 700,
+            lineHeight: "normal",
+            margin: "28px 0 0",
+          }}>
+            Renew Now to Continue!
+          </p>
+        </div>
+
+        {/* Pricing Section */}
+        <div style={{ marginTop: "20px" }}>
+          <PricingAndComparisonSection
+            selectedPlanIdx={selectedPlanIdx}
+            setSelectedPlanIdx={setSelectedPlanIdx}
+            daysLeft={0}
+            hideDaysLeft={true}
+          />
+        </div>
+      </div>
+    );
   }
 
   // --- Detect ongoing users whose 14-day batch has elapsed ---
