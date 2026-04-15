@@ -1352,7 +1352,9 @@ const Index = () => {
 
                           {/* View Class Recordings */}
                           <div style={{ padding: "20px 21px 0 22px" }}>
-                            <div style={{
+                            <div
+                              onClick={() => navigate("/all-recordings")}
+                              style={{
                               width: "100%", borderRadius: "6px", border: "1px solid #F0EEEE", background: "#FFF5E5",
                               boxShadow: "0 1px 1px 0 rgba(0,0,0,0.20)",
                               display: "flex", alignItems: "center", padding: "20px 23px 19px 27px", gap: "16px", boxSizing: "border-box", cursor: "pointer",
@@ -1375,7 +1377,10 @@ const Index = () => {
                           <div style={{ padding: "40px 22px 0" }}>
                             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
                               <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, margin: 0 }}>Your Weekly Attendance</h3>
-                              <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}>View progress</span>
+                              <span
+                                onClick={() => navigate(`/attendance-page?mobile=${mobile || ""}`)}
+                                style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
+                              >View progress</span>
                             </div>
                           </div>
 

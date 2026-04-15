@@ -7,6 +7,8 @@ import Index from "./pages/Index";
 import NotFound from "./pages/NotFound";
 import Referral from "./pages/Referral";
 import ReferralStatus from "./pages/ReferralStatus";
+import AttendancePage from "./pages/AttendancePage";
+import AllRecordings from "./pages/AllRecordings";
 
 const queryClient = new QueryClient();
 
@@ -21,6 +23,8 @@ const App = () => (
           <Route path="/:mobile" element={<Index />} />
           <Route path="/referral" element={<Referral />} />
           <Route path="/referral-status" element={<ReferralStatus />} />
+          <Route path="/attendance-page" element={<AttendancePage />} />
+          <Route path="/all-recordings" element={<AllRecordings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
