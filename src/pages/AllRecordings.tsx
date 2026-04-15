@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 
 const classRecordings = [
@@ -45,22 +44,22 @@ const youtubeVideos = [
     id: "CgWC09sydHk",
     title: "15 Minutes Pranayama",
     subtitle: "Healthyday Yoga Telugu",
-    duration: "18 mins",
-    date: "OCT  25",
+    duration: "15 mins",
+    date: "JAN  26",
   },
   {
     id: "raCc7Z31LYw",
     title: "15 Minutes Meditation",
     subtitle: "Healthyday Yoga Telugu",
-    duration: "18 mins",
-    date: "OCT  25",
+    duration: "14 mins",
+    date: "NOV  25",
   },
   {
     id: "bl3W5tzK4ds",
-    title: "Yoga Nidra Session",
+    title: "Yoga Nidra - Deep Rest",
     subtitle: "Healthyday Yoga Telugu",
-    duration: "22 mins",
-    date: "OCT  25",
+    duration: "20 mins",
+    date: "DEC  25",
   },
 ];
 
@@ -76,114 +75,61 @@ const PlayButton = () => (
     <img
       src="/image 12.png"
       alt="Play"
-      style={{
-        width: "100%",
-        height: "100%",
-        objectFit: "cover",
-      }}
+      style={{ width: "100%", height: "100%", objectFit: "cover" }}
     />
   </div>
 );
 
-const RecordingCard = ({
-  thumbnail,
-  title,
-  subtitle,
-  dateBadge,
-  link,
-}: {
-  thumbnail: string;
-  title: string;
-  subtitle: string;
-  dateBadge: string;
-  link: string;
-}) => (
-  <a
-    href={link}
-    target="_blank"
-    rel="noopener noreferrer"
-    style={{ textDecoration: "none", width: "calc(50% - 6px)" }}
-  >
-    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-      {/* Thumbnail */}
-      <div style={{
-        width: "100%",
-        height: "93.45px",
-        borderRadius: "12px",
-        overflow: "hidden",
-        position: "relative",
-      }}>
-        <img
-          src={thumbnail}
-          alt={title}
-          style={{
-            width: "100%",
-            height: "100%",
-            objectFit: "cover",
-            display: "block",
-          }}
-        />
-        <div style={{
-          position: "absolute",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: 0,
-          borderRadius: "12px",
-          background: "rgba(0, 0, 0, 0.32)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}>
-          <PlayButton />
-        </div>
-      </div>
-
-      {/* Title */}
-      <span style={{
-        color: "#0D468B",
-        fontFamily: "Outfit",
-        fontSize: "15px",
-        fontWeight: 700,
-        lineHeight: "normal",
-      }}>
-        {title}
-      </span>
-
-      {/* Subtitle */}
-      <span style={{
-        color: "#7E7D7D",
-        fontFamily: "Outfit",
-        fontSize: "11px",
-        fontWeight: 500,
-        lineHeight: "normal",
-      }}>
-        {subtitle}
-      </span>
-
-      {/* Date Badge */}
-      <div style={{
-        width: "fit-content",
-        height: "25px",
-        borderRadius: "20px",
-        background: "#E7EEFA",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: "0 12px",
-      }}>
-        <span style={{
-          color: "#0D468B",
-          fontFamily: "Outfit",
-          fontSize: "12px",
-          fontWeight: 700,
-          lineHeight: "normal",
-        }}>
-          {dateBadge}
-        </span>
-      </div>
+const Thumbnail = ({ src, alt }: { src: string; alt: string }) => (
+  <div style={{
+    width: "170px",
+    minWidth: "170px",
+    height: "93.45px",
+    borderRadius: "12px",
+    overflow: "hidden",
+    position: "relative",
+    flexShrink: 0,
+  }}>
+    <img
+      src={src}
+      alt={alt}
+      style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+    />
+    <div style={{
+      position: "absolute",
+      top: 0, left: 0, right: 0, bottom: 0,
+      borderRadius: "12px",
+      background: "rgba(0, 0, 0, 0.32)",
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+    }}>
+      <PlayButton />
     </div>
-  </a>
+  </div>
+);
+
+const DateBadge = ({ label }: { label: string }) => (
+  <div style={{
+    width: "fit-content",
+    height: "25px",
+    borderRadius: "20px",
+    background: "#E7EEFA",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    padding: "0 12px",
+  }}>
+    <span style={{
+      color: "#0D468B",
+      fontFamily: "Outfit",
+      fontSize: "12px",
+      fontWeight: 700,
+      lineHeight: "normal",
+    }}>
+      {label}
+    </span>
+  </div>
 );
 
 const AllRecordings = () => {
@@ -217,20 +163,38 @@ const AllRecordings = () => {
           Class Recordings
         </h2>
 
-        <div style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "12px",
-        }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {classRecordings.map((rec, i) => (
-            <RecordingCard
+            <a
               key={i}
-              thumbnail={rec.thumbnail}
-              title={rec.title}
-              subtitle={rec.accessible}
-              dateBadge={rec.date}
-              link={rec.link}
-            />
+              href={rec.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{ textDecoration: "none", display: "flex", gap: "12px", alignItems: "flex-start" }}
+            >
+              <Thumbnail src={rec.thumbnail} alt={rec.title} />
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px", flex: 1, paddingTop: "2px" }}>
+                <span style={{
+                  color: "#0D468B",
+                  fontFamily: "Outfit",
+                  fontSize: "15px",
+                  fontWeight: 700,
+                  lineHeight: "normal",
+                }}>
+                  {rec.title}
+                </span>
+                <span style={{
+                  color: "#7E7D7D",
+                  fontFamily: "Outfit",
+                  fontSize: "11px",
+                  fontWeight: 500,
+                  lineHeight: "normal",
+                }}>
+                  {rec.accessible}
+                </span>
+                <DateBadge label={rec.date} />
+              </div>
+            </a>
           ))}
         </div>
       </div>
@@ -258,55 +222,20 @@ const AllRecordings = () => {
           Youtube Videos
         </h2>
 
-        <div style={{
-          display: "flex",
-          flexWrap: "wrap",
-          gap: "12px",
-        }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
           {youtubeVideos.map((video, i) => (
             <a
               key={i}
               href={`https://youtu.be/${video.id}`}
               target="_blank"
               rel="noopener noreferrer"
-              style={{ textDecoration: "none", width: "calc(50% - 6px)" }}
+              style={{ textDecoration: "none", display: "flex", gap: "12px", alignItems: "flex-start" }}
             >
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                {/* Thumbnail */}
-                <div style={{
-                  width: "100%",
-                  height: "93.45px",
-                  borderRadius: "12px",
-                  overflow: "hidden",
-                  position: "relative",
-                }}>
-                  <img
-                    src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
-                    alt={video.title}
-                    style={{
-                      width: "100%",
-                      height: "100%",
-                      objectFit: "cover",
-                      display: "block",
-                    }}
-                  />
-                  <div style={{
-                    position: "absolute",
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    bottom: 0,
-                    borderRadius: "12px",
-                    background: "rgba(0, 0, 0, 0.32)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                  }}>
-                    <PlayButton />
-                  </div>
-                </div>
-
-                {/* Title */}
+              <Thumbnail
+                src={`https://img.youtube.com/vi/${video.id}/maxresdefault.jpg`}
+                alt={video.title}
+              />
+              <div style={{ display: "flex", flexDirection: "column", gap: "6px", flex: 1, paddingTop: "2px" }}>
                 <span style={{
                   color: "#0D468B",
                   fontFamily: "Outfit",
@@ -316,18 +245,17 @@ const AllRecordings = () => {
                 }}>
                   {video.title}
                 </span>
-
-                {/* Subtitle + Duration */}
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-                  <span style={{
-                    color: "#7E7D7D",
-                    fontFamily: "Outfit",
-                    fontSize: "11px",
-                    fontWeight: 500,
-                    lineHeight: "normal",
-                  }}>
-                    {video.subtitle}
-                  </span>
+                <span style={{
+                  color: "#7E7D7D",
+                  fontFamily: "Outfit",
+                  fontSize: "11px",
+                  fontWeight: 500,
+                  lineHeight: "normal",
+                }}>
+                  {video.subtitle}
+                </span>
+                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                  <DateBadge label={video.date} />
                   <span style={{
                     color: "#7E7D7D",
                     fontFamily: "Outfit",
@@ -335,29 +263,7 @@ const AllRecordings = () => {
                     fontWeight: 600,
                     lineHeight: "normal",
                   }}>
-                    {video.duration}
-                  </span>
-                </div>
-
-                {/* Date Badge */}
-                <div style={{
-                  width: "fit-content",
-                  height: "25px",
-                  borderRadius: "20px",
-                  background: "#E7EEFA",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  padding: "0 12px",
-                }}>
-                  <span style={{
-                    color: "#0D468B",
-                    fontFamily: "Outfit",
-                    fontSize: "12px",
-                    fontWeight: 700,
-                    lineHeight: "normal",
-                  }}>
-                    {video.date}
+                    • {video.duration}
                   </span>
                 </div>
               </div>
