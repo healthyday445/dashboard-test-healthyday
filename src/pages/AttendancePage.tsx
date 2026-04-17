@@ -302,8 +302,16 @@ const AttendancePage = () => {
             </div>
           </div>
 
+          {/* Top Separator */}
+          <div style={{
+            width: "308px",
+            height: "0.5px",
+            background: "#BEBEBE",
+            margin: "0 auto",
+          }} />
+
           {/* Day-of-week headers */}
-          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", marginBottom: "4px" }}>
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(7, 1fr)", marginBottom: "4px", marginTop: "8px" }}>
             {WEEK_HEADERS.map((h) => (
               <div key={h} style={{
                 display: "flex",
