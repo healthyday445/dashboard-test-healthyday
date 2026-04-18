@@ -8,6 +8,71 @@ const MONTH_NAMES = [
   "July", "August", "September", "October", "November", "December",
 ];
 
+// --- Paid Attendance localStorage helpers ---
+const DAY_ABBR_TO_DOW: Record<string, number> = {
+  sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6,
+};
+
+function fmt(d: Date): string {
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
+
+/** Returns Monday of the week containing `date` */
+function getWeekMonday(date: Date): Date {
+  const d = new Date(date);
+  d.setHours(0, 0, 0, 0);
+  const dow = d.getDay(); // 0=Sun
+  d.setDate(d.getDate() - (dow === 0 ? 6 : dow - 1));
+  return d;
+}
+
+/**
+ * Given paid_attendance_tracker day abbreviations (e.g. ["thu","fri","sat"]),
+ * converts them to actual date strings for the current week (only past/today dates),
+ * merges with existing localStorage history, saves, and returns the merged set.
+ */
+function mergePaidAttendanceToStorage(mobile: string, rawDays: string[]): Set<string> {
+  const key = `hd_paid_att_${mobile}`;
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  const monday = getWeekMonday(today);
+
+  // Convert current week's day abbreviations → actual dates (only <= today)
+  const thisWeekDates: string[] = [];
+  rawDays.forEach((abbr) => {
+    const dow = DAY_ABBR_TO_DOW[abbr.toLowerCase()];
+    if (dow === undefined) return;
+    const daysFromMon = dow === 0 ? 6 : dow - 1;
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + daysFromMon);
+    if (d <= today) thisWeekDates.push(fmt(d));
+  });
+
+  // Load existing stored dates
+  let stored: string[] = [];
+  try {
+    const raw = localStorage.getItem(key);
+    if (raw) stored = JSON.parse(raw);
+  } catch { /* ignore */ }
+
+  // Merge and deduplicate
+  const merged = Array.from(new Set([...stored, ...thisWeekDates]));
+
+  // Save back
+  try { localStorage.setItem(key, JSON.stringify(merged)); } catch { /* ignore */ }
+
+  return new Set(merged);
+}
+
+/** Reads accumulated paid attendance from localStorage (without modifying it). */
+function readPaidAttendanceFromStorage(mobile: string): Set<string> {
+  try {
+    const raw = localStorage.getItem(`hd_paid_att_${mobile}`);
+    if (raw) return new Set(JSON.parse(raw));
+  } catch { /* ignore */ }
+  return new Set();
+}
+
 const AttendancePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
@@ -25,23 +90,16 @@ const AttendancePage = () => {
 
   useEffect(() => {
     if (previewMode === "paid") {
-      // Generate sample attendance dates for preview
-      const dates: string[] = [];
-      const today = new Date();
-      // Simulate some attended days this month
-      for (let i = 1; i <= today.getDate(); i++) {
-        if (i % 3 !== 0) { // skip every 3rd day as "missed"
-          const d = new Date(today.getFullYear(), today.getMonth(), i);
-          dates.push(
-            `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`
-          );
-        }
-      }
+      // Preview: simulate Thu/Fri/Sat class schedule with some history
+      const paidDays = ["thu", "fri", "sat"];
+      const previewMobile = "preview";
+      const mergedDates = mergePaidAttendanceToStorage(previewMobile, paidDays);
       setStudentData({
         language: "Telugu",
         status: "paid",
         total_referral_count: 3,
-        attendance_tracker: dates,
+        attendance_tracker: Array.from(mergedDates),
+        paid_attendance_tracker: paidDays,
       });
       setLoading(false);
       return;
@@ -67,6 +125,23 @@ const AttendancePage = () => {
         if (data.status !== "paid") {
           navigate(`/${mobile}`);
           return;
+        }
+
+        // --- Paid user: accumulate attendance in localStorage ---
+        // API gives current week's attended days as abbreviations in paid_attendance_tracker.
+        // We convert those to actual dates and merge with stored history so the full
+        // month calendar can show past weeks' attendance without re-fetching.
+        const rawPaidDays: string[] = data.paid_attendance_tracker ?? [];
+        if (rawPaidDays.length > 0) {
+          const mergedDates = mergePaidAttendanceToStorage(mobile, rawPaidDays);
+          // Inject merged dates back into data so the calendar uses full history
+          data.attendance_tracker = Array.from(mergedDates);
+        } else {
+          // No paid_attendance_tracker from API — read whatever was stored before
+          const stored = readPaidAttendanceFromStorage(mobile);
+          if (stored.size > 0) {
+            data.attendance_tracker = Array.from(stored);
+          }
         }
 
         setStudentData(data);
@@ -122,9 +197,17 @@ const AttendancePage = () => {
   if (!studentData) return null;
 
   // --- Calendar logic ---
+  // For paid users: attendance_tracker was already merged with localStorage above.
   const attendedDates = new Set<string>(studentData?.attendance_tracker ?? []);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
+
+  // paid_attendance_tracker: e.g. ["thu", "fri", "sat"] — the weekdays that have sessions
+  const rawPaidDays: string[] = studentData?.paid_attendance_tracker ?? [];
+  const scheduledWeekdays: Set<number> | null =
+    studentData?.status === "paid" && rawPaidDays.length > 0
+      ? new Set(rawPaidDays.map((d: string) => DAY_ABBR_TO_DOW[d.toLowerCase()]).filter((n: number | undefined): n is number => n !== undefined))
+      : null;
 
   const firstDayOfMonth = new Date(viewYear, viewMonth, 1);
   const startDow = firstDayOfMonth.getDay(); // 0=Sun
@@ -188,12 +271,14 @@ const AttendancePage = () => {
     const cellDate = new Date(cell.dateObj);
     cellDate.setHours(0, 0, 0, 0);
 
-    if (cellDate > today) return "scheduled"; // future days in current month
+    // Paid users: only class weekdays get a status indicator
+    if (scheduledWeekdays !== null && !scheduledWeekdays.has(cellDate.getDay())) return "none";
+
+    if (cellDate > today) return "scheduled"; // future class day
     if (attendedDates.has(cell.dateStr)) return "attended";
-    if (cellDate < today) return "missed"; // past day, not attended
-    // Today: check if attended
-    if (attendedDates.has(cell.dateStr)) return "attended";
-    return "scheduled"; // today, not yet marked
+    if (cellDate < today) return "missed";   // past class day, not attended
+    // Today
+    return "scheduled"; // today's class, not yet marked attended
   };
 
   const goToPrevMonth = () => {
