@@ -1,4 +1,5 @@
-import { useNavigate } from "react-router-dom";
+import { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 
 const classRecordings = [
@@ -32,7 +33,7 @@ const classRecordings = [
   },
 ];
 
-const youtubeVideos = [
+const teluguVideos = [
   {
     id: "SyjnCjDtNS8",
     title: "15 Min Yoga for Beginners",
@@ -58,6 +59,37 @@ const youtubeVideos = [
     id: "bl3W5tzK4ds",
     title: "Yoga Nidra - Deep Rest",
     subtitle: "Healthyday Yoga Telugu",
+    duration: "20 mins",
+    date: "DEC  25",
+  },
+];
+
+const englishVideos = [
+  {
+    id: "SyjnCjDtNS8",
+    title: "15 Min Yoga for Beginners",
+    subtitle: "Healthyday Yoga English",
+    duration: "17 mins",
+    date: "OCT  25",
+  },
+  {
+    id: "aC7Vi9qUExs",
+    title: "15 Minutes Pranayama",
+    subtitle: "Healthyday Yoga English",
+    duration: "15 mins",
+    date: "JAN  26",
+  },
+  {
+    id: "u1Hom0s7ibU",
+    title: "5-Minute Gratitude Meditation",
+    subtitle: "Healthyday Yoga English",
+    duration: "14 mins",
+    date: "NOV  25",
+  },
+  {
+    id: "n0iI0ZSVTWA",
+    title: "Yoga Nidra - Deep Rest",
+    subtitle: "Healthyday Yoga English",
     duration: "20 mins",
     date: "DEC  25",
   },
@@ -134,6 +166,77 @@ const DateBadge = ({ label }: { label: string }) => (
 
 const AllRecordings = () => {
   const navigate = useNavigate();
+  const location = useLocation();
+  const searchParams = new URLSearchParams(location.search);
+  const mobile = searchParams.get("mobile") || sessionStorage.getItem("referrer_mobile") || "";
+  const previewMode = searchParams.get("preview");
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [studentData, setStudentData] = useState<any>(null);
+
+  useEffect(() => {
+    if (previewMode === "paid" || previewMode === "english") {
+      setStudentData({
+        language: previewMode === "english" ? "English" : "Telugu",
+        status: "paid",
+      });
+      setLoading(false);
+      return;
+    }
+
+    if (!mobile) {
+      setLoading(false);
+      setError("No mobile number provided.");
+      return;
+    }
+
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const encodedMobile = encodeURIComponent(`+91${mobile}`);
+        const response = await fetch(`/.netlify/functions/student?mobile=${encodedMobile}`);
+        if (!response.ok) throw new Error(`API error: ${response.status}`);
+        const data = await response.json();
+        setStudentData(data);
+      } catch (err: any) {
+        setError(err.message || "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [mobile, previewMode]);
+
+  if (loading) {
+    return (
+      <div className="hd-page bg-background flex flex-col items-center justify-center" style={{ fontFamily: "Outfit, sans-serif" }}>
+        <img src={logo} alt="Healthyday" className="h-10 mb-8" />
+        <div className="flex flex-col items-center gap-4">
+          <div style={{ width: "48px", height: "48px", border: "4px solid #EDF6FF", borderTop: "4px solid #FEAB27", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+          <p style={{ color: "#888", fontSize: "14px", fontWeight: 500 }}>Loading...</p>
+        </div>
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="hd-page bg-background flex flex-col items-center justify-center" style={{ fontFamily: "Outfit, sans-serif" }}>
+        <img src={logo} alt="Healthyday" className="h-10 mb-8" />
+        <div style={{ background: "#FFF3F3", border: "1px solid #FFD4D4", borderRadius: "12px", padding: "24px", textAlign: "center", maxWidth: "340px" }}>
+          <p style={{ color: "#D32F2F", fontSize: "16px", fontWeight: 700, marginBottom: "8px" }}>Oops!</p>
+          <p style={{ color: "#666", fontSize: "14px", fontWeight: 400 }}>{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const isEnglish = studentData?.language === "English";
+  const youtubeVideos = isEnglish ? englishVideos : teluguVideos;
 
   return (
     <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
