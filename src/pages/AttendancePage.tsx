@@ -463,15 +463,20 @@ const AttendancePage = () => {
                 if (status === "attended") {
                   circleStyle = {
                     width: "24px", height: "24px",
-                    borderRadius: "9px",
+                    minWidth: "24px", minHeight: "24px",
+                    flexShrink: 0,
+                    borderRadius: "8px",
                     background: "#FFB525",
                     display: "flex", alignItems: "center", justifyContent: "center",
+                    boxSizing: "border-box",
                   };
                   textStyle.color = "#FFF";
                 } else if (status === "missed") {
                   circleStyle = {
                     width: "24px", height: "24px",
-                    borderRadius: "9px",
+                    minWidth: "24px", minHeight: "24px",
+                    flexShrink: 0,
+                    borderRadius: "8px",
                     border: "1px solid #FF0101",
                     background: "#FFF",
                     display: "flex", alignItems: "center", justifyContent: "center",
@@ -481,18 +486,24 @@ const AttendancePage = () => {
                 } else if (status === "scheduled") {
                   circleStyle = {
                     width: "24px", height: "24px",
-                    borderRadius: "9px",
+                    minWidth: "24px", minHeight: "24px",
+                    flexShrink: 0,
+                    borderRadius: "8px",
                     background: "#DCDCDC",
                     display: "flex", alignItems: "center", justifyContent: "center",
+                    boxSizing: "border-box",
                   };
                   textStyle.color = "#7F7B75";
                 } else {
                   // "none" — shouldn't hit for current month, fallback
                   circleStyle = {
                     width: "24px", height: "24px",
-                    borderRadius: "9px",
+                    minWidth: "24px", minHeight: "24px",
+                    flexShrink: 0,
+                    borderRadius: "8px",
                     background: "#DCDCDC",
                     display: "flex", alignItems: "center", justifyContent: "center",
+                    boxSizing: "border-box",
                   };
                   textStyle.color = "#7F7B75";
                 }
@@ -536,7 +547,7 @@ const AttendancePage = () => {
             {/* Attended */}
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <circle cx="7" cy="7" r="7" fill="#FFB525" />
+                <rect width="14" height="14" rx="4" fill="#FFB525" />
               </svg>
               <span style={{
                 color: "#595959",
@@ -550,7 +561,7 @@ const AttendancePage = () => {
             {/* Scheduled */}
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <circle cx="7" cy="7" r="6.5" fill="#FDF3E9" stroke="#FFB525" />
+                <rect width="14" height="14" rx="4" fill="#DCDCDC" />
               </svg>
               <span style={{
                 color: "#595959",
@@ -563,7 +574,7 @@ const AttendancePage = () => {
             {/* Missed */}
             <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none">
-                <circle cx="7" cy="7" r="6.5" fill="white" stroke="#FF0101" />
+                <rect x="0.5" y="0.5" width="13" height="13" rx="4" fill="white" stroke="#FF0101" />
               </svg>
               <span style={{
                 color: "#595959",
