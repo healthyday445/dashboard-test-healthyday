@@ -2,36 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 
-const classRecordings = [
-  {
-    title: "Yoga Class",
-    accessible: "Accessible till 26th March (5:00AM)",
-    date: "MARCH 25",
-    thumbnail: "https://img.youtube.com/vi/SyjnCjDtNS8/maxresdefault.jpg",
-    link: "https://youtu.be/SyjnCjDtNS8",
-  },
-  {
-    title: "Breathing Session",
-    accessible: "Accessible till 26th March (8:00PM)",
-    date: "MARCH 25",
-    thumbnail: "https://img.youtube.com/vi/CgWC09sydHk/maxresdefault.jpg",
-    link: "https://youtu.be/CgWC09sydHk",
-  },
-  {
-    title: "Diet Session",
-    accessible: "Accessible till 26th March (7:30PM)",
-    date: "MARCH 25",
-    thumbnail: "https://img.youtube.com/vi/raCc7Z31LYw/maxresdefault.jpg",
-    link: "https://youtu.be/raCc7Z31LYw",
-  },
-  {
-    title: "Face Yoga",
-    accessible: "Accessible till 7th April",
-    date: "MARCH 23",
-    thumbnail: "https://img.youtube.com/vi/bl3W5tzK4ds/maxresdefault.jpg",
-    link: "https://youtu.be/bl3W5tzK4ds",
-  },
-];
+// classRecordings is now built dynamically inside the component based on student language & API data
 
 const teluguVideos = [
   {
@@ -180,6 +151,7 @@ const AllRecordings = () => {
       setStudentData({
         language: previewMode === "english" ? "English" : "Telugu",
         status: "paid",
+        paid_classes_joining_link: "https://www.youtube.com/c/Healthyday",
       });
       setLoading(false);
       return;
@@ -238,6 +210,39 @@ const AllRecordings = () => {
   const isEnglish = studentData?.language === "English";
   const youtubeVideos = isEnglish ? englishVideos : teluguVideos;
 
+  // --- Build Class Recordings dynamically based on language ---
+  const yogaClassLink = studentData?.paid_classes_joining_link || studentData?.classes_joining_link || "https://www.youtube.com/c/Healthyday";
+  const classRecordings: { title: string; subtitle: string; thumbnail: string; link: string }[] = [
+    {
+      title: "Yoga Class",
+      subtitle: "Daily Live Yoga Session",
+      thumbnail: isEnglish ? "/language English.jpg" : "/language Telugu.jpg",
+      link: yogaClassLink,
+    },
+    {
+      title: "Face Yoga Session",
+      subtitle: "Sundays at 11:30 AM",
+      thumbnail: isEnglish ? "/bonus/faceyoga_eng.jpg" : "/bonus/faceyoga_tel.jpg",
+      link: isEnglish ? "https://join.healthyday.co.in/healthyface_eng" : "https://join.healthyday.co.in/healthyface",
+    },
+    {
+      title: "Breath to Heal Session",
+      subtitle: "Daily at 9:00 PM",
+      thumbnail: isEnglish ? "/bonus/bw_eng.jpg" : "/bonus/breathwork.jpg",
+      link: isEnglish ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession",
+    },
+  ];
+
+  // Diet Session — Telugu 12-month plans only
+  if (!isEnglish) {
+    classRecordings.push({
+      title: "Diet Session",
+      subtitle: "Daily at 8:00 PM",
+      thumbnail: "/bonus/weightlosssession.jpg",
+      link: "https://join.healthyday.co.in/diet",
+    });
+  }
+
   return (
     <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
       {/* Header */}
@@ -293,9 +298,8 @@ const AllRecordings = () => {
                   fontWeight: 500,
                   lineHeight: "normal",
                 }}>
-                  {rec.accessible}
+                  {rec.subtitle}
                 </span>
-                <DateBadge label={rec.date} />
               </div>
             </a>
           ))}
