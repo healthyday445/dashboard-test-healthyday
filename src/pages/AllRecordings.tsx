@@ -210,36 +210,66 @@ const AllRecordings = () => {
   const isEnglish = studentData?.language === "English";
   const youtubeVideos = isEnglish ? englishVideos : teluguVideos;
 
+  // --- Date formatting helpers ---
+  const ordinalSuffix = (d: number) => {
+    if (d >= 11 && d <= 13) return "th";
+    switch (d % 10) {
+      case 1: return "st";
+      case 2: return "nd";
+      case 3: return "rd";
+      default: return "th";
+    }
+  };
+
+  const MONTH_NAMES_SHORT = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+
+  const fmtDate = (d: Date) => `${d.getDate()}${ordinalSuffix(d.getDate())} ${MONTH_NAMES_SHORT[d.getMonth()]}`;
+
+  const now = new Date();
+  const todayLabel = fmtDate(now);
+
+  const tomorrow = new Date(now);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+  const tomorrowLabel = fmtDate(tomorrow);
+
+  const plus13 = new Date(now);
+  plus13.setDate(plus13.getDate() + 13);
+  const plus13Label = fmtDate(plus13);
+
   // --- Build Class Recordings dynamically based on language ---
   const yogaClassLink = studentData?.paid_classes_joining_link || studentData?.classes_joining_link || "https://www.youtube.com/c/Healthyday";
-  const classRecordings: { title: string; subtitle: string; thumbnail: string; link: string }[] = [
+  const classRecordings: { title: string; subtitle: string; thumbnail: string; link: string; accessTill: string }[] = [
     {
-      title: "Yoga Class",
+      title: `${todayLabel} Yoga Session`,
       subtitle: "Daily Live Yoga Session",
       thumbnail: isEnglish ? "/language English.jpg" : "/language Telugu.jpg",
       link: yogaClassLink,
+      accessTill: `Access till 5:00 AM, ${tomorrowLabel}`,
     },
     {
-      title: "Face Yoga Session",
+      title: "Last Healthyday Face Yoga",
       subtitle: "Sundays at 11:30 AM",
       thumbnail: isEnglish ? "/bonus/faceyoga_eng.jpg" : "/bonus/faceyoga_tel.jpg",
       link: isEnglish ? "https://join.healthyday.co.in/healthyface_eng" : "https://join.healthyday.co.in/healthyface",
+      accessTill: `Access till ${plus13Label}`,
     },
     {
-      title: "Breath to Heal Session",
+      title: `${todayLabel} Breath to Heal Session`,
       subtitle: "Daily at 9:00 PM",
       thumbnail: isEnglish ? "/bonus/bw_eng.jpg" : "/bonus/breathwork.jpg",
       link: isEnglish ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession",
+      accessTill: `Access till 8:30 PM, ${tomorrowLabel}`,
     },
   ];
 
   // Diet Session — Telugu 12-month plans only
   if (!isEnglish) {
     classRecordings.push({
-      title: "Diet Session",
+      title: `${todayLabel} Healthyday Diet Routine`,
       subtitle: "Daily at 8:00 PM",
       thumbnail: "/bonus/weightlosssession.jpg",
       link: "https://join.healthyday.co.in/diet",
+      accessTill: `Access till 7:30 PM, ${tomorrowLabel}`,
     });
   }
 
@@ -268,7 +298,7 @@ const AllRecordings = () => {
           lineHeight: "normal",
           margin: "0 0 16px",
         }}>
-          Class Recordings
+          Most Recent Session Recordings
         </h2>
 
         <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
@@ -299,6 +329,15 @@ const AllRecordings = () => {
                   lineHeight: "normal",
                 }}>
                   {rec.subtitle}
+                </span>
+                <span style={{
+                  color: "#B71C1C",
+                  fontFamily: "Outfit",
+                  fontSize: "11px",
+                  fontWeight: 600,
+                  lineHeight: "normal",
+                }}>
+                  {rec.accessTill}
                 </span>
               </div>
             </a>
