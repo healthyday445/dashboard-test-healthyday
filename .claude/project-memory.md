@@ -87,6 +87,14 @@ Handled in `src/pages/Index.tsx`.
 - `pastdue`
 - `elapsed`
 - `day1` through `day14`
+- `w1pms` — Week 1, Post Morning Session, non-bonus day (Day 2 @ 10:00 AM)
+- `w1pmsbonus` — Week 1, Post Morning Session, bonus day (Day 3 @ 10:00 AM)
+- `w1pes` — Week 1, Post Evening Session, non-bonus day (Day 4 @ 8:00 PM)
+- `w1pesbonus` — Week 1, Post Evening Session, bonus LIVE (Day 3 @ 8:40 PM)
+- `w2pms` — Week 2, Post Morning Session, non-bonus day (Day 9 @ 10:00 AM)
+- `w2pmsbonus` — Week 2, Post Morning Session, bonus day (Day 10 @ 10:00 AM)
+- `w2pes` — Week 2, Post Evening Session, non-bonus day (Day 11 @ 8:00 PM)
+- `w2pesbonus` — Week 2, Post Evening Session, bonus LIVE (Day 10 @ 8:40 PM)
 
 ## Styling Notes
 

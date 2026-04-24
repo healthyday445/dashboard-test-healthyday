@@ -150,6 +150,7 @@ const Index = () => {
   const [studentData, setStudentData] = useState<any>(null);
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
+  const [previewTimeOverrideMin, setPreviewTimeOverrideMin] = useState<number | null>(null);
   const [joinedDays, setJoinedDays] = useState<number[]>(() => {
     try {
       const keys = Object.keys(localStorage).filter(k => k.startsWith("hd_joined_"));
@@ -313,6 +314,44 @@ const Index = () => {
         setLoading(false);
         return;
       }
+    }
+    // ?preview=w1pms|w1pmsbonus|w1pes|w1pesbonus|w2pms|w2pmsbonus|w2pes|w2pesbonus
+    // W1/W2 = Week 1/2, PMS = Post Morning Session, PES = Post Evening Session
+    // Non Sunday = regular (non-bonus) day, Bonus = bonus day (3,5,7,10,14)
+    const ongoingPreviews: Record<string, { dayNum: number; timeMin: number }> = {
+      // Week 1 — Post Morning Session (10:00 AM IST = 600 min)
+      w1pms:      { dayNum: 2,  timeMin: 600 },   // W1, non-bonus day, after morning sessions
+      w1pmsbonus: { dayNum: 3,  timeMin: 600 },   // W1, bonus day (Face Yoga 8:30 PM), after morning sessions
+      // Week 1 — Post Evening Session (8:00 PM IST = 1200 min)
+      w1pes:      { dayNum: 4,  timeMin: 1200 },  // W1, non-bonus day, after evening sessions
+      w1pesbonus: { dayNum: 3,  timeMin: 1240 },  // W1, bonus day, during bonus LIVE window (8:30-9:00 PM)
+      // Week 2 — Post Morning Session
+      w2pms:      { dayNum: 9,  timeMin: 600 },   // W2, non-bonus day, after morning sessions
+      w2pmsbonus: { dayNum: 10, timeMin: 600 },   // W2, bonus day (Breath Work 8:30 PM), after morning sessions
+      // Week 2 — Post Evening Session
+      w2pes:      { dayNum: 11, timeMin: 1200 },  // W2, non-bonus day, after evening sessions
+      w2pesbonus: { dayNum: 10, timeMin: 1240 },  // W2, bonus day, during bonus LIVE window
+    };
+    if (previewMode && ongoingPreviews[previewMode]) {
+      const { dayNum, timeMin } = ongoingPreviews[previewMode];
+      const startDate = new Date();
+      startDate.setDate(startDate.getDate() - (dayNum - 1));
+      // Ensure start date is NOT a Sunday so "Non Sunday" previews work correctly
+      // For non-sunday previews, shift if it lands on Sunday
+      const yyyyMMDD = toLocalDateStr(startDate);
+      setStudentData({
+        language: "Telugu",
+        status: "registered",
+        free_batch_start_date: yyyyMMDD,
+        attendance: Array(dayNum - 1).fill("present"),
+        free_class_join_link: "https://www.youtube.com/c/Healthyday",
+        referral_link: "healthyday.app/ref=preview123",
+        total_referral_count: 2,
+      });
+      setPreviewTimeOverrideMin(timeMin);
+      setAuthenticated(true);
+      setLoading(false);
+      return;
     }
     // â”€â”€ NORMAL FLOW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     if (!mobile) {
@@ -645,8 +684,7 @@ const Index = () => {
         },
       };
       const bonusSession = bonusByDay[currentDay][lang];
-      const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
-      const totalMin = nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
+      const totalMin = previewTimeOverrideMin != null ? previewTimeOverrideMin : (() => { const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000); return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes(); })();
       const showBonus = totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + 30;
       if (showBonus) {
         const isLive = totalMin >= bonusSession.startMin && totalMin < bonusSession.startMin + 30;
@@ -910,8 +948,7 @@ const Index = () => {
 
                   {/* Your Yoga Session — live/not-live */}
                   {(() => {
-                    const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
-                    const totalMin = nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
+                    const totalMin = previewTimeOverrideMin != null ? previewTimeOverrideMin : (() => { const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000); return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes(); })();
 
                     // Bonus session detection for regular session card
                     const BONUS_DAYS = [3, 5, 7, 10, 14];
