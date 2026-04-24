@@ -331,6 +331,9 @@ const Index = () => {
       // Week 2 — Post Evening Session
       w2pes:      { dayNum: 11, timeMin: 1200 },  // W2, non-bonus day, after evening sessions
       w2pesbonus: { dayNum: 10, timeMin: 1240 },  // W2, bonus day, during bonus LIVE window
+      // After Bonus Session (bonus ended, session card hidden — startMin + 50)
+      w1afterbonus: { dayNum: 3,  timeMin: 1280 }, // W1, Day 3 after Face Yoga (8:30 PM + 50 min = 9:20 PM)
+      w2afterbonus: { dayNum: 10, timeMin: 1280 }, // W2, Day 10 after Breath Work (8:30 PM + 50 min = 9:20 PM)
     };
     if (previewMode && ongoingPreviews[previewMode]) {
       const { dayNum, timeMin } = ongoingPreviews[previewMode];

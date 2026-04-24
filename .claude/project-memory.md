@@ -95,6 +95,8 @@ Handled in `src/pages/Index.tsx`.
 - `w2pmsbonus` — Week 2, Post Morning Session, bonus day (Day 10 @ 10:00 AM)
 - `w2pes` — Week 2, Post Evening Session, non-bonus day (Day 11 @ 8:00 PM)
 - `w2pesbonus` — Week 2, Post Evening Session, bonus LIVE (Day 10 @ 8:40 PM)
+- `w1afterbonus` — Week 1, after bonus session ended (Day 3 @ 9:20 PM)
+- `w2afterbonus` — Week 2, after bonus session ended (Day 10 @ 9:20 PM)
 
 ## Styling Notes
 
