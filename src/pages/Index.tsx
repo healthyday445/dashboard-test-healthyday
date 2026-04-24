@@ -5,6 +5,7 @@ import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSe
 import { ReferralMilestonesCard } from "@/components/ReferralMilestonesCard";
 import { ReferWinPopup, ReferralProgressBar } from "@/components/ReferWinPopup";
 import { ShareReferralActions } from "@/components/ShareReferralActions";
+import NoSessionsCard from "@/components/NoSessionsCard";
 
 const MoonIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -1477,13 +1478,16 @@ const Index = () => {
           </header>
 
           {/* Bonus Special Session (Paid) */}
-          {activeBonusCard && (
+          {activeBonusCard && (() => {
+            const bonusIsLive = totalMin >= activeBonusCard.startMin && totalMin < activeBonusCard.startMin + 30;
+            const bonusTimeLabel = activeBonusCard.fullName.replace(/^.*at\s+/, '');
+            return (
             <div style={{ padding: "24px 20px 0" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
                 <h2 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>
-                  Bonus Special Session
+                  {bonusIsLive ? `${activeBonusCard.name} - Live Now` : `Next Session - ${activeBonusCard.name}`}
                 </h2>
-                {totalMin >= activeBonusCard.startMin && totalMin < activeBonusCard.startMin + 30 && (
+                {bonusIsLive && (
                   <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
                     <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
                     <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>LIVE</span>
@@ -1491,198 +1495,120 @@ const Index = () => {
                 )}
               </div>
 
-              {totalMin >= activeBonusCard.startMin && totalMin < activeBonusCard.startMin + 30 ? (
-                <>
-                  <a href={activeBonusCard.sessionLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px", overflow: "hidden", background: "#000", position: "relative", marginBottom: "12px" }}>
-                    <img
-                      src={activeBonusCard.thumbnail}
-                      alt={activeBonusCard.name}
-                      style={{ width: "100%", height: "auto", aspectRatio: "372/204", objectFit: "cover", opacity: 0.85, display: "block" }}
-                    />
-                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <PlayButton />
-                    </div>
-                  </a>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-                    <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>
-                      {activeBonusCard.name}
-                    </span>
-                    <a
-                      href={activeBonusCard.sessionLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: "flex", alignItems: "center", gap: "8px",
-                        height: "38px", padding: "0 18px", borderRadius: "8px",
-                        background: "#FEAB27", textDecoration: "none",
-                        boxShadow: "0 2px 8px rgba(254,171,39,0.35)",
-                      }}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                      <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700 }}>JOIN NOW</span>
-                    </a>
-                  </div>
-                </>
-              ) : (
-                <div style={{ marginBottom: "16px" }}>
-                  <a href={activeBonusCard.sessionLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
-                    <img
-                      src={activeBonusCard.thumbnail}
-                      alt={activeBonusCard.name}
-                      style={{ width: "100%", height: "auto", aspectRatio: "360/197", objectFit: "cover", opacity: 0.85, display: "block" }}
-                    />
-                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <PlayButton />
-                    </div>
-                  </a>
-                  <div style={{
-                    width: "100%", height: "58px",
-                    borderRadius: "0 0 12px 12px",
-                    border: "1.5px solid #E9E9E9", background: "#FFF",
-                    boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
-                    display: "flex", alignItems: "center", paddingLeft: "16px", boxSizing: "border-box",
-                  }}>
-                    <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>
-                      {activeBonusCard.fullName}
-                    </span>
-                  </div>
-                </div>
-              )}
-              {/* Next regular session card — shown when bonus is active */}
-              {(() => {
-                const isAMBonus = activeBonusCard.startMin < 12 * 60;
-                const nextRegSlots = isAMBonus ? ["4:30 PM", "5:30 PM", "6:30 PM"] : ["5:30 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
-                const nextRegWhen = isAMBonus ? "at 4:30 PM" : "tomorrow at 5:30 AM";
-                return (
-                  <div style={{
-                    width: "100%", borderRadius: "12px", marginTop: "16px",
-                    border: "1.5px solid #D2D2D2", background: "#FFF",
-                    boxShadow: "-1px -1px 4px 0 rgba(0,0,0,0.10), 1px 1px 4px 0 rgba(0,0,0,0.10)",
-                    padding: "16px", boxSizing: "border-box", display: "flex", flexDirection: "column", gap: "12px",
-                  }}>
-                    <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
-                      <div style={{
-                        width: "82px", height: "81px", borderRadius: "50%", flexShrink: 0,
-                        background: "url(/8ea326ab563adb61ccb99b953865cb3132c173ab.png) lightgray -5.311px -5.747px / 112.404% 113.525% no-repeat",
-                      }} />
-                      <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                        <div style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>
-                          Next regular session is {nextRegWhen}
-                        </div>
-                        <div style={{ color: "#7990AC", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "24px" }}>
-                          Open the link during live timings
-                        </div>
-                      </div>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0" }}>
-                      {nextRegSlots.map((label, idx) => (
-                        <span key={label} style={{ display: "flex", alignItems: "center" }}>
-                          {idx > 0 && <span style={{ color: "#CCCBCB", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal", margin: "0 8px" }}>|</span>}
-                          <span style={{ color: "#FEAB27", textAlign: "center", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal" }}>{label}</span>
-                        </span>
-                      ))}
-                    </div>
-                  </div>
-                );
-              })()}
-            </div>
-          )}
-
-          {/* Your Yoga Session */}
-          {!activeBonusCard && (
-            <div style={{ padding: "24px 20px 0" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
-                <h2 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, margin: 0 }}>Your Yoga Session</h2>
-                {isLive && (
-                  <div style={{ display: "flex", alignItems: "center", gap: "6px", borderRadius: "60px", background: "#FFD3D3", padding: "4px 10px" }}>
-                    <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#E02F2F" }} />
-                    <span style={{ color: "#E02F2F", fontFamily: "Outfit", fontSize: "13px", fontWeight: 700 }}>LIVE</span>
-                  </div>
-                )}
-              </div>
-
-              {/* Session Card */}
+              {/* Session card */}
               <div style={{ width: "100%" }}>
-                <a href={todayBonusCard ? todayBonusCard.sessionLink : paidJoinLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none" }}>
-                  <div style={{
-                    width: "100%", aspectRatio: "178/93", borderRadius: "12px 12px 0 0",
-                    background: `url(/language%20${studentData?.language === "English" ? "English" : "Telugu"}.jpg) lightgray 50% / cover no-repeat`,
-                    boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
-                    position: "relative",
-                  }}>
-                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px 12px 0 0", background: "rgba(0,0,0,0.32)" }} />
-                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <PlayButton />
-                    </div>
+                <a href={activeBonusCard.sessionLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
+                  <img
+                    src={activeBonusCard.thumbnail}
+                    alt={activeBonusCard.name}
+                    style={{ width: "100%", height: "auto", aspectRatio: "372/204", objectFit: "cover", opacity: 0.85, display: "block" }}
+                  />
+                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                    <PlayButton />
                   </div>
                 </a>
                 <div style={{
-                  width: "100%", height: "67px", borderRadius: "0 0 12px 12px",
+                  width: "100%", height: "67px",
+                  borderRadius: "0 0 12px 12px",
                   border: "1.5px solid #E9E9E9", background: "#FFF",
                   boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
-                  display: "flex", alignItems: "center", paddingLeft: todayBonusCard ? "16px" : "0", justifyContent: todayBonusCard ? "flex-start" : "center", boxSizing: "border-box",
+                  display: "flex", alignItems: "center", justifyContent: "center", boxSizing: "border-box",
                 }}>
-                  {todayBonusCard ? (
-                    <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>
-                      {todayBonusCard.fullName}
-                    </span>
-                  ) : (
-                    <a href={paidJoinLink} target="_blank" rel="noopener noreferrer" style={{
+                  {bonusIsLive ? (
+                    <a href={activeBonusCard.sessionLink} target="_blank" rel="noopener noreferrer" style={{
                       width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27",
-                      display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", textDecoration: "none",
+                      display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none",
+                      boxShadow: "0 2px 8px rgba(254,171,39,0.35)",
                     }}>
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                         <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                       </svg>
-                      <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION</span>
+                      <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN NOW</span>
                     </a>
+                  ) : (
+                    <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>
+                      Session Starts at {bonusTimeLabel}
+                    </span>
                   )}
                 </div>
               </div>
-              
-              {/* Next regular session card — shown on bonus days */}
-              {todayBonusCard && (() => {
-                const isAMBonus = todayBonusCard.startMin < 12 * 60;
-                const nextRegSlots = isAMBonus ? ["4:30 PM", "5:30 PM", "6:30 PM"] : ["5:30 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
-                const nextRegWhen = isAMBonus ? "at 4:30 PM" : "tomorrow at 5:30 AM";
-                return (
-                  <div style={{
-                    width: "100%", borderRadius: "12px", marginTop: "16px",
-                    border: "1.5px solid #D2D2D2", background: "#FFF",
-                    boxShadow: "-1px -1px 4px 0 rgba(0,0,0,0.10), 1px 1px 4px 0 rgba(0,0,0,0.10)",
-                    padding: "16px", boxSizing: "border-box", display: "flex", flexDirection: "column", gap: "12px",
-                  }}>
-                    <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
+            </div>
+            );
+          })()}
+
+          {/* Your Yoga Session / No Sessions */}
+          {!activeBonusCard && (() => {
+            const bonusTimeLabel = todayBonusCard ? todayBonusCard.fullName.replace(/^.*at\s+/, '') : '';
+            const noSessionsNow = !isLive && !todayBonusCard;
+            return (
+            <div style={{ padding: "24px 20px 0" }}>
+              {noSessionsNow ? (
+                /* No sessions right now */
+                <NoSessionsCard />
+
+              ) : (
+                <>
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "20px" }}>
+                    <h2 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, margin: 0 }}>
+                      {todayBonusCard ? `Next Session - ${todayBonusCard.name}` : "Your Yoga Session"}
+                    </h2>
+                    {isLive && (
+                      <div style={{ display: "flex", alignItems: "center", gap: "6px", borderRadius: "60px", background: "#FFD3D3", padding: "4px 10px" }}>
+                        <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#E02F2F" }} />
+                        <span style={{ color: "#E02F2F", fontFamily: "Outfit", fontSize: "13px", fontWeight: 700 }}>LIVE</span>
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Session Card */}
+                  <div style={{ width: "100%" }}>
+                    <a href={todayBonusCard ? todayBonusCard.sessionLink : paidJoinLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none" }}>
                       <div style={{
-                        width: "82px", height: "81px", borderRadius: "50%", flexShrink: 0,
-                        background: "url(/8ea326ab563adb61ccb99b953865cb3132c173ab.png) lightgray -5.311px -5.747px / 112.404% 113.525% no-repeat",
-                      }} />
-                      <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                        <div style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>
-                          Next regular session is {nextRegWhen}
-                        </div>
-                        <div style={{ color: "#7990AC", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "24px" }}>
-                          Open the link during live timings
+                        width: "100%", aspectRatio: "178/93", borderRadius: "12px 12px 0 0",
+                        background: todayBonusCard
+                          ? `url(${todayBonusCard.thumbnail}) lightgray 50% / cover no-repeat`
+                          : `url(/language%20${studentData?.language === "English" ? "English" : "Telugu"}.jpg) lightgray 50% / cover no-repeat`,
+                        boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
+                        position: "relative",
+                      }}>
+                        <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px 12px 0 0", background: "rgba(0,0,0,0.32)" }} />
+                        <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                          <PlayButton />
                         </div>
                       </div>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0" }}>
-                      {nextRegSlots.map((label, idx) => (
-                        <span key={label} style={{ display: "flex", alignItems: "center" }}>
-                          {idx > 0 && <span style={{ color: "#CCCBCB", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal", margin: "0 8px" }}>|</span>}
-                          <span style={{ color: "#FEAB27", textAlign: "center", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal" }}>{label}</span>
+                    </a>
+                    <div style={{
+                      width: "100%", height: "67px", borderRadius: "0 0 12px 12px",
+                      border: "1.5px solid #E9E9E9", background: "#FFF",
+                      boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
+                      display: "flex", alignItems: "center", justifyContent: "center", boxSizing: "border-box",
+                    }}>
+                      {todayBonusCard ? (
+                        <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>
+                          Session Starts at {bonusTimeLabel}
                         </span>
-                      ))}
+                      ) : (
+                        <a href={paidJoinLink} target="_blank" rel="noopener noreferrer" style={{
+                          width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27",
+                          display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", textDecoration: "none",
+                        }}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                          <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION</span>
+                        </a>
+                      )}
                     </div>
                   </div>
-                );
-              })()}
+                </>
+              )}
             </div>
-          )}
+            );
+          })()}
 
                           {/* View Class Recordings */}
                           <div style={{ padding: "20px 21px 0 22px" }}>
@@ -1750,19 +1676,33 @@ const Index = () => {
                           </div>
                           )}
 
-                          {/* Refer and Win Footer */}
+                          {/* Refer & Win Card (blue) */}
                           {!showPlanRenewal && (
-                          <div
-                            style={{ padding: "28px 63px 40px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "12px", cursor: "pointer" }}
-                            onClick={() => navigate(`/referral?count=${refCount}&mobile=${mobile || ""}`)}
-                          >
-                            <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none">
-                              <circle cx="50" cy="50" r="50" fill="#FFF5E5" />
-                              <path d="M56.2367 58.7131L41.2852 43.7625L31.2151 65.7366C31.016 66.1632 30.9531 66.6408 31.0348 67.1044C31.1165 67.568 31.339 67.9953 31.6719 68.3282C32.0048 68.6611 32.4321 68.8835 32.8957 68.9652C33.3594 69.0469 33.837 68.984 34.2636 68.7849L56.2367 58.7131Z" fill="#FEAB27" />
-                              <path d="M33.2979 32.2937H37.8857M35.5918 30V34.5875M50.502 30L49.3551 34.5875M65.4122 32.2937H70M67.7061 30V34.5875M58.5306 41.4687L56.2367 43.7625M65.4122 50.6437L70 49.4968M65.4122 64.4062H70M67.7061 62.1124V66.6999M56.2367 58.7131L41.2852 43.7625L31.2151 65.7366C31.016 66.1632 30.9531 66.6408 31.0348 67.1044C31.1165 67.568 31.339 67.9953 31.6719 68.3282C32.0048 68.6611 32.4321 68.8835 32.8957 68.9652C33.3594 69.0469 33.837 68.984 34.2636 68.7849L56.2367 58.7131Z" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                            <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal", margin: 0 }}>Refer and Win!</h3>
-                            <p style={{ color: "#ADADAD", fontFamily: "Outfit", fontSize: "18px", fontWeight: 500, lineHeight: "normal", textAlign: "center", margin: 0 }}>Every active referral earn gifts and rewards for you</p>
+                          <div style={{ padding: "28px 20px 40px" }}>
+                            <div style={{
+                              width: "100%", boxSizing: "border-box",
+                              borderRadius: "16px",
+                              background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
+                              boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
+                              padding: "20px 16px",
+                            }}>
+                              {/* Header */}
+                              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, lineHeight: "normal" }}>REFER & WIN</span>
+
+                              {/* Progress Bar */}
+                              <ReferralProgressBar refCount={refCount} />
+
+                              {/* Refer Now Button */}
+                              <button
+                                onClick={() => navigate(`/referral?count=${refCount}&mobile=${mobile || ""}`)}
+                                style={{ width: "100%", height: "43px", borderRadius: "14px", background: "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", boxShadow: "0 0 10px 1px rgba(0,0,0,0.25)", backdropFilter: "blur(2px)" }}
+                              >
+                                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                  <path d="M1.25 16.4079V14.7237C1.25 13.8303 1.60489 12.9736 2.23659 12.3419C2.86829 11.7102 3.72506 11.3553 4.61842 11.3553H7.98684C8.79526 11.3553 9.53632 11.6399 10.1174 12.114M12.1974 1.35948C12.9219 1.54499 13.5641 1.96638 14.0227 2.55721C14.4814 3.14804 14.7303 3.8747 14.7303 4.62264C14.7303 5.37057 14.4814 6.09723 14.0227 6.68806C13.5641 7.27889 12.9219 7.70028 12.1974 7.88579M12.1974 14.7237H17.25M14.7237 12.1974V17.25M2.93421 4.61842C2.93421 5.51178 3.2891 6.36855 3.9208 7.00025C4.5525 7.63196 5.40927 7.98684 6.30263 7.98684C7.19599 7.98684 8.05276 7.63196 8.68447 7.00025C9.31617 6.36855 9.67105 5.51178 9.67105 4.61842C9.67105 3.72506 9.31617 2.86829 8.68447 2.23659C8.05276 1.60489 7.19599 1.25 6.30263 1.25C5.40927 1.25 4.5525 1.60489 3.9208 2.23659C3.2891 2.86829 2.93421 3.72506 2.93421 4.61842Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                                </svg>
+                                <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal" }}>Refer Now</span>
+                              </button>
+                            </div>
                           </div>
                           )}
 
@@ -1844,14 +1784,7 @@ const Index = () => {
                             </>
                           )}
 
-                          {/* Referral Status Popup Overlay */}
-                          {!showPlanRenewal && showReferral && (
-                            <ReferWinPopup
-                              refCount={refCount}
-                              onClose={() => setShowReferral(false)}
-referNowUrl={`/referral?count=${refCount}&mobile=${mobile || ""}`}
-                            />
-                          )}
+
                         </div>
                         );
   }
@@ -1962,7 +1895,7 @@ referNowUrl={`/referral?count=${refCount}&mobile=${mobile || ""}`}
         </div>
 
         {/* Pricing Section */}
-        <div style={{ marginTop: "20px" }}>
+        <div style={{ marginTop: "-30px" }}>
           <PricingAndComparisonSection
             selectedPlanIdx={selectedPlanIdx}
             setSelectedPlanIdx={setSelectedPlanIdx}
@@ -1970,6 +1903,7 @@ referNowUrl={`/referral?count=${refCount}&mobile=${mobile || ""}`}
             hideDaysLeft={true}
           />
         </div>
+        <div style={{ height: "40px" }} />
       </div>
     );
   }
