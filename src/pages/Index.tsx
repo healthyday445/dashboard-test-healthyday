@@ -828,18 +828,16 @@ const Index = () => {
                 <p style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700, marginBottom: "14px" }}>
                   {dateRangeLabel}
                 </p>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "14px" }}>
                   {dayStatus.slice(0, 7).map((status, i) => (
                     <DayBox key={i} status={status} dayLabel={`Day ${i + 1}`} />
                   ))}
                 </div>
-                {week === 2 && (
-                  <div style={{ display: "flex", justifyContent: "space-between", marginTop: "14px" }}>
-                    {dayStatus.slice(7, 14).map((status, i) => (
-                      <DayBox key={i} status={status} dayLabel={`Day ${i + 8}`} />
-                    ))}
-                  </div>
-                )}
+                <div style={{ display: "flex", justifyContent: "space-between" }}>
+                  {dayStatus.slice(7, 14).map((status, i) => (
+                    <DayBox key={i} status={status} dayLabel={`Day ${i + 8}`} />
+                  ))}
+                </div>
               </div>
             </div>
 
@@ -876,24 +874,30 @@ const Index = () => {
               );
             })()}
 
-            {/* Refer and Win */}
-            <div style={{ padding: "28px 20px 40px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none">
-                <circle cx="50" cy="50" r="50" fill="#FFF5E5" />
-                <path d="M33.2979 32.2937H37.8857H33.2979Z" fill="#FEAB27" />
-                <path d="M35.5918 30V34.5875V30Z" fill="#FEAB27" />
-                <path d="M50.502 30L49.3551 34.5875L50.502 30Z" fill="#FEAB27" />
-                <path d="M65.4122 32.2937H70H65.4122Z" fill="#FEAB27" />
-                <path d="M67.7061 30V34.5875V30Z" fill="#FEAB27" />
-                <path d="M58.5306 41.4687L56.2367 43.7625L58.5306 41.4687Z" fill="#FEAB27" />
-                <path d="M65.4122 50.6437L70 49.4968L65.4122 50.6437Z" fill="#FEAB27" />
-                <path d="M65.4122 64.4062H70H65.4122Z" fill="#FEAB27" />
-                <path d="M67.7061 62.1124V66.6999V62.1124Z" fill="#FEAB27" />
-                <path d="M56.2367 58.7131L41.2852 43.7625L31.2151 65.7366C31.016 66.1632 30.9531 66.6408 31.0348 67.1044C31.1165 67.568 31.339 67.9953 31.6719 68.3282C32.0048 68.6611 32.4321 68.8835 32.8957 68.9652C33.3594 69.0469 33.837 68.984 34.2636 68.7849L56.2367 58.7131Z" fill="#FEAB27" />
-                <path d="M33.2979 32.2937H37.8857M35.5918 30V34.5875M50.502 30L49.3551 34.5875M65.4122 32.2937H70M67.7061 30V34.5875M58.5306 41.4687L56.2367 43.7625M65.4122 50.6437L70 49.4968M65.4122 64.4062H70M67.7061 62.1124V66.6999M56.2367 58.7131L41.2852 43.7625L31.2151 65.7366C31.016 66.1632 30.9531 66.6408 31.0348 67.1044C31.1165 67.568 31.339 67.9953 31.6719 68.3282C32.0048 68.6611 32.4321 68.8835 32.8957 68.9652C33.3594 69.0469 33.837 68.984 34.2636 68.7849L56.2367 58.7131Z" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal", margin: 0 }}>Refer and Win!</h3>
-              <p style={{ color: "#ADADAD", fontFamily: "Outfit", fontSize: "18px", fontWeight: 500, lineHeight: "normal", textAlign: "center", width: "286px", margin: 0 }}>Every active referral earn gifts and rewards for you</p>
+            {/* Refer & Win card */}
+            <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
+              <div style={{
+                width: "100%",
+                maxWidth: "358px",
+                height: "254px",
+                boxSizing: "border-box",
+                borderRadius: "16px",
+                background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
+                boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
+                padding: "20px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                justifyContent: "center"
+              }}>
+                <div>
+                  <h3 style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "21px", fontWeight: 700, lineHeight: "normal", margin: "0 0 4px" }}>Refer &amp; Win</h3>
+                  <p style={{ color: "#FFFCFC", fontFamily: "Outfit", fontSize: "14px", fontWeight: 400, lineHeight: "normal", margin: 0 }}>Invite your friends &amp; family and get exciting gifts!</p>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  <ShareReferralActions shareLink={shareLink} referralsUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`} />
+                </div>
+              </div>
             </div>
 
             {/* Week 2 Bonus: show payment section instead */}
@@ -1178,19 +1182,17 @@ const Index = () => {
               {dateRangeLabel}
             </p>
             {/* Row 1: Days 1-7 */}
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: week === 2 ? "14px" : "0" }}>
+            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "14px" }}>
               {dayStatus.slice(0, 7).map((status, i) => (
                 <DayBox key={i} status={status} dayLabel={`Day ${i + 1}`} />
               ))}
             </div>
-            {/* Row 2: Days 8-14 — only shown in week 2 */}
-            {week === 2 && (
-              <div style={{ display: "flex", justifyContent: "space-between" }}>
-                {dayStatus.slice(7, 14).map((status, i) => (
-                  <DayBox key={i} status={status} dayLabel={`Day ${i + 8}`} />
-                ))}
-              </div>
-            )}
+            {/* Row 2: Days 8-14 */}
+            <div style={{ display: "flex", justifyContent: "space-between" }}>
+              {dayStatus.slice(7, 14).map((status, i) => (
+                <DayBox key={i} status={status} dayLabel={`Day ${i + 8}`} />
+              ))}
+            </div>
           </div>
         </div>
 
@@ -1235,24 +1237,30 @@ const Index = () => {
             })()}
 
 
-            {/* Refer and Win banner */}
-            <div style={{ padding: "28px 20px 40px", textAlign: "center", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100" fill="none">
-                <circle cx="50" cy="50" r="50" fill="#FFF5E5" />
-                <path d="M33.2979 32.2937H37.8857H33.2979Z" fill="#FEAB27" />
-                <path d="M35.5918 30V34.5875V30Z" fill="#FEAB27" />
-                <path d="M50.502 30L49.3551 34.5875L50.502 30Z" fill="#FEAB27" />
-                <path d="M65.4122 32.2937H70H65.4122Z" fill="#FEAB27" />
-                <path d="M67.7061 30V34.5875V30Z" fill="#FEAB27" />
-                <path d="M58.5306 41.4687L56.2367 43.7625L58.5306 41.4687Z" fill="#FEAB27" />
-                <path d="M65.4122 50.6437L70 49.4968L65.4122 50.6437Z" fill="#FEAB27" />
-                <path d="M65.4122 64.4062H70H65.4122Z" fill="#FEAB27" />
-                <path d="M67.7061 62.1124V66.6999V62.1124Z" fill="#FEAB27" />
-                <path d="M56.2367 58.7131L41.2852 43.7625L31.2151 65.7366C31.016 66.1632 30.9531 66.6408 31.0348 67.1044C31.1165 67.568 31.339 67.9953 31.6719 68.3282C32.0048 68.6611 32.4321 68.8835 32.8957 68.9652C33.3594 69.0469 33.837 68.984 34.2636 68.7849L56.2367 58.7131Z" fill="#FEAB27" />
-                <path d="M33.2979 32.2937H37.8857M35.5918 30V34.5875M50.502 30L49.3551 34.5875M65.4122 32.2937H70M67.7061 30V34.5875M58.5306 41.4687L56.2367 43.7625M65.4122 50.6437L70 49.4968M65.4122 64.4062H70M67.7061 62.1124V66.6999M56.2367 58.7131L41.2852 43.7625L31.2151 65.7366C31.016 66.1632 30.9531 66.6408 31.0348 67.1044C31.1165 67.568 31.339 67.9953 31.6719 68.3282C32.0048 68.6611 32.4321 68.8835 32.8957 68.9652C33.3594 69.0469 33.837 68.984 34.2636 68.7849L56.2367 58.7131Z" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
-              <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal", margin: 0 }}>Refer and Win!</h3>
-              <p style={{ color: "#ADADAD", fontFamily: "Outfit", fontSize: "18px", fontWeight: 500, lineHeight: "normal", textAlign: "center", width: "286px", margin: 0 }}>Every active referral earn gifts and rewards for you</p>
+            {/* Refer & Win card */}
+            <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
+              <div style={{
+                width: "100%",
+                maxWidth: "358px",
+                height: "254px",
+                boxSizing: "border-box",
+                borderRadius: "16px",
+                background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
+                boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
+                padding: "20px",
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+                justifyContent: "center"
+              }}>
+                <div>
+                  <h3 style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "21px", fontWeight: 700, lineHeight: "normal", margin: "0 0 4px" }}>Refer &amp; Win</h3>
+                  <p style={{ color: "#FFFCFC", fontFamily: "Outfit", fontSize: "14px", fontWeight: 400, lineHeight: "normal", margin: 0 }}>Invite your friends &amp; family and get exciting gifts!</p>
+                </div>
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+                  <ShareReferralActions shareLink={shareLink} referralsUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`} />
+                </div>
+              </div>
             </div>
           </>
         )}
