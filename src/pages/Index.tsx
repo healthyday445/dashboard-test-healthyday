@@ -856,7 +856,7 @@ const Index = () => {
               return (
                 <div style={{ padding: "28px 20px 0" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-                    <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Referral Milestones</h3>
+                    <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Your Referral Gifts</h3>
                     <span
                       onClick={() => {
                         const dest = (refCount > 0 && (studentStatus === "14DaysOngoing" || studentStatus === "14daysongoing"))
@@ -1199,7 +1199,7 @@ const Index = () => {
           <PricingAndComparisonSection selectedPlanIdx={selectedPlanIdx} setSelectedPlanIdx={setSelectedPlanIdx} daysLeft={Math.max(0, 15 - currentDay)} />
         )}
 
-        {/* Referral Milestones Section */}
+        {/* Your Referral Gifts Section */}
         {week === 1 && (
           <>
             {(() => {
@@ -1214,7 +1214,7 @@ const Index = () => {
               return (
                 <div style={{ padding: "28px 20px 0" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-                    <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Referral Milestones</h3>
+                    <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Your Referral Gifts</h3>
                     <span
                       onClick={() => {
                         const dest = (refCount > 0 && (studentStatus === "14DaysOngoing" || studentStatus === "14daysongoing"))
@@ -1302,7 +1302,7 @@ const Index = () => {
         )}
 
         {/* Referral Status Popup Overlay � 14DaysOngoing simplified */}
-        {showReferral && (
+        {week === 1 && showReferral && (
           <ReferWinPopup
             refCount={studentData?.total_referral_count ?? 0}
             onClose={() => setShowReferral(false)}
@@ -1658,11 +1658,11 @@ const Index = () => {
           </div>
         </div>
 
-        {/* Referral Milestones */}
+        {/* Your Referral Gifts */}
         {!showPlanRenewal && (
           <div style={{ padding: "28px 20px 0" }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-              <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Referral Milestones</h3>
+              <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Your Referral Gifts</h3>
               <span
                 onClick={() => navigate(`/referral-status?count=${refCount}&mobile=${mobile || ""}`)}
                 style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}

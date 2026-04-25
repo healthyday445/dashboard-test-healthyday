@@ -163,10 +163,10 @@ const ReferralStatus = () => {
         </div>
       </div>
 
-      {/* ── Referral Milestones ── */}
+      {/* ── Your Referral Gifts ── */}
       <div style={{ padding: "22px 26px 9px" }}>
         <h3 style={{ margin: "0 0 24px", fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, color: "#202020" }}>
-          Referral Milestones
+          Your Referral Gifts
         </h3>
         <div
           style={{
