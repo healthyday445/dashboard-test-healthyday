@@ -149,8 +149,17 @@ export const ReferWinPopup: React.FC<ReferWinPopupProps> = ({ refCount, onClose,
   const navigate = useNavigate();
 
   return (
-    <div onClick={onClose} className="hd-popup-overlay">
-      <div onClick={(e) => e.stopPropagation()} className="hd-popup-content" style={{ height: "200px" }}>
+    <div style={{
+      position: "fixed",
+      bottom: 0,
+      left: 0,
+      right: 0,
+      zIndex: 1000,
+      display: "flex",
+      justifyContent: "center",
+      pointerEvents: "none",
+    }}>
+      <div className="hd-popup-content" style={{ height: "200px", pointerEvents: "auto" }}>
         {/* Header */}
         <div className="flex items-center justify-between">
           <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, lineHeight: "normal" }}>REFER & WIN</span>
