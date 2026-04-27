@@ -2195,7 +2195,6 @@ const Index = () => {
       {/* Referral Status Popup Overlay */}
       {showReferral && (
         <div
-          onClick={() => setShowReferral(false)}
           className="hd-popup-overlay"
         >
           <div
