@@ -201,114 +201,126 @@ const ReferralStatus = () => {
           </p>
         )}
 
-        {referrals.length > 0 && (
-          <div
-            style={{
-              borderRadius: "20px",
-              border: "1px solid #FEAB27",
-              background: "#FFF",
-              overflow: "hidden",
-              marginBottom: "16px",
-            }}
-          >
-            {referrals.slice(0, 4).map((ref, idx) => (
-              <div key={idx}>
-                {idx > 0 && (
-                  <div style={{ height: "0.5px", background: "#FEAB27", margin: "0 21px" }} />
-                )}
-                <div
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "space-between",
-                    padding: "10px 24px 10px 21px",
-                  }}
-                >
-                  <div style={{ display: "flex", alignItems: "center", gap: "17px" }}>
-                    {/* Avatar */}
-                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none" style={{ flexShrink: 0 }}>
-                      <circle cx="18" cy="18" r="18" fill="#F3F4F7" />
-                      <g transform="translate(12, 9.5)">
-                        <path d="M1 16V14.3333C1 13.4493 1.35119 12.6014 1.97631 11.9763C2.60143 11.3512 3.44928 11 4.33333 11H7.66667C8.55072 11 9.39857 11.3512 10.0237 11.9763C10.6488 12.6014 11 13.4493 11 14.3333V16M2.66667 4.33333C2.66667 5.21739 3.01786 6.06523 3.64298 6.69036C4.2681 7.31548 5.11594 7.66667 6 7.66667C6.88405 7.66667 7.7319 7.31548 8.35702 6.69036C8.98214 6.06523 9.33333 5.21739 9.33333 4.33333C9.33333 3.44928 8.98214 2.60143 8.35702 1.97631C7.7319 1.35119 6.88405 1 6 1C5.11594 1 4.2681 1.35119 3.64298 1.97631C3.01786 2.60143 2.66667 3.44928 2.66667 4.33333Z" stroke="#0D468B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M1 16V14.3333C1 13.4493 1.35119 12.6014 1.97631 11.9763C2.60143 11.3512 3.44928 11 4.33333 11H7.66667C8.55072 11 9.39857 11.3512 10.0237 11.9763C10.6488 12.6014 11 13.4493 11 14.3333V16M2.66667 4.33333C2.66667 5.21739 3.01786 6.06523 3.64298 6.69036C4.2681 7.31548 5.11594 7.66667 6 7.66667C6.88405 7.66667 7.7319 7.31548 8.35702 6.69036C8.98214 6.06523 9.33333 5.21739 9.33333 4.33333C9.33333 3.44928 8.98214 2.60143 8.35702 1.97631C7.7319 1.35119 6.88405 1 6 1C5.11594 1 4.2681 1.35119 3.64298 1.97631C3.01786 2.60143 2.66667 3.44928 2.66667 4.33333Z" stroke="black" strokeOpacity="0.2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </g>
-                    </svg>
-                    <div>
-                      {/* Name as primary identifier */}
-                      <div
-                        style={{
-                          fontFamily: "Outfit",
-                          fontSize: "15px",
-                          fontWeight: 600,
-                          background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
-                          WebkitBackgroundClip: "text",
-                          WebkitTextFillColor: "transparent",
-                        }}
-                      >
-                        {ref.referred_name || maskMobile(ref.referred_mobile)}
-                      </div>
-                      {/* Masked mobile + referral date */}
-                      <div style={{ color: "#A2A2A2", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, marginTop: "2px" }}>
-                        {ref.referred_name && `${maskMobile(ref.referred_mobile)} · `}Joined {formatDate(ref.referral_date)}
-                      </div>
-                    </div>
-                  </div>
-
-                  {/* Status badge */}
+        {/* Card + FAB wrapper */}
+        <div style={{ position: "relative", paddingBottom: "44px", minHeight: referrals.length === 0 ? "60px" : "auto" }}>
+          {referrals.length > 0 && (
+            <div
+              style={{
+                borderRadius: "20px",
+                border: "1px solid #FEAB27",
+                background: "#FFF",
+                overflow: "hidden",
+                marginBottom: "0",
+              }}
+            >
+              {referrals.slice(0, 4).map((ref, idx) => (
+                <div key={idx}>
+                  {idx > 0 && (
+                    <div style={{ height: "0.5px", background: "#FEAB27", margin: "0 21px" }} />
+                  )}
                   <div
                     style={{
-                      width: "58px",
-                      height: "21px",
-                      borderRadius: "3px",
-                      background: "#C7FFDA",
                       display: "flex",
                       alignItems: "center",
-                      justifyContent: "center",
-                      fontFamily: "Outfit",
-                      fontSize: "10px",
-                      fontWeight: 600,
-                      color: "#287E54",
+                      justifyContent: "space-between",
+                      padding: "10px 24px 10px 21px",
                     }}
                   >
-                    ACTIVE
+                    <div style={{ display: "flex", alignItems: "center", gap: "17px" }}>
+                      {/* Avatar */}
+                      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none" style={{ flexShrink: 0 }}>
+                        <circle cx="18" cy="18" r="18" fill="#F3F4F7" />
+                        <g transform="translate(12, 9.5)">
+                          <path d="M1 16V14.3333C1 13.4493 1.35119 12.6014 1.97631 11.9763C2.60143 11.3512 3.44928 11 4.33333 11H7.66667C8.55072 11 9.39857 11.3512 10.0237 11.9763C10.6488 12.6014 11 13.4493 11 14.3333V16M2.66667 4.33333C2.66667 5.21739 3.01786 6.06523 3.64298 6.69036C4.2681 7.31548 5.11594 7.66667 6 7.66667C6.88405 7.66667 7.7319 7.31548 8.35702 6.69036C8.98214 6.06523 9.33333 5.21739 9.33333 4.33333C9.33333 3.44928 8.98214 2.60143 8.35702 1.97631C7.7319 1.35119 6.88405 1 6 1C5.11594 1 4.2681 1.35119 3.64298 1.97631C3.01786 2.60143 2.66667 3.44928 2.66667 4.33333Z" stroke="#0D468B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M1 16V14.3333C1 13.4493 1.35119 12.6014 1.97631 11.9763C2.60143 11.3512 3.44928 11 4.33333 11H7.66667C8.55072 11 9.39857 11.3512 10.0237 11.9763C10.6488 12.6014 11 13.4493 11 14.3333V16M2.66667 4.33333C2.66667 5.21739 3.01786 6.06523 3.64298 6.69036C4.2681 7.31548 5.11594 7.66667 6 7.66667C6.88405 7.66667 7.7319 7.31548 8.35702 6.69036C8.98214 6.06523 9.33333 5.21739 9.33333 4.33333C9.33333 3.44928 8.98214 2.60143 8.35702 1.97631C7.7319 1.35119 6.88405 1 6 1C5.11594 1 4.2681 1.35119 3.64298 1.97631C3.01786 2.60143 2.66667 3.44928 2.66667 4.33333Z" stroke="black" strokeOpacity="0.2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </g>
+                      </svg>
+                      <div>
+                        {/* Name as primary identifier */}
+                        <div
+                          style={{
+                            fontFamily: "Outfit",
+                            fontSize: "15px",
+                            fontWeight: 600,
+                            background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
+                            WebkitBackgroundClip: "text",
+                            WebkitTextFillColor: "transparent",
+                          }}
+                        >
+                          {ref.referred_name || maskMobile(ref.referred_mobile)}
+                        </div>
+                        {/* Masked mobile + referral date */}
+                        <div style={{ color: "#A2A2A2", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, marginTop: "2px" }}>
+                          {ref.referred_name && `${maskMobile(ref.referred_mobile)} · `}Joined {formatDate(ref.referral_date)}
+                        </div>
+                      </div>
+                    </div>
+
+                    {/* Status badge */}
+                    <div
+                      style={{
+                        width: "58px",
+                        height: "21px",
+                        borderRadius: "3px",
+                        background: "#C7FFDA",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        fontFamily: "Outfit",
+                        fontSize: "10px",
+                        fontWeight: 600,
+                        color: "#287E54",
+                      }}
+                    >
+                      ACTIVE
+                    </div>
                   </div>
                 </div>
-              </div>
-            ))}
-          </div>
-        )}
+              ))}
+            </div>
+          )}
 
-        {/* Refer Now floating button */}
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "center",
-            marginTop: referrals.length > 0 ? "-30px" : "0",
-          }}
-        >
+          {/* REFER & WIN — FAB floating at bottom-right */}
           <button
+            className="refer-fab"
             onClick={handleReferNow}
             style={{
+              position: "absolute",
+              bottom: referrals.length > 0 ? "-24px" : "-100px",
+              right: "16px",
               display: "flex",
               alignItems: "center",
-              gap: "12px",
-              background: "#FEAB27",
+              gap: "10px",
+              background: "linear-gradient(135deg, #FEAB27 0%, #FF8C00 100%)",
               border: "none",
               borderRadius: "40px",
-              padding: "15px 25px 14px",
+              padding: "12px 24px",
               cursor: "pointer",
-              boxShadow: "0 0 10px 1px rgba(0,0,0,0.25)",
+              boxShadow: "0 6px 20px rgba(254,171,39,0.50), 0 3px 10px rgba(0,0,0,0.12)",
               backdropFilter: "blur(4px)",
+              zIndex: 2,
+              transition: "transform 0.2s ease, box-shadow 0.2s ease",
             }}
           >
-            <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+            <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 19 19" fill="none">
               <path d="M1.25 16.4079V14.7237C1.25 13.8303 1.60489 12.9736 2.23659 12.3419C2.86829 11.7102 3.72506 11.3553 4.61842 11.3553H7.98684C8.79526 11.3553 9.53632 11.6399 10.1174 12.114M12.1974 1.35948C12.9219 1.54499 13.5641 1.96638 14.0227 2.55721C14.4814 3.14804 14.7303 3.8747 14.7303 4.62264C14.7303 5.37057 14.4814 6.09723 14.0227 6.68806C13.5641 7.27889 12.9219 7.70028 12.1974 7.88579M12.1974 14.7237H17.25M14.7237 12.1974V17.25M2.93421 4.61842C2.93421 5.51178 3.2891 6.36855 3.9208 7.00025C4.5525 7.63196 5.40927 7.98684 6.30263 7.98684C7.19599 7.98684 8.05276 7.63196 8.68447 7.00025C9.31617 6.36855 9.67105 5.51178 9.67105 4.61842C9.67105 3.72506 9.31617 2.86829 8.68447 2.23659C8.05276 1.60489 7.19599 1.25 6.30263 1.25C5.40927 1.25 4.5525 1.60489 3.9208 2.23659C3.2891 2.86829 2.93421 3.72506 2.93421 4.61842Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <h3 style={{ margin: 0, fontFamily: "Outfit", fontSize: "19px", fontWeight: 700, color: "#FFF" }}>
+            <span style={{ margin: 0, fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, color: "#FFF", whiteSpace: "nowrap" }}>
               REFER & WIN
-            </h3>
+            </span>
           </button>
         </div>
+
+        {/* Hover animation for FAB */}
+        <style>{`
+          .refer-fab:hover {
+            transform: scale(1.05) !important;
+            box-shadow: 0 8px 28px rgba(254,171,39,0.60), 0 4px 14px rgba(0,0,0,0.18) !important;
+          }
+          .refer-fab:active {
+            transform: scale(0.97) !important;
+          }
+        `}</style>
       </div>
 
       {/* ── Rewards ── */}
