@@ -1985,7 +1985,7 @@ const Index = () => {
             <span style={{ color: "#B71C1C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 800, lineHeight: "22px", letterSpacing: "0.88px" }}>TRIAL ENDED</span>
           </div>
           {/* Title */}
-          <p style={{ width: "308px", color: "#000", textAlign: "center", fontFamily: "Outfit", fontSize: "25px", fontWeight: 800, lineHeight: "normal", margin: 0 }}>
+          <p style={{ width: "308px", color: "#000", textAlign: "center", fontFamily: "Outfit", fontSize: "27px", fontWeight: 800, lineHeight: "normal", margin: 0 }}>
             Your <span style={{ color: "#D70000" }}>14-Days FREE</span> Classes are completed
           </p>
           {/* Subtitle */}
