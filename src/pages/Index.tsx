@@ -2192,6 +2192,9 @@ const Index = () => {
         </div>
       </div>
 
+      {/* Spacer to allow scrolling past the fixed popup */}
+      {showReferral && <div style={{ height: "360px" }} />}
+
       {/* Referral Status Popup Overlay */}
       {showReferral && (
         <div
@@ -2200,7 +2203,7 @@ const Index = () => {
           <div
             onClick={(e) => e.stopPropagation()}
             className="hd-popup-content"
-            style={{ height: "336px" }}
+            style={{ height: "312px" }}
           >
             {/* Header */}
             <div className="flex items-center justify-between">
