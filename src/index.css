@@ -61,7 +61,7 @@ html, body {
 
 .hd-popup-content {
   width: 100%;
-  max-width: none;
+  max-width: 412px;
   border-radius: 12px 12px 0 0;
   background: linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B;
   box-shadow: 0 4px 8px 0 rgba(0,0,0,0.25);
@@ -72,6 +72,12 @@ html, body {
   justify-content: space-between;
   box-sizing: border-box;
   pointer-events: auto;
+}
+
+@media (max-width: 480px) {
+  .hd-popup-content {
+    max-width: none;
+  }
 }
 
 /* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
