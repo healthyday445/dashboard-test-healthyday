@@ -152,6 +152,8 @@ const Index = () => {
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
   const [previewTimeOverrideMin, setPreviewTimeOverrideMin] = useState<number | null>(null);
+  const [previewDowOverride, setPreviewDowOverride] = useState<number | null>(null);
+  const [previewWeekOverride, setPreviewWeekOverride] = useState<number | null>(null);
   const [joinedDays, setJoinedDays] = useState<number[]>(() => {
     try {
       const keys = Object.keys(localStorage).filter(k => k.startsWith("hd_joined_"));
@@ -220,6 +222,61 @@ const Index = () => {
       setLoading(false);
       return;
     }
+
+    if (previewMode && previewMode.startsWith("paid_")) {
+      const parts = previewMode.split("_");
+      // example: paid_week1_day1_beforthesession_plan12month
+      const weekPart = parts[1] || "week1";
+      const dayPart = parts[2] || "day1";
+      const sessionPart = parts[3] || "beforthesession";
+      const planPart = parts[4] || "plan12month";
+
+      const weekNum = parseInt(weekPart.replace("week", ""), 10) || 1;
+      const dayNum = parseInt(dayPart.replace("day", ""), 10) || 1;
+
+      let timeMin = 600; // 10:00 AM
+      if (sessionPart === "beforthesession") timeMin = 300; // 5:00 AM
+      else if (sessionPart === "livesession") timeMin = 345; // 5:45 AM
+      else if (sessionPart === "afterthesession") timeMin = 600; // 10:00 AM
+      else if (sessionPart.endsWith("time")) {
+        const tStr = sessionPart.replace("time", "");
+        let hour = 10, min = 0;
+        if (tStr.includes("AM") || tStr.includes("PM")) {
+          const isPM = tStr.includes("PM");
+          const hm = tStr.replace("AM", "").replace("PM", "").split(".");
+          hour = parseInt(hm[0], 10) || 10;
+          min = parseInt(hm[1] || "0", 10);
+          if (isPM && hour !== 12) hour += 12;
+          if (!isPM && hour === 12) hour = 0;
+        }
+        timeMin = hour * 60 + min;
+      }
+
+      let planType = "12_months";
+      if (planPart === "plan6month") planType = "6_months";
+      else if (planPart === "plan3month") planType = "3_months";
+      else if (planPart === "plan1month") planType = "1_month";
+
+      const attAbbrs = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"].slice(0, dayNum - 1);
+
+      setStudentData({
+        language: "Telugu",
+        status: "paid",
+        paid_classes_joining_link: "https://www.youtube.com/c/Healthyday",
+        referral_link: "healthyday.app/ref=preview123",
+        total_referral_count: 3,
+        attendance_tracker: [],
+        paid_attendance_tracker: attAbbrs,
+        subscriptions: [{ plan_type: planType, subscription_status: "active" }],
+      });
+      setPreviewTimeOverrideMin(timeMin);
+      setPreviewDowOverride(dayNum === 7 ? 0 : dayNum);
+      setPreviewWeekOverride(weekNum);
+      setAuthenticated(true);
+      setLoading(false);
+      return;
+    }
+
     if (previewMode === "paid") {
       setStudentData({
         language: "Telugu",
@@ -1335,8 +1392,9 @@ const Index = () => {
     const forceWeek = searchParams.get("forceWeek");
 
     const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
-    const totalMin = forceTime ? parseInt(forceTime, 10) : nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
-    const currentDow = forceDay !== null ? parseInt(forceDay, 10) : nowIST.getUTCDay(); // 0 is Sunday
+    const totalMin = forceTime ? parseInt(forceTime, 10) : (previewTimeOverrideMin != null ? previewTimeOverrideMin : nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes());
+    const currentDow = forceDay !== null ? parseInt(forceDay, 10) : (previewDowOverride != null ? previewDowOverride : nowIST.getUTCDay()); // 0 is Sunday
+
 
     // Subscription plan duration check
     const activeSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "active" || s.subscription_status === "ongoing") || studentData?.subscriptions?.[0];
@@ -1348,7 +1406,7 @@ const Index = () => {
     // Paid Bonus Sessions Logic
     const anchorDate = new Date(Date.UTC(2026, 3, 5)); // April 5, 2026
     const diffMs = nowIST.getTime() - anchorDate.getTime();
-    const diffWeeks = forceWeek !== null ? parseInt(forceWeek, 10) : Math.floor(diffMs / (1000 * 60 * 60 * 24 * 7));
+    const diffWeeks = forceWeek !== null ? parseInt(forceWeek, 10) : (previewWeekOverride != null ? previewWeekOverride : Math.floor(diffMs / (1000 * 60 * 60 * 24 * 7)));
     const isTeluguFaceYogaWeek = diffWeeks % 2 === 0;
 
     let todayBonusCard = null;
@@ -1420,6 +1478,10 @@ const Index = () => {
 
     // Weekly attendance (Mon-Sun)
     const today = new Date();
+    if (previewDowOverride != null) {
+      const diff = previewDowOverride - today.getDay();
+      today.setDate(today.getDate() + diff);
+    }
     const todayDow = today.getDay();
     const mondayDate = new Date(today);
     mondayDate.setDate(today.getDate() - (todayDow === 0 ? 6 : todayDow - 1));
