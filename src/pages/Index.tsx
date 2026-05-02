@@ -6,6 +6,7 @@ import { ReferralMilestonesCard } from "@/components/ReferralMilestonesCard";
 import { ReferWinPopup, ReferralProgressBar } from "@/components/ReferWinPopup";
 import { ShareReferralActions } from "@/components/ShareReferralActions";
 import NoSessionsCard from "@/components/NoSessionsCard";
+import ReferWinCard from "@/components/ReferWinCard";
 
 const MoonIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -933,28 +934,7 @@ const Index = () => {
 
             {/* Refer & Win card */}
             <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-              <div style={{
-                width: "100%",
-                maxWidth: "358px",
-                height: "254px",
-                boxSizing: "border-box",
-                borderRadius: "16px",
-                background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
-                boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
-                padding: "20px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "12px",
-                justifyContent: "center"
-              }}>
-                <div>
-                  <h3 style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "21px", fontWeight: 700, lineHeight: "normal", margin: "0 0 4px" }}>Refer &amp; Win</h3>
-                  <p style={{ color: "#FFFCFC", fontFamily: "Outfit", fontSize: "14px", fontWeight: 400, lineHeight: "normal", margin: 0 }}>Invite your friends &amp; family and get exciting gifts!</p>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                  <ShareReferralActions shareLink={shareLink} referralsUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`} />
-                </div>
-              </div>
+              <ReferWinCard shareLink={shareLink} referralsUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`} />
             </div>
 
             {/* Week 2 Bonus: show payment section instead */}
@@ -965,28 +945,7 @@ const Index = () => {
                   <p style={{ width: "100%", maxWidth: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
                 </div>
                 <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-                  <div style={{
-                    width: "100%",
-                    maxWidth: "358px",
-                    height: "254px",
-                    boxSizing: "border-box",
-                    borderRadius: "16px",
-                    background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
-                    boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
-                    padding: "20px",
-                    display: "flex",
-                    flexDirection: "column",
-                    gap: "12px",
-                    justifyContent: "center"
-                  }}>
-                    <div>
-                      <h3 style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "21px", fontWeight: 700, lineHeight: "normal", margin: "0 0 4px" }}>Refer &amp; Win</h3>
-                      <p style={{ color: "#FFFCFC", fontFamily: "Outfit", fontSize: "14px", fontWeight: 400, lineHeight: "normal", margin: 0 }}>Invite your friends &amp; family and get exciting gifts!</p>
-                    </div>
-                    <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                      <ShareReferralActions shareLink={shareLink} referralsUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`} />
-                    </div>
-                  </div>
+                  <ReferWinCard shareLink={shareLink} referralsUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`} />
                 </div>
               </>
             )}
@@ -1296,28 +1255,7 @@ const Index = () => {
 
             {/* Refer & Win card */}
             <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-              <div style={{
-                width: "100%",
-                maxWidth: "358px",
-                height: "254px",
-                boxSizing: "border-box",
-                borderRadius: "16px",
-                background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
-                boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
-                padding: "20px",
-                display: "flex",
-                flexDirection: "column",
-                gap: "12px",
-                justifyContent: "center"
-              }}>
-                <div>
-                  <h3 style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "21px", fontWeight: 700, lineHeight: "normal", margin: "0 0 4px" }}>Refer &amp; Win</h3>
-                  <p style={{ color: "#FFFCFC", fontFamily: "Outfit", fontSize: "14px", fontWeight: 400, lineHeight: "normal", margin: 0 }}>Invite your friends &amp; family and get exciting gifts!</p>
-                </div>
-                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                  <ShareReferralActions shareLink={shareLink} referralsUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`} />
-                </div>
-              </div>
+              <ReferWinCard shareLink={shareLink} referralsUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`} />
             </div>
           </>
         )}
@@ -1331,37 +1269,7 @@ const Index = () => {
             </div>
             {/* Refer & Earn */}
             <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-              <div
-                style={{
-                  width: "100%",
-                  maxWidth: "358px",
-                  height: "254px",
-                  boxSizing: "border-box",
-                  borderRadius: "16px",
-                  background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
-                  boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
-                  padding: "20px",
-                  display: "flex",
-                  flexDirection: "column",
-                  gap: "12px",
-                  justifyContent: "center"
-                }}
-              >
-                {/* Title + subtitle — left aligned */}
-                <div>
-                  <h3 style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "21px", fontWeight: 700, lineHeight: "normal", margin: "0 0 4px" }}>
-                    Refer &amp; Win
-                  </h3>
-                  <p style={{ color: "#FFFCFC", fontFamily: "Outfit", fontSize: "14px", fontWeight: 400, lineHeight: "normal", margin: 0 }}>
-                    Invite your friends &amp; family and get exciting gifts!
-                  </p>
-                </div>
-
-                {/* Share Link */}
-                <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                  <ShareReferralActions shareLink={shareLink} referralsUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`} />
-                </div>
-              </div>
+              <ReferWinCard shareLink={shareLink} referralsUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`} />
             </div>
           </>
         )}
@@ -1617,7 +1525,7 @@ const Index = () => {
             <div style={{ padding: "24px 20px 0" }}>
               {noSessionsNow ? (
                 /* No sessions right now */
-                <NoSessionsCard />
+                <NoSessionsCard totalMin={totalMin} />
 
               ) : (
                 /* Regular session is LIVE — show yoga session */
@@ -1738,33 +1646,10 @@ const Index = () => {
           </div>
         )}
 
-        {/* Refer & Win Card (blue) */}
-        {!showPlanRenewal && (
-          <div style={{ padding: "28px 20px 40px" }}>
-            <div style={{
-              width: "100%", boxSizing: "border-box",
-              borderRadius: "16px",
-              background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
-              boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
-              padding: "20px 16px",
-            }}>
-              {/* Header */}
-              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, lineHeight: "normal" }}>REFER & WIN</span>
-
-              {/* Progress Bar */}
-              <ReferralProgressBar refCount={refCount} />
-
-              {/* Refer Now Button */}
-              <button
-                onClick={() => navigate(`/referral?count=${refCount}&mobile=${mobile || ""}`)}
-                style={{ width: "100%", height: "43px", borderRadius: "14px", background: "#FEAB27", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", boxShadow: "0 0 10px 1px rgba(0,0,0,0.25)", backdropFilter: "blur(2px)" }}
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
-                  <path d="M1.25 16.4079V14.7237C1.25 13.8303 1.60489 12.9736 2.23659 12.3419C2.86829 11.7102 3.72506 11.3553 4.61842 11.3553H7.98684C8.79526 11.3553 9.53632 11.6399 10.1174 12.114M12.1974 1.35948C12.9219 1.54499 13.5641 1.96638 14.0227 2.55721C14.4814 3.14804 14.7303 3.8747 14.7303 4.62264C14.7303 5.37057 14.4814 6.09723 14.0227 6.68806C13.5641 7.27889 12.9219 7.70028 12.1974 7.88579M12.1974 14.7237H17.25M14.7237 12.1974V17.25M2.93421 4.61842C2.93421 5.51178 3.2891 6.36855 3.9208 7.00025C4.5525 7.63196 5.40927 7.98684 6.30263 7.98684C7.19599 7.98684 8.05276 7.63196 8.68447 7.00025C9.31617 6.36855 9.67105 5.51178 9.67105 4.61842C9.67105 3.72506 9.31617 2.86829 8.68447 2.23659C8.05276 1.60489 7.19599 1.25 6.30263 1.25C5.40927 1.25 4.5525 1.60489 3.9208 2.23659C3.2891 2.86829 2.93421 3.72506 2.93421 4.61842Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal" }}>Refer Now</span>
-              </button>
-            </div>
+        {/* Refer & Win Card — shown only after popup is dismissed */}
+        {!showPlanRenewal && !showReferral && (
+          <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
+            <ReferWinCard shareLink={shareLink} referralsUrl={`/referral-status?count=${refCount}&mobile=${mobile || ""}`} />
           </div>
         )}
 
@@ -1846,6 +1731,14 @@ const Index = () => {
           </>
         )}
 
+        {/* Referral Status Popup Overlay — Paid */}
+        {showReferral && (
+          <ReferWinPopup
+            refCount={refCount}
+            onClose={() => setShowReferral(false)}
+            referNowUrl={`/referral?count=${refCount}&mobile=${mobile || ""}`}
+          />
+        )}
 
       </div>
     );
@@ -2069,37 +1962,7 @@ const Index = () => {
         </div>
         {/* Refer & Earn */}
         <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-          <div
-            style={{
-              width: "100%",
-              maxWidth: "358px",
-              height: "254px",
-              boxSizing: "border-box",
-              borderRadius: "16px",
-              background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
-              boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)",
-              padding: "20px",
-              display: "flex",
-              flexDirection: "column",
-              gap: "12px",
-              justifyContent: "center"
-            }}
-          >
-            {/* Title + subtitle — left aligned */}
-            <div>
-              <h3 style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "21px", fontWeight: 700, lineHeight: "normal", margin: "0 0 4px" }}>
-                Refer &amp; Win
-              </h3>
-              <p style={{ color: "#FFFCFC", fontFamily: "Outfit", fontSize: "14px", fontWeight: 400, lineHeight: "normal", margin: 0 }}>
-                Invite your friends &amp; family and get exciting gifts!
-              </p>
-            </div>
-
-            {/* Share Link */}
-            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-              <ShareReferralActions shareLink={referralLink} referralsUrl={`/referral?count=&mobile=`} />
-            </div>
-          </div>
+          <ReferWinCard shareLink={referralLink} referralsUrl={`/referral?count=&mobile=`} />
         </div>
       </div>
     );
