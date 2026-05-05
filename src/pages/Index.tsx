@@ -1603,6 +1603,91 @@ const Index = () => {
           </div>
         </div>
 
+        {/* This Week's Grocery List — 12-month Telugu plan only */}
+        {is12Month && paidLang === "Telugu" && (
+          <div style={{ padding: "12px 21px 0 22px" }}>
+            <div
+              onClick={() => window.open("https://dailyyogawithjagan.com/grocery-list", "_blank")}
+              style={{
+                width: "100%",
+                height: "87px",
+                borderRadius: "6px",
+                border: "1px solid #E7E6E6",
+                background: "#EAFFE5",
+                boxShadow: "0 1px 1px 0 rgba(0,0,0,0.20)",
+                display: "flex",
+                alignItems: "center",
+                padding: "0 18px",
+                gap: "12px",
+                boxSizing: "border-box",
+                cursor: "pointer",
+              }}
+            >
+              {/* Icon box */}
+              <div
+                style={{
+                  width: "44px",
+                  height: "44px",
+                  borderRadius: "6px",
+                  border: "0.25px solid #BCBCBC",
+                  background: "#FFF",
+                  flexShrink: 0,
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                }}
+              >
+                <img
+                  src="/Ingredients.png"
+                  alt="Ingredients"
+                  style={{ width: "24px", height: "24px", aspectRatio: "1/1", objectFit: "contain" }}
+                />
+              </div>
+
+              {/* Text */}
+              <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "4px" }}>
+                <span
+                  style={{
+                    color: "#0D468B",
+                    fontFamily: "Outfit",
+                    fontSize: "16px",
+                    fontStyle: "normal",
+                    fontWeight: 700,
+                    lineHeight: "normal",
+                  }}
+                >
+                  This Week's Grocery List
+                </span>
+                <span
+                  style={{
+                    color: "#FEAB27",
+                    fontFamily: "Outfit",
+                    fontSize: "12px",
+                    fontStyle: "normal",
+                    fontWeight: 600,
+                    lineHeight: "normal",
+                  }}
+                >
+                  Nutrition plan for the week
+                </span>
+              </div>
+
+              {/* Chevron arrow (rotated SVG) */}
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="11"
+                height="18"
+                viewBox="0 0 11 18"
+                fill="none"
+                style={{ transform: "rotate(0deg)", flexShrink: 0, display: "block" }}
+              >
+                <line x1="1.5" y1="-1.5" x2="11.0237" y2="-1.5" transform="matrix(0.718602 -0.695422 0.695421 0.718603 1.46484 17.4191)" stroke="#FEAB27" strokeWidth="3" strokeLinecap="round"/>
+                <line x1="1.5" y1="-1.5" x2="11.0237" y2="-1.5" transform="matrix(-0.718602 -0.695422 0.695421 -0.718603 10.4648 8.70927)" stroke="#FEAB27" strokeWidth="3" strokeLinecap="round"/>
+              </svg>
+            </div>
+          </div>
+        )}
+
         {/* Your Weekly Attendance */}
         <div style={{ padding: "40px 22px 0" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
