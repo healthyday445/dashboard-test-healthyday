@@ -12,6 +12,11 @@ dist
 dist-ssr
 *.local
 
+# Environment variable files — never commit secrets
+.env
+.env.*
+!.env.example
+
 # Claude Code local settings (may contain secrets)
 .claude/settings.local.json
 
