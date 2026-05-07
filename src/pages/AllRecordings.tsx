@@ -66,6 +66,69 @@ const englishVideos = [
   },
 ];
 
+// --- Helpers ---
+
+interface SessionLink {
+  session_date: string;
+  session_name: string | null;
+  language: string;
+  session_code: string;
+  link: string;
+  expiry_by: string | null;
+}
+
+/** Extract YouTube video ID from various URL formats */
+function extractYouTubeId(url: string): string | null {
+  try {
+    const u = new URL(url);
+    if (u.hostname === "youtu.be") return u.pathname.slice(1).split("?")[0];
+    if (u.searchParams.has("v")) return u.searchParams.get("v");
+    const liveMatch = u.pathname.match(/\/live\/([^/?]+)/);
+    if (liveMatch) return liveMatch[1];
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/** Remove "Healthyday Yoga Telugu", "Healthyday Yoga English", etc. from session names */
+function cleanSessionName(name: string): string {
+  return name
+    .replace(/\|?\s*Healthyday\s+Yoga\s+(Telugu|English)\s*/gi, "")
+    .replace(/\|\s*$/, "")
+    .trim();
+}
+
+/**
+ * Find the current active recording for a given session_code + language.
+ * Picks the entry with the earliest (soonest) expiry_by — that's the recording
+ * that is currently available. Once it expires, the next one takes over.
+ * This prevents showing today's session (not yet recorded) over yesterday's
+ * actual available recording.
+ */
+function findSessionLink(
+  links: SessionLink[],
+  sessionCode: string | string[],
+  language: string
+): SessionLink | undefined {
+  const codes = Array.isArray(sessionCode) ? sessionCode : [sessionCode];
+  const matches = links.filter(
+    (s) => codes.includes(s.session_code) && s.language === language
+  );
+
+  if (matches.length === 0) return undefined;
+  if (matches.length === 1) return matches[0];
+
+  // Sort by expiry_by ASC (earliest expiry first = current recording)
+  // Entries with null expiry (never expires) go last
+  return [...matches].sort((a, b) => {
+    if (!a.expiry_by && !b.expiry_by) return 0;
+    if (!a.expiry_by) return 1;
+    if (!b.expiry_by) return -1;
+    return new Date(a.expiry_by).getTime() - new Date(b.expiry_by).getTime();
+  })[0];
+}
+
 const PlayButton = () => (
   <div style={{
     width: "37.894px",
@@ -146,6 +209,11 @@ const AllRecordings = () => {
   const [error, setError] = useState<string | null>(null);
   const [studentData, setStudentData] = useState<any>(null);
 
+  // Session links from API
+  const [sessionLinks, setSessionLinks] = useState<SessionLink[]>([]);
+  const [sessionLinksLoading, setSessionLinksLoading] = useState(true);
+
+  // Fetch student data
   useEffect(() => {
     if (previewMode === "paid" || previewMode === "english") {
       setStudentData({
@@ -182,6 +250,25 @@ const AllRecordings = () => {
     fetchData();
   }, [mobile, previewMode]);
 
+  // Fetch session links from API
+  useEffect(() => {
+    const fetchSessionLinks = async () => {
+      try {
+        const res = await fetch("/.netlify/functions/session-links");
+        if (!res.ok) throw new Error("Failed to fetch session links");
+        const json = await res.json();
+        setSessionLinks(json.data || []);
+      } catch (err) {
+        console.error("Session links fetch error:", err);
+        // On failure, sessionLinks stays empty → static fallback links will be used
+        setSessionLinks([]);
+      } finally {
+        setSessionLinksLoading(false);
+      }
+    };
+    fetchSessionLinks();
+  }, []);
+
   if (loading) {
     return (
       <div className="hd-page bg-background flex flex-col items-center justify-center" style={{ fontFamily: "Outfit, sans-serif" }}>
@@ -209,6 +296,7 @@ const AllRecordings = () => {
 
   const isEnglish = studentData?.language === "English";
   const youtubeVideos = isEnglish ? englishVideos : teluguVideos;
+  const lang = isEnglish ? "english" : "telugu";
 
   // --- Date formatting helpers ---
   const ordinalSuffix = (d: number) => {
@@ -225,6 +313,28 @@ const AllRecordings = () => {
 
   const fmtDate = (d: Date) => `${d.getDate()}${ordinalSuffix(d.getDate())} ${MONTH_NAMES_SHORT[d.getMonth()]}`;
 
+  /** Format a "YYYY-MM-DD" session_date string into a readable label like "6th May" */
+  const fmtSessionDate = (sessionDate: string): string => {
+    // Parse as local date (avoid timezone shift by splitting manually)
+    const [y, m, d] = sessionDate.split("-").map(Number);
+    const date = new Date(y, m - 1, d);
+    return fmtDate(date);
+  };
+
+  /** Format an ISO expiry_by timestamp into a human-readable access window */
+  const formatExpiry = (expiryBy: string | null): string | null => {
+    if (!expiryBy) return null;
+    const d = new Date(expiryBy);
+    const hours = d.getHours();
+    const minutes = d.getMinutes();
+    const ampm = hours >= 12 ? "PM" : "AM";
+    const h12 = hours % 12 || 12;
+    const mm = minutes === 0 ? "" : `:${String(minutes).padStart(2, "0")}`;
+    const timeStr = `${h12}${mm} ${ampm}`;
+    const dateStr = fmtDate(d);
+    return `Access till ${timeStr}, ${dateStr}`;
+  };
+
   const now = new Date();
   const todayLabel = fmtDate(now);
 
@@ -236,15 +346,41 @@ const AllRecordings = () => {
   plus13.setDate(plus13.getDate() + 13);
   const plus13Label = fmtDate(plus13);
 
-  // --- Build Class Recordings dynamically based on language ---
-  const yogaClassLink = studentData?.paid_classes_joining_link || studentData?.classes_joining_link || "https://www.youtube.com/c/Healthyday";
+  // --- Look up API session links; fall back to static links if not found ---
+
+  // Card 1: Yoga Session — look for daily_morning or daily_evening
+  const yogaSession = findSessionLink(sessionLinks, ["daily_morning", "daily_evening"], lang);
+  const yogaFallbackLink = studentData?.paid_classes_joining_link || studentData?.classes_joining_link || "https://www.youtube.com/c/Healthyday";
+
+  // Card 2: Face Yoga — no session_code in the API for this; always static
+  // (If face_yoga session_code is added to the API later, we can wire it up here)
+
+  // Card 3: Breath to Heal — look for b2h
+  const b2hSession = findSessionLink(sessionLinks, "b2h", lang);
+
+  // Card 4: Diet Routine (Telugu only) — look for paid_diet
+  const dietSession = findSessionLink(sessionLinks, "paid_diet", lang);
+
+  // Use session_date from API for the title (actual recording date), fallback to today
+  const yogaDateLabel = yogaSession ? fmtSessionDate(yogaSession.session_date) : todayLabel;
+  const b2hDateLabel = b2hSession ? fmtSessionDate(b2hSession.session_date) : todayLabel;
+  const dietDateLabel = dietSession ? fmtSessionDate(dietSession.session_date) : todayLabel;
+
+  // --- Helper: get YouTube thumbnail or fallback to static ---
+  const ytThumb = (link: string | undefined, fallback: string): string => {
+    if (!link) return fallback;
+    const vid = extractYouTubeId(link);
+    return vid ? `https://img.youtube.com/vi/${vid}/mqdefault.jpg` : fallback;
+  };
+
+  // --- Build Class Recordings with same structure, using API data where available ---
   const classRecordings: { title: string; subtitle: string; thumbnail: string; link: string; accessTill: string }[] = [
     {
-      title: `${todayLabel} Yoga Session`,
+      title: `${yogaDateLabel} Yoga Session`,
       subtitle: "Daily Live Yoga Session",
-      thumbnail: isEnglish ? "/language English.jpg" : "/language Telugu.jpg",
-      link: yogaClassLink,
-      accessTill: `Access till 5:00 AM, ${tomorrowLabel}`,
+      thumbnail: ytThumb(yogaSession?.link, isEnglish ? "/language English.jpg" : "/language Telugu.jpg"),
+      link: yogaSession?.link || yogaFallbackLink,
+      accessTill: (yogaSession && formatExpiry(yogaSession.expiry_by)) || `Access till 5:00 AM, ${tomorrowLabel}`,
     },
     {
       title: "Last Healthyday Face Yoga",
@@ -254,23 +390,50 @@ const AllRecordings = () => {
       accessTill: `Access till ${plus13Label}`,
     },
     {
-      title: `${todayLabel} Breath to Heal Session`,
+      title: `${b2hDateLabel} Breath to Heal Session`,
       subtitle: "Daily at 9:00 PM",
-      thumbnail: isEnglish ? "/bonus/bw_eng.jpg" : "/bonus/breathwork.jpg",
-      link: isEnglish ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession",
-      accessTill: `Access till 8:30 PM, ${tomorrowLabel}`,
+      thumbnail: ytThumb(b2hSession?.link, isEnglish ? "/bonus/bw_eng.jpg" : "/bonus/breathwork.jpg"),
+      link: b2hSession?.link || (isEnglish ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession"),
+      accessTill: (b2hSession && formatExpiry(b2hSession.expiry_by)) || `Access till 8:30 PM, ${tomorrowLabel}`,
     },
   ];
 
-  // Diet Session — Telugu 12-month plans only
+  // Diet Session — Telugu only
   if (!isEnglish) {
     classRecordings.push({
-      title: `${todayLabel} Healthyday Diet Routine`,
+      title: `${dietDateLabel} Healthyday Diet Routine`,
       subtitle: "Daily at 8:00 PM",
-      thumbnail: "/bonus/weightlosssession.jpg",
-      link: "https://join.healthyday.co.in/diet",
-      accessTill: `Access till 7:30 PM, ${tomorrowLabel}`,
+      thumbnail: ytThumb(dietSession?.link, "/bonus/weightlosssession.jpg"),
+      link: dietSession?.link || "https://join.healthyday.co.in/diet",
+      accessTill: (dietSession && formatExpiry(dietSession.expiry_by)) || `Access till 7:30 PM, ${tomorrowLabel}`,
     });
+  }
+
+  // Card 5: 108 Suryanamaskar Challenge — Telugu only, only shown when API has an active session
+  if (!isEnglish) {
+    // Match any session_code starting with "108sn_"
+    const snSession = findSessionLink(
+      sessionLinks,
+      sessionLinks
+        .filter((s) => s.session_code.startsWith("108sn_") && s.language === lang)
+        .map((s) => s.session_code),
+      lang
+    );
+    if (snSession) {
+      const snVideoId = extractYouTubeId(snSession.link);
+      const snTitle = snSession.session_name
+        ? cleanSessionName(snSession.session_name)
+        : "108 Suryanamaskar Challenge";
+      classRecordings.push({
+        title: snTitle,
+        subtitle: "108 Suryanamaskar Challenge",
+        thumbnail: snVideoId
+          ? `https://img.youtube.com/vi/${snVideoId}/mqdefault.jpg`
+          : "/language Telugu.jpg",
+        link: snSession.link,
+        accessTill: formatExpiry(snSession.expiry_by) || "Always available",
+      });
+    }
   }
 
   return (

@@ -1,13 +1,14 @@
-import { defineConfig } from "vite";
+import { defineConfig, loadEnv } from "vite";
 import react from "@vitejs/plugin-react-swc";
 import path from "path";
 import { componentTagger } from "lovable-tagger";
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
-  // Read the API key from environment — never hardcode secrets in source files.
-  // Set INTERNAL_API_KEY in your .env (local) and in Netlify → Site settings → Environment variables (production).
-  const internalApiKey = process.env.INTERNAL_API_KEY;
+  // loadEnv reads .env / .env.local files into process.env for the config context.
+  // Without this, INTERNAL_API_KEY would be undefined locally even if set in .env.
+  const env = loadEnv(mode, process.cwd(), "");
+  const internalApiKey = env.INTERNAL_API_KEY || process.env.INTERNAL_API_KEY;
 
   if (!internalApiKey) {
     console.warn(
@@ -43,6 +44,20 @@ export default defineConfig(({ mode }) => {
           secure: true,
           rewrite: (path) =>
             path.replace("/.netlify/functions/referrals", "/api/internal/student/referrals"),
+          configure: (proxy) => {
+            proxy.on("proxyReq", (proxyReq) => {
+              if (internalApiKey) {
+                proxyReq.setHeader("X-API-KEY", internalApiKey);
+              }
+            });
+          },
+        },
+        "/.netlify/functions/session-links": {
+          target: "https://healthyday-backend-773381060399.asia-south1.run.app",
+          changeOrigin: true,
+          secure: true,
+          rewrite: (path) =>
+            path.replace("/.netlify/functions/session-links", "/api/internal/session-link/active"),
           configure: (proxy) => {
             proxy.on("proxyReq", (proxyReq) => {
               if (internalApiKey) {
