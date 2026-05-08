@@ -27,17 +27,18 @@ function getWeekMonday(date: Date): Date {
 }
 
 /**
- * Given paid_attendance_tracker day abbreviations (e.g. ["thu","fri","sat"]),
- * converts them to actual date strings for the current week (only past/today dates),
- * merges with existing localStorage history, saves, and returns the merged set.
+ * Given paid_attendance_tracker day abbreviations, converts them to actual attended dates 
+ * for the current week. Also computes which days were missed THIS week.
+ * Merges both sets with localStorage history and saves them.
  */
-function mergePaidAttendanceToStorage(mobile: string, rawDays: string[]): Set<string> {
-  const key = `hd_paid_att_${mobile}`;
+function mergePaidDataToStorage(mobile: string, rawDays: string[]): { attended: Set<string>; missed: Set<string> } {
+  const attKey = `hd_paid_att_${mobile}`;
+  const missedKey = `hd_paid_missed_${mobile}`;
   const today = new Date();
   today.setHours(0, 0, 0, 0);
   const monday = getWeekMonday(today);
 
-  // Convert current week's day abbreviations → actual dates (only <= today)
+  // 1. Calculate this week's attended dates
   const thisWeekDates: string[] = [];
   rawDays.forEach((abbr) => {
     const dow = DAY_ABBR_TO_DOW[abbr.toLowerCase()];
@@ -48,29 +49,50 @@ function mergePaidAttendanceToStorage(mobile: string, rawDays: string[]): Set<st
     if (d <= today) thisWeekDates.push(fmt(d));
   });
 
-  // Load existing stored dates
-  let stored: string[] = [];
-  try {
-    const raw = localStorage.getItem(key);
-    if (raw) stored = JSON.parse(raw);
-  } catch { /* ignore */ }
+  // 2. Calculate this week's missed dates (Monday through Saturday, up to today, excluding attended)
+  const thisWeekMissed: string[] = [];
+  for (let i = 0; i < 6; i++) {
+    const d = new Date(monday);
+    d.setDate(monday.getDate() + i);
+    if (d < today) {
+      const dStr = fmt(d);
+      if (!thisWeekDates.includes(dStr)) {
+        thisWeekMissed.push(dStr);
+      }
+    }
+  }
 
-  // Merge and deduplicate
-  const merged = Array.from(new Set([...stored, ...thisWeekDates]));
+  // Load existing
+  let storedAtt: string[] = [];
+  try { const raw = localStorage.getItem(attKey); if (raw) storedAtt = JSON.parse(raw); } catch { }
+
+  let storedMissed: string[] = [];
+  try { const raw = localStorage.getItem(missedKey); if (raw) storedMissed = JSON.parse(raw); } catch { }
+
+  // Merge
+  const mergedAtt = Array.from(new Set([...storedAtt, ...thisWeekDates]));
+  const mergedMissedSet = new Set([...storedMissed, ...thisWeekMissed]);
+  // Make sure we never mark an attended date as missed
+  mergedAtt.forEach(d => mergedMissedSet.delete(d));
+  const mergedMissed = Array.from(mergedMissedSet);
 
   // Save back
-  try { localStorage.setItem(key, JSON.stringify(merged)); } catch { /* ignore */ }
+  try { localStorage.setItem(attKey, JSON.stringify(mergedAtt)); } catch { }
+  try { localStorage.setItem(missedKey, JSON.stringify(mergedMissed)); } catch { }
 
-  return new Set(merged);
+  return { attended: new Set(mergedAtt), missed: new Set(mergedMissed) };
 }
 
-/** Reads accumulated paid attendance from localStorage (without modifying it). */
-function readPaidAttendanceFromStorage(mobile: string): Set<string> {
+/** Reads accumulated paid attendance and missed data from localStorage. */
+function readPaidDataFromStorage(mobile: string): { attended: Set<string>; missed: Set<string> } {
+  const res = { attended: new Set<string>(), missed: new Set<string>() };
   try {
-    const raw = localStorage.getItem(`hd_paid_att_${mobile}`);
-    if (raw) return new Set(JSON.parse(raw));
+    const rawAtt = localStorage.getItem(`hd_paid_att_${mobile}`);
+    if (rawAtt) res.attended = new Set(JSON.parse(rawAtt));
+    const rawMissed = localStorage.getItem(`hd_paid_missed_${mobile}`);
+    if (rawMissed) res.missed = new Set(JSON.parse(rawMissed));
   } catch { /* ignore */ }
-  return new Set();
+  return res;
 }
 
 const AttendancePage = () => {
@@ -93,12 +115,13 @@ const AttendancePage = () => {
       // Preview: simulate Thu/Fri/Sat class schedule with some history
       const paidDays = ["thu", "fri", "sat"];
       const previewMobile = "preview";
-      const mergedDates = mergePaidAttendanceToStorage(previewMobile, paidDays);
+      const mergedData = mergePaidDataToStorage(previewMobile, paidDays);
       setStudentData({
         language: "Telugu",
         status: "paid",
         total_referral_count: 3,
-        attendance_tracker: Array.from(mergedDates),
+        attendance_tracker: Array.from(mergedData.attended),
+        missed_tracker: Array.from(mergedData.missed),
         paid_attendance_tracker: paidDays,
       });
       setLoading(false);
@@ -131,16 +154,19 @@ const AttendancePage = () => {
         // API gives current week's attended days as abbreviations in paid_attendance_tracker.
         // We convert those to actual dates and merge with stored history so the full
         // month calendar can show past weeks' attendance without re-fetching.
-        const rawPaidDays: string[] = data.paid_attendance_tracker ?? [];
-        if (rawPaidDays.length > 0) {
-          const mergedDates = mergePaidAttendanceToStorage(mobile, rawPaidDays);
+        const rawPaidDays = data.paid_attendance_tracker;
+        // Even if empty, we evaluate missed days up to today as long as the array exists.
+        if (Array.isArray(rawPaidDays)) {
+          const mergedData = mergePaidDataToStorage(mobile, rawPaidDays);
           // Inject merged dates back into data so the calendar uses full history
-          data.attendance_tracker = Array.from(mergedDates);
+          data.attendance_tracker = Array.from(mergedData.attended);
+          data.missed_tracker = Array.from(mergedData.missed);
         } else {
           // No paid_attendance_tracker from API — read whatever was stored before
-          const stored = readPaidAttendanceFromStorage(mobile);
-          if (stored.size > 0) {
-            data.attendance_tracker = Array.from(stored);
+          const stored = readPaidDataFromStorage(mobile);
+          if (stored.attended.size > 0 || stored.missed.size > 0) {
+            data.attendance_tracker = Array.from(stored.attended);
+            data.missed_tracker = Array.from(stored.missed);
           }
         }
 
@@ -199,15 +225,14 @@ const AttendancePage = () => {
   // --- Calendar logic ---
   // For paid users: attendance_tracker was already merged with localStorage above.
   const attendedDates = new Set<string>(studentData?.attendance_tracker ?? []);
+  const missedDates = new Set<string>(studentData?.missed_tracker ?? []);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
-  // paid_attendance_tracker: e.g. ["thu", "fri", "sat"] — the weekdays that have sessions
-  const rawPaidDays: string[] = studentData?.paid_attendance_tracker ?? [];
+  // For paid users: classes are typically Monday to Saturday.
+  // We no longer use paid_attendance_tracker for this because it contains the days ATTENDED this week, not the schedule.
   const scheduledWeekdays: Set<number> | null =
-    studentData?.status === "paid" && rawPaidDays.length > 0
-      ? new Set(rawPaidDays.map((d: string) => DAY_ABBR_TO_DOW[d.toLowerCase()]).filter((n: number | undefined): n is number => n !== undefined))
-      : null;
+    studentData?.status === "paid" ? new Set([1, 2, 3, 4, 5, 6]) : null;
 
   const firstDayOfMonth = new Date(viewYear, viewMonth, 1);
   const startDow = firstDayOfMonth.getDay(); // 0=Sun
@@ -276,7 +301,11 @@ const AttendancePage = () => {
 
     if (cellDate > today) return "scheduled"; // future class day
     if (attendedDates.has(cell.dateStr)) return "attended";
-    if (cellDate < today) return "missed";   // past class day, not attended
+    if (missedDates.has(cell.dateStr)) return "missed";
+
+    // Past dates that are neither attended nor missed (e.g. before subscription started) default to scheduled (grey)
+    if (cellDate < today) return "scheduled";
+
     // Today
     return "scheduled"; // today's class, not yet marked attended
   };
