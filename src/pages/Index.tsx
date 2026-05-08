@@ -1928,7 +1928,7 @@ const Index = () => {
             fontSize: "24px",
             fontWeight: 700,
             lineHeight: "normal",
-            margin: "28px 0 0",
+            margin: "28px 0 25px",
           }}>
             Renew Now to Continue!
           </p>
