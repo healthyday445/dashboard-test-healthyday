@@ -6,7 +6,7 @@ import React from "react";
  * Two states based on time of day:
  * 1. After all classes are done (≥ 7:30 PM / 1170 min until midnight)
  *    → "Next Session is Tomorrow"
- * 2. After midnight (< 5:30 AM / 330 min) OR between morning/evening blocks
+ * 2. After midnight (< 5:00 AM / 300 min) OR between morning/evening blocks
  *    → "Session Live at <next time>"
  */
 
@@ -20,10 +20,10 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin }) => {
   const isTomorrow = totalMin >= 1170;
 
   // Find the next session label to show as the highlighted time
-  // Morning: 330, 390, 450, 510  Evening: 990, 1050, 1110
-  let nextSessionLabel = "5:30 AM";
-  if (totalMin >= 570 && totalMin < 990) {
-    nextSessionLabel = "4:30 PM";
+  // Morning begins at 300 (5:00 AM), Evening begins at 960 (4:00 PM)
+  let nextSessionLabel = "5:00 AM";
+  if (totalMin >= 570 && totalMin < 960) {
+    nextSessionLabel = "4:00 PM";
   }
 
   const title = isTomorrow
@@ -32,10 +32,10 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin }) => {
 
   // Session times row — always show morning times for "tomorrow" and "before morning"
   // Show evening times for the midday gap
-  const isMidDayGap = totalMin >= 570 && totalMin < 990;
+  const isMidDayGap = totalMin >= 570 && totalMin < 960;
   const sessionTimes = isMidDayGap
-    ? ["4:30 PM", "5:30 PM", "6:30 PM"]
-    : ["5:30 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
+    ? ["4:00 PM", "5:30 PM", "6:30 PM"]
+    : ["5:00 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
 
   return (
     <div
@@ -61,14 +61,14 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin }) => {
         style={{
           display: "flex",
           alignItems: "center",
-          gap: "12px",
+          gap: "clamp(8px, 3vw, 12px)",
         }}
       >
         {/* Badge illustration */}
         <div
           style={{
-            width: "82px",
-            height: "81px",
+            width: "clamp(64px, 20vw, 82px)",
+            height: "auto",
             aspectRatio: "82/81",
             background:
               'url("/8ea326ab563adb61ccb99b953865cb3132c173ab.png") lightgray -5.311px -5.747px / 112.404% 113.525% no-repeat',
@@ -83,10 +83,10 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin }) => {
             style={{
               color: "#0D468B",
               fontFamily: "Outfit",
-              fontSize: "20px",
+              fontSize: "clamp(17px, 5vw, 20px)",
               fontStyle: "normal",
               fontWeight: 700,
-              lineHeight: "normal",
+              lineHeight: "1.2",
             }}
           >
             {title}
@@ -95,10 +95,10 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin }) => {
             style={{
               color: "#7990AC",
               fontFamily: "Outfit",
-              fontSize: "15px",
+              fontSize: "clamp(13px, 4vw, 15px)",
               fontStyle: "normal",
               fontWeight: 400,
-              lineHeight: "24px",
+              lineHeight: "1.4",
             }}
           >
             Open the link during live timings
@@ -112,7 +112,7 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin }) => {
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
-          gap: "6px",
+          gap: "clamp(4px, 1.5vw, 6px)",
           flexWrap: "wrap",
         }}
       >
@@ -123,7 +123,7 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin }) => {
                 style={{
                   color: "#CCCBCB",
                   fontFamily: "Outfit",
-                  fontSize: "17px",
+                  fontSize: "clamp(14px, 4vw, 17px)",
                   fontStyle: "normal",
                   fontWeight: 800,
                   lineHeight: "normal",
@@ -137,10 +137,11 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin }) => {
                 color: "#FEAB27",
                 textAlign: "center",
                 fontFamily: "Outfit",
-                fontSize: "17px",
+                fontSize: "clamp(14px, 4vw, 17px)",
                 fontStyle: "normal",
                 fontWeight: 800,
                 lineHeight: "normal",
+                whiteSpace: "nowrap",
               }}
             >
               {time}

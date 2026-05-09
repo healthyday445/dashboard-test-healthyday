@@ -751,8 +751,8 @@ const Index = () => {
       if (showBonus) {
         const isLive = totalMin >= bonusSession.startMin && totalMin < bonusSession.startMin + 30;
         const isAMSession = bonusSession.startMin < 12 * 60;
-        const nextSlots = isAMSession ? ["4:30 PM", "5:30 PM", "6:30 PM"] : ["5:30 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
-        const nextWhen = isAMSession ? "at 4:30 PM" : "tomorrow at 5:30 AM";
+        const nextSlots = isAMSession ? ["4:00 PM", "5:30 PM", "6:30 PM"] : ["5:00 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
+        const nextWhen = isAMSession ? "at 4:00 PM" : "tomorrow at 5:00 AM";
         return (
           <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
             {/* Header */}
@@ -1369,8 +1369,8 @@ const Index = () => {
 
     const activeBonusCard = todayBonusCard && totalMin >= todayBonusCard.startMin - 30 && totalMin < todayBonusCard.startMin + 45 ? todayBonusCard : null;
     const isLive = [
-      [330, 390], [390, 450], [450, 510], [510, 570],
-      [990, 1050], [1050, 1110], [1110, 1170],
+      [300, 390], [390, 450], [450, 510], [510, 570],
+      [960, 1050], [1050, 1110], [1110, 1170],
     ].some(([s, e]) => totalMin >= s && totalMin < e);
 
     // Plan renewal detection (3 days before plan ends)
