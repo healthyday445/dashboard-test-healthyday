@@ -1388,8 +1388,15 @@ const Index = () => {
       [960, 1050], [1050, 1110], [1110, 1170],
     ].some(([s, e]) => totalMin >= s && totalMin < e);
 
-    // Plan renewal detection (3 days before plan ends)
-    const planEndDate = studentData?.plan_end_date ? new Date(studentData.plan_end_date) : null;
+    // Plan renewal detection (7 days before plan ends)
+    const planEndDateStr = studentData?.sub_end_date || studentData?.plan_end_date || studentData?.plan_expired_date;
+    const planEndDate = planEndDateStr ? (() => {
+      const parts = planEndDateStr.split('T')[0].split('-');
+      if (parts.length === 3) {
+        return new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]));
+      }
+      return new Date(planEndDateStr);
+    })() : null;
     const daysUntilPlanEnds = (() => {
       if (!planEndDate) return null;
       const todayDate = new Date();
@@ -1397,7 +1404,7 @@ const Index = () => {
       planEndDate.setHours(0, 0, 0, 0);
       return Math.ceil((planEndDate.getTime() - todayDate.getTime()) / 86400000);
     })();
-    const showPlanRenewal = daysUntilPlanEnds !== null && daysUntilPlanEnds <= 3 && daysUntilPlanEnds >= 0;
+    const showPlanRenewal = daysUntilPlanEnds !== null && daysUntilPlanEnds <= 7 && daysUntilPlanEnds >= 0;
 
     // Weekly attendance (Mon-Sun)
     const today = new Date();
@@ -1757,7 +1764,7 @@ const Index = () => {
         {showPlanRenewal && (
           <>
             {/* Your Plan ends warning */}
-            <div style={{ padding: "0 20px", textAlign: "center" }}>
+            <div style={{ padding: "15px 20px", textAlign: "center" }}>
               <p style={{
                 width: "100%",
                 maxWidth: "343px",
