@@ -41,7 +41,8 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin }) => {
     <div
       style={{
         width: "358px",
-        height: "146px",
+        height: "auto",
+        minHeight: "146px",
         maxWidth: "100%",
         borderRadius: "12px",
         border: "1.5px solid #D2D2D2",
@@ -77,10 +78,9 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin }) => {
         />
 
         {/* Title + subtitle */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "2px", flex: 1 }}>
           <span
             style={{
-              width: "244px",
               color: "#0D468B",
               fontFamily: "Outfit",
               fontSize: "20px",
@@ -93,7 +93,6 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin }) => {
           </span>
           <span
             style={{
-              width: "244px",
               color: "#7990AC",
               fontFamily: "Outfit",
               fontSize: "15px",
@@ -114,6 +113,7 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin }) => {
           alignItems: "center",
           justifyContent: "center",
           gap: "6px",
+          flexWrap: "wrap",
         }}
       >
         {sessionTimes.map((time, idx) => (

@@ -1681,8 +1681,8 @@ const Index = () => {
                 fill="none"
                 style={{ transform: "rotate(0deg)", flexShrink: 0, display: "block" }}
               >
-                <line x1="1.5" y1="-1.5" x2="11.0237" y2="-1.5" transform="matrix(0.718602 -0.695422 0.695421 0.718603 1.46484 17.4191)" stroke="#FEAB27" strokeWidth="3" strokeLinecap="round"/>
-                <line x1="1.5" y1="-1.5" x2="11.0237" y2="-1.5" transform="matrix(-0.718602 -0.695422 0.695421 -0.718603 10.4648 8.70927)" stroke="#FEAB27" strokeWidth="3" strokeLinecap="round"/>
+                <line x1="1.5" y1="-1.5" x2="11.0237" y2="-1.5" transform="matrix(0.718602 -0.695422 0.695421 0.718603 1.46484 17.4191)" stroke="#FEAB27" strokeWidth="3" strokeLinecap="round" />
+                <line x1="1.5" y1="-1.5" x2="11.0237" y2="-1.5" transform="matrix(-0.718602 -0.695422 0.695421 -0.718603 10.4648 8.70927)" stroke="#FEAB27" strokeWidth="3" strokeLinecap="round" />
               </svg>
             </div>
           </div>
