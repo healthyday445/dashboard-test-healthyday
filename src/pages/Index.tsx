@@ -422,6 +422,18 @@ const Index = () => {
       return;
     }
 
+    if (!/^\d+$/.test(mobile)) {
+      setLoading(false);
+      setError("Mobile number should contain only numbers. No alphabets or special characters are allowed.");
+      return;
+    }
+
+    if (mobile.length !== 10) {
+      setLoading(false);
+      setError("Please enter a valid 10-digit mobile number.");
+      return;
+    }
+
     const fetchStudentData = async () => {
       setLoading(true);
       setError(null);
@@ -432,6 +444,9 @@ const Index = () => {
         );
 
         if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error("This mobile number is not registered. Please check the number and try again.");
+          }
           throw new Error(`API error: ${response.status}`);
         }
 
