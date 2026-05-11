@@ -1332,57 +1332,62 @@ const Index = () => {
     const diffWeeks = forceWeek !== null ? parseInt(forceWeek, 10) : (previewWeekOverride != null ? previewWeekOverride : Math.floor(diffMs / (1000 * 60 * 60 * 24 * 7)));
     const isTeluguFaceYogaWeek = diffWeeks % 2 === 0;
 
-    let todayBonusCard = null;
+    // Collect all eligible bonus sessions for today, then pick the one
+    // whose active window (startMin-30 to startMin+45) matches current time.
+    // This ensures sessions like Diet (8 PM) and Breath to Heal (9 PM) can
+    // both show for 12-month Telugu users at the correct time.
+    type BonusCard = { name: string; fullName: string; startMin: number; sessionLink: string; thumbnail: string };
+    const eligibleBonusSessions: BonusCard[] = [];
 
     // 1. Face Yoga (Sundays at 11:30 AM IST -> 690 min)
-    let showFaceYoga = false;
-    let faceYogaLink = "";
     if (currentDow === 0) {
       if (paidLang === "Telugu" && isTeluguFaceYogaWeek) {
-        showFaceYoga = true;
-        faceYogaLink = "https://join.healthyday.co.in/healthyface";
+        eligibleBonusSessions.push({
+          name: "Face Yoga Session",
+          fullName: "Face Yoga Session at 11:30 AM",
+          startMin: 690,
+          sessionLink: "https://join.healthyday.co.in/healthyface",
+          thumbnail: "/bonus/faceyoga_tel.jpg",
+        });
       } else if (paidLang === "English" && !isTeluguFaceYogaWeek) {
-        showFaceYoga = true;
-        faceYogaLink = "https://join.healthyday.co.in/healthyface_eng";
-      }
-    }
-    if (showFaceYoga) {
-      todayBonusCard = {
-        name: "Face Yoga Session",
-        fullName: "Face Yoga Session at 11:30 AM",
-        startMin: 690,
-        sessionLink: faceYogaLink,
-        thumbnail: paidLang === "English" ? "/bonus/faceyoga_eng.jpg" : "/bonus/faceyoga_tel.jpg",
-      };
-    }
-
-    // 2. Breath to Heal (Daily at 9:00 PM IST -> 1260 min)
-    // Eligible: 6 & 12 months. Exclude English on Sundays.
-    if (!todayBonusCard && (is6Month || is12Month)) {
-      if (!(paidLang === "English" && currentDow === 0)) {
-        todayBonusCard = {
-          name: "Breath to Heal Session",
-          fullName: "Breath to Heal Session at 9:00 PM",
-          startMin: 1260,
-          sessionLink: paidLang === "English" ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession",
-          thumbnail: paidLang === "English" ? "/bonus/bw_eng.jpg" : "/bonus/breathwork.jpg",
-        };
+        eligibleBonusSessions.push({
+          name: "Face Yoga Session",
+          fullName: "Face Yoga Session at 11:30 AM",
+          startMin: 690,
+          sessionLink: "https://join.healthyday.co.in/healthyface_eng",
+          thumbnail: "/bonus/faceyoga_eng.jpg",
+        });
       }
     }
 
-    // 3. Diet Session (Daily at 8:00 PM IST -> 1200 min)
+    // 2. Diet Session (Daily at 8:00 PM IST -> 1200 min)
     // Eligible: 12 months Telugu only
-    if (!todayBonusCard && is12Month && paidLang === "Telugu") {
-      todayBonusCard = {
+    if (is12Month && paidLang === "Telugu") {
+      eligibleBonusSessions.push({
         name: "Diet Session",
         fullName: "Diet Session at 8:00 PM",
         startMin: 1200,
         sessionLink: "https://join.healthyday.co.in/diet",
         thumbnail: "/bonus/weightlosssession.jpg",
-      };
+      });
     }
 
-    const activeBonusCard = todayBonusCard && totalMin >= todayBonusCard.startMin - 30 && totalMin < todayBonusCard.startMin + 45 ? todayBonusCard : null;
+    // 3. Breath to Heal (Daily at 9:00 PM IST -> 1260 min)
+    // Eligible: 6 & 12 months. Exclude English on Sundays.
+    if ((is6Month || is12Month) && !(paidLang === "English" && currentDow === 0)) {
+      eligibleBonusSessions.push({
+        name: "Breath to Heal Session",
+        fullName: "Breath to Heal Session at 9:00 PM",
+        startMin: 1260,
+        sessionLink: paidLang === "English" ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession",
+        thumbnail: paidLang === "English" ? "/bonus/bw_eng.jpg" : "/bonus/breathwork.jpg",
+      });
+    }
+
+    // Pick the session whose active window matches current time (startMin-30 to startMin+45)
+    const activeBonusCard = eligibleBonusSessions.find(s => totalMin >= s.startMin - 30 && totalMin < s.startMin + 45) || null;
+    // For upcoming session display (outside any active window), pick the next upcoming one
+    const todayBonusCard = activeBonusCard || eligibleBonusSessions.find(s => totalMin < s.startMin - 30) || null;
     const isLive = [
       [300, 390], [390, 450], [450, 510], [510, 570],
       [960, 1050], [1050, 1110], [1110, 1170],
