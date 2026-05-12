@@ -145,7 +145,15 @@ const Index = () => {
   const { mobile } = useParams<{ mobile: string }>();
   const location = useLocation();
   const previewMode = new URLSearchParams(location.search).get("preview");
-  const [showReferral, setShowReferral] = useState(true);
+  const [showReferral, setShowReferral] = useState(() => {
+    return sessionStorage.getItem("hd_referral_popup_dismissed") !== "true";
+  });
+
+  const handleCloseReferral = () => {
+    setShowReferral(false);
+    sessionStorage.setItem("hd_referral_popup_dismissed", "true");
+  };
+
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -969,7 +977,7 @@ const Index = () => {
             {week === 1 && showReferral && (
               <ReferWinPopup
                 refCount={studentData?.total_referral_count ?? 0}
-                onClose={() => setShowReferral(false)}
+                onClose={handleCloseReferral}
                 referNowUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`}
               />
             )}
@@ -1293,7 +1301,7 @@ const Index = () => {
         {week === 1 && showReferral && (
           <ReferWinPopup
             refCount={studentData?.total_referral_count ?? 0}
-            onClose={() => setShowReferral(false)}
+            onClose={handleCloseReferral}
             referNowUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`}
           />
         )}
@@ -1847,7 +1855,7 @@ const Index = () => {
         {showReferral && (
           <ReferWinPopup
             refCount={refCount}
-            onClose={() => setShowReferral(false)}
+            onClose={handleCloseReferral}
             referNowUrl={`/referral?count=${refCount}&mobile=${mobile || ""}`}
           />
         )}
@@ -2246,7 +2254,7 @@ const Index = () => {
             <div className="flex items-center justify-between">
               <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, lineHeight: "normal" }}>REFER & WIN</span>
               <button
-                onClick={() => setShowReferral(false)}
+                onClick={handleCloseReferral}
                 style={{
                   background: "none",
                   border: "none",
