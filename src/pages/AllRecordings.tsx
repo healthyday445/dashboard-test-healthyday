@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 
 // classRecordings is now built dynamically inside the component based on student language & API data
+
 
 const teluguVideos = [
   {
@@ -201,8 +202,9 @@ const DateBadge = ({ label }: { label: string }) => (
 const AllRecordings = () => {
   const navigate = useNavigate();
   const location = useLocation();
+  const { mobile: urlMobile } = useParams<{ mobile: string }>();
   const searchParams = new URLSearchParams(location.search);
-  const mobile = searchParams.get("mobile") || sessionStorage.getItem("referrer_mobile") || "";
+  const mobile = urlMobile || searchParams.get("mobile") || sessionStorage.getItem("referrer_mobile") || "";
   const previewMode = searchParams.get("preview");
 
   const [loading, setLoading] = useState(true);

@@ -229,6 +229,25 @@ const AttendancePage = () => {
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
+  // Estimate subscription start date from plan end date and plan type
+  // This prevents marking dates before the subscription as "missed"
+  const planStartDate: Date | null = (() => {
+    const planEndDateStr = studentData?.sub_end_date || studentData?.plan_end_date || studentData?.plan_expired_date;
+    if (!planEndDateStr) return null;
+    const planEnd = new Date(planEndDateStr);
+    planEnd.setHours(0, 0, 0, 0);
+    // Determine plan duration to calculate start
+    const activeSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "active" || s.subscription_status === "ongoing") || studentData?.subscriptions?.[0];
+    const planType = activeSub?.plan_type || studentData?.plan_type;
+    let durationMonths = 3; // default 3 months
+    if (planType === "6_months") durationMonths = 6;
+    else if (planType === "12_months") durationMonths = 12;
+    else if (planType === "1_month") durationMonths = 1;
+    const start = new Date(planEnd);
+    start.setMonth(start.getMonth() - durationMonths);
+    return start;
+  })();
+
   // For paid users: classes are typically Monday to Saturday.
   // We no longer use paid_attendance_tracker for this because it contains the days ATTENDED this week, not the schedule.
   const scheduledWeekdays: Set<number> | null =
@@ -296,18 +315,21 @@ const AttendancePage = () => {
     const cellDate = new Date(cell.dateObj);
     cellDate.setHours(0, 0, 0, 0);
 
-    // Paid users: only class weekdays get a status indicator
+    // Paid users: only class weekdays (Mon-Sat) get a status indicator; Sundays are off
     if (scheduledWeekdays !== null && !scheduledWeekdays.has(cellDate.getDay())) return "none";
+
+    // Dates before subscription started should show no indicator
+    if (planStartDate && cellDate < planStartDate) return "none";
 
     if (cellDate > today) return "scheduled"; // future class day
     if (attendedDates.has(cell.dateStr)) return "attended";
     if (missedDates.has(cell.dateStr)) return "missed";
 
-    // Past dates that are neither attended nor missed (e.g. before subscription started) default to scheduled (grey)
-    if (cellDate < today) return "scheduled";
+    // Past class days with no attendance record should be marked as missed
+    if (cellDate < today) return "missed";
 
-    // Today
-    return "scheduled"; // today's class, not yet marked attended
+    // Today's class — not yet marked attended, show as scheduled
+    return "scheduled";
   };
 
   const goToPrevMonth = () => {

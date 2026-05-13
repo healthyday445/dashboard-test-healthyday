@@ -432,15 +432,25 @@ const Index = () => {
       return;
     }
 
-    if (!/^\d+$/.test(mobile)) {
+    // Normalize mobile number: strip spaces, dashes, parentheses
+    const rawMobile = mobile || "";
+    let cleanedMobile = rawMobile.replace(/[\s\-\(\)]/g, "");
+    // Strip +91 or 91 country code prefix only if it leaves exactly 10 digits
+    if (/^\+91\d{10}$/.test(cleanedMobile)) {
+      cleanedMobile = cleanedMobile.slice(3);
+    } else if (/^91\d{10}$/.test(cleanedMobile)) {
+      cleanedMobile = cleanedMobile.slice(2);
+    }
+
+    if (!/^\d{10}$/.test(cleanedMobile)) {
       setLoading(false);
-      setError("Mobile number should contain only numbers. No alphabets or special characters are allowed.");
+      setError("Please enter a valid 10-digit mobile number (e.g. 9876543210, 919876543210, or +91 9876543210).");
       return;
     }
 
-    if (mobile.length !== 10) {
-      setLoading(false);
-      setError("Please enter a valid 10-digit mobile number.");
+    // If the URL had a prefix (91xxx or +91xxx), redirect to clean 10-digit URL
+    if (rawMobile !== cleanedMobile) {
+      navigate(`/${cleanedMobile}`, { replace: true });
       return;
     }
 
@@ -1620,7 +1630,7 @@ const Index = () => {
         {/* View Class Recordings */}
         <div style={{ padding: "20px 21px 0 22px" }}>
           <div
-            onClick={() => window.open(`https://class.healthyday.co.in/${mobile || ""}/recordings`, "_blank")}
+            onClick={() => navigate(`/${mobile || ""}/recordings`)}
             style={{
               width: "100%", borderRadius: "6px", border: "1px solid #F0EEEE", background: "#FFF5E5",
               boxShadow: "0 1px 1px 0 rgba(0,0,0,0.20)",

@@ -24,7 +24,7 @@ const App = () => (
           <Route path="/referral" element={<Referral />} />
           <Route path="/referral-status" element={<ReferralStatus />} />
           <Route path="/attendance-page" element={<AttendancePage />} />
-          <Route path="/all-recordings" element={<AllRecordings />} />
+          <Route path="/:mobile/recordings" element={<AllRecordings />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
