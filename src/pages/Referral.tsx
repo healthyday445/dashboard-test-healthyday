@@ -11,10 +11,10 @@ const Referral = () => {
   const [copied, setCopied] = useState(false);
 
   const shareLink = referrerMobile
-    ? `https://healthyday.co.in/free-programmes?ref=91${referrerMobile}`
+    ? `https://yoga.healthyday.co.in?ref=91${referrerMobile}`
     : "healthyday.app/ref=ggtujev58";
 
-  const displayLink = "healthyday.app/ref=ggtujev58";
+  const displayLink = referrerMobile ? `yoga.healthyday.co.in?ref=91${referrerMobile}` : "yoga.healthyday.co.in";
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shareLink);

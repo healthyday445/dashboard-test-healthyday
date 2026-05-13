@@ -704,7 +704,7 @@ const Index = () => {
     const sessionVideoId = ytIdMatch ? ytIdMatch[1] : null;
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
 
-    const shareLink = mobile ? `https://healthyday.co.in/free-programmes?ref=91${mobile}` : referralLink;
+    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=91${mobile}` : referralLink;
     const handleCopyLink = () => navigator.clipboard.writeText(shareLink);
     const handleWhatsAppShare = () => {
       const msg = encodeURIComponent(`Join me on Healthyday! ${shareLink}`);
@@ -1315,7 +1315,7 @@ const Index = () => {
   if (isPaid) {
     const paidJoinLink = studentData?.paid_classes_joining_link || studentData?.classes_joining_link || sessionJoinLink || "https://www.youtube.com/c/Healthyday";
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
-    const shareLink = mobile ? `https://healthyday.co.in/free-programmes?ref=91${mobile}` : referralLink;
+    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=91${mobile}` : referralLink;
 
     // Session live detection (IST)
     const searchParams = new URLSearchParams(location.search);
@@ -1620,7 +1620,7 @@ const Index = () => {
         {/* View Class Recordings */}
         <div style={{ padding: "20px 21px 0 22px" }}>
           <div
-            onClick={() => navigate("/all-recordings")}
+            onClick={() => window.open(`https://class.healthyday.co.in/${mobile || ""}/recordings`, "_blank")}
             style={{
               width: "100%", borderRadius: "6px", border: "1px solid #F0EEEE", background: "#FFF5E5",
               boxShadow: "0 1px 1px 0 rgba(0,0,0,0.20)",
@@ -2000,7 +2000,7 @@ const Index = () => {
   // --- 14 Days Completed Page ---
   if (show14DayCompleted) {
     const referralLink = "healthyday.app/ref=ggtujev58";
-    const shareLink = mobile ? `https://healthyday.co.in/free-programmes?ref=91${mobile}` : referralLink;
+    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=91${mobile}` : referralLink;
 
     const handleCopyLink = () => {
       navigator.clipboard.writeText(shareLink);

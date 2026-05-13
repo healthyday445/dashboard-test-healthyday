@@ -70,7 +70,7 @@ const ReferralStatus = () => {
   const [apiError, setApiError] = useState<string | null>(null);
 
   const shareLink = mobile
-    ? `https://healthyday.co.in/free-programmes?ref=91${mobile}`
+    ? `https://yoga.healthyday.co.in?ref=91${mobile}`
     : "healthyday.app/ref=ggtujev58";
 
   useEffect(() => {
