@@ -432,23 +432,17 @@ const Index = () => {
       return;
     }
 
-    // Normalize mobile number: strip spaces, dashes, parentheses
+    // Normalize mobile number: strip spaces, dashes, parentheses, leading +
     const rawMobile = mobile || "";
-    let cleanedMobile = rawMobile.replace(/[\s\-\(\)]/g, "");
-    // Strip +91 or 91 country code prefix only if it leaves exactly 10 digits
-    if (/^\+91\d{10}$/.test(cleanedMobile)) {
-      cleanedMobile = cleanedMobile.slice(3);
-    } else if (/^91\d{10}$/.test(cleanedMobile)) {
-      cleanedMobile = cleanedMobile.slice(2);
-    }
+    const cleanedMobile = rawMobile.replace(/[\s\-\(\)\+]/g, "");
 
-    if (!/^\d{10}$/.test(cleanedMobile)) {
+    if (!/^\d{7,15}$/.test(cleanedMobile)) {
       setLoading(false);
-      setError("Please enter a valid 10-digit mobile number (e.g. 9876543210, 919876543210, or +91 9876543210).");
+      setError("Please enter a valid mobile number.");
       return;
     }
 
-    // If the URL had a prefix (91xxx or +91xxx), redirect to clean 10-digit URL
+    // If the URL had special characters (e.g. +91xxx), redirect to clean numeric URL
     if (rawMobile !== cleanedMobile) {
       navigate(`/${cleanedMobile}`, { replace: true });
       return;
@@ -458,7 +452,10 @@ const Index = () => {
       setLoading(true);
       setError(null);
       try {
-        const encodedMobile = encodeURIComponent(`+91${mobile}`);
+        // 10-digit numbers are Indian → prepend +91
+        // All other lengths already include the country code → just prepend +
+        const apiMobile = cleanedMobile.length === 10 ? `+91${cleanedMobile}` : `+${cleanedMobile}`;
+        const encodedMobile = encodeURIComponent(apiMobile);
         const response = await fetch(
           `/.netlify/functions/student?mobile=${encodedMobile}`
         );
@@ -714,7 +711,7 @@ const Index = () => {
     const sessionVideoId = ytIdMatch ? ytIdMatch[1] : null;
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
 
-    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=91${mobile}` : referralLink;
+    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile.length === 10 ? "91" : ""}${mobile}` : referralLink;
     const handleCopyLink = () => navigator.clipboard.writeText(shareLink);
     const handleWhatsAppShare = () => {
       const msg = encodeURIComponent(`Join me on Healthyday! ${shareLink}`);
@@ -1325,7 +1322,7 @@ const Index = () => {
   if (isPaid) {
     const paidJoinLink = studentData?.paid_classes_joining_link || studentData?.classes_joining_link || sessionJoinLink || "https://www.youtube.com/c/Healthyday";
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
-    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=91${mobile}` : referralLink;
+    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile.length === 10 ? "91" : ""}${mobile}` : referralLink;
 
     // Session live detection (IST)
     const searchParams = new URLSearchParams(location.search);
@@ -2010,7 +2007,7 @@ const Index = () => {
   // --- 14 Days Completed Page ---
   if (show14DayCompleted) {
     const referralLink = "healthyday.app/ref=ggtujev58";
-    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=91${mobile}` : referralLink;
+    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile.length === 10 ? "91" : ""}${mobile}` : referralLink;
 
     const handleCopyLink = () => {
       navigator.clipboard.writeText(shareLink);
