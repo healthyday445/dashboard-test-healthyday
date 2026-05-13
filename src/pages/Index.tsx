@@ -146,12 +146,14 @@ const Index = () => {
   const location = useLocation();
   const previewMode = new URLSearchParams(location.search).get("preview");
   const [showReferral, setShowReferral] = useState(() => {
-    return sessionStorage.getItem("hd_referral_popup_dismissed") !== "true";
+    const dismissedDate = localStorage.getItem("hd_referral_popup_dismissed_date");
+    const today = new Date().toDateString();
+    return dismissedDate !== today;
   });
 
   const handleCloseReferral = () => {
     setShowReferral(false);
-    sessionStorage.setItem("hd_referral_popup_dismissed", "true");
+    localStorage.setItem("hd_referral_popup_dismissed_date", new Date().toDateString());
   };
 
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
