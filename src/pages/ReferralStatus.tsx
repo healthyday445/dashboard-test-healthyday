@@ -438,14 +438,12 @@ const ReferralStatus = () => {
             </div>
           )}
 
-          {/* REFER & WIN — FAB floating at bottom-right */}
+          {/* REFER & WIN button */}
+          <div style={{ display: "flex", justifyContent: referrals.length > 0 ? "flex-end" : "center", paddingRight: referrals.length > 0 ? "16px" : "0", marginTop: "16px" }}>
           <button
             className="refer-fab"
             onClick={handleReferNow}
             style={{
-              position: "absolute",
-              bottom: referrals.length > 0 ? "-24px" : "-100px",
-              right: "16px",
               display: "flex",
               alignItems: "center",
               gap: "10px",
@@ -467,6 +465,7 @@ const ReferralStatus = () => {
               REFER & WIN
             </span>
           </button>
+          </div>
         </div>
 
         {/* Hover animation for FAB */}
