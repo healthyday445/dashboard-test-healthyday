@@ -948,7 +948,7 @@ const Index = () => {
                     <span
                       onClick={() => {
                         const dest = (refCount > 0 && (studentStatus === "14DaysOngoing" || studentStatus === "14daysongoing"))
-                          ? `/referral-status?count=${refCount}&mobile=${mobile || ""}`
+                          ? `/${mobile || ""}/referrals/${refCount}`
                           : `/referral?count=${refCount}&mobile=${mobile || ""}`;
                         navigate(dest);
                       }}
@@ -966,7 +966,7 @@ const Index = () => {
 
             {/* Refer & Win card */}
             <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard shareLink={shareLink} referralsUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`} />
+              <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals/${studentData?.total_referral_count ?? 0}`} />
             </div>
 
             {/* Week 2 Bonus: show payment section instead */}
@@ -977,7 +977,7 @@ const Index = () => {
                   <p style={{ width: "100%", maxWidth: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
                 </div>
                 <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-                  <ReferWinCard shareLink={shareLink} referralsUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`} />
+                  <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals/${studentData?.total_referral_count ?? 0}`} />
                 </div>
               </>
             )}
@@ -987,7 +987,7 @@ const Index = () => {
               <ReferWinPopup
                 refCount={studentData?.total_referral_count ?? 0}
                 onClose={handleCloseReferral}
-                referNowUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`}
+                referNowUrl={`/${mobile || ""}/referrals/${studentData?.total_referral_count ?? 0}`}
               />
             )}
           </div>
@@ -1268,7 +1268,7 @@ const Index = () => {
                     <span
                       onClick={() => {
                         const dest = (refCount > 0 && (studentStatus === "14DaysOngoing" || studentStatus === "14daysongoing"))
-                          ? `/referral-status?count=${refCount}&mobile=${mobile || ""}`
+                          ? `/${mobile || ""}/referrals/${refCount}`
                           : `/referral?count=${refCount}&mobile=${mobile || ""}`;
                         navigate(dest);
                       }}
@@ -1287,7 +1287,7 @@ const Index = () => {
 
             {/* Refer & Win card */}
             <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard shareLink={shareLink} referralsUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`} />
+              <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals/${studentData?.total_referral_count ?? 0}`} />
             </div>
           </>
         )}
@@ -1301,7 +1301,7 @@ const Index = () => {
             </div>
             {/* Refer & Earn */}
             <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard shareLink={shareLink} referralsUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`} />
+              <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals/${studentData?.total_referral_count ?? 0}`} />
             </div>
           </>
         )}
@@ -1311,7 +1311,7 @@ const Index = () => {
           <ReferWinPopup
             refCount={studentData?.total_referral_count ?? 0}
             onClose={handleCloseReferral}
-            referNowUrl={`/referral?count=${studentData?.total_referral_count ?? 0}&mobile=${mobile || ""}`}
+            referNowUrl={`/${mobile || ""}/referrals/${studentData?.total_referral_count ?? 0}`}
           />
         )}
       </div>
@@ -1737,7 +1737,7 @@ const Index = () => {
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
             <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, margin: 0 }}>Your Weekly Attendance</h3>
             <span
-              onClick={() => navigate(`/attendance-page?mobile=${mobile || ""}`)}
+              onClick={() => navigate(`/${mobile || ""}/attendance`)}
               style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
             >View progress</span>
           </div>
@@ -1763,7 +1763,7 @@ const Index = () => {
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
               <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Your Referral Gifts</h3>
               <span
-                onClick={() => navigate(`/referral-status?count=${refCount}&mobile=${mobile || ""}`)}
+                onClick={() => navigate(`/${mobile || ""}/referrals/${refCount}`)}
                 style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
               >
                 View More
@@ -1778,7 +1778,7 @@ const Index = () => {
         {/* Refer & Win Card — shown only after popup is dismissed */}
         {!showPlanRenewal && !showReferral && (
           <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-            <ReferWinCard shareLink={shareLink} referralsUrl={`/referral-status?count=${refCount}&mobile=${mobile || ""}`} />
+            <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals/${refCount}`} />
           </div>
         )}
 
@@ -1853,7 +1853,7 @@ const Index = () => {
               }}>
                 <ShareReferralActions
                   shareLink={shareLink}
-                  referralsUrl={`/referral-status?count=${refCount}&mobile=${mobile || ""}`}
+                  referralsUrl={`/${mobile || ""}/referrals/${refCount}`}
                 />
               </div>
             </div>
@@ -1865,7 +1865,7 @@ const Index = () => {
           <ReferWinPopup
             refCount={refCount}
             onClose={handleCloseReferral}
-            referNowUrl={`/referral?count=${refCount}&mobile=${mobile || ""}`}
+            referNowUrl={`/${mobile || ""}/referrals/${refCount}`}
           />
         )}
 
@@ -1876,9 +1876,10 @@ const Index = () => {
   // --- Past Due / Subscription Expired Dashboard ---
   if (studentStatus === "pastdue") {
     // Format expired date
-    const expiredDateRaw = studentData?.plan_expired_date;
+    const expiredSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "expired") || studentData?.subscriptions?.[studentData.subscriptions.length - 1];
+    const expiredDateRaw = expiredSub?.subscription_end || studentData?.sub_end_date || studentData?.plan_end_date || studentData?.plan_expired_date;
     const formatExpiredDate = (dateStr: string) => {
-      if (!dateStr) return "recently";
+      if (!dateStr) return "";
       const d = new Date(dateStr);
       const day = d.getDate();
       const suffix = day === 1 || day === 21 || day === 31 ? "st" : day === 2 || day === 22 ? "nd" : day === 3 || day === 23 ? "rd" : "th";

@@ -301,6 +301,13 @@ const AllRecordings = () => {
   const youtubeVideos = isEnglish ? englishVideos : teluguVideos;
   const lang = isEnglish ? "english" : "telugu";
 
+  // Subscription plan duration check (mirrors paid dashboard logic)
+  const activeSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "active" || s.subscription_status === "ongoing") || studentData?.subscriptions?.[0];
+  const planType = activeSub?.plan_type || studentData?.plan_type;
+  const is6Month = planType === "6_months";
+  const is12Month = planType === "12_months";
+  const hasB2hAccess = is6Month || is12Month;
+
   // --- Date formatting helpers ---
   const ordinalSuffix = (d: number) => {
     if (d >= 11 && d <= 13) return "th";
@@ -392,17 +399,21 @@ const AllRecordings = () => {
       link: isEnglish ? "https://join.healthyday.co.in/healthyface_eng" : "https://join.healthyday.co.in/healthyface",
       accessTill: `Access till ${plus13Label}`,
     },
-    {
+  ];
+
+  // Breath to Heal — 6-month & 12-month plans only
+  if (hasB2hAccess) {
+    classRecordings.push({
       title: `${b2hDateLabel} Breath to Heal Session`,
       subtitle: "Daily at 9:00 PM",
       thumbnail: ytThumb(b2hSession?.link, isEnglish ? "/bonus/bw_eng.jpg" : "/bonus/breathwork.jpg"),
       link: b2hSession?.link || (isEnglish ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession"),
       accessTill: (b2hSession && formatExpiry(b2hSession.expiry_by)) || `Access till 8:30 PM, ${tomorrowLabel}`,
-    },
-  ];
+    });
+  }
 
-  // Diet Session — Telugu only
-  if (!isEnglish) {
+  // Diet Session — 12-month Telugu only
+  if (is12Month && !isEnglish) {
     classRecordings.push({
       title: `${dietDateLabel} Healthyday Diet Routine`,
       subtitle: "Daily at 8:00 PM",

@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import { ReferralMilestonesCard } from "@/components/ReferralMilestonesCard";
 
@@ -53,14 +53,17 @@ const formatDate = (iso: string): string => {
 
 const ReferralStatus = () => {
   const location = useLocation();
+  const { mobile: urlMobile, count: urlCount } = useParams<{ mobile: string; count: string }>();
   const searchParams = new URLSearchParams(location.search);
 
   // Use URL param as optimistic initial value; API response will override
   const initialCount =
+    Number(urlCount) ||
     Number(searchParams.get("count")) ||
     Number(sessionStorage.getItem("total_referral_count")) ||
     0;
   const mobile =
+    urlMobile ||
     searchParams.get("mobile") ||
     sessionStorage.getItem("referrer_mobile") ||
     "";
@@ -68,6 +71,7 @@ const ReferralStatus = () => {
   const [apiData, setApiData] = useState<ReferralsApiData | null>(null);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [showAllReferrals, setShowAllReferrals] = useState(false);
 
   const shareLink = mobile
     ? `https://yoga.healthyday.co.in?ref=${mobile.length === 10 ? "91" : ""}${mobile}`
@@ -278,6 +282,159 @@ const ReferralStatus = () => {
                   </div>
                 </div>
               ))}
+            </div>
+          )}
+
+          {/* View All button */}
+          {referrals.length > 4 && (
+            <button
+              onClick={() => setShowAllReferrals(true)}
+              style={{
+                display: "block",
+                margin: "12px auto 0",
+                background: "none",
+                border: "none",
+                cursor: "pointer",
+                fontFamily: "Outfit",
+                fontSize: "14px",
+                fontWeight: 600,
+                color: "#FEAB27",
+                padding: "6px 16px",
+              }}
+            >
+              View All ({referrals.length})
+            </button>
+          )}
+
+          {/* All Referrals Popup */}
+          {showAllReferrals && (
+            <div
+              onClick={() => setShowAllReferrals(false)}
+              style={{
+                position: "fixed",
+                top: 0, left: 0, right: 0, bottom: 0,
+                background: "rgba(0, 0, 0, 0.55)",
+                zIndex: 1000,
+                display: "flex",
+                alignItems: "flex-end",
+                justifyContent: "center",
+                animation: "fadeIn 0.2s ease-out",
+              }}
+            >
+              <div
+                onClick={(e) => e.stopPropagation()}
+                style={{
+                  width: "100%",
+                  maxWidth: "412px",
+                  maxHeight: "75vh",
+                  borderRadius: "24px 24px 0 0",
+                  background: "#FFF",
+                  boxShadow: "0 -4px 30px rgba(0,0,0,0.2)",
+                  display: "flex",
+                  flexDirection: "column",
+                  animation: "slideUp 0.3s ease-out",
+                }}
+              >
+                {/* Popup Header */}
+                <div style={{
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "20px 24px 16px",
+                  borderBottom: "1px solid #F0F0F0",
+                  flexShrink: 0,
+                }}>
+                  <h3 style={{ margin: 0, fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, color: "#202020" }}>
+                    All Referrals ({referrals.length})
+                  </h3>
+                  <button
+                    onClick={() => setShowAllReferrals(false)}
+                    style={{
+                      background: "#F5F5F5",
+                      border: "none",
+                      borderRadius: "50%",
+                      width: "32px",
+                      height: "32px",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      cursor: "pointer",
+                      fontSize: "18px",
+                      color: "#666",
+                    }}
+                  >
+                    ✕
+                  </button>
+                </div>
+
+                {/* Scrollable Referral List */}
+                <div style={{ overflowY: "auto", flex: 1, padding: "0 24px 24px" }}>
+                  {referrals.map((ref, idx) => (
+                    <div key={idx}>
+                      {idx > 0 && (
+                        <div style={{ height: "0.5px", background: "#FEAB27", margin: "0" }} />
+                      )}
+                      <div
+                        style={{
+                          display: "flex",
+                          alignItems: "center",
+                          justifyContent: "space-between",
+                          padding: "12px 0",
+                        }}
+                      >
+                        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
+                          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none" style={{ flexShrink: 0 }}>
+                            <circle cx="18" cy="18" r="18" fill="#F3F4F7" />
+                            <g transform="translate(12, 9.5)">
+                              <path d="M1 16V14.3333C1 13.4493 1.35119 12.6014 1.97631 11.9763C2.60143 11.3512 3.44928 11 4.33333 11H7.66667C8.55072 11 9.39857 11.3512 10.0237 11.9763C10.6488 12.6014 11 13.4493 11 14.3333V16M2.66667 4.33333C2.66667 5.21739 3.01786 6.06523 3.64298 6.69036C4.2681 7.31548 5.11594 7.66667 6 7.66667C6.88405 7.66667 7.7319 7.31548 8.35702 6.69036C8.98214 6.06523 9.33333 5.21739 9.33333 4.33333C9.33333 3.44928 8.98214 2.60143 8.35702 1.97631C7.7319 1.35119 6.88405 1 6 1C5.11594 1 4.2681 1.35119 3.64298 1.97631C3.01786 2.60143 2.66667 3.44928 2.66667 4.33333Z" stroke="#0D468B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                              <path d="M1 16V14.3333C1 13.4493 1.35119 12.6014 1.97631 11.9763C2.60143 11.3512 3.44928 11 4.33333 11H7.66667C8.55072 11 9.39857 11.3512 10.0237 11.9763C10.6488 12.6014 11 13.4493 11 14.3333V16M2.66667 4.33333C2.66667 5.21739 3.01786 6.06523 3.64298 6.69036C4.2681 7.31548 5.11594 7.66667 6 7.66667C6.88405 7.66667 7.7319 7.31548 8.35702 6.69036C8.98214 6.06523 9.33333 5.21739 9.33333 4.33333C9.33333 3.44928 8.98214 2.60143 8.35702 1.97631C7.7319 1.35119 6.88405 1 6 1C5.11594 1 4.2681 1.35119 3.64298 1.97631C3.01786 2.60143 2.66667 3.44928 2.66667 4.33333Z" stroke="black" strokeOpacity="0.2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                            </g>
+                          </svg>
+                          <div>
+                            <div
+                              style={{
+                                fontFamily: "Outfit",
+                                fontSize: "15px",
+                                fontWeight: 600,
+                                background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
+                                WebkitBackgroundClip: "text",
+                                WebkitTextFillColor: "transparent",
+                              }}
+                            >
+                              {ref.referred_name || maskMobile(ref.referred_mobile)}
+                            </div>
+                            <div style={{ color: "#A2A2A2", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, marginTop: "2px" }}>
+                              {ref.referred_name && `${maskMobile(ref.referred_mobile)} · `}Joined {formatDate(ref.referral_date)}
+                            </div>
+                          </div>
+                        </div>
+                        <div
+                          style={{
+                            width: "58px",
+                            height: "21px",
+                            borderRadius: "3px",
+                            background: "#C7FFDA",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            fontFamily: "Outfit",
+                            fontSize: "10px",
+                            fontWeight: 600,
+                            color: "#287E54",
+                            flexShrink: 0,
+                          }}
+                        >
+                          ACTIVE
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              </div>
+              <style>{`
+                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+                @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
+              `}</style>
             </div>
           )}
 
