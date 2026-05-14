@@ -142,9 +142,25 @@ const VideoCard = ({ video }: { video: (typeof teluguVideos)[0] }) => {
 
 const Index = () => {
   const navigate = useNavigate();
-  const { mobile } = useParams<{ mobile: string }>();
+  const { mobile: pathMobile } = useParams<{ mobile: string }>();
   const location = useLocation();
-  const previewMode = new URLSearchParams(location.search).get("preview");
+  const searchParams = new URLSearchParams(location.search);
+  const previewMode = searchParams.get("preview");
+
+  // Support Short.io link tracking: /dashboard?mobile=919110378176
+  // Reads ?mobile= query param and redirects to clean path-based URL (/919110378176)
+  const queryMobile = searchParams.get("mobile");
+  const mobile = pathMobile || queryMobile || undefined;
+
+  useEffect(() => {
+    if (!pathMobile && queryMobile) {
+      // Redirect from /dashboard?mobile=XXX → /XXX (preserving other query params like ?preview=)
+      const remaining = new URLSearchParams(location.search);
+      remaining.delete("mobile");
+      const qs = remaining.toString();
+      navigate(`/${queryMobile}${qs ? `?${qs}` : ""}`, { replace: true });
+    }
+  }, [pathMobile, queryMobile, navigate, location.search]);
   const [showReferral, setShowReferral] = useState(() => {
     const dismissedDate = localStorage.getItem("hd_referral_popup_dismissed_date");
     const today = new Date().toDateString();
