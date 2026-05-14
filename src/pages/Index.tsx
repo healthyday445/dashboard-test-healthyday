@@ -462,7 +462,7 @@ const Index = () => {
 
         if (!response.ok) {
           if (response.status === 404) {
-            throw new Error("This mobile number is not registered. Please check the number and try again.");
+            throw new Error("This link is incorrect. Can you please recheck your WhatsApp reminder and open the correct link?");
           }
           throw new Error(`API error: ${response.status}`);
         }
@@ -1424,9 +1424,9 @@ const Index = () => {
       const todayDate = new Date();
       todayDate.setHours(0, 0, 0, 0);
       planEndDate.setHours(0, 0, 0, 0);
-      return Math.ceil((planEndDate.getTime() - todayDate.getTime()) / 86400000);
+      return Math.ceil((planEndDate.getTime() - todayDate.getTime()) / 86400000) + 1;
     })();
-    const showPlanRenewal = daysUntilPlanEnds !== null && daysUntilPlanEnds <= 7 && daysUntilPlanEnds >= 0;
+    const showPlanRenewal = daysUntilPlanEnds !== null && daysUntilPlanEnds <= 7 && daysUntilPlanEnds >= 1;
 
     // Weekly attendance (Mon-Sun)
     const today = new Date();
@@ -1808,7 +1808,7 @@ const Index = () => {
                 fontSize: "20px",
                 fontWeight: 700,
                 lineHeight: "normal",
-                margin: "0 auto 20px",
+                margin: "0 auto 0",
               }}>
                 RENEW NOW!
               </p>

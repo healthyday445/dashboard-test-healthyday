@@ -1,19 +1,20 @@
 import React from "react";
 
 const plans = [
-  { name: "1 Year Plan", price: 1999, originalPrice: 5988, discount: 63, bestValue: true, url: "https://healthyday.co.in/1-year-plan/" },
-  { name: "6 Months Plan", price: 1499, originalPrice: 2994, discount: 38, bestValue: false, url: "https://healthyday.co.in/6-months-plan/" },
-  { name: "3 Months Plan", price: 999, originalPrice: 1497, discount: 25, bestValue: false, url: "https://healthyday.co.in/3-months-plan/" },
+  { name: "1 Year Plan", price: 1999, originalPrice: 5988, discount: 63, bestValue: true, url: "https://rzp.io/rzp/NFLe4Cj" },
+  { name: "6 Months Plan", price: 1499, originalPrice: 2994, discount: 38, bestValue: false, url: "https://rzp.io/rzp/35LBolAY" },
+  { name: "3 Months Plan", price: 999, originalPrice: 1497, discount: 25, bestValue: false, url: "https://rzp.io/rzp/4wy41nqC" },
 ];
 
 const features = [
   { name: "Daily YOGA", year: true, sixMonth: true, threeMonth: true },
-  { name: "24-Hour Recording", year: true, sixMonth: true, threeMonth: true },
-  { name: "Reminders & Tracking", year: true, sixMonth: true, threeMonth: true },
+  { name: "Daily Diet Routine", year: true, sixMonth: false, threeMonth: false },
+  { name: "Face Yoga", year: true, sixMonth: false, threeMonth: false },
+  { name: "Daily Breathwork", year: true, sixMonth: true, threeMonth: false },
   { name: "108 Surya Namaskar", year: true, sixMonth: true, threeMonth: false },
-  { name: "Breath Mastery", year: true, sixMonth: true, threeMonth: false },
-  { name: "Face YOGA", year: true, sixMonth: false, threeMonth: false },
-  { name: "Masterclass", year: true, sixMonth: false, threeMonth: false },
+  { name: "24 Hours Recording", year: true, sixMonth: true, threeMonth: true },
+  { name: "Whatsapp Reminders", year: true, sixMonth: true, threeMonth: true },
+  { name: "Attendance Tracking", year: true, sixMonth: true, threeMonth: true },
 ];
 
 const CompletedDayBox = ({ status, dayLabel }: { status: string; dayLabel: string }) => (
