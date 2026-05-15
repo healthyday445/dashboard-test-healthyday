@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { trackVisit } from "@/lib/trackVisit";
 import logo from "@/assets/Primary_logo.svg";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 import { ReferralMilestonesCard } from "@/components/ReferralMilestonesCard";
@@ -161,6 +162,13 @@ const Index = () => {
       navigate(`/${queryMobile}${qs ? `?${qs}` : ""}`, { replace: true });
     }
   }, [pathMobile, queryMobile, navigate, location.search]);
+
+  // --- Link tracking: log visit to Supabase attendance_logs ---
+  useEffect(() => {
+    if (mobile && !previewMode) {
+      trackVisit(mobile);
+    }
+  }, [mobile, previewMode]);
   const [showReferral, setShowReferral] = useState(() => {
     const dismissedDate = localStorage.getItem("hd_referral_popup_dismissed_date");
     const today = new Date().toDateString();
