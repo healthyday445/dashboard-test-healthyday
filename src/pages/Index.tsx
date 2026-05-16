@@ -1431,8 +1431,8 @@ const Index = () => {
     // For upcoming session display (outside any active window), pick the next upcoming one
     const todayBonusCard = activeBonusCard || eligibleBonusSessions.find(s => totalMin < s.startMin - 30) || null;
     const isLive = [
-      [330, 390], [390, 450], [450, 510], [510, 570],
-      [990, 1050], [1050, 1110], [1110, 1170],
+      [285, 570], // Morning: 4:45 AM - 9:30 AM
+      [945, 1170], // Evening: 3:45 PM - 7:30 PM
     ].some(([s, e]) => totalMin >= s && totalMin < e);
 
     // Plan renewal detection (7 days before plan ends)
