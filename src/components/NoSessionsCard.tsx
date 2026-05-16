@@ -4,10 +4,10 @@ import React from "react";
  * Session-info card shown on the paid dashboard when no sessions are currently live.
  *
  * Two states based on time of day:
- * 1. After all classes are done (≥ 7:30 PM / 1170 min until midnight)
+ * 1. After all classes are done (≥ 8:30 PM / 1230 min until midnight)
  *    → "Next Session is Tomorrow"
- * 2. After midnight (< 5:00 AM / 300 min) OR between morning/evening blocks
- *    → "Session Live at <next time>"
+ * 2. After midnight (< 5:30 AM / 330 min) OR between morning/evening blocks
+ *    → "Next Live at <next time>"
  */
 
 interface NoSessionsCardProps {
@@ -16,26 +16,26 @@ interface NoSessionsCardProps {
 }
 
 const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin }) => {
-  // After evening sessions end (7:30 PM = 1170 min) until midnight → "Tomorrow"
-  const isTomorrow = totalMin >= 1170;
+  // After evening sessions end (8:30 PM = 1230 min) until midnight → "Tomorrow"
+  const isTomorrow = totalMin >= 1230;
 
   // Find the next session label to show as the highlighted time
-  // Morning begins at 300 (5:00 AM), Evening begins at 960 (4:00 PM)
-  let nextSessionLabel = "5:00 AM";
-  if (totalMin >= 570 && totalMin < 960) {
-    nextSessionLabel = "4:00 PM";
+  // Morning begins at 330 (5:30 AM), Evening begins at 1050 (5:30 PM)
+  let nextSessionLabel = "5:30 AM";
+  if (totalMin >= 570 && totalMin < 1050) {
+    nextSessionLabel = "5:30 PM";
   }
 
   const title = isTomorrow
     ? "Next Session is Tomorrow"
-    : `Session Live at ${nextSessionLabel}`;
+    : `Next Live at ${nextSessionLabel}`;
 
   // Session times row — always show morning times for "tomorrow" and "before morning"
   // Show evening times for the midday gap
-  const isMidDayGap = totalMin >= 570 && totalMin < 960;
+  const isMidDayGap = totalMin >= 570 && totalMin < 1050;
   const sessionTimes = isMidDayGap
-    ? ["4:00 PM", "5:30 PM", "6:30 PM"]
-    : ["5:00 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
+    ? ["5:30 PM", "6:30 PM", "7:30 PM"]
+    : ["5:30 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
 
   return (
     <div

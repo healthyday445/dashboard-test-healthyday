@@ -11,6 +11,7 @@
 > These are dynamic class recordings linked to the user's live session access.
 
 ### ✅ All Paid Users (Telugu + English)
+*(Note: Face Yoga is restricted to 12-Month users only)*
 
 | # | Title | Subtitle | Thumbnail | Link | Access Window |
 |---|-------|----------|-----------|------|---------------|
@@ -18,11 +19,11 @@
 | 2 | Last Healthyday Face Yoga | Sundays at 11:30 AM | Telugu: `/bonus/faceyoga_tel.jpg` · English: `/bonus/faceyoga_eng.jpg` | Telugu: `https://join.healthyday.co.in/healthyface` · English: `https://join.healthyday.co.in/healthyface_eng` | Till **+13 days from today** |
 | 3 | `[Today's Date]` Breath to Heal Session | Daily at 9:00 PM | Telugu: `/bonus/breathwork.jpg` · English: `/bonus/bw_eng.jpg` | Telugu: `https://join.healthyday.co.in/b2hsession` · English: `https://join.healthyday.co.in/b2hsession_eng` | Till **8:30 PM next day** |
 
-### 🇮🇳 Telugu-Only (4th Card — not shown to English users)
+### Diet Session (12-Month users only)
 
 | # | Title | Subtitle | Thumbnail | Link | Access Window |
 |---|-------|----------|-----------|------|---------------|
-| 4 | `[Today's Date]` Healthyday Diet Routine | Daily at 8:00 PM | `/bonus/weightlosssession.jpg` | `https://join.healthyday.co.in/diet` | Till **7:30 PM next day** |
+| 4 | `[Today's Date]` Healthyday Diet Routine | Daily at 8:00 PM | `/bonus/weightlosssession.jpg` | Telugu: `https://join.healthyday.co.in/diet` · English: `https://join.healthyday.co.in/diet_eng` | Till **7:30 PM next day** |
 
 ---
 

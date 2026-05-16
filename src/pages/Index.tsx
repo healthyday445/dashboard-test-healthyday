@@ -1381,7 +1381,8 @@ const Index = () => {
     const eligibleBonusSessions: BonusCard[] = [];
 
     // 1. Face Yoga (Sundays at 11:30 AM IST -> 690 min)
-    if (currentDow === 0) {
+    // Eligible: 12 months only
+    if (is12Month && currentDow === 0) {
       if (paidLang === "Telugu" && isTeluguFaceYogaWeek) {
         eligibleBonusSessions.push({
           name: "Face Yoga Session",
@@ -1402,13 +1403,13 @@ const Index = () => {
     }
 
     // 2. Diet Session (Daily at 8:00 PM IST -> 1200 min)
-    // Eligible: 12 months Telugu only
-    if (is12Month && paidLang === "Telugu") {
+    // Eligible: 12 months only
+    if (is12Month) {
       eligibleBonusSessions.push({
         name: "Diet Session",
         fullName: "Diet Session at 8:00 PM",
         startMin: 1200,
-        sessionLink: "https://join.healthyday.co.in/diet",
+        sessionLink: paidLang === "English" ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet",
         thumbnail: "/bonus/weightlosssession.jpg",
       });
     }
@@ -1671,8 +1672,8 @@ const Index = () => {
           </div>
         </div>
 
-        {/* This Week's Grocery List — 12-month Telugu plan only */}
-        {is12Month && paidLang === "Telugu" && (
+        {/* This Week's Grocery List — 12-month plan only */}
+        {is12Month && (
           <div style={{ padding: "12px 21px 0 22px" }}>
             <div
               onClick={() => window.open("https://dailyyogawithjagan.com/grocery-list", "_blank")}
@@ -1760,10 +1761,6 @@ const Index = () => {
         <div style={{ padding: "40px 22px 0" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
             <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, margin: 0 }}>Your Weekly Attendance</h3>
-            <span
-              onClick={() => navigate(`/${mobile || ""}/attendance`)}
-              style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
-            >View progress</span>
           </div>
         </div>
 

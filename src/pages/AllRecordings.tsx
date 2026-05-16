@@ -392,14 +392,18 @@ const AllRecordings = () => {
       link: yogaSession?.link || yogaFallbackLink,
       accessTill: (yogaSession && formatExpiry(yogaSession.expiry_by)) || `Access till 5:00 AM, ${tomorrowLabel}`,
     },
-    {
+  ];
+
+  // Face Yoga — 12-month plan only
+  if (is12Month) {
+    classRecordings.push({
       title: "Last Healthyday Face Yoga",
       subtitle: "Sundays at 11:30 AM",
       thumbnail: isEnglish ? "/bonus/faceyoga_eng.jpg" : "/bonus/faceyoga_tel.jpg",
       link: isEnglish ? "https://join.healthyday.co.in/healthyface_eng" : "https://join.healthyday.co.in/healthyface",
       accessTill: `Access till ${plus13Label}`,
-    },
-  ];
+    });
+  }
 
   // Breath to Heal — 6-month & 12-month plans only
   if (hasB2hAccess) {
@@ -412,13 +416,13 @@ const AllRecordings = () => {
     });
   }
 
-  // Diet Session — 12-month Telugu only
-  if (is12Month && !isEnglish) {
+  // Diet Session — 12-month
+  if (is12Month) {
     classRecordings.push({
       title: `${dietDateLabel} Healthyday Diet Routine`,
       subtitle: "Daily at 8:00 PM",
       thumbnail: ytThumb(dietSession?.link, "/bonus/weightlosssession.jpg"),
-      link: dietSession?.link || "https://join.healthyday.co.in/diet",
+      link: dietSession?.link || (isEnglish ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet"),
       accessTill: (dietSession && formatExpiry(dietSession.expiry_by)) || `Access till 7:30 PM, ${tomorrowLabel}`,
     });
   }
