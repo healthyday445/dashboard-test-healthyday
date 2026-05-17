@@ -101,11 +101,32 @@ function cleanSessionName(name: string): string {
 }
 
 /**
+ * Helper to determine a rough timestamp for a session based on its date and whether
+ * it's a morning or evening session. Used to sort recordings by most recent.
+ */
+function getSessionTimestamp(link: SessionLink): number {
+  if (!link.session_date) return 0;
+  // Parse as local date (avoid timezone shift)
+  const [y, m, d] = link.session_date.split("-").map(Number);
+  if (!y || !m || !d) return 0;
+  
+  const date = new Date(y, m - 1, d);
+  
+  if (link.session_code.includes("morning")) {
+    date.setHours(6, 0, 0, 0); // 6:00 AM
+  } else if (link.session_code.includes("evening")) {
+    date.setHours(18, 0, 0, 0); // 6:00 PM
+  } else {
+    date.setHours(12, 0, 0, 0); // Default to noon for others (like b2h)
+  }
+  
+  return date.getTime();
+}
+
+/**
  * Find the current active recording for a given session_code + language.
- * Picks the entry with the earliest (soonest) expiry_by — that's the recording
- * that is currently available. Once it expires, the next one takes over.
- * This prevents showing today's session (not yet recorded) over yesterday's
- * actual available recording.
+ * Sorts multiple available recordings by their calculated timestamp descending,
+ * so the most recently occurred session is shown (e.g., Today's Morning over Yesterday's Evening).
  */
 function findSessionLink(
   links: SessionLink[],
@@ -113,20 +134,27 @@ function findSessionLink(
   language: string
 ): SessionLink | undefined {
   const codes = Array.isArray(sessionCode) ? sessionCode : [sessionCode];
+  
   const matches = links.filter(
     (s) => codes.includes(s.session_code) && s.language === language
   );
 
   if (matches.length === 0) return undefined;
-  if (matches.length === 1) return matches[0];
 
-  // Sort by expiry_by ASC (earliest expiry first = current recording)
-  // Entries with null expiry (never expires) go last
+  const now = Date.now();
+
+  // Sort by most recent session timestamp first, but prioritize past sessions over future ones
   return [...matches].sort((a, b) => {
-    if (!a.expiry_by && !b.expiry_by) return 0;
-    if (!a.expiry_by) return 1;
-    if (!b.expiry_by) return -1;
-    return new Date(a.expiry_by).getTime() - new Date(b.expiry_by).getTime();
+    const tA = getSessionTimestamp(a);
+    const tB = getSessionTimestamp(b);
+    
+    const isAFuture = tA > now;
+    const isBFuture = tB > now;
+    
+    if (isAFuture && !isBFuture) return 1;
+    if (!isAFuture && isBFuture) return -1;
+    
+    return tB - tA;
   })[0];
 }
 
