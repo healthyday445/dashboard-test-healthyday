@@ -116,8 +116,12 @@ function getSessionTimestamp(link: SessionLink): number {
     date.setHours(6, 0, 0, 0); // 6:00 AM
   } else if (link.session_code.includes("evening")) {
     date.setHours(18, 0, 0, 0); // 6:00 PM
+  } else if (link.session_code.includes("b2h")) {
+    date.setHours(21, 0, 0, 0); // 9:00 PM
+  } else if (link.session_code.includes("diet")) {
+    date.setHours(20, 0, 0, 0); // 8:00 PM
   } else {
-    date.setHours(12, 0, 0, 0); // Default to noon for others (like b2h)
+    date.setHours(12, 0, 0, 0); // Default to noon for others
   }
   
   return date.getTime();

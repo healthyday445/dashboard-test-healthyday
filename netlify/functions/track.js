@@ -1,17 +1,23 @@
 /**
  * Netlify Function: track
- * Logs link visits to the Supabase `attendance_logs` table.
- *
- * POST /.netlify/functions/track
- * Body: { "slug": "919110378176" }
- *
- * The function captures the visitor's IP and User-Agent from request headers
- * and inserts a row into the `attendance_logs` table.
+ * Logs link visits to Google Firestore `portal_link_clicks` collection.
  */
 
-const SUPABASE_URL = "https://opmezoyalvcqdezxcexw.supabase.co";
-const SUPABASE_SERVICE_KEY =
-  "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im9wbWV6b3lhbHZjcWRlenhjZXh3Iiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3MTEwNTM5NywiZXhwIjoyMDg2NjgxMzk3fQ.NsHxI8HIxlA6DOr-TlITTugIIPX-PMARqaglMJ7u4Ug";
+import admin from 'firebase-admin';
+import { getFirestore } from 'firebase-admin/firestore';
+
+// Service Account Credentials (loaded from environment variable to prevent secret leaks)
+const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
+
+// Initialize Firebase Admin only once
+if (!admin.apps.length) {
+  admin.initializeApp({
+    credential: admin.credential.cert(serviceAccount)
+  });
+}
+
+// Access the specific named database
+const db = getFirestore('healthyday-logstore');
 
 export async function handler(event) {
   // Only allow POST
@@ -33,6 +39,26 @@ export async function handler(event) {
       };
     }
 
+    // Prepare mobile number (ensure it has a '+' sign if it's purely digits)
+    let mobile = slug.replace(/[\s\-\(\)]/g, ''); // strip spaces and dashes
+    if (/^\d{10}$/.test(mobile)) {
+      mobile = '+91' + mobile;
+    } else if (/^\d+$/.test(mobile)) {
+      mobile = '+' + mobile;
+    } else if (!mobile.startsWith('+')) {
+      mobile = '+' + mobile.replace(/[^\d]/g, '');
+    }
+
+    // Get current date in YYYY-MM-DD
+    const dateObj = new Date();
+    // Extract YYYY-MM-DD in local time using string splitting
+    // Since serverless functions might be in UTC, we can use UTC offset or standard ISO format
+    // A robust way to get YYYY-MM-DD in UTC (or based on standard format)
+    const dateStr = dateObj.toISOString().split('T')[0];
+
+    // Document ID: <mobile_number_with_plus_sign_and_acountry_code>_YYYY-MM-DD
+    const docId = `${mobile}_${dateStr}`;
+
     // Extract visitor info from headers
     const ip =
       event.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
@@ -40,33 +66,21 @@ export async function handler(event) {
       event.headers["x-real-ip"] ||
       "unknown";
 
-    const userAgent = event.headers["user-agent"] || "unknown";
+    // Event payload: Include original body plus the extracted IP
+    const eventPayload = {
+      ...body,
+      ip
+    };
 
-    // Insert into Supabase via REST API (no SDK needed in serverless)
-    const res = await fetch(`${SUPABASE_URL}/rest/v1/attendance_logs`, {
-      method: "POST",
-      headers: {
-        apikey: SUPABASE_SERVICE_KEY,
-        Authorization: `Bearer ${SUPABASE_SERVICE_KEY}`,
-        "Content-Type": "application/json",
-        Prefer: "return=minimal",
-      },
-      body: JSON.stringify({
-        slug,
-        ip,
-        user_agent: userAgent,
-      }),
-    });
+    // Reference to the document
+    const docRef = db.collection('portal_link_clicks').doc(docId);
 
-    if (!res.ok) {
-      const errText = await res.text();
-      console.error("Supabase insert error:", res.status, errText);
-      return {
-        statusCode: res.status,
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ error: "Failed to log visit", detail: errText }),
-      };
-    }
+    // Update with arrayUnion or create if not exists
+    await docRef.set({
+      mobile: mobile,
+      date: dateStr,
+      clicks: admin.firestore.FieldValue.arrayUnion(eventPayload)
+    }, { merge: true });
 
     return {
       statusCode: 200,
