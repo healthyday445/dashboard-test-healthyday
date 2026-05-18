@@ -139,27 +139,17 @@ function findSessionLink(
 ): SessionLink | undefined {
   const codes = Array.isArray(sessionCode) ? sessionCode : [sessionCode];
   
+  const now = Date.now();
+  
+  // Only consider sessions that are for the current language and have already happened
   const matches = links.filter(
-    (s) => codes.includes(s.session_code) && s.language === language
+    (s) => codes.includes(s.session_code) && s.language === language && getSessionTimestamp(s) <= now
   );
 
   if (matches.length === 0) return undefined;
 
-  const now = Date.now();
-
-  // Sort by most recent session timestamp first, but prioritize past sessions over future ones
-  return [...matches].sort((a, b) => {
-    const tA = getSessionTimestamp(a);
-    const tB = getSessionTimestamp(b);
-    
-    const isAFuture = tA > now;
-    const isBFuture = tB > now;
-    
-    if (isAFuture && !isBFuture) return 1;
-    if (!isAFuture && isBFuture) return -1;
-    
-    return tB - tA;
-  })[0];
+  // Sort by most recent session timestamp first
+  return [...matches].sort((a, b) => getSessionTimestamp(b) - getSessionTimestamp(a))[0];
 }
 
 const PlayButton = () => (
@@ -397,16 +387,23 @@ const AllRecordings = () => {
   // Card 2: Face Yoga — no session_code in the API for this; always static
   // (If face_yoga session_code is added to the API later, we can wire it up here)
 
-  // Card 3: Breath to Heal — look for b2h
-  const b2hSession = findSessionLink(sessionLinks, "b2h", lang);
+  // Card 3: Breath to Heal — look for b2h or b2h_eng
+  const b2hSession = findSessionLink(sessionLinks, ["b2h", "b2h_eng"], lang);
 
-  // Card 4: Diet Routine (Telugu only) — look for paid_diet
-  const dietSession = findSessionLink(sessionLinks, "paid_diet", lang);
+  // Card 4: Diet Routine — look for paid_diet or diet_eng
+  const dietSession = findSessionLink(sessionLinks, ["paid_diet", "diet_eng"], lang);
 
-  // Use session_date from API for the title (actual recording date), fallback to today
-  const yogaDateLabel = yogaSession ? fmtSessionDate(yogaSession.session_date) : todayLabel;
-  const b2hDateLabel = b2hSession ? fmtSessionDate(b2hSession.session_date) : todayLabel;
-  const dietDateLabel = dietSession ? fmtSessionDate(dietSession.session_date) : todayLabel;
+  const yesterday = new Date(now);
+  yesterday.setDate(yesterday.getDate() - 1);
+  const yesterdayLabel = fmtDate(yesterday);
+
+  // Helper to determine fallback date: if it hasn't happened yet today, show yesterday
+  const getFallbackDate = (hour: number) => now.getHours() >= hour ? todayLabel : yesterdayLabel;
+
+  // Use session_date from API for the title, fallback to today/yesterday dynamically
+  const yogaDateLabel = yogaSession ? fmtSessionDate(yogaSession.session_date) : getFallbackDate(6); // 6 AM
+  const b2hDateLabel = b2hSession ? fmtSessionDate(b2hSession.session_date) : getFallbackDate(21); // 9 PM
+  const dietDateLabel = dietSession ? fmtSessionDate(dietSession.session_date) : getFallbackDate(20); // 8 PM
 
   // --- Helper: get YouTube thumbnail or fallback to static ---
   const ytThumb = (link: string | undefined, fallback: string): string => {
@@ -415,6 +412,8 @@ const AllRecordings = () => {
     return vid ? `https://img.youtube.com/vi/${vid}/mqdefault.jpg` : fallback;
   };
 
+  const getFallbackExpiryDate = (hour: number) => now.getHours() >= hour ? tomorrowLabel : todayLabel;
+
   // --- Build Class Recordings with same structure, using API data where available ---
   const classRecordings: { title: string; subtitle: string; thumbnail: string; link: string; accessTill: string }[] = [
     {
@@ -422,7 +421,7 @@ const AllRecordings = () => {
       subtitle: "Daily Live Yoga Session",
       thumbnail: ytThumb(yogaSession?.link, isEnglish ? "/language English.jpg" : "/language Telugu.jpg"),
       link: yogaSession?.link || yogaFallbackLink,
-      accessTill: (yogaSession && formatExpiry(yogaSession.expiry_by)) || `Access till 5:00 AM, ${tomorrowLabel}`,
+      accessTill: (yogaSession && formatExpiry(yogaSession.expiry_by)) || `Access till 5:00 AM, ${getFallbackExpiryDate(6)}`,
     },
   ];
 
@@ -444,7 +443,7 @@ const AllRecordings = () => {
       subtitle: "Daily at 9:00 PM",
       thumbnail: ytThumb(b2hSession?.link, isEnglish ? "/bonus/bw_eng.jpg" : "/bonus/breathwork.jpg"),
       link: b2hSession?.link || (isEnglish ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession"),
-      accessTill: (b2hSession && formatExpiry(b2hSession.expiry_by)) || `Access till 8:30 PM, ${tomorrowLabel}`,
+      accessTill: (b2hSession && formatExpiry(b2hSession.expiry_by)) || `Access till 8:30 PM, ${getFallbackExpiryDate(21)}`,
     });
   }
 
@@ -455,7 +454,7 @@ const AllRecordings = () => {
       subtitle: "Daily at 8:00 PM",
       thumbnail: ytThumb(dietSession?.link, "/bonus/weightlosssession.jpg"),
       link: dietSession?.link || (isEnglish ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet"),
-      accessTill: (dietSession && formatExpiry(dietSession.expiry_by)) || `Access till 7:30 PM, ${tomorrowLabel}`,
+      accessTill: (dietSession && formatExpiry(dietSession.expiry_by)) || `Access till 7:30 PM, ${getFallbackExpiryDate(20)}`,
     });
   }
 
