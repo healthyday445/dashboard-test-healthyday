@@ -112,16 +112,18 @@ function getSessionTimestamp(link: SessionLink): number {
   
   const date = new Date(y, m - 1, d);
   
+  // We add 2 hours to the start time so the session only appears as a "recording"
+  // AFTER the live session is completely finished.
   if (link.session_code.includes("morning")) {
-    date.setHours(6, 0, 0, 0); // 6:00 AM
+    date.setHours(8, 0, 0, 0); // Starts 6 AM -> Recording at 8 AM
   } else if (link.session_code.includes("evening")) {
-    date.setHours(18, 0, 0, 0); // 6:00 PM
+    date.setHours(20, 0, 0, 0); // Starts 6 PM -> Recording at 8 PM
   } else if (link.session_code.includes("b2h")) {
-    date.setHours(21, 0, 0, 0); // 9:00 PM
+    date.setHours(23, 0, 0, 0); // Starts 9 PM -> Recording at 11 PM
   } else if (link.session_code.includes("diet")) {
-    date.setHours(20, 0, 0, 0); // 8:00 PM
+    date.setHours(22, 0, 0, 0); // Starts 8 PM -> Recording at 10 PM
   } else {
-    date.setHours(12, 0, 0, 0); // Default to noon for others
+    date.setHours(14, 0, 0, 0); // Default -> 2 PM
   }
   
   return date.getTime();
