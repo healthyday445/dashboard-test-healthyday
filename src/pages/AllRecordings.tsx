@@ -109,9 +109,9 @@ function getSessionTimestamp(link: SessionLink): number {
   // Parse as local date (avoid timezone shift)
   const [y, m, d] = link.session_date.split("-").map(Number);
   if (!y || !m || !d) return 0;
-  
+
   const date = new Date(y, m - 1, d);
-  
+
   // We add 2 hours to the start time so the session only appears as a "recording"
   // AFTER the live session is completely finished.
   if (link.session_code.includes("morning")) {
@@ -125,7 +125,7 @@ function getSessionTimestamp(link: SessionLink): number {
   } else {
     date.setHours(14, 0, 0, 0); // Default -> 2 PM
   }
-  
+
   return date.getTime();
 }
 
@@ -140,9 +140,9 @@ function findSessionLink(
   language: string
 ): SessionLink | undefined {
   const codes = Array.isArray(sessionCode) ? sessionCode : [sessionCode];
-  
+
   const now = Date.now();
-  
+
   // Only consider sessions that are for the current language and have already happened
   const matches = links.filter(
     (s) => codes.includes(s.session_code) && s.language === language && getSessionTimestamp(s) <= now
@@ -343,7 +343,7 @@ const AllRecordings = () => {
     }
   };
 
-  const MONTH_NAMES_SHORT = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+  const MONTH_NAMES_SHORT = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
   const fmtDate = (d: Date) => `${d.getDate()}${ordinalSuffix(d.getDate())} ${MONTH_NAMES_SHORT[d.getMonth()]}`;
 
