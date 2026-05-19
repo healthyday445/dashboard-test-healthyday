@@ -31,22 +31,8 @@ export async function handler(event) {
   try {
     const body = JSON.parse(event.body || "{}");
 
-    // Extract visitor IP from headers
-    const ip =
-      event.headers["x-forwarded-for"]?.split(",")[0]?.trim() ||
-      event.headers["client-ip"] ||
-      event.headers["x-real-ip"] ||
-      "unknown";
-
-    // Raw payload dump: everything from the request body + IP + timestamp
-    const payload = {
-      ...body,
-      ip,
-      timestamp: new Date().toISOString(),
-    };
-
-    // Save as a new auto-ID document in portal_link_clicks
-    await db.collection('portal_link_clicks').add(payload);
+    // Dump the raw body fields as-is into Firestore — no extra fields added
+    await db.collection('portal_link_clicks').add(body);
 
     return {
       statusCode: 200,
