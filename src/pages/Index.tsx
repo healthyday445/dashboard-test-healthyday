@@ -1387,10 +1387,19 @@ const Index = () => {
     // Morning updates at 4:30 AM, Evening updates at 3:45 PM
     const sessionCodeForNow = totalMin < (15 * 60 + 45) ? "daily_morning" : "daily_evening";
     const langKey = paidLang.toLowerCase(); // "telugu" or "english"
-    const apiSessionLink = sessionLinks.find(
+    const apiSessionEntry = sessionLinks.find(
       (s: any) => s.session_code === sessionCodeForNow && s.language === langKey
-    )?.link || null;
+    ) || null;
+    const apiSessionLink = apiSessionEntry?.link || null;
+    const apiSessionName = apiSessionEntry?.session_name || null;
     const paidJoinLink = apiSessionLink || studentData?.paid_classes_joining_link || studentData?.classes_joining_link || sessionJoinLink || "https://www.youtube.com/c/Healthyday";
+
+    // Extract YouTube video ID from the resolved join link for thumbnail
+    const ytMatch = paidJoinLink.match(/(?:v=|youtu\.be\/|\/live\/)([a-zA-Z0-9_-]{11})/);
+    const sessionVideoId = ytMatch ? ytMatch[1] : null;
+    const sessionThumbnail = sessionVideoId
+      ? `https://img.youtube.com/vi/${sessionVideoId}/maxresdefault.jpg`
+      : `/language%20${studentData?.language === "English" ? "English" : "Telugu"}.jpg`;
 
     // Paid Bonus Sessions Logic
     const anchorDate = new Date(Date.UTC(2026, 3, 5)); // April 5, 2026
@@ -1639,14 +1648,32 @@ const Index = () => {
                     <a href={paidJoinLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none" }}>
                       <div style={{
                         width: "100%", aspectRatio: "178/93", borderRadius: "12px 12px 0 0",
-                        background: `url(/language%20${studentData?.language === "English" ? "English" : "Telugu"}.jpg) lightgray 50% / cover no-repeat`,
+                        overflow: "hidden",
                         boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
                         position: "relative",
                       }}>
+                        <img
+                          src={sessionThumbnail}
+                          alt={apiSessionName || "Yoga Session"}
+                          style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                          onError={(e) => {
+                            // Fallback to static image if YouTube thumbnail fails
+                            (e.target as HTMLImageElement).src = `/language%20${studentData?.language === "English" ? "English" : "Telugu"}.jpg`;
+                          }}
+                        />
                         <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px 12px 0 0", background: "rgba(0,0,0,0.32)" }} />
                         <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                           <PlayButton />
                         </div>
+                        {apiSessionName && (
+                          <div style={{
+                            position: "absolute", bottom: "10px", left: "12px", right: "12px",
+                            color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700,
+                            textShadow: "0 1px 4px rgba(0,0,0,0.6)",
+                          }}>
+                            {apiSessionName}
+                          </div>
+                        )}
                       </div>
                     </a>
                     <div style={{
