@@ -169,6 +169,22 @@ const Index = () => {
       trackVisit(mobile);
     }
   }, [mobile, previewMode]);
+
+  // --- Fetch session links for paid users ---
+  useEffect(() => {
+    fetch("/.netlify/functions/session-links")
+      .then(r => r.json())
+      .then(data => {
+        // Handle bare array OR wrapped object { data: [...] } / { links: [...] }
+        const arr = Array.isArray(data)
+          ? data
+          : Array.isArray(data?.data) ? data.data
+          : Array.isArray(data?.links) ? data.links
+          : [];
+        setSessionLinks(arr);
+      })
+      .catch(() => {});
+  }, []);
   const [showReferral, setShowReferral] = useState(() => {
     const dismissedDate = localStorage.getItem("hd_referral_popup_dismissed_date");
     const today = new Date().toDateString();
@@ -189,6 +205,7 @@ const Index = () => {
   const [previewTimeOverrideMin, setPreviewTimeOverrideMin] = useState<number | null>(null);
   const [previewDowOverride, setPreviewDowOverride] = useState<number | null>(null);
   const [previewWeekOverride, setPreviewWeekOverride] = useState<number | null>(null);
+  const [sessionLinks, setSessionLinks] = useState<any[]>([]);
   const [joinedDays, setJoinedDays] = useState<number[]>(() => {
     try {
       const keys = Object.keys(localStorage).filter(k => k.startsWith("hd_joined_"));
@@ -1344,7 +1361,6 @@ const Index = () => {
 
   // --- Paid Member Dashboard ---
   if (isPaid) {
-    const paidJoinLink = studentData?.paid_classes_joining_link || studentData?.classes_joining_link || sessionJoinLink || "https://www.youtube.com/c/Healthyday";
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
     const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile.length === 10 ? "91" : ""}${mobile}` : referralLink;
 
@@ -1366,6 +1382,15 @@ const Index = () => {
     const is6Month = planType === "6_months";
     const is12Month = planType === "12_months";
     const paidLang = forceLang || (studentData?.language === "English" ? "English" : "Telugu");
+
+    // Resolve session link from API: pick morning (< 15:45 IST) or evening (≥ 15:45 IST)
+    // Morning updates at 4:30 AM, Evening updates at 3:45 PM
+    const sessionCodeForNow = totalMin < (15 * 60 + 45) ? "daily_morning" : "daily_evening";
+    const langKey = paidLang.toLowerCase(); // "telugu" or "english"
+    const apiSessionLink = sessionLinks.find(
+      (s: any) => s.session_code === sessionCodeForNow && s.language === langKey
+    )?.link || null;
+    const paidJoinLink = apiSessionLink || studentData?.paid_classes_joining_link || studentData?.classes_joining_link || sessionJoinLink || "https://www.youtube.com/c/Healthyday";
 
     // Paid Bonus Sessions Logic
     const anchorDate = new Date(Date.UTC(2026, 3, 5)); // April 5, 2026
