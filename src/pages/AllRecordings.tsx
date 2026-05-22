@@ -417,15 +417,25 @@ const AllRecordings = () => {
   const getFallbackExpiryDate = (hour: number) => now.getHours() >= hour ? tomorrowLabel : todayLabel;
 
   // --- Build Class Recordings with same structure, using API data where available ---
-  const classRecordings: { title: string; subtitle: string; thumbnail: string; link: string; accessTill: string }[] = [
-    {
+  const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+  const forceTime = searchParams.get("forceTime");
+  const totalMin = forceTime ? parseInt(forceTime, 10) : (nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes());
+  const isLiveNow = [
+    [285, 570], // Morning: 4:45 AM - 9:30 AM IST
+    [945, 1170], // Evening: 3:45 PM - 7:30 PM IST
+  ].some(([s, e]) => totalMin >= s && totalMin < e);
+
+  const classRecordings: { title: string; subtitle: string; thumbnail: string; link: string; accessTill: string }[] = [];
+
+  if (!isLiveNow) {
+    classRecordings.push({
       title: `${yogaDateLabel} Yoga Session`,
       subtitle: "Daily Live Yoga Session",
       thumbnail: ytThumb(yogaSession?.link, isEnglish ? "/language English.jpg" : "/language Telugu.jpg"),
       link: yogaSession?.link || yogaFallbackLink,
       accessTill: (yogaSession && formatExpiry(yogaSession.expiry_by)) || `Access till 5:00 AM, ${getFallbackExpiryDate(6)}`,
-    },
-  ];
+    });
+  }
 
   // Face Yoga — 12-month plan only
   if (is12Month) {
