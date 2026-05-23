@@ -421,8 +421,8 @@ const AllRecordings = () => {
   const forceTime = searchParams.get("forceTime");
   const totalMin = forceTime ? parseInt(forceTime, 10) : (nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes());
   const isLiveNow = [
-    [285, 570], // Morning: 4:45 AM - 9:30 AM IST
-    [945, 1170], // Evening: 3:45 PM - 7:30 PM IST
+    [330, 570], // Morning: 5:30 AM - 9:30 AM IST
+    [990, 1170], // Evening: 4:30 PM - 7:30 PM IST
   ].some(([s, e]) => totalMin >= s && totalMin < e);
 
   const classRecordings: { title: string; subtitle: string; thumbnail: string; link: string; accessTill: string }[] = [];
