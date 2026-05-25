@@ -179,11 +179,11 @@ const Index = () => {
         const arr = Array.isArray(data)
           ? data
           : Array.isArray(data?.data) ? data.data
-          : Array.isArray(data?.links) ? data.links
-          : [];
+            : Array.isArray(data?.links) ? data.links
+              : [];
         setSessionLinks(arr);
       })
-      .catch(() => {});
+      .catch(() => { });
   }, []);
   const [showReferral, setShowReferral] = useState(() => {
     const dismissedDate = localStorage.getItem("hd_referral_popup_dismissed_date");
@@ -225,7 +225,41 @@ const Index = () => {
       const dd = String(d.getDate()).padStart(2, "0");
       return `${yyyy}-${mm}-${dd}`;
     };
-    // â”€â”€ PREVIEW MODE: bypass API â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+    // ─── PREVIEW MODE: bypass API ──────────────────────────────
+    if (previewMode && previewMode.startsWith("Free_")) {
+      const match = previewMode.match(/^Free_day(\d+)_([\d\.]+)(AM|PM)(?:_(eng))?$/);
+      if (match) {
+        const dayNum = parseInt(match[1], 10);
+        const timeVal = match[2];
+        const ampm = match[3];
+        const isEnglish = !!match[4];
+
+        const hm = timeVal.split(".");
+        let hour = parseInt(hm[0], 10);
+        const min = parseInt(hm[1] || "0", 10);
+        if (ampm === "PM" && hour !== 12) hour += 12;
+        if (ampm === "AM" && hour === 12) hour = 0;
+        const timeMin = hour * 60 + min;
+
+        const startDate = new Date();
+        startDate.setDate(startDate.getDate() - (dayNum - 1));
+        const yyyyMMDD = toLocalDateStr(startDate);
+
+        setStudentData({
+          language: isEnglish ? "English" : "Telugu",
+          status: "registered",
+          free_batch_start_date: yyyyMMDD,
+          attendance: Array(dayNum - 1).fill("present"),
+          free_class_join_link: "https://www.youtube.com/c/Healthyday",
+          referral_link: "healthyday.app/ref=preview123",
+          total_referral_count: 2,
+        });
+        setPreviewTimeOverrideMin(timeMin);
+        setAuthenticated(true);
+        setLoading(false);
+        return;
+      }
+    }
     if (previewMode === "batch") {
       const today = new Date();
       const day = today.getDay();
@@ -441,9 +475,9 @@ const Index = () => {
       // Week 2 — Post Evening Session
       w2pes: { dayNum: 11, timeMin: 1200 },  // W2, non-bonus day, after evening sessions
       w2pesbonus: { dayNum: 10, timeMin: 1240 },  // W2, bonus day, during bonus LIVE window
-      // After Bonus Session (bonus ended, session card hidden — startMin + 50)
-      w1afterbonus: { dayNum: 3, timeMin: 1280 }, // W1, Day 3 after Face Yoga (8:30 PM + 50 min = 9:20 PM)
-      w2afterbonus: { dayNum: 10, timeMin: 1280 }, // W2, Day 10 after Breath Work (8:30 PM + 50 min = 9:20 PM)
+      // After Bonus Session (bonus ended, session card hidden)
+      w1afterbonus: { dayNum: 3, timeMin: 1300 }, // W1, Day 3 after Face Yoga (8:30 PM + 70 min = 9:40 PM)
+      w2afterbonus: { dayNum: 10, timeMin: 1300 }, // W2, Day 10 after Breath Work (8:30 PM + 70 min = 9:40 PM)
     };
     if (previewMode && ongoingPreviews[previewMode]) {
       const { dayNum, timeMin } = ongoingPreviews[previewMode];
@@ -493,9 +527,8 @@ const Index = () => {
       setLoading(true);
       setError(null);
       try {
-        // 10-digit numbers are Indian → prepend +91
-        // All other lengths already include the country code → just prepend +
-        const apiMobile = cleanedMobile.length === 10 ? `+91${cleanedMobile}` : `+${cleanedMobile}`;
+        // Country code is compulsory for all users. We just prepend +
+        const apiMobile = `+${cleanedMobile}`;
         const encodedMobile = encodeURIComponent(apiMobile);
         const response = await fetch(
           `/.netlify/functions/student?mobile=${encodedMobile}`
@@ -752,7 +785,7 @@ const Index = () => {
     const sessionVideoId = ytIdMatch ? ytIdMatch[1] : null;
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
 
-    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile.length === 10 ? "91" : ""}${mobile}` : referralLink;
+    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : referralLink;
     const handleCopyLink = () => navigator.clipboard.writeText(shareLink);
     const handleWhatsAppShare = () => {
       const msg = encodeURIComponent(`Join me on Healthyday! ${shareLink}`);
@@ -795,11 +828,11 @@ const Index = () => {
     const BONUS_DAYS = [3, 5, 7, 10, 14];
     if (BONUS_DAYS.includes(currentDay)) {
       const lang = studentData?.language === "English" ? "English" : "Telugu";
-      type BonusInfo = { name: string; fullName: string; startMin: number; videoId: string; sessionLink: string; thumbnail: string };
+      type BonusInfo = { name: string; fullName: string; startMin: number; videoId: string; sessionLink: string; thumbnail: string; liveDuration?: number; activeEndOffset?: number };
       const bonusByDay: Record<number, Record<string, BonusInfo>> = {
         3: {
-          Telugu: { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga", thumbnail: "/bonus/faceyoga_tel.jpg" },
-          English: { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga_eng", thumbnail: "/bonus/faceyoga_eng.jpg" },
+          Telugu: { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga", thumbnail: "/bonus/faceyoga_tel.jpg", liveDuration: 60, activeEndOffset: 60 },
+          English: { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga_eng", thumbnail: "/bonus/faceyoga_eng.jpg", liveDuration: 60, activeEndOffset: 60 },
         },
         5: {
           Telugu: { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "raCc7Z31LYw", sessionLink: "https://start.dailyyogawithjagan.com/meditation_tel", thumbnail: "/bonus/meditation_tel.jpg" },
@@ -810,8 +843,8 @@ const Index = () => {
           English: { name: "Weight Loss Session", fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession_eng", thumbnail: "/bonus/weightlosssession_eng.jpg" },
         },
         10: {
-          Telugu: { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/breathwork", thumbnail: "/bonus/breathwork.jpg" },
-          English: { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/bw_eng", thumbnail: "/bonus/bw_eng.jpg" },
+          Telugu: { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/breathwork", thumbnail: "/bonus/breathwork.jpg", liveDuration: 30, activeEndOffset: 60 },
+          English: { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/bw_eng", thumbnail: "/bonus/bw_eng.jpg", liveDuration: 30, activeEndOffset: 60 },
         },
         14: {
           Telugu: { name: "Sleep Session", fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/sleepsession", thumbnail: "/bonus/sleepsession.jpg" },
@@ -820,9 +853,9 @@ const Index = () => {
       };
       const bonusSession = bonusByDay[currentDay][lang];
       const totalMin = previewTimeOverrideMin != null ? previewTimeOverrideMin : (() => { const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000); return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes(); })();
-      const showBonus = totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + 30;
+      const showBonus = totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
       if (showBonus) {
-        const isLive = totalMin >= bonusSession.startMin && totalMin < bonusSession.startMin + 30;
+        const isLive = totalMin >= bonusSession.startMin && totalMin < bonusSession.startMin + (bonusSession.liveDuration ?? 30);
         const isAMSession = bonusSession.startMin < 12 * 60;
         const nextSlots = isAMSession ? ["4:00 PM", "5:30 PM", "6:30 PM"] : ["5:00 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
         const nextWhen = isAMSession ? "at 4:00 PM" : "tomorrow at 5:00 AM";
@@ -837,12 +870,12 @@ const Index = () => {
             <div style={{ padding: "24px 20px 0" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
                 <h2 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>
-                  Bonus Special Session
+                  Special Bonus Session
                 </h2>
                 {isLive && (
                   <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
                     <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
-                    <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>LIVE</span>
+                    <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>Ongoing now</span>
                   </div>
                 )}
               </div>
@@ -907,47 +940,18 @@ const Index = () => {
                 </div>
               )}
 
-              {/* Next regular session card — hidden during live */}
-              {!isLive && <div style={{
-                width: "100%", height: "auto", borderRadius: "12px",
-                border: "1.5px solid #D2D2D2", background: "#FFF",
-                boxShadow: "-1px -1px 4px 0 rgba(0,0,0,0.10), 1px 1px 4px 0 rgba(0,0,0,0.10)",
-                padding: "16px", display: "flex", flexDirection: "column", justifyContent: "space-between", boxSizing: "border-box",
-              }}>
-                <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
-                  <div style={{
-                    width: "82px", height: "81px", aspectRatio: "82/81", borderRadius: "50%", flexShrink: 0,
-                    background: "url(/8ea326ab563adb61ccb99b953865cb3132c173ab.png) lightgray -5.311px -5.747px / 112.404% 113.525% no-repeat",
-                  }} />
-                  <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                    <div style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal", width: "231.658px" }}>
-                      Next regular session is {nextWhen}
-                    </div>
-                    <div style={{ color: "#7990AC", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "24px", width: "244px" }}>
-                      Open the link during live timings
-                    </div>
-                  </div>
-                </div>
-                <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0" }}>
-                  {nextSlots.map((label, idx) => (
-                    <span key={label} style={{ display: "flex", alignItems: "center" }}>
-                      {idx > 0 && <span style={{ color: "#CCCBCB", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal", margin: "0 8px" }}>|</span>}
-                      <span style={{ color: "#FEAB27", textAlign: "center", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal" }}>{label}</span>
-                    </span>
-                  ))}
-                </div>
-                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px" }}>
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
-                    <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
-                    <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
-                    <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D" />
-                    <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  <span style={{ color: "#747474", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "22px", textAlign: "center", width: "289.656px" }}>
-                    Note: No recordings are available for FREE batch
-                  </span>
-                </div>
-              </div>}
+              {/* Next regular session card replaced by grey note */}
+              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px", marginTop: "10px" }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
+                  <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
+                  <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
+                  <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D" />
+                  <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span style={{ width: "343px", color: "#747474", fontFamily: "Outfit", fontSize: "13px", fontWeight: 400, lineHeight: "22px", textAlign: "center" }}>
+                  Next Yoga Session is {isAMSession ? "at 4:30 PM" : "tomorrow at 5:30 AM"}. Currently, Bonus Session is going on! Click on the link above to join
+                </span>
+              </div>
             </div>
 
             {/* 14 Days Attendance */}
@@ -1006,9 +1010,14 @@ const Index = () => {
             })()}
 
             {/* Refer & Win card */}
-            <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals/${studentData?.total_referral_count ?? 0}`} />
-            </div>
+            {(week !== 1 || !showReferral) && (
+              <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
+                <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals/${studentData?.total_referral_count ?? 0}`} />
+              </div>
+            )}
+
+            {/* Spacer for popup so content can be scrolled into view */}
+            {week === 1 && showReferral && <div style={{ height: "220px" }} />}
 
             {/* Week 2 Bonus: show payment section instead */}
             {week === 2 && (
@@ -1049,17 +1058,23 @@ const Index = () => {
 
           // Bonus session detection for regular session card
           const BONUS_DAYS = [3, 5, 7, 10, 14];
-          const bonusByDayMap: Record<number, Record<string, { fullName: string; startMin: number; sessionLink: string; thumbnail: string }>> = {
-            3: { Telugu: { fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/faceyoga", thumbnail: "/bonus/faceyoga_tel.jpg" }, English: { fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/faceyoga_eng", thumbnail: "/bonus/faceyoga_eng.jpg" } },
+          const bonusByDayMap: Record<number, Record<string, { fullName: string; startMin: number; sessionLink: string; thumbnail: string; liveDuration?: number; activeEndOffset?: number }>> = {
+            3: {
+              Telugu: { fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/faceyoga", thumbnail: "/bonus/faceyoga_tel.jpg" },
+              English: { fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/faceyoga_eng", thumbnail: "/bonus/faceyoga_eng.jpg" }
+            },
             5: { Telugu: { fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, sessionLink: "https://start.dailyyogawithjagan.com/meditation_tel", thumbnail: "/bonus/meditation_tel.jpg" }, English: { fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, sessionLink: "https://start.dailyyogawithjagan.com/meditation_eng", thumbnail: "/bonus/meditation_eng.jpg" } },
             7: { Telugu: { fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession", thumbnail: "/bonus/weightlosssession.jpg" }, English: { fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession_eng", thumbnail: "/bonus/weightlosssession_eng.jpg" } },
-            10: { Telugu: { fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/breathwork", thumbnail: "/bonus/breathwork.jpg" }, English: { fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/bw_eng", thumbnail: "/bonus/bw_eng.jpg" } },
+            10: {
+              Telugu: { fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/breathwork", thumbnail: "/bonus/breathwork.jpg" },
+              English: { fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/bw_eng", thumbnail: "/bonus/bw_eng.jpg" }
+            },
             14: { Telugu: { fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/sleepsession", thumbnail: "/bonus/sleepsession.jpg" }, English: { fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/sleepsession_eng", thumbnail: "/bonus/sleepsession_eng.jpg" } },
           };
           const bonusLang = studentData?.language === "English" ? "English" : "Telugu";
           const isBonusDay = BONUS_DAYS.includes(currentDay);
           const bonusSessionData = isBonusDay ? bonusByDayMap[currentDay][bonusLang] : null;
-          const showBonus = isBonusDay && bonusSessionData !== null && totalMin >= bonusSessionData.startMin - 30 && totalMin < bonusSessionData.startMin + 30;
+          const showBonus = isBonusDay && bonusSessionData !== null && totalMin >= bonusSessionData.startMin - 30 && totalMin < bonusSessionData.startMin + (bonusSessionData.activeEndOffset ?? 30);
 
           const MORNING_SLOTS = [
             { start: 5 * 60 + 30, end: 6 * 60 + 30, label: "5:30 AM" },
@@ -1082,103 +1097,82 @@ const Index = () => {
 
           const nextLabel = nextSlot ? nextSlot.label : "5:30 AM";
           const nextText = isTomorrow ? `tomorrow at ${nextLabel}` : `at ${nextLabel}`;
-          const noteText = liveSlot
-            ? "Note: Evening Yoga Session will start at 4:30 PM with the same link"
-            : `Next regular session is ${nextText}`;
+          
+          let noteText: string | null = null;
+          if (showBonus && bonusSessionData) {
+            noteText = `Next Yoga Session is ${nextText}. Currently, Bonus Session is going on! Click on the link above to join`;
+          } else if (!liveSlot) {
+            noteText = null;
+          }
 
           return (
             <div style={{ padding: "24px 20px 0" }}>
-              {/* Header */}
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
+              {(!liveSlot && !showBonus) ? (
+                <div style={{ display: "flex", justifyContent: "center" }}>
+                  <NoSessionsCard totalMin={totalMin} isFreeBatch={true} />
+                </div>
+              ) : (
+                <>
+                  {/* Header */}
+                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
                 <h2 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Your Yoga Session</h2>
                 {liveSlot && (
                   <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
                     <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
-                    <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>LIVE</span>
+                    <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>Ongoing now</span>
                   </div>
                 )}
               </div>
 
-              {/* Session Card — hidden after bonus is done */}
-              {!(isBonusDay && bonusSessionData && totalMin >= bonusSessionData.startMin + 45) && (
-                <div style={{ width: "100%" }}>
-                  {/* Thumbnail */}
-                  <a href={showBonus && bonusSessionData ? bonusSessionData.sessionLink : sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{ display: "block", textDecoration: "none" }}>
-                    <div style={{
-                      width: "100%",
-                      height: "auto",
-                      aspectRatio: "178/93",
-                      borderRadius: "12px 12px 0 0",
-                      background: (() => {
-                        if (showBonus && bonusSessionData) return `url(${bonusSessionData.thumbnail}) lightgray 50% / cover no-repeat`;
-                        const lang = studentData?.language;
-                        if (lang === "English") return "url(/language%20English.jpg) lightgray 50% / cover no-repeat";
-                        if (lang === "Telugu") return "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat";
-                        return sessionVideoId
-                          ? `url(https://img.youtube.com/vi/${sessionVideoId}/maxresdefault.jpg) lightgray 50% / cover no-repeat`
-                          : "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat";
-                      })(),
-                      boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
-                      position: "relative",
-                    }}>
-                      <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px", background: "rgba(0, 0, 0, 0.32)" }} />
-                      <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <PlayButton />
-                      </div>
-                    </div>
-                  </a>
-
-                  {/* Bottom bar */}
+              {/* Session Card */}
+              <div style={{ width: "100%" }}>
+                {/* Thumbnail */}
+                <a href={showBonus && bonusSessionData ? bonusSessionData.sessionLink : sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{ display: "block", textDecoration: "none" }}>
                   <div style={{
                     width: "100%",
-                    height: "67px",
-                    borderRadius: "0 0 12px 12px",
-                    border: "1.5px solid #E9E9E9",
-                    background: "#FFF",
-                    boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    boxSizing: "border-box",
-                    paddingLeft: "16px",
+                    height: "auto",
+                    aspectRatio: "178/93",
+                    borderRadius: "12px 12px 0 0",
+                    background: (() => {
+                      if (showBonus && bonusSessionData) return `url(${bonusSessionData.thumbnail}) lightgray 50% / cover no-repeat`;
+                      const lang = studentData?.language;
+                      if (lang === "English") return "url(/language%20English.jpg) lightgray 50% / cover no-repeat";
+                      if (lang === "Telugu") return "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat";
+                      return sessionVideoId
+                        ? `url(https://img.youtube.com/vi/${sessionVideoId}/maxresdefault.jpg) lightgray 50% / cover no-repeat`
+                        : "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat";
+                    })(),
+                    boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
+                    position: "relative",
                   }}>
-                    {(() => {
-                      // 30 min before bonus: show JOIN button linking to bonus
-                      if (showBonus && bonusSessionData) {
-                        return (
-                          <a href={bonusSessionData.sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{
-                            width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27",
-                            display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none",
-                          }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                              <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                              <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                              <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION</span>
-                          </a>
-                        );
-                      }
-                      // Bonus day but outside 30-min window: show bonus session name text
-                      if (isBonusDay && bonusSessionData) {
-                        return (
-                          <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>
-                            {bonusSessionData.fullName}
-                          </span>
-                        );
-                      }
-                      // Regular day: show JOIN SESSION with API link
+                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px", background: "rgba(0, 0, 0, 0.32)" }} />
+                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                      <PlayButton />
+                    </div>
+                  </div>
+                </a>
+
+                {/* Bottom bar */}
+                <div style={{
+                  width: "100%",
+                  height: "67px",
+                  borderRadius: "0 0 12px 12px",
+                  border: "1.5px solid #E9E9E9",
+                  background: "#FFF",
+                  boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  boxSizing: "border-box",
+                  paddingLeft: "16px",
+                }}>
+                  {(() => {
+                    // 30 min before bonus: show JOIN button linking to bonus
+                    if (showBonus && bonusSessionData) {
                       return (
-                        <a href={sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{
-                          width: "300px",
-                          height: "40px",
-                          borderRadius: "10px",
-                          background: "#FEAB27",
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "center",
-                          gap: "8px",
-                          textDecoration: "none",
+                        <a href={bonusSessionData.sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{
+                          width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27",
+                          display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none",
                         }}>
                           <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                             <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -1188,72 +1182,56 @@ const Index = () => {
                           <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION</span>
                         </a>
                       );
-                    })()}
-                  </div>
+                    }
+                    // Bonus day but outside 30-min window, and no regular session is live: show bonus session name text
+                    if (isBonusDay && bonusSessionData && !liveSlot) {
+                      return (
+                        <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>
+                          {bonusSessionData.fullName}
+                        </span>
+                      );
+                    }
+                    // Regular day: show JOIN SESSION with API link
+                    return (
+                      <a href={sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{
+                        width: "300px",
+                        height: "40px",
+                        borderRadius: "10px",
+                        background: "#FEAB27",
+                        display: "flex",
+                        alignItems: "center",
+                        justifyContent: "center",
+                        gap: "8px",
+                        textDecoration: "none",
+                      }}>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                          <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                          <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        </svg>
+                        <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION</span>
+                      </a>
+                    );
+                  })()}
+                </div>
+              </div>
+
+              {/* Note — conditionally shown */}
+              {noteText && (
+                <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px", marginTop: "10px" }}>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
+                    <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
+                    <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
+                    <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D" />
+                    <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span style={{ width: "343px", color: "#747474", fontFamily: "Outfit", fontSize: "13px", fontWeight: 400, lineHeight: "22px", textAlign: "center" }}>
+                    {noteText}
+                  </span>
                 </div>
               )}
-
-              {/* Note — hidden on bonus days since the card below already shows next session info */}
-              {!isBonusDay && <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px", marginTop: "10px" }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
-                  <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
-                  <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
-                  <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D" />
-                  <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <span style={{ width: "268px", color: "#747474", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "22px", textAlign: "center" }}>
-                  {noteText}
-                </span>
-              </div>}
-
-              {/* Next regular session card — shown on bonus days, hidden during live */}
-              {isBonusDay && bonusSessionData && !liveSlot && (() => {
-                const isAMBonus = bonusSessionData.startMin < 12 * 60;
-                const nextRegSlots = isAMBonus ? ["4:30 PM", "5:30 PM", "6:30 PM"] : ["5:30 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
-                const nextRegWhen = isAMBonus ? "at 4:30 PM" : "tomorrow at 5:30 AM";
-                return (
-                  <div style={{
-                    width: "100%", borderRadius: "12px", marginTop: "16px",
-                    border: "1.5px solid #D2D2D2", background: "#FFF",
-                    boxShadow: "-1px -1px 4px 0 rgba(0,0,0,0.10), 1px 1px 4px 0 rgba(0,0,0,0.10)",
-                    padding: "16px", boxSizing: "border-box", display: "flex", flexDirection: "column", gap: "12px",
-                  }}>
-                    <div style={{ display: "flex", alignItems: "flex-start", gap: "12px" }}>
-                      <div style={{
-                        width: "82px", height: "81px", borderRadius: "50%", flexShrink: 0,
-                        background: "url(/8ea326ab563adb61ccb99b953865cb3132c173ab.png) lightgray -5.311px -5.747px / 112.404% 113.525% no-repeat",
-                      }} />
-                      <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-                        <div style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>
-                          Next regular session is {nextRegWhen}
-                        </div>
-                        <div style={{ color: "#7990AC", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "24px" }}>
-                          Open the link during live timings
-                        </div>
-                      </div>
-                    </div>
-                    <div style={{ display: "flex", alignItems: "center", justifyContent: "center", gap: "0" }}>
-                      {nextRegSlots.map((label, idx) => (
-                        <span key={label} style={{ display: "flex", alignItems: "center" }}>
-                          {idx > 0 && <span style={{ color: "#CCCBCB", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal", margin: "0 8px" }}>|</span>}
-                          <span style={{ color: "#FEAB27", textAlign: "center", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 800, lineHeight: "normal" }}>{label}</span>
-                        </span>
-                      ))}
-                    </div>
-                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px" }}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
-                        <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
-                        <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
-                        <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D" />
-                        <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                      <span style={{ color: "#747474", fontFamily: "Outfit", fontSize: "15px", fontWeight: 400, lineHeight: "22px", textAlign: "center", width: "289px" }}>
-                        Note: No recordings are available for FREE batch
-                      </span>
-                    </div>
-                  </div>
-                );
-              })()}
+                </>
+              )}
             </div>
           );
         })()}
@@ -1327,9 +1305,14 @@ const Index = () => {
 
 
             {/* Refer & Win card */}
-            <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals/${studentData?.total_referral_count ?? 0}`} />
-            </div>
+            {!showReferral && (
+              <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
+                <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals/${studentData?.total_referral_count ?? 0}`} />
+              </div>
+            )}
+
+            {/* Spacer for popup so content can be scrolled into view */}
+            {showReferral && <div style={{ height: "220px" }} />}
           </>
         )}
 
@@ -1362,7 +1345,7 @@ const Index = () => {
   // --- Paid Member Dashboard ---
   if (isPaid) {
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
-    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile.length === 10 ? "91" : ""}${mobile}` : referralLink;
+    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : referralLink;
 
     // Session live detection (IST)
     const searchParams = new URLSearchParams(location.search);
@@ -2081,7 +2064,7 @@ const Index = () => {
   // --- 14 Days Completed Page ---
   if (show14DayCompleted) {
     const referralLink = "healthyday.app/ref=ggtujev58";
-    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile.length === 10 ? "91" : ""}${mobile}` : referralLink;
+    const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : referralLink;
 
     const handleCopyLink = () => {
       navigator.clipboard.writeText(shareLink);

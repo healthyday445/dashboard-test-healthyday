@@ -106,27 +106,24 @@ function cleanSessionName(name: string): string {
  */
 function getSessionTimestamp(link: SessionLink): number {
   if (!link.session_date) return 0;
-  // Parse as local date (avoid timezone shift)
   const [y, m, d] = link.session_date.split("-").map(Number);
   if (!y || !m || !d) return 0;
 
-  const date = new Date(y, m - 1, d);
-
-  // We add 2 hours to the start time so the session only appears as a "recording"
-  // AFTER the live session is completely finished.
+  // Determine the IST hour when the session should become available
+  let hourIST = 14; // Default -> 2 PM
   if (link.session_code.includes("morning")) {
-    date.setHours(8, 0, 0, 0); // Starts 6 AM -> Recording at 8 AM
+    hourIST = 8; // Starts 6 AM -> Recording at 8 AM
   } else if (link.session_code.includes("evening")) {
-    date.setHours(20, 0, 0, 0); // Starts 6 PM -> Recording at 8 PM
+    hourIST = 20; // Starts 6 PM -> Recording at 8 PM
   } else if (link.session_code.includes("b2h")) {
-    date.setHours(23, 0, 0, 0); // Starts 9 PM -> Recording at 11 PM
+    hourIST = 23; // Starts 9 PM -> Recording at 11 PM
   } else if (link.session_code.includes("diet")) {
-    date.setHours(22, 0, 0, 0); // Starts 8 PM -> Recording at 10 PM
-  } else {
-    date.setHours(14, 0, 0, 0); // Default -> 2 PM
+    hourIST = 22; // Starts 8 PM -> Recording at 10 PM
   }
 
-  return date.getTime();
+  // Construct timestamp strictly in IST (UTC+5:30)
+  // UTC hour = IST hour - 5, UTC min = 0 - 30 = -30
+  return Date.UTC(y, m - 1, d, hourIST - 5, -30, 0, 0);
 }
 
 /**
@@ -261,7 +258,7 @@ const AllRecordings = () => {
       setLoading(true);
       setError(null);
       try {
-        const apiMobile = mobile.length === 10 ? `+91${mobile}` : `+${mobile}`;
+        const apiMobile = `+${mobile}`;
         const encodedMobile = encodeURIComponent(apiMobile);
         const response = await fetch(`/.netlify/functions/student?mobile=${encodedMobile}`);
         if (!response.ok) throw new Error(`API error: ${response.status}`);
@@ -346,39 +343,43 @@ const AllRecordings = () => {
   const MONTH_NAMES_SHORT = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
 
   const fmtDate = (d: Date) => `${d.getDate()}${ordinalSuffix(d.getDate())} ${MONTH_NAMES_SHORT[d.getMonth()]}`;
+  const fmtISTDate = (d: Date) => `${d.getUTCDate()}${ordinalSuffix(d.getUTCDate())} ${MONTH_NAMES_SHORT[d.getUTCMonth()]}`;
 
   /** Format a "YYYY-MM-DD" session_date string into a readable label like "6th May" */
   const fmtSessionDate = (sessionDate: string): string => {
-    // Parse as local date (avoid timezone shift by splitting manually)
     const [y, m, d] = sessionDate.split("-").map(Number);
-    const date = new Date(y, m - 1, d);
-    return fmtDate(date);
+    const date = new Date(Date.UTC(y, m - 1, d));
+    return fmtISTDate(date);
   };
 
-  /** Format an ISO expiry_by timestamp into a human-readable access window */
+  /** Format an ISO expiry_by timestamp into a human-readable access window strictly in IST */
   const formatExpiry = (expiryBy: string | null): string | null => {
     if (!expiryBy) return null;
     const d = new Date(expiryBy);
-    const hours = d.getHours();
-    const minutes = d.getMinutes();
+    // Convert UTC to IST
+    const istMs = d.getTime() + 5.5 * 60 * 60 * 1000;
+    const istDate = new Date(istMs);
+    const hours = istDate.getUTCHours();
+    const minutes = istDate.getUTCMinutes();
     const ampm = hours >= 12 ? "PM" : "AM";
     const h12 = hours % 12 || 12;
     const mm = minutes === 0 ? "" : `:${String(minutes).padStart(2, "0")}`;
     const timeStr = `${h12}${mm} ${ampm}`;
-    const dateStr = fmtDate(d);
+    const dateStr = fmtISTDate(istDate);
     return `Access till ${timeStr}, ${dateStr}`;
   };
 
-  const now = new Date();
-  const todayLabel = fmtDate(now);
+  // --- Define strict IST "now" for fallback dates ---
+  const nowISTFallback = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+  const todayLabel = fmtISTDate(nowISTFallback);
 
-  const tomorrow = new Date(now);
-  tomorrow.setDate(tomorrow.getDate() + 1);
-  const tomorrowLabel = fmtDate(tomorrow);
+  const tomorrow = new Date(nowISTFallback);
+  tomorrow.setUTCDate(tomorrow.getUTCDate() + 1);
+  const tomorrowLabel = fmtISTDate(tomorrow);
 
-  const plus13 = new Date(now);
-  plus13.setDate(plus13.getDate() + 13);
-  const plus13Label = fmtDate(plus13);
+  const plus13 = new Date(nowISTFallback);
+  plus13.setUTCDate(plus13.getUTCDate() + 13);
+  const plus13Label = fmtISTDate(plus13);
 
   // --- Look up API session links; fall back to static links if not found ---
 
@@ -395,12 +396,12 @@ const AllRecordings = () => {
   // Card 4: Diet Routine — look for paid_diet or diet_eng
   const dietSession = findSessionLink(sessionLinks, ["paid_diet", "diet_eng"], lang);
 
-  const yesterday = new Date(now);
-  yesterday.setDate(yesterday.getDate() - 1);
-  const yesterdayLabel = fmtDate(yesterday);
+  const yesterday = new Date(nowISTFallback);
+  yesterday.setUTCDate(yesterday.getUTCDate() - 1);
+  const yesterdayLabel = fmtISTDate(yesterday);
 
-  // Helper to determine fallback date: if it hasn't happened yet today, show yesterday
-  const getFallbackDate = (hour: number) => now.getHours() >= hour ? todayLabel : yesterdayLabel;
+  // Helper to determine fallback date: if it hasn't happened yet today in IST, show yesterday
+  const getFallbackDate = (hourIST: number) => nowISTFallback.getUTCHours() >= hourIST ? todayLabel : yesterdayLabel;
 
   // Use session_date from API for the title, fallback to today/yesterday dynamically
   const yogaDateLabel = yogaSession ? fmtSessionDate(yogaSession.session_date) : getFallbackDate(6); // 6 AM
@@ -414,7 +415,7 @@ const AllRecordings = () => {
     return vid ? `https://img.youtube.com/vi/${vid}/mqdefault.jpg` : fallback;
   };
 
-  const getFallbackExpiryDate = (hour: number) => now.getHours() >= hour ? tomorrowLabel : todayLabel;
+  const getFallbackExpiryDate = (hourIST: number) => nowISTFallback.getUTCHours() >= hourIST ? tomorrowLabel : todayLabel;
 
   // --- Build Class Recordings with same structure, using API data where available ---
   const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);

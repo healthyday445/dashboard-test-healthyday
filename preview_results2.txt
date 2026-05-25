@@ -1,0 +1,77 @@
+﻿
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90mC:/Users/prath/OneDrive/Documents/@Downloads/@healthyday/@production/dashboard-test-healthyday[39m
+
+node.exe : (node:18824) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland 
+alternative instead.
+At C:\Program Files\nodejs\npx.ps1:29 char:3
++   & $NODE_EXE $NPX_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:18824) [D...native instead.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[90mstderr[2m | src/test/preview_all_days.test.tsx[2m > [22m[2mFree Trial Preview ΓÇö All Days[2m > [22m[2mDay 
+1 at 6:00 PM (Telugu) ΓÇö regular evening LIVE
+[22m[39mΓÜá∩╕Å React Router Future Flag Warning: React Router will begin wrapping state updates in 
+`React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, 
+see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+ΓÜá∩╕Å React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use 
+the `v7_relativeSplatPath` future flag to opt-in early. For more information, see 
+https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [31mΓ¥»[39m src/test/preview_all_days.test.tsx [2m([22m[2m23 tests[22m[2m | [22m[31m1 failed[39m[2m)[22m[33m 3826[2mms[22m[39m
+   [33m[2mΓ£ô[22m[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 1 at 6:00 PM (Telugu) ΓÇö regular evening LIVE [33m 445[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 1 at 6:00 PM (English) ΓÇö regular evening LIVE[32m 199[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 2 at 2:00 PM ΓÇö between sessions[32m 187[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 2 at 8:00 PM ΓÇö after all sessions[32m 244[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 3 at 8:30 PM (Telugu) ΓÇö bonus LIVE[32m 168[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 3 at 8:30 PM (English) ΓÇö bonus LIVE[32m 168[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 3 at 8:00 PM ΓÇö before bonus (pre-live)[32m 159[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 5 at 8:00 PM (Telugu) ΓÇö bonus LIVE[32m 95[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 5 at 7:30 PM ΓÇö before bonus[32m 126[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 7 at 10:30 AM (Telugu) ΓÇö bonus LIVE[32m 120[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 7 at 10:30 AM (English) ΓÇö bonus LIVE[32m 125[2mms[22m[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 7 at 7:00 PM ΓÇö regular evening LIVE (6:30 PM slot)[39m[32m 218[2mms[22m[39m
+[31m     ΓåÆ expected 'Your Yoga SessionLIVEYour 14 Days AttΓÇª' to contain 'JOIN SESSION'[39m
+   [33m[2mΓ£ô[22m[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 7 at 7:00 PM (English) ΓÇö regular evening LIVE [33m 569[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 8 at 6:00 AM ΓÇö morning LIVE + pricing section[32m 275[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 9 at 2:00 PM ΓÇö between sessions[32m 160[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 10 at 8:30 PM (Telugu) ΓÇö bonus LIVE[32m 94[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 10 at 8:30 PM (English) ΓÇö bonus LIVE[32m 61[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 11 at 5:30 PM ΓÇö evening LIVE[32m 85[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 12 at 8:00 PM ΓÇö after sessions[32m 96[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 13 at 7:30 AM ΓÇö morning LIVE[32m 61[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 14 at 10:30 AM (Telugu) ΓÇö bonus LIVE[32m 53[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 14 at 10:30 AM (English) ΓÇö bonus LIVE[32m 48[2mms[22m[39m
+   [32mΓ£ô[39m Free Trial Preview ΓÇö All Days[2m > [22mDay 14 at 6:30 PM ΓÇö regular evening LIVE (final day)[32m 64[2mms[22m[39m
+
+[31mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[39m[1m[41m Failed Tests 1 [49m[22m[31mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+7 at 7:00 PM ΓÇö regular evening LIVE (6:30 PM slot)
+[31m[1mAssertionError[22m: expected 'Your Yoga SessionLIVEYour 14 Days AttΓÇª' to contain 'JOIN SESSION'[39m
+
+Expected: [32m"JOIN SESSION"[39m
+Received: [31m"Your Yoga SessionLIVEYour 14 Days AttendanceSat, May 16 ΓÇö Fri, May 29Day 1Day 2Day 3Day 4Day 5Day 
+6Day 7Day 8Day 9Day 10Day 11Day 12Day 13Day 14Your Referral GiftsView More2 ReferralsYou are here10 Free Classes5 
+ReferralsIN PROGRESS20 Free Classes10 ReferralsHealthyday T-shirt20 ReferralsWater Bottle40 ReferralsYoga Mat60 
+ReferralsRefer & WinInvite your friends & family and get exciting gifts!Share this 
+linkhealthyday.app/ref=preview123Copy LinkShare on WhatsappYour ReferralsΓåÆREFER & WINYou are here2 Referrals+10 FREE 
+Classes5 Referrals+20 FREE Classes10 ReferralsRefer Now"[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m130:18[22m[39m
+    [90m128| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Your Yoga Session"[39m)[33m;[39m
+    [90m129| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m130| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"JOIN SESSION"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m131| [39m  })[33m;[39m
+    [90m132| [39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/1]ΓÄ»[22m[39m
+
+
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m1 failed[39m[22m[2m | [22m[1m[32m22 passed[39m[22m[90m (23)[39m
+[2m   Start at [22m 16:27:47
+[2m   Duration [22m 14.96s[2m (transform 1.41s, setup 871ms, collect 3.69s, tests 3.83s, environment 4.47s, prepare 1.61s)[22m
+

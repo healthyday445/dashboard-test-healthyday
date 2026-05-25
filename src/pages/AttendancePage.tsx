@@ -139,7 +139,7 @@ const AttendancePage = () => {
       setLoading(true);
       setError(null);
       try {
-        const apiMobile = mobile.length === 10 ? `+91${mobile}` : `+${mobile}`;
+        const apiMobile = `+${mobile}`;
         const encodedMobile = encodeURIComponent(apiMobile);
         const response = await fetch(
           `/.netlify/functions/student?mobile=${encodedMobile}`

@@ -1,0 +1,498 @@
+﻿
+[1m[46m RUN [49m[22m [36mv3.2.4 [39m[90mC:/Users/prath/OneDrive/Documents/@Downloads/@healthyday/@production/dashboard-test-healthyday[39m
+
+node.exe : (node:18780) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland 
+alternative instead.
+At C:\Program Files\nodejs\npx.ps1:29 char:3
++   & $NODE_EXE $NPX_CLI_JS $args
++   ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpecified: ((node:18780) [D...native instead.:String) [], RemoteException
+    + FullyQualifiedErrorId : NativeCommandError
+ 
+(Use `node --trace-deprecation ...` to show where the warning was created)
+[90mstderr[2m | src/test/preview_all_days.test.tsx[2m > [22m[2mFree Trial Preview ΓÇö All Days[2m > [22m[2mDay 
+1 at 6:00 PM (Telugu) ΓÇö regular evening LIVE
+[22m[39mΓÜá∩╕Å React Router Future Flag Warning: React Router will begin wrapping state updates in 
+`React.startTransition` in v7. You can use the `v7_startTransition` future flag to opt-in early. For more information, 
+see https://reactrouter.com/v6/upgrading/future#v7_starttransition.
+ΓÜá∩╕Å React Router Future Flag Warning: Relative route resolution within Splat routes is changing in v7. You can use 
+the `v7_relativeSplatPath` future flag to opt-in early. For more information, see 
+https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath.
+
+ [31mΓ¥»[39m src/test/preview_all_days.test.tsx [2m([22m[2m23 tests[22m[2m | [22m[31m23 failed[39m[2m)[22m[32m 122[2mms[22m[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 1 at 6:00 PM (Telugu) ΓÇö regular evening LIVE[39m[32m 43[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 1 at 6:00 PM (English) ΓÇö regular evening LIVE[39m[32m 5[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 2 at 2:00 PM ΓÇö between sessions[39m[32m 5[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 2 at 8:00 PM ΓÇö after all sessions[39m[32m 3[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'tomorrow'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 3 at 8:30 PM (Telugu) ΓÇö bonus LIVE[39m[32m 4[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 3 at 8:30 PM (English) ΓÇö bonus LIVE[39m[32m 3[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 3 at 8:00 PM ΓÇö before bonus (pre-live)[39m[32m 3[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 5 at 8:00 PM (Telugu) ΓÇö bonus LIVE[39m[32m 5[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 5 at 7:30 PM ΓÇö before bonus[39m[32m 5[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 7 at 10:30 AM (Telugu) ΓÇö bonus LIVE[39m[32m 3[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 7 at 10:30 AM (English) ΓÇö bonus LIVE[39m[32m 3[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 7 at 7:00 PM ΓÇö regular evening LIVE (6:30 PM slot)[39m[32m 2[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 7 at 7:00 PM (English) ΓÇö regular evening LIVE[39m[32m 2[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 8 at 6:00 AM ΓÇö morning LIVE + pricing section[39m[32m 2[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 9 at 2:00 PM ΓÇö between sessions[39m[32m 2[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 10 at 8:30 PM (Telugu) ΓÇö bonus LIVE[39m[32m 3[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 10 at 8:30 PM (English) ΓÇö bonus LIVE[39m[32m 3[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 11 at 5:30 PM ΓÇö evening LIVE[39m[32m 6[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 12 at 8:00 PM ΓÇö after sessions[39m[32m 3[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'tomorrow'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 13 at 7:30 AM ΓÇö morning LIVE[39m[32m 3[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 14 at 10:30 AM (Telugu) ΓÇö bonus LIVE[39m[32m 3[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 14 at 10:30 AM (English) ΓÇö bonus LIVE[39m[32m 4[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special Session'[39m
+[31m   [31m├ù[31m Free Trial Preview ΓÇö All Days[2m > [22mDay 14 at 6:30 PM ΓÇö regular evening LIVE (final day)[39m[32m 3[2mms[22m[39m
+[31m     ΓåÆ expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+
+[31mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[39m[1m[41m Failed Tests 23 [49m[22m[31mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+1 at 6:00 PM (Telugu) ΓÇö regular evening LIVE
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+
+Expected: [32m"Your Yoga Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m40:18[22m[39m
+    [90m 38| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day1_6.00PM"[39m)[33m;[39m
+    [90m 39| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m 40| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Your Yoga Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 41| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m 42| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"JOIN SESSION"[39m)[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[1/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+1 at 6:00 PM (English) ΓÇö regular evening LIVE
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+
+Expected: [32m"Your Yoga Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m49:18[22m[39m
+    [90m 47| [39m    [35mconst[39m c [33m=[39m 
+[34mrenderPreview[39m([32m"Free_day1_6.00PM_eng"[39m)[33m;[39m
+    [90m 48| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m 49| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Your Yoga Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 50| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m 51| [39m  })[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[2/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+2 at 2:00 PM ΓÇö between sessions
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+
+Expected: [32m"Your Yoga Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m57:18[22m[39m
+    [90m 55| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m 56| [39m    [90m// Should show next session info, not LIVE[39m
+    [90m 57| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Your Yoga Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 58| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"4:30 PM"[39m)[33m;[39m
+    [90m 59| [39m  })[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[3/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+2 at 8:00 PM ΓÇö after all sessions
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'tomorrow'[39m
+
+Expected: [32m"tomorrow"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m64:18[22m[39m
+    [90m 62| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day2_8.00PM"[39m)[33m;[39m
+    [90m 63| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m 64| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"tomorrow"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 65| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"5:30 AM"[39m)[33m;[39m
+    [90m 66| [39m  })[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[4/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+3 at 8:30 PM (Telugu) ΓÇö bonus LIVE
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special 
+Session'[39m
+
+Expected: [32m"Bonus Special Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m72:18[22m[39m
+    [90m 70| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day3_8.30PM"[39m)[33m;[39m
+    [90m 71| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m 72| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Bonus Special 
+Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 73| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m 74| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Face Yoga"[39m)[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[5/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+3 at 8:30 PM (English) ΓÇö bonus LIVE
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special 
+Session'[39m
+
+Expected: [32m"Bonus Special Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m80:18[22m[39m
+    [90m 78| [39m    [35mconst[39m c [33m=[39m 
+[34mrenderPreview[39m([32m"Free_day3_8.30PM_eng"[39m)[33m;[39m
+    [90m 79| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m 80| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Bonus Special 
+Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 81| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m 82| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Face Yoga"[39m)[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[6/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+3 at 8:00 PM ΓÇö before bonus (pre-live)
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special 
+Session'[39m
+
+Expected: [32m"Bonus Special Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m88:18[22m[39m
+    [90m 86| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day3_8.00PM"[39m)[33m;[39m
+    [90m 87| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m 88| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Bonus Special 
+Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 89| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Face Yoga Session at 8:30 
+PM"[39m)[33m;[39m
+    [90m 90| [39m  })[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[7/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+5 at 8:00 PM (Telugu) ΓÇö bonus LIVE
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special 
+Session'[39m
+
+Expected: [32m"Bonus Special Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m96:18[22m[39m
+    [90m 94| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day5_8.00PM"[39m)[33m;[39m
+    [90m 95| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m 96| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Bonus Special 
+Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m 97| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m 98| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Meditation"[39m)[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[8/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+5 at 7:30 PM ΓÇö before bonus
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special 
+Session'[39m
+
+Expected: [32m"Bonus Special Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m104:18[22m[39m
+    [90m102| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day5_7.30PM"[39m)[33m;[39m
+    [90m103| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m104| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Bonus Special 
+Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m105| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Meditation Session at 8:00 
+PM"[39m)[33m;[39m
+    [90m106| [39m  })[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[9/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+7 at 10:30 AM (Telugu) ΓÇö bonus LIVE
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special 
+Session'[39m
+
+Expected: [32m"Bonus Special Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m112:18[22m[39m
+    [90m110| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day7_10.30AM"[39m)[33m;[39m
+    [90m111| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m112| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Bonus Special 
+Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m113| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m114| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Weight Loss"[39m)[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[10/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+7 at 10:30 AM (English) ΓÇö bonus LIVE
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special 
+Session'[39m
+
+Expected: [32m"Bonus Special Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m120:18[22m[39m
+    [90m118| [39m    [35mconst[39m c [33m=[39m 
+[34mrenderPreview[39m([32m"Free_day7_10.30AM_eng"[39m)[33m;[39m
+    [90m119| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m120| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Bonus Special 
+Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m121| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m122| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Weight Loss"[39m)[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[11/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+7 at 7:00 PM ΓÇö regular evening LIVE (6:30 PM slot)
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+
+Expected: [32m"Your Yoga Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m128:18[22m[39m
+    [90m126| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day7_7.00PM"[39m)[33m;[39m
+    [90m127| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m128| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Your Yoga Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m129| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m130| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"JOIN SESSION"[39m)[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[12/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+7 at 7:00 PM (English) ΓÇö regular evening LIVE
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+
+Expected: [32m"Your Yoga Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m136:18[22m[39m
+    [90m134| [39m    [35mconst[39m c [33m=[39m 
+[34mrenderPreview[39m([32m"Free_day7_7.00PM_eng"[39m)[33m;[39m
+    [90m135| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m136| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Your Yoga Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m137| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m138| [39m  })[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[13/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+8 at 6:00 AM ΓÇö morning LIVE + pricing section
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+
+Expected: [32m"Your Yoga Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m144:18[22m[39m
+    [90m142| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day8_6.00AM"[39m)[33m;[39m
+    [90m143| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m144| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Your Yoga Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m145| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m146| [39m    [34mexpect[39m([34mcountDayBoxes[39m(c))[33m.[39m[34mtoBe[39m([34m14[39m)[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[14/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+9 at 2:00 PM ΓÇö between sessions
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+
+Expected: [32m"Your Yoga Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m152:18[22m[39m
+    [90m150| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day9_2.00PM"[39m)[33m;[39m
+    [90m151| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m152| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Your Yoga Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m153| [39m  })[33m;[39m
+    [90m154| [39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[15/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+10 at 8:30 PM (Telugu) ΓÇö bonus LIVE
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special 
+Session'[39m
+
+Expected: [32m"Bonus Special Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m159:18[22m[39m
+    [90m157| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day10_8.30PM"[39m)[33m;[39m
+    [90m158| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m159| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Bonus Special 
+Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m160| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m161| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Breath Work"[39m)[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[16/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+10 at 8:30 PM (English) ΓÇö bonus LIVE
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special 
+Session'[39m
+
+Expected: [32m"Bonus Special Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m167:18[22m[39m
+    [90m165| [39m    [35mconst[39m c [33m=[39m 
+[34mrenderPreview[39m([32m"Free_day10_8.30PM_eng"[39m)[33m;[39m
+    [90m166| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m167| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Bonus Special 
+Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m168| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m169| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Breath Work"[39m)[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[17/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+11 at 5:30 PM ΓÇö evening LIVE
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+
+Expected: [32m"Your Yoga Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m176:18[22m[39m
+    [90m174| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day11_5.30PM"[39m)[33m;[39m
+    [90m175| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m176| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Your Yoga Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m177| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m178| [39m  })[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[18/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+12 at 8:00 PM ΓÇö after sessions
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'tomorrow'[39m
+
+Expected: [32m"tomorrow"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m183:18[22m[39m
+    [90m181| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day12_8.00PM"[39m)[33m;[39m
+    [90m182| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m183| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"tomorrow"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m184| [39m  })[33m;[39m
+    [90m185| [39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[19/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+13 at 7:30 AM ΓÇö morning LIVE
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+
+Expected: [32m"Your Yoga Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m189:18[22m[39m
+    [90m187| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day13_7.30AM"[39m)[33m;[39m
+    [90m188| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m189| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Your Yoga Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m190| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m191| [39m  })[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[20/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+14 at 10:30 AM (Telugu) ΓÇö bonus LIVE
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special 
+Session'[39m
+
+Expected: [32m"Bonus Special Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m197:18[22m[39m
+    [90m195| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day14_10.30AM"[39m)[33m;[39m
+    [90m196| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m197| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Bonus Special 
+Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m198| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m199| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Sleep Session"[39m)[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[21/23]ΓÄ»[22m[39m
+
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+14 at 10:30 AM (English) ΓÇö bonus LIVE
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Bonus Special 
+Session'[39m
+
+Expected: [32m"Bonus Special Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m205:18[22m[39m
+    [90m203| [39m    [35mconst[39m c [33m=[39m 
+[34mrenderPreview[39m([32m"Free_day14_10.30AM_eng"[39m)[33m;[39m
+    [90m204| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m205| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Bonus Special 
+Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m206| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m207| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Sleep Session"[39m)[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[22/23]ΓÄ»[22m[39m
+
+[41m[1m FAIL [22m[49m src/test/preview_all_days.test.tsx[2m > [22mFree Trial Preview ΓÇö All Days[2m > [22mDay 
+14 at 6:30 PM ΓÇö regular evening LIVE (final day)
+[31m[1mAssertionError[22m: expected 'Oops!No mobile number provided. PleasΓÇª' to contain 'Your Yoga Session'[39m
+
+Expected: [32m"Your Yoga Session"[39m
+Received: [31m"Oops!No mobile number provided. Please visit /<mobile_number> to login."[39m
+[2m Test Files [22m [1m[31m1 failed[39m[22m[90m (1)[39m
+[2m      Tests [22m [1m[31m23 failed[39m[22m[90m (23)[39m
+[2m   Start at [22m 16:25:34
+
+[36m [2mΓ¥»[22m src/test/preview_all_days.test.tsx:[2m213:18[22m[39m
+    [90m211| [39m    [35mconst[39m c [33m=[39m [34mrenderPreview[39m([32m"Free_day14_6.30PM"[39m)[33m;[39m
+    [90m212| [39m    [35mconst[39m text [33m=[39m [34mgetRenderedText[39m(c)[33m;[39m
+    [90m213| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"Your Yoga Session"[39m)[33m;[39m
+    [90m   | [39m                 [31m^[39m
+    [90m214| [39m    [34mexpect[39m(text)[33m.[39m[34mtoContain[39m([32m"LIVE"[39m)[33m;[39m
+    [90m215| [39m  })[33m;[39m
+
+[31m[2mΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»ΓÄ»[23/23]ΓÄ»[22m[39m
+
+[2m   Duration [22m 2.45s[2m (transform 284ms, setup 156ms, collect 663ms, tests 122ms, environment 815ms, prepare 102ms)[22m
+

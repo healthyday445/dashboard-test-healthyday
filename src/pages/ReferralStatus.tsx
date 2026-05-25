@@ -74,12 +74,12 @@ const ReferralStatus = () => {
   const [showAllReferrals, setShowAllReferrals] = useState(false);
 
   const shareLink = mobile
-    ? `https://yoga.healthyday.co.in?ref=${mobile.length === 10 ? "91" : ""}${mobile}`
-    : "healthyday.app/ref=ggtujev58";
+    ? `https://yoga.healthyday.co.in?ref=${mobile}`
+    : "https://yoga.healthyday.co.in";
 
   useEffect(() => {
     if (!mobile) { setLoading(false); return; }
-    const apiMobile = mobile.length === 10 ? `+91${mobile}` : `+${mobile}`;
+    const apiMobile = `+${mobile}`;
     const encodedMobile = encodeURIComponent(apiMobile);
     fetch(`/.netlify/functions/referrals?mobile=${encodedMobile}`)
       .then((r) => r.json())
