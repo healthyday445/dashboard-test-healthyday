@@ -1265,7 +1265,7 @@ const Index = () => {
 
         {/* Week 2 Pricing & Comparison */}
         {week === 2 && (
-          <PricingAndComparisonSection selectedPlanIdx={selectedPlanIdx} setSelectedPlanIdx={setSelectedPlanIdx} daysLeft={Math.max(0, 15 - currentDay)} />
+          <PricingAndComparisonSection selectedPlanIdx={selectedPlanIdx} setSelectedPlanIdx={setSelectedPlanIdx} daysLeft={Math.max(0, 15 - currentDay)} useOngoingPricing={true} />
         )}
 
         {/* Your Referral Gifts Section */}
@@ -2140,6 +2140,7 @@ const Index = () => {
           setSelectedPlanIdx={setSelectedPlanIdx}
           daysLeft={0}
           hideDaysLeft={true}
+          useOngoingPricing={true}
         />
         {/* Want More FREE Classes heading */}
         <div style={{ padding: "32px 20px 0", textAlign: "center" }}>

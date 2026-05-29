@@ -1,6 +1,12 @@
 import React from "react";
 
-const plans = [
+const ongoingPlans = [
+  { name: "1 Year Including Diet Plan", price: 2399, originalPrice: 5999, discount: 60, bestValue: true, url: "https://healthyday.co.in/1-year-plan/" },
+  { name: "6 Months Plan", price: 1899, originalPrice: 2999, discount: 37, bestValue: false, url: "https://healthyday.co.in/6-months-plan/" },
+  { name: "3 Months Plan", price: 1399, originalPrice: 1499, discount: 7, bestValue: false, url: "https://healthyday.co.in/3-months-plan/" },
+];
+
+const paidPlans = [
   { name: "1 Year Plan", price: 1999, originalPrice: 5988, discount: 63, bestValue: true, url: "https://rzp.io/rzp/NFLe4Cj" },
   { name: "6 Months Plan", price: 1499, originalPrice: 2994, discount: 38, bestValue: false, url: "https://rzp.io/rzp/35LBolAY" },
   { name: "3 Months Plan", price: 999, originalPrice: 1497, discount: 25, bestValue: false, url: "https://rzp.io/rzp/4wy41nqC" },
@@ -31,7 +37,8 @@ const CompletedDayBox = ({ status, dayLabel }: { status: string; dayLabel: strin
   </div>
 );
 
-export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanIdx, daysLeft, completedDateRangeLabel, completedDayStatus, hideDaysLeft }: any) => {
+export const PricingAndComparisonSection = ({ selectedPlanIdx, setSelectedPlanIdx, daysLeft, completedDateRangeLabel, completedDayStatus, hideDaysLeft, useOngoingPricing }: any) => {
+  const plans = useOngoingPricing ? ongoingPlans : paidPlans;
   return (
     <>
       {completedDayStatus && (

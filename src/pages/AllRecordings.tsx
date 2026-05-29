@@ -238,10 +238,11 @@ const AllRecordings = () => {
 
   // Fetch student data
   useEffect(() => {
-    if (previewMode === "paid" || previewMode === "english") {
+    if (previewMode === "paid" || previewMode === "english" || previewMode === "3month") {
       setStudentData({
         language: previewMode === "english" ? "English" : "Telugu",
         status: "paid",
+        plan_type: previewMode === "3month" ? "3_months" : undefined,
         paid_classes_joining_link: "https://www.youtube.com/c/Healthyday",
       });
       setLoading(false);
@@ -325,6 +326,7 @@ const AllRecordings = () => {
   // Subscription plan duration check (mirrors paid dashboard logic)
   const activeSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "active" || s.subscription_status === "ongoing") || studentData?.subscriptions?.[0];
   const planType = activeSub?.plan_type || studentData?.plan_type;
+  const is3Month = planType === "3_months";
   const is6Month = planType === "6_months";
   const is12Month = planType === "12_months";
   const hasB2hAccess = is6Month || is12Month;
@@ -385,6 +387,8 @@ const AllRecordings = () => {
 
   // Card 1: Yoga Session — look for daily_morning or daily_evening
   const yogaSession = findSessionLink(sessionLinks, ["daily_morning", "daily_evening"], lang);
+  // Morning-only yoga session — used during evening live hours to show today's morning recording
+  const morningYogaSession = findSessionLink(sessionLinks, ["daily_morning"], lang);
   const yogaFallbackLink = studentData?.paid_classes_joining_link || studentData?.classes_joining_link || "https://www.youtube.com/c/Healthyday";
 
   // Card 2: Face Yoga — no session_code in the API for this; always static
@@ -405,6 +409,7 @@ const AllRecordings = () => {
 
   // Use session_date from API for the title, fallback to today/yesterday dynamically
   const yogaDateLabel = yogaSession ? fmtSessionDate(yogaSession.session_date) : getFallbackDate(6); // 6 AM
+  const morningYogaDateLabel = morningYogaSession ? fmtSessionDate(morningYogaSession.session_date) : getFallbackDate(6);
   const b2hDateLabel = b2hSession ? fmtSessionDate(b2hSession.session_date) : getFallbackDate(21); // 9 PM
   const dietDateLabel = dietSession ? fmtSessionDate(dietSession.session_date) : getFallbackDate(20); // 8 PM
 
@@ -421,14 +426,23 @@ const AllRecordings = () => {
   const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
   const forceTime = searchParams.get("forceTime");
   const totalMin = forceTime ? parseInt(forceTime, 10) : (nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes());
-  const isLiveNow = [
-    [330, 570], // Morning: 5:30 AM - 9:30 AM IST
-    [990, 1170], // Evening: 4:30 PM - 7:30 PM IST
-  ].some(([s, e]) => totalMin >= s && totalMin < e);
+  const isMorningLive = totalMin >= 330 && totalMin < 570;  // 5:30 AM - 9:30 AM IST
+  const isEveningLive = totalMin >= 990 && totalMin < 1170; // 4:30 PM - 7:30 PM IST
+  const isLiveNow = isMorningLive || isEveningLive;
 
   const classRecordings: { title: string; subtitle: string; thumbnail: string; link: string; accessTill: string }[] = [];
 
-  if (!isLiveNow) {
+  if (isEveningLive) {
+    // During evening live: show today's MORNING recording (not the evening one)
+    classRecordings.push({
+      title: `${morningYogaDateLabel} Yoga Session`,
+      subtitle: "Daily Live Yoga Session",
+      thumbnail: ytThumb(morningYogaSession?.link, isEnglish ? "/language English.jpg" : "/language Telugu.jpg"),
+      link: morningYogaSession?.link || yogaFallbackLink,
+      accessTill: (morningYogaSession && formatExpiry(morningYogaSession.expiry_by)) || `Access till 5:00 AM, ${getFallbackExpiryDate(6)}`,
+    });
+  } else if (!isMorningLive) {
+    // Outside live hours: show most recent recording (morning or evening)
     classRecordings.push({
       title: `${yogaDateLabel} Yoga Session`,
       subtitle: "Daily Live Yoga Session",
@@ -437,6 +451,7 @@ const AllRecordings = () => {
       accessTill: (yogaSession && formatExpiry(yogaSession.expiry_by)) || `Access till 5:00 AM, ${getFallbackExpiryDate(6)}`,
     });
   }
+  // During morning live: no yoga recording shown (session still in progress)
 
   // Face Yoga — 12-month plan only
   if (is12Month) {
@@ -514,74 +529,177 @@ const AllRecordings = () => {
       </header>
 
       {/* Class Recordings Section */}
-      <div style={{ padding: "24px 20px 0" }}>
-        <h2 style={{
-          color: "#202020",
-          fontFamily: "Outfit",
-          fontSize: "20px",
-          fontWeight: 700,
-          lineHeight: "normal",
-          margin: "0 0 16px",
-        }}>
-          Most Recent Session Recordings
-        </h2>
+      {isMorningLive && is3Month ? (
+        /* --- 3-month user live session banner --- */
+        <div style={{ padding: "24px 20px 0", display: "flex", flexDirection: "column", alignItems: "center" }}>
+          {/* Live Session Banner Card */}
+          <div style={{
+            width: "357px",
+            maxWidth: "100%",
+            height: "87px",
+            borderRadius: "10px",
+            border: "1px solid var(--Orange, #FEAB27)",
+            background: "#FFF5E5",
+            display: "flex",
+            alignItems: "center",
+            gap: "12px",
+            padding: "0 14px",
+            boxSizing: "border-box",
+          }}>
+            {/* Yoga Meditation Image */}
+            <img
+              src="/0da635826ff23e34b2bf7680030cac545d32dcfb.png"
+              alt="Live session"
+              style={{
+                width: "78px",
+                height: "78px",
+                aspectRatio: "1/1",
+                objectFit: "cover",
+                flexShrink: 0,
+              }}
+            />
+            {/* Banner Text */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "4px", flex: 1 }}>
+              <span style={{
+                color: "var(--Blue, #0A386F)",
+                fontFamily: "Outfit",
+                fontSize: "18px",
+                fontWeight: 600,
+                lineHeight: "normal",
+              }}>
+                A session is live right now!
+              </span>
+              <span style={{
+                color: "#5A5A5A",
+                fontFamily: "Outfit",
+                fontSize: "12px",
+                fontWeight: 400,
+                lineHeight: "normal",
+              }}>
+                Please visit the recordings section{" "}
+                <span style={{ fontWeight: 700, color: "#5A5A5A" }}>after{"\n"}9:30 AM</span>{" "}
+                to access today's session recording.
+              </span>
+            </div>
+          </div>
 
-        <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
-          {classRecordings.map((rec, i) => (
-            <a
-              key={i}
-              href={rec.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              style={{ textDecoration: "none", display: "flex", gap: "12px", alignItems: "flex-start" }}
-            >
-              <Thumbnail src={rec.thumbnail} alt={rec.title} />
-              <div style={{ display: "flex", flexDirection: "column", gap: "6px", flex: 1, paddingTop: "2px" }}>
-                <span style={{
-                  color: "#0D468B",
-                  fontFamily: "Outfit",
-                  fontSize: "15px",
-                  fontWeight: 700,
-                  lineHeight: "normal",
-                }}>
-                  {rec.title}
-                </span>
-                <span style={{
-                  color: "#7E7D7D",
-                  fontFamily: "Outfit",
-                  fontSize: "11px",
-                  fontWeight: 500,
-                  lineHeight: "normal",
-                }}>
-                  {rec.subtitle}
-                </span>
-                <span style={{
-                  color: "#B71C1C",
-                  fontFamily: "Outfit",
-                  fontSize: "11px",
-                  fontWeight: 600,
-                  lineHeight: "normal",
-                }}>
-                  {rec.accessTill}
-                </span>
-              </div>
-            </a>
-          ))}
+          {/* Lotus Divider */}
+          <div style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "10px",
+            margin: "28px 0 20px",
+            width: "100%",
+            maxWidth: "300px",
+          }}>
+            <div style={{ width: "110px", height: "0.5px", background: "var(--Orange, #FEAB27)" }} />
+            <img
+              src="/5ce32860a765bdcaeb0504ff13008eea60a6cd55.png"
+              alt="Lotus"
+              style={{ width: "32px", height: "21px", aspectRatio: "26/17", objectFit: "cover", flexShrink: 0 }}
+            />
+            <div style={{ width: "110px", height: "0.5px", background: "var(--Orange, #FEAB27)" }} />
+          </div>
+
+          {/* Explore YouTube CTA */}
+          <p style={{
+            maxWidth: "328px",
+            color: "#494949",
+            textAlign: "center",
+            fontFamily: "Outfit",
+            fontSize: "14px",
+            fontWeight: 400,
+            lineHeight: "normal",
+            margin: "0 0 8px",
+          }}>
+            Explore these Yoga & Wellness{" "}
+            <span style={{ color: "#F00", fontWeight: 600 }}>Youtube</span>{" "}
+            videos from{" "}
+            <span style={{ color: "var(--Blue, #0A386F)", fontWeight: 600 }}>Healthyday</span>
+          </p>
+
+          {/* Separator */}
+          <div style={{
+            width: "360px",
+            maxWidth: "100%",
+            height: "1px",
+            background: "#D4D4D4",
+            marginTop: "16px",
+          }} />
         </div>
-      </div>
+      ) : (
+        <div style={{ padding: "24px 20px 0" }}>
+          <h2 style={{
+            color: "#202020",
+            fontFamily: "Outfit",
+            fontSize: "20px",
+            fontWeight: 700,
+            lineHeight: "normal",
+            margin: "0 0 16px",
+          }}>
+            Most Recent Session Recordings
+          </h2>
 
-      {/* Separator */}
-      <div style={{ padding: "28px 20px" }}>
-        <div style={{
-          width: "100%",
-          maxWidth: "360px",
-          height: "1.5px",
-          background: "#A7A7A7",
-        }} />
-      </div>
+          <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+            {classRecordings.map((rec, i) => (
+              <a
+                key={i}
+                href={rec.link}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{ textDecoration: "none", display: "flex", gap: "12px", alignItems: "flex-start" }}
+              >
+                <Thumbnail src={rec.thumbnail} alt={rec.title} />
+                <div style={{ display: "flex", flexDirection: "column", gap: "6px", flex: 1, paddingTop: "2px" }}>
+                  <span style={{
+                    color: "#0D468B",
+                    fontFamily: "Outfit",
+                    fontSize: "15px",
+                    fontWeight: 700,
+                    lineHeight: "normal",
+                  }}>
+                    {rec.title}
+                  </span>
+                  <span style={{
+                    color: "#7E7D7D",
+                    fontFamily: "Outfit",
+                    fontSize: "11px",
+                    fontWeight: 500,
+                    lineHeight: "normal",
+                  }}>
+                    {rec.subtitle}
+                  </span>
+                  <span style={{
+                    color: "#B71C1C",
+                    fontFamily: "Outfit",
+                    fontSize: "11px",
+                    fontWeight: 600,
+                    lineHeight: "normal",
+                  }}>
+                    {rec.accessTill}
+                  </span>
+                </div>
+              </a>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* Separator — hide when 3-month live banner is shown (it has its own divider) */}
+      {!(isMorningLive && is3Month) && (
+        <div style={{ padding: "28px 20px" }}>
+          <div style={{
+            width: "100%",
+            maxWidth: "360px",
+            height: "1.5px",
+            background: "#A7A7A7",
+          }} />
+        </div>
+      )}
 
       {/* Youtube Videos Section */}
-      <div style={{ padding: "0 20px 40px" }}>
+      <div style={{ padding: "24px 20px 40px" }}>
         <h2 style={{
           color: "#202020",
           fontFamily: "Outfit",
