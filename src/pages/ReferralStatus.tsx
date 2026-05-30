@@ -11,6 +11,7 @@ interface ApiReferral {
   referral_date: string;
   is_redeemed_for_free_classes: boolean;
   is_redeemed_for_gift: boolean;
+  referral_confirmation_status: "pending" | "verified";
 }
 
 interface ReferralsApiData {
@@ -267,17 +268,17 @@ const ReferralStatus = () => {
                         width: "58px",
                         height: "21px",
                         borderRadius: "3px",
-                        background: "#C7FFDA",
+                        background: ref.referral_confirmation_status === "verified" ? "#C7FFDA" : "#FFF3CD",
                         display: "flex",
                         alignItems: "center",
                         justifyContent: "center",
                         fontFamily: "Outfit",
                         fontSize: "10px",
                         fontWeight: 600,
-                        color: "#287E54",
+                        color: ref.referral_confirmation_status === "verified" ? "#287E54" : "#856404",
                       }}
                     >
-                      ACTIVE
+                      {ref.referral_confirmation_status === "verified" ? "ACTIVE" : "PENDING"}
                     </div>
                   </div>
                 </div>
@@ -413,18 +414,18 @@ const ReferralStatus = () => {
                             width: "58px",
                             height: "21px",
                             borderRadius: "3px",
-                            background: "#C7FFDA",
+                            background: ref.referral_confirmation_status === "verified" ? "#C7FFDA" : "#FFF3CD",
                             display: "flex",
                             alignItems: "center",
                             justifyContent: "center",
                             fontFamily: "Outfit",
                             fontSize: "10px",
                             fontWeight: 600,
-                            color: "#287E54",
+                            color: ref.referral_confirmation_status === "verified" ? "#287E54" : "#856404",
                             flexShrink: 0,
                           }}
                         >
-                          ACTIVE
+                          {ref.referral_confirmation_status === "verified" ? "ACTIVE" : "PENDING"}
                         </div>
                       </div>
                     </div>
