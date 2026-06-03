@@ -24,14 +24,14 @@ const MOCK_LEADERBOARD = [
    ──────────────────────────────────────────── */
 const BackArrow = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-    <path d="M12.5 15L7.5 10L12.5 5" stroke="#202020" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M12.5 15L7.5 10L12.5 5" stroke="#202020" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
 const TrophyIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none">
-    <path d="M8 21H16M12 17V21M6 3H18L17 10C17 12.7614 14.7614 15 12 15C9.23858 15 7 12.7614 7 10L6 3Z" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
-    <path d="M6 4H4C3 4 2 5 2 6C2 7 3 9 5 9M18 4H20C21 4 22 5 22 6C22 7 21 9 19 9" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+    <path d="M8 21H16M12 17V21M6 3H18L17 10C17 12.7614 14.7614 15 12 15C9.23858 15 7 12.7614 7 10L6 3Z" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    <path d="M6 4H4C3 4 2 5 2 6C2 7 3 9 5 9M18 4H20C21 4 22 5 22 6C22 7 21 9 19 9" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
   </svg>
 );
 
@@ -299,42 +299,6 @@ const Leaderboard: React.FC = () => {
       {/* ═══════════════════════════════════════
           REFER & WIN BUTTON
          ═══════════════════════════════════════ */}
-      <button
-        onClick={() => {
-          const msg = encodeURIComponent(
-            `Join me on Healthyday! ${shareLink}`
-          );
-          window.open(`https://wa.me/?text=${msg}`, "_blank");
-        }}
-        style={{
-          width: "343px",
-          height: "40px",
-          borderRadius: "30px",
-          background: "#FEAB27",
-          boxShadow: "0 4px 4px 0 rgba(0, 0, 0, 0.25)",
-          border: "none",
-          cursor: "pointer",
-          marginTop: "18px",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <span
-          style={{
-            color: "#202020",
-            textAlign: "center",
-            fontFamily: "Outfit",
-            fontSize: "16px",
-            fontStyle: "normal",
-            fontWeight: 500,
-            lineHeight: "normal",
-            textTransform: "uppercase",
-          }}
-        >
-          Refer &amp; Win yoga kit
-        </span>
-      </button>
 
       {/* ═══════════════════════════════════════
           LEADERBOARD SECTION
@@ -415,24 +379,9 @@ const Leaderboard: React.FC = () => {
       </div>
 
       {/* ═══════════════════════════════════════
-          BOTTOM — Golden sheet with ReferWinCard
+          BOTTOM SHEET (ReferWinCard)
          ═══════════════════════════════════════ */}
-      <div
-        style={{
-          width: "412px",
-          borderRadius: "32px 32px 0 0",
-          border: "1px solid #FEAB27",
-          borderBottom: "none",
-          background: "#FFE5BA",
-          marginTop: "24px",
-          padding: "28px 34px 40px 35px",
-          boxSizing: "border-box",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "flex-start",
-          gap: "8px",
-        }}
-      >
+      <div style={{ marginTop: "24px", marginBottom: "48px", width: "100%", display: "flex", justifyContent: "center" }}>
         <ReferWinCard shareLink={shareLink} referralsUrl={referralsUrl} />
       </div>
     </div>
@@ -632,7 +581,7 @@ const CurrentUserRankCard: React.FC = () => {
         display: "flex",
         alignItems: "center",
         justifyContent: "space-between",
-        padding: "0 16px",
+        padding: "0 27px",
         boxSizing: "border-box",
         overflow: "hidden",
       }}
@@ -654,11 +603,11 @@ const CurrentUserRankCard: React.FC = () => {
             Great job!
           </span>
         </div>
-        
+
         <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, lineHeight: "normal" }}>
           You’re in <span style={{ color: "#FEAB27" }}>TOP 25 !</span>
         </span>
-        
+
         <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 400, width: "166px", marginTop: "2px", lineHeight: "normal" }}>
           Keep referring and stay at the top till June 30th.
         </span>
@@ -686,7 +635,7 @@ const CurrentUserRankCard: React.FC = () => {
             }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" style={{ position: "absolute", left: 0, top: 0 }}>
-              <circle cx="7.5" cy="7.5" r="7.5" fill="#FEAB27"/>
+              <circle cx="7.5" cy="7.5" r="7.5" fill="#FEAB27" />
             </svg>
             <div style={{
               position: "absolute",
@@ -740,7 +689,18 @@ const CurrentUserRankCard: React.FC = () => {
             paddingTop: "14px", // Adjust to center the text in the badge
           }}
         >
-          <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "22px", fontWeight: 800, lineHeight: "normal" }}>
+          <span style={{
+            color: "#FFF",
+            fontFamily: "Outfit",
+            fontSize: "22px",
+            fontStyle: "normal",
+            fontWeight: 800,
+            lineHeight: "normal",
+            width: "13.674px",
+            height: "54.302px",
+            display: "inline-block", // Add this to make width/height work on span
+            textAlign: "center"
+          }}>
             6
           </span>
         </div>
