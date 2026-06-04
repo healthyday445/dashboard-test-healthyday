@@ -382,7 +382,7 @@ const Leaderboard: React.FC = () => {
           BOTTOM SHEET (ReferWinCard)
          ═══════════════════════════════════════ */}
       <div style={{ marginTop: "24px", marginBottom: "48px", width: "100%", display: "flex", justifyContent: "center" }}>
-        <ReferWinCard shareLink={shareLink} referralsUrl={referralsUrl} />
+        <ReferWinCard shareLink={shareLink} referralsUrl={referralsUrl} showViewMore={false} />
       </div>
     </div>
   );

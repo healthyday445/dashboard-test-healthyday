@@ -981,12 +981,7 @@ const Index = () => {
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
                     <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Your Referral Gifts</h3>
                     <span
-                      onClick={() => {
-                        const dest = (refCount > 0 && (studentStatus === "14DaysOngoing" || studentStatus === "14daysongoing"))
-                          ? `/${mobile || ""}/referrals/${refCount}`
-                          : `/referral?count=${refCount}&mobile=${mobile || ""}`;
-                        navigate(dest);
-                      }}
+                      onClick={() => navigate(`/${mobile || ""}/leaderboard`)}
                       style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
                     >
                       View More
@@ -1001,7 +996,7 @@ const Index = () => {
 
             {/* Refer & Win card */}
             <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals/${studentData?.total_referral_count ?? 0}`} />
+              <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
             </div>
 
             {/* Week 2 Bonus: show payment section instead */}
@@ -1012,7 +1007,7 @@ const Index = () => {
                   <p style={{ width: "100%", maxWidth: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
                 </div>
                 <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-                  <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals/${studentData?.total_referral_count ?? 0}`} />
+                  <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
                 </div>
               </>
             )}
@@ -1262,12 +1257,7 @@ const Index = () => {
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
                     <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Your Referral Gifts</h3>
                     <span
-                      onClick={() => {
-                        const dest = (refCount > 0 && (studentStatus === "14DaysOngoing" || studentStatus === "14daysongoing"))
-                          ? `/${mobile || ""}/referrals/${refCount}`
-                          : `/referral?count=${refCount}&mobile=${mobile || ""}`;
-                        navigate(dest);
-                      }}
+                      onClick={() => navigate(`/${mobile || ""}/leaderboard`)}
                       style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
                     >
                       View More
@@ -1283,7 +1273,7 @@ const Index = () => {
 
             {/* Refer & Win card */}
             <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals/${studentData?.total_referral_count ?? 0}`} />
+              <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
             </div>
           </>
         )}
@@ -1297,7 +1287,7 @@ const Index = () => {
             </div>
             {/* Refer & Earn */}
             <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals/${studentData?.total_referral_count ?? 0}`} />
+              <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
             </div>
           </>
         )}
@@ -1468,8 +1458,6 @@ const Index = () => {
       if (paidAttDates.has(ds)) return "green";
       return "yellow";
     });
-
-    const refCount = studentData?.total_referral_count ?? 0;
 
     const PaidDayBox = ({ status, dayLabel }: { status: string; dayLabel: string }) => (
       <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "42px" }}>
@@ -1781,7 +1769,7 @@ const Index = () => {
         {/* Refer & Win Card */}
         {!showPlanRenewal && (
           <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-            <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals/${refCount}`} />
+            <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
           </div>
         )}
 
@@ -1856,7 +1844,7 @@ const Index = () => {
               }}>
                 <ShareReferralActions
                   shareLink={shareLink}
-                  referralsUrl={`/${mobile || ""}/referrals/${refCount}`}
+                  referralsUrl={`/${mobile || ""}/leaderboard`}
                 />
               </div>
             </div>

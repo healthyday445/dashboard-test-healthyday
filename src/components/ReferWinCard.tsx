@@ -9,18 +9,17 @@ import { ShareReferralActions } from "@/components/ShareReferralActions";
  */
 
 interface ReferWinCardProps {
-  /** Full share URL shown in the input and shared via WhatsApp */
   shareLink: string;
-  /** Navigation URL for "Your Referrals" link */
   referralsUrl: string;
+  showViewMore?: boolean;
 }
 
-const ReferWinCard: React.FC<ReferWinCardProps> = ({ shareLink, referralsUrl }) => (
+const ReferWinCard: React.FC<ReferWinCardProps> = ({ shareLink, referralsUrl, showViewMore = true }) => (
   <div
     style={{
       width: "100%",
       maxWidth: "358px",
-      height: "254px",
+      height: "auto",
       boxSizing: "border-box",
       borderRadius: "16px",
       background:
@@ -33,37 +32,9 @@ const ReferWinCard: React.FC<ReferWinCardProps> = ({ shareLink, referralsUrl }) 
       justifyContent: "center",
     }}
   >
-    {/* Title + subtitle */}
-    <div>
-      <h3
-        style={{
-          color: "#FFF",
-          fontFamily: "Outfit",
-          fontSize: "21px",
-          fontWeight: 700,
-          lineHeight: "normal",
-          margin: "0 0 4px",
-        }}
-      >
-        Refer &amp; Win
-      </h3>
-      <p
-        style={{
-          color: "#FFFCFC",
-          fontFamily: "Outfit",
-          fontSize: "14px",
-          fontWeight: 400,
-          lineHeight: "normal",
-          margin: 0,
-        }}
-      >
-        Invite your friends &amp; family and get exciting gifts!
-      </p>
-    </div>
-
     {/* Share actions */}
     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-      <ShareReferralActions shareLink={shareLink} referralsUrl={referralsUrl} />
+      <ShareReferralActions shareLink={shareLink} referralsUrl={referralsUrl} showViewMore={showViewMore} />
     </div>
   </div>
 );

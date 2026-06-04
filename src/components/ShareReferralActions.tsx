@@ -4,9 +4,11 @@ import { useNavigate } from "react-router-dom";
 export const ShareReferralActions = ({
   shareLink,
   referralsUrl,
+  showViewMore = true,
 }: {
   shareLink: string;
   referralsUrl: string;
+  showViewMore?: boolean;
 }) => {
   const navigate = useNavigate();
 
@@ -100,22 +102,23 @@ export const ShareReferralActions = ({
         </button>
       </div>
 
-      {/* Your Referrals Link */}
-      <div 
-        style={{ 
-          marginTop: "6px", 
-          textAlign: "center", 
-          cursor: "pointer", 
-          display: "flex", 
-          alignItems: "center", 
-          justifyContent: "center", 
-          gap: "4px" 
-        }} 
-        onClick={() => navigate(referralsUrl)}
-      >
-        <span style={{ color: "#FFF", textAlign: "center", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal" }}>Your Referrals</span>
-        <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal", marginTop: "-2px" }}>→</span>
-      </div>
+      {showViewMore && (
+        <div
+          style={{
+            marginTop: "6px",
+            textAlign: "center",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "4px",
+          }}
+          onClick={() => navigate(referralsUrl)}
+        >
+          <span style={{ color: "#FFF", textAlign: "center", fontFamily: "Outfit", fontSize: "16px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal" }}>View More</span>
+          <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal", marginTop: "-2px" }}>→</span>
+        </div>
+      )}
     </div>
   );
 };
