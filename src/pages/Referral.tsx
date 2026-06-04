@@ -23,10 +23,8 @@ const Referral = () => {
   };
 
   const handleWhatsApp = () => {
-    const message = encodeURIComponent(
-      `Join me on Healthyday! Use my referral link: ${shareLink}`
-    );
-    window.open(`https://wa.me/?text=${message}`, "_blank");
+    const waMessage = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank");
   };
 
   return (

@@ -96,8 +96,8 @@ const ReferralStatus = () => {
   const refsForNextGift = apiData?.referrals_required_for_next_gift ?? null;
 
   const handleReferNow = () => {
-    const msg = encodeURIComponent(`Join me on Healthyday! ${shareLink}`);
-    window.open(`https://wa.me/?text=${msg}`, "_blank");
+    const waMessage = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
+    window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank");
   };
 
   return (

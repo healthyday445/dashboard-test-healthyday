@@ -778,8 +778,8 @@ const Index = () => {
     const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : referralLink;
     const handleCopyLink = () => navigator.clipboard.writeText(shareLink);
     const handleWhatsAppShare = () => {
-      const msg = encodeURIComponent(`Join me on Healthyday! ${shareLink}`);
-      window.open(`https://wa.me/?text=${msg}`, "_blank");
+      const waMessage = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank");
     };
 
     const DayBox = ({ status, dayLabel }: { status: string; dayLabel: string }) => (
@@ -1998,10 +1998,8 @@ const Index = () => {
     };
 
     const handleWhatsAppShare = () => {
-      const message = encodeURIComponent(
-        `Join me on Healthyday! Use my referral link: ${shareLink}`
-      );
-      window.open(`https://wa.me/?text=${message}`, "_blank");
+      const waMessage = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
+      window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank");
     };
 
     const completedFreeBatches: any[] = studentData?.free_batches ?? [];
