@@ -1,23 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReferWinCard from "@/components/ReferWinCard";
 import logo from "@/assets/Primary_logo.svg";
 
-/* ────────────────────────────────────────────
-   Mock leaderboard data — replace with API later
-   ──────────────────────────────────────────── */
-const MOCK_LEADERBOARD = [
-  { rank: 1, name: "T Ravikrishna", referrals: 98 },
-  { rank: 2, name: "Sree Lakshmi", referrals: 85 },
-  { rank: 3, name: "Padma Devi", referrals: 72 },
-  { rank: 4, name: "Venkat Reddy", referrals: 64 },
-  { rank: 5, name: "Anjali Kumari", referrals: 58 },
-  { rank: 6, name: "Ravi Kumar", referrals: 51 },
-  { rank: 7, name: "Sunitha M", referrals: 47 },
-  { rank: 8, name: "Priya Sharma", referrals: 43 },
-  { rank: 9, name: "Deepak Rao", referrals: 39 },
-  { rank: 10, name: "Meena Kumari", referrals: 35 },
-];
+const CONTEST_START = "2026-06-01";
+const CONTEST_END = "2026-06-30";
+
+interface LeaderboardEntry {
+  rank: number;
+  name: string;
+  referral_count: number;
+}
+
+interface UserRank {
+  rank: number;
+  name: string;
+  referral_count: number;
+}
 
 /* ────────────────────────────────────────────
    SVG Icons
@@ -55,10 +54,35 @@ const Leaderboard: React.FC = () => {
   const { mobile: pathMobile } = useParams<{ mobile: string }>();
   const mobile = pathMobile || "";
 
+  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
+  const [userRank, setUserRank] = useState<UserRank | null>(null);
+  const [leaderboardLoading, setLeaderboardLoading] = useState(true);
+  const [rankLoading, setRankLoading] = useState(!!mobile);
+
+  useEffect(() => {
+    fetch(`/.netlify/functions/leaderboard?start_date=${CONTEST_START}&end_date=${CONTEST_END}&page_size=100`)
+      .then((r) => r.json())
+      .then((data) => setLeaderboard(data.leaderboard ?? []))
+      .catch(() => {})
+      .finally(() => setLeaderboardLoading(false));
+  }, []);
+
+  useEffect(() => {
+    if (!mobile) { setRankLoading(false); return; }
+    const digits = mobile.replace(/\D/g, "");
+    const normalized = digits.startsWith("91") && digits.length >= 12 ? digits.slice(2) : digits;
+    const e164 = `+91${normalized}`;
+    fetch(`/.netlify/functions/leaderboard-rank?mobile=${encodeURIComponent(e164)}&start_date=${CONTEST_START}&end_date=${CONTEST_END}`)
+      .then((r) => (r.status === 404 ? null : r.json()))
+      .then((data) => setUserRank(data))
+      .catch(() => {})
+      .finally(() => setRankLoading(false));
+  }, [mobile]);
+
   const shareLink = mobile
     ? `https://yoga.healthyday.co.in?ref=${mobile}`
     : "https://yoga.healthyday.co.in?ref=demo";
-  const referralsUrl = mobile ? `/${mobile}/referrals/0` : "/referral-status";
+  const referralsUrl = mobile ? `/${mobile}/leaderboard` : "/leaderboard";
 
   return (
     <div
@@ -294,7 +318,7 @@ const Leaderboard: React.FC = () => {
       {/* ═══════════════════════════════════════
           CURRENT USER RANK
          ═══════════════════════════════════════ */}
-      <CurrentUserRankCard />
+      <CurrentUserRankCard userRank={userRank} loading={rankLoading} />
 
       {/* ═══════════════════════════════════════
           REFER & WIN BUTTON
@@ -373,8 +397,11 @@ const Leaderboard: React.FC = () => {
           </span>
         </div>
 
-        {MOCK_LEADERBOARD.map((entry) => (
-          <LeaderboardRow key={entry.rank} {...entry} />
+        {leaderboardLoading && (
+          <span style={{ color: "rgba(255,255,255,0.6)", fontFamily: "Outfit", fontSize: "13px", textAlign: "center", padding: "12px 0" }}>Loading…</span>
+        )}
+        {!leaderboardLoading && leaderboard.map((entry) => (
+          <LeaderboardRow key={entry.rank} rank={entry.rank} name={entry.name} referrals={entry.referral_count} />
         ))}
       </div>
 
@@ -567,7 +594,16 @@ const LeaderboardRow: React.FC<{
 /* ────────────────────────────────────────────
    Current User Rank Card Sub-component
    ──────────────────────────────────────────── */
-const CurrentUserRankCard: React.FC = () => {
+const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolean }> = ({ userRank, loading }) => {
+  if (loading) return (
+    <div style={{ width: "360px", height: "123px", borderRadius: "12px", border: "1.5px solid #FEAB27", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", marginTop: "18px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+      <span style={{ color: "rgba(255,255,255,0.6)", fontFamily: "Outfit", fontSize: "13px" }}>Loading…</span>
+    </div>
+  );
+  if (!userRank) return null;
+
+  const tierLabel = userRank.rank <= 25 ? "TOP 25" : userRank.rank <= 100 ? "TOP 100" : userRank.rank <= 500 ? "TOP 500" : `RANK ${userRank.rank}`;
+
   return (
     <div
       style={{
@@ -605,7 +641,7 @@ const CurrentUserRankCard: React.FC = () => {
         </div>
 
         <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, lineHeight: "normal" }}>
-          You’re in <span style={{ color: "#FEAB27" }}>TOP 25 !</span>
+          You’re in <span style={{ color: "#FEAB27" }}>{tierLabel} !</span>
         </span>
 
         <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 400, width: "166px", marginTop: "2px", lineHeight: "normal" }}>
@@ -652,7 +688,7 @@ const CurrentUserRankCard: React.FC = () => {
             Total Referrals
           </span>
           <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, lineHeight: "normal" }}>
-            88
+            {userRank.referral_count}
           </span>
         </div>
       </div>
@@ -701,7 +737,7 @@ const CurrentUserRankCard: React.FC = () => {
             display: "inline-block", // Add this to make width/height work on span
             textAlign: "center"
           }}>
-            6
+            {userRank.rank}
           </span>
         </div>
       </div>
