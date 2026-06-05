@@ -80,6 +80,22 @@ html, body {
   }
 }
 
+/* Drawer animations */
+@keyframes slideUp {
+  from { transform: translateX(-50%) translateY(100%); }
+  to   { transform: translateX(-50%) translateY(0); }
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
+}
+.drawer-slide-up {
+  animation: slideUp 0.32s cubic-bezier(0.32, 0.72, 0, 1) both;
+}
+.drawer-backdrop {
+  animation: fadeIn 0.25s ease both;
+}
+
 /* Hide scrollbar but keep scrollability */
 .scrollbar-hide {
   -ms-overflow-style: none;

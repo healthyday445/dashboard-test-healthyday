@@ -460,11 +460,13 @@ const Leaderboard: React.FC = () => {
         <>
           {/* Backdrop */}
           <div
+            className="drawer-backdrop"
             onClick={() => setDrawerOpen(false)}
             style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", zIndex: 100 }}
           />
           {/* Drawer */}
           <div
+            className="drawer-slide-up"
             style={{
               position: "fixed",
               bottom: 0,
