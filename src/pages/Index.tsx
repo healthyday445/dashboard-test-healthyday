@@ -996,7 +996,7 @@ const Index = () => {
 
             {/* Refer & Win card */}
             <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
+              <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
             </div>
 
             {/* Week 2 Bonus: show payment section instead */}
@@ -1007,7 +1007,7 @@ const Index = () => {
                   <p style={{ width: "100%", maxWidth: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
                 </div>
                 <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-                  <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
+                  <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
                 </div>
               </>
             )}
@@ -1273,7 +1273,7 @@ const Index = () => {
 
             {/* Refer & Win card */}
             <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
+              <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
             </div>
           </>
         )}
@@ -1287,7 +1287,7 @@ const Index = () => {
             </div>
             {/* Refer & Earn */}
             <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
+              <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
             </div>
           </>
         )}
@@ -1769,7 +1769,7 @@ const Index = () => {
         {/* Refer & Win Card */}
         {!showPlanRenewal && (
           <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-            <ReferWinCard shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
+            <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
           </div>
         )}
 
@@ -2074,7 +2074,7 @@ const Index = () => {
         </div>
         {/* Refer & Earn */}
         <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-          <ReferWinCard shareLink={referralLink} referralsUrl={`/referral?count=&mobile=`} />
+          <ReferWinCard showTitle={false} shareLink={referralLink} referralsUrl={`/referral?count=&mobile=`} />
         </div>
       </div>
     );

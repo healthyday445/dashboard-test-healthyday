@@ -421,7 +421,7 @@ const Leaderboard: React.FC = () => {
         style={{
           position: "sticky",
           bottom: 0,
-          width: "100%",
+          width: "90%",
           display: "flex",
           justifyContent: "center",
           padding: "16px 0 32px",
