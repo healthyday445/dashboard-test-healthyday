@@ -23,8 +23,16 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin, isFreeBatch }
 
   // Find the next session label to show as the highlighted time
   let nextSessionLabel = "5:30 AM";
-  if (totalMin >= 570 && totalMin < 945) {
-    nextSessionLabel = "4:30 PM";
+  if (totalMin >= 570 && totalMin < 1170) {
+    if (totalMin < 945) {
+      nextSessionLabel = "4:30 PM";
+    } else if (totalMin < 1050) {
+      nextSessionLabel = "4:30 PM"; // or 5:30 PM if you prefer
+    } else if (totalMin < 1110) {
+      nextSessionLabel = "5:30 PM";
+    } else {
+      nextSessionLabel = "6:30 PM";
+    }
   }
 
   let title = isTomorrow
@@ -38,8 +46,8 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin, isFreeBatch }
   }
 
   // Session times row — always show morning times for "tomorrow" and "before morning"
-  // Show evening times for the midday gap
-  const isMidDayGap = totalMin >= 570 && totalMin < 945;
+  // Show evening times for the midday gap and evening block
+  const isMidDayGap = totalMin >= 570 && totalMin < 1170;
   const sessionTimes = isMidDayGap
     ? ["4:30 PM", "5:30 PM", "6:30 PM"]
     : ["5:30 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
