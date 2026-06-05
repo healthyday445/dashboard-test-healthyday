@@ -17,9 +17,10 @@ const MoonIcon = () => (
 );
 
 const SunIcon = () => (
-  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-    <circle cx="8" cy="8" r="4" fill="#FEAB27" />
-    <path d="M8 0.5V2.5M8 13.5V15.5M15.5 8H13.5M2.5 8H0.5M13.3 2.7L11.9 4.1M4.1 11.9L2.7 13.3M13.3 13.3L11.9 11.9M4.1 4.1L2.7 2.7" stroke="#FEAB27" strokeWidth="1.5" strokeLinecap="round" />
+  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+    <path d="M10.8346 2.50017C10.8346 2.72119 10.7468 2.93315 10.5906 3.08943C10.4343 3.24571 10.2223 3.33351 10.0013 3.33351C9.78029 3.33351 9.56833 3.24571 9.41205 3.08943C9.25577 2.93315 9.16797 2.72119 9.16797 2.50017C9.16797 2.27916 9.25577 2.0672 9.41205 1.91092C9.56833 1.75464 9.78029 1.66684 10.0013 1.66684C10.2223 1.66684 10.4343 1.75464 10.5906 1.91092C10.7468 2.0672 10.8346 2.27916 10.8346 2.50017Z" fill="#FEAB27"/>
+    <path fillRule="evenodd" clipRule="evenodd" d="M10.0013 15.8335C10.7673 15.8335 11.5259 15.6826 12.2336 15.3895C12.9414 15.0963 13.5844 14.6666 14.1261 14.125C14.6678 13.5833 15.0974 12.9402 15.3906 12.2325C15.6838 11.5248 15.8346 10.7662 15.8346 10.0002C15.8346 9.23413 15.6838 8.47559 15.3906 7.76785C15.0974 7.06012 14.6678 6.41706 14.1261 5.87538C13.5844 5.33371 12.9414 4.90403 12.2336 4.61088C11.5259 4.31772 10.7673 4.16684 10.0013 4.16684C8.45421 4.16684 6.97047 4.78142 5.87651 5.87538C4.78255 6.96935 4.16797 8.45308 4.16797 10.0002C4.16797 11.5473 4.78255 13.031 5.87651 14.125C6.97047 15.2189 8.45421 15.8335 10.0013 15.8335Z" fill="#FEAB27"/>
+    <path d="M10.0013 18.3331C10.2223 18.3331 10.4343 18.2453 10.5906 18.089C10.7468 17.9327 10.8346 17.7208 10.8346 17.4997C10.8346 17.2787 10.7468 17.0668 10.5906 16.9105C10.4343 16.7542 10.2223 16.6664 10.0013 16.6664C9.78029 16.6664 9.56833 16.7542 9.41205 16.9105C9.25577 17.0668 9.16797 17.2787 9.16797 17.4997C9.16797 17.7208 9.25577 17.9327 9.41205 18.089C9.56833 18.2453 9.78029 18.3331 10.0013 18.3331ZM17.5013 10.8331C17.2803 10.8331 17.0683 10.7453 16.912 10.589C16.7558 10.4327 16.668 10.2208 16.668 9.99975C16.668 9.77873 16.7558 9.56677 16.912 9.41049C17.0683 9.25421 17.2803 9.16641 17.5013 9.16641C17.7223 9.16641 17.9343 9.25421 18.0906 9.41049C18.2468 9.56677 18.3346 9.77873 18.3346 9.99975C18.3346 10.2208 18.2468 10.4327 18.0906 10.589C17.9343 10.7453 17.7223 10.8331 17.5013 10.8331ZM1.66797 9.99975C1.66797 10.2208 1.75577 10.4327 1.91205 10.589C2.06833 10.7453 2.28029 10.8331 2.5013 10.8331C2.72232 10.8331 2.93428 10.7453 3.09056 10.589C3.24684 10.4327 3.33464 10.2208 3.33464 9.99975C3.33464 9.77873 3.24684 9.56677 3.09056 9.41049C2.93428 9.25421 2.72232 9.16641 2.5013 9.16641C2.28029 9.16641 2.06833 9.25421 1.91205 9.41049C1.75577 9.56677 1.66797 9.77873 1.66797 9.99975ZM15.8938 5.28558C15.8169 5.36517 15.725 5.42866 15.6233 5.47233C15.5216 5.51601 15.4123 5.539 15.3016 5.53996C15.191 5.54092 15.0813 5.51983 14.9788 5.47793C14.8764 5.43603 14.7834 5.37415 14.7051 5.29591C14.6269 5.21767 14.565 5.12462 14.5231 5.02221C14.4812 4.9198 14.4601 4.81006 14.4611 4.69941C14.4621 4.58876 14.485 4.47941 14.5287 4.37774C14.5724 4.27607 14.6359 4.18412 14.7155 4.10725C14.8726 3.95545 15.0831 3.87145 15.3016 3.87335C15.5201 3.87525 15.7291 3.96289 15.8837 4.1174C16.0382 4.27191 16.1258 4.48092 16.1277 4.69941C16.1296 4.91791 16.0456 5.12841 15.8938 5.28558ZM4.10964 15.8922C4.18651 15.9718 4.27846 16.0353 4.38013 16.079C4.4818 16.1227 4.59115 16.1457 4.7018 16.1466C4.81245 16.1476 4.92218 16.1265 5.0246 16.0846C5.12701 16.0427 5.22005 15.9808 5.2983 15.9026C5.37654 15.8243 5.43842 15.7313 5.48032 15.6289C5.52222 15.5265 5.54331 15.4167 5.54234 15.3061C5.54138 15.1954 5.51839 15.0861 5.47472 14.9844C5.43105 14.8827 5.36756 14.7908 5.28797 14.7139C5.1302 14.5658 4.92098 14.4848 4.70457 14.4882C4.48817 14.4915 4.28156 14.5789 4.12846 14.7319C3.97537 14.8849 3.8878 15.0915 3.88429 15.3079C3.88077 15.5243 3.96159 15.7344 4.10964 15.8922ZM14.7163 15.8922C14.6367 15.8154 14.5732 15.7234 14.5296 15.6218C14.4859 15.5201 14.4629 15.4107 14.4619 15.3001C14.461 15.1894 14.482 15.0797 14.524 14.9773C14.5659 14.8749 14.6277 14.7818 14.706 14.7036C14.7842 14.6253 14.8773 14.5635 14.9797 14.5216C15.0821 14.4797 15.1918 14.4586 15.3025 14.4595C15.4131 14.4605 15.5225 14.4835 15.6241 14.5272C15.7258 14.5708 15.8178 14.6343 15.8946 14.7139C16.0464 14.8711 16.1304 15.0816 16.1285 15.3001C16.1266 15.5186 16.039 15.7276 15.8845 15.8821C15.73 16.0366 15.521 16.1242 15.3025 16.1261C15.084 16.128 14.8735 16.044 14.7163 15.8922ZM4.1088 4.10808C4.02921 4.18495 3.96573 4.27691 3.92205 4.37858C3.87838 4.48025 3.85539 4.5896 3.85443 4.70025C3.85347 4.8109 3.87455 4.92063 3.91645 5.02304C3.95835 5.12546 4.02023 5.2185 4.09847 5.29674C4.17672 5.37499 4.26976 5.43687 4.37217 5.47877C4.47459 5.52067 4.58432 5.54175 4.69497 5.54079C4.80562 5.53983 4.91497 5.51684 5.01664 5.47317C5.11831 5.42949 5.21026 5.36601 5.28714 5.28641C5.43529 5.12864 5.51626 4.91942 5.5129 4.70302C5.50954 4.48661 5.42211 4.28 5.26913 4.12691C5.11614 3.97382 4.9096 3.88625 4.69319 3.88273C4.47679 3.87922 4.26668 3.96004 4.1088 4.10808Z" fill="#FEAB27"/>
   </svg>
 );
 
@@ -2108,6 +2109,31 @@ const Index = () => {
     ? "https://www.youtube.com/@HealthydayEnglish"
     : "https://www.youtube.com/@healthydayyoga";
 
+  const _months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+  const _getSuffix = (day: number) => [1, 21, 31].includes(day) ? "st" : [2, 22].includes(day) ? "nd" : [3, 23].includes(day) ? "rd" : "th";
+  const _batchD = studentData?.free_batch_start_date;
+  let dateLabel: string;
+  let _dateLabelDay: number;
+  let _dateLabelSuffix: string;
+  let _dateLabelMonth: string;
+  if (!_batchD) {
+    const _today = new Date();
+    const _dow = _today.getDay();
+    const _daysToMon = _dow === 0 ? 1 : _dow === 1 ? 7 : (8 - _dow);
+    const _nextMon = new Date(_today);
+    _nextMon.setDate(_today.getDate() + _daysToMon);
+    _dateLabelDay = _nextMon.getDate();
+    _dateLabelSuffix = _getSuffix(_dateLabelDay);
+    _dateLabelMonth = _months[_nextMon.getMonth()].toUpperCase();
+    dateLabel = `${_months[_nextMon.getMonth()]} ${_dateLabelDay}${_dateLabelSuffix}`;
+  } else {
+    const _date = new Date(_batchD);
+    _dateLabelDay = _date.getDate();
+    _dateLabelSuffix = _getSuffix(_dateLabelDay);
+    _dateLabelMonth = _months[_date.getMonth()].toUpperCase();
+    dateLabel = `${_months[_date.getMonth()]} ${_dateLabelDay}${_dateLabelSuffix}`;
+  }
+
   return (
     <div className="hd-page bg-background" style={{ fontFamily: "Outfit, sans-serif" }}>
       <header
@@ -2116,92 +2142,69 @@ const Index = () => {
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
 
-      {/* Onboarding Card */}
-      <div className="flex flex-col items-center mt-6 gap-3">
-        {/* Title */}
-        <h2 style={{ width: "100%", maxWidth: "370px", textAlign: "center", fontFamily: "Outfit", fontSize: "20px", fontStyle: "normal", fontWeight: 700, lineHeight: "normal", margin: 0 }}>
-          {(() => {
-            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            const getSuffix = (day: number) => [1, 21, 31].includes(day) ? "st" : [2, 22].includes(day) ? "nd" : [3, 23].includes(day) ? "rd" : "th";
-
-            const d = studentData?.free_batch_start_date;
-            let dateLabel: string;
-            if (!d) {
-              // Calculate next Monday
-              const today = new Date();
-              const dayOfWeek = today.getDay(); // 0=Sun, 1=Mon, ...
-              const daysUntilMonday = dayOfWeek === 0 ? 1 : dayOfWeek === 1 ? 7 : (8 - dayOfWeek);
-              const nextMonday = new Date(today);
-              nextMonday.setDate(today.getDate() + daysUntilMonday);
-              const day = nextMonday.getDate();
-              dateLabel = `${months[nextMonday.getMonth()]} ${day}${getSuffix(day)}`;
-            } else {
-              const date = new Date(d);
-              const day = date.getDate();
-              dateLabel = `${months[date.getMonth()]} ${day}${getSuffix(day)}`;
-            }
-            return <>
-              <span style={{ color: "#FEAB27" }}>Your 14 Days FREE Yoga Batch starts on </span>
-              <span style={{ color: "#0D468B" }}>{dateLabel}</span>
-            </>;
-          })()}
-        </h2>
-
-        {/* Morning Session Card */}
-        <div style={{ width: "100%", maxWidth: "342px", height: "93px", borderRadius: "10px", border: "0.5px solid #FFCD7E", background: "#FFFDF5", boxShadow: "-1px -1px 4px 0 rgba(205,205,205,0.10), 1px 1px 4px 0 rgba(205,205,205,0.10)", display: "flex", alignItems: "center", padding: "0 12px", gap: "12px", boxSizing: "border-box" }}>
-          {/* Sun icon box */}
-          <div style={{ width: "54px", height: "53px", borderRadius: "5px", border: "0.5px solid #FFCD7E", background: "#FFF", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="35" height="35" viewBox="0 0 35 35" fill="none">
-              <path d="M18.9582 4.37533C18.9582 4.7621 18.8045 5.13303 18.531 5.40652C18.2575 5.68001 17.8866 5.83366 17.4998 5.83366C17.1131 5.83366 16.7421 5.68001 16.4686 5.40652C16.1951 5.13303 16.0415 4.7621 16.0415 4.37533C16.0415 3.98855 16.1951 3.61762 16.4686 3.34413C16.7421 3.07064 17.1131 2.91699 17.4998 2.91699C17.8866 2.91699 18.2575 3.07064 18.531 3.34413C18.8045 3.61762 18.9582 3.98855 18.9582 4.37533Z" fill="#FEAB27" />
-              <path fillRule="evenodd" clipRule="evenodd" d="M17.4998 27.7087C18.8404 27.7087 20.1679 27.4446 21.4064 26.9316C22.6449 26.4186 23.7703 25.6666 24.7182 24.7187C25.6662 23.7708 26.4181 22.6454 26.9311 21.4069C27.4441 20.1684 27.7082 18.8409 27.7082 17.5003C27.7082 16.1597 27.4441 14.8323 26.9311 13.5938C26.4181 12.3552 25.6662 11.2299 24.7182 10.2819C23.7703 9.33401 22.6449 8.58207 21.4064 8.06906C20.1679 7.55604 18.8404 7.29199 17.4998 7.29199C14.7924 7.29199 12.1959 8.36751 10.2815 10.2819C8.36702 12.1964 7.2915 14.7929 7.2915 17.5003C7.2915 20.2077 8.36702 22.8043 10.2815 24.7187C12.1959 26.6331 14.7924 27.7087 17.4998 27.7087Z" fill="#FEAB27" />
-              <path d="M17.4998 32.0829C17.8866 32.0829 18.2575 31.9293 18.531 31.6558C18.8045 31.3823 18.9582 31.0113 18.9582 30.6246C18.9582 30.2378 18.8045 29.8669 18.531 29.5934C18.2575 29.3199 17.8866 29.1662 17.4998 29.1662C17.1131 29.1662 16.7421 29.3199 16.4686 29.5934C16.1952 29.8669 16.0415 30.2378 16.0415 30.6246C16.0415 31.0113 16.1952 31.3823 16.4686 31.6558C16.7421 31.9293 17.1131 32.0829 17.4998 32.0829ZM30.6248 18.9579C30.2381 18.9579 29.8671 18.8043 29.5936 18.5308C29.3201 18.2573 29.1665 17.8863 29.1665 17.4996C29.1665 17.1128 29.3201 16.7419 29.5936 16.4684C29.8671 16.1949 30.2381 16.0412 30.6248 16.0412C31.0116 16.0412 31.3825 16.1949 31.656 16.4684C31.9295 16.7419 32.0832 17.1128 32.0832 17.4996C32.0832 17.8863 31.9295 18.2573 31.656 18.5308C31.3825 18.8043 31.0116 18.9579 30.6248 18.9579ZM2.9165 17.4996C2.9165 17.8863 3.07015 18.2573 3.34364 18.5308C3.61713 18.8043 3.98806 18.9579 4.37484 18.9579C4.76161 18.9579 5.13254 18.8043 5.40603 18.5308C5.67953 18.2573 5.83317 17.8863 5.83317 17.4996C5.83317 17.1128 5.67953 16.7419 5.40603 16.4684C5.13254 16.1949 4.76161 16.0412 4.37484 16.0412C3.98806 16.0412 3.61713 16.1949 3.34364 16.4684C3.07015 16.7419 2.9165 17.1128 2.9165 17.4996ZM27.8117 9.24977C27.6772 9.38906 27.5163 9.50016 27.3383 9.57659C27.1604 9.65302 26.9691 9.69325 26.7754 9.69493C26.5818 9.69661 26.3898 9.65972 26.2105 9.58639C26.0313 9.51306 25.8685 9.40478 25.7316 9.26785C25.5946 9.13092 25.4863 8.9681 25.413 8.78887C25.3397 8.60965 25.3028 8.41762 25.3045 8.22398C25.3062 8.03035 25.3464 7.83898 25.4228 7.66106C25.4992 7.48314 25.6103 7.32222 25.7496 7.18769C26.0247 6.92204 26.3931 6.77505 26.7754 6.77838C27.1578 6.7817 27.5236 6.93507 27.7939 7.20546C28.0643 7.47584 28.2177 7.84161 28.221 8.22398C28.2243 8.60635 28.0774 8.97473 27.8117 9.24977ZM7.18942 27.8114C7.32395 27.9507 7.48487 28.0618 7.66279 28.1383C7.84071 28.2147 8.03207 28.2549 8.22571 28.2566C8.41935 28.2583 8.61138 28.2214 8.7906 28.1481C8.96983 28.0747 9.13265 27.9664 9.26958 27.8295C9.40651 27.6926 9.51479 27.5298 9.58812 27.3505C9.66145 27.1713 9.69834 26.9793 9.69666 26.7856C9.69498 26.592 9.65475 26.4007 9.57832 26.2227C9.50189 26.0448 9.39079 25.8839 9.2515 25.7494C8.97541 25.4901 8.60926 25.3484 8.23056 25.3543C7.85185 25.3602 7.49028 25.5131 7.22237 25.7809C6.95446 26.0486 6.80121 26.4101 6.79506 26.7888C6.78891 27.1675 6.93034 27.5352 7.18942 27.8114ZM25.7511 27.8114C25.6118 27.6769 25.5007 27.516 25.4243 27.3381C25.3478 27.1602 25.3076 26.9688 25.3059 26.7752C25.3042 26.5815 25.3411 26.3895 25.4145 26.2103C25.4878 26.031 25.5961 25.8682 25.733 25.7313C25.8699 25.5944 26.0328 25.4861 26.212 25.4127C26.3912 25.3394 26.5832 25.3025 26.7769 25.3042C26.9705 25.3059 27.1619 25.3461 27.3398 25.4225C27.5177 25.499 27.6786 25.6101 27.8132 25.7494C28.0788 26.0244 28.2258 26.3928 28.2225 26.7752C28.2192 27.1575 28.0658 27.5233 27.7954 27.7937C27.525 28.0641 27.1593 28.2174 26.7769 28.2208C26.3945 28.2241 26.0261 28.0771 25.7511 27.8114ZM7.18796 7.18915C7.04868 7.32368 6.93758 7.4846 6.86115 7.66252C6.78472 7.84044 6.74449 8.0318 6.74281 8.22544C6.74112 8.41908 6.77802 8.61111 6.85135 8.79033C6.92467 8.96956 7.03296 9.13238 7.16989 9.26931C7.30681 9.40624 7.46964 9.51452 7.64886 9.58785C7.82809 9.66117 8.02012 9.69807 8.21376 9.69639C8.40739 9.69471 8.59875 9.65448 8.77668 9.57805C8.9546 9.50162 9.11552 9.39052 9.25005 9.25123C9.50932 8.97513 9.65101 8.60899 9.64513 8.23029C9.63925 7.85158 9.48626 7.49001 9.21853 7.2221C8.95081 6.95419 8.58935 6.80094 8.21065 6.79479C7.83194 6.78864 7.46424 6.93007 7.18796 7.18915Z" fill="#FEAB27" />
-            </svg>
-          </div>
-          {/* Morning text */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ color: "#898989", fontFamily: "Outfit", fontSize: "12px", fontWeight: 600, lineHeight: "normal" }}>MORNING SESSIONS</span>
+      {/* Batch Start Hero Banner */}
+      <div style={{ padding: "16px 20px 0" }}>
+        <div style={{ position: "relative", width: "100%" }}>
+          <img
+            src="/batchNotStartedStudents.svg"
+            alt="Your 21-Days Online Yoga"
+            style={{ width: "100%", display: "block", borderRadius: "10px" }}
+          />
+          <div style={{
+            position: "absolute",
+            top: 0, left: 0, bottom: 0,
+            width: "58%",
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            paddingLeft: "8%",
+            gap: "1px",
+          }}>
+            <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "0.625rem", fontWeight: 600, lineHeight: "normal" }}>Your</span>
+            <div style={{ fontFamily: "Outfit", fontWeight: 800, lineHeight: "25px" }}>
+              <div style={{ color: "#0A386F", fontSize: "1.375rem" }}>21-Days</div>
+              <div style={{ color: "#FEAB27", fontSize: "1.375rem" }}>Online Yoga</div>
             </div>
-            <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "13px", fontWeight: 700, lineHeight: "normal" }}>5:30AM | 6:30AM | 7:30AM | 8:30AM</span>
+            <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "0.75rem", fontWeight: 600, lineHeight: "normal" }}>
+              starts on {_dateLabelDay}<sup style={{ fontSize: "0.484rem", fontWeight: 600 }}>{_dateLabelSuffix}</sup> {_dateLabelMonth}
+            </span>
           </div>
         </div>
+      </div>
 
-        {/* Evening Session Card */}
-        <div style={{ width: "100%", maxWidth: "342px", height: "93px", borderRadius: "10px", border: "0.5px solid #56A2FF", background: "#F6F8FF", boxShadow: "-1px -1px 4px 0 rgba(205,205,205,0.10), 1px 1px 4px 0 rgba(205,205,205,0.10)", display: "flex", alignItems: "center", padding: "0 12px", gap: "12px", boxSizing: "border-box" }}>
-          {/* Moon icon box — full SVG with border built in */}
-          <svg xmlns="http://www.w3.org/2000/svg" width="54" height="53" viewBox="0 0 54 53" fill="none" style={{ flexShrink: 0 }}>
-            <rect x="0.25" y="0.25" width="53.5" height="52.5" rx="4.75" fill="white" stroke="#56A2FF" strokeWidth="0.5" />
-            <path d="M40.9435 30.7208C39.2042 36.7657 33.5727 41 27.2569 41C19.4013 41 13 34.5987 13 26.7431C13 20.4273 17.2343 14.7958 23.2792 13.0565C23.8638 12.8854 24.4911 13.1135 24.8475 13.5982C25.1896 14.0972 25.1896 14.7673 24.8332 15.252C23.6214 16.9486 22.9798 18.9446 22.9798 21.0403C22.9798 26.5435 27.4565 31.0202 32.9597 31.0202C35.0554 31.0202 37.0514 30.3786 38.748 29.1668C39.2327 28.8104 39.9028 28.8104 40.4018 29.1525C40.8865 29.5089 41.1146 30.1362 40.9435 30.7208Z" fill="#5462F0" />
-          </svg>
-          {/* Evening text */}
-          <div style={{ display: "flex", flexDirection: "column", gap: "4px" }}>
-            <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
-              <span style={{ color: "#898989", fontFamily: "Outfit", fontSize: "12px", fontWeight: 600, lineHeight: "normal" }}>EVENING SESSIONS</span>
-            </div>
-            <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "13px", fontWeight: 700, lineHeight: "normal" }}>4:30PM | 5:30PM | 6:30PM</span>
-          </div>
+      {/* Onboarding Card */}
+      <div className="flex flex-col items-center mt-6 gap-3">
+        {/* Morning Sessions Row */}
+        <div style={{ maxWidth: "342px", display: "flex", alignItems: "center", gap: "10px" }}>
+          <SunIcon />
+          <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "0.9375rem", fontWeight: 700, lineHeight: "normal" }}>
+            MOR - 5:30AM | 6:30AM | 7:30AM | 8:30AM
+          </span>
+        </div>
+
+        {/* Evening Sessions Row */}
+        <div style={{ maxWidth: "342px", display: "flex", alignItems: "center", gap: "10px" }}>
+          <MoonIcon />
+          <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "0.9375rem", fontWeight: 700, lineHeight: "normal" }}>
+            EVE - 4:30PM | 5:30PM | 6:30PM
+          </span>
         </div>
 
         {/* Info note */}
-        <div style={{ width: "100%", maxWidth: "342px", display: "flex", alignItems: "flex-start", gap: "6px" }}>
+        <div style={{ maxWidth: "342px", display: "flex", alignItems: "flex-start", gap: "6px" }}>
           <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
             <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
             <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
             <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D" />
             <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span style={{ color: "#747474", fontFamily: "Outfit", fontSize: "11px", fontWeight: 400, lineHeight: "22px" }}>Note: You will receive Joining Link on WhatsApp on {(() => {
-            const today = new Date();
-            const dayOfWeek = today.getDay(); // 0=Sun, 1=Mon, ...
-            const daysUntilSunday = dayOfWeek === 0 ? 7 : (7 - dayOfWeek);
-            const nextSunday = new Date(today);
-            nextSunday.setDate(today.getDate() + daysUntilSunday);
-            const months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-            const day = nextSunday.getDate();
-            const suffix = [1, 21, 31].includes(day) ? "st" : [2, 22].includes(day) ? "nd" : [3, 23].includes(day) ? "rd" : "th";
-            return `${months[nextSunday.getMonth()]} ${day}${suffix}`;
-          })()}</span>
+          <span style={{ color: "#747474", fontFamily: "Outfit", fontSize: "11px", fontWeight: 400, lineHeight: "22px" }}>Note: You will receive Joining Link on WhatsApp on {dateLabel}</span>
         </div>
+      </div>
+
+      {/* Refer & Win 500 card */}
+      <div style={{ padding: "18px 20px 0" }}>
+        <ReferAndWin500 onClick={() => navigate(`/${mobile || ""}/leaderboard`)} />
       </div>
 
       {/* Try these 15 Minutes Yoga Section */}
