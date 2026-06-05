@@ -60,6 +60,30 @@ const Leaderboard: React.FC = () => {
   const [leaderboardLoading, setLeaderboardLoading] = useState(true);
   const [rankLoading, setRankLoading] = useState(!!mobile);
 
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [referralsData, setReferralsData] = useState<{ total_referrals: number; referrals: { referred_mobile: string; referred_name: string; referral_confirmation_status: string }[] } | null>(null);
+  const [referralsLoading, setReferralsLoading] = useState(false);
+
+  const openReferralsDrawer = () => {
+    setDrawerOpen(true);
+    if (referralsData) return;
+    setReferralsLoading(true);
+    const digits = mobile.replace(/\D/g, "");
+    const normalized = digits.startsWith("91") && digits.length >= 12 ? digits.slice(2) : digits;
+    const e164 = `+91${normalized}`;
+    fetch(`/.netlify/functions/referrals?mobile=${encodeURIComponent(e164)}`)
+      .then((r) => r.json())
+      .then((data) => setReferralsData(data))
+      .catch(() => {})
+      .finally(() => setReferralsLoading(false));
+  };
+
+  const maskMobile = (num: string) => {
+    const digits = num.replace(/\D/g, "");
+    const last10 = digits.slice(-10);
+    return `+91 ${last10.slice(0, 2)} ******${last10.slice(-2)}`;
+  };
+
   useEffect(() => {
     fetch(`/.netlify/functions/leaderboard?start_date=${CONTEST_START}&end_date=${CONTEST_END}&page_size=100`)
       .then((r) => r.json())
@@ -356,7 +380,7 @@ const Leaderboard: React.FC = () => {
 
       <div style={{ width: "calc(100% - 32px)", display: "flex", justifyContent: "center", marginTop: "10px" }}>
         <span
-          onClick={() => navigate(`/${mobile}/referrals/${userRank?.referral_count ?? 0}`)}
+          onClick={openReferralsDrawer}
           style={{
             color: "#012755",
             fontFamily: "Outfit",
@@ -369,8 +393,7 @@ const Leaderboard: React.FC = () => {
         >
           View your referrals
         </span>
-          <span style={{ color: "#012755", fontFamily: "Outfit", fontSize: "18px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal", marginTop: "-2px" }}>→</span>
-
+        <span style={{ color: "#012755", fontFamily: "Outfit", fontSize: "18px", fontWeight: 500, lineHeight: "normal", marginTop: "-2px" }}>→</span>
       </div>
 
       {/* ═══════════════════════════════════════
@@ -431,6 +454,129 @@ const Leaderboard: React.FC = () => {
       >
         <ReferWinCard shareLink={shareLink} referralsUrl={referralsUrl} showViewMore={false} />
       </div>
+
+      {/* ═══ REFERRALS DRAWER ═══ */}
+      {drawerOpen && (
+        <>
+          {/* Backdrop */}
+          <div
+            onClick={() => setDrawerOpen(false)}
+            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", zIndex: 100 }}
+          />
+          {/* Drawer */}
+          <div
+            style={{
+              position: "fixed",
+              bottom: 0,
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "100%",
+              maxWidth: "412px",
+              background: "#FFF",
+              borderRadius: "20px 20px 0 0",
+              zIndex: 101,
+              display: "flex",
+              flexDirection: "column",
+              maxHeight: "82vh",
+            }}
+          >
+            {/* Header */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 20px 12px", flexShrink: 0 }}>
+              <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>
+                Your Recent Referrals
+              </span>
+              <button
+                onClick={() => setDrawerOpen(false)}
+                style={{ background: "none", border: "none", cursor: "pointer", fontSize: "20px", color: "#202020", padding: "4px", lineHeight: 1 }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* List */}
+            <div style={{ overflowY: "auto", flex: 1, padding: "0 16px 12px" }}>
+              {referralsLoading && (
+                <div style={{ textAlign: "center", padding: "32px 0", color: "#888", fontFamily: "Outfit", fontSize: "14px" }}>Loading…</div>
+              )}
+              {!referralsLoading && referralsData?.referrals?.map((ref, i) => {
+                const isVerified = ref.referral_confirmation_status === "verified";
+                return (
+                  <div
+                    key={i}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "12px",
+                      padding: "14px 12px",
+                      borderRadius: "12px",
+                      border: "1px solid #FFE5BA",
+                      marginBottom: "10px",
+                      background: "#FFF",
+                    }}
+                  >
+                    {/* Avatar */}
+                    <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#EEF3FF", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                        <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="#0D468B" opacity="0.6"/>
+                        <path d="M12 14C7.58172 14 4 16.6863 4 20V22H20V20C20 16.6863 16.4183 14 12 14Z" fill="#0D468B" opacity="0.6"/>
+                      </svg>
+                    </div>
+                    {/* Info */}
+                    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "2px" }}>
+                      <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 600, lineHeight: "normal" }}>
+                        {(!ref.referred_name || ref.referred_name === "None") ? maskMobile(ref.referred_mobile) : ref.referred_name}
+                      </span>
+                      <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                          <path d="M6.62 10.79C8.06 13.62 10.38 15.93 13.21 17.38L15.41 15.18C15.68 14.91 16.08 14.82 16.43 14.94C17.55 15.31 18.76 15.51 20 15.51C20.55 15.51 21 15.96 21 16.51V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z" fill="#888"/>
+                        </svg>
+                        <span style={{ color: "#888", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400 }}>
+                          {maskMobile(ref.referred_mobile)}
+                        </span>
+                      </div>
+                    </div>
+                    {/* Status badge */}
+                    <div
+                      style={{
+                        padding: "4px 10px",
+                        borderRadius: "6px",
+                        background: isVerified ? "#E6F9EE" : "#F2F2F2",
+                        flexShrink: 0,
+                      }}
+                    >
+                      <span style={{ color: isVerified ? "#1A8A45" : "#888", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, letterSpacing: "0.5px" }}>
+                        {isVerified ? "VERIFIED" : "PENDING"}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })}
+            </div>
+
+            {/* Sticky total bar */}
+            <div
+              style={{
+                flexShrink: 0,
+                margin: "0 16px 16px",
+                height: "56px",
+                borderRadius: "14px",
+                background: "#FEAB27",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "space-between",
+                padding: "0 20px",
+              }}
+            >
+              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>Your Total Referrals</span>
+              <div style={{ background: "#FFF", borderRadius: "8px", padding: "4px 14px" }}>
+                <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700 }}>
+                  {referralsData?.total_referrals ?? 0}
+                </span>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };

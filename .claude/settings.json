@@ -2,7 +2,8 @@
   "permissions": {
     "allow": [
       "Bash(cmd.exe /c \"where claude 2>&1\")",
-      "Read(//tmp/**)"
+      "Read(//tmp/**)",
+      "Bash(npx tsc *)"
     ],
     "additionalDirectories": [
       "C:\\Users\\prath\\.claude"
