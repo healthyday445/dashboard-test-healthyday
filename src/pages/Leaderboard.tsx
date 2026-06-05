@@ -61,8 +61,17 @@ const Leaderboard: React.FC = () => {
   const [rankLoading, setRankLoading] = useState(!!mobile);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerClosing, setDrawerClosing] = useState(false);
   const [referralsData, setReferralsData] = useState<{ total_referrals: number; referrals: { referred_mobile: string; referred_name: string; referral_confirmation_status: string }[] } | null>(null);
   const [referralsLoading, setReferralsLoading] = useState(false);
+
+  const closeDrawer = () => {
+    setDrawerClosing(true);
+    setTimeout(() => {
+      setDrawerOpen(false);
+      setDrawerClosing(false);
+    }, 280);
+  };
 
   const openReferralsDrawer = () => {
     setDrawerOpen(true);
@@ -460,13 +469,13 @@ const Leaderboard: React.FC = () => {
         <>
           {/* Backdrop */}
           <div
-            className="drawer-backdrop"
-            onClick={() => setDrawerOpen(false)}
+            className={drawerClosing ? "drawer-backdrop-out" : "drawer-backdrop"}
+            onClick={closeDrawer}
             style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", zIndex: 100 }}
           />
           {/* Drawer */}
           <div
-            className="drawer-slide-up"
+            className={drawerClosing ? "drawer-slide-down" : "drawer-slide-up"}
             style={{
               position: "fixed",
               bottom: 0,
@@ -488,7 +497,7 @@ const Leaderboard: React.FC = () => {
                 Your Recent Referrals
               </span>
               <button
-                onClick={() => setDrawerOpen(false)}
+                onClick={closeDrawer}
                 style={{ background: "none", border: "none", cursor: "pointer", fontSize: "20px", color: "#202020", padding: "4px", lineHeight: 1 }}
               >
                 ✕
