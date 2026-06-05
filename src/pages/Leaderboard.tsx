@@ -9,6 +9,7 @@ const CONTEST_END = "2026-06-30";
 interface LeaderboardEntry {
   rank: number;
   name: string;
+  mobile: string;
   referral_count: number;
 }
 
@@ -351,11 +352,7 @@ const Leaderboard: React.FC = () => {
       {/* ═══════════════════════════════════════
           CURRENT USER RANK
          ═══════════════════════════════════════ */}
-      <CurrentUserRankCard userRank={{
-  rank: 2,
-  name: "Tanishq",
-  referral_count: 500
-}} loading={rankLoading} />
+      <CurrentUserRankCard userRank={userRank} loading={rankLoading} />
 
       <div style={{ width: "calc(100% - 32px)", display: "flex", justifyContent: "center", marginTop: "10px" }}>
         <span
@@ -408,6 +405,7 @@ const Leaderboard: React.FC = () => {
                 key={entry.rank}
                 rank={entry.rank}
                 name={entry.name}
+                mobile={entry.mobile}
                 referrals={entry.referral_count}
                 isCurrentUser={userRank?.rank === entry.rank}
               />
@@ -534,9 +532,10 @@ const PrizeTierCard: React.FC<{
 const LeaderboardRow: React.FC<{
   rank: number;
   name: string;
+  mobile: string;
   referrals: number;
   isCurrentUser?: boolean;
-}> = ({ rank, name, referrals, isCurrentUser }) => (
+}> = ({ rank, name, mobile, referrals, isCurrentUser }) => (
   <div
     style={{
       width: "100%",
@@ -592,7 +591,7 @@ const LeaderboardRow: React.FC<{
         whiteSpace: "nowrap",
       }}
     >
-      {isCurrentUser ? "You" : name}
+      {isCurrentUser ? "You" : (!name || name === "None") ? mobile.slice(0, 5) + "XXX" + mobile.slice(8) : name}
     </span>
 
     {/* Referral count */}
