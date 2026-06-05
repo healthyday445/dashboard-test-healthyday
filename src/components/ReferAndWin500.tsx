@@ -33,7 +33,7 @@ const ReferAndWin500: React.FC<ReferAndWin500Props> = ({ onClick }) => (
         Refer &amp; Win
       </span>
       <span style={{ color: "#fff", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, lineHeight: "normal", display: "flex", alignItems: "center", gap: "4px" }}>
-        Click here →
+        Click here
       </span>
     </div>
 

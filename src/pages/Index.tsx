@@ -982,8 +982,8 @@ const Index = () => {
               </div>
             </div>
 
-            {/* Referral Milestones — Week 1 only */}
-            {week === 1 && (() => {
+            {/* Your Referral Gifts — commented out */}
+            {/* {week === 1 && (() => {
               const refCount = studentData?.total_referral_count ?? 0;
               const milestones = [
                 { label: "10 Free Classes", reward: "+10", refs: 5 },
@@ -995,20 +995,15 @@ const Index = () => {
               return (
                 <div style={{ padding: "28px 20px 0" }}>
                   <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-                    <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Your Referral Gifts</h3>
-                    <span
-                      onClick={() => navigate(`/${mobile || ""}/leaderboard`)}
-                      style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
-                    >
-                      View More
-                    </span>
+                    <h3>Your Referral Gifts</h3>
+                    <span onClick={() => navigate(`/${mobile || ""}/leaderboard`)}>View More</span>
                   </div>
-                  <div style={{ width: "100%", borderRadius: "16px", background: "#FFF", boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)", padding: "20px 16px", boxSizing: "border-box" }}>
+                  <div>
                     <ReferralMilestonesCard refCount={refCount} milestones={milestones} nextLabel="NEXT GOAL" />
                   </div>
                 </div>
               );
-            })()}
+            })()} */}
 
             {/* Refer & Win card */}
             {/* <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
@@ -1271,43 +1266,21 @@ const Index = () => {
           <PricingAndComparisonSection selectedPlanIdx={selectedPlanIdx} setSelectedPlanIdx={setSelectedPlanIdx} daysLeft={Math.max(0, 15 - currentDay)} useOngoingPricing={true} />
         )}
 
-        {/* Your Referral Gifts Section */}
-        {week === 1 && (
+        {/* Your Referral Gifts Section — commented out */}
+        {/* {week === 1 && (
           <>
             {(() => {
               const refCount = studentData?.total_referral_count ?? 0;
-              const milestones = [
-                { label: "10 Free Classes", reward: "+10", refs: 5 },
-                { label: "20 Free Classes", reward: "+20", refs: 10 },
-                { label: "Healthyday T-shirt", reward: null, refs: 20 },
-                { label: "Water Bottle", reward: null, refs: 40 },
-                { label: "Yoga Mat", reward: null, refs: 60 },
-              ];
+              const milestones = [...];
               return (
-                <div style={{ padding: "28px 20px 0" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-                    <h3 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Your Referral Gifts</h3>
-                    <span
-                      onClick={() => navigate(`/${mobile || ""}/leaderboard`)}
-                      style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
-                    >
-                      View More
-                    </span>
-                  </div>
-                  <div style={{ width: "100%", borderRadius: "16px", background: "#FFF", boxShadow: "0 0 10px 0 rgba(0,0,0,0.25)", padding: "20px 16px", boxSizing: "border-box" }}>
-                    <ReferralMilestonesCard refCount={refCount} milestones={milestones} />
-                  </div>
+                <div>
+                  <h3>Your Referral Gifts</h3>
+                  <ReferralMilestonesCard refCount={refCount} milestones={milestones} />
                 </div>
               );
             })()}
-
-
-            {/* Refer & Win card */}
-            {/* <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
-            </div> */}
           </>
-        )}
+        )} */}
 
         {week === 2 && (
           <>
