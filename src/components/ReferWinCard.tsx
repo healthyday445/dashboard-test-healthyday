@@ -12,9 +12,10 @@ interface ReferWinCardProps {
   shareLink: string;
   referralsUrl: string;
   showViewMore?: boolean;
+  showTitle?: boolean;
 }
 
-const ReferWinCard: React.FC<ReferWinCardProps> = ({ shareLink, referralsUrl, showViewMore = true }) => (
+const ReferWinCard: React.FC<ReferWinCardProps> = ({ shareLink, referralsUrl, showViewMore = true, showTitle = true }) => (
   <div
     style={{
       width: "100%",
@@ -32,6 +33,16 @@ const ReferWinCard: React.FC<ReferWinCardProps> = ({ shareLink, referralsUrl, sh
       justifyContent: "center",
     }}
   >
+    {showTitle && (
+      <div>
+        <h3 style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "21px", fontWeight: 700, lineHeight: "normal", margin: "0 0 0" }}>
+          Refer &amp; Win
+        </h3>
+        <p style={{ color: "#FFFCFC", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400, lineHeight: "normal", margin: "0 0 0" }}>
+          Invite your friends &amp; family and get exciting gifts!
+        </p>
+      </div>
+    )}
     {/* Share actions */}
     <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
       <ShareReferralActions shareLink={shareLink} referralsUrl={referralsUrl} showViewMore={showViewMore} />
