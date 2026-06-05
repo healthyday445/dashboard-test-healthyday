@@ -30,7 +30,7 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin, isFreeBatch }
   let title = isTomorrow
     ? "Next Session is Tomorrow"
     : `Next Live at ${nextSessionLabel}`;
-    
+
   if (isFreeBatch) {
     title = isTomorrow
       ? `Next Yoga session is Tomorrow at 5:30AM`
