@@ -125,8 +125,7 @@ const Leaderboard: React.FC = () => {
          ═══════════════════════════════════════ */}
       <div
         style={{
-          width: "100%",
-          maxWidth: "360px",
+          width: "calc(100% - 32px)",
           padding: "16px 0 12px",
         }}
       >
@@ -150,7 +149,7 @@ const Leaderboard: React.FC = () => {
          ═══════════════════════════════════════ */}
       <div
         style={{
-          width: "360px",
+          width: "calc(100% - 32px)",
           height: "145px",
           borderRadius: "12px",
           border: "1px solid #537AA8",
@@ -180,6 +179,7 @@ const Leaderboard: React.FC = () => {
               fontStyle: "normal",
               fontWeight: 800,
               lineHeight: "normal",
+              whiteSpace: "nowrap",
             }}
           >
             TOP 500
@@ -245,16 +245,19 @@ const Leaderboard: React.FC = () => {
          ═══════════════════════════════════════ */}
       <div
         style={{
-          width: "360px",
+          width: "calc(100% - 32px)",
           height: "30px",
           borderRadius: "5px",
           background: "#FFE8CD",
           display: "flex",
           alignItems: "center",
-          justifyContent: "center",
+          justifyContent: "flex-start",
           marginTop: "10px",
+          gap: "16px",
+          boxSizing: "border-box",
         }}
       >
+        <div style={{ width: "10px", height: "100%", background: "#FF8C00", borderRadius: "2px", flexShrink: 0 }} />
         <span
           style={{
             color: "#505050",
@@ -276,7 +279,7 @@ const Leaderboard: React.FC = () => {
               lineHeight: "normal",
             }}
           >
-            From 1st JUNE to 30th JUNE
+            From 1<sup style={{ fontSize: "7.74px" }}>st</sup> JUNE to 30<sup style={{ fontSize: "7.74px" }}>th</sup> JUNE
           </span>
         </span>
       </div>
@@ -286,7 +289,7 @@ const Leaderboard: React.FC = () => {
          ═══════════════════════════════════════ */}
       <div
         style={{
-          width: "360px",
+          width: "calc(100% - 32px)",
           display: "flex",
           justifyContent: "space-between",
           alignItems: "flex-start",
@@ -316,99 +319,118 @@ const Leaderboard: React.FC = () => {
       </div>
 
       {/* ═══════════════════════════════════════
-          CURRENT USER RANK
-         ═══════════════════════════════════════ */}
-      <CurrentUserRankCard userRank={userRank} loading={rankLoading} />
-
-      {/* ═══════════════════════════════════════
           REFER & WIN BUTTON
          ═══════════════════════════════════════ */}
+      <div style={{ width: "calc(100% - 32px)", marginTop: "18px" }}>
+        <button
+          onClick={() => {
+            const waMessage = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
+            window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank");
+          }}
+          style={{
+            width: "100%",
+            height: "40px",
+            borderRadius: "30px",
+            background: "#FEAB27",
+            border: "none",
+            cursor: "pointer",
+            fontFamily: "Outfit",
+            fontSize: "16px",
+            fontWeight: 500,
+            color: "#202020",
+            textTransform: "uppercase",
+            letterSpacing: "0.5px",
+            boxShadow: "0px 4px 2px rgba(0,0,0,0.25)",
+          }}
+        >
+          Refer &amp; Win Yoga Kit
+        </button>
+      </div>
+
+
+      {/* ═══════════════════════════════════════
+          CURRENT USER RANK
+         ═══════════════════════════════════════ */}
+      <CurrentUserRankCard userRank={{
+  rank: 2,
+  name: "Tanishq",
+  referral_count: 500
+}} loading={rankLoading} />
+
+      <div style={{ width: "calc(100% - 32px)", display: "flex", justifyContent: "center", marginTop: "10px" }}>
+        <span
+          onClick={() => navigate(`/${mobile}/referrals/${userRank?.referral_count ?? 0}`)}
+          style={{
+            color: "#012755",
+            fontFamily: "Outfit",
+            fontSize: "16px",
+            fontWeight: 500,
+            lineHeight: "normal",
+            whiteSpace: "nowrap",
+            cursor: "pointer",
+          }}
+        >
+          View your referrals
+        </span>
+          <span style={{ color: "#012755", fontFamily: "Outfit", fontSize: "18px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal", marginTop: "-2px" }}>→</span>
+
+      </div>
 
       {/* ═══════════════════════════════════════
           LEADERBOARD SECTION
          ═══════════════════════════════════════ */}
+      {/* Outer colored wrapper */}
       <div
         style={{
-          width: "360px",
-          borderRadius: "12px",
-          border: "1.5px solid #FEAB27",
-          background:
-            "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
+          width: "100%",
+          background: "#FFE5BA",
+          border: "1px solid #FEAB27",
+          borderRadius: "32px 32px 0 0",
           marginTop: "18px",
-          padding: "16px 12px",
-          boxSizing: "border-box",
-          display: "flex",
-          flexDirection: "column",
-          gap: "6px",
         }}
       >
-        {/* Section header */}
+        {/* Scrollable inner container */}
         <div
+          className="scrollbar-hide"
           style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            marginBottom: "4px",
+            width: "100%",
+            boxSizing: "border-box",
+            maxHeight: "calc(7 * 3rem + 6 * 0.5rem + 2rem + 1.5rem)",
+            overflowY: "auto",
           }}
         >
-          <TrophyIcon />
-          <span
-            style={{
-              color: "#FFF",
-              fontFamily: "Outfit",
-              fontSize: "16px",
-              fontWeight: 700,
-              lineHeight: "normal",
-            }}
-          >
-            Leaderboard
-          </span>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "16px 16px 24px" }}>
+            {leaderboardLoading && (
+              <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "13px", textAlign: "center", padding: "12px 0" }}>Loading…</span>
+            )}
+            {!leaderboardLoading && leaderboard.map((entry) => (
+              <LeaderboardRow
+                key={entry.rank}
+                rank={entry.rank}
+                name={entry.name}
+                referrals={entry.referral_count}
+                isCurrentUser={userRank?.rank === entry.rank}
+              />
+            ))}
+          </div>
         </div>
-
-        {/* Mini column headers */}
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "0 4px",
-            marginBottom: "2px",
-          }}
-        >
-          <span
-            style={{
-              color: "rgba(255,255,255,0.6)",
-              fontFamily: "Outfit",
-              fontSize: "11px",
-              fontWeight: 500,
-            }}
-          >
-            Rank
-          </span>
-          <span
-            style={{
-              color: "rgba(255,255,255,0.6)",
-              fontFamily: "Outfit",
-              fontSize: "11px",
-              fontWeight: 500,
-            }}
-          >
-            Referrals
-          </span>
-        </div>
-
-        {leaderboardLoading && (
-          <span style={{ color: "rgba(255,255,255,0.6)", fontFamily: "Outfit", fontSize: "13px", textAlign: "center", padding: "12px 0" }}>Loading…</span>
-        )}
-        {!leaderboardLoading && leaderboard.map((entry) => (
-          <LeaderboardRow key={entry.rank} rank={entry.rank} name={entry.name} referrals={entry.referral_count} />
-        ))}
       </div>
 
       {/* ═══════════════════════════════════════
           BOTTOM SHEET (ReferWinCard)
          ═══════════════════════════════════════ */}
-      <div style={{ marginTop: "24px", marginBottom: "48px", width: "100%", display: "flex", justifyContent: "center" }}>
+      <div
+        style={{
+          position: "sticky",
+          bottom: 0,
+          width: "100%",
+          display: "flex",
+          justifyContent: "center",
+          padding: "16px 0 32px",
+          background: "#FFF",
+          boxSizing: "border-box",
+        }}
+      >
         <ReferWinCard shareLink={shareLink} referralsUrl={referralsUrl} showViewMore={false} />
       </div>
     </div>
@@ -513,18 +535,21 @@ const LeaderboardRow: React.FC<{
   rank: number;
   name: string;
   referrals: number;
-}> = ({ rank, name, referrals }) => (
+  isCurrentUser?: boolean;
+}> = ({ rank, name, referrals, isCurrentUser }) => (
   <div
     style={{
       width: "100%",
       height: "48px",
       borderRadius: "12px",
-      background: "#FFF",
+      background: isCurrentUser ? "#FFB033" : "#FFF",
       display: "flex",
       alignItems: "center",
-      padding: "0 10px",
+      paddingLeft: "14px",
+      paddingRight: "14px",
+      paddingBlock: "10px",
       boxSizing: "border-box",
-      gap: "10px",
+      gap: "15px",
     }}
   >
     {/* Rank badge */}
@@ -532,9 +557,8 @@ const LeaderboardRow: React.FC<{
       style={{
         width: "28px",
         height: "28px",
-        aspectRatio: "1/1",
         borderRadius: "5px",
-        background: "#FEAB27",
+        background: isCurrentUser ? "#FFF" : "#FEAB27",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -546,7 +570,6 @@ const LeaderboardRow: React.FC<{
           color: "#012755",
           fontFamily: "Outfit",
           fontSize: "16px",
-          fontStyle: "normal",
           fontWeight: 700,
           lineHeight: "normal",
         }}
@@ -558,11 +581,10 @@ const LeaderboardRow: React.FC<{
     {/* Name */}
     <span
       style={{
-        color: "#0D468B",
+        color: "#0A386F",
         fontFamily: "Outfit",
         fontSize: "18px",
-        fontStyle: "normal",
-        fontWeight: 500,
+        fontWeight: isCurrentUser ? 700 : 500,
         lineHeight: "normal",
         flex: 1,
         overflow: "hidden",
@@ -570,18 +592,17 @@ const LeaderboardRow: React.FC<{
         whiteSpace: "nowrap",
       }}
     >
-      {name}
+      {isCurrentUser ? "You" : name}
     </span>
 
     {/* Referral count */}
     <span
       style={{
-        color: "#0D468B",
+        color: "#0A386F",
         textAlign: "right",
         fontFamily: "Outfit",
         fontSize: "16px",
-        fontStyle: "normal",
-        fontWeight: 300,
+        fontWeight: isCurrentUser ? 500 : 300,
         lineHeight: "normal",
         flexShrink: 0,
       }}
@@ -594,214 +615,185 @@ const LeaderboardRow: React.FC<{
 /* ────────────────────────────────────────────
    Current User Rank Card Sub-component
    ──────────────────────────────────────────── */
+/* Rank + Referrals tab — shared by tiers 2-5 */
+const RankReferralsTab: React.FC<{ rank: number; referralCount: number; ellipseImg: string; starImg: string; lineImg: string }> = ({ rank, referralCount, ellipseImg, starImg, lineImg }) => (
+  <div
+    style={{
+      width: "161px",
+      height: "37px",
+      borderRadius: "6px",
+      background: "#FFF",
+      border: "0.2px solid #A0A0A0",
+      display: "flex",
+      alignItems: "center",
+      padding: "0 8px",
+      boxSizing: "border-box",
+      gap: "4px",
+      marginTop: "6px",
+    }}
+  >
+    <div style={{ width: "26px", height: "26px", position: "relative", flexShrink: 0 }}>
+      <img src={ellipseImg} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
+      <img src={starImg} alt="" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "18px", height: "19px", objectFit: "contain" }} />
+    </div>
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <span style={{ color: "#494949", fontFamily: "Outfit", fontSize: "8px", fontWeight: 500, lineHeight: "normal" }}>Your Rank</span>
+      <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, lineHeight: "normal" }}>{rank}</span>
+    </div>
+    <img src={lineImg} alt="" style={{ width: "1px", height: "24px", margin: "0 4px", objectFit: "cover" }} />
+    <div style={{ display: "flex", flexDirection: "column" }}>
+      <span style={{ color: "#494949", fontFamily: "Outfit", fontSize: "8px", fontWeight: 500, lineHeight: "normal" }}>Total Referrals</span>
+      <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, lineHeight: "normal" }}>{referralCount}</span>
+    </div>
+  </div>
+);
+
 const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolean }> = ({ userRank, loading }) => {
   if (loading) return (
-    <div style={{ width: "360px", height: "123px", borderRadius: "12px", border: "1.5px solid #FEAB27", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", marginTop: "18px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+    <div style={{ width: "calc(100% - 32px)", height: "123px", borderRadius: "12px", border: "1.5px solid #FEAB27", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", marginTop: "18px", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <span style={{ color: "rgba(255,255,255,0.6)", fontFamily: "Outfit", fontSize: "13px" }}>Loading…</span>
     </div>
   );
   if (!userRank) return null;
 
-  const tierLabel = userRank.rank <= 25 ? "TOP 25" : userRank.rank <= 100 ? "TOP 100" : userRank.rank <= 500 ? "TOP 500" : `RANK ${userRank.rank}`;
+  const CARD_BASE: React.CSSProperties = {
+    width: "calc(100% - 32px)",
+    height: "123px",
+    borderRadius: "12px",
+    marginTop: "18px",
+    position: "relative",
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "space-between",
+    padding: "0 20px",
+    boxSizing: "border-box",
+    overflow: "hidden",
+  };
 
-  return (
-    <div
-      style={{
-        width: "360px",
-        height: "123px",
-        borderRadius: "12px",
-        border: "1.5px solid #FEAB27",
-        background: "linear-gradient(0deg, rgba(0, 0, 0, 0.20) 0%, rgba(0, 0, 0, 0.20) 100%), #0D468B",
-        position: "relative",
-        marginTop: "18px",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "0 27px",
-        boxSizing: "border-box",
-        overflow: "hidden",
-      }}
-    >
-      {/* Left side texts */}
-      <div style={{ display: "flex", flexDirection: "column", gap: "2px", zIndex: 2 }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-          <div
-            style={{
-              width: "18px",
-              height: "16px",
-              backgroundImage: "url(/leaderboard/d8c04109d0b7e7d179eedceade5572244f039058.png)",
-              backgroundSize: "contain",
-              backgroundPosition: "50%",
-              backgroundRepeat: "no-repeat",
-            }}
-          />
-          <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400, lineHeight: "normal" }}>
-            Great job!
-          </span>
-        </div>
-
-        <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, lineHeight: "normal" }}>
-          You’re in <span style={{ color: "#FEAB27" }}>{tierLabel} !</span>
-        </span>
-
-        <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 400, width: "166px", marginTop: "2px", lineHeight: "normal" }}>
-          Keep referring and stay at the top till June 30th.
-        </span>
-
-        {/* Total Referrals Badge */}
-        <div
-          style={{
-            width: "121px",
-            height: "23px",
-            borderRadius: "6px",
-            background: "#365B88",
-            boxShadow: "1px 1px 1px 0 rgba(255, 255, 255, 0.25)",
-            display: "flex",
-            alignItems: "center",
-            padding: "0 6px",
-            gap: "6px",
-            marginTop: "6px",
-          }}
-        >
-          <div
-            style={{
-              width: "15px",
-              height: "15px",
-              position: "relative",
-            }}
-          >
-            <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" style={{ position: "absolute", left: 0, top: 0 }}>
-              <circle cx="7.5" cy="7.5" r="7.5" fill="#FEAB27" />
-            </svg>
-            <div style={{
-              position: "absolute",
-              top: "50%", left: "50%",
-              transform: "translate(-50%, -50%)",
-              width: "10.385px", height: "10.962px",
-              backgroundImage: "url(/leaderboard/eeef30852c9e8a5d9b0eedd75392aa12539c4ce5.png)",
-              backgroundSize: "contain",
-              backgroundPosition: "50%",
-              backgroundRepeat: "no-repeat"
-            }} />
+  /* ── Tier 1: Rank 1–25 ── Dark blue + shield + confetti */
+  if (userRank.rank <= 25) {
+    return (
+      <div style={{ ...CARD_BASE, border: "1.5px solid #FEAB27", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", padding: "0 27px" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "2px", zIndex: 2 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <div style={{ width: "18px", height: "16px", backgroundImage: "url(/leaderboard/d8c04109d0b7e7d179eedceade5572244f039058.png)", backgroundSize: "contain", backgroundPosition: "50%", backgroundRepeat: "no-repeat" }} />
+            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400, lineHeight: "normal" }}>Great job!</span>
           </div>
-          <span style={{ color: "#D2D2D2", fontFamily: "Outfit", fontSize: "8px", fontWeight: 500, lineHeight: "normal", flex: 1 }}>
-            Total Referrals
+          <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, lineHeight: "normal" }}>
+            You’re in <span style={{ color: "#FEAB27" }}>TOP 25 !</span>
           </span>
-          <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, lineHeight: "normal" }}>
-            {userRank.referral_count}
+          <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 400, width: "166px", marginTop: "2px", lineHeight: "normal" }}>
+            Keep referring and stay at the top till June 30th.
           </span>
+          <div style={{ width: "121px", height: "23px", borderRadius: "6px", background: "#365B88", boxShadow: "1px 1px 1px 0 rgba(255,255,255,0.25)", display: "flex", alignItems: "center", padding: "0 6px", gap: "6px", marginTop: "6px" }}>
+            <div style={{ width: "15px", height: "15px", position: "relative" }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" style={{ position: "absolute", left: 0, top: 0 }}><circle cx="7.5" cy="7.5" r="7.5" fill="#FEAB27" /></svg>
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "10.385px", height: "10.962px", backgroundImage: "url(/leaderboard/eeef30852c9e8a5d9b0eedd75392aa12539c4ce5.png)", backgroundSize: "contain", backgroundPosition: "50%", backgroundRepeat: "no-repeat" }} />
+            </div>
+            <span style={{ color: "#D2D2D2", fontFamily: "Outfit", fontSize: "8px", fontWeight: 500, flex: 1 }}>Total Referrals</span>
+            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600 }}>{userRank.referral_count}</span>
+          </div>
         </div>
-      </div>
-
-      {/* Right side Badge */}
-      <div style={{ position: "relative", width: "85.954px", height: "84px", zIndex: 2, marginRight: "8px" }}>
-        {/* Glow behind the badge */}
-        <div
-          style={{
-            position: "absolute",
-            top: "50%",
-            left: "50%",
-            width: "50%",
-            height: "50%",
-            transform: "translate(-50%, -50%)",
-            borderRadius: "50%",
-            boxShadow: "0 0 250px 0 rgba(255, 234, 199, 0.80), 0 0 166.32px 0 rgba(255, 234, 199, 0.80), 0 0 83.16px 0 rgba(255, 234, 199, 0.80), 0 0 23.76px 0 rgba(255, 234, 199, 0.80), 0 0 11.88px 0 rgba(255, 234, 199, 0.80)",
-            zIndex: 0,
-          }}
-        />
-        <div
-          style={{
-            position: "relative",
-            zIndex: 1,
-            width: "100%",
-            height: "100%",
-            backgroundImage: "url(/leaderboard/ca43f854ecd5ab3cd7e14fec2e140210244d902d.png)",
-            backgroundSize: "139.424% 100%",
-            backgroundPosition: "-16.943px 0px",
-            backgroundRepeat: "no-repeat",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            paddingTop: "14px", // Adjust to center the text in the badge
-          }}
-        >
-          <span style={{
-            color: "#FFF",
-            fontFamily: "Outfit",
-            fontSize: "22px",
-            fontStyle: "normal",
-            fontWeight: 800,
-            lineHeight: "normal",
-            width: "13.674px",
-            height: "54.302px",
-            display: "inline-block", // Add this to make width/height work on span
-            textAlign: "center"
-          }}>
+        {/* Shield badge */}
+        <div style={{ position: "absolute", right: 0, top: 0, bottom: 0, width: "130px", zIndex: 2, display: "flex", alignItems: "center", justifyContent: "center" }}>
+          {/* Glow */}
+          <div style={{ position: "absolute", top: "50%", left: "50%", width: "60%", height: "60%", transform: "translate(-50%,-50%)", borderRadius: "50%", boxShadow: "0 0 250px 0 rgba(255,234,199,0.80), 0 0 166px 0 rgba(255,234,199,0.80), 0 0 83px 0 rgba(255,234,199,0.80)", zIndex: 0, pointerEvents: "none" }} />
+          {/* Shield image */}
+          <img
+            src="https://www.figma.com/api/mcp/asset/ae45b944-5789-48fb-a245-6c7e0d583498"
+            alt=""
+            style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", pointerEvents: "none", zIndex: 1 }}
+          />
+          {/* Rank number overlay */}
+          <span style={{ position: "relative", zIndex: 2, color: "#FFF", fontFamily: "Outfit", fontSize: "20px", fontWeight: 800, textAlign: "center", marginTop: "-15px" }}>
             {userRank.rank}
           </span>
         </div>
+        {/* Confetti */}
+        <div style={{ position: "absolute", top: "-5px", right: "75px", width: "58.9px", height: "83.6px", transform: "rotate(-144.8deg)", backgroundImage: "url(/leaderboard/226805aeb355248ebac39e293e844975a3b6fada.png)", backgroundSize: "242.952% 164.377%", backgroundPosition: "-121.696px -40.227px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
+        <div style={{ position: "absolute", top: "45px", left: "210px", width: "47.7px", height: "36.5px", transform: "rotate(39.7deg)", backgroundImage: "url(/leaderboard/confetti.png)", backgroundSize: "361.562% 522.221%", backgroundPosition: "-88.083px -79.919px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
+        <div style={{ position: "absolute", top: "0", left: "170px", width: "56.96px", height: "61.08px", transform: "rotate(-124.7deg)", backgroundImage: "url(/leaderboard/226805aeb355248ebac39e293e844975a3b6fada\\ (1).png)", backgroundSize: "364.5% 378.052%", backgroundPosition: "-197.338px -173.409px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
       </div>
+    );
+  }
 
-      {/* Confetti Backgrounds */}
-      <div
-        style={{
-          position: "absolute",
-          top: "-5px",
-          right: "75px",
-          width: "58.902px",
-          height: "83.609px",
-          transform: "rotate(-144.816deg)",
-          backgroundImage: "url(/leaderboard/226805aeb355248ebac39e293e844975a3b6fada.png)",
-          backgroundSize: "242.952% 164.377%",
-          backgroundPosition: "-121.696px -40.227px",
-          backgroundRepeat: "no-repeat",
-          zIndex: 1,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: "45px",
-          left: "210px",
-          width: "47.675px",
-          height: "36.475px",
-          transform: "rotate(39.729deg)",
-          backgroundImage: "url(/leaderboard/confetti.png)",
-          backgroundSize: "361.562% 522.221%",
-          backgroundPosition: "-88.083px -79.919px",
-          backgroundRepeat: "no-repeat",
-          zIndex: 1,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          bottom: "10px",
-          right: "15px",
-          width: "41.966px",
-          height: "60.769px",
-          transform: "rotate(-90.317deg)",
-          backgroundImage: "url(/leaderboard/confetti\\ (1).png)",
-          backgroundSize: "494.772% 380.013%",
-          backgroundPosition: "-143.092px -26.872px",
-          backgroundRepeat: "no-repeat",
-          zIndex: 1,
-        }}
-      />
-      <div
-        style={{
-          position: "absolute",
-          top: "0px",
-          left: "170px",
-          width: "56.964px",
-          height: "61.084px",
-          transform: "rotate(-124.681deg)",
-          backgroundImage: "url(/leaderboard/226805aeb355248ebac39e293e844975a3b6fada\\ (1).png)",
-          backgroundSize: "364.5% 378.052%",
-          backgroundPosition: "-197.338px -173.409px",
-          backgroundRepeat: "no-repeat",
-          zIndex: 1,
-        }}
+  /* ── Tiers 2-5: light background cards ── */
+  type LightTier = { border: string; bg: string; heading: string; hasSparkles: boolean; subtitle: string; illustration: string; ellipse: string; star: string; line: string; imgStyle: React.CSSProperties };
+  const tier: LightTier =
+    userRank.rank <= 100 ? {
+      border: "1.5px solid #7BB7FF",
+      bg: "radial-gradient(ellipse at 80% 55%, #FFF 2%, #E3F0FF 65%, #D1E6FF 100%)",
+      heading: "You are in TOP 100",
+      hasSparkles: true,
+      subtitle: "Refer few more and reach Top 25 to win Weight Scale also",
+      illustration: "https://www.figma.com/api/mcp/asset/6ef5463d-a898-48fc-98dc-e711c0b34996",
+      ellipse: "https://www.figma.com/api/mcp/asset/41e7fddc-4b3f-4ec2-af4d-dd17b5c98409",
+      star: "https://www.figma.com/api/mcp/asset/f097455c-c5a8-4784-954a-d70c8a3ad33e",
+      line: "https://www.figma.com/api/mcp/asset/994fb10a-939b-4089-b514-f879546c6447",
+      imgStyle: { position: "absolute", right: 0, bottom: 0, width: "8.375rem", height: "6.5625rem", objectFit: "contain", pointerEvents: "none" },
+    } : userRank.rank <= 500 ? {
+      border: "1.5px solid #FFD6B8",
+      bg: "radial-gradient(ellipse at 80% 55%, #FDF7F1 2%, #FDF5EF 60%, #FDEEE1 100%)",
+      heading: "You are in TOP 500",
+      hasSparkles: true,
+      subtitle: "Refer few more and reach Top 100 to win hand towel as well",
+      illustration: "https://www.figma.com/api/mcp/asset/c90d6f89-3f9f-488e-a14f-7d4f88f2af63",
+      ellipse: "https://www.figma.com/api/mcp/asset/04933756-d957-47cf-a30b-14f87a06d7f2",
+      star: "https://www.figma.com/api/mcp/asset/a976429d-c0e8-4d89-bf50-3bcd1aad9e1d",
+      line: "https://www.figma.com/api/mcp/asset/5851987f-6b6d-4a28-a73d-d6d563f6aa1b",
+      imgStyle: { position: "absolute", right: 0, bottom: 0, width: "9.375rem", height: "6.6875rem",  pointerEvents: "none" },
+    } : userRank.rank <= 1000 ? {
+      border: "1.5px solid #A2C6CF",
+      bg: "radial-gradient(ellipse at 80% 55%, #FFF 2%, #E3F1FF 65%, #F0F8FE 100%)",
+      heading: "You are close to Top 500!",
+      hasSparkles: false,
+      subtitle: "Keep referring and reach Top 500 to win a Yoga kit!",
+      illustration: "https://www.figma.com/api/mcp/asset/170c682f-6efb-4a0d-9c6f-92047a9d6a8d",
+      ellipse: "https://www.figma.com/api/mcp/asset/358ea314-1060-4db0-b7c5-c0ed9423e2fa",
+      star: "https://www.figma.com/api/mcp/asset/698019ed-6dd6-4e3f-a35f-41951c4a70e3",
+      line: "https://www.figma.com/api/mcp/asset/0be9ddf1-1921-4fe8-a7bf-f1a282cbb11f",
+      imgStyle: { position: "absolute", right: 0, bottom: 0, width: "8.375rem", height: "6.5625rem", objectFit: "contain", pointerEvents: "none" },
+    } : {
+      border: "1.5px solid #ADCFA2",
+      bg: "radial-gradient(ellipse at 80% 55%, #FFF 2%, #E3FFEE 65%, #F0FEF5 100%)",
+      heading: "You are on track!",
+      hasSparkles: false,
+      subtitle: "You are only few referrals away from Top 500. Just keep referring!",
+      illustration: "https://www.figma.com/api/mcp/asset/37e40e5d-344b-48f6-bba8-1a46e5e64393",
+      ellipse: "https://www.figma.com/api/mcp/asset/c542efcf-eaec-4e13-ace0-da1de37af699",
+      star: "https://www.figma.com/api/mcp/asset/95afdf40-7ae5-4a55-8405-15485a546146",
+      line: "https://www.figma.com/api/mcp/asset/d183e791-7993-4aed-b45c-4beb74dcc761",
+      imgStyle: { position: "absolute", right: 0, bottom: 0, width: "8.375rem", height: "6.5625rem", objectFit: "contain", pointerEvents: "none" },
+    };
+
+  return (
+    <div style={{ ...CARD_BASE, border: tier.border, background: tier.bg }}>
+      {/* Left */}
+      <div style={{ display: "flex", flexDirection: "column", gap: "4px", zIndex: 2, flex: 1 }}>
+        <div style={{ display: "flex", alignItems: "center", gap: "6px" }}>
+          <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, lineHeight: "normal" }}>
+            {tier.heading}
+          </span>
+          {tier.hasSparkles && (
+            <span style={{ fontSize: "16px" }}>✨</span>
+          )}
+        </div>
+        <span style={{ color: "#000", fontFamily: "Outfit", fontSize: "10px", fontWeight: 400, lineHeight: "1.4", maxWidth: "185px" }}>
+          {tier.subtitle}
+        </span>
+        <RankReferralsTab
+          rank={userRank.rank}
+          referralCount={userRank.referral_count}
+          ellipseImg={tier.ellipse}
+          starImg={tier.star}
+          lineImg={tier.line}
+        />
+      </div>
+      {/* Right illustration */}
+      <img
+        src={tier.illustration}
+        alt=""
+        style={tier.imgStyle}
       />
     </div>
   );
