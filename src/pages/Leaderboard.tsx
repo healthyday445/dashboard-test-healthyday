@@ -358,6 +358,10 @@ const Leaderboard: React.FC = () => {
       <div style={{ width: "calc(100% - 32px)", marginTop: "18px" }}>
         <button
           onClick={() => {
+            if (!mobile) {
+              window.open("https://wa.me/919052888968?text=Refer", "_blank");
+              return;
+            }
             const waMessage = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
             window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank");
           }}
@@ -387,7 +391,7 @@ const Leaderboard: React.FC = () => {
          ═══════════════════════════════════════ */}
       <CurrentUserRankCard userRank={userRank} loading={rankLoading} />
 
-      <div style={{ width: "calc(100% - 32px)", display: "flex", justifyContent: "center", marginTop: "10px" }}>
+      {mobile && <div style={{ width: "calc(100% - 32px)", display: "flex", justifyContent: "center", marginTop: "10px" }}>
         <span
           onClick={openReferralsDrawer}
           style={{
@@ -403,7 +407,7 @@ const Leaderboard: React.FC = () => {
           View your referrals
         </span>
         <span style={{ color: "#012755", fontFamily: "Outfit", fontSize: "18px", fontWeight: 500, lineHeight: "normal", marginTop: "-2px" }}>→</span>
-      </div>
+      </div>}
 
       {/* ═══════════════════════════════════════
           LEADERBOARD SECTION
@@ -449,7 +453,7 @@ const Leaderboard: React.FC = () => {
       {/* ═══════════════════════════════════════
           BOTTOM SHEET (ReferWinCard)
          ═══════════════════════════════════════ */}
-      <div
+      {mobile && <div
         style={{
           position: "sticky",
           bottom: 0,
@@ -462,7 +466,7 @@ const Leaderboard: React.FC = () => {
         }}
       >
         <ReferWinCard shareLink={shareLink} referralsUrl={referralsUrl} showViewMore={false} />
-      </div>
+      </div>}
 
       {/* ═══ REFERRALS DRAWER ═══ */}
       {drawerOpen && (
