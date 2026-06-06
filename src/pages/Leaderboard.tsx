@@ -80,7 +80,7 @@ const Leaderboard: React.FC = () => {
     const digits = mobile.replace(/\D/g, "");
     const normalized = digits.startsWith("91") && digits.length >= 12 ? digits.slice(2) : digits;
     const e164 = `+91${normalized}`;
-    fetch(`/.netlify/functions/referrals?mobile=${encodeURIComponent(e164)}`)
+    fetch(`/.netlify/functions/referrals?mobile=${encodeURIComponent(e164)}&start_date=${CONTEST_START}&end_date=${CONTEST_END}`)
       .then((r) => r.json())
       .then((data) => setReferralsData(data))
       .catch(() => {})
@@ -585,7 +585,7 @@ const Leaderboard: React.FC = () => {
               <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>Your Total Referrals</span>
               <div style={{ background: "#FFF", borderRadius: "8px", padding: "4px 14px" }}>
                 <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700 }}>
-                  {referralsData?.total_referrals ?? 0}
+                  {referralsData?.referrals?.filter(r => r.referral_confirmation_status === "verified").length ?? 0}
                 </span>
               </div>
             </div>
