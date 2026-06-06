@@ -2147,9 +2147,16 @@ const Index = () => {
       <div style={{ padding: "16px 20px 0" }}>
         <div style={{ position: "relative", width: "100%" }}>
           <img
-            src="/batchNotStartedStudents.svg"
+            src="/batchNotStartedStudents.webp"
             alt="Your 21-Days Online Yoga"
-            style={{ width: "100%", display: "block", borderRadius: "10px" }}
+            fetchPriority="high"
+            style={{
+              width: "100%",
+              display: "block",
+              borderRadius: "12px",
+              border: "0.5px solid #E4E4E4",
+              boxShadow: "0 1px 8px rgba(0,0,0,0.05), 0 -1px 8px rgba(0,0,0,0.05)",
+            }}
           />
           <div style={{
             position: "absolute",
