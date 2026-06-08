@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReferWinCard from "@/components/ReferWinCard";
 import logo from "@/assets/Primary_logo.svg";
@@ -59,6 +59,10 @@ const Leaderboard: React.FC = () => {
   const [userRank, setUserRank] = useState<UserRank | null>(null);
   const [leaderboardLoading, setLeaderboardLoading] = useState(true);
   const [rankLoading, setRankLoading] = useState(!!mobile);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const [isNearBottom, setIsNearBottom] = useState(false);
+  const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerClosing, setDrawerClosing] = useState(false);
@@ -94,12 +98,29 @@ const Leaderboard: React.FC = () => {
   };
 
   useEffect(() => {
-    fetch(`/.netlify/functions/leaderboard?start_date=${CONTEST_START}&end_date=${CONTEST_END}&page_size=100`)
+    if (currentPage === 1) {
+      setLeaderboardLoading(true);
+      setLeaderboard([]);
+    } else {
+      setIsFetchingMore(true);
+    }
+    fetch(`/.netlify/functions/leaderboard?start_date=${CONTEST_START}&end_date=${CONTEST_END}&page_size=100&page=${currentPage}`)
       .then((r) => r.json())
-      .then((data) => setLeaderboard(data.leaderboard ?? []))
+      .then((data) => {
+        const rows: LeaderboardEntry[] = data.leaderboard ?? [];
+        setLeaderboard((prev) => currentPage === 1 ? rows : [...prev, ...rows]);
+      })
       .catch(() => {})
-      .finally(() => setLeaderboardLoading(false));
-  }, []);
+      .finally(() => { setLeaderboardLoading(false); setIsFetchingMore(false); });
+  }, [currentPage]);
+
+  const handleScroll = useCallback(() => {
+    const el = scrollContainerRef.current;
+    if (!el || isFetchingMore || leaderboardLoading || currentPage >= 5) return;
+    const remaining = el.scrollHeight - el.scrollTop - el.clientHeight;
+    setIsNearBottom(remaining < 60);
+    if (remaining < 80) setCurrentPage((p) => p + 1);
+  }, [isFetchingMore, leaderboardLoading, currentPage]);
 
   useEffect(() => {
     if (!mobile) { setRankLoading(false); return; }
@@ -425,18 +446,18 @@ const Leaderboard: React.FC = () => {
       >
         {/* Scrollable inner container */}
         <div
+          ref={scrollContainerRef}
+          onScroll={handleScroll}
           className="scrollbar-hide"
           style={{
-            // width: "100%",
             boxSizing: "border-box",
             maxHeight: "calc(7 * 3rem + 6 * 0.5rem + 2rem + 1.5rem)",
             overflowY: "auto",
             marginTop: "24px",
             marginBottom: "14px",
             marginInline: "16px",
-            // border: "1px solid #FEAB27",
-            // borderRadius: "32px 32px 0 0",
-          
+            WebkitOverflowScrolling: "touch",
+            willChange: "transform",
           }}
         >
           <div style={{ display: "flex", flexDirection: "column", gap: "8px", borderRadius: "12px" }}>
@@ -453,6 +474,29 @@ const Leaderboard: React.FC = () => {
                 isCurrentUser={userRank?.rank === entry.rank}
               />
             ))}
+            {/* Load-more zone — springs open when near bottom or fetching */}
+            {currentPage < 5 && (
+              <div
+                style={{
+                  height: isFetchingMore ? "48px" : isNearBottom ? "28px" : "0px",
+                  transition: "height 0.4s cubic-bezier(0.34,1.56,0.64,1)",
+                  overflow: "hidden",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "center",
+                  gap: "6px",
+                  color: "#FEAB27",
+                  fontFamily: "Outfit",
+                  fontSize: "12px",
+                  fontWeight: 600,
+                }}
+              >
+                {isFetchingMore
+                  ? <><span style={{ display: "inline-block", animation: "spin 0.8s linear infinite" }}>⟳</span> Loading more…</>
+                  : "↓ more"
+                }
+              </div>
+            )}
           </div>
         </div>
       </div>
@@ -599,6 +643,7 @@ const Leaderboard: React.FC = () => {
           </div>
         </>
       )}
+      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
     </div>
   );
 };
