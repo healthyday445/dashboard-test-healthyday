@@ -355,7 +355,7 @@ const Leaderboard: React.FC = () => {
       {/* ═══════════════════════════════════════
           REFER & WIN BUTTON
          ═══════════════════════════════════════ */}
-      <div style={{ width: "calc(100% - 32px)", marginTop: "18px" }}>
+      <div style={{ width: "calc(100% - 32px)", marginTop: "18px", marginBottom: "8px" }}>
         <button
           onClick={() => {
             if (!mobile) {
@@ -402,11 +402,12 @@ const Leaderboard: React.FC = () => {
             lineHeight: "normal",
             whiteSpace: "nowrap",
             cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
           }}
         >
-          View your referrals
+          View Your Referrals <img src="/blueArrow.svg" alt="" style={{ width: "18px", height: "18px", marginLeft: "4px", marginTop: "4px" }} />
         </span>
-        <span style={{ color: "#012755", fontFamily: "Outfit", fontSize: "18px", fontWeight: 500, lineHeight: "normal", marginTop: "-2px" }}>→</span>
       </div>}
 
       {/* ═══════════════════════════════════════
@@ -419,20 +420,26 @@ const Leaderboard: React.FC = () => {
           background: "#FFE5BA",
           border: "1px solid #FEAB27",
           borderRadius: "32px 32px 0 0",
-          marginTop: "18px",
+          marginTop: "24px",
         }}
       >
         {/* Scrollable inner container */}
         <div
           className="scrollbar-hide"
           style={{
-            width: "100%",
+            // width: "100%",
             boxSizing: "border-box",
             maxHeight: "calc(7 * 3rem + 6 * 0.5rem + 2rem + 1.5rem)",
             overflowY: "auto",
+            marginTop: "24px",
+            marginBottom: "14px",
+            marginInline: "16px",
+            // border: "1px solid #FEAB27",
+            // borderRadius: "32px 32px 0 0",
+          
           }}
         >
-          <div style={{ display: "flex", flexDirection: "column", gap: "8px", padding: "16px 16px 24px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px", borderRadius: "12px" }}>
             {leaderboardLoading && (
               <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "13px", textAlign: "center", padding: "12px 0" }}>Loading…</span>
             )}
@@ -497,8 +504,8 @@ const Leaderboard: React.FC = () => {
           >
             {/* Header */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 20px 12px", flexShrink: 0 }}>
-              <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>
-                Your Recent Referrals
+              <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "1.025rem", fontWeight: 700, lineHeight: "normal" }}>
+                Your referrals from June 1<sup style={{ fontSize: "0.6em" }}>st</sup> to June 30<sup style={{ fontSize: "0.6em" }}>th</sup> 
               </span>
               <button
                 onClick={closeDrawer}
@@ -569,7 +576,7 @@ const Leaderboard: React.FC = () => {
             </div>
 
             {/* Sticky total bar */}
-            <div
+            {!referralsLoading && <div
               style={{
                 flexShrink: 0,
                 margin: "0 16px 16px",
@@ -588,7 +595,7 @@ const Leaderboard: React.FC = () => {
                   {referralsData?.referrals?.filter(r => r.referral_confirmation_status === "verified").length ?? 0}
                 </span>
               </div>
-            </div>
+            </div>}
           </div>
         </>
       )}
