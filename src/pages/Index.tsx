@@ -772,7 +772,21 @@ const Index = () => {
       return "yellow";
     });
 
-    const sessionLink = sessionJoinLink ?? "https://www.youtube.com/c/Healthyday";
+    const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+    const defaultTotalMin = nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
+    const totalMinCalc = previewTimeOverrideMin != null ? previewTimeOverrideMin : defaultTotalMin;
+    const isMorning = totalMinCalc < (15 * 60 + 45); // < 3:45 PM IST
+    const timeOfDayStr = isMorning ? "morning" : "evening";
+    const freeLangKey = (studentData?.language || "Telugu").toLowerCase();
+    const freeSessionCode = `14d_week${week}_${timeOfDayStr}`;
+    
+    const freeApiSessionEntry = sessionLinks.find(
+      (s: any) => s.session_code === freeSessionCode && s.language === freeLangKey
+    );
+    const freeApiSessionLink = freeApiSessionEntry?.link || null;
+    const apiSessionName = freeApiSessionEntry?.session_name || null; // Can be used to show title if needed
+
+    const sessionLink = freeApiSessionLink || sessionJoinLink || "https://www.youtube.com/c/Healthyday";
     const ytIdMatch = sessionLink.match(/(?:v=|youtu\.be\/|\/live\/)([a-zA-Z0-9_-]{11})/);
     const sessionVideoId = ytIdMatch ? ytIdMatch[1] : null;
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
