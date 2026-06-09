@@ -548,7 +548,7 @@ const AllRecordings = () => {
           }}>
             {/* Yoga Meditation Image */}
             <img
-              src="/0da635826ff23e34b2bf7680030cac545d32dcfb.png"
+              src="/0da635826ff23e34b2bf7680030cac545d32dcfb.webp"
               alt="Live session"
               style={{
                 width: "78px",
@@ -595,7 +595,7 @@ const AllRecordings = () => {
           }}>
             <div style={{ width: "110px", height: "0.5px", background: "var(--Orange, #FEAB27)" }} />
             <img
-              src="/5ce32860a765bdcaeb0504ff13008eea60a6cd55.png"
+              src="/5ce32860a765bdcaeb0504ff13008eea60a6cd55.webp"
               alt="Lotus"
               style={{ width: "32px", height: "21px", aspectRatio: "26/17", objectFit: "cover", flexShrink: 0 }}
             />

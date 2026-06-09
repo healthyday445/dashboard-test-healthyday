@@ -86,7 +86,7 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin, isFreeBatch }
             height: "auto",
             aspectRatio: "82/81",
             background:
-              'url("/8ea326ab563adb61ccb99b953865cb3132c173ab.png") lightgray -5.311px -5.747px / 112.404% 113.525% no-repeat',
+              'url("/8ea326ab563adb61ccb99b953865cb3132c173ab.webp") lightgray -5.311px -5.747px / 112.404% 113.525% no-repeat',
             borderRadius: "50%",
             flexShrink: 0,
           }}

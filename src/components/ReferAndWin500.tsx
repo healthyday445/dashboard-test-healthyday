@@ -43,7 +43,7 @@ const ReferAndWin500: React.FC<ReferAndWin500Props> = ({ onClick }) => (
         display: "flex",
         alignItems: "flex-end",
         justifyContent: "space-between",
-        backgroundImage: "url('/11621406ee6eb5f29bb80937e33d2195815c78d8.png')",
+        backgroundImage: "url('/11621406ee6eb5f29bb80937e33d2195815c78d8.webp')",
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -66,7 +66,7 @@ const ReferAndWin500: React.FC<ReferAndWin500Props> = ({ onClick }) => (
       </div>
       {/* SVG illustration */}
       <img
-        src="/element.png"
+        src="/element.webp"
         alt="Yoga Kit"
         style={{
           width: "10.3125rem",

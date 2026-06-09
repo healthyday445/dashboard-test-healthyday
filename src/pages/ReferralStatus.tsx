@@ -563,8 +563,8 @@ const ReferralStatus = () => {
         {/* Gift pair (unlocks at 20 and 40 refs) */}
         <div style={{ display: "flex", gap: "12px" }}>
           {([
-            { label: "Healthyday T-shirt", refs: "20 Referrals", need: 20, img: "/unsplash_GkXJisd5W1M.png" },
-            { label: "Special Gift", refs: "40 Referrals", need: 40, img: "/unsplash_mSJsiQCm6og.png" },
+            { label: "Healthyday T-shirt", refs: "20 Referrals", need: 20, img: "/unsplash_GkXJisd5W1M.webp" },
+            { label: "Special Gift", refs: "40 Referrals", need: 40, img: "/unsplash_mSJsiQCm6og.webp" },
           ] as const).map((reward, i) => {
             const progress = Math.min(100, (totalRefs / reward.need) * 100);
             const unlocked = totalRefs >= reward.need;

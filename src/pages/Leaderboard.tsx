@@ -39,13 +39,13 @@ const TrophyIcon = () => (
    Prize Tier images (from /public/leaderboard/)
    ──────────────────────────────────────────── */
 const PRIZE_IMAGES = {
-  tier1: "/leaderboard/03fe32d52d733d7264af16fa1a873079ffdb9919.png",
-  tier2: "/leaderboard/a999ad5d053fb10e4399ce1c16a6647a5e72b054.png",
-  tier3: "/leaderboard/a623655ba98def85f08fd93b110d719415c6fc2e.png",
+  tier1: "/leaderboard/03fe32d52d733d7264af16fa1a873079ffdb9919.webp",
+  tier2: "/leaderboard/a999ad5d053fb10e4399ce1c16a6647a5e72b054.webp",
+  tier3: "/leaderboard/a623655ba98def85f08fd93b110d719415c6fc2e.webp",
 };
 
-const BANNER_BG = "/leaderboard/11621406ee6eb5f29bb80937e33d2195815c78d8.png";
-const MAIN_PRIZE_IMG = "/leaderboard/0d0feb7c046d1e7737d4d7000c10d1cf68d8865c.png";
+const BANNER_BG = "/leaderboard/11621406ee6eb5f29bb80937e33d2195815c78d8.webp";
+const MAIN_PRIZE_IMG = "/leaderboard/0d0feb7c046d1e7737d4d7000c10d1cf68d8865c.webp";
 
 /* ────────────────────────────────────────────
    Leaderboard Page Component
