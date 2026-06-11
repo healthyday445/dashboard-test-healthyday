@@ -94,7 +94,7 @@ const Leaderboard: React.FC = () => {
   const maskMobile = (num: string) => {
     const digits = num.replace(/\D/g, "");
     const last10 = digits.slice(-10);
-    return `+91 ${last10.slice(0, 2)} ******${last10.slice(-2)}`;
+    return `+91 ${last10.slice(0, 1)}***${last10.slice(-6)}`;
   };
 
   useEffect(() => {
