@@ -9,10 +9,15 @@
  * - Silently swallows errors so tracking never blocks the user experience.
  */
 
-const TRACKED_KEY = "hd_visit_tracked";
+const getTrackedKey = () => {
+  const today = new Date().toISOString().split('T')[0];
+  return `hd_visit_tracked_${today}`;
+};
 
 export function trackVisit(slug: string): void {
-  // Skip if already tracked in this browser session
+  const TRACKED_KEY = getTrackedKey();
+
+  // Skip if already tracked in this browser session today
   const alreadyTracked = sessionStorage.getItem(TRACKED_KEY);
   if (alreadyTracked === slug) return;
 
@@ -48,7 +53,7 @@ export function trackVisit(slug: string): void {
     clientTime: new Date().toISOString(),
   };
 
-  fetch("/.netlify/functions/track", {
+  fetch("/.netlify/functions/ping-activity", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(payload),
