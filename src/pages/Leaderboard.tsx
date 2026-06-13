@@ -123,15 +123,7 @@ const Leaderboard: React.FC = () => {
   }, [isFetchingMore, leaderboardLoading, currentPage]);
 
   useEffect(() => {
-    if (!mobile) { setRankLoading(false); return; }
-    const digits = mobile.replace(/\D/g, "");
-    const normalized = digits.startsWith("91") && digits.length >= 12 ? digits.slice(2) : digits;
-    const e164 = `+91${normalized}`;
-    fetch(`/.netlify/functions/leaderboard-rank?mobile=${encodeURIComponent(e164)}&start_date=${CONTEST_START}&end_date=${CONTEST_END}`)
-      .then((r) => (r.status === 404 ? null : r.json()))
-      .then((data) => setUserRank(data))
-      .catch(() => {})
-      .finally(() => setRankLoading(false));
+    setRankLoading(false);
   }, [mobile]);
 
   const shareLink = mobile
