@@ -410,7 +410,11 @@ const Leaderboard: React.FC = () => {
       {/* ═══════════════════════════════════════
           CURRENT USER RANK
          ═══════════════════════════════════════ */}
-      <CurrentUserRankCard userRank={userRank} loading={rankLoading} />
+      <CurrentUserRankCard userRank={
+{  rank: 40,
+  name: 'tanishq',
+  referral_count: 50,}
+} loading={rankLoading} />
 
       {mobile && <div style={{ width: "calc(100% - 32px)", display: "flex", justifyContent: "center", marginTop: "10px" }}>
         <span
@@ -888,7 +892,7 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
       <div style={{ ...CARD_BASE, border: "1.5px solid #FEAB27", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", padding: "0 27px" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "2px", zIndex: 2 }}>
           <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            <div style={{ width: "18px", height: "16px", backgroundImage: "url(/leaderboard/d8c04109d0b7e7d179eedceade5572244f039058.png)", backgroundSize: "contain", backgroundPosition: "50%", backgroundRepeat: "no-repeat" }} />
+            <div style={{ width: "18px", height: "16px", backgroundImage: "url(/leaderboard/d8c04109d0b7e7d179eedceade5572244f039058.webp)", backgroundSize: "contain", backgroundPosition: "50%", backgroundRepeat: "no-repeat" }} />
             <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400, lineHeight: "normal" }}>Great job!</span>
           </div>
           <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, lineHeight: "normal" }}>
@@ -900,7 +904,7 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
           <div style={{ width: "121px", height: "23px", borderRadius: "6px", background: "#365B88", boxShadow: "1px 1px 1px 0 rgba(255,255,255,0.25)", display: "flex", alignItems: "center", padding: "0 6px", gap: "6px", marginTop: "6px" }}>
             <div style={{ width: "15px", height: "15px", position: "relative" }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" style={{ position: "absolute", left: 0, top: 0 }}><circle cx="7.5" cy="7.5" r="7.5" fill="#FEAB27" /></svg>
-              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "10.385px", height: "10.962px", backgroundImage: "url(/leaderboard/eeef30852c9e8a5d9b0eedd75392aa12539c4ce5.png)", backgroundSize: "contain", backgroundPosition: "50%", backgroundRepeat: "no-repeat" }} />
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "10.385px", height: "10.962px", backgroundImage: "url(/leaderboard/eeef30852c9e8a5d9b0eedd75392aa12539c4ce5.webp)", backgroundSize: "contain", backgroundPosition: "50%", backgroundRepeat: "no-repeat" }} />
             </div>
             <span style={{ color: "#D2D2D2", fontFamily: "Outfit", fontSize: "8px", fontWeight: 500, flex: 1 }}>Total Referrals</span>
             <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600 }}>{userRank.referral_count}</span>
@@ -912,7 +916,7 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
           <div style={{ position: "absolute", top: "50%", left: "50%", width: "60%", height: "60%", transform: "translate(-50%,-50%)", borderRadius: "50%", boxShadow: "0 0 250px 0 rgba(255,234,199,0.80), 0 0 166px 0 rgba(255,234,199,0.80), 0 0 83px 0 rgba(255,234,199,0.80)", zIndex: 0, pointerEvents: "none" }} />
           {/* Shield image */}
           <img
-            src="https://www.figma.com/api/mcp/asset/ae45b944-5789-48fb-a245-6c7e0d583498"
+            src="/leaderboard/shield.webp"
             alt=""
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", pointerEvents: "none", zIndex: 1 }}
           />
@@ -922,9 +926,9 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
           </span>
         </div>
         {/* Confetti */}
-        <div style={{ position: "absolute", top: "-5px", right: "75px", width: "58.9px", height: "83.6px", transform: "rotate(-144.8deg)", backgroundImage: "url(/leaderboard/226805aeb355248ebac39e293e844975a3b6fada.png)", backgroundSize: "242.952% 164.377%", backgroundPosition: "-121.696px -40.227px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
-        <div style={{ position: "absolute", top: "45px", left: "210px", width: "47.7px", height: "36.5px", transform: "rotate(39.7deg)", backgroundImage: "url(/leaderboard/confetti.png)", backgroundSize: "361.562% 522.221%", backgroundPosition: "-88.083px -79.919px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
-        <div style={{ position: "absolute", top: "0", left: "170px", width: "56.96px", height: "61.08px", transform: "rotate(-124.7deg)", backgroundImage: "url(/leaderboard/226805aeb355248ebac39e293e844975a3b6fada\\ (1).png)", backgroundSize: "364.5% 378.052%", backgroundPosition: "-197.338px -173.409px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
+        <div style={{ position: "absolute", top: "-5px", right: "75px", width: "58.9px", height: "83.6px", transform: "rotate(-144.8deg)", backgroundImage: "url(/leaderboard/226805aeb355248ebac39e293e844975a3b6fada.webp)", backgroundSize: "242.952% 164.377%", backgroundPosition: "-121.696px -40.227px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
+        <div style={{ position: "absolute", top: "45px", left: "210px", width: "47.7px", height: "36.5px", transform: "rotate(39.7deg)", backgroundImage: "url(/leaderboard/confetti.webp)", backgroundSize: "361.562% 522.221%", backgroundPosition: "-88.083px -79.919px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
+        <div style={{ position: "absolute", top: "0", left: "170px", width: "56.96px", height: "61.08px", transform: "rotate(-124.7deg)", backgroundImage: "url(/leaderboard/226805aeb355248ebac39e293e844975a3b6fada\\ (1).webp)", backgroundSize: "364.5% 378.052%", backgroundPosition: "-197.338px -173.409px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
       </div>
     );
   }
@@ -938,10 +942,10 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
       heading: "You are in TOP 100",
       hasSparkles: true,
       subtitle: "Refer few more and reach Top 25 to win Weight Scale also",
-      illustration: "https://www.figma.com/api/mcp/asset/6ef5463d-a898-48fc-98dc-e711c0b34996",
-      ellipse: "https://www.figma.com/api/mcp/asset/41e7fddc-4b3f-4ec2-af4d-dd17b5c98409",
-      star: "https://www.figma.com/api/mcp/asset/f097455c-c5a8-4784-954a-d70c8a3ad33e",
-      line: "https://www.figma.com/api/mcp/asset/994fb10a-939b-4089-b514-f879546c6447",
+      illustration: "/leaderboard/tier1-illustration.webp",
+      ellipse: "/leaderboard/ellipse.svg",
+      star: "/leaderboard/tier1-star.webp",
+      line: "/leaderboard/line.svg",
       imgStyle: { position: "absolute", right: 0, bottom: 0, width: "8.375rem", height: "6.5625rem", objectFit: "contain", pointerEvents: "none" },
     } : userRank.rank <= 500 ? {
       border: "1.5px solid #FFD6B8",
@@ -949,10 +953,10 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
       heading: "You are in TOP 500",
       hasSparkles: true,
       subtitle: "Refer few more and reach Top 100 to win hand towel as well",
-      illustration: "https://www.figma.com/api/mcp/asset/c90d6f89-3f9f-488e-a14f-7d4f88f2af63",
-      ellipse: "https://www.figma.com/api/mcp/asset/04933756-d957-47cf-a30b-14f87a06d7f2",
-      star: "https://www.figma.com/api/mcp/asset/a976429d-c0e8-4d89-bf50-3bcd1aad9e1d",
-      line: "https://www.figma.com/api/mcp/asset/5851987f-6b6d-4a28-a73d-d6d563f6aa1b",
+      illustration: "/leaderboard/tier2-illustration.webp",
+      ellipse: "/leaderboard/ellipse.svg",
+      star: "/leaderboard/tier2-star.webp",
+      line: "/leaderboard/line.svg",
       imgStyle: { position: "absolute", right: 0, bottom: 0, width: "9.375rem", height: "6.6875rem",  pointerEvents: "none" },
     } : userRank.rank <= 1000 ? {
       border: "1.5px solid #A2C6CF",
@@ -960,10 +964,10 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
       heading: "You are close to Top 500!",
       hasSparkles: false,
       subtitle: "Keep referring and reach Top 500 to win a Yoga kit!",
-      illustration: "https://www.figma.com/api/mcp/asset/170c682f-6efb-4a0d-9c6f-92047a9d6a8d",
-      ellipse: "https://www.figma.com/api/mcp/asset/358ea314-1060-4db0-b7c5-c0ed9423e2fa",
-      star: "https://www.figma.com/api/mcp/asset/698019ed-6dd6-4e3f-a35f-41951c4a70e3",
-      line: "https://www.figma.com/api/mcp/asset/0be9ddf1-1921-4fe8-a7bf-f1a282cbb11f",
+      illustration: "/leaderboard/tier3-illustration.webp",
+      ellipse: "/leaderboard/ellipse.svg",
+      star: "/leaderboard/tier3-star.webp",
+      line: "/leaderboard/line.svg",
       imgStyle: { position: "absolute", right: 0, bottom: 0, width: "8.375rem", height: "6.5625rem", objectFit: "contain", pointerEvents: "none" },
     } : {
       border: "1.5px solid #ADCFA2",
@@ -971,10 +975,10 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
       heading: "You are on track!",
       hasSparkles: false,
       subtitle: "You are only few referrals away from Top 500. Just keep referring!",
-      illustration: "https://www.figma.com/api/mcp/asset/37e40e5d-344b-48f6-bba8-1a46e5e64393",
-      ellipse: "https://www.figma.com/api/mcp/asset/c542efcf-eaec-4e13-ace0-da1de37af699",
-      star: "https://www.figma.com/api/mcp/asset/95afdf40-7ae5-4a55-8405-15485a546146",
-      line: "https://www.figma.com/api/mcp/asset/d183e791-7993-4aed-b45c-4beb74dcc761",
+      illustration: "/leaderboard/tier4-illustration.webp",
+      ellipse: "/leaderboard/ellipse.svg",
+      star: "/leaderboard/tier4-star.webp",
+      line: "/leaderboard/line.svg",
       imgStyle: { position: "absolute", right: 0, bottom: 0, width: "8.375rem", height: "6.5625rem", objectFit: "contain", pointerEvents: "none" },
     };
 
