@@ -2157,72 +2157,100 @@ const Index = () => {
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
 
-      {/* Batch Start Hero Banner */}
-      <div style={{ padding: "16px 20px 0" }}>
-        <div style={{ position: "relative", width: "100%" }}>
-          <img
-            src="/batchNotStartedStudents.webp"
-            alt="Your 21-Days Online Yoga"
-            fetchPriority="high"
-            style={{
-              width: "100%",
-              display: "block",
-              borderRadius: "12px",
-              border: "0.5px solid #E4E4E4",
-              boxShadow: "0 1px 8px rgba(0,0,0,0.05), 0 -1px 8px rgba(0,0,0,0.05)",
-            }}
-          />
-          <div style={{
-            position: "absolute",
-            top: 0, left: 0, bottom: 0,
-            width: "58%",
-            display: "flex",
-            flexDirection: "column",
-            justifyContent: "center",
-            paddingLeft: "8%",
-            gap: "1px",
-          }}>
-            <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "0.625rem", fontWeight: 600, lineHeight: "normal" }}>Your</span>
-            <div style={{ fontFamily: "Outfit", fontWeight: 800, lineHeight: "25px" }}>
-              <div style={{ color: "#0A386F", fontSize: "1.375rem" }}>21-Days</div>
-              <div style={{ color: "#FEAB27", fontSize: "1.375rem" }}>Online Yoga</div>
-            </div>
-            <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "0.75rem", fontWeight: 600, lineHeight: "normal" }}>
-              starts on {_dateLabelDay}<sup style={{ fontSize: "0.484rem", fontWeight: 600 }}>{_dateLabelSuffix}</sup> {_dateLabelMonth}
-            </span>
-          </div>
-        </div>
+      {/* Hero Text */}
+      <div style={{ paddingTop: "16px", textAlign: "center" }}>
+        <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#0A386F" }}>
+          21-DAYS ONLINE FREE YOGA
+        </p>
+        <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
+          starts on 21<sup style={{ fontSize: "14px" }}>st</sup> June
+        </p>
       </div>
 
       {/* Onboarding Card */}
-      <div className="flex flex-col items-center mt-6 gap-3">
+      <div className="flex flex-col items-center m-3">
         {/* Morning Sessions Row */}
-        <div style={{ maxWidth: "342px", display: "flex", alignItems: "center", gap: "10px" }}>
+        <div style={{ maxWidth: "342px", display: "flex", alignItems: "center", gap: "6px" }}>
           <SunIcon />
-          <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "0.9375rem", fontWeight: 700, lineHeight: "normal" }}>
+          <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "9px", fontWeight: 700, lineHeight: "normal" }}>
             MOR - 5:30AM | 6:30AM | 7:30AM | 8:30AM
           </span>
         </div>
 
         {/* Evening Sessions Row */}
-        <div style={{ maxWidth: "342px", display: "flex", alignItems: "center", gap: "10px" }}>
+        <div style={{ maxWidth: "342px", display: "flex", alignItems: "center", gap: "6px" }}>
           <MoonIcon />
-          <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "0.9375rem", fontWeight: 700, lineHeight: "normal" }}>
+          <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "9px", fontWeight: 700, lineHeight: "normal" }}>
             EVE - 4:30PM | 5:30PM | 6:30PM
           </span>
         </div>
-
-        {/* Info note */}
-        <div style={{ maxWidth: "342px", display: "flex", alignItems: "flex-start", gap: "6px" }}>
-          <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
-            <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
-            <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
-            <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D" />
-            <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-          </svg>
-          <span style={{ color: "#747474", fontFamily: "Outfit", fontSize: "11px", fontWeight: 400, lineHeight: "22px" }}>Note: You will receive Joining Link on WhatsApp on {_dateLabelMonth.charAt(0) + _dateLabelMonth.slice(1).toLowerCase()} {_dateLabelDay}<sup style={{ fontSize: "0.6em" }}>{_dateLabelSuffix}</sup></span>
-        </div>
       </div>
+
+      {/* Introductory Session Card */}
+      {(() => {
+        const link = "https://www.youtube.com/live/mA1uWOTjdeU?feature=share";
+        const thumbnail = "https://img.youtube.com/vi/mA1uWOTjdeU/maxresdefault.jpg";
+
+        // IST time — session: June 21 2026, 11:00–11:30 AM
+        const _nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+        const _totalMin = _nowIST.getUTCHours() * 60 + _nowIST.getUTCMinutes();
+        const _isJun21 = _nowIST.getUTCFullYear() === 2026 && _nowIST.getUTCMonth() === 5 && _nowIST.getUTCDate() === 21;
+        const _isLive = _isJun21 && _totalMin >= 630 && _totalMin < 720;      // 10:30 AM–12:00 PM IST
+        const _isSessionDay = _isJun21 && _totalMin < 630;                    // Jun 21 before 10:30 AM ISTM IST
+
+        return (
+          <div style={{ padding: "18px 20px 0" }}>
+            {/* Title + LIVE badge */}
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
+              <p style={{ color: "#202020", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal", margin: 0 }}>
+                Introductory Session
+              </p>
+              {_isLive && (
+                <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
+                  <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
+                  <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>LIVE</span>
+                </div>
+              )}
+            </div>
+
+            <div style={{ borderRadius: "12px", overflow: "hidden", boxShadow: "1px 0 4px rgba(0,0,0,0.25), -1px -1px 4px rgba(0,0,0,0.25)" }}>
+              {/* Thumbnail */}
+              <a href={link || "#"} target="_blank" rel="noopener noreferrer" style={{ display: "block", position: "relative", width: "100%", aspectRatio: "342/187", textDecoration: "none" }}>
+                <img src={thumbnail} alt="Introductory Session" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.32)" }} />
+                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <PlayButton />
+                </div>
+              </a>
+
+              {/* CTA */}
+              <div style={{ background: "#fff", border: "1.5px solid #E9E9E9", borderTop: "none", padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <a
+                  href={link || "#"}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none" }}
+                >
+                  {_isLive ? (
+                    <>
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                        <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      </svg>
+                      <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION NOW</span>
+                    </>
+                  ) : (
+                    <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>
+                      {_isSessionDay ? "JOIN AT 11:00 AM" : "JOIN TOMORROW AT 11:00 AM"}
+                    </span>
+                  )}
+                </a>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       {/* Refer & Win 500 card */}
       <div style={{ padding: "18px 20px 0" }}>
@@ -2273,6 +2301,7 @@ const Index = () => {
         </div>
       </div>
 
+      <div style={{ height: "48px" }} />
     </div>
   );
 };
