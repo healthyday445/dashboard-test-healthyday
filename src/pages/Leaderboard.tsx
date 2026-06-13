@@ -59,9 +59,7 @@ const Leaderboard: React.FC = () => {
   const [userRank, setUserRank] = useState<UserRank | null>(null);
   const [leaderboardLoading, setLeaderboardLoading] = useState(true);
   const [rankLoading, setRankLoading] = useState(!!mobile);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [isFetchingMore, setIsFetchingMore] = useState(false);
-  const [isNearBottom, setIsNearBottom] = useState(false);
+  const [currentPage] = useState(1);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -98,29 +96,20 @@ const Leaderboard: React.FC = () => {
   };
 
   useEffect(() => {
-    if (currentPage === 1) {
-      setLeaderboardLoading(true);
-      setLeaderboard([]);
-    } else {
-      setIsFetchingMore(true);
-    }
+    if (currentPage !== 1) return;
+    setLeaderboardLoading(true);
+    setLeaderboard([]);
     fetch(`/.netlify/functions/leaderboard?start_date=${CONTEST_START}&end_date=${CONTEST_END}&page_size=100&page=${currentPage}`)
       .then((r) => r.json())
       .then((data) => {
         const rows: LeaderboardEntry[] = data.leaderboard ?? [];
-        setLeaderboard((prev) => currentPage === 1 ? rows : [...prev, ...rows]);
+        setLeaderboard(rows);
       })
       .catch(() => {})
-      .finally(() => { setLeaderboardLoading(false); setIsFetchingMore(false); });
+      .finally(() => { setLeaderboardLoading(false); });
   }, [currentPage]);
 
-  const handleScroll = useCallback(() => {
-    const el = scrollContainerRef.current;
-    if (!el || isFetchingMore || leaderboardLoading || currentPage >= 5) return;
-    const remaining = el.scrollHeight - el.scrollTop - el.clientHeight;
-    setIsNearBottom(remaining < 60);
-    if (remaining < 80) setCurrentPage((p) => p + 1);
-  }, [isFetchingMore, leaderboardLoading, currentPage]);
+  const handleScroll = useCallback(() => {}, []);
 
   useEffect(() => {
     setRankLoading(false);
@@ -466,32 +455,15 @@ const Leaderboard: React.FC = () => {
                 isCurrentUser={userRank?.rank === entry.rank}
               />
             ))}
-            {/* Load-more zone — springs open when near bottom or fetching */}
-            {currentPage < 5 && (
-              <div
-                style={{
-                  height: isFetchingMore ? "48px" : isNearBottom ? "28px" : "0px",
-                  transition: "height 0.4s cubic-bezier(0.34,1.56,0.64,1)",
-                  overflow: "hidden",
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "center",
-                  gap: "6px",
-                  color: "#FEAB27",
-                  fontFamily: "Outfit",
-                  fontSize: "12px",
-                  fontWeight: 600,
-                }}
-              >
-                {isFetchingMore
-                  ? <><span style={{ display: "inline-block", animation: "spin 0.8s linear infinite" }}>⟳</span> Loading more…</>
-                  : "↓ more"
-                }
-              </div>
-            )}
           </div>
         </div>
       </div>
+
+      {!leaderboardLoading && (
+        <div style={{ textAlign: "center", color: "#9CA3AF", fontFamily: "Outfit", fontSize: "11px", padding: "6px 0 10px" }}>
+          Last updated: 13 June 2026, 7:00 PM
+        </div>
+      )}
 
       {/* ═══════════════════════════════════════
           BOTTOM SHEET (ReferWinCard)
