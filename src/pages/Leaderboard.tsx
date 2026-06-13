@@ -410,11 +410,7 @@ const Leaderboard: React.FC = () => {
       {/* ═══════════════════════════════════════
           CURRENT USER RANK
          ═══════════════════════════════════════ */}
-      <CurrentUserRankCard userRank={
-{  rank: 40,
-  name: 'tanishq',
-  referral_count: 50,}
-} loading={rankLoading} />
+      <CurrentUserRankCard userRank={userRank} loading={rankLoading} />
 
       {mobile && <div style={{ width: "calc(100% - 32px)", display: "flex", justifyContent: "center", marginTop: "10px" }}>
         <span
