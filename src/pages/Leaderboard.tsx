@@ -59,7 +59,8 @@ const Leaderboard: React.FC = () => {
   const [userRank, setUserRank] = useState<UserRank | null>(null);
   const [leaderboardLoading, setLeaderboardLoading] = useState(true);
   const [rankLoading, setRankLoading] = useState(!!mobile);
-  const [currentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isFetchingMore, setIsFetchingMore] = useState(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -96,20 +97,29 @@ const Leaderboard: React.FC = () => {
   };
 
   useEffect(() => {
-    if (currentPage !== 1) return;
-    setLeaderboardLoading(true);
-    setLeaderboard([]);
+    if (currentPage === 1) {
+      setLeaderboardLoading(true);
+      setLeaderboard([]);
+    } else {
+      setIsFetchingMore(true);
+    }
     fetch(`/.netlify/functions/leaderboard?start_date=${CONTEST_START}&end_date=${CONTEST_END}&page_size=100&page=${currentPage}`)
       .then((r) => r.json())
       .then((data) => {
         const rows: LeaderboardEntry[] = data.leaderboard ?? [];
-        setLeaderboard(rows);
+        setLeaderboard((prev) => currentPage === 1 ? rows : [...prev, ...rows]);
       })
       .catch(() => {})
-      .finally(() => { setLeaderboardLoading(false); });
+      .finally(() => { setLeaderboardLoading(false); setIsFetchingMore(false); });
   }, [currentPage]);
 
-  const handleScroll = useCallback(() => {}, []);
+  const handleScroll = useCallback(() => {
+    const el = scrollContainerRef.current;
+    if (!el || isFetchingMore || leaderboardLoading || currentPage >= 5) return;
+    const remaining = el.scrollHeight - el.scrollTop - el.clientHeight;
+    // 7 skeleton rows × (48px height + 8px gap) = ~392px — trigger when user enters skeleton zone
+    if (remaining < 392) setCurrentPage((p) => p + 1);
+  }, [isFetchingMore, leaderboardLoading, currentPage]);
 
   useEffect(() => {
     if (!mobile) { setRankLoading(false); return; }
@@ -449,6 +459,7 @@ const Leaderboard: React.FC = () => {
             boxSizing: "border-box",
             maxHeight: "calc(7 * 3rem + 6 * 0.5rem + 2rem + 1.5rem)",
             overflowY: "auto",
+            scrollBehavior: "smooth",
             marginTop: "16px",
             marginBottom: "14px",
             marginInline: "16px",
@@ -457,18 +468,22 @@ const Leaderboard: React.FC = () => {
           }}
         >
           <div style={{ display: "flex", flexDirection: "column", gap: "8px", borderRadius: "12px" }}>
-            {leaderboardLoading && (
-              <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "13px", textAlign: "center", padding: "12px 0" }}>Loading…</span>
-            )}
-            {!leaderboardLoading && leaderboard.map((entry) => (
-              <LeaderboardRow
-                key={entry.rank}
-                rank={entry.rank}
-                name={entry.name}
-                mobile={entry.mobile}
-                referrals={entry.referral_count}
-                isCurrentUser={userRank?.rank === entry.rank}
-              />
+            {leaderboardLoading && [0,1,2,3,4,5,6].map((i) => (
+              <LeaderboardRowSkeleton key={`init-skel-${i}`} delay={i * 60} />
+            ))}
+            {!leaderboardLoading && leaderboard.map((entry, i) => (
+              <div key={entry.rank} className="lb-row" style={{ animationDelay: `${Math.min(i % 100, 20) * 20}ms` }}>
+                <LeaderboardRow
+                  rank={entry.rank}
+                  name={entry.name}
+                  mobile={entry.mobile}
+                  referrals={entry.referral_count}
+                  isCurrentUser={userRank?.rank === entry.rank}
+                />
+              </div>
+            ))}
+            {!leaderboardLoading && currentPage < 5 && [0,1,2,3,4,5,6].map((i) => (
+              <LeaderboardRowSkeleton key={`skel-${i}`} delay={i * 60} />
             ))}
           </div>
         </div>
@@ -616,7 +631,7 @@ const Leaderboard: React.FC = () => {
           </div>
         </>
       )}
-      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes livePulse { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }`}</style>
+      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes livePulse { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } } @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .lb-row { animation: fadeSlideIn 0.3s ease both; } @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } } .lb-skeleton { background: linear-gradient(90deg, #f0e8d8 25%, #f8f0e0 50%, #f0e8d8 75%); background-size: 800px 100%; animation: shimmer 1.4s ease-in-out infinite; border-radius: 8px; }`}</style>
     </div>
   );
 };
@@ -715,6 +730,14 @@ const PrizeTierCard: React.FC<{
 /* ────────────────────────────────────────────
    Leaderboard Row Sub-component
    ──────────────────────────────────────────── */
+const LeaderboardRowSkeleton: React.FC<{ delay?: number }> = ({ delay = 0 }) => (
+  <div style={{ width: "100%", height: "48px", borderRadius: "12px", background: "#FFF", display: "flex", alignItems: "center", paddingInline: "14px", paddingBlock: "10px", boxSizing: "border-box", gap: "15px" }}>
+    <div className="lb-skeleton" style={{ width: "28px", height: "28px", borderRadius: "5px", flexShrink: 0, animationDelay: `${delay}ms` }} />
+    <div className="lb-skeleton" style={{ flex: 1, height: "14px", borderRadius: "6px", animationDelay: `${delay + 80}ms` }} />
+    <div className="lb-skeleton" style={{ width: "48px", height: "14px", borderRadius: "6px", flexShrink: 0, animationDelay: `${delay + 160}ms` }} />
+  </div>
+);
+
 const LeaderboardRow: React.FC<{
   rank: number;
   name: string;
