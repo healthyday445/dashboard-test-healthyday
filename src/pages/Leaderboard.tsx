@@ -112,7 +112,15 @@ const Leaderboard: React.FC = () => {
   const handleScroll = useCallback(() => {}, []);
 
   useEffect(() => {
-    setRankLoading(false);
+    if (!mobile) { setRankLoading(false); return; }
+    const digits = mobile.replace(/\D/g, "");
+    const normalized = digits.startsWith("91") && digits.length >= 12 ? digits.slice(2) : digits;
+    const e164 = `+91${normalized}`;
+    fetch(`/.netlify/functions/leaderboard-rank?mobile=${encodeURIComponent(e164)}&start_date=${CONTEST_START}&end_date=${CONTEST_END}`)
+      .then((r) => (r.status === 404 ? null : r.json()))
+      .then((data) => setUserRank(data))
+      .catch(() => {})
+      .finally(() => setRankLoading(false));
   }, [mobile]);
 
   const shareLink = mobile
@@ -415,9 +423,6 @@ const Leaderboard: React.FC = () => {
       {/* ═══════════════════════════════════════
           LEADERBOARD SECTION
          ═══════════════════════════════════════ */}
-      <div style={{ textAlign: "center", color: "#CC0000", background: "#FFE9C4", fontFamily: "Outfit", fontSize: "11px", fontWeight: 600, padding: "7px 16px", borderRadius: "8px", marginTop: "16px", marginBottom: "-16px", width: "calc(100% - 32px)", boxSizing: "border-box" }}>
-        Leaderboard Last updated: 13 June 2026, 7:00 PM
-      </div>
       {/* Outer colored wrapper */}
       <div
         style={{
@@ -428,6 +433,13 @@ const Leaderboard: React.FC = () => {
           marginTop: "24px",
         }}
       >
+        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "16px", paddingInline: "16px" }}>
+          <span style={{ color: "#003473", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, marginLeft: "8px" }}>Leaderboard</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "3px", background: "#FFFFFF", borderRadius: "20px", padding: "3px 10px" }}>
+            <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#FF3B30", animation: "livePulse 1.2s ease-in-out infinite" }} />
+            <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, padding: "0 5px" }}>LIVE</span>
+          </div>
+        </div>
         {/* Scrollable inner container */}
         <div
           ref={scrollContainerRef}
@@ -437,7 +449,7 @@ const Leaderboard: React.FC = () => {
             boxSizing: "border-box",
             maxHeight: "calc(7 * 3rem + 6 * 0.5rem + 2rem + 1.5rem)",
             overflowY: "auto",
-            marginTop: "24px",
+            marginTop: "16px",
             marginBottom: "14px",
             marginInline: "16px",
             WebkitOverflowScrolling: "touch",
@@ -604,7 +616,7 @@ const Leaderboard: React.FC = () => {
           </div>
         </>
       )}
-      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }`}</style>
+      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes livePulse { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } }`}</style>
     </div>
   );
 };
