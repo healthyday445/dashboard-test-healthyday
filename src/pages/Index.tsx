@@ -534,6 +534,7 @@ const Index = () => {
         }
 
         const data = await response.json();
+        console.log("[DEBUG] raw API language:", data.language, "| full data keys:", Object.keys(data));
         setStudentData(data);
 
         // Store referral data for the Referral page
@@ -2118,6 +2119,7 @@ const Index = () => {
   if (!authenticated) return null;
 
   const userLanguage = studentData?.language || "Telugu";
+  console.log("[DEBUG] onboarding render — studentData.language:", studentData?.language, "→ userLanguage:", userLanguage);
   const currentVideos = userLanguage === "English" ? englishVideos : teluguVideos;
   const viewAllLink = userLanguage === "English"
     ? "https://www.youtube.com/@HealthydayEnglish"
@@ -2188,15 +2190,29 @@ const Index = () => {
 
       {/* Introductory Session Card */}
       {(() => {
-        const link = "https://www.youtube.com/live/mA1uWOTjdeU?feature=share";
-        const thumbnail = "https://img.youtube.com/vi/mA1uWOTjdeU/maxresdefault.jpg";
-
-        // IST time — session: June 21 2026, 11:00–11:30 AM
         const _nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
         const _totalMin = _nowIST.getUTCHours() * 60 + _nowIST.getUTCMinutes();
-        const _isJun21 = _nowIST.getUTCFullYear() === 2026 && _nowIST.getUTCMonth() === 5 && _nowIST.getUTCDate() === 21;
-        const _isLive = _isJun21 && _totalMin >= 630 && _totalMin < 720;      // 10:30 AM–12:00 PM IST
-        const _isSessionDay = _isJun21 && _totalMin < 630;                    // Jun 21 before 10:30 AM ISTM IST
+        const _isJun14 = _nowIST.getUTCFullYear() === 2026 && _nowIST.getUTCMonth() === 5 && _nowIST.getUTCDate() === 14;
+
+        const isTelugu = userLanguage !== "English";
+        const link = isTelugu
+          ? "https://www.youtube.com/live/mA1uWOTjdeU?feature=share"
+          : "https://www.youtube.com/live/4GEgaD2BGcM?feature=share";
+        const videoId = isTelugu ? "mA1uWOTjdeU" : "4GEgaD2BGcM";
+        const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+        // Telugu: 10:30 AM–12:00 PM | English: 8:00 PM–9:30 PM
+        const liveStart = isTelugu ? 630 : 1200;
+        const liveEnd = isTelugu ? 720 : 1290;
+        const ctaTime = isTelugu ? "11:00 AM" : "8:00 PM";
+
+        // Hide once the session has ended, or on any day after June 14
+        const _isPastSessionDay = _nowIST.getUTCFullYear() > 2026 ||
+          (_nowIST.getUTCFullYear() === 2026 && (_nowIST.getUTCMonth() > 5 ||
+          (_nowIST.getUTCMonth() === 5 && _nowIST.getUTCDate() > 14)));
+        if (_isPastSessionDay || (_isJun14 && _totalMin >= liveEnd)) return null;
+
+        const _isLive = _isJun14 && _totalMin >= liveStart && _totalMin < liveEnd;
+        const _isSessionDay = _isJun14 && _totalMin < liveStart;
 
         return (
           <div style={{ padding: "18px 20px 0" }}>
@@ -2242,7 +2258,7 @@ const Index = () => {
                     </>
                   ) : (
                     <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>
-                      {_isSessionDay ? "JOIN AT 11:00 AM" : "JOIN TOMORROW AT 11:00 AM"}
+                      {_isSessionDay ? `JOIN AT ${ctaTime}` : `JOIN TOMORROW AT ${ctaTime}`}
                     </span>
                   )}
                 </a>
