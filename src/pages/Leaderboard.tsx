@@ -415,6 +415,9 @@ const Leaderboard: React.FC = () => {
       {/* ═══════════════════════════════════════
           LEADERBOARD SECTION
          ═══════════════════════════════════════ */}
+      <div style={{ textAlign: "center", color: "#CC0000", background: "#FFE9C4", fontFamily: "Outfit", fontSize: "11px", fontWeight: 600, padding: "7px 16px", borderRadius: "8px", marginTop: "16px", marginBottom: "-16px", width: "calc(100% - 32px)", boxSizing: "border-box" }}>
+        Leaderboard Last updated: 13 June 2026, 7:00 PM
+      </div>
       {/* Outer colored wrapper */}
       <div
         style={{
@@ -458,12 +461,6 @@ const Leaderboard: React.FC = () => {
           </div>
         </div>
       </div>
-
-      {!leaderboardLoading && (
-        <div style={{ textAlign: "center", color: "#9CA3AF", fontFamily: "Outfit", fontSize: "11px", padding: "6px 0 10px" }}>
-          Last updated: 13 June 2026, 7:00 PM
-        </div>
-      )}
 
       {/* ═══════════════════════════════════════
           BOTTOM SHEET (ReferWinCard)

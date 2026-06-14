@@ -2203,7 +2203,7 @@ const Index = () => {
         // Telugu: 10:30 AM–12:00 PM | English: 8:00 PM–9:30 PM
         const liveStart = isTelugu ? 630 : 1200;
         const liveEnd = isTelugu ? 720 : 1290;
-        const ctaTime = isTelugu ? "11:00 AM" : "8:00 PM";
+        const ctaTime = isTelugu ? "11:00 AM" : "8:30 PM";
 
         // Hide once the session has ended, or on any day after June 14
         const _isPastSessionDay = _nowIST.getUTCFullYear() > 2026 ||
