@@ -4,11 +4,6 @@ import logo from "@/assets/Primary_logo.svg";
 import imgImage12 from "@/assets/image_12.png";
 import imgLanguageEnglish from "@/assets/language_English.jpg";
 import imgLanguageTelugu from "@/assets/language_Telugu.jpg";
-import bonusFaceyogaEng from "@/assets/bonus/faceyoga_eng.jpg";
-import bonusFaceyogaTel from "@/assets/bonus/faceyoga_tel.jpg";
-import bonusBwEng from "@/assets/bonus/bw_eng.jpg";
-import bonusBreathwork from "@/assets/bonus/breathwork.jpg";
-import bonusWeightloss from "@/assets/bonus/weightlosssession.jpg";
 import img0da635 from "@/assets/0da635826ff23e34b2bf7680030cac545d32dcfb.webp";
 import img5ce328 from "@/assets/5ce32860a765bdcaeb0504ff13008eea60a6cd55.webp";
 
@@ -468,7 +463,7 @@ const AllRecordings = () => {
     classRecordings.push({
       title: "Last Healthyday Face Yoga",
       subtitle: "Sundays at 11:30 AM",
-      thumbnail: isEnglish ? bonusFaceyogaEng : bonusFaceyogaTel,
+      thumbnail: `https://img.youtube.com/vi/SyjnCjDtNS8/hqdefault.jpg`,
       link: isEnglish ? "https://join.healthyday.co.in/healthyface_eng" : "https://join.healthyday.co.in/healthyface",
       accessTill: `Access till ${plus13Label}`,
     });
@@ -479,7 +474,7 @@ const AllRecordings = () => {
     classRecordings.push({
       title: `${b2hDateLabel} Breath to Heal Session`,
       subtitle: "Daily at 9:00 PM",
-      thumbnail: ytThumb(b2hSession?.link, isEnglish ? bonusBwEng : bonusBreathwork),
+      thumbnail: ytThumb(b2hSession?.link, `https://img.youtube.com/vi/SyjnCjDtNS8/hqdefault.jpg`),
       link: b2hSession?.link || (isEnglish ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession"),
       accessTill: (b2hSession && formatExpiry(b2hSession.expiry_by)) || `Access till 8:30 PM, ${getFallbackExpiryDate(21)}`,
     });
@@ -490,7 +485,7 @@ const AllRecordings = () => {
     classRecordings.push({
       title: `${dietDateLabel} Healthyday Diet Routine`,
       subtitle: "Daily at 8:00 PM",
-      thumbnail: ytThumb(dietSession?.link, bonusWeightloss),
+      thumbnail: ytThumb(dietSession?.link, `https://img.youtube.com/vi/SyjnCjDtNS8/hqdefault.jpg`),
       link: dietSession?.link || (isEnglish ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet"),
       accessTill: (dietSession && formatExpiry(dietSession.expiry_by)) || `Access till 7:30 PM, ${getFallbackExpiryDate(20)}`,
     });
