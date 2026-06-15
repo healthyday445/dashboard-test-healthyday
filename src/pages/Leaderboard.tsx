@@ -2,6 +2,27 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReferWinCard from "@/components/ReferWinCard";
 import logo from "@/assets/Primary_logo.svg";
+import imgBannerBg from "@/assets/leaderboard/11621406ee6eb5f29bb80937e33d2195815c78d8.webp";
+import imgMainPrize from "@/assets/leaderboard/0d0feb7c046d1e7737d4d7000c10d1cf68d8865c.webp";
+import imgPrizeTier1 from "@/assets/leaderboard/03fe32d52d733d7264af16fa1a873079ffdb9919.webp";
+import imgPrizeTier2 from "@/assets/leaderboard/a999ad5d053fb10e4399ce1c16a6647a5e72b054.webp";
+import imgPrizeTier3 from "@/assets/leaderboard/a623655ba98def85f08fd93b110d719415c6fc2e.webp";
+import imgShield from "@/assets/leaderboard/shield.webp";
+import imgConfettiA from "@/assets/leaderboard/226805aeb355248ebac39e293e844975a3b6fada.webp";
+import imgConfettiA1 from "@/assets/leaderboard/226805aeb355248ebac39e293e844975a3b6fada_1.webp";
+import imgConfetti from "@/assets/leaderboard/confetti.webp";
+import imgMedal from "@/assets/leaderboard/d8c04109d0b7e7d179eedceade5572244f039058.webp";
+import imgStarSmall from "@/assets/leaderboard/eeef30852c9e8a5d9b0eedd75392aa12539c4ce5.webp";
+import imgEllipse from "@/assets/leaderboard/ellipse.svg";
+import imgLine from "@/assets/leaderboard/line.svg";
+import imgTier1Illustration from "@/assets/leaderboard/tier1-illustration.webp";
+import imgTier1Star from "@/assets/leaderboard/tier1-star.webp";
+import imgTier2Illustration from "@/assets/leaderboard/tier2-illustration.webp";
+import imgTier2Star from "@/assets/leaderboard/tier2-star.webp";
+import imgTier3Illustration from "@/assets/leaderboard/tier3-illustration.webp";
+import imgTier3Star from "@/assets/leaderboard/tier3-star.webp";
+import imgTier4Illustration from "@/assets/leaderboard/tier4-illustration.webp";
+import imgTier4Star from "@/assets/leaderboard/tier4-star.webp";
 
 const CONTEST_START = "2026-06-01";
 const CONTEST_END = "2026-06-30";
@@ -39,13 +60,13 @@ const TrophyIcon = () => (
    Prize Tier images (from /public/leaderboard/)
    ──────────────────────────────────────────── */
 const PRIZE_IMAGES = {
-  tier1: "/leaderboard/03fe32d52d733d7264af16fa1a873079ffdb9919.webp",
-  tier2: "/leaderboard/a999ad5d053fb10e4399ce1c16a6647a5e72b054.webp",
-  tier3: "/leaderboard/a623655ba98def85f08fd93b110d719415c6fc2e.webp",
+  tier1: imgPrizeTier1,
+  tier2: imgPrizeTier2,
+  tier3: imgPrizeTier3,
 };
 
-const BANNER_BG = "/leaderboard/11621406ee6eb5f29bb80937e33d2195815c78d8.webp";
-const MAIN_PRIZE_IMG = "/leaderboard/0d0feb7c046d1e7737d4d7000c10d1cf68d8865c.webp";
+const BANNER_BG = imgBannerBg;
+const MAIN_PRIZE_IMG = imgMainPrize;
 
 /* ────────────────────────────────────────────
    Leaderboard Page Component
@@ -884,7 +905,7 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
       <div style={{ ...CARD_BASE, border: "1.5px solid #FEAB27", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", padding: "0 27px" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "2px", zIndex: 2 }}>
           <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-            <div style={{ width: "18px", height: "16px", backgroundImage: "url(/leaderboard/d8c04109d0b7e7d179eedceade5572244f039058.webp)", backgroundSize: "contain", backgroundPosition: "50%", backgroundRepeat: "no-repeat" }} />
+            <div style={{ width: "18px", height: "16px", backgroundImage: `url(${imgMedal})`, backgroundSize: "contain", backgroundPosition: "50%", backgroundRepeat: "no-repeat" }} />
             <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400, lineHeight: "normal" }}>Great job!</span>
           </div>
           <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, lineHeight: "normal" }}>
@@ -896,7 +917,7 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
           <div style={{ width: "121px", height: "23px", borderRadius: "6px", background: "#365B88", boxShadow: "1px 1px 1px 0 rgba(255,255,255,0.25)", display: "flex", alignItems: "center", padding: "0 6px", gap: "6px", marginTop: "6px" }}>
             <div style={{ width: "15px", height: "15px", position: "relative" }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="15" height="15" viewBox="0 0 15 15" fill="none" style={{ position: "absolute", left: 0, top: 0 }}><circle cx="7.5" cy="7.5" r="7.5" fill="#FEAB27" /></svg>
-              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "10.385px", height: "10.962px", backgroundImage: "url(/leaderboard/eeef30852c9e8a5d9b0eedd75392aa12539c4ce5.webp)", backgroundSize: "contain", backgroundPosition: "50%", backgroundRepeat: "no-repeat" }} />
+              <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "10.385px", height: "10.962px", backgroundImage: `url(${imgStarSmall})`, backgroundSize: "contain", backgroundPosition: "50%", backgroundRepeat: "no-repeat" }} />
             </div>
             <span style={{ color: "#D2D2D2", fontFamily: "Outfit", fontSize: "8px", fontWeight: 500, flex: 1 }}>Total Referrals</span>
             <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600 }}>{userRank.referral_count}</span>
@@ -908,7 +929,7 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
           <div style={{ position: "absolute", top: "50%", left: "50%", width: "60%", height: "60%", transform: "translate(-50%,-50%)", borderRadius: "50%", boxShadow: "0 0 250px 0 rgba(255,234,199,0.80), 0 0 166px 0 rgba(255,234,199,0.80), 0 0 83px 0 rgba(255,234,199,0.80)", zIndex: 0, pointerEvents: "none" }} />
           {/* Shield image */}
           <img
-            src="/leaderboard/shield.webp"
+            src={imgShield}
             alt=""
             style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "contain", pointerEvents: "none", zIndex: 1 }}
           />
@@ -918,9 +939,9 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
           </span>
         </div>
         {/* Confetti */}
-        <div style={{ position: "absolute", top: "-5px", right: "75px", width: "58.9px", height: "83.6px", transform: "rotate(-144.8deg)", backgroundImage: "url(/leaderboard/226805aeb355248ebac39e293e844975a3b6fada.webp)", backgroundSize: "242.952% 164.377%", backgroundPosition: "-121.696px -40.227px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
-        <div style={{ position: "absolute", top: "45px", left: "210px", width: "47.7px", height: "36.5px", transform: "rotate(39.7deg)", backgroundImage: "url(/leaderboard/confetti.webp)", backgroundSize: "361.562% 522.221%", backgroundPosition: "-88.083px -79.919px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
-        <div style={{ position: "absolute", top: "0", left: "170px", width: "56.96px", height: "61.08px", transform: "rotate(-124.7deg)", backgroundImage: "url(/leaderboard/226805aeb355248ebac39e293e844975a3b6fada\\ (1).webp)", backgroundSize: "364.5% 378.052%", backgroundPosition: "-197.338px -173.409px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
+        <div style={{ position: "absolute", top: "-5px", right: "75px", width: "58.9px", height: "83.6px", transform: "rotate(-144.8deg)", backgroundImage: `url(${imgConfettiA})`, backgroundSize: "242.952% 164.377%", backgroundPosition: "-121.696px -40.227px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
+        <div style={{ position: "absolute", top: "45px", left: "210px", width: "47.7px", height: "36.5px", transform: "rotate(39.7deg)", backgroundImage: `url(${imgConfetti})`, backgroundSize: "361.562% 522.221%", backgroundPosition: "-88.083px -79.919px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
+        <div style={{ position: "absolute", top: "0", left: "170px", width: "56.96px", height: "61.08px", transform: "rotate(-124.7deg)", backgroundImage: `url(${imgConfettiA1})`, backgroundSize: "364.5% 378.052%", backgroundPosition: "-197.338px -173.409px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
       </div>
     );
   }
@@ -934,10 +955,10 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
       heading: "You are in TOP 100",
       hasSparkles: true,
       subtitle: "Refer few more and reach Top 25 to win Weight Scale also",
-      illustration: "/leaderboard/tier1-illustration.webp",
-      ellipse: "/leaderboard/ellipse.svg",
-      star: "/leaderboard/tier1-star.webp",
-      line: "/leaderboard/line.svg",
+      illustration: imgTier1Illustration,
+      ellipse: imgEllipse,
+      star: imgTier1Star,
+      line: imgLine,
       imgStyle: { position: "absolute", right: 0, bottom: 0, width: "8.375rem", height: "6.5625rem", objectFit: "contain", pointerEvents: "none" },
     } : userRank.rank <= 500 ? {
       border: "1.5px solid #FFD6B8",
@@ -945,10 +966,10 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
       heading: "You are in TOP 500",
       hasSparkles: true,
       subtitle: "Refer few more and reach Top 100 to win hand towel as well",
-      illustration: "/leaderboard/tier2-illustration.webp",
-      ellipse: "/leaderboard/ellipse.svg",
-      star: "/leaderboard/tier2-star.webp",
-      line: "/leaderboard/line.svg",
+      illustration: imgTier2Illustration,
+      ellipse: imgEllipse,
+      star: imgTier2Star,
+      line: imgLine,
       imgStyle: { position: "absolute", right: 0, bottom: 0, width: "9.375rem", height: "6.6875rem",  pointerEvents: "none" },
     } : userRank.rank <= 1000 ? {
       border: "1.5px solid #A2C6CF",
@@ -956,10 +977,10 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
       heading: "You are close to Top 500!",
       hasSparkles: false,
       subtitle: "Keep referring and reach Top 500 to win a Yoga kit!",
-      illustration: "/leaderboard/tier3-illustration.webp",
-      ellipse: "/leaderboard/ellipse.svg",
-      star: "/leaderboard/tier3-star.webp",
-      line: "/leaderboard/line.svg",
+      illustration: imgTier3Illustration,
+      ellipse: imgEllipse,
+      star: imgTier3Star,
+      line: imgLine,
       imgStyle: { position: "absolute", right: 0, bottom: 0, width: "8.375rem", height: "6.5625rem", objectFit: "contain", pointerEvents: "none" },
     } : {
       border: "1.5px solid #ADCFA2",
@@ -967,10 +988,10 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
       heading: "You are on track!",
       hasSparkles: false,
       subtitle: "You are only few referrals away from Top 500. Just keep referring!",
-      illustration: "/leaderboard/tier4-illustration.webp",
-      ellipse: "/leaderboard/ellipse.svg",
-      star: "/leaderboard/tier4-star.webp",
-      line: "/leaderboard/line.svg",
+      illustration: imgTier4Illustration,
+      ellipse: imgEllipse,
+      star: imgTier4Star,
+      line: imgLine,
       imgStyle: { position: "absolute", right: 0, bottom: 0, width: "8.375rem", height: "6.5625rem", objectFit: "contain", pointerEvents: "none" },
     };
 

@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { trackVisit } from "@/lib/trackVisit";
 import logo from "@/assets/Primary_logo.svg";
+import sessionTimeIcon from "@/assets/leaderboard/session_time_icon.webp";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 import { ReferralMilestonesCard } from "@/components/ReferralMilestonesCard";
 import { ReferralProgressBar } from "@/components/ReferWinPopup";
@@ -2215,7 +2216,7 @@ const Index = () => {
           return (
             <div style={{ padding: "18px 20px 0" }}>
               <div style={{ background: "#fff", borderRadius: "10px", boxShadow: "0px 0px 8px 0px rgba(0,0,0,0.25)", display: "flex", alignItems: "center", gap: "14px", padding: "14px 16px" }}>
-                <img src="/leaderboard/session_time_icon.webp" alt="" style={{ width: "52px", height: "52px", flexShrink: 0, objectFit: "contain" }} />
+                <img src={sessionTimeIcon} alt="" style={{ width: "52px", height: "52px", flexShrink: 0, objectFit: "contain" }} />
                 {/* Text */}
                 <div style={{ flex: 1, wordBreak: "break-word" }}>
                   <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "14px", fontWeight: 700, color: "#202020", lineHeight: "1.35" }}>INTRODUCTION LIVE HAS ENDED!</p>
