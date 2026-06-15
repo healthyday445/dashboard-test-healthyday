@@ -2,8 +2,8 @@ import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import { ReferralMilestonesCard } from "@/components/ReferralMilestonesCard";
-import imgPose81 from "@/assets/pose_8_1.png";
-import imgPose811 from "@/assets/pose_8_1_1.png";
+import imgPose81 from "@/assets/pose_8_1.webp";
+import imgPose811 from "@/assets/pose_8_1_1.webp";
 import imgUnsplashG from "@/assets/unsplash_GkXJisd5W1M.webp";
 import imgUnsplashM from "@/assets/unsplash_mSJsiQCm6og.webp";
 

@@ -1417,7 +1417,7 @@ const Index = () => {
         fullName: "Breath to Heal Session at 9:00 PM",
         startMin: 1260,
         sessionLink: paidLang === "English" ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession",
-        thumbnail: paidLang === "English" ? bonusBwEng : bonusBreathwork,
+        thumbnail: ytThumb("SyjnCjDtNS8"),
       });
     }
 
