@@ -1,4 +1,5 @@
 import React from "react";
+import img8ea326 from "@/assets/8ea326ab563adb61ccb99b953865cb3132c173ab.webp";
 
 /**
  * Session-info card shown on the paid dashboard when no sessions are currently live.
@@ -86,7 +87,7 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin, isFreeBatch }
             height: "auto",
             aspectRatio: "82/81",
             background:
-              'url("/8ea326ab563adb61ccb99b953865cb3132c173ab.webp") lightgray -5.311px -5.747px / 112.404% 113.525% no-repeat',
+              `url(${img8ea326}) lightgray -5.311px -5.747px / 112.404% 113.525% no-repeat`,
             borderRadius: "50%",
             flexShrink: 0,
           }}

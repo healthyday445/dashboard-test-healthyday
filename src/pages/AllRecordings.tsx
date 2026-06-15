@@ -1,6 +1,16 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
+import imgImage12 from "@/assets/image_12.png";
+import imgLanguageEnglish from "@/assets/language_English.jpg";
+import imgLanguageTelugu from "@/assets/language_Telugu.jpg";
+import bonusFaceyogaEng from "@/assets/bonus/faceyoga_eng.jpg";
+import bonusFaceyogaTel from "@/assets/bonus/faceyoga_tel.jpg";
+import bonusBwEng from "@/assets/bonus/bw_eng.jpg";
+import bonusBreathwork from "@/assets/bonus/breathwork.jpg";
+import bonusWeightloss from "@/assets/bonus/weightlosssession.jpg";
+import img0da635 from "@/assets/0da635826ff23e34b2bf7680030cac545d32dcfb.webp";
+import img5ce328 from "@/assets/5ce32860a765bdcaeb0504ff13008eea60a6cd55.webp";
 
 // classRecordings is now built dynamically inside the component based on student language & API data
 
@@ -161,7 +171,7 @@ const PlayButton = () => (
     justifyContent: "center",
   }}>
     <img
-      src="/image 12.png"
+      src={imgImage12}
       alt="Play"
       style={{ width: "100%", height: "100%", objectFit: "cover" }}
     />
@@ -437,7 +447,7 @@ const AllRecordings = () => {
     classRecordings.push({
       title: `${morningYogaDateLabel} Yoga Session`,
       subtitle: "Daily Live Yoga Session",
-      thumbnail: ytThumb(morningYogaSession?.link, isEnglish ? "/language English.jpg" : "/language Telugu.jpg"),
+      thumbnail: ytThumb(morningYogaSession?.link, isEnglish ? imgLanguageEnglish : imgLanguageTelugu),
       link: morningYogaSession?.link || yogaFallbackLink,
       accessTill: (morningYogaSession && formatExpiry(morningYogaSession.expiry_by)) || `Access till 5:00 AM, ${getFallbackExpiryDate(6)}`,
     });
@@ -446,7 +456,7 @@ const AllRecordings = () => {
     classRecordings.push({
       title: `${yogaDateLabel} Yoga Session`,
       subtitle: "Daily Live Yoga Session",
-      thumbnail: ytThumb(yogaSession?.link, isEnglish ? "/language English.jpg" : "/language Telugu.jpg"),
+      thumbnail: ytThumb(yogaSession?.link, isEnglish ? imgLanguageEnglish : imgLanguageTelugu),
       link: yogaSession?.link || yogaFallbackLink,
       accessTill: (yogaSession && formatExpiry(yogaSession.expiry_by)) || `Access till 5:00 AM, ${getFallbackExpiryDate(6)}`,
     });
@@ -458,7 +468,7 @@ const AllRecordings = () => {
     classRecordings.push({
       title: "Last Healthyday Face Yoga",
       subtitle: "Sundays at 11:30 AM",
-      thumbnail: isEnglish ? "/bonus/faceyoga_eng.jpg" : "/bonus/faceyoga_tel.jpg",
+      thumbnail: isEnglish ? bonusFaceyogaEng : bonusFaceyogaTel,
       link: isEnglish ? "https://join.healthyday.co.in/healthyface_eng" : "https://join.healthyday.co.in/healthyface",
       accessTill: `Access till ${plus13Label}`,
     });
@@ -469,7 +479,7 @@ const AllRecordings = () => {
     classRecordings.push({
       title: `${b2hDateLabel} Breath to Heal Session`,
       subtitle: "Daily at 9:00 PM",
-      thumbnail: ytThumb(b2hSession?.link, isEnglish ? "/bonus/bw_eng.jpg" : "/bonus/breathwork.jpg"),
+      thumbnail: ytThumb(b2hSession?.link, isEnglish ? bonusBwEng : bonusBreathwork),
       link: b2hSession?.link || (isEnglish ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession"),
       accessTill: (b2hSession && formatExpiry(b2hSession.expiry_by)) || `Access till 8:30 PM, ${getFallbackExpiryDate(21)}`,
     });
@@ -480,7 +490,7 @@ const AllRecordings = () => {
     classRecordings.push({
       title: `${dietDateLabel} Healthyday Diet Routine`,
       subtitle: "Daily at 8:00 PM",
-      thumbnail: ytThumb(dietSession?.link, "/bonus/weightlosssession.jpg"),
+      thumbnail: ytThumb(dietSession?.link, bonusWeightloss),
       link: dietSession?.link || (isEnglish ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet"),
       accessTill: (dietSession && formatExpiry(dietSession.expiry_by)) || `Access till 7:30 PM, ${getFallbackExpiryDate(20)}`,
     });
@@ -506,7 +516,7 @@ const AllRecordings = () => {
         subtitle: "108 Suryanamaskar Challenge",
         thumbnail: snVideoId
           ? `https://img.youtube.com/vi/${snVideoId}/mqdefault.jpg`
-          : "/language Telugu.jpg",
+          : imgLanguageTelugu,
         link: snSession.link,
         accessTill: formatExpiry(snSession.expiry_by) || "Always available",
       });
@@ -548,7 +558,7 @@ const AllRecordings = () => {
           }}>
             {/* Yoga Meditation Image */}
             <img
-              src="/0da635826ff23e34b2bf7680030cac545d32dcfb.webp"
+              src={img0da635}
               alt="Live session"
               style={{
                 width: "78px",
@@ -595,7 +605,7 @@ const AllRecordings = () => {
           }}>
             <div style={{ width: "110px", height: "0.5px", background: "var(--Orange, #FEAB27)" }} />
             <img
-              src="/5ce32860a765bdcaeb0504ff13008eea60a6cd55.webp"
+              src={img5ce328}
               alt="Lotus"
               style={{ width: "32px", height: "21px", aspectRatio: "26/17", objectFit: "cover", flexShrink: 0 }}
             />

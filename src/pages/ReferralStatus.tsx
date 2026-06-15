@@ -2,6 +2,10 @@ import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import { ReferralMilestonesCard } from "@/components/ReferralMilestonesCard";
+import imgPose81 from "@/assets/pose_8_1.png";
+import imgPose811 from "@/assets/pose_8_1_1.png";
+import imgUnsplashG from "@/assets/unsplash_GkXJisd5W1M.webp";
+import imgUnsplashM from "@/assets/unsplash_mSJsiQCm6og.webp";
 
 // ── API types ─────────────────────────────────────────────────────────────────
 
@@ -490,8 +494,8 @@ const ReferralStatus = () => {
         {/* Free Classes pair (unlocks every 5 refs) */}
         <div style={{ display: "flex", gap: "12px", marginBottom: "11px" }}>
           {([
-            { label: "+10 Free Classes", refs: "5 Referrals", need: 5, img: "/pose 8 1.png" },
-            { label: "+20 Free Classes", refs: "10 Referrals", need: 10, img: "/pose 8 1 (1).png" },
+            { label: "+10 Free Classes", refs: "5 Referrals", need: 5, img: imgPose81 },
+            { label: "+20 Free Classes", refs: "10 Referrals", need: 10, img: imgPose811 },
           ] as const).map((reward, i) => {
             const unlocked = totalRefs >= reward.need;
             return (
@@ -563,8 +567,8 @@ const ReferralStatus = () => {
         {/* Gift pair (unlocks at 20 and 40 refs) */}
         <div style={{ display: "flex", gap: "12px" }}>
           {([
-            { label: "Healthyday T-shirt", refs: "20 Referrals", need: 20, img: "/unsplash_GkXJisd5W1M.webp" },
-            { label: "Special Gift", refs: "40 Referrals", need: 40, img: "/unsplash_mSJsiQCm6og.webp" },
+            { label: "Healthyday T-shirt", refs: "20 Referrals", need: 20, img: imgUnsplashG },
+            { label: "Special Gift", refs: "40 Referrals", need: 40, img: imgUnsplashM },
           ] as const).map((reward, i) => {
             const progress = Math.min(100, (totalRefs / reward.need) * 100);
             const unlocked = totalRefs >= reward.need;

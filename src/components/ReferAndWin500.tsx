@@ -1,4 +1,7 @@
 import React from "react";
+import imgWhiteArrow from "@/assets/whiteArrow.svg";
+import img11621406 from "@/assets/11621406ee6eb5f29bb80937e33d2195815c78d8.webp";
+import imgElement from "@/assets/element.webp";
 
 interface ReferAndWin500Props {
   onClick?: () => void;
@@ -33,7 +36,7 @@ const ReferAndWin500: React.FC<ReferAndWin500Props> = ({ onClick }) => (
         Refer &amp; Win
       </span>
       <span style={{ color: "#fff", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, lineHeight: "normal", display: "flex", alignItems: "center", gap: "4px" }}>
-        Click here <img src="/whiteArrow.svg" alt="" style={{ width: "16px", height: "16px", marginTop: "2px" }} />
+        Click here <img src={imgWhiteArrow} alt="" style={{ width: "16px", height: "16px", marginTop: "2px" }} />
       </span>
     </div>
 
@@ -43,7 +46,7 @@ const ReferAndWin500: React.FC<ReferAndWin500Props> = ({ onClick }) => (
         display: "flex",
         alignItems: "flex-end",
         justifyContent: "space-between",
-        backgroundImage: "url('/11621406ee6eb5f29bb80937e33d2195815c78d8.webp')",
+        backgroundImage: `url(${img11621406})`,
         backgroundSize: "cover",
         backgroundPosition: "center",
         backgroundRepeat: "no-repeat",
@@ -66,7 +69,7 @@ const ReferAndWin500: React.FC<ReferAndWin500Props> = ({ onClick }) => (
       </div>
       {/* SVG illustration */}
       <img
-        src="/element.webp"
+        src={imgElement}
         alt="Yoga Kit"
         style={{
           width: "10.3125rem",

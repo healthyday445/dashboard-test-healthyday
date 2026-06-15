@@ -13,6 +13,7 @@ import imgConfettiA1 from "@/assets/leaderboard/226805aeb355248ebac39e293e844975
 import imgConfetti from "@/assets/leaderboard/confetti.webp";
 import imgMedal from "@/assets/leaderboard/d8c04109d0b7e7d179eedceade5572244f039058.webp";
 import imgStarSmall from "@/assets/leaderboard/eeef30852c9e8a5d9b0eedd75392aa12539c4ce5.webp";
+import imgBlueArrow from "@/assets/blueArrow.svg";
 import imgEllipse from "@/assets/leaderboard/ellipse.svg";
 import imgLine from "@/assets/leaderboard/line.svg";
 import imgTier1Illustration from "@/assets/leaderboard/tier1-illustration.webp";
@@ -447,7 +448,7 @@ const Leaderboard: React.FC = () => {
             alignItems: "center",
           }}
         >
-          View Your Referrals <img src="/blueArrow.svg" alt="" style={{ width: "18px", height: "18px", marginLeft: "4px", marginTop: "4px" }} />
+          View Your Referrals <img src={imgBlueArrow} alt="" style={{ width: "18px", height: "18px", marginLeft: "4px", marginTop: "4px" }} />
         </span>
       </div>}
 

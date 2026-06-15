@@ -2,6 +2,17 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { trackVisit } from "@/lib/trackVisit";
 import logo from "@/assets/Primary_logo.svg";
+import imgIngredients from "@/assets/Ingredients.png";
+import bonusFaceyogaTel from "@/assets/bonus/faceyoga_tel.jpg";
+import bonusFaceyogaEng from "@/assets/bonus/faceyoga_eng.jpg";
+import bonusWeightloss from "@/assets/bonus/weightlosssession.jpg";
+import bonusWeightlossEng from "@/assets/bonus/weightlosssession_eng.jpg";
+import bonusBwEng from "@/assets/bonus/bw_eng.jpg";
+import bonusBreathwork from "@/assets/bonus/breathwork.jpg";
+import bonusMeditationTel from "@/assets/bonus/meditation_tel.jpg";
+import bonusMeditationEng from "@/assets/bonus/meditation_eng.jpg";
+import bonusSleepsession from "@/assets/bonus/sleepsession.jpg";
+import bonusSleepsessionEng from "@/assets/bonus/sleepsession_eng.jpg";
 import sessionTimeIcon from "@/assets/leaderboard/session_time_icon.webp";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 import { ReferralMilestonesCard } from "@/components/ReferralMilestonesCard";
@@ -839,24 +850,24 @@ const Index = () => {
       type BonusInfo = { name: string; fullName: string; startMin: number; videoId: string; sessionLink: string; thumbnail: string; liveDuration?: number; activeEndOffset?: number };
       const bonusByDay: Record<number, Record<string, BonusInfo>> = {
         3: {
-          Telugu: { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga", thumbnail: "/bonus/faceyoga_tel.jpg", liveDuration: 60, activeEndOffset: 60 },
-          English: { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga_eng", thumbnail: "/bonus/faceyoga_eng.jpg", liveDuration: 60, activeEndOffset: 60 },
+          Telugu: { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga", thumbnail: bonusFaceyogaTel, liveDuration: 60, activeEndOffset: 60 },
+          English: { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga_eng", thumbnail: bonusFaceyogaEng, liveDuration: 60, activeEndOffset: 60 },
         },
         5: {
-          Telugu: { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "raCc7Z31LYw", sessionLink: "https://start.dailyyogawithjagan.com/meditation_tel", thumbnail: "/bonus/meditation_tel.jpg" },
-          English: { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "u1Hom0s7ibU", sessionLink: "https://start.dailyyogawithjagan.com/meditation_eng", thumbnail: "/bonus/meditation_eng.jpg" },
+          Telugu: { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "raCc7Z31LYw", sessionLink: "https://start.dailyyogawithjagan.com/meditation_tel", thumbnail: bonusMeditationTel },
+          English: { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "u1Hom0s7ibU", sessionLink: "https://start.dailyyogawithjagan.com/meditation_eng", thumbnail: bonusMeditationEng },
         },
         7: {
-          Telugu: { name: "Weight Loss Session", fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession", thumbnail: "/bonus/weightlosssession.jpg" },
-          English: { name: "Weight Loss Session", fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession_eng", thumbnail: "/bonus/weightlosssession_eng.jpg" },
+          Telugu: { name: "Weight Loss Session", fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession", thumbnail: bonusWeightloss },
+          English: { name: "Weight Loss Session", fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession_eng", thumbnail: bonusWeightlossEng },
         },
         10: {
-          Telugu: { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/breathwork", thumbnail: "/bonus/breathwork.jpg", liveDuration: 30, activeEndOffset: 60 },
-          English: { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/bw_eng", thumbnail: "/bonus/bw_eng.jpg", liveDuration: 30, activeEndOffset: 60 },
+          Telugu: { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/breathwork", thumbnail: bonusBreathwork, liveDuration: 30, activeEndOffset: 60 },
+          English: { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/bw_eng", thumbnail: bonusBwEng, liveDuration: 30, activeEndOffset: 60 },
         },
         14: {
-          Telugu: { name: "Sleep Session", fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/sleepsession", thumbnail: "/bonus/sleepsession.jpg" },
-          English: { name: "Sleep Session", fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/sleepsession_eng", thumbnail: "/bonus/sleepsession_eng.jpg" },
+          Telugu: { name: "Sleep Session", fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/sleepsession", thumbnail: bonusSleepsession },
+          English: { name: "Sleep Session", fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/sleepsession_eng", thumbnail: bonusSleepsessionEng },
         },
       };
       const bonusSession = bonusByDay[currentDay][lang];
@@ -1060,16 +1071,16 @@ const Index = () => {
           const BONUS_DAYS = [3, 5, 7, 10, 14];
           const bonusByDayMap: Record<number, Record<string, { fullName: string; startMin: number; sessionLink: string; thumbnail: string; liveDuration?: number; activeEndOffset?: number }>> = {
             3: {
-              Telugu: { fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/faceyoga", thumbnail: "/bonus/faceyoga_tel.jpg" },
-              English: { fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/faceyoga_eng", thumbnail: "/bonus/faceyoga_eng.jpg" }
+              Telugu: { fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/faceyoga", thumbnail: bonusFaceyogaTel },
+              English: { fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/faceyoga_eng", thumbnail: bonusFaceyogaEng }
             },
-            5: { Telugu: { fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, sessionLink: "https://start.dailyyogawithjagan.com/meditation_tel", thumbnail: "/bonus/meditation_tel.jpg" }, English: { fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, sessionLink: "https://start.dailyyogawithjagan.com/meditation_eng", thumbnail: "/bonus/meditation_eng.jpg" } },
-            7: { Telugu: { fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession", thumbnail: "/bonus/weightlosssession.jpg" }, English: { fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession_eng", thumbnail: "/bonus/weightlosssession_eng.jpg" } },
+            5: { Telugu: { fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, sessionLink: "https://start.dailyyogawithjagan.com/meditation_tel", thumbnail: bonusMeditationTel }, English: { fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, sessionLink: "https://start.dailyyogawithjagan.com/meditation_eng", thumbnail: bonusMeditationEng } },
+            7: { Telugu: { fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession", thumbnail: bonusWeightloss }, English: { fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession_eng", thumbnail: bonusWeightlossEng } },
             10: {
-              Telugu: { fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/breathwork", thumbnail: "/bonus/breathwork.jpg" },
-              English: { fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/bw_eng", thumbnail: "/bonus/bw_eng.jpg" }
+              Telugu: { fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/breathwork", thumbnail: bonusBreathwork },
+              English: { fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/bw_eng", thumbnail: bonusBwEng }
             },
-            14: { Telugu: { fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/sleepsession", thumbnail: "/bonus/sleepsession.jpg" }, English: { fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/sleepsession_eng", thumbnail: "/bonus/sleepsession_eng.jpg" } },
+            14: { Telugu: { fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/sleepsession", thumbnail: bonusSleepsession }, English: { fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/sleepsession_eng", thumbnail: bonusSleepsessionEng } },
           };
           const bonusLang = studentData?.language === "English" ? "English" : "Telugu";
           const isBonusDay = BONUS_DAYS.includes(currentDay);
@@ -1381,7 +1392,7 @@ const Index = () => {
           fullName: "Face Yoga Session at 11:30 AM",
           startMin: 690,
           sessionLink: "https://join.healthyday.co.in/healthyface",
-          thumbnail: "/bonus/faceyoga_tel.jpg",
+          thumbnail: bonusFaceyogaTel,
         });
       } else if (paidLang === "English" && !isTeluguFaceYogaWeek) {
         eligibleBonusSessions.push({
@@ -1389,7 +1400,7 @@ const Index = () => {
           fullName: "Face Yoga Session at 11:30 AM",
           startMin: 690,
           sessionLink: "https://join.healthyday.co.in/healthyface_eng",
-          thumbnail: "/bonus/faceyoga_eng.jpg",
+          thumbnail: bonusFaceyogaEng,
         });
       }
     }
@@ -1402,7 +1413,7 @@ const Index = () => {
         fullName: "Diet Session at 8:00 PM",
         startMin: 1200,
         sessionLink: paidLang === "English" ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet",
-        thumbnail: "/bonus/weightlosssession.jpg",
+        thumbnail: bonusWeightloss,
       });
     }
 
@@ -1414,7 +1425,7 @@ const Index = () => {
         fullName: "Breath to Heal Session at 9:00 PM",
         startMin: 1260,
         sessionLink: paidLang === "English" ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession",
-        thumbnail: paidLang === "English" ? "/bonus/bw_eng.jpg" : "/bonus/breathwork.jpg",
+        thumbnail: paidLang === "English" ? bonusBwEng : bonusBreathwork,
       });
     }
 
@@ -1715,7 +1726,7 @@ const Index = () => {
                 }}
               >
                 <img
-                  src="/Ingredients.png"
+                  src={imgIngredients}
                   alt="Ingredients"
                   style={{ width: "24px", height: "24px", aspectRatio: "1/1", objectFit: "contain" }}
                 />

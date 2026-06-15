@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
+import imgImage1 from "@/assets/image_1.png";
 
 const Referral = () => {
   const navigate = useNavigate();
@@ -185,7 +186,7 @@ const Referral = () => {
               }}
             >
               <img
-                src="/image 1.png"
+                src={imgImage1}
                 alt="WhatsApp"
                 style={{ width: "15px", height: "15px", aspectRatio: "1/1", objectFit: "cover" }}
               />

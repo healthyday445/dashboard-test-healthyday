@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import imgImage1 from "@/assets/image_1.png";
 
 export const ShareReferralActions = ({
   shareLink,
@@ -97,7 +98,7 @@ export const ShareReferralActions = ({
             cursor: "pointer" 
           }}
         >
-          <img src="/image 1.png" style={{ display: "block", width: "15px", height: "15px", aspectRatio: "1/1" }} alt="WhatsApp" />
+          <img src={imgImage1} style={{ display: "block", width: "15px", height: "15px", aspectRatio: "1/1" }} alt="WhatsApp" />
           <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontStyle: "normal", fontWeight: 500, lineHeight: "normal" }}>Share on Whatsapp</span>
         </button>
       </div>
