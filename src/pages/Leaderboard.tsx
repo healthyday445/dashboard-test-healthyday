@@ -82,7 +82,7 @@ const Leaderboard: React.FC = () => {
   const [leaderboardLoading, setLeaderboardLoading] = useState(true);
   const [rankLoading, setRankLoading] = useState(!!mobile);
   const [currentPage, setCurrentPage] = useState(1);
-  const [isFetchingMore, setIsFetchingMore] = useState(false);
+  const isFetchingRef = useRef(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
@@ -119,29 +119,34 @@ const Leaderboard: React.FC = () => {
   };
 
   useEffect(() => {
-    if (currentPage === 1) {
+    const controller = new AbortController();
+    const page = currentPage;
+    isFetchingRef.current = true;
+    if (page === 1) {
       setLeaderboardLoading(true);
       setLeaderboard([]);
-    } else {
-      setIsFetchingMore(true);
     }
-    fetch(`/.netlify/functions/leaderboard?start_date=${CONTEST_START}&end_date=${CONTEST_END}&page_size=100&page=${currentPage}`)
+    fetch(`/.netlify/functions/leaderboard?start_date=${CONTEST_START}&end_date=${CONTEST_END}&page_size=100&page=${page}`, { signal: controller.signal })
       .then((r) => r.json())
       .then((data) => {
         const rows: LeaderboardEntry[] = data.leaderboard ?? [];
-        setLeaderboard((prev) => currentPage === 1 ? rows : [...prev, ...rows]);
+        setLeaderboard((prev) => page === 1 ? rows : [...prev, ...rows]);
       })
-      .catch(() => {})
-      .finally(() => { setLeaderboardLoading(false); setIsFetchingMore(false); });
+      .catch((e) => { if (e.name !== "AbortError") console.error(e); })
+      .finally(() => { setLeaderboardLoading(false); isFetchingRef.current = false; });
+    return () => controller.abort();
   }, [currentPage]);
 
   const handleScroll = useCallback(() => {
     const el = scrollContainerRef.current;
-    if (!el || isFetchingMore || leaderboardLoading || currentPage >= 5) return;
+    if (!el || isFetchingRef.current || leaderboardLoading || currentPage >= 5) return;
     const remaining = el.scrollHeight - el.scrollTop - el.clientHeight;
     // 7 skeleton rows × (48px height + 8px gap) = ~392px — trigger when user enters skeleton zone
-    if (remaining < 392) setCurrentPage((p) => p + 1);
-  }, [isFetchingMore, leaderboardLoading, currentPage]);
+    if (remaining < 392) {
+      isFetchingRef.current = true;
+      setCurrentPage((p) => p + 1);
+    }
+  }, [leaderboardLoading, currentPage]);
 
   useEffect(() => {
     if (!mobile) { setRankLoading(false); return; }
