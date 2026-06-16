@@ -24,6 +24,7 @@ import imgTier3Illustration from "@/assets/leaderboard/tier3-illustration.webp";
 import imgTier3Star from "@/assets/leaderboard/tier3-star.webp";
 import imgTier4Illustration from "@/assets/leaderboard/tier4-illustration.webp";
 import imgTier4Star from "@/assets/leaderboard/tier4-star.webp";
+import imgYogaKit from "@/assets/leaderboard/yoga-kit-final.webp";
 
 const CONTEST_START = "2026-06-01";
 const CONTEST_END = "2026-06-30";
@@ -948,6 +949,42 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
         <div style={{ position: "absolute", top: "-5px", right: "75px", width: "58.9px", height: "83.6px", transform: "rotate(-144.8deg)", backgroundImage: `url(${imgConfettiA})`, backgroundSize: "242.952% 164.377%", backgroundPosition: "-121.696px -40.227px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
         <div style={{ position: "absolute", top: "45px", left: "210px", width: "47.7px", height: "36.5px", transform: "rotate(39.7deg)", backgroundImage: `url(${imgConfetti})`, backgroundSize: "361.562% 522.221%", backgroundPosition: "-88.083px -79.919px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
         <div style={{ position: "absolute", top: "0", left: "170px", width: "56.96px", height: "61.08px", transform: "rotate(-124.7deg)", backgroundImage: `url(${imgConfettiA1})`, backgroundSize: "364.5% 378.052%", backgroundPosition: "-197.338px -173.409px", backgroundRepeat: "no-repeat", zIndex: 1 }} />
+      </div>
+    );
+  }
+
+  /* ── Rank > 2000 ── Light blue card: "You are ranked X" */
+  if (userRank.rank > 2000) {
+    return (
+      <div style={{ ...CARD_BASE, border: "1.5px solid #7AB6ED", background: "radial-gradient(ellipse at 80% 55%, #F7FFFF 2%, #E7F7FF 60%, #DCF4FF 100%)" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px", zIndex: 2, flex: 1 }}>
+          <div style={{ display: "flex", alignItems: "baseline", gap: "4px" }}>
+            <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, lineHeight: "normal" }}>
+              You are ranked
+            </span>
+            <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "18px", fontWeight: 800, lineHeight: "normal" }}>
+              {userRank.rank}
+            </span>
+          </div>
+          <span style={{ color: "#000", fontFamily: "Outfit", fontSize: "10px", fontWeight: 400, lineHeight: "1.4", maxWidth: "177px" }}>
+            {"Refer more to win exciting rewards - FREE Classes & Yoga Kits!"}
+          </span>
+          <div style={{ width: "100px", height: "34px", borderRadius: "6px", background: "#FFF", border: "0.2px solid #A0A0A0", boxShadow: "1px 1px 1px 0px rgba(255,255,255,0.25)", display: "flex", alignItems: "center", padding: "0 6px", boxSizing: "border-box", gap: "6px", marginTop: "6px" }}>
+            <div style={{ width: "23px", height: "23px", position: "relative", flexShrink: 0 }}>
+              <img src={imgEllipse} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
+              <img src={imgTier4Star} alt="" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "15px", height: "17px", objectFit: "contain" }} />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span style={{ color: "#494949", fontFamily: "Outfit", fontSize: "8px", fontWeight: 500, lineHeight: "normal" }}>Your Referrals</span>
+              <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, lineHeight: "normal" }}>{userRank.referral_count}</span>
+            </div>
+          </div>
+        </div>
+        <img
+          src={imgYogaKit}
+          alt=""
+          style={{ position: "absolute", right: 10, bottom: 0, width: "9.375rem", height: "7.5625rem", objectFit: "cover", pointerEvents: "none" }}
+        />
       </div>
     );
   }
