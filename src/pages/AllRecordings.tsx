@@ -330,10 +330,10 @@ const AllRecordings = () => {
 
   // Subscription plan duration check (mirrors paid dashboard logic)
   const activeSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "active" || s.subscription_status === "ongoing") || studentData?.subscriptions?.[0];
-  const planType = activeSub?.plan_type || studentData?.plan_type;
-  const is3Month = planType === "3_months";
-  const is6Month = planType === "6_months";
-  const is12Month = planType === "12_months";
+  const planType = activeSub?.plan_type || studentData?.current_plan || studentData?.plan_type;
+  const is3Month = planType === "3_months" || planType === "3_months_upgrade";
+  const is6Month = planType === "6_months" || planType === "6_months_upgrade";
+  const is12Month = planType === "12_months" || planType === "12_months_upgrade";
   const hasB2hAccess = is6Month || is12Month;
 
   // --- Date formatting helpers ---
