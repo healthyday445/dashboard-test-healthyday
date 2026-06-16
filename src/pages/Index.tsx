@@ -2196,47 +2196,28 @@ const Index = () => {
       {(() => {
         const _nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
         const _totalMin = _nowIST.getUTCHours() * 60 + _nowIST.getUTCMinutes();
-        const _isJun14 = _nowIST.getUTCFullYear() === 2026 && _nowIST.getUTCMonth() === 5 && _nowIST.getUTCDate() === 14;
+        const _isJun17 = _nowIST.getUTCFullYear() === 2026 && _nowIST.getUTCMonth() === 5 && _nowIST.getUTCDate() === 17;
 
         const isTelugu = userLanguage !== "English";
         const link = isTelugu
-          ? "https://www.youtube.com/live/mA1uWOTjdeU?feature=share"
-          : "https://www.youtube.com/live/4GEgaD2BGcM?feature=share";
-        const videoId = isTelugu ? "mA1uWOTjdeU" : "4GEgaD2BGcM";
+          ? "https://www.youtube.com/live/HaWU4AHsKXc"
+          : "https://www.youtube.com/live/OskBc7sb-_0";
+        const videoId = isTelugu ? "HaWU4AHsKXc" : "OskBc7sb-_0";
         const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-        // Telugu: 10:30 AM–12:00 PM | English: 8:00 PM–9:30 PM
-        const liveStart = isTelugu ? 630 : 1200;
-        const liveEnd = isTelugu ? 720 : 1290;
-        const ctaTime = isTelugu ? "11:00 AM IST" : "8:30 PM IST";
+        // Both languages: 8:00 PM IST, live tag 7:30–9:00 PM
+        const liveStart = 1170;  // 7:30 PM
+        const liveEnd = 1260;    // 9:00 PM
+        const ctaTime = "8:00 PM IST";
 
-        // Show ended card once the session has ended, or on any day after June 14
+        // Hide once session has ended on June 17, or on any day after June 17
         const _isPastSessionDay = _nowIST.getUTCFullYear() > 2026 ||
           (_nowIST.getUTCFullYear() === 2026 && (_nowIST.getUTCMonth() > 5 ||
-          (_nowIST.getUTCMonth() === 5 && _nowIST.getUTCDate() > 14)));
-        const _isEnded = _isPastSessionDay || (_isJun14 && _totalMin >= liveEnd);
-        if (_isEnded) {
-          const nextSessionTime = isTelugu ? "11:00 AM IST" : "8:30 PM IST";
-          return (
-            <div style={{ padding: "18px 20px 0" }}>
-              <div style={{ background: "#fff", borderRadius: "10px", boxShadow: "0px 0px 8px 0px rgba(0,0,0,0.25)", display: "flex", alignItems: "center", gap: "14px", padding: "14px 16px" }}>
-                <img src={sessionTimeIcon} alt="" style={{ width: "52px", height: "52px", flexShrink: 0, objectFit: "contain" }} />
-                {/* Text */}
-                <div style={{ flex: 1, wordBreak: "break-word" }}>
-                  <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "14px", fontWeight: 700, color: "#202020", lineHeight: "1.35" }}>INTRODUCTION LIVE HAS ENDED!</p>
-                  <p style={{ margin: "5px 0 0", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400, color: "#575656", lineHeight: "15px" }}>
-                    The next Intro session will be live again on
-                  </p>
-                  <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, color: "#0D468B", lineHeight: "15px" }}>
-                    17<sup>th</sup> June (Wednesday) at {nextSessionTime}
-                  </p>
-                </div>
-              </div>
-            </div>
-          );
-        }
+          (_nowIST.getUTCMonth() === 5 && _nowIST.getUTCDate() > 17)));
+        const _isEnded = _isPastSessionDay || (_isJun17 && _totalMin >= liveEnd);
+        if (_isEnded) return null;
 
-        const _isLive = _isJun14 && _totalMin >= liveStart && _totalMin < liveEnd;
-        const _isSessionDay = _isJun14 && _totalMin < liveStart;
+        const _isLive = _isJun17 && _totalMin >= liveStart && _totalMin < liveEnd;
+        const _isSessionDay = _isJun17 && _totalMin < liveStart;
 
         return (
           <div style={{ padding: "18px 20px 0" }}>
