@@ -26,6 +26,7 @@ import imgTier4Illustration from "@/assets/leaderboard/tier4-illustration.webp";
 import imgTier4Star from "@/assets/leaderboard/tier4-star.webp";
 import imgYogaKit from "@/assets/leaderboard/yoga-kit-final.webp";
 import imgWhatsApp from "@/assets/leaderboard/whatsapp-icon.png";
+import imgSadEmoji from "@/assets/leaderboard/sad-emoji.png";
 
 const CONTEST_START = "2026-06-01";
 const CONTEST_END = "2026-06-30";
@@ -93,9 +94,11 @@ const ReferralNameNumber: React.FC<{ name: string; mobile: string }> = ({ name, 
   </div>
 );
 
-const PendingNote: React.FC = () => (
+const PendingNote: React.FC<{ language?: string }> = ({ language }) => (
   <span style={{ color: "#FF3E3E", fontFamily: "Outfit", fontSize: "10px", fontWeight: 400, lineHeight: "normal" }}>
-    Verify Button in the WhatsApp Reminder is not clicked by this person
+    {language === "Telugu"
+      ? "ఈ person ఇంకా whatsapp లో confirm button నొక్కలేదు"
+      : "Verify Button in the WhatsApp Reminder is not clicked by this person"}
   </span>
 );
 
@@ -117,7 +120,7 @@ const Leaderboard: React.FC = () => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerClosing, setDrawerClosing] = useState(false);
-  const [referralsData, setReferralsData] = useState<{ total_referrals: number; referrals: { referred_mobile: string; referred_name: string; referral_confirmation_status: string }[] } | null>(null);
+  const [referralsData, setReferralsData] = useState<{ language?: string; total_referrals: number; referrals: { referred_mobile: string; referred_name: string; referral_confirmation_status: string }[] } | null>(null);
   const [referralsLoading, setReferralsLoading] = useState(false);
 
   const closeDrawer = () => {
@@ -174,8 +177,14 @@ const Leaderboard: React.FC = () => {
     if (!mobile) { setRankLoading(false); return; }
     const e164 = `+${mobile.replace(/\D/g, "")}`;
     fetch(`/.netlify/functions/leaderboard-rank?mobile=${encodeURIComponent(e164)}&start_date=${CONTEST_START}&end_date=${CONTEST_END}`)
-      .then((r) => (r.status === 404 ? null : r.json()))
-      .then((data) => setUserRank(data))
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.detail?.status === "not_ranked") {
+          setUserRank({ rank: 0, name: "", referral_count: 0 });
+        } else {
+          setUserRank(data);
+        }
+      })
       .catch(() => {})
       .finally(() => setRankLoading(false));
   }, [mobile]);
@@ -420,62 +429,68 @@ const Leaderboard: React.FC = () => {
       </div>
 
       {/* ═══════════════════════════════════════
-          REFER & WIN BUTTON
+          RANK CARD + REFER & WIN + VIEW REFERRALS
+          (order swapped for zero-referrals case)
          ═══════════════════════════════════════ */}
-      <div style={{ width: "calc(100% - 32px)", marginTop: "18px", marginBottom: "8px" }}>
-        <button
-          onClick={() => {
-            if (!mobile) {
-              window.open("https://wa.me/919052888968?text=Refer", "_blank");
-              return;
-            }
-            const waMessage = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
-            window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank");
-          }}
-          style={{
-            width: "100%",
-            height: "40px",
-            borderRadius: "30px",
-            background: "#FEAB27",
-            border: "none",
-            cursor: "pointer",
-            fontFamily: "Outfit",
-            fontSize: "16px",
-            fontWeight: 500,
-            color: "#202020",
-            textTransform: "uppercase",
-            letterSpacing: "0.5px",
-            boxShadow: "0px 4px 2px rgba(0,0,0,0.25)",
-          }}
-        >
-          Refer &amp; Win Yoga Kit
-        </button>
+      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+        {/* RANK CARD */}
+        <div style={{ order: userRank?.referral_count === 0 ? 1 : 2, width: "100%", display: "flex", justifyContent: "center" }}>
+          <CurrentUserRankCard userRank={userRank} loading={rankLoading} />
+        </div>
+
+        {/* REFER & WIN BUTTON */}
+        <div style={{ order: userRank?.referral_count === 0 ? 2 : 1, width: "calc(100% - 32px)", marginTop: "18px", marginBottom: "8px" }}>
+          <button
+            onClick={() => {
+              if (!mobile) {
+                window.open("https://wa.me/919052888968?text=Refer", "_blank");
+                return;
+              }
+              const waMessage = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
+              window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank");
+            }}
+            style={{
+              width: "100%",
+              height: "40px",
+              borderRadius: "30px",
+              background: "#FEAB27",
+              border: "none",
+              cursor: "pointer",
+              fontFamily: "Outfit",
+              fontSize: "16px",
+              fontWeight: 500,
+              color: "#202020",
+              textTransform: "uppercase",
+              letterSpacing: "0.5px",
+              boxShadow: "0px 4px 2px rgba(0,0,0,0.25)",
+            }}
+          >
+            Refer &amp; Win Yoga Kit
+          </button>
+        </div>
+
+        {/* VIEW YOUR REFERRALS — hidden for zero-referrals */}
+        {mobile && userRank?.referral_count !== 0 && (
+          <div style={{ order: 3, width: "calc(100% - 32px)", display: "flex", justifyContent: "center", marginTop: "10px" }}>
+            <span
+              onClick={openReferralsDrawer}
+              style={{
+                color: "#012755",
+                fontFamily: "Outfit",
+                fontSize: "16px",
+                fontWeight: 500,
+                lineHeight: "normal",
+                whiteSpace: "nowrap",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+              }}
+            >
+              View Your Referrals <img src={imgBlueArrow} alt="" style={{ width: "18px", height: "18px", marginLeft: "4px", marginTop: "4px" }} />
+            </span>
+          </div>
+        )}
       </div>
-
-
-      {/* ═══════════════════════════════════════
-          CURRENT USER RANK
-         ═══════════════════════════════════════ */}
-      <CurrentUserRankCard userRank={userRank} loading={rankLoading} />
-
-      {mobile && <div style={{ width: "calc(100% - 32px)", display: "flex", justifyContent: "center", marginTop: "10px" }}>
-        <span
-          onClick={openReferralsDrawer}
-          style={{
-            color: "#012755",
-            fontFamily: "Outfit",
-            fontSize: "16px",
-            fontWeight: 500,
-            lineHeight: "normal",
-            whiteSpace: "nowrap",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-          }}
-        >
-          View Your Referrals <img src={imgBlueArrow} alt="" style={{ width: "18px", height: "18px", marginLeft: "4px", marginTop: "4px" }} />
-        </span>
-      </div>}
 
       {/* ═══════════════════════════════════════
           LEADERBOARD SECTION
@@ -629,11 +644,11 @@ const Leaderboard: React.FC = () => {
                       {/* Left column: name+number, note */}
                       <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px", minWidth: 0 }}>
                         <ReferralNameNumber name={displayName} mobile={ref.referred_mobile} />
-                        <PendingNote />
+                        <PendingNote language={referralsData?.language} />
                       </div>
                       {/* Right column: PENDING badge + Remind button */}
                       <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", justifyContent: "space-between", gap: "8px", flexShrink: 0, alignSelf: "stretch" }}>
-                        <div style={{ padding: "4px 10px", borderRadius: "6px", background: "#F2F2F2" }}>
+                        <div style={{ padding: "4px 10px", borderRadius: "6px", background: "#F2F2F2", display: "flex", alignItems: "center", justifyContent: "center" }}>
                           <span style={{ color: "#888", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, letterSpacing: "0.5px" }}>PENDING</span>
                         </div>
                         <button
@@ -650,13 +665,13 @@ const Leaderboard: React.FC = () => {
                             gap: "4px",
                             padding: "5px 4px",
                             borderRadius: "4px",
-                            border: "0.7px solid #40C351",
+                            border: "1px solid #40C351",
                             background: "#FFF",
                             cursor: "pointer",
                             fontFamily: "Outfit",
-                            fontSize: "12px",
+                            fontSize: "10px",
                             fontWeight: 600,
-                            color: "#202020",
+                            color: "#40C351",
                             lineHeight: "normal",
                           }}
                         >
@@ -685,7 +700,7 @@ const Leaderboard: React.FC = () => {
                     <div style={{ flex: 1 }}>
                       <ReferralNameNumber name={displayName} mobile={ref.referred_mobile} />
                     </div>
-                    <div style={{ padding: "4px 10px", borderRadius: "6px", background: "#E6F9EE", flexShrink: 0 }}>
+                    <div style={{ padding: "4px 10px", borderRadius: "6px", background: "#E6F9EE", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                       <span style={{ color: "#1A8A45", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, letterSpacing: "0.5px" }}>VERIFIED</span>
                     </div>
                   </div>
@@ -963,6 +978,33 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
     boxSizing: "border-box",
     overflow: "hidden",
   };
+
+  /* ── Zero referrals ── "Start Referring Today!" */
+  if (userRank.referral_count === 0) {
+    return (
+      <div style={{ ...CARD_BASE, border: "1.5px solid #7AB6ED", background: "radial-gradient(ellipse at 80% 55%, #F7FFFF 2%, #E7F7FF 60%, #DCF4FF 100%)" }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: "4px", zIndex: 2, flex: 1 }}>
+          <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, lineHeight: "normal" }}>
+            Start Referring Today!
+          </span>
+          <span style={{ color: "#000", fontFamily: "Outfit", fontSize: "10px", fontWeight: 400, lineHeight: "1.4", maxWidth: "177px" }}>
+            You currently do not have a rank as your referrals are still zero
+          </span>
+          <div style={{ width: "100px", height: "34px", borderRadius: "6px", background: "#FFF", border: "0.2px solid #A0A0A0", boxShadow: "1px 1px 1px 0px rgba(255,255,255,0.25)", display: "flex", alignItems: "center", padding: "0 6px", boxSizing: "border-box", gap: "6px", marginTop: "6px" }}>
+            <div style={{ width: "23px", height: "23px", position: "relative", flexShrink: 0 }}>
+              <img src={imgEllipse} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
+              <img src={imgSadEmoji} alt="" style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "17px", height: "17px", objectFit: "contain" }} />
+            </div>
+            <div style={{ display: "flex", flexDirection: "column" }}>
+              <span style={{ color: "#494949", fontFamily: "Outfit", fontSize: "8px", fontWeight: 500, lineHeight: "normal" }}>Your Referrals</span>
+              <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, lineHeight: "normal" }}>0</span>
+            </div>
+          </div>
+        </div>
+        <img src={imgYogaKit} alt="" style={{ position: "absolute", right: 10, bottom: 0, width: "9.375rem", height: "7.5625rem", objectFit: "cover", pointerEvents: "none" }} />
+      </div>
+    );
+  }
 
   /* ── Tier 1: Rank 1–25 ── Dark blue + shield + confetti */
   if (userRank.rank <= 25) {
