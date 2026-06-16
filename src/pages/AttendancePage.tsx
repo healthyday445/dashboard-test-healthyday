@@ -242,9 +242,9 @@ const AttendancePage = () => {
     const activeSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "active" || s.subscription_status === "ongoing") || studentData?.subscriptions?.[0];
     const planType = activeSub?.plan_type || studentData?.plan_type;
     let durationMonths = 3; // default 3 months
-    if (planType === "6_months") durationMonths = 6;
-    else if (planType === "12_months") durationMonths = 12;
-    else if (planType === "1_month") durationMonths = 1;
+    if (planType === "6_months" || planType === "6_months_upgrade") durationMonths = 6;
+    else if (planType === "12_months" || planType === "12_months_upgrade") durationMonths = 12;
+    else if (planType === "1_month" || planType === "1_month_upgrade") durationMonths = 1;
     const start = new Date(planEnd);
     start.setMonth(start.getMonth() - durationMonths);
     return start;
