@@ -27,7 +27,7 @@ export default defineConfig(({ mode }) => {
       },
       proxy: {
         "/.netlify/functions/student": {
-          target: "https://test-healthyday-backend-773381060399.asia-south1.run.app",
+          target: "https://healthyday-backend-v2-773381060399.asia-south1.run.app",
           changeOrigin: true,
           secure: true,
           rewrite: (path) => path.replace("/.netlify/functions/student", "/api/internal/student"),
@@ -40,7 +40,7 @@ export default defineConfig(({ mode }) => {
           },
         },
         "/.netlify/functions/referrals": {
-          target: "https://test-healthyday-backend-773381060399.asia-south1.run.app",
+          target: "https://healthyday-backend-v2-773381060399.asia-south1.run.app",
           changeOrigin: true,
           secure: true,
           rewrite: (path) =>
@@ -54,7 +54,7 @@ export default defineConfig(({ mode }) => {
           },
         },
         "/.netlify/functions/session-links": {
-          target: "https://test-healthyday-backend-773381060399.asia-south1.run.app",
+          target: "https://healthyday-backend-v2-773381060399.asia-south1.run.app",
           changeOrigin: true,
           secure: true,
           rewrite: (path) =>
@@ -68,7 +68,7 @@ export default defineConfig(({ mode }) => {
           },
         },
         "/.netlify/functions/leaderboard-rank": {
-          target: "https://test-healthyday-backend-773381060399.asia-south1.run.app",
+          target: "https://healthyday-backend-v2-773381060399.asia-south1.run.app",
           changeOrigin: true,
           secure: true,
           rewrite: (path) =>
@@ -82,7 +82,7 @@ export default defineConfig(({ mode }) => {
           },
         },
         "/.netlify/functions/leaderboard": {
-          target: "https://test-healthyday-backend-773381060399.asia-south1.run.app",
+          target: "https://healthyday-backend-v2-773381060399.asia-south1.run.app",
           changeOrigin: true,
           secure: true,
           rewrite: (path) =>

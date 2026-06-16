@@ -7,7 +7,7 @@ export async function handler(event) {
   if (page) params.set("page", page);
   if (page_size) params.set("page_size", page_size);
 
-  const url = `https://test-healthyday-backend-773381060399.asia-south1.run.app/api/internal/referrals/leaderboard?${params.toString()}`;
+  const url = `https://healthyday-backend-v2-773381060399.asia-south1.run.app/api/internal/referrals/leaderboard?${params.toString()}`;
   const res = await fetch(url, { headers: { "X-API-KEY": "HDB@020205" } });
 
   const body = await res.text();
