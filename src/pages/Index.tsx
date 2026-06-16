@@ -37,7 +37,7 @@ const PlayButton = () => (
 
 const teluguVideos = [
   {
-    id: "SyjnCjDtNS8",
+    id: "TJXFF0LknNs",
     title: "15 Minutes Yoga for Beginners",
     duration: "18:51",
     subtitle: "Healthyday Yoga Telugu",
