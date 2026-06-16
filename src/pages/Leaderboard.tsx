@@ -654,8 +654,10 @@ const Leaderboard: React.FC = () => {
                         <button
                           onClick={() => {
                             const phone = ref.referred_mobile.replace(/\D/g, "");
-                            const message = encodeURIComponent("Hi! You haven't verified your participation yet. Please click the verify button in the WhatsApp reminder we sent you.");
-                            window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
+                            const text = referralsData?.language === "Telugu"
+                              ? "మీరు ఇంకా మీ 21 Days FREE Registration confirm చేయలేదు.\n\nDaily Yoga with Jagan WhatsApp Number నుండి మీకు ఒక message వచ్చింది. అందులో \"Next Step - Click Here\" అని ఒక Button ఉంటుంది. అది Click చేసి Confirm చేయొచ్చు"
+                              : "Namaste! You still haven't verified your mobile number for 21 days FREE Yoga.\n\nYou must have received a message from \"Daily Yoga with Jagan\" on WhatsApp. There is a button in there \"NEXT STEP - CLICK HERE\".\n\nPlease click that button to verify";
+                            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, "_blank");
                           }}
                           style={{
                             width: "100%",
