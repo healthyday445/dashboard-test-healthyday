@@ -25,6 +25,7 @@ import imgTier3Star from "@/assets/leaderboard/tier3-star.webp";
 import imgTier4Illustration from "@/assets/leaderboard/tier4-illustration.webp";
 import imgTier4Star from "@/assets/leaderboard/tier4-star.webp";
 import imgYogaKit from "@/assets/leaderboard/yoga-kit-final.webp";
+import imgWhatsApp from "@/assets/leaderboard/whatsapp-icon.png";
 
 const CONTEST_START = "2026-06-01";
 const CONTEST_END = "2026-06-30";
@@ -70,6 +71,34 @@ const PRIZE_IMAGES = {
 const BANNER_BG = imgBannerBg;
 const MAIN_PRIZE_IMG = imgMainPrize;
 
+const maskMobile = (num: string) => {
+  const digits = num.replace(/\D/g, "");
+  const last10 = digits.slice(-10);
+  return `+91 ${last10.slice(0, 1)}***${last10.slice(-6)}`;
+};
+
+const ReferralNameNumber: React.FC<{ name: string; mobile: string }> = ({ name, mobile }) => (
+  <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+    <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 600, lineHeight: "normal" }}>
+      {name}
+    </span>
+    <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+        <path d="M6.62 10.79C8.06 13.62 10.38 15.93 13.21 17.38L15.41 15.18C15.68 14.91 16.08 14.82 16.43 14.94C17.55 15.31 18.76 15.51 20 15.51C20.55 15.51 21 15.96 21 16.51V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z" fill="#888"/>
+      </svg>
+      <span style={{ color: "#888", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400 }}>
+        {maskMobile(mobile)}
+      </span>
+    </div>
+  </div>
+);
+
+const PendingNote: React.FC = () => (
+  <span style={{ color: "#FF3E3E", fontFamily: "Outfit", fontSize: "10px", fontWeight: 400, lineHeight: "normal" }}>
+    Verify Button in the WhatsApp Reminder is not clicked by this person
+  </span>
+);
+
 /* ────────────────────────────────────────────
    Leaderboard Page Component
    ──────────────────────────────────────────── */
@@ -103,20 +132,12 @@ const Leaderboard: React.FC = () => {
     setDrawerOpen(true);
     if (referralsData) return;
     setReferralsLoading(true);
-    const digits = mobile.replace(/\D/g, "");
-    const normalized = digits.startsWith("91") && digits.length >= 12 ? digits.slice(2) : digits;
-    const e164 = `+91${normalized}`;
+    const e164 = `+${mobile.replace(/\D/g, "")}`;
     fetch(`/.netlify/functions/referrals?mobile=${encodeURIComponent(e164)}&start_date=${CONTEST_START}&end_date=${CONTEST_END}`)
       .then((r) => r.json())
       .then((data) => setReferralsData(data))
       .catch(() => {})
       .finally(() => setReferralsLoading(false));
-  };
-
-  const maskMobile = (num: string) => {
-    const digits = num.replace(/\D/g, "");
-    const last10 = digits.slice(-10);
-    return `+91 ${last10.slice(0, 1)}***${last10.slice(-6)}`;
   };
 
   useEffect(() => {
@@ -151,9 +172,7 @@ const Leaderboard: React.FC = () => {
 
   useEffect(() => {
     if (!mobile) { setRankLoading(false); return; }
-    const digits = mobile.replace(/\D/g, "");
-    const normalized = digits.startsWith("91") && digits.length >= 12 ? digits.slice(2) : digits;
-    const e164 = `+91${normalized}`;
+    const e164 = `+${mobile.replace(/\D/g, "")}`;
     fetch(`/.netlify/functions/leaderboard-rank?mobile=${encodeURIComponent(e164)}&start_date=${CONTEST_START}&end_date=${CONTEST_END}`)
       .then((r) => (r.status === 404 ? null : r.json()))
       .then((data) => setUserRank(data))
@@ -582,6 +601,72 @@ const Leaderboard: React.FC = () => {
               )}
               {!referralsLoading && referralsData?.referrals?.map((ref, i) => {
                 const isVerified = ref.referral_confirmation_status === "verified";
+                const displayName = (!ref.referred_name || ref.referred_name === "None") ? maskMobile(ref.referred_mobile) : ref.referred_name;
+                const avatarEl = (
+                  <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#EEF3FF", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+                      <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="#0D468B" opacity="0.6"/>
+                      <path d="M12 14C7.58172 14 4 16.6863 4 20V22H20V20C20 16.6863 16.4183 14 12 14Z" fill="#0D468B" opacity="0.6"/>
+                    </svg>
+                  </div>
+                );
+                if (!isVerified) {
+                  return (
+                    <div
+                      key={i}
+                      style={{
+                        display: "flex",
+                        alignItems: "flex-start",
+                        gap: "12px",
+                        padding: "14px 12px",
+                        borderRadius: "12px",
+                        border: "1px solid #FFE5BA",
+                        marginBottom: "10px",
+                        background: "#FFF",
+                      }}
+                    >
+                      {avatarEl}
+                      {/* Left column: name+number, note */}
+                      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px", minWidth: 0 }}>
+                        <ReferralNameNumber name={displayName} mobile={ref.referred_mobile} />
+                        <PendingNote />
+                      </div>
+                      {/* Right column: PENDING badge + Remind button */}
+                      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", justifyContent: "space-between", gap: "8px", flexShrink: 0, alignSelf: "stretch" }}>
+                        <div style={{ padding: "4px 10px", borderRadius: "6px", background: "#F2F2F2" }}>
+                          <span style={{ color: "#888", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, letterSpacing: "0.5px" }}>PENDING</span>
+                        </div>
+                        <button
+                          onClick={() => {
+                            const phone = ref.referred_mobile.replace(/\D/g, "");
+                            const message = encodeURIComponent("Hi! You haven't verified your participation yet. Please click the verify button in the WhatsApp reminder we sent you.");
+                            window.open(`https://wa.me/${phone}?text=${message}`, "_blank");
+                          }}
+                          style={{
+                            width: "100%",
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: "4px",
+                            padding: "5px 4px",
+                            borderRadius: "4px",
+                            border: "0.7px solid #40C351",
+                            background: "#FFF",
+                            cursor: "pointer",
+                            fontFamily: "Outfit",
+                            fontSize: "12px",
+                            fontWeight: 600,
+                            color: "#202020",
+                            lineHeight: "normal",
+                          }}
+                        >
+                          Remind
+                          <img src={imgWhatsApp} alt="WhatsApp" style={{ width: "14px", height: "14px", objectFit: "contain" }} />
+                        </button>
+                      </div>
+                    </div>
+                  );
+                }
                 return (
                   <div
                     key={i}
@@ -596,39 +681,12 @@ const Leaderboard: React.FC = () => {
                       background: "#FFF",
                     }}
                   >
-                    {/* Avatar */}
-                    <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#EEF3FF", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                      <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                        <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="#0D468B" opacity="0.6"/>
-                        <path d="M12 14C7.58172 14 4 16.6863 4 20V22H20V20C20 16.6863 16.4183 14 12 14Z" fill="#0D468B" opacity="0.6"/>
-                      </svg>
+                    {avatarEl}
+                    <div style={{ flex: 1 }}>
+                      <ReferralNameNumber name={displayName} mobile={ref.referred_mobile} />
                     </div>
-                    {/* Info */}
-                    <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "2px" }}>
-                      <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "15px", fontWeight: 600, lineHeight: "normal" }}>
-                        {(!ref.referred_name || ref.referred_name === "None") ? maskMobile(ref.referred_mobile) : ref.referred_name}
-                      </span>
-                      <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
-                        <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                          <path d="M6.62 10.79C8.06 13.62 10.38 15.93 13.21 17.38L15.41 15.18C15.68 14.91 16.08 14.82 16.43 14.94C17.55 15.31 18.76 15.51 20 15.51C20.55 15.51 21 15.96 21 16.51V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z" fill="#888"/>
-                        </svg>
-                        <span style={{ color: "#888", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400 }}>
-                          {maskMobile(ref.referred_mobile)}
-                        </span>
-                      </div>
-                    </div>
-                    {/* Status badge */}
-                    <div
-                      style={{
-                        padding: "4px 10px",
-                        borderRadius: "6px",
-                        background: isVerified ? "#E6F9EE" : "#F2F2F2",
-                        flexShrink: 0,
-                      }}
-                    >
-                      <span style={{ color: isVerified ? "#1A8A45" : "#888", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, letterSpacing: "0.5px" }}>
-                        {isVerified ? "VERIFIED" : "PENDING"}
-                      </span>
+                    <div style={{ padding: "4px 10px", borderRadius: "6px", background: "#E6F9EE", flexShrink: 0 }}>
+                      <span style={{ color: "#1A8A45", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, letterSpacing: "0.5px" }}>VERIFIED</span>
                     </div>
                   </div>
                 );
