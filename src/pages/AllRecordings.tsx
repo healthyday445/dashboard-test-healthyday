@@ -85,16 +85,9 @@ interface SessionLink {
 
 /** Extract YouTube video ID from various URL formats */
 function extractYouTubeId(url: string): string | null {
-  try {
-    const u = new URL(url);
-    if (u.hostname === "youtu.be") return u.pathname.slice(1).split("?")[0];
-    if (u.searchParams.has("v")) return u.searchParams.get("v");
-    const liveMatch = u.pathname.match(/\/live\/([^/?]+)/);
-    if (liveMatch) return liveMatch[1];
-    return null;
-  } catch {
-    return null;
-  }
+  if (!url) return null;
+  const match = url.match(/(?:v=|youtu\.be\/|\/live\/|\/shorts\/|\/embed\/)([a-zA-Z0-9_-]{11})/);
+  return match ? match[1] : null;
 }
 
 /** Remove "Healthyday Yoga Telugu", "Healthyday Yoga English", etc. from session names */
@@ -437,46 +430,53 @@ const AllRecordings = () => {
 
   const classRecordings: { title: string; subtitle: string; thumbnail: string; link: string; accessTill: string }[] = [];
 
+  const yogaFallbackSession = sessionLinks.find((s) => (s.session_code === "daily_morning" || s.session_code === "daily_evening") && s.language === lang);
+  const morningYogaFallbackSession = sessionLinks.find((s) => s.session_code === "daily_morning" && s.language === lang);
+
   if (isEveningLive) {
     // During evening live: show today's MORNING recording (not the evening one)
     classRecordings.push({
       title: `${morningYogaDateLabel} Yoga Session`,
       subtitle: "Daily Live Yoga Session",
-      thumbnail: ytThumb(morningYogaSession?.link, isEnglish ? imgLanguageEnglish : imgLanguageTelugu),
-      link: morningYogaSession?.link || yogaFallbackLink,
-      accessTill: (morningYogaSession && formatExpiry(morningYogaSession.expiry_by)) || `Access till 5:00 AM, ${getFallbackExpiryDate(6)}`,
+      thumbnail: ytThumb(morningYogaSession?.link || morningYogaFallbackSession?.link, isEnglish ? imgLanguageEnglish : imgLanguageTelugu),
+      link: morningYogaSession?.link || morningYogaFallbackSession?.link || yogaFallbackLink,
+      accessTill: (morningYogaSession && formatExpiry(morningYogaSession.expiry_by)) || (morningYogaFallbackSession && formatExpiry(morningYogaFallbackSession.expiry_by)) || `Access till 5:00 AM, ${getFallbackExpiryDate(6)}`,
     });
   } else if (!isMorningLive) {
     // Outside live hours: show most recent recording (morning or evening)
     classRecordings.push({
       title: `${yogaDateLabel} Yoga Session`,
       subtitle: "Daily Live Yoga Session",
-      thumbnail: ytThumb(yogaSession?.link, isEnglish ? imgLanguageEnglish : imgLanguageTelugu),
-      link: yogaSession?.link || yogaFallbackLink,
-      accessTill: (yogaSession && formatExpiry(yogaSession.expiry_by)) || `Access till 5:00 AM, ${getFallbackExpiryDate(6)}`,
+      thumbnail: ytThumb(yogaSession?.link || yogaFallbackSession?.link, isEnglish ? imgLanguageEnglish : imgLanguageTelugu),
+      link: yogaSession?.link || yogaFallbackSession?.link || yogaFallbackLink,
+      accessTill: (yogaSession && formatExpiry(yogaSession.expiry_by)) || (yogaFallbackSession && formatExpiry(yogaFallbackSession.expiry_by)) || `Access till 5:00 AM, ${getFallbackExpiryDate(6)}`,
     });
   }
   // During morning live: no yoga recording shown (session still in progress)
 
   // Face Yoga — 12-month plan only
   if (is12Month) {
+    const faceYogaSession = sessionLinks.find((s) => s.session_code === "face_yoga" && s.language === lang);
     classRecordings.push({
       title: "Last Healthyday Face Yoga",
       subtitle: "Sundays at 11:30 AM",
       thumbnail: `https://img.youtube.com/vi/SyjnCjDtNS8/hqdefault.jpg`,
-      link: isEnglish ? "https://join.healthyday.co.in/healthyface_eng" : "https://join.healthyday.co.in/healthyface",
+      link: faceYogaSession?.link || (isEnglish ? "https://join.healthyday.co.in/healthyface_eng" : "https://join.healthyday.co.in/healthyface"),
       accessTill: `Access till ${plus13Label}`,
     });
   }
+
+  const b2hFallbackSession = sessionLinks.find((s) => (s.session_code === "b2h" || s.session_code === "b2h_eng") && s.language === lang);
+  const dietFallbackSession = sessionLinks.find((s) => (s.session_code === "paid_diet" || s.session_code === "diet_eng") && s.language === lang);
 
   // Breath to Heal — 6-month & 12-month plans only
   if (hasB2hAccess) {
     classRecordings.push({
       title: `${b2hDateLabel} Breath to Heal Session`,
       subtitle: "Daily at 9:00 PM",
-      thumbnail: ytThumb(b2hSession?.link, `https://img.youtube.com/vi/SyjnCjDtNS8/hqdefault.jpg`),
-      link: b2hSession?.link || (isEnglish ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession"),
-      accessTill: (b2hSession && formatExpiry(b2hSession.expiry_by)) || `Access till 8:30 PM, ${getFallbackExpiryDate(21)}`,
+      thumbnail: ytThumb(b2hSession?.link || b2hFallbackSession?.link, `https://img.youtube.com/vi/SyjnCjDtNS8/hqdefault.jpg`),
+      link: b2hSession?.link || b2hFallbackSession?.link || (isEnglish ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession"),
+      accessTill: (b2hSession && formatExpiry(b2hSession.expiry_by)) || (b2hFallbackSession && formatExpiry(b2hFallbackSession.expiry_by)) || `Access till 8:30 PM, ${getFallbackExpiryDate(21)}`,
     });
   }
 
@@ -485,9 +485,9 @@ const AllRecordings = () => {
     classRecordings.push({
       title: `${dietDateLabel} Healthyday Diet Routine`,
       subtitle: "Daily at 8:00 PM",
-      thumbnail: ytThumb(dietSession?.link, `https://img.youtube.com/vi/SyjnCjDtNS8/hqdefault.jpg`),
-      link: dietSession?.link || (isEnglish ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet"),
-      accessTill: (dietSession && formatExpiry(dietSession.expiry_by)) || `Access till 7:30 PM, ${getFallbackExpiryDate(20)}`,
+      thumbnail: ytThumb(dietSession?.link || dietFallbackSession?.link, `https://img.youtube.com/vi/SyjnCjDtNS8/hqdefault.jpg`),
+      link: dietSession?.link || dietFallbackSession?.link || (isEnglish ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet"),
+      accessTill: (dietSession && formatExpiry(dietSession.expiry_by)) || (dietFallbackSession && formatExpiry(dietFallbackSession.expiry_by)) || `Access till 7:30 PM, ${getFallbackExpiryDate(20)}`,
     });
   }
 

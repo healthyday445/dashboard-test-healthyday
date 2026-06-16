@@ -792,7 +792,7 @@ const Index = () => {
     const apiSessionName = freeApiSessionEntry?.session_name || null; // Can be used to show title if needed
 
     const sessionLink = freeApiSessionLink || sessionJoinLink || "https://www.youtube.com/c/Healthyday";
-    const ytIdMatch = sessionLink.match(/(?:v=|youtu\.be\/|\/live\/)([a-zA-Z0-9_-]{11})/);
+    const ytIdMatch = sessionLink.match(/(?:v=|youtu\.be\/|\/live\/|\/shorts\/|\/embed\/)([a-zA-Z0-9_-]{11})/);
     const sessionVideoId = ytIdMatch ? ytIdMatch[1] : null;
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
 
@@ -1375,24 +1375,37 @@ const Index = () => {
     type BonusCard = { name: string; fullName: string; startMin: number; sessionLink: string; thumbnail: string };
     const eligibleBonusSessions: BonusCard[] = [];
 
+    const getApiBonusLink = (code: string, fallback: string) => {
+      const match = sessionLinks.find((s: any) => s.session_code === code && s.language === langKey);
+      return match?.link || fallback;
+    };
+
+    const getDynamicThumbnail = (link: string, fallbackId: string) => {
+      if (!link) return ytThumb(fallbackId);
+      const match = link.match(/(?:v=|youtu\.be\/|\/live\/|\/shorts\/|\/embed\/)([a-zA-Z0-9_-]{11})/);
+      return ytThumb(match ? match[1] : fallbackId);
+    };
+
     // 1. Face Yoga (Sundays at 11:30 AM IST -> 690 min)
     // Eligible: 12 months only
     if (is12Month && currentDow === 0) {
       if (paidLang === "Telugu" && isTeluguFaceYogaWeek) {
+        const link = getApiBonusLink("face_yoga", "https://join.healthyday.co.in/healthyface");
         eligibleBonusSessions.push({
           name: "Face Yoga Session",
           fullName: "Face Yoga Session at 11:30 AM",
           startMin: 690,
-          sessionLink: "https://join.healthyday.co.in/healthyface",
-          thumbnail: ytThumb("SyjnCjDtNS8"),
+          sessionLink: link,
+          thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8"),
         });
       } else if (paidLang === "English" && !isTeluguFaceYogaWeek) {
+        const link = getApiBonusLink("face_yoga", "https://join.healthyday.co.in/healthyface_eng");
         eligibleBonusSessions.push({
           name: "Face Yoga Session",
           fullName: "Face Yoga Session at 11:30 AM",
           startMin: 690,
-          sessionLink: "https://join.healthyday.co.in/healthyface_eng",
-          thumbnail: ytThumb("SyjnCjDtNS8"),
+          sessionLink: link,
+          thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8"),
         });
       }
     }
@@ -1400,24 +1413,26 @@ const Index = () => {
     // 2. Diet Session (Daily at 8:00 PM IST -> 1200 min)
     // Eligible: 12 months only
     if (is12Month) {
+      const link = getApiBonusLink("paid_diet", paidLang === "English" ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet");
       eligibleBonusSessions.push({
         name: "Diet Session",
         fullName: "Diet Session at 8:00 PM",
         startMin: 1200,
-        sessionLink: paidLang === "English" ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet",
-        thumbnail: ytThumb("SyjnCjDtNS8"),
+        sessionLink: link,
+        thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8"),
       });
     }
 
     // 3. Breath to Heal (Daily at 9:00 PM IST -> 1260 min)
     // Eligible: 6 & 12 months. Exclude English on Sundays.
     if ((is6Month || is12Month) && !(paidLang === "English" && currentDow === 0)) {
+      const link = getApiBonusLink("b2h", paidLang === "English" ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession");
       eligibleBonusSessions.push({
         name: "Breath to Heal Session",
         fullName: "Breath to Heal Session at 9:00 PM",
         startMin: 1260,
-        sessionLink: paidLang === "English" ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession",
-        thumbnail: ytThumb("SyjnCjDtNS8"),
+        sessionLink: link,
+        thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8"),
       });
     }
 
