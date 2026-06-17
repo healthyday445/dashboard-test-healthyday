@@ -470,7 +470,7 @@ const Leaderboard: React.FC = () => {
         </div>
 
         {/* VIEW YOUR REFERRALS — hidden for zero-referrals */}
-        {mobile && userRank?.referral_count !== 0 && (
+        {mobile && (
           <div style={{ order: 3, width: "calc(100% - 32px)", display: "flex", justifyContent: "center", marginTop: "10px" }}>
             <span
               onClick={openReferralsDrawer}
