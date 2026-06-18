@@ -2211,28 +2211,73 @@ const Index = () => {
       {(() => {
         const _nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
         const _totalMin = _nowIST.getUTCHours() * 60 + _nowIST.getUTCMinutes();
-        const _isJun17 = _nowIST.getUTCFullYear() === 2026 && _nowIST.getUTCMonth() === 5 && _nowIST.getUTCDate() === 17;
+        const _year = _nowIST.getUTCFullYear();
+        const _month = _nowIST.getUTCMonth(); // 5 = June
+        const _date = _nowIST.getUTCDate();
 
         const isTelugu = userLanguage !== "English";
-        const link = isTelugu
-          ? "https://www.youtube.com/live/HaWU4AHsKXc"
-          : "https://www.youtube.com/live/OskBc7sb-_0";
-        const videoId = isTelugu ? "HaWU4AHsKXc" : "OskBc7sb-_0";
+
+        const SESSION_DATA: Record<number, { telugu: { id: string; link: string }; english: { id: string; link: string }; dayName: string }> = {
+          17: { telugu: { id: "HaWU4AHsKXc", link: "https://www.youtube.com/live/HaWU4AHsKXc" },   english: { id: "OskBc7sb-_0", link: "https://www.youtube.com/live/OskBc7sb-_0" },   dayName: "Wednesday" },
+          18: { telugu: { id: "dHRQc6tTBOU", link: "https://www.youtube.com/watch?v=dHRQc6tTBOU" }, english: { id: "JzA-vJ5-Yxw", link: "https://www.youtube.com/watch?v=JzA-vJ5-Yxw" }, dayName: "Thursday"  },
+          19: { telugu: { id: "mnt9cvRztHA", link: "https://www.youtube.com/watch?v=mnt9cvRztHA" }, english: { id: "yAzo4cfwRtM", link: "https://www.youtube.com/watch?v=yAzo4cfwRtM" }, dayName: "Friday"    },
+          20: { telugu: { id: "jr7uu4lhcLw", link: "https://www.youtube.com/watch?v=jr7uu4lhcLw" }, english: { id: "fY4d10K3iQI", link: "https://www.youtube.com/watch?v=fY4d10K3iQI" }, dayName: "Saturday"  },
+        };
+
+        const liveStart = 1170; // 7:30 PM IST
+        const liveEnd   = 1260; // 9:00 PM IST
+        const noon      = 720;  // 12:00 PM IST
+
+        // Only active June 17–20, 2026
+        if (_year !== 2026 || _month !== 5 || _date < 17 || _date > 20) return null;
+        // After June 20 session ends, hide entirely
+        if (_date === 20 && _totalMin >= liveEnd) return null;
+
+        // Determine display state
+        let displayDay: number;
+        let isEnded: boolean;
+        let isLive = false;
+
+        if (_totalMin >= noon && _totalMin < liveEnd) {
+          // 12:00 PM – 9:00 PM: show today's session card
+          displayDay = _date;
+          isEnded = false;
+          isLive = _totalMin >= liveStart;
+        } else if (_totalMin < noon) {
+          // Morning before noon: show "ended" — next session is today at 8 PM
+          displayDay = _date;
+          isEnded = true;
+        } else {
+          // After 9 PM: show "ended" — next session is tomorrow
+          displayDay = _date + 1;
+          if (displayDay > 20) return null;
+          isEnded = true;
+        }
+
+        const session = SESSION_DATA[displayDay];
+        if (!session) return null;
+        const lang = isTelugu ? session.telugu : session.english;
+        const { link, id: videoId } = lang;
         const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-        // Both languages: 8:00 PM IST, live tag 7:30–9:00 PM
-        const liveStart = 1170;  // 7:30 PM
-        const liveEnd = 1260;    // 9:00 PM
-        const ctaTime = "8:00 PM IST";
 
-        // Hide once session has ended on June 17, or on any day after June 17
-        const _isPastSessionDay = _nowIST.getUTCFullYear() > 2026 ||
-          (_nowIST.getUTCFullYear() === 2026 && (_nowIST.getUTCMonth() > 5 ||
-          (_nowIST.getUTCMonth() === 5 && _nowIST.getUTCDate() > 17)));
-        const _isEnded = _isPastSessionDay || (_isJun17 && _totalMin >= liveEnd);
-        if (_isEnded) return null;
-
-        const _isLive = _isJun17 && _totalMin >= liveStart && _totalMin < liveEnd;
-        const _isSessionDay = _isJun17 && _totalMin < liveStart;
+        if (isEnded) {
+          return (
+            <div style={{ padding: "18px 20px 0" }}>
+              <div style={{ background: "#fff", borderRadius: "10px", boxShadow: "0px 0px 8px 0px rgba(0,0,0,0.25)", display: "flex", alignItems: "center", gap: "14px", padding: "14px 16px" }}>
+                <img src={sessionTimeIcon} alt="" style={{ width: "52px", height: "52px", flexShrink: 0, objectFit: "contain" }} />
+                <div style={{ flex: 1, wordBreak: "break-word" }}>
+                  <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "14px", fontWeight: 700, color: "#202020", lineHeight: "1.35" }}>INTRODUCTION LIVE HAS ENDED!</p>
+                  <p style={{ margin: "5px 0 0", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400, color: "#575656", lineHeight: "15px" }}>
+                    The next Intro session will be live again on
+                  </p>
+                  <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, color: "#0D468B", lineHeight: "15px" }}>
+                    {displayDay}<sup>th</sup> June ({session.dayName}) at 8:00 PM IST
+                  </p>
+                </div>
+              </div>
+            </div>
+          );
+        }
 
         return (
           <div style={{ padding: "18px 20px 0" }}>
@@ -2241,7 +2286,7 @@ const Index = () => {
               <p style={{ color: "#202020", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal", margin: 0 }}>
                 Introductory Session
               </p>
-              {_isLive && (
+              {isLive && (
                 <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
                   <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
                   <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>LIVE</span>
@@ -2251,7 +2296,7 @@ const Index = () => {
 
             <div style={{ borderRadius: "12px", overflow: "hidden", boxShadow: "1px 0 4px rgba(0,0,0,0.25), -1px -1px 4px rgba(0,0,0,0.25)" }}>
               {/* Thumbnail */}
-              <a href={link || "#"} target="_blank" rel="noopener noreferrer" style={{ display: "block", position: "relative", width: "100%", aspectRatio: "342/187", textDecoration: "none" }}>
+              <a href={link} target="_blank" rel="noopener noreferrer" style={{ display: "block", position: "relative", width: "100%", aspectRatio: "342/187", textDecoration: "none" }}>
                 <img src={thumbnail} alt="Introductory Session" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
                 <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.32)" }} />
                 <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -2262,12 +2307,12 @@ const Index = () => {
               {/* CTA */}
               <div style={{ background: "#fff", border: "1.5px solid #E9E9E9", borderTop: "none", padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                 <a
-                  href={link || "#"}
+                  href={link}
                   target="_blank"
                   rel="noopener noreferrer"
                   style={{ width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none" }}
                 >
-                  {_isLive ? (
+                  {isLive ? (
                     <>
                       <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
                         <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -2278,7 +2323,7 @@ const Index = () => {
                     </>
                   ) : (
                     <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>
-                      {_isSessionDay ? `JOIN AT ${ctaTime}` : `JOIN TOMORROW AT ${ctaTime}`}
+                      JOIN AT 8:00 PM IST
                     </span>
                   )}
                 </a>
