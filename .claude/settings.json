@@ -1,5 +1,6 @@
 {
   "permissions": {
+    "defaultMode": "bypassPermissions",
     "allow": [
       "Bash(cmd.exe /c \"where claude 2>&1\")",
       "Read(//tmp/**)",
