@@ -39,47 +39,52 @@ const LEVEL_DATA = [
   { level: 7, unlockDay: 21, rewardLine1: "21-Days Yoga", rewardLine2: "Certificate", badge: levelIcon7 },
 ];
 
+// Indexed directly by daysAttended (0–21) — one config per day so each can be individually styled
 const BADGE_CARD_DATA = [
-  { // L0: daysAttended 0-2
-    gradient: "radial-gradient(circle at 85% 0%, rgba(128,164,221,1) 0%, rgba(191,210,238,1) 50%, rgba(255,255,255,1) 100%)",
-    img: badgeCardL0, imgTop: 8, imgRight: 0, imgWidth: 198, imgHeight: 122,
-    textRight: 176, titleCaps: true,
-  },
-  { // L1: daysAttended 3-5
-    gradient: "radial-gradient(circle at 83% 0%, rgba(255,237,195,1) 0%, rgba(255,255,255,1) 100%)",
-    img: badgeCardL1, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138,
-    textRight: 148, titleCaps: false,
-  },
-  { // L2: daysAttended 6-8
-    gradient: "radial-gradient(circle at 87% 0%, rgba(212,220,145,1) 0%, rgba(234,238,200,1) 50%, rgba(255,255,255,1) 100%)",
-    img: badgeCardL2, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138,
-    textRight: 148, titleCaps: false,
-  },
-  { // L3: daysAttended 9-11
-    gradient: "radial-gradient(circle at 89% 0%, rgba(246,219,255,1) 0%, rgba(255,255,255,1) 100%)",
-    img: badgeCardL3, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138,
-    textRight: 148, titleCaps: false,
-  },
-  { // L4: daysAttended 12-14
-    gradient: "radial-gradient(circle at 85% 0%, rgba(171,226,232,1) 0%, rgba(213,241,243,1) 50%, rgba(255,255,255,1) 100%)",
-    img: badgeCardL4, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138,
-    textRight: 148, titleCaps: false,
-  },
-  { // L5: daysAttended 15-17
-    gradient: "radial-gradient(circle at 86% 0%, rgba(249,191,117,1) 0%, rgba(251,207,152,1) 25%, rgba(252,223,186,1) 50%, rgba(255,255,255,1) 100%)",
-    img: badgeCardL5, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138,
-    textRight: 148, titleCaps: false,
-  },
-  { // L6: daysAttended 18-20
-    gradient: "radial-gradient(circle at 85% 0%, rgba(255,189,189,1) 0%, rgba(255,255,255,1) 100%)",
-    img: badgeCardL6, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138,
-    textRight: 148, titleCaps: false,
-  },
-  { // L7: daysAttended 21
-    gradient: "radial-gradient(circle at 84% 0%, rgba(175,210,255,1) 0%, rgba(215,233,255,1) 50%, rgba(255,255,255,1) 100%)",
-    img: badgeCardL7, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138,
-    textRight: 148, titleCaps: false,
-  },
+  // Day 0 — YOU ARE AT LEVEL 1!, blue sky scene
+  { gradient: "radial-gradient(circle at 85% 0%, rgba(128,164,221,1) 0%, rgba(191,210,238,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL0, imgTop: 8, imgRight: 0, imgWidth: 198, imgHeight: 122, textRight: 176, titleCaps: true },
+  // Day 1
+  { gradient: "radial-gradient(circle at 85% 0%, rgba(128,164,221,1) 0%, rgba(191,210,238,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL0, imgTop: 8, imgRight: 0, imgWidth: 198, imgHeight: 122, textRight: 176, titleCaps: true },
+  // Day 2
+  { gradient: "radial-gradient(circle at 85% 0%, rgba(128,164,221,1) 0%, rgba(191,210,238,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL0, imgTop: 8, imgRight: 0, imgWidth: 198, imgHeight: 122, textRight: 176, titleCaps: true },
+  // Day 3 — CONGRATULATIONS! Level 1, warm yellow
+  { gradient: "radial-gradient(circle at 83% 0%, rgba(255,237,195,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL1, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 128, titleCaps: false },
+  // Day 4
+  { gradient: "radial-gradient(circle at 83% 0%, rgba(255,237,195,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL1, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 148, titleCaps: false },
+  // Day 5
+  { gradient: "radial-gradient(circle at 83% 0%, rgba(255,237,195,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL1, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 148, titleCaps: false },
+  // Day 6 — CONGRATULATIONS! Level 2, yellow-green
+  { gradient: "radial-gradient(circle at 87% 0%, rgba(212,220,145,1) 0%, rgba(234,238,200,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL2, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 128, titleCaps: false },
+  // Day 7
+  { gradient: "radial-gradient(circle at 87% 0%, rgba(212,220,145,1) 0%, rgba(234,238,200,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL2, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 148, titleCaps: false },
+  // Day 8
+  { gradient: "radial-gradient(circle at 87% 0%, rgba(212,220,145,1) 0%, rgba(234,238,200,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL2, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 148, titleCaps: false },
+  // Day 9 — CONGRATULATIONS! Level 3, lavender
+  { gradient: "radial-gradient(circle at 89% 0%, rgba(246,219,255,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL3, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 128, titleCaps: false },
+  // Day 10
+  { gradient: "radial-gradient(circle at 89% 0%, rgba(246,219,255,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL3, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 148, titleCaps: false },
+  // Day 11
+  { gradient: "radial-gradient(circle at 89% 0%, rgba(246,219,255,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL3, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 148, titleCaps: false },
+  // Day 12 — CONGRATULATIONS! Level 4, teal
+  { gradient: "radial-gradient(circle at 85% 0%, rgba(171,226,232,1) 0%, rgba(213,241,243,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL4, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 148, titleCaps: false },
+  // Day 13
+  { gradient: "radial-gradient(circle at 85% 0%, rgba(171,226,232,1) 0%, rgba(213,241,243,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL4, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 148, titleCaps: false },
+  // Day 14
+  { gradient: "radial-gradient(circle at 85% 0%, rgba(171,226,232,1) 0%, rgba(213,241,243,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL4, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 148, titleCaps: false },
+  // Day 15 — CONGRATULATIONS! Level 5, warm orange
+  { gradient: "radial-gradient(circle at 86% 0%, rgba(249,191,117,1) 0%, rgba(251,207,152,1) 25%, rgba(252,223,186,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL5, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 128, titleCaps: false },
+  // Day 16
+  { gradient: "radial-gradient(circle at 86% 0%, rgba(249,191,117,1) 0%, rgba(251,207,152,1) 25%, rgba(252,223,186,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL5, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 148, titleCaps: false },
+  // Day 17
+  { gradient: "radial-gradient(circle at 86% 0%, rgba(249,191,117,1) 0%, rgba(251,207,152,1) 25%, rgba(252,223,186,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL5, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 148, titleCaps: false },
+  // Day 18 — CONGRATULATIONS! Level 6, pink/salmon
+  { gradient: "radial-gradient(circle at 85% 0%, rgba(255,189,189,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL6, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 148, titleCaps: false },
+  // Day 19
+  { gradient: "radial-gradient(circle at 85% 0%, rgba(255,189,189,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL6, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 148, titleCaps: false },
+  // Day 20
+  { gradient: "radial-gradient(circle at 85% 0%, rgba(255,189,189,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL6, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 148, titleCaps: false },
+  // Day 21 — CONGRATULATIONS! All 21 days!, blue/indigo
+  { gradient: "radial-gradient(circle at 84% 0%, rgba(175,210,255,1) 0%, rgba(215,233,255,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL7, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 128, titleCaps: false },
 ];
 
 // Indexed by completedLevel (daysAttended / 3), for milestone days
@@ -129,12 +134,12 @@ function RewardCard({
   return (
     <div
       className="relative rounded-[8px] overflow-hidden"
-      style={{ height: 119, border: isUnlocked ? "none" : "1.25px solid #c8c8c8" }}
+      style={{ height: 119 }}
     >
       <img
         src={rewardCardBgUnlocked}
         alt=""
-        className="absolute inset-0 w-full h-full object-cover object-bottom pointer-events-none"
+        className="absolute inset-0 w-full h-full object-fill pointer-events-none"
         style={{ filter: isUnlocked ? "none" : "grayscale(1)" }}
       />
 
@@ -498,15 +503,17 @@ export default function TwentyOneDaysProgram() {
 
   // Level zone: which level group the student is currently "in" (1–7)
   const levelZone = Math.max(1, Math.min(7, Math.ceil((daysAttended + 0.01) / 3)));
-  const badgeCardLevel = daysAttended === 21 ? 7 : Math.min(6, Math.floor(daysAttended / 3));
-  const badgeCardConfig = BADGE_CARD_DATA[badgeCardLevel];
-  const badgeTitle = badgeCardLevel === 7
+  const badgeCardConfig = BADGE_CARD_DATA[daysAttended];
+  const badgeCardLevel = Math.floor(daysAttended / 3); // 0–7, for text interpolation
+  const isMilestone = daysAttended > 0 && daysAttended % 3 === 0;
+  const badgeTitle = isMilestone
     ? "CONGRATULATIONS!"
     : badgeCardConfig.titleCaps
       ? `YOU ARE AT LEVEL ${levelZone}!`
       : `You completed Level ${badgeCardLevel}!`;
+  const badgeTitleSize = isMilestone || badgeCardConfig.titleCaps ? 18 : 16;
   const shareText = encodeURIComponent(
-    badgeCardLevel === 7
+    daysAttended === 21
       ? "I completed all 21 Days of the HealthyDay Yoga Challenge! 🎉🏅"
       : `I just completed Level ${badgeCardLevel} of the HealthyDay 21-Day Yoga Challenge! 🧘‍♀️🎉`
   );
@@ -514,13 +521,11 @@ export default function TwentyOneDaysProgram() {
   const badgeSubText = (() => {
     if (daysAttended === 0) return "Attend 3 classes to unlock Level 2.";
     if (daysAttended === 21) return "You have completed all the Levels & earned the 21-Days Yoga Certificate";
-    if (daysAttended % 3 === 0) {
-      const completedLevel = daysAttended / 3;
-      return `You have completed Level ${completedLevel} & unlocked the ${BADGE_SUBTEXT_COMPLETED[completedLevel]}!`;
+    if (isMilestone) {
+      return `You have completed Level ${badgeCardLevel} & unlocked the ${BADGE_SUBTEXT_COMPLETED[badgeCardLevel]}!`;
     }
-    const completedLevels = Math.floor(daysAttended / 3);
     const classesNeeded = 3 - (daysAttended % 3);
-    const { verb, levelNum, reward } = BADGE_SUBTEXT_INPROGRESS[completedLevels];
+    const { verb, levelNum, reward } = BADGE_SUBTEXT_INPROGRESS[badgeCardLevel];
     const suffix = verb === "unlock" ? reward : `get ${reward}`;
     return `Attend ${classesNeeded} more class${classesNeeded > 1 ? "es" : ""} to ${verb} Level ${levelNum} & ${suffix}`;
   })();
@@ -689,10 +694,11 @@ export default function TwentyOneDaysProgram() {
                   {studentData?.name ? `Hello ${studentData.name},` : "Hello there,"}
                 </p>
                 <p
-                  className="font-bold text-[18px] leading-none"
+                  className="font-bold leading-none"
                   style={{
                     color: "#0a386f",
                     fontFamily: "Outfit, sans-serif",
+                    fontSize: badgeTitleSize,
                     marginBottom: 8,
                   }}
                 >
