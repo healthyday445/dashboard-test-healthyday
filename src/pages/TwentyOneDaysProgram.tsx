@@ -1,12 +1,11 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
-import heroBg from "@/assets/21daysprogram/hero_bg.webp";
+import heroBg from "@/assets/21daysprogram/hero-bg.png";
 import rewardCardBg from "@/assets/21daysprogram/reward_card_bg.webp";
 import lockIcon from "@/assets/21daysprogram/lock_icon.png";
 import lockLarge from "@/assets/21daysprogram/lock_large.png";
 import giftIcon from "@/assets/21daysprogram/gift_icon.png";
-import ellipseGiftBg from "@/assets/21daysprogram/ellipse_gift_bg.svg";
 import completedBadge from "@/assets/21daysprogram/completed_badge.png";
 import levelIcon1 from "@/assets/21daysprogram/level_icon_1.png";
 import levelIcon2 from "@/assets/21daysprogram/level_icon_2.png";
@@ -18,10 +17,9 @@ import levelIcon7 from "@/assets/21daysprogram/level_icon_7.png";
 import downloadIcon from "@/assets/21daysprogram/download_icon.png";
 import rewardVideoPlaceholder from "@/assets/language_English.webp";
 import rewardCardBgUnlocked from "@/assets/21daysprogram/reward_card_bg_unlocked.png";
-import playButtonIcon from "@/assets/21daysprogram/play_button_icon.png";
+import circledPlayButton from "@/assets/21daysprogram/circled_play_button.png";
 import padlockIcon from "@/assets/21daysprogram/padlock_icon.png";
 import pathLineIcon from "@/assets/21daysprogram/path_line_icon.png";
-import ellipseGiftBgUnlocked from "@/assets/21daysprogram/ellipse_gift_bg_unlocked.png";
 import giftIconUnlocked from "@/assets/21daysprogram/gift_icon_unlocked.png";
 import badgeCardL0 from "@/assets/21daysprogram/badge_card_l0.png";
 import badgeCardL1 from "@/assets/21daysprogram/badge_card_l1.png";
@@ -178,18 +176,19 @@ function RewardCard({
           className="flex-1 flex flex-col justify-start pl-[12px] min-w-0"
           style={{ paddingTop: isUnlocked ? 26 : 18 }}
         >
-          <div className="flex items-center gap-[4px] mb-[6px]">
-            <div className="relative flex-shrink-0 w-[18px] h-[18px]">
-              <img
-                src={isUnlocked ? ellipseGiftBgUnlocked : ellipseGiftBg}
-                alt=""
-                className="absolute inset-0 w-full h-full"
-              />
+          <div className="flex items-center gap-[4px] mb-[2px]">
+            <div
+              className="relative flex-shrink-0 flex items-center justify-center rounded-full"
+              style={{
+                width: 18,
+                height: 18,
+                backgroundColor: isUnlocked ? "#FEAB27" : "#c8c8c8",
+              }}
+            >
               <img
                 src={isUnlocked ? giftIconUnlocked : giftIcon}
                 alt=""
-                className="absolute"
-                style={{ width: 12, height: 12, top: 3, left: 3 }}
+                style={{ width: 12, height: 12 }}
               />
             </div>
             <span
@@ -202,7 +201,14 @@ function RewardCard({
               Your Level {levelData.level} Reward
             </span>
           </div>
-          <div className="w-[98px] h-px mb-[8px]" style={{ backgroundColor: "#c8c8c8" }} />
+          <div
+            className="h-px mb-[8px]"
+            style={{
+              width: 98,
+              marginLeft: 22,
+              backgroundColor: isUnlocked ? "#FEAB27" : "#c8c8c8",
+            }}
+          />
           <p
             className="font-semibold text-[19px] leading-[20px] m-0"
             style={{
@@ -275,13 +281,13 @@ function RewardCard({
               </>
             ) : isUnlocked ? (
               <>
+                <img src={circledPlayButton} alt="" style={{ width: 11, height: 11 }} />
                 <span
                   className="font-bold text-[10px] text-white"
                   style={{ fontFamily: "Outfit, sans-serif" }}
                 >
                   Join now
                 </span>
-                <img src={playButtonIcon} alt="" style={{ width: 11, height: 11 }} />
               </>
             ) : (
               <span
@@ -389,15 +395,6 @@ function DayRow({
             />
           )}
 
-          {/* "Next" pill only for non-milestone upcoming days */}
-          {status === "next" && !isMilestone && (
-            <span
-              className="font-bold text-[10px] text-white px-2 py-0.5 rounded-full flex-shrink-0"
-              style={{ backgroundColor: "#FEAB27", fontFamily: "Outfit, sans-serif" }}
-            >
-              Next
-            </span>
-          )}
         </div>
       </div>
 
