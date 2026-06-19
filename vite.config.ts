@@ -97,6 +97,9 @@ export default defineConfig(({ mode }) => {
         },
       },
     },
+    build: {
+      target: "es2015",
+    },
     plugins: [
       react(),
       legacy({
