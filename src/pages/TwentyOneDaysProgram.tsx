@@ -133,21 +133,13 @@ function RewardCard({
   return (
     <div
       className="relative rounded-[8px] overflow-hidden"
-      style={{ height: 119 }}
+      style={{ height: 119, border: isUnlocked ? "none" : "1.25px solid #c8c8c8" }}
     >
       <img
         src={isUnlocked ? rewardCardBgUnlocked : rewardCardBg}
         alt=""
         className="absolute inset-0 w-full h-full object-cover object-bottom pointer-events-none"
       />
-
-      {/* Border overlay — last painted, always visible above the bg image */}
-      {!isUnlocked && (
-        <div
-          className="absolute inset-0 rounded-[8px] pointer-events-none"
-          style={{ border: "1.25px solid #c8c8c8", zIndex: 10 }}
-        />
-      )}
 
       {/* Unlocked tag overlaid at top-left of card */}
       {isUnlocked && (
@@ -238,7 +230,7 @@ function RewardCard({
             style={{
               width: 116,
               height: 71,
-              border: isUnlocked ? "none" : "1px solid white",
+              border: isUnlocked ? "1px solid #FF8A00" : "1px solid white",
             }}
           >
             <img
@@ -433,7 +425,10 @@ export default function TwentyOneDaysProgram() {
   const nextDayRowRef = useRef<HTMLDivElement>(null);
   const iconCardRef = useRef<HTMLDivElement>(null);
   const lastCompletedRowRef = useRef<HTMLDivElement>(null);
+  const lastDayRowRef = useRef<HTMLDivElement>(null);
   const [greenLineHeight, setGreenLineHeight] = useState(0);
+  const [solidLineEndHeight, setSolidLineEndHeight] = useState(0);
+  const [timelineEndHeight, setTimelineEndHeight] = useState(0);
 
   useEffect(() => {
     // Preview mode: ?preview=day0 … ?preview=day21
@@ -535,27 +530,38 @@ export default function TwentyOneDaysProgram() {
   })();
 
   useLayoutEffect(() => {
-    if (daysAttended === 0 || !timelineContainerRef.current) {
+    if (!timelineContainerRef.current) return;
+    const containerRect = timelineContainerRef.current.getBoundingClientRect();
+
+    // Always measure where day-21 row center sits in the container
+    if (lastDayRowRef.current) {
+      const r = lastDayRowRef.current.getBoundingClientRect();
+      setTimelineEndHeight(Math.max(0, r.top + r.height / 2 - containerRect.top));
+    }
+
+    if (daysAttended === 0) {
       setGreenLineHeight(0);
+      setSolidLineEndHeight(0);
       return;
     }
     if (daysAttended >= 21) {
+      if (lastCompletedRowRef.current) {
+        const lastRow = lastCompletedRowRef.current.getBoundingClientRect();
+        setSolidLineEndHeight(Math.max(0, lastRow.top + lastRow.height / 2 - containerRect.top));
+      }
       setGreenLineHeight(timelineContainerRef.current.offsetHeight - 40);
       return;
     }
-    const containerRect = timelineContainerRef.current.getBoundingClientRect();
     const isMilestone = daysAttended % 3 === 0;
 
-    if (isMilestone && iconCardRef.current && nextDayRowRef.current) {
-      // Milestone: green ends at midpoint between reward card bottom and next day dot center
-      const cardBottom = iconCardRef.current.getBoundingClientRect().bottom;
-      const nextRow = nextDayRowRef.current.getBoundingClientRect();
-      const nextRowCenter = nextRow.top + nextRow.height / 2;
-      setGreenLineHeight(Math.max(0, (cardBottom + nextRowCenter) / 2 - containerRect.top));
-      return;
+    // solidLineEndHeight = center of last completed row (milestone or not)
+    if (lastCompletedRowRef.current) {
+      const lastRow = lastCompletedRowRef.current.getBoundingClientRect();
+      setSolidLineEndHeight(Math.max(0, lastRow.top + lastRow.height / 2 - containerRect.top));
     }
-    if (!isMilestone && lastCompletedRowRef.current && nextDayRowRef.current) {
-      // Non-milestone: green ends at midpoint between last completed dot center and next dot center
+
+    if (isMilestone && lastCompletedRowRef.current && nextDayRowRef.current) {
+      // Milestone: path icon at midpoint between last completed row center and next day row center
       const lastRow = lastCompletedRowRef.current.getBoundingClientRect();
       const nextRow = nextDayRowRef.current.getBoundingClientRect();
       const lastCenter = lastRow.top + lastRow.height / 2;
@@ -563,7 +569,16 @@ export default function TwentyOneDaysProgram() {
       setGreenLineHeight(Math.max(0, (lastCenter + nextCenter) / 2 - containerRect.top));
       return;
     }
-    // Fallback: just use next day row
+    if (!isMilestone && lastCompletedRowRef.current && nextDayRowRef.current) {
+      // Non-milestone: path icon at midpoint between last completed and next dot centers
+      const lastRow = lastCompletedRowRef.current.getBoundingClientRect();
+      const nextRow = nextDayRowRef.current.getBoundingClientRect();
+      const lastCenter = lastRow.top + lastRow.height / 2;
+      const nextCenter = nextRow.top + nextRow.height / 2;
+      setGreenLineHeight(Math.max(0, (lastCenter + nextCenter) / 2 - containerRect.top));
+      return;
+    }
+    // Fallback
     if (nextDayRowRef.current) {
       const nextRow = nextDayRowRef.current.getBoundingClientRect();
       setGreenLineHeight(Math.max(0, nextRow.top - containerRect.top + nextRow.height / 2));
@@ -758,14 +773,14 @@ export default function TwentyOneDaysProgram() {
           style={{ paddingLeft: DOT_LEFT_EDGE, paddingRight: 16 }}
           ref={timelineContainerRef}
         >
-          {/* Green solid line — completed portion (stops 35px before icon center) */}
-          {greenLineHeight > 35 && (
+          {/* Green solid line — top to center of last completed row */}
+          {solidLineEndHeight > 0 && (
             <div
               className="absolute"
               style={{
                 left: LINE_LEFT,
                 top: 0,
-                height: greenLineHeight - 35,
+                height: solidLineEndHeight,
                 width: 2,
                 backgroundColor: "#22c55e",
                 zIndex: 0,
@@ -773,15 +788,15 @@ export default function TwentyOneDaysProgram() {
             />
           )}
 
-          {/* Dashed green transition segment — 27px above icon */}
-          {daysAttended > 0 && daysAttended < 21 && greenLineHeight > 35 && (
+          {/* Dashed green line — last completed row center to path icon (midpoint) */}
+          {daysAttended > 0 && daysAttended < 21 && greenLineHeight > solidLineEndHeight && (
             <div
               className="absolute"
               style={{
                 left: LINE_LEFT,
-                top: greenLineHeight - 35,
+                top: solidLineEndHeight,
                 width: 2,
-                height: 27,
+                height: greenLineHeight - solidLineEndHeight,
                 background:
                   "repeating-linear-gradient(to bottom, #0D9400 0px, #0D9400 6px, transparent 6px, transparent 12px)",
                 zIndex: 0,
@@ -805,18 +820,20 @@ export default function TwentyOneDaysProgram() {
             />
           )}
 
-          {/* Gray line — remaining portion (starts below icon) */}
-          <div
-            className="absolute"
-            style={{
-              left: LINE_LEFT,
-              top: Math.max(greenLineHeight + 8, 0),
-              bottom: 40,
-              width: 2,
-              backgroundColor: "#d1d1d2",
-              zIndex: 0,
-            }}
-          />
+          {/* Gray line — remaining portion (starts below icon, hidden when all done) */}
+          {daysAttended < 21 && timelineEndHeight > greenLineHeight + 8 && (
+            <div
+              className="absolute"
+              style={{
+                left: LINE_LEFT,
+                top: Math.max(greenLineHeight + 8, 0),
+                height: timelineEndHeight - Math.max(greenLineHeight + 8, 0),
+                width: 2,
+                backgroundColor: "#d1d1d2",
+                zIndex: 0,
+              }}
+            />
+          )}
 
           <div className="relative" style={{ zIndex: 1 }}>
             {LEVEL_DATA.map((levelInfo) => {
@@ -831,7 +848,8 @@ export default function TwentyOneDaysProgram() {
                     const status = getDayStatus(day, daysAttended);
                     const isMilestone = day === levelInfo.unlockDay;
                     const isNextDay = status === "next";
-                    const isLastCompleted = day === daysAttended && daysAttended % 3 !== 0;
+                    const isLastCompleted = day === daysAttended;
+                    const isLastDay = day === 21;
                     return (
                       <DayRow
                         key={day}
@@ -842,6 +860,7 @@ export default function TwentyOneDaysProgram() {
                         rowRef={
                           isNextDay ? nextDayRowRef :
                           isLastCompleted ? lastCompletedRowRef :
+                          isLastDay ? lastDayRowRef :
                           undefined
                         }
                         cardRef={isMilestone && isIconLevel ? iconCardRef : undefined}
