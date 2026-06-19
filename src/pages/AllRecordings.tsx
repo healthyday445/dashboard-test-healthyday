@@ -218,12 +218,14 @@ const DateBadge = ({ label }: { label: string }) => (
   </div>
 );
 
+import { safeSessionStorage } from "@/lib/storage";
+
 const AllRecordings = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { mobile: urlMobile } = useParams<{ mobile: string }>();
   const searchParams = new URLSearchParams(location.search);
-  const mobile = urlMobile || searchParams.get("mobile") || sessionStorage.getItem("referrer_mobile") || "";
+  const mobile = urlMobile || searchParams.get("mobile") || safeSessionStorage.getItem("referrer_mobile") || "";
   const previewMode = searchParams.get("preview");
 
   const [loading, setLoading] = useState(true);

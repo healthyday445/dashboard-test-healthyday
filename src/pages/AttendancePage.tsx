@@ -64,10 +64,10 @@ function mergePaidDataToStorage(mobile: string, rawDays: string[]): { attended: 
 
   // Load existing
   let storedAtt: string[] = [];
-  try { const raw = localStorage.getItem(attKey); if (raw) storedAtt = JSON.parse(raw); } catch { }
+  try { const raw = safeLocalStorage.getItem(attKey); if (raw) storedAtt = JSON.parse(raw); } catch { }
 
   let storedMissed: string[] = [];
-  try { const raw = localStorage.getItem(missedKey); if (raw) storedMissed = JSON.parse(raw); } catch { }
+  try { const raw = safeLocalStorage.getItem(missedKey); if (raw) storedMissed = JSON.parse(raw); } catch { }
 
   // Merge
   const mergedAtt = Array.from(new Set([...storedAtt, ...thisWeekDates]));
@@ -77,8 +77,8 @@ function mergePaidDataToStorage(mobile: string, rawDays: string[]): { attended: 
   const mergedMissed = Array.from(mergedMissedSet);
 
   // Save back
-  try { localStorage.setItem(attKey, JSON.stringify(mergedAtt)); } catch { }
-  try { localStorage.setItem(missedKey, JSON.stringify(mergedMissed)); } catch { }
+  try { safeLocalStorage.setItem(attKey, JSON.stringify(mergedAtt)); } catch { }
+  try { safeLocalStorage.setItem(missedKey, JSON.stringify(mergedMissed)); } catch { }
 
   return { attended: new Set(mergedAtt), missed: new Set(mergedMissed) };
 }
@@ -87,20 +87,22 @@ function mergePaidDataToStorage(mobile: string, rawDays: string[]): { attended: 
 function readPaidDataFromStorage(mobile: string): { attended: Set<string>; missed: Set<string> } {
   const res = { attended: new Set<string>(), missed: new Set<string>() };
   try {
-    const rawAtt = localStorage.getItem(`hd_paid_att_${mobile}`);
+    const rawAtt = safeLocalStorage.getItem(`hd_paid_att_${mobile}`);
     if (rawAtt) res.attended = new Set(JSON.parse(rawAtt));
-    const rawMissed = localStorage.getItem(`hd_paid_missed_${mobile}`);
+    const rawMissed = safeLocalStorage.getItem(`hd_paid_missed_${mobile}`);
     if (rawMissed) res.missed = new Set(JSON.parse(rawMissed));
   } catch { /* ignore */ }
   return res;
 }
+
+import { safeSessionStorage, safeLocalStorage } from "@/lib/storage";
 
 const AttendancePage = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { mobile: urlMobile } = useParams<{ mobile: string }>();
   const searchParams = new URLSearchParams(location.search);
-  const mobile = urlMobile || searchParams.get("mobile") || sessionStorage.getItem("referrer_mobile") || "";
+  const mobile = urlMobile || searchParams.get("mobile") || safeSessionStorage.getItem("referrer_mobile") || "";
   const previewMode = searchParams.get("preview");
 
   const [loading, setLoading] = useState(true);

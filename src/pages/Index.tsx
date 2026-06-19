@@ -147,6 +147,8 @@ const VideoCard = ({ video }: { video: (typeof teluguVideos)[0] }) => {
   );
 };
 
+import { safeSessionStorage, safeLocalStorage } from "@/lib/storage";
+
 const Index = () => {
   const navigate = useNavigate();
   const { mobile: pathMobile } = useParams<{ mobile: string }>();
@@ -204,9 +206,9 @@ const Index = () => {
   const [sessionLinks, setSessionLinks] = useState<any[]>([]);
   const [joinedDays, setJoinedDays] = useState<number[]>(() => {
     try {
-      const keys = Object.keys(localStorage).filter(k => k.startsWith("hd_joined_"));
+      const keys = safeLocalStorage.keys().filter(k => k.startsWith("hd_joined_"));
       for (const k of keys) {
-        const stored = localStorage.getItem(k);
+        const stored = safeLocalStorage.getItem(k);
         if (stored) return JSON.parse(stored);
       }
     } catch { }
@@ -542,8 +544,8 @@ const Index = () => {
         setStudentData(data);
 
         // Store referral data for the Referral page
-        sessionStorage.setItem("total_referral_count", String(data.total_referral_count ?? 0));
-        sessionStorage.setItem("referrer_mobile", mobile || "");
+        safeSessionStorage.setItem("total_referral_count", String(data.total_referral_count ?? 0));
+        safeSessionStorage.setItem("referrer_mobile", mobile || "");
 
         if (data.language === "Telugu" || data.language === "English") {
           setAuthenticated(true);
@@ -565,7 +567,7 @@ const Index = () => {
   useEffect(() => {
     if (!studentData?.free_batch_start_date) return;
     try {
-      const stored = localStorage.getItem(joinStorageKey);
+      const stored = safeLocalStorage.getItem(joinStorageKey);
       if (stored) setJoinedDays(JSON.parse(stored));
     } catch { }
   }, [joinStorageKey, studentData?.free_batch_start_date]);
@@ -761,7 +763,7 @@ const Index = () => {
       if (!joinedDays.includes(currentDay)) {
         const updated = [...joinedDays, currentDay];
         setJoinedDays(updated);
-        localStorage.setItem(joinStorageKey, JSON.stringify(updated));
+        safeLocalStorage.setItem(joinStorageKey, JSON.stringify(updated));
       }
     };
 

@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { safeLocalStorage } from "@/lib/storage";
 import logo from "@/assets/Primary_logo.svg";
 
 const COUNTRIES = [
@@ -43,7 +44,7 @@ const Login = () => {
       return;
     }
     // Store the name in localStorage just in case we need it
-    localStorage.setItem("user_name", name);
+    safeLocalStorage.setItem("user_name", name);
     
     let finalMobile = cleanedMobile;
     
