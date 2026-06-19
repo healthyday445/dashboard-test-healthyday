@@ -2,10 +2,8 @@ import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useParams, useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import heroBg from "@/assets/21daysprogram/hero-bg.png";
-import rewardCardBg from "@/assets/21daysprogram/reward_card_bg.webp";
 import lockIcon from "@/assets/21daysprogram/lock_icon.png";
 import lockLarge from "@/assets/21daysprogram/lock_large.png";
-import giftIcon from "@/assets/21daysprogram/gift_icon.png";
 import completedBadge from "@/assets/21daysprogram/completed_badge.png";
 import levelIcon1 from "@/assets/21daysprogram/level_icon_1.png";
 import levelIcon2 from "@/assets/21daysprogram/level_icon_2.png";
@@ -134,9 +132,10 @@ function RewardCard({
       style={{ height: 119, border: isUnlocked ? "none" : "1.25px solid #c8c8c8" }}
     >
       <img
-        src={isUnlocked ? rewardCardBgUnlocked : rewardCardBg}
+        src={rewardCardBgUnlocked}
         alt=""
         className="absolute inset-0 w-full h-full object-cover object-bottom pointer-events-none"
+        style={{ filter: isUnlocked ? "none" : "grayscale(1)" }}
       />
 
       {/* Unlocked tag overlaid at top-left of card */}
@@ -186,9 +185,9 @@ function RewardCard({
               }}
             >
               <img
-                src={isUnlocked ? giftIconUnlocked : giftIcon}
+                src={giftIconUnlocked}
                 alt=""
-                style={{ width: 12, height: 12 }}
+                style={{ width: 12, height: 12, filter: isUnlocked ? "none" : "grayscale(1)" }}
               />
             </div>
             <span
@@ -230,11 +229,11 @@ function RewardCard({
         </div>
 
         {/* Right video + button */}
-        <div className="flex-shrink-0 flex flex-col pt-[13px]" style={{ width: 116 }}>
+        <div className="flex-shrink-0 flex flex-col pt-[13px]" style={{ width: 130 }}>
           <div
             className="relative rounded-[5px] overflow-hidden"
             style={{
-              width: 116,
+              width: 130,
               height: 71,
               border: isUnlocked ? "1px solid #FF8A00" : "1px solid white",
             }}
@@ -243,7 +242,7 @@ function RewardCard({
               src={rewardVideoPlaceholder}
               alt=""
               className="absolute inset-0 w-full h-full object-cover"
-              style={{ filter: isUnlocked ? "none" : "blur(2px)" }}
+              style={{ filter: isUnlocked ? "none" : "grayscale(1) blur(2px)" }}
             />
             {!isUnlocked && (
               <div
@@ -259,7 +258,7 @@ function RewardCard({
           <div
             className="flex items-center justify-center gap-1 mt-[4px]"
             style={{
-              width: 116,
+              width: 130,
               height: 17,
               borderRadius: 5,
               background: isUnlocked
