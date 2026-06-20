@@ -12,6 +12,7 @@ import AllRecordings from "./pages/AllRecordings";
 import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
 import Faqs from "./pages/Faqs";
+import TwentyOneDaysProgram from "./pages/TwentyOneDaysProgram";
 
 const queryClient = new QueryClient();
 
@@ -33,8 +34,6 @@ const App = () => (
           <Route path="/:mobile/recordings" element={<AllRecordings />} />
           <Route path="/leaderboard" element={<Login />} />
           <Route path="/:mobile/leaderboard" element={<Leaderboard />} />
-          <Route path="/faqs" element={<Faqs />} />
-          <Route path="/:mobile/faqs" element={<Faqs />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

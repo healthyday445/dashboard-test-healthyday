@@ -3,8 +3,20 @@
     "allow": [
       "Bash(cmd.exe /c \"where claude 2>&1\")",
       "Read(//tmp/**)",
-      "Bash(npx tsc *)"
+      "Bash(npx tsc *)",
+      "Bash(python3 -c ' *)",
+      "Bash(curl -s \"https://www.figma.com/api/mcp/asset/96b6442f-af3b-46b5-81f4-93556de2b24d\" -o /tmp/claude-1000/-home-tannu619-Desktop-codes-healthyDay-repos-dashboard-test-healthyday/472e2093-6a68-4fe2-9f41-27f1b36ad0fd/scratchpad/level_card_section.png)",
+      "mcp__claude_ai_Figma__download_assets",
+      "Bash(mkdir -p /home/tannu619/Desktop/codes/healthyDay/repos/dashboard-test-healthyday/src/assets/dashboard-level-card)",
+      "Bash(curl -s -o lvl1_inprogress.png \"https://www.figma.com/api/mcp/asset/bdae66b3-6660-404c-bd9f-441b2f57169b\")",
+      "Bash(curl -s -o lvl2_inprogress.png \"https://www.figma.com/api/mcp/asset/722fb06d-8b3b-47cb-8def-e0e0d6e2a3d0\")",
+      "Bash(curl -s -o lvl3_inprogress.png \"https://www.figma.com/api/mcp/asset/92ee5c17-6d66-4a04-a32e-6b1a8e070119\")",
+      "Bash(curl -s -o lvl4_inprogress.png \"https://www.figma.com/api/mcp/asset/fcf6775a-5bad-45f4-88ef-5486af313971\")",
+      "Bash(curl -s \"https://www.figma.com/api/mcp/asset/85d6dbe6-4977-49cd-9c55-551bc8319433\" -o /home/tannu619/Desktop/codes/healthyDay/repos/dashboard-test-healthyday/src/assets/dashboard-level-card/lvl7_unlocked.png)",
+      "Bash(curl -s \"https://www.figma.com/api/mcp/asset/905d402f-60b3-4fdc-bd25-1486a74fafb1\" -o /home/tannu619/Desktop/codes/healthyDay/repos/dashboard-test-healthyday/src/assets/dashboard-level-card/lvl7_unlocked.png)",
+      "mcp__claude_ai_Figma__get_metadata"
     ],
+    "defaultMode": "bypassPermissions",
     "additionalDirectories": [
       "C:\\Users\\prath\\.claude"
     ]

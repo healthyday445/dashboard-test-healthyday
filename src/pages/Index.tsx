@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { LevelCard } from "@/components/LevelCard";
 import { trackVisit } from "@/lib/trackVisit";
 import logo from "@/assets/Primary_logo.svg";
 import imgIngredients from "@/assets/Ingredients.png";
@@ -154,7 +155,6 @@ const Index = () => {
   const { mobile: pathMobile } = useParams<{ mobile: string }>();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const previewMode = searchParams.get("preview");
 
   // Support Short.io link tracking: /dashboard?mobile=919110378176
   // Reads ?mobile= query param and redirects to clean path-based URL (/919110378176)
@@ -173,10 +173,10 @@ const Index = () => {
 
   // --- Link tracking: log visit to Supabase attendance_logs ---
   useEffect(() => {
-    if (mobile && !previewMode) {
+    if (mobile) {
       trackVisit(mobile);
     }
-  }, [mobile, previewMode]);
+  }, [mobile]);
 
   // --- Fetch session links for paid users ---
   useEffect(() => {
@@ -200,9 +200,6 @@ const Index = () => {
   const [studentData, setStudentData] = useState<any>(null);
   const [showComingSoon, setShowComingSoon] = useState(false);
   const [authenticated, setAuthenticated] = useState(false);
-  const [previewTimeOverrideMin, setPreviewTimeOverrideMin] = useState<number | null>(null);
-  const [previewDowOverride, setPreviewDowOverride] = useState<number | null>(null);
-  const [previewWeekOverride, setPreviewWeekOverride] = useState<number | null>(null);
   const [sessionLinks, setSessionLinks] = useState<any[]>([]);
   const [joinedDays, setJoinedDays] = useState<number[]>(() => {
     try {
@@ -223,282 +220,6 @@ const Index = () => {
       const dd = String(d.getDate()).padStart(2, "0");
       return `${yyyy}-${mm}-${dd}`;
     };
-    // ─── PREVIEW MODE: bypass API ──────────────────────────────
-    if (previewMode && previewMode.startsWith("Free_")) {
-      const match = previewMode.match(/^Free_day(\d+)_([\d\.]+)(AM|PM)(?:_(eng))?$/);
-      if (match) {
-        const dayNum = parseInt(match[1], 10);
-        const timeVal = match[2];
-        const ampm = match[3];
-        const isEnglish = !!match[4];
-
-        const hm = timeVal.split(".");
-        let hour = parseInt(hm[0], 10);
-        const min = parseInt(hm[1] || "0", 10);
-        if (ampm === "PM" && hour !== 12) hour += 12;
-        if (ampm === "AM" && hour === 12) hour = 0;
-        const timeMin = hour * 60 + min;
-
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() - (dayNum - 1));
-        const yyyyMMDD = toLocalDateStr(startDate);
-
-        setStudentData({
-          language: isEnglish ? "English" : "Telugu",
-          status: "registered",
-          free_batch_start_date: yyyyMMDD,
-          attendance: Array(dayNum - 1).fill("present"),
-          free_class_join_link: "https://www.youtube.com/c/Healthyday",
-          referral_link: "healthyday.app/ref=preview123",
-          total_referral_count: 2,
-        });
-        setPreviewTimeOverrideMin(timeMin);
-        setAuthenticated(true);
-        setLoading(false);
-        return;
-      }
-    }
-    if (previewMode === "batch") {
-      const today = new Date();
-      const day = today.getDay();
-      const diffToMonday = day === 0 ? -6 : 1 - day;
-      const monday = new Date(today);
-      monday.setDate(today.getDate() + diffToMonday);
-      const yyyyMMDD = toLocalDateStr(monday);
-      setStudentData({
-        language: "Telugu",
-        status: "registered",
-        free_batch_start_date: yyyyMMDD,
-        attendance: ["present", "present", "present"],
-        free_class_join_link: "https://www.youtube.com/c/Healthyday",
-        referral_link: "healthyday.app/ref=preview123",
-      });
-      setAuthenticated(true);
-      setLoading(false);
-      return;
-    }
-    if (previewMode === "sunday") {
-      const today = new Date();
-      const sixDaysAgo = new Date(today);
-      sixDaysAgo.setDate(today.getDate() - 6);
-      const yyyyMMDD = toLocalDateStr(sixDaysAgo);
-      setStudentData({
-        language: "Telugu",
-        status: "registered",
-        free_batch_start_date: yyyyMMDD,
-        attendance: ["present", "present", "present", "present", "present", "present"],
-        free_class_join_link: "https://www.youtube.com/c/Healthyday",
-        referral_link: "healthyday.app/ref=preview123",
-      });
-      setAuthenticated(true);
-      setLoading(false);
-      return;
-    }
-    if (previewMode === "completed") {
-      setStudentData({ language: "Telugu", status: "14 day completed" });
-      setAuthenticated(true);
-      setLoading(false);
-      return;
-    }
-    if (previewMode === "onboarding") {
-      setStudentData({ language: "Telugu", status: "registered" });
-      setAuthenticated(true);
-      setLoading(false);
-      return;
-    }
-
-    if (previewMode && previewMode.startsWith("paid_")) {
-      const parts = previewMode.split("_");
-      // example: paid_week1_day1_beforthesession_plan12month
-      const weekPart = parts[1] || "week1";
-      const dayPart = parts[2] || "day1";
-      const sessionPart = parts[3] || "beforthesession";
-      const planPart = parts[4] || "plan12month";
-
-      const weekNum = parseInt(weekPart.replace("week", ""), 10) || 1;
-      const dayNum = parseInt(dayPart.replace("day", ""), 10) || 1;
-
-      let timeMin = 600; // 10:00 AM
-      if (sessionPart === "beforthesession") timeMin = 300; // 5:00 AM
-      else if (sessionPart === "livesession") timeMin = 345; // 5:45 AM
-      else if (sessionPart === "afterthesession") timeMin = 600; // 10:00 AM
-      else if (sessionPart.endsWith("time")) {
-        const tStr = sessionPart.replace("time", "");
-        let hour = 10, min = 0;
-        if (tStr.includes("AM") || tStr.includes("PM")) {
-          const isPM = tStr.includes("PM");
-          const hm = tStr.replace("AM", "").replace("PM", "").split(".");
-          hour = parseInt(hm[0], 10) || 10;
-          min = parseInt(hm[1] || "0", 10);
-          if (isPM && hour !== 12) hour += 12;
-          if (!isPM && hour === 12) hour = 0;
-        }
-        timeMin = hour * 60 + min;
-      }
-
-      let planType = "12_months";
-      if (planPart === "plan6month") planType = "6_months";
-      else if (planPart === "plan3month") planType = "3_months";
-      else if (planPart === "plan1month") planType = "1_month";
-
-      const attAbbrs = ["mon", "tue", "wed", "thu", "fri", "sat", "sun"].slice(0, dayNum - 1);
-
-      setStudentData({
-        language: "Telugu",
-        status: "paid",
-        paid_classes_joining_link: "https://www.youtube.com/c/Healthyday",
-        referral_link: "healthyday.app/ref=preview123",
-        total_referral_count: 3,
-        attendance_tracker: [],
-        paid_attendance_tracker: attAbbrs,
-        subscriptions: [{ plan_type: planType, subscription_status: "active" }],
-      });
-      setPreviewTimeOverrideMin(timeMin);
-      setPreviewDowOverride(dayNum === 7 ? 0 : dayNum);
-      setPreviewWeekOverride(weekNum);
-      setAuthenticated(true);
-      setLoading(false);
-      return;
-    }
-
-    if (previewMode === "paid") {
-      setStudentData({
-        language: "Telugu",
-        status: "paid",
-        paid_classes_joining_link: "https://www.youtube.com/c/Healthyday",
-        referral_link: "healthyday.app/ref=preview123",
-        total_referral_count: 3,
-        attendance_tracker: [],
-        subscriptions: [{ plan_type: "6_months", subscription_status: "active" }],
-      });
-      setAuthenticated(true);
-      setLoading(false);
-      return;
-    }
-    if (previewMode === "paid12") {
-      setStudentData({
-        language: "Telugu",
-        status: "paid",
-        paid_classes_joining_link: "https://www.youtube.com/c/Healthyday",
-        referral_link: "healthyday.app/ref=preview123",
-        total_referral_count: 3,
-        attendance_tracker: [],
-        subscriptions: [{ plan_type: "12_months", subscription_status: "active" }],
-      });
-      setAuthenticated(true);
-      setLoading(false);
-      return;
-    }
-    if (previewMode === "paidendsoon") {
-      const endDate = new Date();
-      endDate.setDate(endDate.getDate() + 3); // plan ends in 3 days
-      const planEnd = toLocalDateStr(endDate);
-      setStudentData({
-        language: "Telugu",
-        status: "paid",
-        paid_classes_joining_link: "https://www.youtube.com/c/Healthyday",
-        referral_link: "healthyday.app/ref=preview123",
-        total_referral_count: 3,
-        attendance_tracker: [],
-        plan_end_date: planEnd,
-      });
-      setAuthenticated(true);
-      setLoading(false);
-      return;
-    }
-    if (previewMode === "pastdue") {
-      setStudentData({
-        language: "Telugu",
-        status: "pastdue",
-        plan_expired_date: "2025-03-03",
-        referral_link: "healthyday.app/ref=preview123",
-        total_referral_count: 3,
-        attendance_tracker: [],
-      });
-      setAuthenticated(true);
-      setLoading(false);
-      return;
-    }
-    // ?preview=elapsed — preview ongoing user whose 14-day batch has elapsed
-    if (previewMode === "elapsed") {
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() - 15); // batch started 15 days ago
-      const yyyyMMDD = toLocalDateStr(startDate);
-      setStudentData({
-        language: "Telugu",
-        status: "registered",
-        free_batch_start_date: yyyyMMDD,
-        attendance: ["present", "present", "present", "present", "present", "present", "present",
-          "present", "present", "present", "absent", "present", "present", "present"],
-        free_class_join_link: "https://www.youtube.com/c/Healthyday",
-        referral_link: "healthyday.app/ref=preview123",
-      });
-      setAuthenticated(true);
-      setLoading(false);
-      return;
-    }
-    // ?preview=day1 … day14 — preview a specific batch day
-    if (previewMode && previewMode.startsWith("day")) {
-      const dayNum = Number(previewMode.slice(3));
-      if (dayNum >= 1 && dayNum <= 14) {
-        const startDate = new Date();
-        startDate.setDate(startDate.getDate() - (dayNum - 1));
-        const yyyyMMDD = toLocalDateStr(startDate);
-        setStudentData({
-          language: "Telugu",
-          status: "registered",
-          free_batch_start_date: yyyyMMDD,
-          attendance: Array(dayNum - 1).fill("present"),
-          free_class_join_link: "https://www.youtube.com/c/Healthyday",
-          referral_link: "healthyday.app/ref=preview123",
-        });
-        setAuthenticated(true);
-        setLoading(false);
-        return;
-      }
-    }
-    // ?preview=w1pms|w1pmsbonus|w1pes|w1pesbonus|w2pms|w2pmsbonus|w2pes|w2pesbonus
-    // W1/W2 = Week 1/2, PMS = Post Morning Session, PES = Post Evening Session
-    // Non Sunday = regular (non-bonus) day, Bonus = bonus day (3,5,7,10,14)
-    const ongoingPreviews: Record<string, { dayNum: number; timeMin: number }> = {
-      // Week 1 — Post Morning Session (10:00 AM IST = 600 min)
-      w1pms: { dayNum: 2, timeMin: 600 },   // W1, non-bonus day, after morning sessions
-      w1pmsbonus: { dayNum: 3, timeMin: 600 },   // W1, bonus day (Face Yoga 8:30 PM), after morning sessions
-      // Week 1 — Post Evening Session (8:00 PM IST = 1200 min)
-      w1pes: { dayNum: 4, timeMin: 1200 },  // W1, non-bonus day, after evening sessions
-      w1pesbonus: { dayNum: 3, timeMin: 1240 },  // W1, bonus day, during bonus LIVE window (8:30-9:00 PM)
-      // Week 2 — Post Morning Session
-      w2pms: { dayNum: 9, timeMin: 600 },   // W2, non-bonus day, after morning sessions
-      w2pmsbonus: { dayNum: 10, timeMin: 600 },   // W2, bonus day (Breath Work 8:30 PM), after morning sessions
-      // Week 2 — Post Evening Session
-      w2pes: { dayNum: 11, timeMin: 1200 },  // W2, non-bonus day, after evening sessions
-      w2pesbonus: { dayNum: 10, timeMin: 1240 },  // W2, bonus day, during bonus LIVE window
-      // After Bonus Session (bonus ended, session card hidden)
-      w1afterbonus: { dayNum: 3, timeMin: 1300 }, // W1, Day 3 after Face Yoga (8:30 PM + 70 min = 9:40 PM)
-      w2afterbonus: { dayNum: 10, timeMin: 1300 }, // W2, Day 10 after Breath Work (8:30 PM + 70 min = 9:40 PM)
-    };
-    if (previewMode && ongoingPreviews[previewMode]) {
-      const { dayNum, timeMin } = ongoingPreviews[previewMode];
-      const startDate = new Date();
-      startDate.setDate(startDate.getDate() - (dayNum - 1));
-      // Ensure start date is NOT a Sunday so "Non Sunday" previews work correctly
-      // For non-sunday previews, shift if it lands on Sunday
-      const yyyyMMDD = toLocalDateStr(startDate);
-      setStudentData({
-        language: "Telugu",
-        status: "registered",
-        free_batch_start_date: yyyyMMDD,
-        attendance: Array(dayNum - 1).fill("present"),
-        free_class_join_link: "https://www.youtube.com/c/Healthyday",
-        referral_link: "healthyday.app/ref=preview123",
-        total_referral_count: 2,
-      });
-      setPreviewTimeOverrideMin(timeMin);
-      setAuthenticated(true);
-      setLoading(false);
-      return;
-    }
-    // â”€â”€ NORMAL FLOW â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
     if (!mobile) {
       setLoading(false);
       setError("No mobile number provided. Please visit /<mobile_number> to login.");
@@ -560,7 +281,7 @@ const Index = () => {
     };
 
     fetchStudentData();
-  }, [mobile, previewMode]);
+  }, [mobile]);
 
   // --- Join tracking via localStorage (must be before any conditional returns) ---
   const joinStorageKey = `hd_joined_${mobile}_${studentData?.free_batch_start_date}`;
@@ -739,7 +460,22 @@ const Index = () => {
     };
   };
 
-  const batchInfo = getActiveBatchInfo(studentData?.free_batch_start_date);
+  const _globalForceDayParam = new URLSearchParams(location.search).get("forceDay");
+  const batchInfo = (() => {
+    const real = getActiveBatchInfo(studentData?.free_batch_start_date);
+    if (_globalForceDayParam !== null && studentData?.free_batch_start_date) {
+      const fd = parseInt(_globalForceDayParam, 10);
+      const bs = new Date(studentData.free_batch_start_date);
+      bs.setHours(0, 0, 0, 0);
+      const be = new Date(bs);
+      be.setDate(bs.getDate() + 13);
+      const DN = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+      const MN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      const fmt = (d: Date) => `${DN[d.getDay()]}, ${MN[d.getMonth()]} ${d.getDate()}`;
+      return { isActive: true as const, currentDay: fd, week: fd <= 7 ? 1 : 2, dateRangeLabel: `${fmt(bs)} — ${fmt(be)}` };
+    }
+    return real;
+  })();
   const studentStatus = studentData?.status;
   const isOngoingStatus = studentStatus === "registered" || studentStatus === "14DaysOngoing" || studentStatus === "14daysongoing";
   const isPaid = studentStatus === "paid";
@@ -751,10 +487,12 @@ const Index = () => {
   if (hasBatchAccess) {
     const { currentDay, week, dateRangeLabel } = batchInfo;
 
-    // Resolve free batch attendance from free_batches[].attendance_tracker
+    // Combine attendance across all batches that share the active batch start date
     const freeBatches: any[] = studentData?.free_batches ?? [];
-    const activeBatchEntry = freeBatches.find(b => b.start_date === studentData?.free_batch_start_date) ?? freeBatches[freeBatches.length - 1];
-    const attendedDates = new Set<string>(activeBatchEntry?.attendance_tracker ?? []);
+    const activeBatches = freeBatches.filter((b) => b.batch_start_date === studentData?.free_batch_start_date);
+    const batchesToCheck = activeBatches.length > 0 ? activeBatches : freeBatches;
+    const attendedDates = new Set<string>(batchesToCheck.flatMap((b) => b.attendance_tracker ?? []));
+    const freeDaysAttended = Math.min(attendedDates.size, 21);
     const batchOrigin = new Date(studentData?.free_batch_start_date!);
     batchOrigin.setHours(0, 0, 0, 0);
 
@@ -781,7 +519,7 @@ const Index = () => {
 
     const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
     const defaultTotalMin = nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
-    const totalMinCalc = previewTimeOverrideMin != null ? previewTimeOverrideMin : defaultTotalMin;
+    const totalMinCalc = defaultTotalMin;
     const isMorning = totalMinCalc < (15 * 60 + 45); // < 3:45 PM IST
     const timeOfDayStr = isMorning ? "morning" : "evening";
     const freeLangKey = (studentData?.language || "Telugu").toLowerCase();
@@ -865,7 +603,8 @@ const Index = () => {
         },
       };
       const bonusSession = bonusByDay[currentDay][lang];
-      const totalMin = previewTimeOverrideMin != null ? previewTimeOverrideMin : (() => { const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000); return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes(); })();
+      const _timeParam = new URLSearchParams(location.search).get("time");
+      const totalMin = (() => { if (_timeParam) { const isPM = _timeParam.toLowerCase().endsWith("pm"); const s = _timeParam.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
       const showBonus = totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
       if (showBonus) {
         const isLive = totalMin >= bonusSession.startMin && totalMin < bonusSession.startMin + (bonusSession.liveDuration ?? 30);
@@ -967,6 +706,16 @@ const Index = () => {
               </div>
             </div>
 
+            {/* Level Card — 21-day program progress */}
+            <div style={{ padding: "18px 20px 0" }}>
+              <LevelCard
+                freeDaysAttended={freeDaysAttended}
+                studentName={studentData?.name}
+                mobile={mobile}
+                joinLink={sessionJoinLink || ""}
+              />
+            </div>
+
             {/* Refer & Win 500 card */}
             <div style={{ padding: "18px 20px 0" }}>
               <ReferAndWin500 onClick={() => navigate(`/${mobile || ""}/leaderboard`)} />
@@ -982,8 +731,8 @@ const Index = () => {
               </button>
             </div>
 
-            {/* 14 Days Attendance */}
-            <div style={{ padding: "28px 20px 0" }}>
+            {/* 14 Days Attendance — commented out */}
+            {/* <div style={{ padding: "28px 20px 0" }}>
               <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, marginBottom: "12px" }}>
                 Your 14 Days Attendance
               </h3>
@@ -1002,7 +751,7 @@ const Index = () => {
                   ))}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Your Referral Gifts — commented out */}
             {/* {week === 1 && (() => {
@@ -1059,7 +808,8 @@ const Index = () => {
 
         {/* Your Yoga Session — live/not-live */}
         {(() => {
-          const totalMin = previewTimeOverrideMin != null ? previewTimeOverrideMin : (() => { const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000); return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes(); })();
+          const _timeParam2 = new URLSearchParams(location.search).get("time");
+          const totalMin = (() => { if (_timeParam2) { const isPM = _timeParam2.toLowerCase().endsWith("pm"); const s = _timeParam2.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
 
           // Bonus session detection for regular session card
           const BONUS_DAYS = [3, 5, 7, 10, 14];
@@ -1082,13 +832,13 @@ const Index = () => {
           const showBonus = isBonusDay && bonusSessionData !== null && totalMin >= bonusSessionData.startMin - 30 && totalMin < bonusSessionData.startMin + (bonusSessionData.activeEndOffset ?? 30);
 
           const MORNING_SLOTS = [
-            { start: 4 * 60 + 45, end: 6 * 60 + 30, label: "5:30 AM" }, // Starts at 4:45 AM
+            { start: 4 * 60 + 30, end: 6 * 60 + 30, label: "5:30 AM" }, // Starts at 4:45 AM
             { start: 6 * 60 + 30, end: 7 * 60 + 30, label: "6:30 AM" },
             { start: 7 * 60 + 30, end: 8 * 60 + 30, label: "7:30 AM" },
             { start: 8 * 60 + 30, end: 9 * 60 + 30, label: "8:30 AM" },
           ];
           const EVENING_SLOTS = [
-            { start: 15 * 60 + 45, end: 17 * 60 + 30, label: "4:30 PM" }, // Starts at 3:45 PM
+            { start: 15 * 60 + 30, end: 17 * 60 + 30, label: "4:30 PM" }, // Starts at 3:45 PM
             { start: 17 * 60 + 30, end: 18 * 60 + 30, label: "5:30 PM" },
             { start: 18 * 60 + 30, end: 19 * 60 + 30, label: "6:30 PM" },
           ];
@@ -1113,9 +863,36 @@ const Index = () => {
           return (
             <div style={{ padding: "24px 20px 0" }}>
               {(!liveSlot && !showBonus) ? (
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                  <NoSessionsCard totalMin={totalMin} isFreeBatch={true} />
-                </div>
+                (currentDay === 1 && !isTomorrow && !(nextSlot && EVENING_SLOTS.some(s => s.label === nextSlot.label))) ? (
+                  <>
+                    <div style={{ paddingTop: "16px", textAlign: "center" }}>
+                      <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#0A386F" }}>
+                        21-DAYS ONLINE FREE YOGA
+                      </p>
+                      <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
+                        Starts TODAY
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-center m-3">
+                      <div style={{ maxWidth: "342px", display: "flex", alignItems: "center", gap: "6px" }}>
+                        <SunIcon />
+                        <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "9px", fontWeight: 700, lineHeight: "normal" }}>
+                          MOR - 5:30AM | 6:30AM | 7:30AM | 8:30AM IST
+                        </span>
+                      </div>
+                      <div style={{ maxWidth: "342px", display: "flex", alignItems: "center", gap: "6px" }}>
+                        <MoonIcon />
+                        <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "9px", fontWeight: 700, lineHeight: "normal" }}>
+                          EVE - 4:30PM | 5:30PM | 6:30PM IST
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <NoSessionsCard totalMin={totalMin} isFreeBatch={true} />
+                  </div>
+                )
               ) : (
                 <>
                   {/* Header */}
@@ -1241,6 +1018,16 @@ const Index = () => {
           );
         })()}
 
+        {/* Level Card — 21-day program progress for free ongoing batch students */}
+        <div style={{ padding: "18px 20px 0" }}>
+          <LevelCard
+            freeDaysAttended={freeDaysAttended}
+            studentName={studentData?.name}
+            mobile={mobile}
+            joinLink={sessionJoinLink || ""}
+          />
+        </div>
+
         {/* Refer & Win 500 card */}
         <div style={{ padding: "18px 20px 0" }}>
           <ReferAndWin500 onClick={() => navigate(`/${mobile || ""}/leaderboard`)} />
@@ -1256,8 +1043,8 @@ const Index = () => {
           </button>
         </div>
 
-        {/* 14 Days Attendance */}
-        <div style={{ padding: "28px 20px 0" }}>
+        {/* 14 Days Attendance — commented out */}
+        {/* <div style={{ padding: "28px 20px 0" }}>
           <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, marginBottom: "12px" }}>
             Your 14 Days Attendance
           </h3>
@@ -1268,20 +1055,18 @@ const Index = () => {
             <p style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700, marginBottom: "14px" }}>
               {dateRangeLabel}
             </p>
-            {/* Row 1: Days 1-7 */}
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "14px" }}>
               {dayStatus.slice(0, 7).map((status, i) => (
                 <DayBox key={i} status={status} dayLabel={`Day ${i + 1}`} />
               ))}
             </div>
-            {/* Row 2: Days 8-14 */}
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               {dayStatus.slice(7, 14).map((status, i) => (
                 <DayBox key={i} status={status} dayLabel={`Day ${i + 8}`} />
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Week 2 Pricing & Comparison */}
         {week === 2 && (
@@ -1335,8 +1120,8 @@ const Index = () => {
     const forceWeek = searchParams.get("forceWeek");
 
     const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
-    const totalMin = forceTime ? parseInt(forceTime, 10) : (previewTimeOverrideMin != null ? previewTimeOverrideMin : nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes());
-    const currentDow = forceDay !== null ? parseInt(forceDay, 10) : (previewDowOverride != null ? previewDowOverride : nowIST.getUTCDay()); // 0 is Sunday
+    const totalMin = forceTime ? parseInt(forceTime, 10) : (nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes());
+    const currentDow = forceDay !== null ? parseInt(forceDay, 10) : nowIST.getUTCDay(); // 0 is Sunday
 
 
     // Subscription plan duration check
@@ -1367,7 +1152,7 @@ const Index = () => {
     // Paid Bonus Sessions Logic
     const anchorDate = new Date(Date.UTC(2026, 3, 5)); // April 5, 2026
     const diffMs = nowIST.getTime() - anchorDate.getTime();
-    const diffWeeks = forceWeek !== null ? parseInt(forceWeek, 10) : (previewWeekOverride != null ? previewWeekOverride : Math.floor(diffMs / (1000 * 60 * 60 * 24 * 7)));
+    const diffWeeks = forceWeek !== null ? parseInt(forceWeek, 10) : Math.floor(diffMs / (1000 * 60 * 60 * 24 * 7));
     const isTeluguFaceYogaWeek = diffWeeks % 2 === 0;
 
     // Collect all eligible bonus sessions for today, then pick the one
@@ -1467,10 +1252,6 @@ const Index = () => {
 
     // Weekly attendance (Mon-Sun)
     const today = new Date();
-    if (previewDowOverride != null) {
-      const diff = previewDowOverride - today.getDay();
-      today.setDate(today.getDate() + diff);
-    }
     const todayDow = today.getDay();
     const mondayDate = new Date(today);
     mondayDate.setDate(today.getDate() - (todayDow === 0 ? 6 : todayDow - 1));
@@ -2186,7 +1967,7 @@ const Index = () => {
           21-DAYS ONLINE FREE YOGA
         </p>
         <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
-          starts on 21<sup style={{ fontSize: "14px" }}>st</sup> June
+          Starts TOMORROW
         </p>
       </div>
 
