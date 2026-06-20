@@ -1,19 +1,19 @@
 import { useNavigate } from "react-router-dom";
-import lvl1Inprogress from "@/assets/dashboard-level-card/lvl1_inprogress.png";
-import lvl2Inprogress from "@/assets/dashboard-level-card/lvl2_inprogress.png";
-import lvl3Inprogress from "@/assets/dashboard-level-card/lvl3_inprogress.png";
-import lvl4Inprogress from "@/assets/dashboard-level-card/lvl4_inprogress.png";
-import lvl5Inprogress from "@/assets/dashboard-level-card/lvl5_inprogress.png";
-import lvl6Inprogress from "@/assets/dashboard-level-card/lvl6_inprogress.png";
-import lvl7Inprogress from "@/assets/dashboard-level-card/lvl7_inprogress.png";
-import lvl1Unlocked from "@/assets/dashboard-level-card/lvl1_unlocked.png";
-import lvl2Unlocked from "@/assets/dashboard-level-card/lvl2_unlocked.png";
-import lvl3Unlocked from "@/assets/dashboard-level-card/lvl3_unlocked.png";
-import lvl4Unlocked from "@/assets/dashboard-level-card/lvl4_unlocked.png";
-import lvl5Unlocked from "@/assets/dashboard-level-card/lvl5_unlocked.png";
-import lvl6Unlocked from "@/assets/dashboard-level-card/lvl6_unlocked.png";
-import lvl7Unlocked from "@/assets/dashboard-level-card/lvl7_unlocked.png";
-import downArrow from "@/assets/dashboard-level-card/down_arrow.png";
+import lvl1Inprogress from "@/assets/dashboard-level-card/lvl1_inprogress.webp";
+import lvl2Inprogress from "@/assets/dashboard-level-card/lvl2_inprogress.webp";
+import lvl3Inprogress from "@/assets/dashboard-level-card/lvl3_inprogress.webp";
+import lvl4Inprogress from "@/assets/dashboard-level-card/lvl4_inprogress.webp";
+import lvl5Inprogress from "@/assets/dashboard-level-card/lvl5_inprogress.webp";
+import lvl6Inprogress from "@/assets/dashboard-level-card/lvl6_inprogress.webp";
+import lvl7Inprogress from "@/assets/dashboard-level-card/lvl7_inprogress.webp";
+import lvl1Unlocked from "@/assets/dashboard-level-card/lvl1_unlocked.webp";
+import lvl2Unlocked from "@/assets/dashboard-level-card/lvl2_unlocked.webp";
+import lvl3Unlocked from "@/assets/dashboard-level-card/lvl3_unlocked.webp";
+import lvl4Unlocked from "@/assets/dashboard-level-card/lvl4_unlocked.webp";
+import lvl5Unlocked from "@/assets/dashboard-level-card/lvl5_unlocked.webp";
+import lvl6Unlocked from "@/assets/dashboard-level-card/lvl6_unlocked.webp";
+import lvl7Unlocked from "@/assets/dashboard-level-card/lvl7_unlocked.webp";
+import downArrow from "@/assets/dashboard-level-card/down_arrow.webp";
 import circledPlayButton from "@/assets/21daysprogram/circled_play_button.png";
 
 // Reward info indexed by level (index 0 = Level 1)
