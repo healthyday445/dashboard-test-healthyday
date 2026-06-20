@@ -3,12 +3,14 @@ import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import imgImage1 from "@/assets/image_1.png";
 
+import { safeSessionStorage } from "@/lib/storage";
+
 const Referral = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
-  const referralCount = Number(searchParams.get("count")) || Number(sessionStorage.getItem("total_referral_count")) || 0;
-  const referrerMobile = searchParams.get("mobile") || sessionStorage.getItem("referrer_mobile") || "";
+  const referralCount = Number(searchParams.get("count")) || Number(safeSessionStorage.getItem("total_referral_count")) || 0;
+  const referrerMobile = searchParams.get("mobile") || safeSessionStorage.getItem("referrer_mobile") || "";
   const [copied, setCopied] = useState(false);
 
   const shareLink = referrerMobile

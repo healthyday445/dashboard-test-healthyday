@@ -9,6 +9,8 @@
  * - Silently swallows errors so tracking never blocks the user experience.
  */
 
+import { safeSessionStorage } from "./storage";
+
 const getTrackedKey = () => {
   const today = new Date().toISOString().split('T')[0];
   return `hd_visit_tracked_${today}`;
@@ -18,11 +20,11 @@ export function trackVisit(slug: string): void {
   const TRACKED_KEY = getTrackedKey();
 
   // Skip if already tracked in this browser session today
-  const alreadyTracked = sessionStorage.getItem(TRACKED_KEY);
+  const alreadyTracked = safeSessionStorage.getItem(TRACKED_KEY);
   if (alreadyTracked === slug) return;
 
   // Mark immediately to avoid duplicate fire on React re-renders
-  sessionStorage.setItem(TRACKED_KEY, slug);
+  safeSessionStorage.setItem(TRACKED_KEY, slug);
 
   // Collect all browser-available context
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

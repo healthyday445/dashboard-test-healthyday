@@ -56,6 +56,8 @@ const formatDate = (iso: string): string => {
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
+import { safeSessionStorage } from "@/lib/storage";
+
 const ReferralStatus = () => {
   const location = useLocation();
   const { mobile: urlMobile, count: urlCount } = useParams<{ mobile: string; count: string }>();
@@ -65,12 +67,12 @@ const ReferralStatus = () => {
   const initialCount =
     Number(urlCount) ||
     Number(searchParams.get("count")) ||
-    Number(sessionStorage.getItem("total_referral_count")) ||
+    Number(safeSessionStorage.getItem("total_referral_count")) ||
     0;
   const mobile =
     urlMobile ||
     searchParams.get("mobile") ||
-    sessionStorage.getItem("referrer_mobile") ||
+    safeSessionStorage.getItem("referrer_mobile") ||
     "";
 
   const [apiData, setApiData] = useState<ReferralsApiData | null>(null);
