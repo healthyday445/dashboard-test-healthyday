@@ -689,7 +689,7 @@ export default function TwentyOneDaysProgram() {
                     marginBottom: badgeCardConfig.titleCaps ? 6 : 9,
                   }}
                 >
-                  {studentData?.name ? `Namaste ${studentData.name} Ji,` : "Namaste Ji,"}
+                  {studentData?.name ? `Namaste ${studentData.name.split(" ")[0]} Ji,` : "Namaste Ji,"}
                 </p>
                 <p
                   className="font-bold leading-none"

@@ -146,7 +146,7 @@ export function LevelCard({
               lineHeight: "normal",
             }}
           >
-            Congratulations{studentName ? ` ${studentName}!` : "!"}
+            Congratulations{studentName ? ` ${studentName.split(" ")[0]}!` : "!"}
           </p>
 
           {/* Text block — top=53, width=143 */}
@@ -227,8 +227,10 @@ export function LevelCard({
               lineHeight: "normal",
             }}
           >
-            Attend {classesNeeded} more class{classesNeeded !== 1 ? "es" : ""} to{" "}
-            {reward.completesAll ? "complete all levels" : `complete Level ${level}`} &amp; get
+            {safeDay === 0
+              ? `Attend 3 classes to complete Level 1 & join`
+              : <>Attend {classesNeeded} more class{classesNeeded !== 1 ? "es" : ""} to{" "}{reward.completesAll ? "complete all levels" : `complete Level ${level}`} &amp; get</>
+            }
           </p>
 
           {/* Reward name — top=91, per-level width, 15px bold */}
