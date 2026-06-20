@@ -460,7 +460,22 @@ const Index = () => {
     };
   };
 
-  const batchInfo = getActiveBatchInfo(studentData?.free_batch_start_date);
+  const _globalForceDayParam = new URLSearchParams(location.search).get("forceDay");
+  const batchInfo = (() => {
+    const real = getActiveBatchInfo(studentData?.free_batch_start_date);
+    if (_globalForceDayParam !== null && studentData?.free_batch_start_date) {
+      const fd = parseInt(_globalForceDayParam, 10);
+      const bs = new Date(studentData.free_batch_start_date);
+      bs.setHours(0, 0, 0, 0);
+      const be = new Date(bs);
+      be.setDate(bs.getDate() + 13);
+      const DN = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+      const MN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      const fmt = (d: Date) => `${DN[d.getDay()]}, ${MN[d.getMonth()]} ${d.getDate()}`;
+      return { isActive: true as const, currentDay: fd, week: fd <= 7 ? 1 : 2, dateRangeLabel: `${fmt(bs)} — ${fmt(be)}` };
+    }
+    return real;
+  })();
   const studentStatus = studentData?.status;
   const isOngoingStatus = studentStatus === "registered" || studentStatus === "14DaysOngoing" || studentStatus === "14daysongoing";
   const isPaid = studentStatus === "paid";
@@ -588,7 +603,8 @@ const Index = () => {
         },
       };
       const bonusSession = bonusByDay[currentDay][lang];
-      const totalMin = (() => { const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000); return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes(); })();
+      const _timeParam = new URLSearchParams(location.search).get("time");
+      const totalMin = (() => { if (_timeParam) { const isPM = _timeParam.toLowerCase().endsWith("pm"); const s = _timeParam.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
       const showBonus = totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
       if (showBonus) {
         const isLive = totalMin >= bonusSession.startMin && totalMin < bonusSession.startMin + (bonusSession.liveDuration ?? 30);
@@ -690,6 +706,16 @@ const Index = () => {
               </div>
             </div>
 
+            {/* Level Card — 21-day program progress */}
+            <div style={{ padding: "18px 20px 0" }}>
+              <LevelCard
+                freeDaysAttended={freeDaysAttended}
+                studentName={studentData?.name}
+                mobile={mobile}
+                joinLink={sessionJoinLink || ""}
+              />
+            </div>
+
             {/* Refer & Win 500 card */}
             <div style={{ padding: "18px 20px 0" }}>
               <ReferAndWin500 onClick={() => navigate(`/${mobile || ""}/leaderboard`)} />
@@ -705,8 +731,8 @@ const Index = () => {
               </button>
             </div>
 
-            {/* 14 Days Attendance */}
-            <div style={{ padding: "28px 20px 0" }}>
+            {/* 14 Days Attendance — commented out */}
+            {/* <div style={{ padding: "28px 20px 0" }}>
               <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, marginBottom: "12px" }}>
                 Your 14 Days Attendance
               </h3>
@@ -725,7 +751,7 @@ const Index = () => {
                   ))}
                 </div>
               </div>
-            </div>
+            </div> */}
 
             {/* Your Referral Gifts — commented out */}
             {/* {week === 1 && (() => {
@@ -782,7 +808,8 @@ const Index = () => {
 
         {/* Your Yoga Session — live/not-live */}
         {(() => {
-          const totalMin = (() => { const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000); return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes(); })();
+          const _timeParam2 = new URLSearchParams(location.search).get("time");
+          const totalMin = (() => { if (_timeParam2) { const isPM = _timeParam2.toLowerCase().endsWith("pm"); const s = _timeParam2.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
 
           // Bonus session detection for regular session card
           const BONUS_DAYS = [3, 5, 7, 10, 14];
@@ -805,13 +832,13 @@ const Index = () => {
           const showBonus = isBonusDay && bonusSessionData !== null && totalMin >= bonusSessionData.startMin - 30 && totalMin < bonusSessionData.startMin + (bonusSessionData.activeEndOffset ?? 30);
 
           const MORNING_SLOTS = [
-            { start: 4 * 60 + 45, end: 6 * 60 + 30, label: "5:30 AM" }, // Starts at 4:45 AM
+            { start: 4 * 60 + 30, end: 6 * 60 + 30, label: "5:30 AM" }, // Starts at 4:45 AM
             { start: 6 * 60 + 30, end: 7 * 60 + 30, label: "6:30 AM" },
             { start: 7 * 60 + 30, end: 8 * 60 + 30, label: "7:30 AM" },
             { start: 8 * 60 + 30, end: 9 * 60 + 30, label: "8:30 AM" },
           ];
           const EVENING_SLOTS = [
-            { start: 15 * 60 + 45, end: 17 * 60 + 30, label: "4:30 PM" }, // Starts at 3:45 PM
+            { start: 15 * 60 + 30, end: 17 * 60 + 30, label: "4:30 PM" }, // Starts at 3:45 PM
             { start: 17 * 60 + 30, end: 18 * 60 + 30, label: "5:30 PM" },
             { start: 18 * 60 + 30, end: 19 * 60 + 30, label: "6:30 PM" },
           ];
@@ -836,9 +863,36 @@ const Index = () => {
           return (
             <div style={{ padding: "24px 20px 0" }}>
               {(!liveSlot && !showBonus) ? (
-                <div style={{ display: "flex", justifyContent: "center" }}>
-                  <NoSessionsCard totalMin={totalMin} isFreeBatch={true} />
-                </div>
+                (currentDay === 1 && !isTomorrow && !(nextSlot && EVENING_SLOTS.some(s => s.label === nextSlot.label))) ? (
+                  <>
+                    <div style={{ paddingTop: "16px", textAlign: "center" }}>
+                      <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#0A386F" }}>
+                        21-DAYS ONLINE FREE YOGA
+                      </p>
+                      <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
+                        Starts TODAY
+                      </p>
+                    </div>
+                    <div className="flex flex-col items-center m-3">
+                      <div style={{ maxWidth: "342px", display: "flex", alignItems: "center", gap: "6px" }}>
+                        <SunIcon />
+                        <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "9px", fontWeight: 700, lineHeight: "normal" }}>
+                          MOR - 5:30AM | 6:30AM | 7:30AM | 8:30AM IST
+                        </span>
+                      </div>
+                      <div style={{ maxWidth: "342px", display: "flex", alignItems: "center", gap: "6px" }}>
+                        <MoonIcon />
+                        <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "9px", fontWeight: 700, lineHeight: "normal" }}>
+                          EVE - 4:30PM | 5:30PM | 6:30PM IST
+                        </span>
+                      </div>
+                    </div>
+                  </>
+                ) : (
+                  <div style={{ display: "flex", justifyContent: "center" }}>
+                    <NoSessionsCard totalMin={totalMin} isFreeBatch={true} />
+                  </div>
+                )
               ) : (
                 <>
                   {/* Header */}
@@ -989,8 +1043,8 @@ const Index = () => {
           </button>
         </div>
 
-        {/* 14 Days Attendance */}
-        <div style={{ padding: "28px 20px 0" }}>
+        {/* 14 Days Attendance — commented out */}
+        {/* <div style={{ padding: "28px 20px 0" }}>
           <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, marginBottom: "12px" }}>
             Your 14 Days Attendance
           </h3>
@@ -1001,20 +1055,18 @@ const Index = () => {
             <p style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700, marginBottom: "14px" }}>
               {dateRangeLabel}
             </p>
-            {/* Row 1: Days 1-7 */}
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "14px" }}>
               {dayStatus.slice(0, 7).map((status, i) => (
                 <DayBox key={i} status={status} dayLabel={`Day ${i + 1}`} />
               ))}
             </div>
-            {/* Row 2: Days 8-14 */}
             <div style={{ display: "flex", justifyContent: "space-between" }}>
               {dayStatus.slice(7, 14).map((status, i) => (
                 <DayBox key={i} status={status} dayLabel={`Day ${i + 8}`} />
               ))}
             </div>
           </div>
-        </div>
+        </div> */}
 
         {/* Week 2 Pricing & Comparison */}
         {week === 2 && (
@@ -1915,7 +1967,7 @@ const Index = () => {
           21-DAYS ONLINE FREE YOGA
         </p>
         <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
-          starts on 21<sup style={{ fontSize: "14px" }}>st</sup> June
+          Starts TOMORROW
         </p>
       </div>
 
