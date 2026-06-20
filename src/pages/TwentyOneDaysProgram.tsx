@@ -679,6 +679,7 @@ export default function TwentyOneDaysProgram() {
                   left: 23,
                   right: badgeCardConfig.textRight,
                   justifyContent: badgeCardConfig.titleCaps ? "center" : "flex-start",
+                  zIndex: 1,
                 }}
               >
                 <p
@@ -698,6 +699,7 @@ export default function TwentyOneDaysProgram() {
                     fontFamily: "Outfit, sans-serif",
                     fontSize: badgeTitleSize,
                     marginBottom: 8,
+                    whiteSpace: "nowrap",
                   }}
                 >
                   {badgeTitle}
@@ -753,6 +755,7 @@ export default function TwentyOneDaysProgram() {
                   right: badgeCardConfig.imgRight,
                   width: badgeCardConfig.imgWidth,
                   height: badgeCardConfig.imgHeight,
+                  zIndex: 0,
                 }}
               />
             </div>
