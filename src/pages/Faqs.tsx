@@ -404,7 +404,7 @@ const Faqs = () => {
             className="inline-flex items-center justify-center gap-2 bg-[#178541] hover:bg-[#126b34] text-white font-bold py-3 px-8 rounded-[12px] transition-colors shadow-sm text-[18px] font-['Outfit']"
           >
             <i className="fab fa-whatsapp text-[24px]"></i>
-            Contact Healthyday
+            Contact Us
           </button>
         </div>
 
