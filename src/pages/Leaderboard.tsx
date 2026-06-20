@@ -123,6 +123,23 @@ const Leaderboard: React.FC = () => {
   const [referralsData, setReferralsData] = useState<{ language?: string; total_referrals: number; referrals: { referred_mobile: string; referred_name: string; referral_confirmation_status: string }[] } | null>(null);
   const [referralsLoading, setReferralsLoading] = useState(false);
 
+  useEffect(() => {
+    const ogImage = document.createElement("meta");
+    ogImage.setAttribute("property", "og:image");
+    ogImage.setAttribute("content", "https://d3jt6ku4g6z5l8.cloudfront.net/IMAGE/684fc31502e580488de82553/9706810_Referral%20Gift%20Campaign%20Poster%20paid%20community.jpg");
+    document.head.appendChild(ogImage);
+
+    const twitterImage = document.createElement("meta");
+    twitterImage.setAttribute("name", "twitter:image");
+    twitterImage.setAttribute("content", "https://d3jt6ku4g6z5l8.cloudfront.net/IMAGE/684fc31502e580488de82553/9706810_Referral%20Gift%20Campaign%20Poster%20paid%20community.jpg");
+    document.head.appendChild(twitterImage);
+
+    return () => {
+      document.head.removeChild(ogImage);
+      document.head.removeChild(twitterImage);
+    };
+  }, []);
+
   const closeDrawer = () => {
     setDrawerClosing(true);
     setTimeout(() => {

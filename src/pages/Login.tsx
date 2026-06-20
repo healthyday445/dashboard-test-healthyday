@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { safeLocalStorage } from "@/lib/storage";
 import logo from "@/assets/Primary_logo.svg";
@@ -31,6 +31,23 @@ const Login = () => {
   const [error, setError] = useState("");
 
   const selectedCountry = COUNTRIES.find(c => c.code === countryCode) || COUNTRIES[0];
+
+  useEffect(() => {
+    const ogImage = document.createElement("meta");
+    ogImage.setAttribute("property", "og:image");
+    ogImage.setAttribute("content", "https://d3jt6ku4g6z5l8.cloudfront.net/IMAGE/684fc31502e580488de82553/9706810_Referral%20Gift%20Campaign%20Poster%20paid%20community.jpg");
+    document.head.appendChild(ogImage);
+
+    const twitterImage = document.createElement("meta");
+    twitterImage.setAttribute("name", "twitter:image");
+    twitterImage.setAttribute("content", "https://d3jt6ku4g6z5l8.cloudfront.net/IMAGE/684fc31502e580488de82553/9706810_Referral%20Gift%20Campaign%20Poster%20paid%20community.jpg");
+    document.head.appendChild(twitterImage);
+
+    return () => {
+      document.head.removeChild(ogImage);
+      document.head.removeChild(twitterImage);
+    };
+  }, []);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
