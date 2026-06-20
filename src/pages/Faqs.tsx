@@ -352,7 +352,7 @@ const Faqs = () => {
 
           const categoryLower = category.category.toLowerCase();
           if (statusLower === 'registered' && categoryLower.includes('registered')) return true;
-          if (statusLower === 'ongoing' && categoryLower.includes('ongoing')) return true;
+          if (statusLower === '14daysongoing' && categoryLower.includes('ongoing')) return true;
           return false;
         }).map((category, idx) => (
           <div key={idx} className="mb-8">
