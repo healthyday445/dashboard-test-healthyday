@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import logo from "@/assets/Primary_logo.svg";
+import { toast } from "sonner";
 
 const generalFaqs = [
   {
@@ -52,7 +53,8 @@ const teluguFaqs = [
       { question: "Yoga Kit ela win avvali?", answer: "Namaste andi! Mee referral link dhwara mee friends mariyu family members ni invite cheyandi. Varu June 1st nundi June 30th lopu register chesukune laa chusukondi. Ee nela chivaraku ekkuva referrals chesina Top 500 mandhi Yoga Kit ni geluchukuntaru!  Ippude share cheyadam prarambhinchandi mariyu leaderboard lo paiki vellandi!\nREFERRAL LINK👇\n\nRegister Now 👇🏻👇🏻\nhttps://yoga.healthyday.co.in?ref=$MobileNumber\n\nJoin me in\n21-Days FREE YOGA 🧘‍♀️😊\n🗓️ Starts 21st JUNE\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith JAGAN 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students" },
       { question: "Naa Referral Count Tappu Chupistundi", answer: "Namaste andi! Ok andi!  meeru refer chesina vaalla details ni ikkada share cheyandi memu check chesi manual ga add chetamu" },
       { question: "Introduction Session Link pettandi", answer: "INTRODUCTION SESSION👇 \nhttps://class.healthyday.co.in/$MobileNumber" },
-      { question: "Health Issues cure avutaaya?", answer: "Namaste andi !Yoga valla chaala rakaala aarogya samasyalu (Health issues) khachithamga nayamavuthayi.Regular gaa yoga practice cheyandi..okavela severe health problem ayithe, meeru doctor ni consult cheyyali andi" }
+      { question: "Health Issues cure avutaaya?", answer: "Namaste andi !Yoga valla chaala rakaala aarogya samasyalu (Health issues) khachithamga nayamavuthayi.Regular gaa yoga practice cheyandi..okavela severe health problem ayithe, meeru doctor ni consult cheyyali andi" },
+      { question: "భాష మార్చండి (Change Language)", answer: "ACTION_CHANGE_LANGUAGE" }
     ]
   },
   {
@@ -87,7 +89,8 @@ const englishFaqs = [
       { question: "Do we need to pay any fee?", answer: "You do not need to pay any fee for 21 days. These 21 days of classes will be completely free for you." },
       { question: "How to win a Yoga Kit?", answer: "Namaste ji! Invite your friends and family using your unique referral link. Make sure they register between June 1st and June 30th. The Top 500 referrers at the end of the month will win a Yoga Kit!  Start sharing now and climb the leaderboard! \nREFERRAL LINK👇\nRegister Now 👇🏻👇🏻\nhttps://yoga.healthyday.co.in?ref=$MobileNumber\n\nJoin me in\n21-Days FREE YOGA 🧘‍♀️😊\n🗓️ Starts 21st JUNE\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith JAGAN 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students" },
       { question: "How to join Introduction Session?", answer: "INTRODUCTION SESSION👇 \nhttps://class.healthyday.co.in/$MobileNumber" },
-      { question: "I have health issues, will they be cured with yoga?", answer: "Namaste! Yoga can definitely cure many types of health issues. Please practice yoga regularly. However, if it is a severe health problem, you must consult a doctor." }
+      { question: "I have health issues, will they be cured with yoga?", answer: "Namaste! Yoga can definitely cure many types of health issues. Please practice yoga regularly. However, if it is a severe health problem, you must consult a doctor." },
+      { question: "Change Language", answer: "ACTION_CHANGE_LANGUAGE" }
     ]
   },
   {
@@ -155,12 +158,16 @@ const Faqs = () => {
   const navigate = useNavigate();
   const [language, setLanguage] = useState<"Telugu" | "English">("Telugu");
   const [studentName, setStudentName] = useState<string | null>(null);
+  const [isChangingLanguage, setIsChangingLanguage] = useState(false);
 
   const cleanedMobile = mobile ? mobile.replace(/[\s\-\(\)\+]/g, "") : "";
 
   useEffect(() => {
     const fetchStudentData = async () => {
-      if (!cleanedMobile) return;
+      if (!cleanedMobile) {
+        navigate("/leaderboard");
+        return;
+      }
       try {
         const response = await fetch(`/.netlify/functions/student?mobile=${encodeURIComponent("+" + cleanedMobile)}`);
         if (response.ok) {
@@ -187,6 +194,32 @@ const Faqs = () => {
     fetchStudentData();
   }, [cleanedMobile, navigate]);
 
+  const handleLanguageChange = async () => {
+    setIsChangingLanguage(true);
+    const newLanguage = language === "English" ? "Telugu" : "English";
+    try {
+      const response = await fetch("/.netlify/functions/update-language", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          mobile: "+" + cleanedMobile,
+          language: newLanguage
+        })
+      });
+      if (response.ok) {
+        setLanguage(newLanguage);
+        toast.success(newLanguage === "English" ? "Language changed to English successfully!" : "భాష విజయవంతంగా తెలుగుకు మార్చబడింది!");
+      } else {
+        toast.error("Failed to change language. Please try again.");
+      }
+    } catch (err) {
+      console.error("Error changing language", err);
+      toast.error("Failed to change language. Please try again.");
+    } finally {
+      setIsChangingLanguage(false);
+    }
+  };
+
   const activeFaqs = language === "Telugu" ? teluguFaqs : englishFaqs;
 
   return (
@@ -196,7 +229,7 @@ const Faqs = () => {
       </header>
       <div className="max-w-3xl mx-auto px-4 pb-8">
 
-        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-8">
+        <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-2 mb-8">
           <h1 className="text-2xl font-bold text-gray-900 mb-2">
             Hi {studentName ? `${studentName} ${language === 'English' ? 'ji' : 'గారు'}` : (language === 'English' ? 'ji' : 'అండీ')}
           </h1>
@@ -218,7 +251,20 @@ const Faqs = () => {
                       {item.question}
                     </AccordionTrigger>
                     <AccordionContent className="text-gray-600 leading-relaxed pb-4">
-                      {renderText(item.answer, cleanedMobile)}
+                      {item.answer === "ACTION_CHANGE_LANGUAGE" ? (
+                        <div className="flex flex-col items-start gap-4">
+                          <p>{language === 'English' ? "Would you like to switch the language to Telugu?" : "మీరు భాషను ఆంగ్లానికి (English) మార్చాలనుకుంటున్నారా?"}</p>
+                          <button
+                            onClick={handleLanguageChange}
+                            disabled={isChangingLanguage}
+                            className="bg-orange-500 hover:bg-orange-600 text-white font-semibold py-2 px-6 rounded-lg transition-colors disabled:opacity-50"
+                          >
+                            {isChangingLanguage ? "Changing..." : (language === 'English' ? "Change to Telugu" : "Change to English")}
+                          </button>
+                        </div>
+                      ) : (
+                        renderText(item.answer, cleanedMobile)
+                      )}
                     </AccordionContent>
                   </AccordionItem>
                 ))}
@@ -243,6 +289,20 @@ const Faqs = () => {
               ))}
             </Accordion>
           </div>
+        </div>
+
+        <div className="flex justify-center mt-8 mb-8">
+          <button
+            onClick={() => {
+              const message = language === 'English' 
+                ? "Namaste! I have a query." 
+                : "నమస్తే! నాకు ఒక ప్రశ్న ఉంది."; 
+              window.open(`https://wa.me/919052888968?text=${encodeURIComponent(message)}`, "_blank");
+            }}
+            className="bg-green-600 hover:bg-green-700 text-white font-bold py-3 px-8 rounded-xl shadow-sm transition-colors text-lg"
+          >
+            Contact Support Team
+          </button>
         </div>
 
       </div>

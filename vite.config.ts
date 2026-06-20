@@ -95,6 +95,20 @@ export default defineConfig(({ mode }) => {
             });
           },
         },
+        "/.netlify/functions/update-language": {
+          target: "https://support-cases-service-773381060399.asia-south1.run.app",
+          changeOrigin: true,
+          secure: true,
+          rewrite: (path) =>
+            path.replace("/.netlify/functions/update-language", "/support/update-student-batch"),
+          configure: (proxy) => {
+            proxy.on("proxyReq", (proxyReq) => {
+              if (internalApiKey) {
+                proxyReq.setHeader("X-API-KEY", internalApiKey);
+              }
+            });
+          },
+        },
       },
     },
     build: {
