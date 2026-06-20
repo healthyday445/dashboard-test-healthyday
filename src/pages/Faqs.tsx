@@ -366,7 +366,7 @@ const Faqs = () => {
                     <AccordionContent className="text-gray-600 leading-relaxed pb-4">
                       {item.answer === "ACTION_CHANGE_LANGUAGE" ? (
                         <div className="flex flex-col items-start gap-4">
-                          <p>{language === 'English' ? "Would you like to switch the language to Telugu?" : "మీరు భాషను ఆంగ్లానికి (English) మార్చాలనుకుంటున్నారా?"}</p>
+                          <p>{language === 'English' ? "Would you like to switch the language to Telugu? Just click the button below" : "Do you want to change your class language to English? Just click the button below"}</p>
                           <button
                             onClick={handleLanguageChange}
                             disabled={isChangingLanguage}
