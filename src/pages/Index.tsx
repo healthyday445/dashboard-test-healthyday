@@ -533,7 +533,7 @@ const Index = () => {
       }
       return defaultTotalMin;
     })();
-    const isMorning = totalMinCalc < (15 * 60 + 45); // < 3:45 PM IST
+    const isMorning = totalMinCalc < (15 * 60 + 30); // < 3:30 PM IST
     const timeOfDayStr = isMorning ? "morning" : "evening";
     const freeLangKey = (studentData?.language || "Telugu").toLowerCase();
     const freeSessionCode = `iyd_2026_${timeOfDayStr}`;
@@ -851,7 +851,7 @@ const Index = () => {
             { start: 8 * 60 + 30, end: 9 * 60 + 30, label: "8:30 AM" },
           ];
           const EVENING_SLOTS = [
-            { start: 15 * 60 + 30, end: 17 * 60 + 30, label: "4:30 PM" }, // Starts at 3:45 PM
+            { start: 15 * 60 + 30, end: 17 * 60 + 30, label: "4:30 PM" }, // Starts at 3:30 PM
             { start: 17 * 60 + 30, end: 18 * 60 + 30, label: "5:30 PM" },
             { start: 18 * 60 + 30, end: 19 * 60 + 30, label: "6:30 PM" },
           ];
@@ -1144,9 +1144,9 @@ const Index = () => {
     const is12Month = planType === "12_months" || planType === "12_months_upgrade";
     const paidLang = forceLang || (studentData?.language === "English" ? "English" : "Telugu");
 
-    // Resolve session link from API: pick morning (< 15:45 IST) or evening (≥ 15:45 IST)
-    // Morning updates at 4:30 AM, Evening updates at 3:45 PM
-    const sessionCodeForNow = totalMin < (15 * 60 + 45) ? "daily_morning" : "daily_evening";
+    // Resolve session link from API: pick morning (< 15:30 IST) or evening (≥ 15:30 IST)
+    // Morning updates at 4:30 AM, Evening updates at 3:30 PM
+    const sessionCodeForNow = totalMin < (15 * 60 + 30) ? "daily_morning" : "daily_evening";
     const langKey = paidLang.toLowerCase(); // "telugu" or "english"
     const apiSessionEntry = sessionLinks.find(
       (s: any) => s.session_code === sessionCodeForNow && s.language === langKey
