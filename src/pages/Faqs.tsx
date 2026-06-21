@@ -388,7 +388,8 @@ const Faqs = () => {
 
 
 
-        <div className="flex flex-col items-center mt-8 mb-8">
+        {/* Contact Us card hidden as requested */}
+        <div className="flex flex-col items-center mt-8 mb-8" style={{ display: 'none' }}>
           <p className="text-gray-700 text-center mb-4 text-[17px] font-medium px-4">
             {language === 'English' 
               ? "If you have any more queries, please click the button below." 
