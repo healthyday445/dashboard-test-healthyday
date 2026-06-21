@@ -519,11 +519,24 @@ const Index = () => {
 
     const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
     const defaultTotalMin = nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
-    const totalMinCalc = defaultTotalMin;
+    const _sessionLinkTimeParam = new URLSearchParams(location.search).get("time");
+    const totalMinCalc = (() => {
+      if (_sessionLinkTimeParam) {
+        const isPM = _sessionLinkTimeParam.toLowerCase().endsWith("pm");
+        const s = _sessionLinkTimeParam.toLowerCase().replace("am", "").replace("pm", "");
+        const [hStr, mStr] = s.split(".");
+        let h = parseInt(hStr, 10);
+        const m = parseInt(mStr ?? "0", 10);
+        if (isPM && h !== 12) h += 12;
+        if (!isPM && h === 12) h = 0;
+        return h * 60 + m;
+      }
+      return defaultTotalMin;
+    })();
     const isMorning = totalMinCalc < (15 * 60 + 45); // < 3:45 PM IST
     const timeOfDayStr = isMorning ? "morning" : "evening";
     const freeLangKey = (studentData?.language || "Telugu").toLowerCase();
-    const freeSessionCode = `14d_week${week}_${timeOfDayStr}`;
+    const freeSessionCode = `iyd_2026_${timeOfDayStr}`;
 
     const freeApiSessionEntry = sessionLinks.find(
       (s: any) => s.session_code === freeSessionCode && s.language === freeLangKey
@@ -917,12 +930,12 @@ const Index = () => {
                         borderRadius: "12px 12px 0 0",
                         background: (() => {
                           if (showBonus && bonusSessionData) return `url(${bonusSessionData.thumbnail}) lightgray 50% / cover no-repeat`;
+                          if (sessionVideoId) {
+                            return `url(https://img.youtube.com/vi/${sessionVideoId}/maxresdefault.jpg) lightgray 50% / cover no-repeat`;
+                          }
                           const lang = studentData?.language;
                           if (lang === "English") return "url(/language%20English.jpg) lightgray 50% / cover no-repeat";
-                          if (lang === "Telugu") return "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat";
-                          return sessionVideoId
-                            ? `url(https://img.youtube.com/vi/${sessionVideoId}/maxresdefault.jpg) lightgray 50% / cover no-repeat`
-                            : "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat";
+                          return "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat";
                         })(),
                         boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
                         position: "relative",
