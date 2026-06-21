@@ -100,10 +100,10 @@ export function LevelCard({
         alt=""
         style={{
           position: "absolute",
-          left: isUnlocked ? 148 : 146,
+          right: 0,
           top: isUnlocked ? 34 : 33,
-          width: isUnlocked ? 209 : 212,
-          height: isUnlocked ? 118 : 119,
+          width: isUnlocked ? "min(209px, 50.7vw)" : "min(212px, 51.5vw)",
+          height: isUnlocked ? "min(118px, 28.6vw)" : "min(119px, 28.9vw)",
           objectFit: "cover",
           pointerEvents: "none",
         }}
@@ -137,12 +137,15 @@ export function LevelCard({
             style={{
               position: "absolute",
               left: 18,
+              right: 90,
               top: 13,
               margin: 0,
-              fontSize: 18,
+              fontSize: "clamp(14px, 4.4vw, 18px)",
               fontWeight: 700,
               color: "#202020",
               whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
               lineHeight: "normal",
             }}
           >
@@ -160,13 +163,13 @@ export function LevelCard({
               lineHeight: "normal",
             }}
           >
-            <p style={{ margin: 0, fontSize: 10, fontWeight: 400 }}>
+            <p style={{ margin: 0, fontSize: "clamp(8px, 2.4vw, 10px)", fontWeight: 400 }}>
               You have completed Level {level}
             </p>
-            <p style={{ margin: 0, fontSize: 10, fontWeight: 400 }}>
+            <p style={{ margin: 0, fontSize: "clamp(8px, 2.4vw, 10px)", fontWeight: 400 }}>
               Here's your reward...
             </p>
-            <p style={{ margin: 0, fontSize: 12, fontWeight: 700 }}>{reward.full}</p>
+            <p style={{ margin: 0, fontSize: "clamp(10px, 2.9vw, 12px)", fontWeight: 700 }}>{reward.full}</p>
           </div>
 
           {/* Join now button — top=110, left=20 */}
@@ -201,12 +204,15 @@ export function LevelCard({
             style={{
               position: "absolute",
               left: 18,
+              right: 90,
               top: 13,
               margin: 0,
-              fontSize: 16,
+              fontSize: "clamp(13px, 3.9vw, 16px)",
               fontWeight: 700,
               color: "#202020",
               whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
               lineHeight: "normal",
             }}
           >
@@ -220,10 +226,10 @@ export function LevelCard({
               left: 20,
               top: 50,
               margin: 0,
-              fontSize: 12,
+              fontSize: safeDay === 0 ? "clamp(8px, 2.4vw, 10px)" : "clamp(10px, 2.9vw, 12px)",
               fontWeight: 400,
               color: "#0a386f",
-              width: reward.subtitleWidth,
+              width: `min(${reward.subtitleWidth}px, 32vw)`,
               lineHeight: "normal",
             }}
           >
@@ -239,8 +245,8 @@ export function LevelCard({
               position: "absolute",
               left: 20,
               top: 91,
-              width: reward.rewardWidth,
-              fontSize: 15,
+              width: `min(${reward.rewardWidth}px, 34vw)`,
+              fontSize: "clamp(12px, 3.6vw, 15px)",
               fontWeight: 700,
               color: "#0a386f",
               lineHeight: "normal",
