@@ -36,13 +36,13 @@ import badgeCardL7 from "@/assets/21daysprogram/badge_card_l7.webp";
 import badgeCardShareIcon from "@/assets/21daysprogram/badge_card_share_icon.png";
 
 const LEVEL_DATA = [
-  { level: 1, unlockDay: 3,  rewardLine1: "3-Days Detox",  rewardLine2: "Programme",     badge: levelIcon1, rewardImg: rewardLvl1 },
-  { level: 2, unlockDay: 6,  rewardLine1: "3-Days",         rewardLine2: "Breakfast Diet", badge: levelIcon2, rewardImg: rewardLvl2 },
-  { level: 3, unlockDay: 9,  rewardLine1: "3-Days Sleep",   rewardLine2: "Masterclass",    badge: levelIcon3, rewardImg: rewardLvl3 },
-  { level: 4, unlockDay: 12, rewardLine1: "3-Days",         rewardLine2: "Lunch Diet",     badge: levelIcon4, rewardImg: rewardLvl4 },
-  { level: 5, unlockDay: 15, rewardLine1: "Post Meal",      rewardLine2: "Body Movement",  badge: levelIcon5, rewardImg: rewardLvl5 },
-  { level: 6, unlockDay: 18, rewardLine1: "3-Days",         rewardLine2: "Dinner Diet",    badge: levelIcon6, rewardImg: rewardLvl6 },
-  { level: 7, unlockDay: 21, rewardLine1: "21-Days Yoga",   rewardLine2: "Certificate",    badge: levelIcon7, rewardImg: rewardLvl7 },
+  { level: 1, unlockDay: 3, rewardLine1: "3-Days Detox", rewardLine2: "Programme", badge: levelIcon1, rewardImg: rewardLvl1 },
+  { level: 2, unlockDay: 6, rewardLine1: "3-Days", rewardLine2: "Breakfast Diet", badge: levelIcon2, rewardImg: rewardLvl2 },
+  { level: 3, unlockDay: 9, rewardLine1: "3-Days Sleep", rewardLine2: "Masterclass", badge: levelIcon3, rewardImg: rewardLvl3 },
+  { level: 4, unlockDay: 12, rewardLine1: "3-Days", rewardLine2: "Lunch Diet", badge: levelIcon4, rewardImg: rewardLvl4 },
+  { level: 5, unlockDay: 15, rewardLine1: "Post Meal", rewardLine2: "Body Movement", badge: levelIcon5, rewardImg: rewardLvl5 },
+  { level: 6, unlockDay: 18, rewardLine1: "3-Days", rewardLine2: "Dinner Diet", badge: levelIcon6, rewardImg: rewardLvl6 },
+  { level: 7, unlockDay: 21, rewardLine1: "21-Days Yoga", rewardLine2: "Certificate", badge: levelIcon7, rewardImg: rewardLvl7 },
 ];
 
 // Indexed directly by daysAttended (0–21) — one config per day so each can be individually styled
@@ -132,11 +132,25 @@ const LINE_LEFT = DOT_LEFT_EDGE + DOT_COL_WIDTH / 2 - 1; // 35px
 function RewardCard({
   levelData,
   isUnlocked,
+  lang,
 }: {
   levelData: (typeof LEVEL_DATA)[number];
   isUnlocked: boolean;
+  lang?: string;
 }) {
   const isCertificate = levelData.level === 7;
+
+  const handleRewardClick = () => {
+    if (!isUnlocked) return;
+    if (levelData.level === 1) {
+      if (lang === "English") {
+        window.open("https://www.youtube.com/watch?v=bDvlif1ofKA", "_blank");
+      } else {
+        window.open("https://www.youtube.com/watch?v=ARr1TMvXYSA", "_blank");
+      }
+    }
+  };
+
   return (
     <div
       className="relative rounded-[8px] overflow-hidden"
@@ -267,6 +281,7 @@ function RewardCard({
 
           {/* Button — always shows "Download Certificate" for level 7 */}
           <div
+            onClick={handleRewardClick}
             className="flex items-center justify-center gap-1 mt-[4px]"
             style={{
               width: 130,
@@ -322,6 +337,7 @@ function DayRow({
   daysAttended,
   rowRef,
   cardRef,
+  lang,
 }: {
   day: number;
   status: DayStatus;
@@ -329,6 +345,7 @@ function DayRow({
   daysAttended: number;
   rowRef?: React.RefObject<HTMLDivElement>;
   cardRef?: React.RefObject<HTMLDivElement>;
+  lang?: string;
 }) {
   const isMilestone = !!levelData;
   const isUnlocked = isMilestone && daysAttended >= (levelData?.unlockDay ?? 0);
@@ -412,7 +429,7 @@ function DayRow({
       {/* Reward card below milestone day */}
       {isMilestone && (
         <div ref={cardRef} style={{ marginLeft: DOT_COL_WIDTH + 19, marginBottom: 14 }}>
-          <RewardCard levelData={levelData!} isUnlocked={isUnlocked} />
+          <RewardCard levelData={levelData!} isUnlocked={isUnlocked} lang={lang} />
         </div>
       )}
     </div>
@@ -485,6 +502,10 @@ export default function TwentyOneDaysProgram() {
 
   // Derive days attended from free_batches attendance_tracker, capped at 21
   const daysAttended: number = (() => {
+    const forceDayParam = new URLSearchParams(window.location.search).get("forceDay");
+    if (forceDayParam !== null) {
+      return Math.min(21, Math.max(0, parseInt(forceDayParam, 10)));
+    }
     if (!studentData) return 0;
     const freeBatches = (studentData?.free_batches ?? []) as { batch_start_date: string; attendance_tracker: string[] }[];
     const activeBatches = freeBatches.filter((b) => b.batch_start_date === studentData?.free_batch_start_date);
@@ -494,6 +515,7 @@ export default function TwentyOneDaysProgram() {
   })();
 
   // Level zone: which level group the student is currently "in" (1–7)
+  const lang = studentData?.language === "English" ? "English" : "Telugu";
   const levelZone = Math.max(1, Math.min(7, Math.ceil((daysAttended + 0.01) / 3)));
   const badgeCardConfig = BADGE_CARD_DATA[daysAttended];
   const badgeCardLevel = Math.floor(daysAttended / 3); // 0–7, for text interpolation
@@ -864,12 +886,13 @@ export default function TwentyOneDaysProgram() {
                         status={status}
                         levelData={isMilestone ? levelInfo : undefined}
                         daysAttended={daysAttended}
+                        lang={lang}
                         rowRef={
                           isNextDay ? nextDayRowRef :
-                          isLastCompleted ? lastCompletedRowRef :
-                          isLastDay ? lastDayRowRef :
-                          day === 1 ? firstDayRowRef :
-                          undefined
+                            isLastCompleted ? lastCompletedRowRef :
+                              isLastDay ? lastDayRowRef :
+                                day === 1 ? firstDayRowRef :
+                                  undefined
                         }
                         cardRef={isMilestone && isIconLevel ? iconCardRef : undefined}
                       />

@@ -13,6 +13,15 @@ import NoSessionsCard from "@/components/NoSessionsCard";
 import ReferWinCard from "@/components/ReferWinCard";
 import ReferAndWin500 from "@/components/ReferAndWin500";
 
+import thumbFaceYogaTel from "@/assets/bonus/Week-1 Telugu - Face Yoga.jpg";
+import thumbFaceYogaEng from "@/assets/bonus/faceyoga_eng.jpg";
+import thumbWeightLossTel from "@/assets/bonus/weightlosssession.jpg";
+import thumbWeightLossEng from "@/assets/bonus/weightlosssession_eng.jpg";
+import thumbMeditationTel from "@/assets/bonus/meditation_tel.jpg";
+import thumbMeditationEng from "@/assets/bonus/meditation_eng.jpg";
+import thumbBreathWorkTel from "@/assets/bonus/breathwork.jpg";
+import thumbBreathWorkEng from "@/assets/bonus/bw_eng.jpg";
+
 const ytThumb = (id: string) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 
 const MoonIcon = () => (
@@ -588,34 +597,37 @@ const Index = () => {
       </div>
     );
 
-    // --- Bonus Session Days (3, 5, 7, 10, 14) ---
-    const BONUS_DAYS = [3, 5, 7, 10, 14];
+    // --- Bonus Special Sessions ---
+    const lang = studentData?.language === "English" ? "English" : "Telugu";
+    const BONUS_DAYS = lang === "English" ? [4, 8, 12, 15, 19, 22] : [3, 8, 11, 15, 18, 22];
+
     if (BONUS_DAYS.includes(currentDay)) {
-      const lang = studentData?.language === "English" ? "English" : "Telugu";
       type BonusInfo = { name: string; fullName: string; startMin: number; videoId: string; sessionLink: string; thumbnail: string; liveDuration?: number; activeEndOffset?: number };
-      const bonusByDay: Record<number, Record<string, BonusInfo>> = {
-        3: {
-          Telugu: { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga", thumbnail: ytThumb("SyjnCjDtNS8"), liveDuration: 60, activeEndOffset: 60 },
-          English: { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga_eng", thumbnail: ytThumb("SyjnCjDtNS8"), liveDuration: 60, activeEndOffset: 60 },
-        },
-        5: {
-          Telugu: { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "raCc7Z31LYw", sessionLink: "https://start.dailyyogawithjagan.com/meditation_tel", thumbnail: ytThumb("raCc7Z31LYw") },
-          English: { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "u1Hom0s7ibU", sessionLink: "https://start.dailyyogawithjagan.com/meditation_eng", thumbnail: ytThumb("u1Hom0s7ibU") },
-        },
-        7: {
-          Telugu: { name: "Weight Loss Session", fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession", thumbnail: ytThumb("SyjnCjDtNS8") },
-          English: { name: "Weight Loss Session", fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession_eng", thumbnail: ytThumb("SyjnCjDtNS8") },
-        },
-        10: {
-          Telugu: { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/breathwork", thumbnail: ytThumb("SyjnCjDtNS8"), liveDuration: 30, activeEndOffset: 60 },
-          English: { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/bw_eng", thumbnail: ytThumb("SyjnCjDtNS8"), liveDuration: 30, activeEndOffset: 60 },
-        },
-        14: {
-          Telugu: { name: "Sleep Session", fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/sleepsession", thumbnail: ytThumb("SyjnCjDtNS8") },
-          English: { name: "Sleep Session", fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/sleepsession_eng", thumbnail: ytThumb("SyjnCjDtNS8") },
-        },
+      const getBonusInfo = (day: number, l: string): BonusInfo => {
+        if (l === "Telugu") {
+          switch (day) {
+            case 3: return { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./faceyoga", thumbnail: thumbFaceYogaTel, liveDuration: 60, activeEndOffset: 60 };
+            case 8: return { name: "Weight Loss Session", fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./weightlosssession", thumbnail: thumbWeightLossTel };
+            case 11: return { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "raCc7Z31LYw", sessionLink: "./meditation_tel", thumbnail: thumbMeditationTel };
+            case 15: return { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./breathwork", thumbnail: thumbBreathWorkTel, liveDuration: 30, activeEndOffset: 60 };
+            case 18: return { name: "Live Q&A", fullName: "Live Q&A Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./liveqa", thumbnail: ytThumb("SyjnCjDtNS8"), liveDuration: 60, activeEndOffset: 60 };
+            case 22: return { name: "Graduation Session", fullName: "Graduation Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./graduation", thumbnail: ytThumb("SyjnCjDtNS8") };
+            default: return {} as BonusInfo;
+          }
+        } else {
+          switch (day) {
+            case 4: return { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./faceyoga_eng", thumbnail: thumbFaceYogaEng, liveDuration: 60, activeEndOffset: 60 };
+            case 8: return { name: "Weight Loss Orientation", fullName: "Weight Loss Orientation at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./weightlosssession_eng", thumbnail: thumbWeightLossEng };
+            case 12: return { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "u1Hom0s7ibU", sessionLink: "./meditation_eng", thumbnail: thumbMeditationEng };
+            case 15: return { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./bw_eng", thumbnail: thumbBreathWorkEng, liveDuration: 30, activeEndOffset: 60 };
+            case 19: return { name: "Live Q&A", fullName: "Live Q&A Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./liveqa_eng", thumbnail: ytThumb("SyjnCjDtNS8"), liveDuration: 60, activeEndOffset: 60 };
+            case 22: return { name: "Graduation Session", fullName: "Graduation Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./graduation_eng", thumbnail: ytThumb("SyjnCjDtNS8") };
+            default: return {} as BonusInfo;
+          }
+        }
       };
-      const bonusSession = bonusByDay[currentDay][lang];
+
+      const bonusSession = getBonusInfo(currentDay, lang);
       const _timeParam = new URLSearchParams(location.search).get("time");
       const totalMin = (() => { if (_timeParam) { const isPM = _timeParam.toLowerCase().endsWith("pm"); const s = _timeParam.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
       const showBonus = totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
