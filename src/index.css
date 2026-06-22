@@ -110,6 +110,27 @@ html, body {
   animation: fadeOut 0.25s ease both;
 }
 
+/* ─── Maintenance page animations ─────────────────────────────────── */
+@keyframes hd-breathe {
+  0%, 100% { transform: scale(0.87); opacity: 0.55; }
+  50%       { transform: scale(1.07); opacity: 1;    }
+}
+
+@keyframes hd-core-pulse {
+  0%, 100% { transform: scale(0.88); box-shadow: 0 0 0   0    rgba(254,171,39,0.20); }
+  50%       { transform: scale(1.10); box-shadow: 0 0 28px 8px rgba(254,171,39,0.38); }
+}
+
+@keyframes hd-blink {
+  0%, 100% { opacity: 1;    }
+  50%       { opacity: 0.15; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hd-ring, .hd-ring-core { animation: none !important; transform: none !important; }
+  .hd-eyebrow-dot          { animation: none !important; }
+}
+
 /* Hide scrollbar but keep scrollability */
 .scrollbar-hide {
   -ms-overflow-style: none;
