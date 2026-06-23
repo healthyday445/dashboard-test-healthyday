@@ -604,14 +604,14 @@ const Index = () => {
 
     // --- Bonus Special Sessions ---
     const lang = studentData?.language === "English" ? "English" : "Telugu";
-    const BONUS_DAYS = lang === "English" ? [4, 8, 12, 15, 19, 22] : [3, 8, 11, 15, 18, 22];
+    const BONUS_DAYS = lang === "English" ? [5, 8, 12, 15, 19, 22] : [4, 8, 11, 15, 18, 22];
 
     if (BONUS_DAYS.includes(currentDay)) {
       type BonusInfo = { name: string; fullName: string; startMin: number; videoId: string; sessionLink: string; thumbnail: string; liveDuration?: number; activeEndOffset?: number };
       const getBonusInfo = (day: number, l: string): BonusInfo => {
         if (l === "Telugu") {
           switch (day) {
-            case 3: return { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./faceyoga", thumbnail: thumbFaceYogaTel, liveDuration: 60, activeEndOffset: 60 };
+            case 4: return { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./faceyoga", thumbnail: thumbFaceYogaTel, liveDuration: 60, activeEndOffset: 60 };
             case 8: return { name: "Weight Loss Session", fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./weightlosssession", thumbnail: thumbWeightLossTel };
             case 11: return { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "raCc7Z31LYw", sessionLink: "./meditation_tel", thumbnail: thumbMeditationTel };
             case 15: return { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./breathwork", thumbnail: thumbBreathWorkTel, liveDuration: 30, activeEndOffset: 60 };
@@ -621,7 +621,7 @@ const Index = () => {
           }
         } else {
           switch (day) {
-            case 4: return { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./faceyoga_eng", thumbnail: thumbFaceYogaEng, liveDuration: 60, activeEndOffset: 60 };
+            case 5: return { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./faceyoga_eng", thumbnail: thumbFaceYogaEng, liveDuration: 60, activeEndOffset: 60 };
             case 8: return { name: "Weight Loss Orientation", fullName: "Weight Loss Orientation at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./weightlosssession_eng", thumbnail: thumbWeightLossEng };
             case 12: return { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "u1Hom0s7ibU", sessionLink: "./meditation_eng", thumbnail: thumbMeditationEng };
             case 15: return { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "./bw_eng", thumbnail: thumbBreathWorkEng, liveDuration: 30, activeEndOffset: 60 };
