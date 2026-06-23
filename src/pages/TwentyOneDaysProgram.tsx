@@ -527,9 +527,20 @@ export default function TwentyOneDaysProgram() {
       : `You completed Level ${badgeCardLevel}!`;
   const badgeTitleSize = isMilestone || badgeCardConfig.titleCaps ? 18 : 16;
   const shareText = encodeURIComponent(
-    daysAttended === 21
-      ? "I completed all 21 Days of the HealthyDay Yoga Challenge! 🎉🏅"
-      : `I just completed Level ${badgeCardLevel} of the HealthyDay 21-Day Yoga Challenge! 🧘‍♀️🎉`
+    (daysAttended === 21
+      ? "🌿 I Just Completed all 21 Days of the Yoga Challenge with Healthyday! 🎉🏅\n"
+      : `🌿 I Just Completed LEVEL ${badgeCardLevel} of the 21 Days Yoga Challenge with Healthyday!🧘🏻‍♀️✨\n`) +
+    `Honestly, if I can do it, you can do it too! 💚\n\n` +
+    `🌿 21-Days FREE Yoga Challenge\n` +
+    `📅 Starts Tomorrow\n\n` +
+    `✅ Daily Yoga\n` +
+    `🥗 Simple Diet Guidance\n` +
+    `🌿 Healthy Lifestyle Habits\n\n` +
+    `with Jagan 🧘🏻‍♂️\n` +
+    `🏅 Internationally Certified Yoga Teacher\n` +
+    `👥 6,00,000+ Students Participated\n\n` +
+    `👇🏻 Register FREE Here\n` +
+    `https://yoga.healthyday.co.in?ref=${mobile || ""}`
   );
 
   const badgeSubText = (() => {
