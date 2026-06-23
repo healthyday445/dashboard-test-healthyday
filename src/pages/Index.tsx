@@ -501,7 +501,12 @@ const Index = () => {
     const activeBatches = freeBatches.filter((b) => b.batch_start_date === studentData?.free_batch_start_date);
     const batchesToCheck = activeBatches.length > 0 ? activeBatches : freeBatches;
     const attendedDates = new Set<string>(batchesToCheck.flatMap((b) => b.attendance_tracker ?? []));
-    const freeDaysAttended = Math.min(attendedDates.size, 21);
+    const freeDaysAttended = (() => {
+      if (_globalForceDayParam !== null) {
+        return Math.min(21, Math.max(0, parseInt(_globalForceDayParam, 10)));
+      }
+      return Math.min(attendedDates.size, 21);
+    })();
     const batchOrigin = new Date(studentData?.free_batch_start_date!);
     batchOrigin.setHours(0, 0, 0, 0);
 
@@ -738,6 +743,7 @@ const Index = () => {
                 studentName={studentData?.name}
                 mobile={mobile}
                 joinLink={sessionJoinLink || ""}
+                language={studentData?.language}
               />
             </div>
 

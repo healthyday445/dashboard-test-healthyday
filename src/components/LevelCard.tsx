@@ -59,11 +59,13 @@ export function LevelCard({
   studentName,
   mobile,
   joinLink,
+  language,
 }: {
   freeDaysAttended: number;
   studentName?: string;
   mobile?: string;
   joinLink: string;
+  language?: string;
 }) {
   const navigate = useNavigate();
   const safeDay = Math.min(Math.max(0, freeDaysAttended), LEVEL_CARD_DATA.length - 1);
@@ -190,7 +192,17 @@ export function LevelCard({
               gap: 4,
               cursor: "pointer",
             }}
-            onClick={() => window.open(joinLink, "_blank")}
+            onClick={() => {
+              if (level === 1) {
+                if (language === "English") {
+                  window.open("https://www.youtube.com/watch?v=bDvlif1ofKA", "_blank");
+                } else {
+                  window.open("https://www.youtube.com/watch?v=ARr1TMvXYSA", "_blank");
+                }
+              } else {
+                window.open(joinLink, "_blank");
+              }
+            }}
           >
             <img src={circledPlayButton} alt="" style={{ width: 12, height: 12 }} />
             <span style={{ color: "white", fontSize: 12, fontWeight: 700 }}>Join now</span>
