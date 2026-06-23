@@ -526,7 +526,7 @@ export default function TwentyOneDaysProgram() {
       ? `YOU ARE AT LEVEL ${levelZone}!`
       : `You completed Level ${badgeCardLevel}!`;
   const badgeTitleSize = isMilestone || badgeCardConfig.titleCaps ? 18 : 16;
-  const shareText = encodeURIComponent(
+  const rawShareText = 
     (daysAttended === 21
       ? "🌿 I Just Completed all 21 Days of the Yoga Challenge with Healthyday! 🎉🏅\n"
       : `🌿 I Just Completed LEVEL ${badgeCardLevel} of the 21 Days Yoga Challenge with Healthyday!🧘🏻‍♀️✨\n`) +
@@ -540,8 +540,39 @@ export default function TwentyOneDaysProgram() {
     `🏅 Internationally Certified Yoga Teacher\n` +
     `👥 6,00,000+ Students Participated\n\n` +
     `👇🏻 Register FREE Here\n` +
-    `https://yoga.healthyday.co.in?ref=${mobile || ""}`
-  );
+    `https://yoga.healthyday.co.in?ref=${mobile || ""}`;
+
+  const shareText = encodeURIComponent(rawShareText);
+
+  const handleShareClick = async (e: React.MouseEvent) => {
+    e.preventDefault();
+    const fallbackShare = () => {
+      window.open(`https://wa.me/?text=${shareText}`, "_blank");
+    };
+
+    if (navigator.share && navigator.canShare) {
+      try {
+        const response = await fetch("/Level%20Badges%20to%20be%20sent.jpg");
+        const blob = await response.blob();
+        const file = new File([blob], "healthyday_badge.jpg", { type: blob.type });
+
+        if (navigator.canShare({ files: [file] })) {
+          await navigator.share({
+            title: "Healthyday Yoga Challenge",
+            text: rawShareText,
+            files: [file],
+          });
+        } else {
+          fallbackShare();
+        }
+      } catch (err) {
+        console.error("Error sharing", err);
+        fallbackShare();
+      }
+    } else {
+      fallbackShare();
+    }
+  };
 
   const badgeSubText = (() => {
     if (daysAttended === 0) return "Attend 3 classes to unlock Level 2.";
@@ -749,9 +780,8 @@ export default function TwentyOneDaysProgram() {
                 </p>
                 {!badgeCardConfig.titleCaps && (
                   <a
-                    href={`https://wa.me/?text=${shareText}`}
-                    target="_blank"
-                    rel="noopener noreferrer"
+                    href="#"
+                    onClick={handleShareClick}
                     className="flex items-center justify-center gap-[5px]"
                     style={{
                       width: 179,
