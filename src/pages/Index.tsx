@@ -635,7 +635,7 @@ const Index = () => {
       const bonusSession = getBonusInfo(currentDay, lang);
       const _timeParam = new URLSearchParams(location.search).get("time");
       const totalMin = (() => { if (_timeParam) { const isPM = _timeParam.toLowerCase().endsWith("pm"); const s = _timeParam.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
-      const showBonus = totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
+      const showBonus = isPaid && totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
       if (showBonus) {
         const isLive = totalMin >= bonusSession.startMin && totalMin < bonusSession.startMin + (bonusSession.liveDuration ?? 30);
         const isAMSession = bonusSession.startMin < 12 * 60;
@@ -860,7 +860,7 @@ const Index = () => {
           const bonusLang = studentData?.language === "English" ? "English" : "Telugu";
           const isBonusDay = BONUS_DAYS.includes(currentDay);
           const bonusSessionData = isBonusDay ? bonusByDayMap[currentDay][bonusLang] : null;
-          const showBonus = isBonusDay && bonusSessionData !== null && totalMin >= bonusSessionData.startMin - 30 && totalMin < bonusSessionData.startMin + (bonusSessionData.activeEndOffset ?? 30);
+          const showBonus = isPaid && isBonusDay && bonusSessionData !== null && totalMin >= bonusSessionData.startMin - 30 && totalMin < bonusSessionData.startMin + (bonusSessionData.activeEndOffset ?? 30);
 
           const MORNING_SLOTS = [
             { start: 4 * 60 + 30, end: 6 * 60 + 30, label: "5:30 AM" }, // Starts at 4:45 AM
