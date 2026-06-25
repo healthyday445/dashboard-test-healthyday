@@ -13,8 +13,8 @@ import NoSessionsCard from "@/components/NoSessionsCard";
 import ReferWinCard from "@/components/ReferWinCard";
 import ReferAndWin500 from "@/components/ReferAndWin500";
 
-import thumbFaceYogaTel from "@/assets/bonus/Week-1 Telugu - Face Yoga.jpg";
-import thumbFaceYogaEng from "@/assets/bonus/faceyoga_eng.jpg";
+import thumbFaceYogaTel from "@/assets/bonus/Face Yoga Thumbnail.jpg";
+import thumbFaceYogaEng from "@/assets/bonus/Face Yoga Thumbnail.jpg";
 import thumbWeightLossTel from "@/assets/bonus/weightlosssession.jpg";
 import thumbWeightLossEng from "@/assets/bonus/weightlosssession_eng.jpg";
 import thumbMeditationTel from "@/assets/bonus/meditation_tel.jpg";
@@ -635,7 +635,7 @@ const Index = () => {
       const bonusSession = getBonusInfo(currentDay, lang);
       const _timeParam = new URLSearchParams(location.search).get("time");
       const totalMin = (() => { if (_timeParam) { const isPM = _timeParam.toLowerCase().endsWith("pm"); const s = _timeParam.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
-      const showBonus = isPaid && totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
+      const showBonus = isOngoingStatus && totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
       if (showBonus) {
         const isLive = totalMin >= bonusSession.startMin && totalMin < bonusSession.startMin + (bonusSession.liveDuration ?? 30);
         const isAMSession = bonusSession.startMin < 12 * 60;
