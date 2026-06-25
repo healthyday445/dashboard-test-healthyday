@@ -1056,6 +1056,7 @@ const Index = () => {
             studentName={studentData?.name}
             mobile={mobile}
             joinLink={sessionJoinLink || ""}
+            language={studentData?.language}
           />
         </div>
 
