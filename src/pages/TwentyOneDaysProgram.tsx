@@ -148,6 +148,12 @@ function RewardCard({
       } else {
         window.open("https://www.youtube.com/watch?v=ARr1TMvXYSA", "_blank");
       }
+    } else if (levelData.level === 2) {
+      if (lang === "English") {
+        window.open("https://www.youtube.com/live/xDFA6-KCE8k", "_blank");
+      } else {
+        window.open("https://www.youtube.com/watch?v=d3HiE2QhlZA", "_blank");
+      }
     }
   };
 
