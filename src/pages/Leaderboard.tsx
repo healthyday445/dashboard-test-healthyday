@@ -734,6 +734,27 @@ const Leaderboard: React.FC = () => {
           </div>
         </>
       )}
+
+      {/* ═══════════════════════════════════════
+          TERMS AND CONDITIONS LINK
+         ═══════════════════════════════════════ */}
+      <div style={{ width: "100%", padding: "16px 0 24px", display: "flex", justifyContent: "center" }}>
+        <a
+          href="https://yoga.healthyday.co.in/referral-tnc"
+          target="_blank"
+          rel="noopener noreferrer"
+          style={{
+            color: "#012755",
+            fontFamily: "Outfit",
+            fontSize: "14px",
+            fontWeight: 500,
+            textDecoration: "underline",
+          }}
+        >
+          Referral Contest Terms &amp; Conditions
+        </a>
+      </div>
+
       <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes livePulse { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } } @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .lb-row { animation: fadeSlideIn 0.3s ease both; } @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } } .lb-skeleton { background: linear-gradient(90deg, #f0e8d8 25%, #f8f0e0 50%, #f0e8d8 75%); background-size: 800px 100%; animation: shimmer 1.4s ease-in-out infinite; border-radius: 8px; }`}</style>
     </div>
   );
