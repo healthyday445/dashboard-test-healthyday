@@ -552,32 +552,7 @@ export default function TwentyOneDaysProgram() {
 
   const handleShareClick = async (e: React.MouseEvent) => {
     e.preventDefault();
-    const fallbackShare = () => {
-      window.open(`https://wa.me/?text=${shareText}`, "_blank");
-    };
-
-    if (navigator.share && navigator.canShare) {
-      try {
-        const response = await fetch("/Level%20Badges%20to%20be%20sent.jpg");
-        const blob = await response.blob();
-        const file = new File([blob], "healthyday_badge.jpg", { type: blob.type });
-
-        if (navigator.canShare({ files: [file] })) {
-          await navigator.share({
-            title: "Healthyday Yoga Challenge",
-            text: rawShareText,
-            files: [file],
-          });
-        } else {
-          fallbackShare();
-        }
-      } catch (err) {
-        console.error("Error sharing", err);
-        fallbackShare();
-      }
-    } else {
-      fallbackShare();
-    }
+    window.open(`https://wa.me/?text=${shareText}`, "_blank");
   };
 
   const badgeSubText = (() => {
