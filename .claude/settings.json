@@ -14,7 +14,8 @@
       "Bash(curl -s -o lvl4_inprogress.png \"https://www.figma.com/api/mcp/asset/fcf6775a-5bad-45f4-88ef-5486af313971\")",
       "Bash(curl -s \"https://www.figma.com/api/mcp/asset/85d6dbe6-4977-49cd-9c55-551bc8319433\" -o /home/tannu619/Desktop/codes/healthyDay/repos/dashboard-test-healthyday/src/assets/dashboard-level-card/lvl7_unlocked.png)",
       "Bash(curl -s \"https://www.figma.com/api/mcp/asset/905d402f-60b3-4fdc-bd25-1486a74fafb1\" -o /home/tannu619/Desktop/codes/healthyDay/repos/dashboard-test-healthyday/src/assets/dashboard-level-card/lvl7_unlocked.png)",
-      "mcp__claude_ai_Figma__get_metadata"
+      "mcp__claude_ai_Figma__get_metadata",
+      "Bash(npx vite *)"
     ],
     "defaultMode": "bypassPermissions",
     "additionalDirectories": [

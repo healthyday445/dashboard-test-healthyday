@@ -12,6 +12,7 @@ import { ShareReferralActions } from "@/components/ShareReferralActions";
 import NoSessionsCard from "@/components/NoSessionsCard";
 import ReferWinCard from "@/components/ReferWinCard";
 import ReferAndWin500 from "@/components/ReferAndWin500";
+import HeaderDaysLeft from "@/components/HeaderDaysLeft";
 
 import thumbFaceYogaTel from "@/assets/bonus/Face Yoga Thumbnail.jpg";
 import thumbFaceYogaEng from "@/assets/bonus/Face Yoga Thumbnail.jpg";
@@ -495,6 +496,11 @@ const Index = () => {
   // --- Active Batch Dashboard (Week 1 or Week 2) ---
   if (hasBatchAccess) {
     const { currentDay, week, dateRangeLabel } = batchInfo;
+    const _july1 = new Date(2026, 6, 1);
+    _july1.setHours(0, 0, 0, 0);
+    const _today = new Date();
+    _today.setHours(0, 0, 0, 0);
+    const daysUntilJuly1 = Math.max(0, Math.ceil((_july1.getTime() - _today.getTime()) / 86400000));
 
     // Combine attendance across all batches that share the active batch start date
     const freeBatches: any[] = studentData?.free_batches ?? [];
@@ -646,6 +652,7 @@ const Index = () => {
             {/* Header */}
             <header className="hd-header bg-white">
               <img src={logo} alt="Healthyday" className="h-7" />
+              <HeaderDaysLeft daysLeft={daysUntilJuly1} />
             </header>
 
             {/* Bonus Special Session */}
@@ -835,6 +842,7 @@ const Index = () => {
         {/* Header */}
         <header className="hd-header bg-white">
           <img src={logo} alt="Healthyday" className="h-7" />
+          <HeaderDaysLeft daysLeft={daysUntilJuly1} />
         </header>
 
         {/* Your Yoga Session — live/not-live */}
@@ -1345,6 +1353,7 @@ const Index = () => {
         {/* Header */}
         <header className="hd-header bg-white">
           <img src={logo} alt="Healthyday" className="h-7" />
+          {daysUntilPlanEnds !== null && <HeaderDaysLeft daysLeft={Math.max(0, daysUntilPlanEnds)} />}
         </header>
 
         {/* Bonus Special Session (Paid) */}
