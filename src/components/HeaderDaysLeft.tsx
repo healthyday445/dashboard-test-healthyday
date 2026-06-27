@@ -6,12 +6,14 @@ interface HeaderDaysLeftProps {
 }
 
 const HeaderDaysLeft = ({ daysLeft }: HeaderDaysLeftProps) => {
+  const isLastDay = daysLeft === 0;
+
   return (
     <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", flexShrink: 0 }}>
       {/* Orange gradient pill */}
       <div style={{
         position: "relative",
-        width: "119px",
+        width: isLastDay ? "119px" : "119px",
         height: "37px",
         borderRadius: "8px",
         background: "linear-gradient(90deg, #ffd182 0%, #ff8a00 100%)",
@@ -24,46 +26,64 @@ const HeaderDaysLeft = ({ daysLeft }: HeaderDaysLeftProps) => {
         alignItems: "center",
         flexShrink: 0,
       }}>
-        {/* Calendar icon with day number overlaid */}
-        <div style={{
-          position: "relative",
-          width: "34px",
-          height: "34px",
-          flexShrink: 0,
-          marginLeft: "4px",
-        }}>
-          <img
-            src={headerDaysIcon}
-            alt=""
-            style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-          />
+        {isLastDay ? (
+          /* ENDS TODAY — no calendar icon, text left-aligned with padding, right padding clears the avatar overlap */
           <span style={{
-            marginTop: "4px",
-            position: "absolute",
-            inset: 0,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            color: "#00316c",
-            fontSize: "15px",
-            fontWeight: 600,
+            color: "#043a7b",
+            fontSize: "12px",
+            fontWeight: 700,
             fontFamily: "Outfit, sans-serif",
+            whiteSpace: "nowrap",
+            letterSpacing: "0.02em",
+            paddingLeft: "10px",
+            paddingRight: "22px",
           }}>
-            {daysLeft}
+            ENDS TODAY
           </span>
-        </div>
+        ) : (
+          <>
+            {/* Calendar icon with day number overlaid */}
+            <div style={{
+              position: "relative",
+              width: "34px",
+              height: "34px",
+              flexShrink: 0,
+              marginLeft: "4px",
+            }}>
+              <img
+                src={headerDaysIcon}
+                alt=""
+                style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              />
+              <span style={{
+                marginTop: "4px",
+                position: "absolute",
+                inset: 0,
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                color: "#00316c",
+                fontSize: "15px",
+                fontWeight: 600,
+                fontFamily: "Outfit, sans-serif",
+              }}>
+                {daysLeft}
+              </span>
+            </div>
 
-        {/* "Days Left" label */}
-        <span style={{
-          color: "#043a7b",
-          fontSize: "12px",
-          fontWeight: 600,
-          fontFamily: "Outfit, sans-serif",
-          marginLeft: "4px",
-          whiteSpace: "nowrap",
-        }}>
-          Days Left
-        </span>
+            {/* "Days Left" label */}
+            <span style={{
+              color: "#043a7b",
+              fontSize: "12px",
+              fontWeight: 600,
+              fontFamily: "Outfit, sans-serif",
+              marginLeft: "4px",
+              whiteSpace: "nowrap",
+            }}>
+              Days Left
+            </span>
+          </>
+        )}
       </div>
 
       {/* Yoga avatar — overlaps pill's right edge by 19px */}

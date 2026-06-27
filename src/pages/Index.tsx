@@ -493,14 +493,19 @@ const Index = () => {
   const sessionJoinLink = studentData?.free_classes_joining_link || studentData?.free_class_join_link;
   const hasBatchAccess = (isOngoingStatus || paidInActiveBatch) && batchInfo.isActive && !!sessionJoinLink;
 
+  // Days remaining until June 30 2026 — shared across all dashboard states
+  const daysUntilJune30 = (() => {
+    const target = new Date(2026, 5, 30);
+    target.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return Math.max(0, Math.ceil((target.getTime() - today.getTime()) / 86400000));
+  })();
+
+
   // --- Active Batch Dashboard (Week 1 or Week 2) ---
   if (hasBatchAccess) {
     const { currentDay, week, dateRangeLabel } = batchInfo;
-    const _july1 = new Date(2026, 6, 1);
-    _july1.setHours(0, 0, 0, 0);
-    const _today = new Date();
-    _today.setHours(0, 0, 0, 0);
-    const daysUntilJuly1 = Math.max(0, Math.ceil((_july1.getTime() - _today.getTime()) / 86400000));
 
     // Combine attendance across all batches that share the active batch start date
     const freeBatches: any[] = studentData?.free_batches ?? [];
@@ -652,7 +657,7 @@ const Index = () => {
             {/* Header */}
             <header className="hd-header bg-white">
               <img src={logo} alt="Healthyday" className="h-7" />
-              <HeaderDaysLeft daysLeft={daysUntilJuly1} />
+              <HeaderDaysLeft daysLeft={daysUntilJune30} />
             </header>
 
             {/* Bonus Special Session */}
@@ -842,7 +847,7 @@ const Index = () => {
         {/* Header */}
         <header className="hd-header bg-white">
           <img src={logo} alt="Healthyday" className="h-7" />
-          <HeaderDaysLeft daysLeft={daysUntilJuly1} />
+          <HeaderDaysLeft daysLeft={daysUntilJune30} />
         </header>
 
         {/* Your Yoga Session — live/not-live */}
@@ -1353,7 +1358,7 @@ const Index = () => {
         {/* Header */}
         <header className="hd-header bg-white">
           <img src={logo} alt="Healthyday" className="h-7" />
-          {daysUntilPlanEnds !== null && <HeaderDaysLeft daysLeft={Math.max(0, daysUntilPlanEnds)} />}
+          <HeaderDaysLeft daysLeft={daysUntilJune30} />
         </header>
 
         {/* Bonus Special Session (Paid) */}
