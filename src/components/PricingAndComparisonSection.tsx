@@ -1,9 +1,9 @@
 import React from "react";
 
 const ongoingPlans = [
-  { name: "1 Year Including Diet Plan", price: 2399, originalPrice: 5999, discount: 60, bestValue: true, url: "https://healthyday.co.in/1-year-plan/" },
-  { name: "6 Months Plan", price: 1899, originalPrice: 2999, discount: 37, bestValue: false, url: "https://healthyday.co.in/6-months-plan/" },
-  { name: "3 Months Plan", price: 1399, originalPrice: 1499, discount: 7, bestValue: false, url: "https://healthyday.co.in/3-months-plan/" },
+  { name: "1 Year Including Diet Plan", price: 2399, originalPrice: 5999, discount: 60, bestValue: true, url: "https://yoga.healthyday.co.in/12m" },
+  { name: "6 Months Plan", price: 1899, originalPrice: 2999, discount: 37, bestValue: false, url: "https://yoga.healthyday.co.in/6m" },
+  { name: "3 Months Plan", price: 1399, originalPrice: 1499, discount: 7, bestValue: false, url: "https://yoga.healthyday.co.in/3m" },
 ];
 
 const paidPlans = [
