@@ -1,3 +1,4 @@
+import { useNavigate, useParams } from "react-router-dom";
 import headerDaysIcon from "@/assets/header_days_icon.webp";
 import headerYogaKit from "@/assets/header_yoga_kit.webp";
 
@@ -6,10 +7,15 @@ interface HeaderDaysLeftProps {
 }
 
 const HeaderDaysLeft = ({ daysLeft }: HeaderDaysLeftProps) => {
+  const navigate = useNavigate();
+  const { mobile } = useParams<{ mobile: string }>();
   const isLastDay = daysLeft === 0;
 
   return (
-    <div style={{ marginLeft: "auto", display: "flex", alignItems: "center", flexShrink: 0 }}>
+    <div
+      onClick={() => navigate(`/${mobile}/leaderboard`)}
+      style={{ marginLeft: "auto", display: "flex", alignItems: "center", flexShrink: 0, cursor: "pointer" }}
+    >
       {/* Orange gradient pill */}
       <div style={{
         position: "relative",
@@ -129,6 +135,7 @@ const HeaderDaysLeft = ({ daysLeft }: HeaderDaysLeftProps) => {
               position: "absolute",
               top: 0,
               left: 0,
+              objectFit: "cover",
               width: "125%",
               height: "100%",
             }}
