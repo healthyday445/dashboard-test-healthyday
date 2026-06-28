@@ -653,12 +653,7 @@ const Index = () => {
         const nextSlots = isAMSession ? ["4:00 PM", "5:30 PM", "6:30 PM"] : ["5:00 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
         const nextWhen = isAMSession ? "at 4:00 PM" : "tomorrow at 5:00 AM";
         return (
-          <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
-            {/* Header */}
-            <header className="hd-header bg-white">
-              <img src={logo} alt="Healthyday" className="h-7" />
-              <HeaderDaysLeft daysLeft={daysUntilJune30} />
-            </header>
+          <>
 
             {/* Bonus Special Session */}
             <div style={{ padding: "24px 20px 0" }}>
@@ -837,7 +832,7 @@ const Index = () => {
               </>
             )}
 
-          </div>
+          </>
         );
       } // end if (showBonus)
     } // end if (BONUS_DAYS)
@@ -889,12 +884,7 @@ const Index = () => {
     }
 
     return (
-      <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
-        {/* Header */}
-        <header className="hd-header bg-white">
-          <img src={logo} alt="Healthyday" className="h-7" />
-          <HeaderDaysLeft daysLeft={daysUntilJune30} />
-        </header>
+      <>
 
         {activeRecurringBonusCard && (() => {
           const rTotalMin = (() => { const _t = new URLSearchParams(location.search).get("time"); if (_t) { const isPM = _t.toLowerCase().endsWith("pm"); const s = _t.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
@@ -1236,7 +1226,7 @@ const Index = () => {
           </>
         )}
 
-      </div>
+      </>
     );
   }
 
@@ -1847,6 +1837,7 @@ const Index = () => {
         {/* Header */}
         <header className="hd-header bg-white">
           <img src={logo} alt="Healthyday" className="h-7" />
+          <HeaderDaysLeft daysLeft={daysUntilJune30} />
         </header>
 
         <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -2002,10 +1993,9 @@ const Index = () => {
     return (
       <div className="hd-page bg-background" style={{ fontFamily: 'Outfit, sans-serif' }}>
         {/* Header */}
-        <header
-          className="hd-header bg-background"
-        >
+        <header className="hd-header bg-background">
           <img src={logo} alt="Healthyday" className="h-7" />
+          <HeaderDaysLeft daysLeft={daysUntilJune30} />
         </header>
 
         {/* 14-Days Completed Banner */}
@@ -2088,12 +2078,7 @@ const Index = () => {
   if (_dateLabelDay === 21) { _dateLabelDay = 20; _dateLabelSuffix = "th"; }
 
   return (
-    <div className="hd-page bg-background" style={{ fontFamily: "Outfit, sans-serif" }}>
-      <header
-        className="hd-header bg-background"
-      >
-        <img src={logo} alt="Healthyday" className="h-7" />
-      </header>
+    <>
 
       {/* Hero Text */}
       <div style={{ paddingTop: "16px", textAlign: "center" }}>
@@ -2300,7 +2285,7 @@ const Index = () => {
       </div>
 
       <div style={{ height: "48px" }} />
-    </div>
+    </>
   );
 };
 

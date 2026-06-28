@@ -3,7 +3,7 @@ import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
+import Dashboard from "./pages/Dashboard";
 import Maintenance from "./pages/Maintenance";
 import NotFound from "./pages/NotFound";
 import Referral from "./pages/Referral";
@@ -13,7 +13,6 @@ import AllRecordings from "./pages/AllRecordings";
 import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
 import Faqs from "./pages/Faqs";
-import TwentyOneDaysProgram from "./pages/TwentyOneDaysProgram";
 
 const queryClient = new QueryClient();
 
@@ -31,9 +30,7 @@ const App = () => {
         <Routes>
           <Route path="/faqs" element={<Faqs />} />
           <Route path="/:mobile/faqs" element={<Faqs />} />
-          <Route path="/" element={<Index />} />
-          <Route path="/dashboard" element={<Index />} />
-          <Route path="/:mobile" element={<Index />} />
+          <Route path="/:mobile" element={<Dashboard />} />
           <Route path="/referral" element={<Referral />} />
           <Route path="/referral-status" element={<ReferralStatus />} />
           <Route path="/:mobile/referrals/:count" element={<ReferralStatus />} />
@@ -42,8 +39,6 @@ const App = () => {
           <Route path="/:mobile/recordings" element={<AllRecordings />} />
           <Route path="/leaderboard" element={<Login />} />
           <Route path="/:mobile/leaderboard" element={<Leaderboard />} />
-          <Route path="/21daysprogram" element={<TwentyOneDaysProgram />} />
-          <Route path="/:mobile/21daysprogram" element={<TwentyOneDaysProgram />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

@@ -667,30 +667,7 @@ export default function TwentyOneDaysProgram() {
   }
 
   return (
-    <div
-      className="hd-page bg-white overflow-x-hidden"
-      style={{ fontFamily: "Outfit, sans-serif" }}
-    >
-      {/* Fixed Header */}
-      <div
-        className="fixed top-0 left-1/2 -translate-x-1/2 z-10 bg-white flex items-center"
-        style={{
-          width: "100%",
-          maxWidth: 412,
-          height: 68,
-          boxShadow: "0px 4px 30px 0px rgba(0,0,0,0.1)",
-          paddingLeft: 20,
-        }}
-      >
-        <img
-          src={logo}
-          alt="Healthyday"
-          style={{ height: 28, width: 144, objectFit: "contain" }}
-        />
-      </div>
-
-      {/* Spacer for fixed header */}
-      <div style={{ height: 68 }} />
+    <>
 
       <div
         className="relative"
@@ -933,6 +910,6 @@ export default function TwentyOneDaysProgram() {
         </div>
       </div>
 
-    </div>
+    </>
   );
 }

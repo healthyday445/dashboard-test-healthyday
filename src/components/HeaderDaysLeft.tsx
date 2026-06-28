@@ -14,7 +14,7 @@ const HeaderDaysLeft = ({ daysLeft }: HeaderDaysLeftProps) => {
   return (
     <div
       onClick={() => navigate(`/${mobile}/leaderboard`)}
-      style={{ marginLeft: "auto", display: "flex", alignItems: "center", flexShrink: 0, cursor: "pointer" }}
+      style={{ marginLeft: "auto", display: "flex", alignItems: "center", flexShrink: 0, width: "fit-content", cursor: "pointer" }}
     >
       {/* Orange gradient pill */}
       <div style={{
