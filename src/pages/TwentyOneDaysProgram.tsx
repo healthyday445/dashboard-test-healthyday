@@ -154,6 +154,12 @@ function RewardCard({
       } else {
         window.open("https://www.youtube.com/watch?v=d3HiE2QhlZA", "_blank");
       }
+    } else if (levelData.level === 3) {
+      if (lang === "English") {
+        window.open("https://youtube.com/live/J3aX2kUMLno", "_blank");
+      } else {
+        window.open("https://youtube.com/live/Nc7figrxfuQ", "_blank");
+      }
     }
   };
 
