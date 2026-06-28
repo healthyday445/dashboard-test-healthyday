@@ -1202,9 +1202,9 @@ const Index = () => {
         </div> */}
 
         {/* Week 2 Pricing & Comparison */}
-        {week === 2 && (
+        {/* {week === 2 && (
           <PricingAndComparisonSection selectedPlanIdx={selectedPlanIdx} setSelectedPlanIdx={setSelectedPlanIdx} daysLeft={Math.max(0, 15 - currentDay)} useOngoingPricing={true} />
-        )}
+        )} */}
 
         {/* Your Referral Gifts Section — commented out */}
         {/* {week === 1 && (
@@ -1222,19 +1222,17 @@ const Index = () => {
           </>
         )} */}
 
-        {week === 2 && (
+        {/* week === 2 && (
           <>
-            {/* Want More FREE Classes heading */}
             <div style={{ padding: "32px 20px 0", textAlign: "center" }}>
               <div style={{ width: "100%", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
               <p style={{ width: "100%", maxWidth: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
             </div>
-            {/* Refer & Earn */}
-            {/* <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
+            <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
               <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
-            </div> */}
+            </div>
           </>
-        )}
+        ) */}
 
       </div>
     );
