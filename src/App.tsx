@@ -13,6 +13,7 @@ import AllRecordings from "./pages/AllRecordings";
 import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
 import Faqs from "./pages/Faqs";
+import Index from "./pages/Index";
 
 const queryClient = new QueryClient();
 
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/:mobile" element={<Dashboard />} />
           <Route path="/referral" element={<Referral />} />
           <Route path="/referral-status" element={<ReferralStatus />} />
+          <Route path="/" element={<Index />} />
           <Route path="/:mobile/referrals/:count" element={<ReferralStatus />} />
           <Route path="/attendance-page" element={<AttendancePage />} />
           <Route path="/:mobile/attendance" element={<AttendancePage />} />
