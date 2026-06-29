@@ -86,7 +86,7 @@ const HeaderDaysLeft = ({ daysLeft }: HeaderDaysLeftProps) => {
               marginLeft: "4px",
               whiteSpace: "nowrap",
             }}>
-              Days Left
+              {daysLeft === 1 ? "Day Left" : "Days Left"}
             </span>
           </>
         )}
