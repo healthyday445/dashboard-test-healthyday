@@ -205,6 +205,12 @@ export function LevelCard({
                 } else {
                   window.open("https://www.youtube.com/watch?v=d3HiE2QhlZA", "_blank");
                 }
+              } else if (level === 3) {
+                if (language === "English") {
+                  window.open("https://youtube.com/live/J3aX2kUMLno", "_blank");
+                } else {
+                  window.open("https://youtube.com/live/Nc7figrxfuQ", "_blank");
+                }
               } else {
                 window.open(joinLink, "_blank");
               }

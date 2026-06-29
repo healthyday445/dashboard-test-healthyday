@@ -54,6 +54,7 @@ const teluguFaqs = [
   {
     category: "Ongoing Week 1",
     items: [
+      { question: "Payment chesaanu, kaani elanti confirmation raledu", answer: "Payment చేసేటపుడు మీరు enter చేసిన number కి 5 minutes లోపు మీకు whatsapp లో confirmation వస్తుంది.\n\nఒకవేళ రాలేదు అంటే ఈ కింద number కి WhatsApp లో message చేయండి\n\n<9052888968>\n\n*Note*: Message లో మీ payment screenshot పెట్టడం మర్చిపోవద్దు" },
       { question: "Change my language to English", answer: "ACTION_CHANGE_LANGUAGE" },
       { question: "Class link open కావటం లేదు", answer: "ఒకవేళ మీకు live timings లో class link open అవ్వకపోతే ఈ కింది link తో join అవ్వండి\n\nhttps://class.healthyday.co.in/{mobile}\n\nLink కేవలం live timings లో మాత్రమే open అవుతుంది. Recordings ఉండవు." },
       { question: "Link open చేస్తే *Restricted Mode* అని వస్తుంది", answer: "Don’t worry.ఇది చాలా మంది ఎదుర్కొనే common issue. \n\nదీనికి solution మీ YouTube లో restricted mode off చేయాలి.\nఎలా off చేయాలో ఈ video లో detailed గా చెప్పాను.\n\nhttps://youtube.com/shorts/I7ooLzNAJ7s\n\nSimple process. 30 sec కూడా పట్టదు." },
@@ -86,6 +87,7 @@ const englishFaqs = [
   {
     category: "Ongoing Week 1",
     items: [
+      { question: "I made the payment, but still didn’t receive any confirmation", answer: "Whatsapp confirmation is sent to the the number entered during the payment\n\nIncase you haven’t received any confirmation, Please click the button below and whatsapp us on our support number\n\n<9052888968>\n\n*Note*: Please do not forget to share the payment screenshot for a faster resolution" },
       { question: "I am in Periods. Can I do yoga?", answer: "During periods, you can practice this specially curated session. This will help relieving your back pain and improve the mood\n\nhttps://youtu.be/ipJ_v1EJ1tw \n\nYou can follow this session for the first two days or till you have cramps and pain. After that you can continue in regular classes" },
       { question: "Class Link is not opening", answer: "If your class link is not opening during live hours, you can join using the link below \n\nhttps://class.healthyday.co.in/{mobile}\n\nThe link will only open during live timings\nNo recordings available" },
       { question: "Getting “Restricted Mode” error when I open my link", answer: "This is a very common error. You can resolve this simply by disabling restricted mode on your Youtube App\n\nI have explained steps to disable in the video here👇\nhttps://youtube.com/shorts/I7ooLzNAJ7s\n\nIt is very simple and takes hardly 30 sec to do it" },
@@ -95,7 +97,7 @@ const englishFaqs = [
       { question: "How to win a Yoga Kit?", answer: "Invite your Friends, Family to our 21 Days FREE Yoga batch. \nWhen they register, you can WIN Yoga kit\n\n🏆 *500 TOP WINNERS get Yoga Kit*\n1️⃣ Invite = Healthy Diet Recipes e-Book\n\nReferrals from 1st to 21st June will be counted\n\n<Invite Friends & Family>\n<Check my Rank>" },
       { question: "My referral count is incorrect", answer: "Please click on the \"View Your Referrals\" button in the link below 👇\nhttp://class.healthyday.co.in/918143754968/leaderboard\n\nYou will instantly see the details of people who joined through your referral link.\n\nIf anyone is showing in Pending status, please ask them to click the \"NEXT STEP - CLICK HERE\" button in the WhatsApp message we sent and complete their verification.\n\nOnce they complete verification, their count will automatically be added to your referrals ✅\n\nIf someone joined using your referral link but their number is not showing in your list, it means they had already registered for our classes earlier.\n\nIf you face any other issue, please send a WhatsApp message to 📞 9052888968" },
       { question: "My attendance is incorrect", answer: "Sometimes we might miss the attendance tracking. If you ever see your attendance marked incorrectly, do not worry\n\nJoin the next day and you will continue to receive the links." },
-      { question: "I am having body pains after class", answer: "Body pains are totally common in the first week! These are good pains and It means your body is developing. \n\nIf you feel a sharp, pinching pain in any joint, that is not good. Otherwise, muscle pains are very good and healthy for your improvement." }
+      { question: "I am having body pains after class", answer: "Body pains are totally common in the first week! These are good pains and It means your body is developing. \n\nIf you feel a sharp, pinching pain in any joint, that is not good. Otherwise, muscle pains are very good and healthy for your improvement." },
     ]
   }
 ];
@@ -391,8 +393,8 @@ const Faqs = () => {
         {/* Contact Us card hidden as requested */}
         <div className="flex flex-col items-center mt-8 mb-8" style={{ display: 'none' }}>
           <p className="text-gray-700 text-center mb-4 text-[17px] font-medium px-4">
-            {language === 'English' 
-              ? "If you have any more queries, please click the button below." 
+            {language === 'English'
+              ? "If you have any more queries, please click the button below."
               : "మీకు ఇంకా ఏమైనా సందేహాలు ఉంటే, దయచేసి క్రింది బటన్‌పై క్లిక్ చేయండి."}
           </p>
           <button
