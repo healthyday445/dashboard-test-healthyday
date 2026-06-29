@@ -449,11 +449,15 @@ function DayRow({
   );
 }
 
-export default function TwentyOneDaysProgram() {
+interface TwentyOneDaysProgramProps {
+  initialStudentData?: any;
+}
+
+export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDaysProgramProps = {}) {
   const { mobile } = useParams<{ mobile?: string }>();
   const navigate = useNavigate();
-  const [studentData, setStudentData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
+  const [studentData, setStudentData] = useState<any>(initialStudentData ?? null);
+  const [loading, setLoading] = useState(!initialStudentData);
   const [error, setError] = useState<string | null>(null);
 
   const timelineContainerRef = useRef<HTMLDivElement>(null);
@@ -468,6 +472,7 @@ export default function TwentyOneDaysProgram() {
   const [timelineEndHeight, setTimelineEndHeight] = useState(0);
 
   useEffect(() => {
+    if (initialStudentData) return; // data already provided by parent
     if (!mobile) {
       setLoading(false);
       return;

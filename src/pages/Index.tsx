@@ -161,7 +161,11 @@ const VideoCard = ({ video }: { video: (typeof teluguVideos)[0] }) => {
 
 import { safeSessionStorage, safeLocalStorage } from "@/lib/storage";
 
-const Index = () => {
+interface IndexProps {
+  initialStudentData?: any;
+}
+
+const Index = ({ initialStudentData }: IndexProps = {}) => {
   const navigate = useNavigate();
   const { mobile: pathMobile } = useParams<{ mobile: string }>();
   const location = useLocation();
@@ -206,11 +210,19 @@ const Index = () => {
   }, []);
 
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(!initialStudentData);
   const [error, setError] = useState<string | null>(null);
-  const [studentData, setStudentData] = useState<any>(null);
-  const [showComingSoon, setShowComingSoon] = useState(false);
-  const [authenticated, setAuthenticated] = useState(false);
+  const [studentData, setStudentData] = useState<any>(initialStudentData ?? null);
+  const [showComingSoon, setShowComingSoon] = useState(
+    initialStudentData
+      ? !(initialStudentData.language === "Telugu" || initialStudentData.language === "English")
+      : false
+  );
+  const [authenticated, setAuthenticated] = useState(
+    initialStudentData
+      ? (initialStudentData.language === "Telugu" || initialStudentData.language === "English")
+      : false
+  );
   const [sessionLinks, setSessionLinks] = useState<any[]>([]);
   const [joinedDays, setJoinedDays] = useState<number[]>(() => {
     try {
@@ -224,6 +236,7 @@ const Index = () => {
   });
 
   useEffect(() => {
+    if (initialStudentData) return; // data already provided by parent
     // Helper: get local date string (YYYY-MM-DD) without UTC timezone shift
     const toLocalDateStr = (d: Date) => {
       const yyyy = d.getFullYear();
@@ -2083,10 +2096,10 @@ const Index = () => {
   if (_dateLabelDay === 21) { _dateLabelDay = 20; _dateLabelSuffix = "th"; }
 
   return (
-    <div>
-      <div style={{ height: 68, background: "white", position: "relative" }}>
-              <img src={tabSubtract} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", transform: "scaleX(-1)", pointerEvents: "none" }} />
-            </div>
+    <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
+      <header className="hd-header bg-white">
+        <img src={logo} alt="Healthyday" className="h-7" />
+      </header>
 
       {/* Hero Text */}
       <div style={{ paddingTop: "16px", textAlign: "center" }}>

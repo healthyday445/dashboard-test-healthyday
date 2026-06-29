@@ -1,19 +1,77 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useParams, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import HeaderDaysLeft from "@/components/HeaderDaysLeft";
 import DashboardTabBar from "@/components/DashboardTabBar";
 import Index from "@/pages/Index";
 import TwentyOneDaysProgram from "@/pages/TwentyOneDaysProgram";
 
+// Only students in this specific free batch get the journey tab
+const FREE_BATCH_DATE = "2026-06-21";
+
 const Dashboard = () => {
+  const { mobile: pathMobile } = useParams<{ mobile: string }>();
+  const location = useLocation();
+  const queryMobile = new URLSearchParams(location.search).get("mobile");
+  const mobile = pathMobile || queryMobile || undefined;
+
+  const [studentData, setStudentData] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
   const [activeTab, setActiveTab] = useState<"dashboard" | "journey">("dashboard");
   const [journeyMounted, setJourneyMounted] = useState(false);
+
+  useEffect(() => {
+    if (!mobile) {
+      setLoading(false);
+      return;
+    }
+    const cleanedMobile = mobile.replace(/[-\s()+]/g, "");
+    if (!/^\d{7,15}$/.test(cleanedMobile)) {
+      setLoading(false);
+      return;
+    }
+    const apiMobile = `+${cleanedMobile}`;
+    const encodedMobile = encodeURIComponent(apiMobile);
+    fetch(`/.netlify/functions/student?mobile=${encodedMobile}`)
+      .then(r => r.ok ? r.json() : Promise.reject(r.status))
+      .then(data => setStudentData(data))
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [mobile]);
 
   const handleTabChange = (tab: "dashboard" | "journey") => {
     if (tab === "journey") setJourneyMounted(true);
     setActiveTab(tab);
   };
 
+  // Show a loading screen while we determine which experience to show
+  if (loading) {
+    return (
+      <div className="hd-page bg-background flex flex-col items-center justify-center" style={{ fontFamily: "Outfit, sans-serif" }}>
+        <img src={logo} alt="Healthyday" className="h-10 mb-8" />
+        <div style={{
+          width: "48px", height: "48px",
+          border: "4px solid #EDF6FF", borderTop: "4px solid #FEAB27",
+          borderRadius: "50%", animation: "spin 0.8s linear infinite",
+        }} />
+        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
+      </div>
+    );
+  }
+
+  // Determine if this student gets the journey tab:
+  // must be in the June-21-2026 free batch AND not paid/pastdue
+  const status = studentData?.status;
+  const isEligibleForJourneyTab =
+    studentData?.free_batch_start_date === FREE_BATCH_DATE &&
+    (status === "registered" || status === "14DaysOngoing" || status === "14daysongoing");
+
+  // Not eligible for journey tab → render Index standalone (Index owns its own layout)
+  if (!isEligibleForJourneyTab) {
+    return <Index initialStudentData={studentData} />;
+  }
+
+  // June-21-2026 free batch student → show the tab experience
   const june30 = new Date(2026, 5, 30);
   june30.setHours(0, 0, 0, 0);
   const today = new Date();
@@ -28,22 +86,22 @@ const Dashboard = () => {
       </header>
 
       <div style={{ position: "relative" }}>
-        {/* Layer 1: blueish tab bar background */}
+        {/* Layer 1: blue tab bar background */}
         <div style={{ height: 68, background: "#E2EFFF" }} />
 
-        {/* Layer 2: view content — each view's 68px spacer holds its own Subtract */}
+        {/* Layer 2: content — each view's own spacer holds its Subtract shape */}
         <div style={{ marginTop: "-68px", position: "relative", zIndex: 5 }}>
           <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
-            <Index />
+            <Index initialStudentData={studentData} />
           </div>
           {journeyMounted && (
             <div style={{ display: activeTab === "journey" ? "block" : "none" }}>
-              <TwentyOneDaysProgram />
+              <TwentyOneDaysProgram initialStudentData={studentData} />
             </div>
           )}
         </div>
 
-        {/* Layer 3: tab labels and click areas — float above the Subtract */}
+        {/* Layer 3: tab labels float above the content */}
         <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 68, zIndex: 10 }}>
           <DashboardTabBar active={activeTab} onTabChange={handleTabChange} />
         </div>
