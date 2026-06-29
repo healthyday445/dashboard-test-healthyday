@@ -27,20 +27,27 @@ const Dashboard = () => {
         <HeaderDaysLeft daysLeft={daysUntilJune30} />
       </header>
 
-      {/* Tab bar in flow with z-index so it renders above the content */}
-      <div style={{ position: "relative", zIndex: 10 }}>
-        <DashboardTabBar active={activeTab} onTabChange={handleTabChange} />
-      </div>
+      <div style={{ position: "relative" }}>
+        {/* Layer 1: blueish tab bar background */}
+        <div style={{ height: 68, background: "#E2EFFF" }} />
 
-      {/* Content pulled up by 68px — component's own bg fills the tab bar area */}
-      <div style={{ display: activeTab === "dashboard" ? "block" : "none", marginTop: "-68px" }}>
-        <Index />
-      </div>
-      {journeyMounted && (
-        <div style={{ display: activeTab === "journey" ? "block" : "none", marginTop: "-68px" }}>
-          <TwentyOneDaysProgram />
+        {/* Layer 2: view content — each view's 68px spacer holds its own Subtract */}
+        <div style={{ marginTop: "-68px", position: "relative", zIndex: 5 }}>
+          <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
+            <Index />
+          </div>
+          {journeyMounted && (
+            <div style={{ display: activeTab === "journey" ? "block" : "none" }}>
+              <TwentyOneDaysProgram />
+            </div>
+          )}
         </div>
-      )}
+
+        {/* Layer 3: tab labels and click areas — float above the Subtract */}
+        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 68, zIndex: 10 }}>
+          <DashboardTabBar active={activeTab} onTabChange={handleTabChange} />
+        </div>
+      </div>
     </div>
   );
 };
