@@ -25,7 +25,6 @@ import imgTier3Star from "@/assets/leaderboard/tier3-star.webp";
 import imgTier4Illustration from "@/assets/leaderboard/tier4-illustration.webp";
 import imgTier4Star from "@/assets/leaderboard/tier4-star.webp";
 import imgYogaKit from "@/assets/leaderboard/yoga-kit-final.webp";
-import imgWhatsApp from "@/assets/leaderboard/whatsapp-icon.png";
 import imgSadEmoji from "@/assets/leaderboard/sad-emoji.png";
 import imgPostCongratsCardBg from "@/assets/leaderboard/post-contest-congrats-bg.webp";
 import imgPostProductImg from "@/assets/leaderboard/post-contest-product.webp";
@@ -103,11 +102,11 @@ const ReferralNameNumber: React.FC<{ name: string; mobile: string }> = ({ name, 
 );
 
 const PendingNote: React.FC<{ language?: string }> = ({ language }) => (
-  <span style={{ color: "#FF3E3E", fontFamily: "Outfit", fontSize: "10px", fontWeight: 400, lineHeight: "normal" }}>
+  <p style={{ margin: 0, color: "#FF3E3E", fontFamily: "Outfit", fontSize: "10px", fontWeight: 400, lineHeight: "1.4" }}>
     {language === "Telugu"
-      ? "ఈ person ఇంకా whatsapp లో confirm button నొక్కలేదు"
-      : "Verify Button in the WhatsApp Reminder is not clicked by this person"}
-  </span>
+      ? "ఈ number 30th June లోపు వాళ్ళ registration WhatsApp Button Click చేసి Confirm చేసుకోలేదు. So contest లో eligible కాదు"
+      : "This user neither verified their number nor attended any class. So, not eligible for the contest"}
+  </p>
 );
 
 /* ────────────────────────────────────────────
@@ -663,7 +662,8 @@ const Leaderboard: React.FC = () => {
               width: "100%",
               maxWidth: "412px",
               background: "#FFF",
-              borderRadius: "20px 20px 0 0",
+              borderRadius: "30px 30px 0 0",
+              boxShadow: "0 1px 8px 0 rgba(0,0,0,0.6)",
               zIndex: 101,
               display: "flex",
               flexDirection: "column",
@@ -671,140 +671,117 @@ const Leaderboard: React.FC = () => {
             }}
           >
             {/* Header */}
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 20px 12px", flexShrink: 0 }}>
-              <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "1.025rem", fontWeight: 700, lineHeight: "normal" }}>
-                Your referrals from June 1<sup style={{ fontSize: "0.6em" }}>st</sup> to June 30<sup style={{ fontSize: "0.6em" }}>th</sup> 
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 26px 16px", flexShrink: 0 }}>
+              <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "normal" }}>
+                Your Referrals from June 1<sup style={{ fontSize: "0.65em" }}>st</sup> – June 30<sup style={{ fontSize: "0.65em" }}>th</sup>
               </span>
               <button
                 onClick={closeDrawer}
-                style={{ background: "none", border: "none", cursor: "pointer", fontSize: "20px", color: "#202020", padding: "4px", lineHeight: 1 }}
+                style={{ background: "none", border: "none", cursor: "pointer", padding: "4px", lineHeight: 1 }}
               >
-                ✕
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
+                  <path d="M18 6L6 18M6 6L18 18" stroke="#202020" strokeWidth="2.5" strokeLinecap="round" />
+                </svg>
               </button>
             </div>
 
-            {/* List */}
-            <div style={{ overflowY: "auto", flex: 1, padding: "0 16px 12px" }}>
-              {referralsLoading && (
-                <div style={{ textAlign: "center", padding: "32px 0", color: "#888", fontFamily: "Outfit", fontSize: "14px" }}>Loading…</div>
-              )}
-              {!referralsLoading && referralsData?.referrals?.map((ref, i) => {
-                const isVerified = ref.referral_confirmation_status === "verified";
-                const displayName = (!ref.referred_name || ref.referred_name === "None") ? maskMobile(ref.referred_mobile) : ref.referred_name;
-                const avatarEl = (
-                  <div style={{ width: "40px", height: "40px", borderRadius: "50%", background: "#EEF3FF", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-                      <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="#0D468B" opacity="0.6"/>
-                      <path d="M12 14C7.58172 14 4 16.6863 4 20V22H20V20C20 16.6863 16.4183 14 12 14Z" fill="#0D468B" opacity="0.6"/>
-                    </svg>
-                  </div>
-                );
-                if (!isVerified) {
+            {/* Orange-bordered list container */}
+            <div
+              style={{
+                flex: 1,
+                overflow: "hidden",
+                margin: "0 26px",
+                borderTop: "1px solid #FEAB27",
+                borderLeft: "1px solid #FEAB27",
+                borderRight: "1px solid #FEAB27",
+                borderRadius: "20px 20px 0 0",
+                display: "flex",
+                flexDirection: "column",
+              }}
+            >
+              <div className="scrollbar-hide" style={{ overflowY: "auto", flex: 1 }}>
+                {referralsLoading && (
+                  <div style={{ textAlign: "center", padding: "32px 0", color: "#888", fontFamily: "Outfit", fontSize: "14px" }}>Loading…</div>
+                )}
+                {!referralsLoading && referralsData?.referrals?.map((ref, i) => {
+                  const isVerified = ref.referral_confirmation_status === "verified";
+                  const displayName = (!ref.referred_name || ref.referred_name === "None") ? maskMobile(ref.referred_mobile) : ref.referred_name;
+                  const isLast = i === (referralsData?.referrals?.length ?? 0) - 1;
                   return (
-                    <div
-                      key={i}
-                      style={{
-                        display: "flex",
-                        alignItems: "flex-start",
-                        gap: "12px",
-                        padding: "14px 12px",
-                        borderRadius: "12px",
-                        border: "1px solid #FFE5BA",
-                        marginBottom: "10px",
-                        background: "#FFF",
-                      }}
-                    >
-                      {avatarEl}
-                      {/* Left column: name+number, note */}
-                      <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px", minWidth: 0 }}>
-                        <ReferralNameNumber name={displayName} mobile={ref.referred_mobile} />
-                        <PendingNote language={referralsData?.language} />
-                      </div>
-                      {/* Right column: PENDING badge + Remind button */}
-                      <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", justifyContent: "space-between", gap: "8px", flexShrink: 0, alignSelf: "stretch" }}>
-                        <div style={{ padding: "4px 10px", borderRadius: "6px", background: "#F2F2F2", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          <span style={{ color: "#888", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, letterSpacing: "0.5px" }}>PENDING</span>
+                    <div key={i}>
+                      {/* Main row: avatar + name/phone + badge */}
+                      <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: isVerified ? "12px 21px" : "12px 21px 6px" }}>
+                        {/* Avatar */}
+                        <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "#EEF3FF", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+                          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="#0D468B" opacity="0.6"/>
+                            <path d="M12 14C7.58172 14 4 16.6863 4 20V22H20V20C20 16.6863 16.4183 14 12 14Z" fill="#0D468B" opacity="0.6"/>
+                          </svg>
                         </div>
-                        <button
-                          onClick={() => {
-                            const phone = ref.referred_mobile.replace(/\D/g, "");
-                            const text = referralsData?.language === "Telugu"
-                              ? "మీరు ఇంకా మీ 21 Days FREE Registration confirm చేయలేదు.\n\nDaily Yoga with Jagan WhatsApp Number నుండి మీకు ఒక message వచ్చింది. అందులో \"Next Step - Click Here\" అని ఒక Button ఉంటుంది. అది Click చేసి Confirm చేయొచ్చు"
-                              : "Namaste! You still haven't verified your mobile number for 21 days FREE Yoga.\n\nYou must have received a message from \"Daily Yoga with Jagan\" on WhatsApp. There is a button in there \"NEXT STEP - CLICK HERE\".\n\nPlease click that button to verify";
-                            window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, "_blank");
-                          }}
-                          style={{
-                            width: "100%",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            gap: "4px",
-                            padding: "5px 4px",
-                            borderRadius: "4px",
-                            border: "1px solid #40C351",
-                            background: "#FFF",
-                            cursor: "pointer",
-                            fontFamily: "Outfit",
-                            fontSize: "10px",
-                            fontWeight: 600,
-                            color: "#40C351",
-                            lineHeight: "normal",
-                          }}
-                        >
-                          Remind
-                          <img src={imgWhatsApp} alt="WhatsApp" style={{ width: "14px", height: "14px", objectFit: "contain" }} />
-                        </button>
+                        {/* Center: name + phone */}
+                        <div style={{ flex: 1, minWidth: 0 }}>
+                          <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "15px", fontWeight: 600, lineHeight: "normal", display: "block" }}>
+                            {displayName}
+                          </span>
+                          <div style={{ display: "flex", alignItems: "center", gap: "4px", marginTop: "4px" }}>
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none">
+                              <path d="M6.62 10.79C8.06 13.62 10.38 15.93 13.21 17.38L15.41 15.18C15.68 14.91 16.08 14.82 16.43 14.94C17.55 15.31 18.76 15.51 20 15.51C20.55 15.51 21 15.96 21 16.51V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z" fill="#A2A2A2"/>
+                            </svg>
+                            <span style={{ color: "#A2A2A2", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500 }}>
+                              {maskMobile(ref.referred_mobile)}
+                            </span>
+                          </div>
+                        </div>
+                        {/* Right: status badge */}
+                        <div style={{ flexShrink: 0 }}>
+                          {isVerified ? (
+                            <div style={{ background: "#C7FFDA", borderRadius: "3px", width: "58px", height: "21px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <span style={{ color: "#287E54", fontFamily: "Outfit", fontSize: "10px", fontWeight: 600, letterSpacing: "0.5px" }}>VERIFIED</span>
+                            </div>
+                          ) : (
+                            <div style={{ background: "#E0E0E0", borderRadius: "3px", width: "62px", height: "21px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                              <span style={{ color: "#7B7F7D", fontFamily: "Outfit", fontSize: "10px", fontWeight: 600, letterSpacing: "0.5px" }}>PENDING</span>
+                            </div>
+                          )}
+                        </div>
                       </div>
+                      {/* Pending error text — below the full row */}
+                      {!isVerified && (
+                        <div style={{ padding: "0 21px 10px" }}>
+                          <PendingNote language={referralsData?.language} />
+                        </div>
+                      )}
+                      {!isLast && <div style={{ height: "1px", background: "#E0E0E0" }} />}
                     </div>
                   );
-                }
-                return (
-                  <div
-                    key={i}
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "12px",
-                      padding: "14px 12px",
-                      borderRadius: "12px",
-                      border: "1px solid #FFE5BA",
-                      marginBottom: "10px",
-                      background: "#FFF",
-                    }}
-                  >
-                    {avatarEl}
-                    <div style={{ flex: 1 }}>
-                      <ReferralNameNumber name={displayName} mobile={ref.referred_mobile} />
-                    </div>
-                    <div style={{ padding: "4px 10px", borderRadius: "6px", background: "#E6F9EE", flexShrink: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <span style={{ color: "#1A8A45", fontFamily: "Outfit", fontSize: "11px", fontWeight: 700, letterSpacing: "0.5px" }}>VERIFIED</span>
-                    </div>
-                  </div>
-                );
-              })}
+                })}
+              </div>
             </div>
 
             {/* Sticky total bar */}
-            {!referralsLoading && <div
-              style={{
-                flexShrink: 0,
-                margin: "0 16px 16px",
-                height: "56px",
-                borderRadius: "14px",
-                background: "#FEAB27",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "space-between",
-                padding: "0 20px",
-              }}
-            >
-              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>Your Total Referrals</span>
-              <div style={{ background: "#FFF", borderRadius: "8px", padding: "4px 14px" }}>
-                <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700 }}>
-                  {referralsData?.referrals?.filter(r => r.referral_confirmation_status === "verified").length ?? 0}
-                </span>
+            {!referralsLoading && (
+              <div
+                style={{
+                  flexShrink: 0,
+                  margin: "16px",
+                  height: "50px",
+                  borderRadius: "10px",
+                  background: "#FEAB27",
+                  boxShadow: "0 4px 8px 0 rgba(0,0,0,0.25)",
+                  display: "flex",
+                  alignItems: "center",
+                  justifyContent: "space-between",
+                  padding: "0 18px",
+                }}
+              >
+                <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 800 }}>Your Total Referrals</span>
+                <div style={{ background: "#FFF", borderRadius: "8px", width: "44px", height: "30px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700 }}>
+                    {referralsData?.total_referrals ?? referralsData?.referrals?.length ?? 0}
+                  </span>
+                </div>
               </div>
-            </div>}
+            )}
           </div>
         </>
       )}
