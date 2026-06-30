@@ -27,9 +27,17 @@ import imgTier4Star from "@/assets/leaderboard/tier4-star.webp";
 import imgYogaKit from "@/assets/leaderboard/yoga-kit-final.webp";
 import imgWhatsApp from "@/assets/leaderboard/whatsapp-icon.png";
 import imgSadEmoji from "@/assets/leaderboard/sad-emoji.png";
+import imgPostCongratsCardBg from "@/assets/leaderboard/post-contest-congrats-bg.webp";
+import imgPostProductImg from "@/assets/leaderboard/post-contest-product.webp";
+import imgPostRankCardBg from "@/assets/leaderboard/post-contest-rank-bg.webp";
+import imgPostInstructor from "@/assets/leaderboard/post-contest-instructor.webp";
+import imgPostDietThumb from "@/assets/leaderboard/post-contest-diet-thumb.webp";
+import imgPostCouponThumb from "@/assets/leaderboard/post-contest-coupon-thumb.webp";
+import imgDownloadIcon from "@/assets/referral/downloading-updates.png";
 
 const CONTEST_START = "2026-06-01";
 const CONTEST_END = "2026-06-30";
+const isContestOver = new Date().toISOString().slice(0, 10) >= CONTEST_END;
 
 interface LeaderboardEntry {
   rank: number;
@@ -122,6 +130,7 @@ const Leaderboard: React.FC = () => {
   const [drawerClosing, setDrawerClosing] = useState(false);
   const [referralsData, setReferralsData] = useState<{ language?: string; total_referrals: number; referrals: { referred_mobile: string; referred_name: string; referral_confirmation_status: string }[] } | null>(null);
   const [referralsLoading, setReferralsLoading] = useState(false);
+  const [isPaidUser, setIsPaidUser] = useState(false);
 
   const closeDrawer = () => {
     setDrawerClosing(true);
@@ -136,7 +145,7 @@ const Leaderboard: React.FC = () => {
     if (referralsData) return;
     setReferralsLoading(true);
     const e164 = `+${mobile.replace(/\D/g, "")}`;
-    fetch(`/.netlify/functions/referrals?mobile=${encodeURIComponent(e164)}&start_date=${CONTEST_START}&end_date=${CONTEST_END}`)
+    fetch(`/.netlify/functions/referrals?mobile=${encodeURIComponent(e164)}&start_date=${CONTEST_START}&end_date=${CONTEST_END}&include_contest=true`)
       .then((r) => r.json())
       .then((data) => setReferralsData(data))
       .catch(() => {})
@@ -151,7 +160,7 @@ const Leaderboard: React.FC = () => {
       setLeaderboardLoading(true);
       setLeaderboard([]);
     }
-    fetch(`/.netlify/functions/leaderboard?start_date=${CONTEST_START}&end_date=${CONTEST_END}&page_size=100&page=${page}`, { signal: controller.signal })
+    fetch(`/.netlify/functions/leaderboard?start_date=${CONTEST_START}&end_date=${CONTEST_END}&page_size=100&page=${page}&include_contest=true`, { signal: controller.signal })
       .then((r) => r.json())
       .then((data) => {
         const rows: LeaderboardEntry[] = data.leaderboard ?? [];
@@ -176,7 +185,7 @@ const Leaderboard: React.FC = () => {
   useEffect(() => {
     if (!mobile) { setRankLoading(false); return; }
     const e164 = `+${mobile.replace(/\D/g, "")}`;
-    fetch(`/.netlify/functions/leaderboard-rank?mobile=${encodeURIComponent(e164)}&start_date=${CONTEST_START}&end_date=${CONTEST_END}`)
+    fetch(`/.netlify/functions/leaderboard-rank?mobile=${encodeURIComponent(e164)}&start_date=${CONTEST_START}&end_date=${CONTEST_END}&include_contest=true`)
       .then((r) => r.json())
       .then((data) => {
         if (data?.detail?.status === "not_ranked") {
@@ -187,6 +196,17 @@ const Leaderboard: React.FC = () => {
       })
       .catch(() => {})
       .finally(() => setRankLoading(false));
+  }, [mobile]);
+
+  useEffect(() => {
+    if (!mobile) return;
+    const e164 = `+${mobile.replace(/\D/g, "")}`;
+    fetch(`/.netlify/functions/student?mobile=${encodeURIComponent(e164)}`)
+      .then((r) => r.json())
+      .then((data) => {
+        if (data?.status?.toLowerCase() === "paid") setIsPaidUser(true);
+      })
+      .catch(() => {});
   }, [mobile]);
 
   const shareLink = mobile
@@ -255,242 +275,292 @@ const Leaderboard: React.FC = () => {
 
 
       {/* ═══════════════════════════════════════
-          BANNER CARD — Blue gradient with leaves bg
+          LIVE CONTEST SECTIONS (hidden after contest ends)
          ═══════════════════════════════════════ */}
-      <div
-        style={{
-          width: "calc(100% - 32px)",
-          height: "145px",
-          borderRadius: "12px",
-          border: "1px solid #537AA8",
-          backgroundImage: `url(${BANNER_BG})`,
+      {!isContestOver && (
+        <>
+          {/* BANNER CARD — Blue gradient with leaves bg */}
+          <div
+            style={{
+              width: "calc(100% - 32px)",
+              height: "145px",
+              borderRadius: "12px",
+              border: "1px solid #537AA8",
+              backgroundImage: `url(${BANNER_BG})`,
 
-          backgroundSize: "cover",
-          backgroundPosition: "50%",
-          backgroundRepeat: "no-repeat",
-          boxShadow:
-            "0 -1px 8px 0 rgba(0,0,0,0.05), 0 1px 8px 0 rgba(0,0,0,0.05)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-          padding: "0 20px",
-          boxSizing: "border-box",
-          position: "relative",
-          overflow: "hidden",
-        }}
-      >
-        {/* Text side */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "2px", zIndex: 1 }}>
-          <span
-            style={{
-              color: "#0D468B",
-              fontFamily: "Outfit",
-              fontSize: "30px",
-              fontStyle: "normal",
-              fontWeight: 800,
-              lineHeight: "normal",
-              whiteSpace: "nowrap",
+              backgroundSize: "cover",
+              backgroundPosition: "50%",
+              backgroundRepeat: "no-repeat",
+              boxShadow:
+                "0 -1px 8px 0 rgba(0,0,0,0.05), 0 1px 8px 0 rgba(0,0,0,0.05)",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "space-between",
+              padding: "0 20px",
+              boxSizing: "border-box",
+              position: "relative",
+              overflow: "hidden",
             }}
           >
-            TOP 500
-          </span>
-          <span
-            style={{
-              color: "#FF9D00",
-              fontFamily: "Outfit",
-              fontSize: "22px",
-              fontStyle: "normal",
-              fontWeight: 800,
-              lineHeight: "normal",
-            }}
-          >
-            WINNERS
-          </span>
-          <span
-            style={{
-              color: "#000",
-              fontFamily: "Outfit",
-              fontSize: "15px",
-              fontStyle: "normal",
-              fontWeight: 700,
-              lineHeight: "normal",
-              maxWidth: "125px",
-            }}
-          >
-            Get Yoga Kit
-          </span>
-          <span
-            style={{
-              color: "#000",
-              fontFamily: "Outfit",
-              fontSize: "8px",
-              fontStyle: "normal",
-              fontWeight: 500,
-              lineHeight: "normal",
-              maxWidth: "165px",
-            }}
-          >
-            (Yoga Mat + T-Shirt + Water Bottle)
-          </span>
-        </div>
+            {/* Text side */}
+            <div style={{ display: "flex", flexDirection: "column", gap: "2px", zIndex: 1 }}>
+              <span
+                style={{
+                  color: "#0D468B",
+                  fontFamily: "Outfit",
+                  fontSize: "30px",
+                  fontStyle: "normal",
+                  fontWeight: 800,
+                  lineHeight: "normal",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                TOP 500
+              </span>
+              <span
+                style={{
+                  color: "#FF9D00",
+                  fontFamily: "Outfit",
+                  fontSize: "22px",
+                  fontStyle: "normal",
+                  fontWeight: 800,
+                  lineHeight: "normal",
+                }}
+              >
+                WINNERS
+              </span>
+              <span
+                style={{
+                  color: "#000",
+                  fontFamily: "Outfit",
+                  fontSize: "15px",
+                  fontStyle: "normal",
+                  fontWeight: 700,
+                  lineHeight: "normal",
+                  maxWidth: "125px",
+                }}
+              >
+                Get Yoga Kit
+              </span>
+              <span
+                style={{
+                  color: "#000",
+                  fontFamily: "Outfit",
+                  fontSize: "8px",
+                  fontStyle: "normal",
+                  fontWeight: 500,
+                  lineHeight: "normal",
+                  maxWidth: "165px",
+                }}
+              >
+                (Yoga Mat + T-Shirt + Water Bottle)
+              </span>
+            </div>
 
-        {/* Prize image */}
-        <div
-          style={{
-            width: "165px",
-            height: "123px",
-            aspectRatio: "55/41",
-            backgroundImage: `url(${MAIN_PRIZE_IMG})`,
+            {/* Prize image */}
+            <div
+              style={{
+                width: "165px",
+                height: "123px",
+                aspectRatio: "55/41",
+                backgroundImage: `url(${MAIN_PRIZE_IMG})`,
 
-            backgroundSize: "180.19% 112.582%",
-            backgroundPosition: "-132.189px -9.511px",
-            backgroundRepeat: "no-repeat",
-            flexShrink: 0,
-          }}
-        />
-      </div>
+                backgroundSize: "180.19% 112.582%",
+                backgroundPosition: "-132.189px -9.511px",
+                backgroundRepeat: "no-repeat",
+                flexShrink: 0,
+              }}
+            />
+          </div>
+
+          {/* DATE BAR — Contest dates */}
+          <div
+            style={{
+              width: "calc(100% - 32px)",
+              height: "30px",
+              borderRadius: "5px",
+              background: "#FFE8CD",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "flex-start",
+              marginTop: "10px",
+              gap: "16px",
+              boxSizing: "border-box",
+            }}
+          >
+            <div style={{ width: "10px", height: "100%", background: "#FF8C00", borderRadius: "2px", flexShrink: 0 }} />
+            <span
+              style={{
+                color: "#505050",
+                fontFamily: "Outfit",
+                fontSize: "12px",
+                fontStyle: "normal",
+                fontWeight: 500,
+                lineHeight: "normal",
+              }}
+            >
+              Referral Contest Dates :{" "}
+              <span
+                style={{
+                  color: "#012755",
+                  fontFamily: "Outfit",
+                  fontSize: "12px",
+                  fontStyle: "normal",
+                  fontWeight: 700,
+                  lineHeight: "normal",
+                }}
+              >
+                From 1<sup style={{ fontSize: "7.74px" }}>st</sup> JUNE to 30<sup style={{ fontSize: "7.74px" }}>th</sup> JUNE
+              </span>
+            </span>
+          </div>
+
+          {/* PRIZE TIERS — 3 columns */}
+          <div
+            style={{
+              width: "calc(100% - 32px)",
+              display: "flex",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
+              marginTop: "18px",
+              padding: "0 10px",
+              boxSizing: "border-box",
+            }}
+          >
+            <PrizeTierCard
+              image={PRIZE_IMAGES.tier1}
+              label="Top 1 - 25"
+              prizes="Yoga Mat + T Shirt + Water Bottle + Weight Scale + Towel"
+            />
+            <PrizeTierCard
+              image={PRIZE_IMAGES.tier2}
+              label="Top 25 - 100"
+              prizes="Yoga Mat + T Shirt + Water Bottle + Towel"
+            />
+            <PrizeTierCard
+              image={PRIZE_IMAGES.tier3}
+              label="Top 100 - 500"
+              prizes="Yoga Mat + T Shirt + Water Bottle"
+            />
+          </div>
+
+          {/* RANK CARD + REFER & WIN + VIEW REFERRALS */}
+          <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
+            <div style={{ order: userRank?.referral_count === 0 ? 1 : 2, width: "100%", display: "flex", justifyContent: "center" }}>
+              <CurrentUserRankCard userRank={userRank} loading={rankLoading} />
+            </div>
+
+            <div style={{ order: userRank?.referral_count === 0 ? 2 : 1, width: "calc(100% - 32px)", marginTop: "18px", marginBottom: "8px" }}>
+              <button
+                onClick={() => {
+                  if (!mobile) {
+                    window.open("https://wa.me/919052888968?text=Refer", "_blank");
+                    return;
+                  }
+                  const waMessage = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
+                  window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank");
+                }}
+                style={{
+                  width: "100%",
+                  height: "40px",
+                  borderRadius: "30px",
+                  background: "#FEAB27",
+                  border: "none",
+                  cursor: "pointer",
+                  fontFamily: "Outfit",
+                  fontSize: "16px",
+                  fontWeight: 500,
+                  color: "#202020",
+                  textTransform: "uppercase",
+                  letterSpacing: "0.5px",
+                  boxShadow: "0px 4px 2px rgba(0,0,0,0.25)",
+                }}
+              >
+                Refer &amp; Win Yoga Kit
+              </button>
+            </div>
+
+            {mobile && (
+              <div style={{ order: 3, width: "calc(100% - 32px)", display: "flex", justifyContent: "center", marginTop: "10px" }}>
+                <span
+                  onClick={openReferralsDrawer}
+                  style={{
+                    color: "#012755",
+                    fontFamily: "Outfit",
+                    fontSize: "16px",
+                    fontWeight: 500,
+                    lineHeight: "normal",
+                    whiteSpace: "nowrap",
+                    cursor: "pointer",
+                    display: "flex",
+                    alignItems: "center",
+                  }}
+                >
+                  View Your Referrals <img src={imgBlueArrow} alt="" style={{ width: "18px", height: "18px", marginLeft: "4px", marginTop: "4px" }} />
+                </span>
+              </div>
+            )}
+          </div>
+        </>
+      )}
 
       {/* ═══════════════════════════════════════
-          DATE BAR — Contest dates
+          POST-CONTEST SECTIONS (shown after contest ends)
          ═══════════════════════════════════════ */}
-      <div
-        style={{
-          width: "calc(100% - 32px)",
-          height: "30px",
-          borderRadius: "5px",
-          background: "#FFE8CD",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-start",
-          marginTop: "10px",
-          gap: "16px",
-          boxSizing: "border-box",
-        }}
-      >
-        <div style={{ width: "10px", height: "100%", background: "#FF8C00", borderRadius: "2px", flexShrink: 0 }} />
-        <span
-          style={{
-            color: "#505050",
-            fontFamily: "Outfit",
-            fontSize: "12px",
-            fontStyle: "normal",
-            fontWeight: 500,
-            lineHeight: "normal",
-          }}
-        >
-          Referral Contest Dates :{" "}
+      {isContestOver && (() => {
+        const rank = userRank?.rank ?? 0;
+        const refCount = userRank?.referral_count ?? 0;
+        const userName = userRank?.name ?? "";
+        const isTop500 = !!mobile && rank > 0 && rank <= 500;
+        const hasRefs = !!mobile && refCount >= 1 && !isTop500;
+
+        return (
+          <>
+            <PostContestBanner />
+
+            {/* State 1: Top 500 */}
+            {isTop500 && (
+              <>
+                <CongratulationsCard userName={userName} rank={rank} referralCount={refCount} />
+                <AddressDetailsCard />
+              </>
+            )}
+
+            {/* State 2 & 3: Has 1+ refs, not top 500 */}
+            {hasRefs && (
+              <>
+                <PostContestRankCard userName={userName} rank={rank} referralCount={refCount} />
+                {!isPaidUser && <YourRewardsCard showCoupon={refCount >= 3} />}
+              </>
+            )}
+          </>
+        );
+      })()}
+
+      {/* ═══════════════════════════════════════
+          VIEW YOUR REFERRALS — always shown for logged-in users
+         ═══════════════════════════════════════ */}
+      {mobile && (
+        <div style={{ width: "calc(100% - 32px)", display: "flex", justifyContent: "center", marginTop: "16px" }}>
           <span
+            onClick={openReferralsDrawer}
             style={{
               color: "#012755",
               fontFamily: "Outfit",
-              fontSize: "12px",
-              fontStyle: "normal",
-              fontWeight: 700,
-              lineHeight: "normal",
-            }}
-          >
-            From 1<sup style={{ fontSize: "7.74px" }}>st</sup> JUNE to 30<sup style={{ fontSize: "7.74px" }}>th</sup> JUNE
-          </span>
-        </span>
-      </div>
-
-      {/* ═══════════════════════════════════════
-          PRIZE TIERS — 3 columns
-         ═══════════════════════════════════════ */}
-      <div
-        style={{
-          width: "calc(100% - 32px)",
-          display: "flex",
-          justifyContent: "space-between",
-          alignItems: "flex-start",
-          marginTop: "18px",
-          padding: "0 10px",
-          boxSizing: "border-box",
-        }}
-      >
-        {/* Tier 1: Top 1-25 */}
-        <PrizeTierCard
-          image={PRIZE_IMAGES.tier1}
-          label="Top 1 - 25"
-          prizes="Yoga Mat + T Shirt + Water Bottle + Weight Scale + Towel"
-        />
-        {/* Tier 2: Top 25-100 */}
-        <PrizeTierCard
-          image={PRIZE_IMAGES.tier2}
-          label="Top 25 - 100"
-          prizes="Yoga Mat + T Shirt + Water Bottle + Towel"
-        />
-        {/* Tier 3: Top 100-500 */}
-        <PrizeTierCard
-          image={PRIZE_IMAGES.tier3}
-          label="Top 100 - 500"
-          prizes="Yoga Mat + T Shirt + Water Bottle"
-        />
-      </div>
-
-      {/* ═══════════════════════════════════════
-          RANK CARD + REFER & WIN + VIEW REFERRALS
-          (order swapped for zero-referrals case)
-         ═══════════════════════════════════════ */}
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
-        {/* RANK CARD */}
-        <div style={{ order: userRank?.referral_count === 0 ? 1 : 2, width: "100%", display: "flex", justifyContent: "center" }}>
-          <CurrentUserRankCard userRank={userRank} loading={rankLoading} />
-        </div>
-
-        {/* REFER & WIN BUTTON */}
-        <div style={{ order: userRank?.referral_count === 0 ? 2 : 1, width: "calc(100% - 32px)", marginTop: "18px", marginBottom: "8px" }}>
-          <button
-            onClick={() => {
-              if (!mobile) {
-                window.open("https://wa.me/919052888968?text=Refer", "_blank");
-                return;
-              }
-              const waMessage = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
-              window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank");
-            }}
-            style={{
-              width: "100%",
-              height: "40px",
-              borderRadius: "30px",
-              background: "#FEAB27",
-              border: "none",
-              cursor: "pointer",
-              fontFamily: "Outfit",
               fontSize: "16px",
               fontWeight: 500,
-              color: "#202020",
-              textTransform: "uppercase",
-              letterSpacing: "0.5px",
-              boxShadow: "0px 4px 2px rgba(0,0,0,0.25)",
+              lineHeight: "normal",
+              whiteSpace: "nowrap",
+              cursor: "pointer",
+              display: "flex",
+              alignItems: "center",
             }}
           >
-            Refer &amp; Win Yoga Kit
-          </button>
+            View your referrals{" "}
+            <img src={imgBlueArrow} alt="" style={{ width: "18px", height: "18px", marginLeft: "4px", marginTop: "4px" }} />
+          </span>
         </div>
-
-        {/* VIEW YOUR REFERRALS — hidden for zero-referrals */}
-        {mobile && (
-          <div style={{ order: 3, width: "calc(100% - 32px)", display: "flex", justifyContent: "center", marginTop: "10px" }}>
-            <span
-              onClick={openReferralsDrawer}
-              style={{
-                color: "#012755",
-                fontFamily: "Outfit",
-                fontSize: "16px",
-                fontWeight: 500,
-                lineHeight: "normal",
-                whiteSpace: "nowrap",
-                cursor: "pointer",
-                display: "flex",
-                alignItems: "center",
-              }}
-            >
-              View Your Referrals <img src={imgBlueArrow} alt="" style={{ width: "18px", height: "18px", marginLeft: "4px", marginTop: "4px" }} />
-            </span>
-          </div>
-        )}
-      </div>
+      )}
 
       {/* ═══════════════════════════════════════
           LEADERBOARD SECTION
@@ -506,11 +576,15 @@ const Leaderboard: React.FC = () => {
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "16px", paddingInline: "16px" }}>
-          <span style={{ color: "#003473", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, marginLeft: "8px" }}>Leaderboard</span>
-          <div style={{ display: "flex", alignItems: "center", gap: "3px", background: "#FFFFFF", borderRadius: "20px", padding: "3px 10px" }}>
-            <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#FF3B30", animation: "livePulse 1.2s ease-in-out infinite" }} />
-            <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, padding: "0 5px" }}>LIVE</span>
-          </div>
+          <span style={{ color: "#003472", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, marginLeft: "8px" }}>
+            {isContestOver ? "Referral Contest Winners" : "Leaderboard"}
+          </span>
+          {!isContestOver && (
+            <div style={{ display: "flex", alignItems: "center", gap: "3px", background: "#FFFFFF", borderRadius: "20px", padding: "3px 10px" }}>
+              <div style={{ width: "10px", height: "10px", borderRadius: "50%", background: "#FF3B30", animation: "livePulse 1.2s ease-in-out infinite" }} />
+              <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, padding: "0 5px" }}>LIVE</span>
+            </div>
+          )}
         </div>
         {/* Scrollable inner container */}
         <div
@@ -552,9 +626,9 @@ const Leaderboard: React.FC = () => {
       </div>
 
       {/* ═══════════════════════════════════════
-          BOTTOM SHEET (ReferWinCard)
+          BOTTOM SHEET (ReferWinCard) — live contest only
          ═══════════════════════════════════════ */}
-      {mobile && <div
+      {!isContestOver && mobile && <div
         style={{
           position: "sticky",
           bottom: 0,
@@ -755,7 +829,7 @@ const Leaderboard: React.FC = () => {
         </a>
       </div>
 
-      <style>{`@keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes livePulse { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } } @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .lb-row { animation: fadeSlideIn 0.3s ease both; } @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } } .lb-skeleton { background: linear-gradient(90deg, #f0e8d8 25%, #f8f0e0 50%, #f0e8d8 75%); background-size: 800px 100%; animation: shimmer 1.4s ease-in-out infinite; border-radius: 8px; }`}</style>
+      <style>{`@import url('https://fonts.googleapis.com/css2?family=Cookie&display=swap'); @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } } @keyframes livePulse { 0% { opacity: 0; } 50% { opacity: 1; } 100% { opacity: 0; } } @keyframes fadeSlideIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } } .lb-row { animation: fadeSlideIn 0.3s ease both; } @keyframes shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } } .lb-skeleton { background: linear-gradient(90deg, #f0e8d8 25%, #f8f0e0 50%, #f0e8d8 75%); background-size: 800px 100%; animation: shimmer 1.4s ease-in-out infinite; border-radius: 8px; }`}</style>
     </div>
   );
 };
@@ -1193,5 +1267,512 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
     </div>
   );
 };
+
+/* ────────────────────────────────────────────
+   Post-Contest UI Sub-components
+   ──────────────────────────────────────────── */
+
+const PostContestBanner: React.FC = () => (
+  <div
+    style={{
+      width: "calc(100% - 32px)",
+      height: "30px",
+      borderRadius: "5px",
+      background: "#FFCDCD",
+      display: "flex",
+      alignItems: "center",
+      overflow: "hidden",
+      marginTop: "10px",
+      boxSizing: "border-box",
+      flexShrink: 0,
+    }}
+  >
+    <div style={{ width: "4px", height: "100%", background: "#FF8C00", flexShrink: 0 }} />
+    <span
+      style={{
+        paddingLeft: "10px",
+        color: "#505050",
+        fontFamily: "Outfit",
+        fontSize: "12px",
+        fontWeight: 500,
+      }}
+    >
+      Referral Contest has ended. The winners have been announced.
+    </span>
+  </div>
+);
+
+const CongratulationsCard: React.FC<{ userName: string; rank: number; referralCount: number }> = ({
+  userName,
+  rank,
+  referralCount,
+}) => {
+  const displayName = !userName || userName === "None" ? "User" : userName.split(" ")[0];
+  return (
+    <div
+      style={{
+        width: "calc(100% - 32px)",
+        height: "145px",
+        borderRadius: "12px",
+        border: "1px solid #ebc79c",
+        boxShadow: "0 1px 8px 0 rgba(0,0,0,0.05), 0 -1px 8px 0 rgba(0,0,0,0.05)",
+        position: "relative",
+        overflow: "hidden",
+        marginTop: "16px",
+      }}
+    >
+      <img
+        src={imgPostCongratsCardBg}
+        alt=""
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+      />
+      {/* Left content */}
+      <div style={{ position: "absolute", left: "16px", top: "12px", zIndex: 1, maxWidth: "185px" }}>
+        <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "11px", fontWeight: 500, color: "#000" }}>
+          Hi {displayName},
+        </p>
+        <p
+          style={{
+            margin: "2px 0",
+            fontFamily: "'Cookie', cursive",
+            fontSize: "28px",
+            fontWeight: 400,
+            color: "#004597",
+            lineHeight: 1.1,
+          }}
+        >
+          Congratulations!
+        </p>
+        <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#004597" }}>
+          You have won a <span style={{ color: "#fe961b" }}>Yoga Kit!</span>
+        </p>
+        {/* Rank + Refs badge */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            height: "32px",
+            borderRadius: "5px",
+            border: "0.5px solid #fe961b",
+            background: "#FFF",
+            padding: "0 8px",
+            gap: "8px",
+            marginTop: "8px",
+            width: "fit-content",
+          }}
+        >
+          <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <div
+              style={{
+                width: "22px",
+                height: "22px",
+                borderRadius: "50%",
+                background: "#FEAB27",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+                <path d="M8 21H16M12 17V21M6 3H18L17 10C17 12.7614 14.7614 15 12 15C9.23858 15 7 12.7614 7 10L6 3Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M6 4H4C3 4 2 5 2 6C2 7 3 9 5 9M18 4H20C21 4 22 5 22 6C22 7 21 9 19 9" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <div>
+              <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "6px", color: "#000" }}>Your Final Rank</p>
+              <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, color: "#003c83" }}>{rank}</p>
+            </div>
+          </div>
+          <div style={{ width: "1px", height: "24px", background: "#D9D9D9" }} />
+          <div style={{ display: "flex", alignItems: "center", gap: "4px" }}>
+            <div
+              style={{
+                width: "22px",
+                height: "22px",
+                borderRadius: "50%",
+                background: "#EEF3FF",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                flexShrink: 0,
+              }}
+            >
+              <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+                <path d="M17 21V19C17 16.7909 15.2091 15 13 15H5C2.79086 15 1 16.7909 1 19V21" stroke="#0D468B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <circle cx="9" cy="7" r="4" stroke="#0D468B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M23 21V19C22.9986 17.1771 21.765 15.5857 20 15.13" stroke="#0D468B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M16 3.13C17.7699 3.58399 19.0078 5.17781 19.0078 7.005C19.0078 8.83219 17.7699 10.426 16 10.88" stroke="#0D468B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+            <div>
+              <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "6px", color: "#000" }}>Total Referrals</p>
+              <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, color: "#003c83" }}>{referralCount}</p>
+            </div>
+          </div>
+        </div>
+      </div>
+      {/* Right product image */}
+      <div
+        style={{
+          position: "absolute",
+          right: 0,
+          top: "7px",
+          width: "173px",
+          height: "138px",
+          overflow: "hidden",
+        }}
+      >
+        <img
+          src={imgPostProductImg}
+          alt=""
+          style={{ width: "100%", height: "120%", objectFit: "cover", objectPosition: "center top" }}
+        />
+      </div>
+    </div>
+  );
+};
+
+const AddressDetailsCard: React.FC = () => (
+  <div
+    style={{
+      width: "calc(100% - 32px)",
+      height: "54px",
+      borderRadius: "12px",
+      background: "linear-gradient(90deg, #012755 0%, #003e88 50%, #001a38 100%)",
+      border: "1px solid #ffae4f",
+      marginTop: "10px",
+      display: "flex",
+      alignItems: "center",
+      padding: "0 10px 0 0",
+      boxSizing: "border-box",
+      gap: "10px",
+    }}
+  >
+    <div
+      style={{
+        flexShrink: 0,
+        width: "34px",
+        height: "34px",
+        borderRadius: "50%",
+        background: "rgba(255,255,255,0.18)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        marginLeft: "10px",
+      }}
+    >
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M12 2C8.13 2 5 5.13 5 9C5 14.25 12 22 12 22C12 22 19 14.25 19 9C19 5.13 15.87 2 12 2ZM12 11.5C10.62 11.5 9.5 10.38 9.5 9C9.5 7.62 10.62 6.5 12 6.5C13.38 6.5 14.5 7.62 14.5 9C14.5 10.38 13.38 11.5 12 11.5Z"
+          fill="white"
+        />
+      </svg>
+    </div>
+    <p
+      style={{
+        flex: 1,
+        margin: 0,
+        fontFamily: "Outfit",
+        fontSize: "11px",
+        fontWeight: 600,
+        color: "#FFF",
+        lineHeight: 1.4,
+      }}
+    >
+      Provide your address details to claim reward
+    </p>
+    <button
+      onClick={() => window.open("https://wa.me/919052888968?text=Address+Details", "_blank")}
+      style={{
+        flexShrink: 0,
+        width: "114px",
+        height: "21px",
+        borderRadius: "4px",
+        background: "linear-gradient(180deg, #FEAB27 0%, #FF8A00 100%)",
+        boxShadow: "0 4px 4px 0 rgba(0,0,0,0.25)",
+        border: "none",
+        cursor: "pointer",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        gap: "3px",
+      }}
+    >
+      <span
+        style={{
+          fontFamily: "Outfit",
+          fontSize: "9px",
+          fontWeight: 700,
+          color: "#FFF",
+          textTransform: "uppercase",
+          letterSpacing: "0.3px",
+        }}
+      >
+        PROVIDE ADDRESS
+      </span>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
+        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
+      </svg>
+    </button>
+  </div>
+);
+
+const PostContestRankCard: React.FC<{ userName: string; rank: number; referralCount: number }> = ({
+  userName,
+  rank,
+  referralCount,
+}) => {
+  const displayName = !userName || userName === "None" ? "User" : userName.split(" ")[0];
+  return (
+    <div
+      style={{
+        width: "calc(100% - 32px)",
+        height: "140px",
+        borderRadius: "12px",
+        border: "1px solid #febf38",
+        position: "relative",
+        overflow: "hidden",
+        marginTop: "16px",
+      }}
+    >
+      <img
+        src={imgPostRankCardBg}
+        alt=""
+        style={{ position: "absolute", inset: 0, width: "100%", height: "100%", objectFit: "cover" }}
+      />
+      {/* Left content */}
+      <div style={{ position: "absolute", left: "16px", top: "14px", zIndex: 1, maxWidth: "210px" }}>
+        <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "11px", fontWeight: 500, color: "#000" }}>
+          Hi {displayName},
+        </p>
+        <div style={{ display: "flex", alignItems: "baseline", gap: "4px", flexWrap: "wrap", marginTop: "2px" }}>
+          <span style={{ fontFamily: "Outfit", fontSize: "17px", fontWeight: 800, color: "#0d468b" }}>
+            You are ranked
+          </span>
+          <span style={{ fontFamily: "Outfit", fontSize: "20px", fontWeight: 800, color: "#00316b" }}>
+            {rank}!
+          </span>
+        </div>
+        <p
+          style={{
+            margin: "4px 0 0",
+            fontFamily: "Outfit",
+            fontSize: "11px",
+            fontWeight: 600,
+            color: "#004597",
+            maxWidth: "143px",
+          }}
+        >
+          Thank you for referring!
+        </p>
+        <p
+          style={{
+            margin: "2px 0 0",
+            fontFamily: "Outfit",
+            fontSize: "8px",
+            fontWeight: 400,
+            color: "#535353",
+            maxWidth: "193px",
+            lineHeight: 1.4,
+          }}
+        >
+          You're helping more people start their yoga journey!
+        </p>
+        {/* Total Referrals pill */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            height: "23px",
+            background: "#0049a0",
+            borderRadius: "6px",
+            boxShadow: "1px 1px 1px 0 rgba(255,255,255,0.25)",
+            padding: "0 8px",
+            gap: "6px",
+            marginTop: "8px",
+            width: "fit-content",
+          }}
+        >
+          <div
+            style={{
+              width: "15px",
+              height: "15px",
+              borderRadius: "50%",
+              background: "#FEAB27",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              flexShrink: 0,
+            }}
+          >
+            <svg width="9" height="9" viewBox="0 0 24 24" fill="none">
+              <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26" fill="white" />
+            </svg>
+          </div>
+          <span style={{ fontFamily: "Outfit", fontSize: "8px", fontWeight: 500, color: "#e9e9e9" }}>
+            Total Referrals
+          </span>
+          <span style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#FFF" }}>
+            {referralCount}
+          </span>
+        </div>
+      </div>
+      {/* Right instructor image */}
+      <div
+        style={{
+          position: "absolute",
+          right: 0,
+          top: "12px",
+          width: "120px",
+          height: "128px",
+          borderTopRightRadius: "11px",
+          overflow: "hidden",
+        }}
+      >
+        <img
+          src={imgPostInstructor}
+          alt=""
+          style={{ width: "100%", height: "120%", objectFit: "cover", objectPosition: "center top" }}
+        />
+      </div>
+    </div>
+  );
+};
+
+const YourRewardsCard: React.FC<{ showCoupon: boolean }> = ({ showCoupon }) => (
+  <div style={{ width: "calc(100% - 32px)", marginTop: "16px" }}>
+    <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "10px" }}>
+      <span style={{ fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, color: "#012755" }}>
+        Your Rewards
+      </span>
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path
+          d="M20 12V22H4V12M22 7H2V12H22V7ZM12 22V7M12 7H7.5C6.11929 7 5 5.88071 5 4.5C5 3.11929 6.11929 2 7.5 2C9.5 2 12 7 12 7ZM12 7H16.5C17.8807 7 19 5.88071 19 4.5C19 3.11929 17.8807 2 16.5 2C14.5 2 12 7 12 7Z"
+          stroke="#012755"
+          strokeWidth="2"
+          strokeLinecap="round"
+          strokeLinejoin="round"
+        />
+      </svg>
+    </div>
+    <div
+      style={{
+        background: "#fff9f2",
+        border: "1px solid #ffac4a",
+        borderRadius: "9px",
+        boxShadow: "-1px -1px 4px 0 rgba(254,150,27,0.15), 1px 1px 4px 0 rgba(254,150,27,0.15)",
+        overflow: "hidden",
+      }}
+    >
+      {/* Diet PDF row */}
+      <div style={{ display: "flex", alignItems: "center", gap: "10px", padding: "12px" }}>
+        <div
+          style={{
+            width: "55px",
+            height: "31px",
+            borderRadius: "4px",
+            overflow: "hidden",
+            flexShrink: 0,
+            boxShadow: "0 0 4px rgba(0,0,0,0.15)",
+          }}
+        >
+          <img src={imgPostDietThumb} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+        </div>
+        <span style={{ flex: 1, fontFamily: "Outfit", fontSize: "13px", fontWeight: 700, color: "#004394" }}>
+          Diet e-Handbook PDF
+        </span>
+        <button
+          onClick={() => {}}
+          style={{
+            flexShrink: 0,
+            width: "80px",
+            height: "22px",
+            borderRadius: "5px",
+            background: "#fe961b",
+            boxShadow: "0 0 8px 1px rgba(0,0,0,0.05)",
+            border: "none",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            gap: "4px",
+          }}
+        >
+          <img src={imgDownloadIcon} alt="" style={{ width: "14px", height: "14px", objectFit: "contain" }} />
+          <span style={{ fontFamily: "Outfit", fontSize: "10px", fontWeight: 700, color: "#FFF" }}>Download</span>
+        </button>
+      </div>
+
+      {showCoupon && (
+        <>
+          <div style={{ height: "0.5px", background: "#E8D5C0", margin: "0 12px" }} />
+          {/* Yoga Coupon row */}
+          <div style={{ display: "flex", alignItems: "flex-start", gap: "10px", padding: "12px" }}>
+            <div
+              style={{
+                width: "59px",
+                height: "29px",
+                borderRadius: "4px",
+                overflow: "hidden",
+                flexShrink: 0,
+                boxShadow: "0 0 4px rgba(0,0,0,0.10)",
+                marginTop: "2px",
+              }}
+            >
+              <img src={imgPostCouponThumb} alt="" style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            </div>
+            <div style={{ flex: 1 }}>
+              <p
+                style={{
+                  margin: 0,
+                  fontFamily: "Outfit",
+                  fontSize: "13px",
+                  fontWeight: 700,
+                  color: "#004394",
+                  maxWidth: "191px",
+                }}
+              >
+                1 Month FREE Yoga Coupon*
+              </p>
+              <p
+                style={{
+                  margin: "2px 0 0",
+                  fontFamily: "Outfit",
+                  fontSize: "8px",
+                  fontWeight: 400,
+                  color: "#797a7a",
+                  whiteSpace: "nowrap",
+                }}
+              >
+                *Redeem automatically with the paid plan
+              </p>
+            </div>
+            <button
+              onClick={() => {}}
+              style={{
+                flexShrink: 0,
+                width: "80px",
+                height: "22px",
+                borderRadius: "5px",
+                background: "#fe961b",
+                boxShadow: "0 0 8px 1px rgba(0,0,0,0.05)",
+                border: "none",
+                cursor: "pointer",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+              }}
+            >
+              <span style={{ fontFamily: "Outfit", fontSize: "10px", fontWeight: 700, color: "#FFF" }}>
+                Redeem Now
+              </span>
+            </button>
+          </div>
+        </>
+      )}
+    </div>
+  </div>
+);
 
 export default Leaderboard;

@@ -1,13 +1,15 @@
 import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
-import { ReferralMilestonesCard } from "@/components/ReferralMilestonesCard";
-import imgPose81 from "@/assets/pose_8_1.webp";
-import imgPose811 from "@/assets/pose_8_1_1.webp";
-import imgUnsplashG from "@/assets/unsplash_GkXJisd5W1M.webp";
-import imgUnsplashM from "@/assets/unsplash_mSJsiQCm6og.webp";
+import imgTshirt from "@/assets/referral/tshirt-reward.webp";
+import imgDietPdf from "@/assets/referral/diet-pdf.webp";
+import imgMsUnlockedCircle from "@/assets/referral/ms-unlocked-circle.svg";
+import imgMsYouAreHere from "@/assets/referral/ms-you-are-here.svg";
+import imgMsDownloadIcon from "@/assets/referral/downloading-updates.png";
+import imgMsTshirtMilestone from "@/assets/referral/ms-tshirt-milestone.webp";
+import { safeSessionStorage } from "@/lib/storage";
 
-// ── API types ─────────────────────────────────────────────────────────────────
+// ── Types ─────────────────────────────────────────────────────────────────────
 
 interface ApiReferral {
   referred_mobile: string;
@@ -20,50 +22,358 @@ interface ApiReferral {
 
 interface ReferralsApiData {
   total_referrals: number;
+  pending_referrals: number;
+  verified_referrals: number;
   referrals_required_for_next_free_classes: number;
   referrals_required_for_next_gift: number;
+  language?: string;
   referrals: ApiReferral[];
 }
 
-// ── Constants ─────────────────────────────────────────────────────────────────
+// ── Gift thresholds ───────────────────────────────────────────────────────────
 
-const MILESTONES = [
-  { label: "10 Free Classes", reward: "+10", refs: 5 },
-  { label: "20 Free Classes", reward: "+20", refs: 10 },
-  { label: "Healthyday T-shirt", reward: null, refs: 20 },
-  { label: "Special Gift", reward: null, refs: 40 },
-  { label: "Yoga Mat", reward: null, refs: 60 },
-];
+const DIET_PDF_REFS = 1;
+const TSHIRT_REFS = 20;
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
-/** "+919876543210" → "+91 98 ******10" */
 const maskMobile = (raw: string): string => {
-  const digits = raw.replace(/\D/g, ""); // strip non-digits
+  const digits = raw.replace(/\D/g, "");
   const local = digits.startsWith("91") ? digits.slice(2) : digits;
   if (local.length < 4) return raw;
   return `+91 ${local.slice(0, 2)} ******${local.slice(-2)}`;
 };
 
-/** "2026-01-15" → "Jan 15" */
 const formatDate = (iso: string): string => {
   const [, mm, dd] = iso.split("-");
-  const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+  const months = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
   return `${months[Number(mm) - 1]} ${Number(dd)}`;
 };
 
+const getDisplayName = (ref: ApiReferral) =>
+  !ref.referred_name || ref.referred_name === "None"
+    ? maskMobile(ref.referred_mobile)
+    : ref.referred_name;
 
+// Single referral row — flat joined list style (Figma 696-7116)
+const ReferralRow: React.FC<{ referral: ApiReferral; language?: string; isLast?: boolean }> = ({ referral, language, isLast = false }) => {
+  const displayName = getDisplayName(referral);
+  const isVerified = referral.referral_confirmation_status === "verified";
+
+  const handleRemind = () => {
+    const phone = referral.referred_mobile.replace(/\D/g, "");
+    const text = language === "Telugu"
+      ? "మీరు ఇంకా మీ 21 Days FREE Registration confirm చేయలేదు.\n\nDaily Yoga with Jagan WhatsApp Number నుండి మీకు ఒక message వచ్చింది. అందులో \"Next Step - Click Here\" అని ఒక Button ఉంటుంది. అది Click చేసి Confirm చేయొచ్చు"
+      : "Namaste! You still haven't verified your mobile number for 21 days FREE Yoga.\n\nYou must have received a message from \"Daily Yoga with Jagan\" on WhatsApp. There is a button in there \"NEXT STEP - CLICK HERE\".\n\nPlease click that button to verify";
+    window.open(`https://wa.me/${phone}?text=${encodeURIComponent(text)}`, "_blank");
+  };
+
+  return (
+    <div>
+      <div style={{ display: "flex", alignItems: "flex-start", gap: "12px", padding: "12px 0" }}>
+        {/* Avatar 36×36 */}
+        <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "#EEF3FF", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M12 12C14.7614 12 17 9.76142 17 7C17 4.23858 14.7614 2 12 2C9.23858 2 7 4.23858 7 7C7 9.76142 9.23858 12 12 12Z" fill="#0D468B" opacity="0.6"/>
+            <path d="M12 14C7.58172 14 4 16.6863 4 20V22H20V20C20 16.6863 16.4183 14 12 14Z" fill="#0D468B" opacity="0.6"/>
+          </svg>
+        </div>
+
+        {/* Center: name + phone + optional error */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "15px", fontWeight: 600, lineHeight: "normal", display: "block" }}>{displayName}</span>
+          <div style={{ display: "flex", alignItems: "center", gap: "4px", marginTop: "3px" }}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
+              <path d="M6.62 10.79C8.06 13.62 10.38 15.93 13.21 17.38L15.41 15.18C15.68 14.91 16.08 14.82 16.43 14.94C17.55 15.31 18.76 15.51 20 15.51C20.55 15.51 21 15.96 21 16.51V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z" fill="#A2A2A2"/>
+            </svg>
+            <span style={{ color: "#A2A2A2", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500 }}>{maskMobile(referral.referred_mobile)}</span>
+          </div>
+          {!isVerified && (
+            <p style={{ color: "#FF3E3E", fontFamily: "Outfit", fontSize: "10px", fontWeight: 400, lineHeight: 1.4, margin: "4px 0 0", maxWidth: "185px" }}>
+              {language === "Telugu"
+                ? "ఈ person ఇంకా whatsapp లో confirm button నొక్కలేదు"
+                : "Verify Button in the WhatsApp Reminder is not clicked by this person"}
+            </p>
+          )}
+        </div>
+
+        {/* Right: badge + remind */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "flex-end", gap: "8px", flexShrink: 0 }}>
+          {isVerified ? (
+            <div style={{ background: "#C7FFDA", borderRadius: "3px", padding: "0 8px", height: "21px", display: "flex", alignItems: "center" }}>
+              <span style={{ color: "#287E54", fontFamily: "Outfit", fontSize: "10px", fontWeight: 600, letterSpacing: "0.5px" }}>VERIFIED</span>
+            </div>
+          ) : (
+            <>
+              <div style={{ background: "#E0E0E0", borderRadius: "3px", padding: "0 8px", height: "21px", display: "flex", alignItems: "center" }}>
+                <span style={{ color: "#7B7F7D", fontFamily: "Outfit", fontSize: "10px", fontWeight: 600, letterSpacing: "0.5px" }}>PENDING</span>
+              </div>
+              <button
+                onClick={handleRemind}
+                style={{ display: "flex", alignItems: "center", gap: "4px", padding: "0 6px", borderRadius: "4px", border: "0.7px solid #40C351", background: "#FFF", cursor: "pointer", width: "62px", height: "21px", justifyContent: "center" }}
+              >
+                <span style={{ fontFamily: "Outfit", fontSize: "10px", fontWeight: 600, color: "#40C351" }}>Remind</span>
+                <svg width="11" height="11" viewBox="0 0 24 24" fill="#40C351">
+                  <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+                </svg>
+              </button>
+            </>
+          )}
+        </div>
+      </div>
+      {!isLast && <div style={{ height: "1px", background: "#FEAB27" }} />}
+    </div>
+  );
+};
+
+// ── Referral Rewards milestone card (Figma 689-6115) ─────────────────────────
+
+// Vertical connecting line between milestone rows
+// solid orange = after unlocked item, dashed grey = before locked item
+const MilestoneLine: React.FC<{ dashed?: boolean }> = ({ dashed = false }) => (
+  <div style={{ display: "flex", paddingLeft: "15px" /* center of 33px icon col */ }}>
+    <div style={{
+      width: "3px",
+      height: "22px",
+      background: dashed
+        ? "repeating-linear-gradient(to bottom, #D0D0D0 0, #D0D0D0 4px, transparent 4px, transparent 8px)"
+        : "#FEAB27",
+    }} />
+  </div>
+);
+
+// Icon for an unlocked milestone: green circle + inline open padlock (white)
+const UnlockedMilestoneIcon = () => (
+  <div style={{ position: "relative", width: "33px", height: "33px", flexShrink: 0 }}>
+    <img src={imgMsUnlockedCircle} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
+    <svg
+      style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)" }}
+      width="18" height="18" viewBox="0 0 24 24" fill="none"
+    >
+      <rect x="3" y="11" width="18" height="11" rx="2" stroke="white" strokeWidth="2.5" strokeLinejoin="round"/>
+      <path d="M7 11V7C7 4.79 8.79 3 11 3C13.21 3 15 4.79 15 7" stroke="white" strokeWidth="2.5" strokeLinecap="round"/>
+      <circle cx="12" cy="16.5" r="1.5" fill="white"/>
+    </svg>
+  </div>
+);
+
+// Icon for a locked milestone: gray (0 refs) or orange (1+ refs)
+const LockedMilestoneIcon: React.FC<{ gray?: boolean }> = ({ gray = false }) => (
+  <div style={{ position: "relative", flexShrink: 0, width: "33px", height: "33px" }}>
+    {gray ? (
+      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none">
+        <circle cx="16.5" cy="16.5" r="16.5" fill="#DDDEDE" />
+      </svg>
+    ) : (
+      <svg xmlns="http://www.w3.org/2000/svg" width="33" height="33" viewBox="0 0 33 33" fill="none">
+        <circle cx="16.5" cy="16.5" r="14.5" fill="white" stroke="#FEAB27" strokeWidth="4" />
+      </svg>
+    )}
+    <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)" }}>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
+        <path d="M5.3335 7.33333V4.66667C5.3335 3.95942 5.61445 3.28115 6.11454 2.78105C6.61464 2.28095 7.29292 2 8.00016 2C8.70741 2 9.38568 2.28095 9.88578 2.78105C10.3859 3.28115 10.6668 3.95942 10.6668 4.66667V7.33333M3.3335 8.66667C3.3335 8.31304 3.47397 7.97391 3.72402 7.72386C3.97407 7.47381 4.31321 7.33333 4.66683 7.33333H11.3335C11.6871 7.33333 12.0263 7.47381 12.2763 7.72386C12.5264 7.97391 12.6668 8.31304 12.6668 8.66667V12.6667C12.6668 13.0203 12.5264 13.3594 12.2763 13.6095C12.0263 13.8595 11.6871 14 11.3335 14H4.66683C4.31321 14 3.97407 13.8595 3.72402 13.6095C3.47397 13.3594 3.3335 13.0203 3.3335 12.6667V8.66667Z"
+          stroke={gray ? "#A2A2A2" : "#FEAB27"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+      </svg>
+    </div>
+  </div>
+);
+
+// "You are here" pulsing orange dot
+const YouAreHereIcon = () => (
+  <div style={{ width: "33px", display: "flex", justifyContent: "center", flexShrink: 0 }}>
+    <img src={imgMsYouAreHere} alt="" style={{ width: "26px", height: "26px" }} />
+  </div>
+);
+
+// "You are here" full row — red pill; zero-refs uses a different layout (Figma 689-6279)
+const YouAreHereRow: React.FC<{ count: number }> = ({ count }) => {
+  if (count === 0) {
+    return (
+      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <div style={{ width: "33px", display: "flex", justifyContent: "center", flexShrink: 0 }}>
+          <svg width="22" height="22" viewBox="0 0 22 22" fill="none">
+            <circle cx="11" cy="11" r="11" fill="#FF0000" />
+          </svg>
+        </div>
+        <span style={{ fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, color: "#F00", lineHeight: "normal" }}>
+          0 Referrals
+        </span>
+        <div style={{ width: "106px", height: "28px", borderRadius: "20px", border: "1px solid #F00", background: "rgba(254,171,39,0.20)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <span style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#F00", lineHeight: "normal" }}>You are here</span>
+        </div>
+      </div>
+    );
+  }
+  return (
+    <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+      <YouAreHereIcon />
+      <div>
+        <div style={{ display: "inline-flex", alignItems: "center", border: "1px solid #FEAB27", borderRadius: "20px", background: "rgba(254,171,39,0.20)", padding: "0 10px", height: "21px" }}>
+          <span style={{ fontFamily: "Outfit", fontSize: "12px", fontWeight: 600, color: "#FEAB27" }}>You are here</span>
+        </div>
+        <p style={{ margin: "4px 0 0", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, color: "#9C9C9C" }}>
+          {count} {count === 1 ? "Referral" : "Referrals"}
+        </p>
+      </div>
+    </div>
+  );
+};
+
+// Download button shown on unlocked Free Diet PDF row
+const DownloadButton = () => (
+  <button
+    style={{ display: "flex", alignItems: "center", gap: "4px", background: "#FEAB27", border: "none", borderRadius: "5px", width: "88px", height: "22px", boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)", cursor: "pointer", justifyContent: "center", flexShrink: 0 }}
+  >
+    <img src={imgMsDownloadIcon} alt="" style={{ width: "17px", height: "17px", objectFit: "contain" }} />
+    <span style={{ fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, color: "#FFF" }}>Download</span>
+  </button>
+);
+
+// Main milestone card — 3 states:
+//   0 refs       → you-are-here(top) → dashed → PDF(locked gray) → dashed → T-shirt(locked gray)
+//   1–19 refs    → PDF(unlocked+Download) → solid → you-are-here → dashed → T-shirt(locked yellow)
+//   20+ refs     → PDF(unlocked+Download) → solid → T-shirt(unlocked)
+const ReferralRewardsCard: React.FC<{ verifiedRefs: number }> = ({ verifiedRefs }) => {
+  const pdfUnlocked = verifiedRefs >= DIET_PDF_REFS;
+  const tshirtUnlocked = verifiedRefs >= TSHIRT_REFS;
+  const isZero = verifiedRefs === 0;
+
+  return (
+    <div style={{ background: "#FFF", borderRadius: "16px", boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.25)", position: "relative", overflow: "hidden" }}>
+      <div style={{ padding: "16px 16px 20px" }}>
+
+        {/* 0 refs: "You are here" at top */}
+        {isZero && (
+          <>
+            <YouAreHereRow count={0} />
+            <MilestoneLine dashed />
+          </>
+        )}
+
+        {/* Free Diet PDF */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          {pdfUnlocked ? <UnlockedMilestoneIcon /> : <LockedMilestoneIcon gray={isZero} />}
+          <div style={{ flex: 1 }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
+              <span style={{ fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, color: pdfUnlocked ? "#377456" : isZero ? "#9A9797" : "#FEAB27" }}>
+                Free Diet PDF
+              </span>
+              {pdfUnlocked && <DownloadButton />}
+            </div>
+            <span style={{ fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, color: "#9C9C9C" }}>1 Referral</span>
+          </div>
+        </div>
+
+        {/* 1–19 refs: solid line → you-are-here → dashed line */}
+        {pdfUnlocked && !tshirtUnlocked && (
+          <>
+            <MilestoneLine />
+            <YouAreHereRow count={verifiedRefs} />
+            <MilestoneLine dashed />
+          </>
+        )}
+
+        {/* 0 refs: dashed line between two locked items */}
+        {!pdfUnlocked && <MilestoneLine dashed />}
+
+        {/* 20+ refs: solid line between two unlocked items */}
+        {tshirtUnlocked && <MilestoneLine />}
+
+        {/* Healthyday T-shirt */}
+        <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+          {tshirtUnlocked ? <UnlockedMilestoneIcon /> : <LockedMilestoneIcon gray={isZero} />}
+          <div>
+            <span style={{ fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, color: tshirtUnlocked ? "#377456" : isZero ? "#9A9797" : "#FEAB27", display: "block" }}>
+              Healthyday T-shirt
+            </span>
+            <span style={{ fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, color: "#9C9C9C" }}>20 Referrals</span>
+          </div>
+        </div>
+
+      </div>
+
+      {/* T-shirt image peeking from bottom-right corner */}
+      <div style={{ position: "absolute", bottom: 0, right: 0, width: "95px", height: "90px", borderBottomRightRadius: "16px", overflow: "hidden" }}>
+        <img
+          src={imgMsTshirtMilestone}
+          alt=""
+          style={{ position: "absolute", top: "-31%", left: 0, width: "100%", height: "131%", objectFit: "cover", objectPosition: "center top" }}
+        />
+      </div>
+    </div>
+  );
+};
+
+// ── Rewards section cards ─────────────────────────────────────────────────────
+
+const REWARDS = [
+  { key: "pdf",    label: "Free Diet PDF",      refs: DIET_PDF_REFS, img: imgDietPdf  },
+  { key: "tshirt", label: "Healthyday T-shirt", refs: TSHIRT_REFS,   img: imgTshirt  },
+] as const;
+
+const RewardCard: React.FC<{ reward: (typeof REWARDS)[number]; verifiedRefs: number }> = ({ reward, verifiedRefs }) => {
+  const unlocked = verifiedRefs >= reward.refs;
+  const progress = Math.min(100, (verifiedRefs / reward.refs) * 100);
+
+  return (
+    <div style={{ flex: 1 }}>
+      {/* Card image */}
+      <div style={{
+        borderRadius: "12px",
+        height: "154px",
+        overflow: "hidden",
+        position: "relative",
+      }}>
+        <img
+          src={reward.img}
+          alt={reward.label}
+          style={{ width: "100%", height: "100%", objectFit: "cover", opacity: unlocked ? 1 : 0.7 }}
+        />
+        {!unlocked && (
+          <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.42)", display: "flex", alignItems: "center", justifyContent: "center" }}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none">
+              <path d="M8 11V7C8 4.79 9.79 3 12 3C14.21 3 16 4.79 16 7V11M5 12C5 11.45 5.45 11 6 11H18C18.55 11 19 11.45 19 12V20C19 20.55 18.55 21 18 21H6C5.45 21 5 20.55 5 20V12ZM12 16.5C12.55 16.5 13 16.05 13 15.5C13 14.95 12.55 14.5 12 14.5C11.45 14.5 11 14.95 11 15.5C11 16.05 11.45 16.5 12 16.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"/>
+            </svg>
+          </div>
+        )}
+        {unlocked && (
+          <div style={{ position: "absolute", top: "8px", left: "8px", background: "#22C55E", borderRadius: "30px", padding: "4px 12px" }}>
+            <span style={{ fontFamily: "Outfit", fontSize: "9px", fontWeight: 700, color: "#FFF" }}>UNLOCKED</span>
+          </div>
+        )}
+      </div>
+
+      {/* Label */}
+      <span style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 700, display: "block", marginTop: "8px", color: "#202020" }}>
+        {reward.label}
+      </span>
+      <span style={{ fontFamily: "Outfit", fontSize: "13px", fontWeight: 600, color: "#FEAB27", display: "block" }}>
+        {reward.refs} {reward.refs === 1 ? "Referral" : "Referrals"}
+      </span>
+
+      {/* Progress bar for locked items */}
+      {!unlocked && (
+        <div style={{ marginTop: "8px" }}>
+          <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
+            <span style={{ fontFamily: "Outfit", fontSize: "10px", fontWeight: 600 }}>{verifiedRefs}/{reward.refs}</span>
+            <span style={{ fontFamily: "Outfit", fontSize: "10px", color: "#9C9C9C" }}>{Math.round(progress)}%</span>
+          </div>
+          <div style={{ height: "6px", background: "#E8DDD2", borderRadius: "3px", overflow: "hidden" }}>
+            <div style={{ height: "6px", width: `${progress}%`, background: "#FEAB27", borderRadius: "3px" }} />
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
 
 // ── Page ──────────────────────────────────────────────────────────────────────
-
-import { safeSessionStorage } from "@/lib/storage";
 
 const ReferralStatus = () => {
   const location = useLocation();
   const { mobile: urlMobile, count: urlCount } = useParams<{ mobile: string; count: string }>();
   const searchParams = new URLSearchParams(location.search);
 
-  // Use URL param as optimistic initial value; API response will override
   const initialCount =
     Number(urlCount) ||
     Number(searchParams.get("count")) ||
@@ -78,7 +388,13 @@ const ReferralStatus = () => {
   const [apiData, setApiData] = useState<ReferralsApiData | null>(null);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState<string | null>(null);
-  const [showAllReferrals, setShowAllReferrals] = useState(false);
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const [drawerClosing, setDrawerClosing] = useState(false);
+
+  const closeDrawer = () => {
+    setDrawerClosing(true);
+    setTimeout(() => { setDrawerOpen(false); setDrawerClosing(false); }, 280);
+  };
 
   const shareLink = mobile
     ? `https://yoga.healthyday.co.in?ref=${mobile}`
@@ -86,20 +402,20 @@ const ReferralStatus = () => {
 
   useEffect(() => {
     if (!mobile) { setLoading(false); return; }
-    const apiMobile = `+${mobile}`;
-    const encodedMobile = encodeURIComponent(apiMobile);
-    fetch(`/.netlify/functions/referrals?mobile=${encodedMobile}`)
+    const apiMobile = `+${mobile.replace(/\D/g, "")}`;
+    fetch(`/.netlify/functions/referrals?mobile=${encodeURIComponent(apiMobile)}`)
       .then((r) => r.json())
       .then((data: ReferralsApiData) => setApiData(data))
       .catch((err) => setApiError(String(err)))
       .finally(() => setLoading(false));
   }, [mobile]);
 
-  // Live count from API; fall back to URL param while loading
-  const totalRefs = apiData?.total_referrals ?? initialCount;
+  // Use verified_referrals for all gift progress; fall back to 0 while loading
+  const verifiedRefs = loading ? 0 : (apiData?.verified_referrals ?? 0);
+  // Keep total for display in score card (optimistic with URL param)
+  const displayCount = loading ? initialCount : (apiData?.verified_referrals ?? initialCount);
   const referrals: ApiReferral[] = apiData?.referrals ?? [];
-  const refsForNextClasses = apiData?.referrals_required_for_next_free_classes ?? null;
-  const refsForNextGift = apiData?.referrals_required_for_next_gift ?? null;
+  const language = apiData?.language;
 
   const handleReferNow = () => {
     const waMessage = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
@@ -112,546 +428,187 @@ const ReferralStatus = () => {
       style={{ fontFamily: "Outfit, sans-serif", background: "#FFF", overflowX: "hidden", maxWidth: "412px", width: "100%" }}
     >
       {/* ── Header ── */}
-      <header
-        style={{
-          width: "100%",
-          height: "68px",
-          display: "flex",
-          alignItems: "center",
-          background: "#FFF",
-          boxShadow: "0 4px 30px rgba(0,0,0,0.10)",
-          padding: "20px",
-          boxSizing: "border-box",
-          flexShrink: 0,
-        }}
-      >
+      <header style={{ width: "100%", height: "68px", display: "flex", alignItems: "center", background: "#FFF", boxShadow: "0 4px 30px rgba(0,0,0,0.10)", padding: "20px", boxSizing: "border-box", flexShrink: 0 }}>
         <img src={logo} alt="Healthyday" style={{ height: "28px", width: "144px" }} />
       </header>
 
       {/* ── Score Card ── */}
-      <div style={{ padding: "31px 26px 9px" }}>
-        <div
-          style={{
-            borderRadius: "12px",
-            background: "#FEAB27",
-            boxShadow: "0 4px 8px rgba(0,0,0,0.25)",
-            padding: "18px 32px 17px 31px",
-            display: "flex",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            gap: "20px",
-            boxSizing: "border-box",
-          }}
-        >
-          <div style={{ display: "flex", flexDirection: "column", gap: "2px", paddingTop: "3px" }}>
-            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>
+      <div style={{ padding: "24px 20px 0" }}>
+        <div style={{ borderRadius: "12px", background: "#FEAB27", boxShadow: "0 4px 8px rgba(0,0,0,0.25)", padding: "18px 24px", display: "flex", alignItems: "center", justifyContent: "space-between", gap: "20px" }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, letterSpacing: "0.5px" }}>
               REFERRAL STATUS
             </span>
-            <h2 style={{ margin: 0, fontFamily: "Outfit", fontSize: "25px", fontWeight: 800, color: "#FFF" }}>
+            <h2 style={{ margin: 0, fontFamily: "Outfit", fontSize: "24px", fontWeight: 800, color: "#FFF" }}>
               Your Referrals
             </h2>
           </div>
-          <div
-            style={{
-              borderRadius: "12px",
-              background: "#FFF",
-              padding: "5px 15px 6px",
-              flexShrink: 0,
-            }}
-          >
-            <span
-              style={{
-                fontFamily: "Outfit",
-                fontSize: "35px",
-                fontWeight: 700,
-                background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
-            >
-              {loading ? "—" : totalRefs}
+          <div style={{ borderRadius: "12px", background: "#FFF", padding: "5px 18px 6px", flexShrink: 0 }}>
+            <span style={{
+              fontFamily: "Outfit",
+              fontSize: "35px",
+              fontWeight: 700,
+              ...(!loading && displayCount === 0
+                ? { color: "#F00" }
+                : {
+                    background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
+                    WebkitBackgroundClip: "text",
+                    WebkitTextFillColor: "transparent",
+                  }
+              ),
+            }}>
+              {loading ? "—" : displayCount}
             </span>
           </div>
         </div>
       </div>
 
-      {/* ── Your Referral Gifts ── */}
-      <div style={{ padding: "22px 26px 9px" }}>
-        <h3 style={{ margin: "0 0 24px", fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, color: "#202020" }}>
-          Your Referral Gifts
+      {/* ── Your Referral Rewards ── */}
+      <div style={{ padding: "24px 20px 0" }}>
+        <h3 style={{ margin: "0 0 16px", fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, color: "#202020" }}>
+          Your Referral Rewards
         </h3>
-        <div
-          style={{
-            background: "#FFF",
-            borderRadius: "16px",
-            boxShadow: "0 0 10px rgba(0,0,0,0.25)",
-            padding: "20px 16px",
-            boxSizing: "border-box",
-          }}
-        >
-          <ReferralMilestonesCard refCount={totalRefs} milestones={MILESTONES} />
-        </div>
+        <ReferralRewardsCard verifiedRefs={verifiedRefs} />
       </div>
 
-      {/* ── Recent Referrals ── */}
-      <div style={{ background: "#FFF9EF", padding: "32px 26px 80px", position: "relative" }}>
+      {/* ── Your Recent Referrals ── */}
+      <div style={{ background: "#FFF9EF", padding: "24px 20px 32px", marginTop: "24px" }}>
         <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
           <h3 style={{ margin: 0, fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, color: "#202020" }}>
             Your Recent Referrals
           </h3>
-        </div>
-
-        {!loading && apiError && (
-          <p style={{ color: "#E53935", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, textAlign: "center", margin: "0 0 20px" }}>
-            Error: {apiError}
-          </p>
-        )}
-
-        {!loading && !apiError && referrals.length === 0 && (
-          <p style={{ color: "#ADADAD", fontFamily: "Outfit", fontSize: "14px", fontWeight: 500, textAlign: "center", margin: "0 0 20px" }}>
-            No referrals yet. Share your link to get started!
-          </p>
-        )}
-
-        {/* Card + FAB wrapper */}
-        <div style={{ position: "relative", paddingBottom: "44px", minHeight: referrals.length === 0 ? "60px" : "auto" }}>
-          {referrals.length > 0 && (
-            <div
-              style={{
-                borderRadius: "20px",
-                border: "1px solid #FEAB27",
-                background: "#FFF",
-                overflow: "hidden",
-                marginBottom: "0",
-              }}
-            >
-              {referrals.slice(0, 4).map((ref, idx) => (
-                <div key={idx}>
-                  {idx > 0 && (
-                    <div style={{ height: "0.5px", background: "#FEAB27", margin: "0 21px" }} />
-                  )}
-                  <div
-                    style={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "space-between",
-                      padding: "10px 24px 10px 21px",
-                    }}
-                  >
-                    <div style={{ display: "flex", alignItems: "center", gap: "17px" }}>
-                      {/* Avatar */}
-                      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none" style={{ flexShrink: 0 }}>
-                        <circle cx="18" cy="18" r="18" fill="#F3F4F7" />
-                        <g transform="translate(12, 9.5)">
-                          <path d="M1 16V14.3333C1 13.4493 1.35119 12.6014 1.97631 11.9763C2.60143 11.3512 3.44928 11 4.33333 11H7.66667C8.55072 11 9.39857 11.3512 10.0237 11.9763C10.6488 12.6014 11 13.4493 11 14.3333V16M2.66667 4.33333C2.66667 5.21739 3.01786 6.06523 3.64298 6.69036C4.2681 7.31548 5.11594 7.66667 6 7.66667C6.88405 7.66667 7.7319 7.31548 8.35702 6.69036C8.98214 6.06523 9.33333 5.21739 9.33333 4.33333C9.33333 3.44928 8.98214 2.60143 8.35702 1.97631C7.7319 1.35119 6.88405 1 6 1C5.11594 1 4.2681 1.35119 3.64298 1.97631C3.01786 2.60143 2.66667 3.44928 2.66667 4.33333Z" stroke="#0D468B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                          <path d="M1 16V14.3333C1 13.4493 1.35119 12.6014 1.97631 11.9763C2.60143 11.3512 3.44928 11 4.33333 11H7.66667C8.55072 11 9.39857 11.3512 10.0237 11.9763C10.6488 12.6014 11 13.4493 11 14.3333V16M2.66667 4.33333C2.66667 5.21739 3.01786 6.06523 3.64298 6.69036C4.2681 7.31548 5.11594 7.66667 6 7.66667C6.88405 7.66667 7.7319 7.31548 8.35702 6.69036C8.98214 6.06523 9.33333 5.21739 9.33333 4.33333C9.33333 3.44928 8.98214 2.60143 8.35702 1.97631C7.7319 1.35119 6.88405 1 6 1C5.11594 1 4.2681 1.35119 3.64298 1.97631C3.01786 2.60143 2.66667 3.44928 2.66667 4.33333Z" stroke="black" strokeOpacity="0.2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        </g>
-                      </svg>
-                      <div>
-                        {/* Name as primary identifier */}
-                        <div
-                          style={{
-                            fontFamily: "Outfit",
-                            fontSize: "15px",
-                            fontWeight: 600,
-                            background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
-                            WebkitBackgroundClip: "text",
-                            WebkitTextFillColor: "transparent",
-                          }}
-                        >
-                          {ref.referred_name || maskMobile(ref.referred_mobile)}
-                        </div>
-                        {/* Masked mobile + referral date */}
-                        <div style={{ color: "#A2A2A2", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, marginTop: "2px" }}>
-                          {ref.referred_name && `${maskMobile(ref.referred_mobile)} · `}Joined {formatDate(ref.referral_date)}
-                        </div>
-                      </div>
-                    </div>
-
-                    {/* Status badge */}
-                    <div
-                      style={{
-                        width: "58px",
-                        height: "21px",
-                        borderRadius: "3px",
-                        background: ref.referral_confirmation_status === "verified" ? "#C7FFDA" : "#FFF3CD",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        fontFamily: "Outfit",
-                        fontSize: "10px",
-                        fontWeight: 600,
-                        color: ref.referral_confirmation_status === "verified" ? "#287E54" : "#856404",
-                      }}
-                    >
-                      {ref.referral_confirmation_status === "verified" ? "ACTIVE" : "PENDING"}
-                    </div>
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-
-          {/* View All button */}
-          {referrals.length > 4 && (
+          {referrals.length > 3 && (
             <button
-              onClick={() => setShowAllReferrals(true)}
-              style={{
-                display: "block",
-                margin: "12px auto 0",
-                background: "none",
-                border: "none",
-                cursor: "pointer",
-                fontFamily: "Outfit",
-                fontSize: "14px",
-                fontWeight: 600,
-                color: "#FEAB27",
-                padding: "6px 16px",
-              }}
+              onClick={() => setDrawerOpen(true)}
+              style={{ background: "none", border: "none", cursor: "pointer", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#FEAB27", padding: 0 }}
             >
               View All ({referrals.length})
             </button>
           )}
+        </div>
 
-          {/* All Referrals Popup */}
-          {showAllReferrals && (
-            <div
-              onClick={() => setShowAllReferrals(false)}
-              style={{
-                position: "fixed",
-                top: 0, left: 0, right: 0, bottom: 0,
-                background: "rgba(0, 0, 0, 0.55)",
-                zIndex: 1000,
-                display: "flex",
-                alignItems: "flex-end",
-                justifyContent: "center",
-                animation: "fadeIn 0.2s ease-out",
-              }}
-            >
-              <div
-                onClick={(e) => e.stopPropagation()}
-                style={{
-                  width: "100%",
-                  maxWidth: "412px",
-                  maxHeight: "75vh",
-                  borderRadius: "24px 24px 0 0",
-                  background: "#FFF",
-                  boxShadow: "0 -4px 30px rgba(0,0,0,0.2)",
-                  display: "flex",
-                  flexDirection: "column",
-                  animation: "slideUp 0.3s ease-out",
-                }}
-              >
-                {/* Popup Header */}
-                <div style={{
-                  display: "flex",
-                  alignItems: "center",
-                  justifyContent: "space-between",
-                  padding: "20px 24px 16px",
-                  borderBottom: "1px solid #F0F0F0",
-                  flexShrink: 0,
-                }}>
-                  <h3 style={{ margin: 0, fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, color: "#202020" }}>
-                    All Referrals ({referrals.length})
-                  </h3>
-                  <button
-                    onClick={() => setShowAllReferrals(false)}
-                    style={{
-                      background: "#F5F5F5",
-                      border: "none",
-                      borderRadius: "50%",
-                      width: "32px",
-                      height: "32px",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      cursor: "pointer",
-                      fontSize: "18px",
-                      color: "#666",
-                    }}
-                  >
-                    ✕
-                  </button>
-                </div>
+        {!loading && apiError && (
+          <p style={{ color: "#E53935", fontFamily: "Outfit", fontSize: "12px", textAlign: "center", margin: "0 0 16px" }}>
+            Error loading referrals. Please try again.
+          </p>
+        )}
 
-                {/* Scrollable Referral List */}
-                <div style={{ overflowY: "auto", flex: 1, padding: "0 24px 24px" }}>
-                  {referrals.map((ref, idx) => (
-                    <div key={idx}>
-                      {idx > 0 && (
-                        <div style={{ height: "0.5px", background: "#FEAB27", margin: "0" }} />
-                      )}
-                      <div
-                        style={{
-                          display: "flex",
-                          alignItems: "center",
-                          justifyContent: "space-between",
-                          padding: "12px 0",
-                        }}
-                      >
-                        <div style={{ display: "flex", alignItems: "center", gap: "14px" }}>
-                          <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none" style={{ flexShrink: 0 }}>
-                            <circle cx="18" cy="18" r="18" fill="#F3F4F7" />
-                            <g transform="translate(12, 9.5)">
-                              <path d="M1 16V14.3333C1 13.4493 1.35119 12.6014 1.97631 11.9763C2.60143 11.3512 3.44928 11 4.33333 11H7.66667C8.55072 11 9.39857 11.3512 10.0237 11.9763C10.6488 12.6014 11 13.4493 11 14.3333V16M2.66667 4.33333C2.66667 5.21739 3.01786 6.06523 3.64298 6.69036C4.2681 7.31548 5.11594 7.66667 6 7.66667C6.88405 7.66667 7.7319 7.31548 8.35702 6.69036C8.98214 6.06523 9.33333 5.21739 9.33333 4.33333C9.33333 3.44928 8.98214 2.60143 8.35702 1.97631C7.7319 1.35119 6.88405 1 6 1C5.11594 1 4.2681 1.35119 3.64298 1.97631C3.01786 2.60143 2.66667 3.44928 2.66667 4.33333Z" stroke="#0D468B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                              <path d="M1 16V14.3333C1 13.4493 1.35119 12.6014 1.97631 11.9763C2.60143 11.3512 3.44928 11 4.33333 11H7.66667C8.55072 11 9.39857 11.3512 10.0237 11.9763C10.6488 12.6014 11 13.4493 11 14.3333V16M2.66667 4.33333C2.66667 5.21739 3.01786 6.06523 3.64298 6.69036C4.2681 7.31548 5.11594 7.66667 6 7.66667C6.88405 7.66667 7.7319 7.31548 8.35702 6.69036C8.98214 6.06523 9.33333 5.21739 9.33333 4.33333C9.33333 3.44928 8.98214 2.60143 8.35702 1.97631C7.7319 1.35119 6.88405 1 6 1C5.11594 1 4.2681 1.35119 3.64298 1.97631C3.01786 2.60143 2.66667 3.44928 2.66667 4.33333Z" stroke="black" strokeOpacity="0.2" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </g>
-                          </svg>
-                          <div>
-                            <div
-                              style={{
-                                fontFamily: "Outfit",
-                                fontSize: "15px",
-                                fontWeight: 600,
-                                background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B",
-                                WebkitBackgroundClip: "text",
-                                WebkitTextFillColor: "transparent",
-                              }}
-                            >
-                              {ref.referred_name || maskMobile(ref.referred_mobile)}
-                            </div>
-                            <div style={{ color: "#A2A2A2", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, marginTop: "2px" }}>
-                              {ref.referred_name && `${maskMobile(ref.referred_mobile)} · `}Joined {formatDate(ref.referral_date)}
-                            </div>
-                          </div>
-                        </div>
-                        <div
-                          style={{
-                            width: "58px",
-                            height: "21px",
-                            borderRadius: "3px",
-                            background: ref.referral_confirmation_status === "verified" ? "#C7FFDA" : "#FFF3CD",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            fontFamily: "Outfit",
-                            fontSize: "10px",
-                            fontWeight: 600,
-                            color: ref.referral_confirmation_status === "verified" ? "#287E54" : "#856404",
-                            flexShrink: 0,
-                          }}
-                        >
-                          {ref.referral_confirmation_status === "verified" ? "ACTIVE" : "PENDING"}
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-              </div>
-              <style>{`
-                @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-                @keyframes slideUp { from { transform: translateY(100%); } to { transform: translateY(0); } }
-              `}</style>
-            </div>
-          )}
+        {!loading && !apiError && referrals.length === 0 && (
+          <div style={{ border: "1px solid #FF6E6E", borderRadius: "20px", background: "#FFF", padding: "20px", textAlign: "center", marginBottom: "16px" }}>
+            <p style={{ color: "#FF6060", fontFamily: "Outfit", fontSize: "15px", fontWeight: 300, margin: 0 }}>
+              You don't have any referrals currently
+            </p>
+          </div>
+        )}
 
-          {/* REFER & WIN button */}
-          <div style={{ display: "flex", justifyContent: referrals.length > 0 ? "flex-end" : "center", paddingRight: referrals.length > 0 ? "16px" : "0", marginTop: "16px" }}>
+        {/* Show up to 3 referrals inline — yellow-bordered flat list */}
+        {referrals.length > 0 && (
+          <div style={{ background: "#FFF", borderRadius: "20px", border: "1px solid #FEAB27", overflow: "hidden", padding: "0 12px" }}>
+            {referrals.slice(0, 3).map((ref, i) => (
+              <ReferralRow key={i} referral={ref} language={language} isLast={i === Math.min(referrals.length, 3) - 1} />
+            ))}
+          </div>
+        )}
+
+        {/* REFER & WIN button */}
+        <div style={{ display: "flex", justifyContent: "center", marginTop: "8px" }}>
           <button
             className="refer-fab"
             onClick={handleReferNow}
             style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "10px",
+              display: "flex", alignItems: "center", gap: "10px",
               background: "linear-gradient(135deg, #FEAB27 0%, #FF8C00 100%)",
-              border: "none",
-              borderRadius: "40px",
-              padding: "12px 24px",
-              cursor: "pointer",
+              border: "none", borderRadius: "40px", padding: "12px 28px", cursor: "pointer",
               boxShadow: "0 6px 20px rgba(254,171,39,0.50), 0 3px 10px rgba(0,0,0,0.12)",
-              backdropFilter: "blur(4px)",
-              zIndex: 2,
               transition: "transform 0.2s ease, box-shadow 0.2s ease",
             }}
           >
             <svg xmlns="http://www.w3.org/2000/svg" width="17" height="17" viewBox="0 0 19 19" fill="none">
               <path d="M1.25 16.4079V14.7237C1.25 13.8303 1.60489 12.9736 2.23659 12.3419C2.86829 11.7102 3.72506 11.3553 4.61842 11.3553H7.98684C8.79526 11.3553 9.53632 11.6399 10.1174 12.114M12.1974 1.35948C12.9219 1.54499 13.5641 1.96638 14.0227 2.55721C14.4814 3.14804 14.7303 3.8747 14.7303 4.62264C14.7303 5.37057 14.4814 6.09723 14.0227 6.68806C13.5641 7.27889 12.9219 7.70028 12.1974 7.88579M12.1974 14.7237H17.25M14.7237 12.1974V17.25M2.93421 4.61842C2.93421 5.51178 3.2891 6.36855 3.9208 7.00025C4.5525 7.63196 5.40927 7.98684 6.30263 7.98684C7.19599 7.98684 8.05276 7.63196 8.68447 7.00025C9.31617 6.36855 9.67105 5.51178 9.67105 4.61842C9.67105 3.72506 9.31617 2.86829 8.68447 2.23659C8.05276 1.60489 7.19599 1.25 6.30263 1.25C5.40927 1.25 4.5525 1.60489 3.9208 2.23659C3.2891 2.86829 2.93421 3.72506 2.93421 4.61842Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
             </svg>
-            <span style={{ margin: 0, fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, color: "#FFF", whiteSpace: "nowrap" }}>
-              REFER & WIN
+            <span style={{ fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, color: "#FFF", whiteSpace: "nowrap" }}>
+              REFER &amp; WIN
             </span>
           </button>
-          </div>
         </div>
 
-        {/* Hover animation for FAB */}
         <style>{`
-          .refer-fab:hover {
-            transform: scale(1.05) !important;
-            box-shadow: 0 8px 28px rgba(254,171,39,0.60), 0 4px 14px rgba(0,0,0,0.18) !important;
-          }
-          .refer-fab:active {
-            transform: scale(0.97) !important;
-          }
+          .refer-fab:hover { transform: scale(1.05) !important; box-shadow: 0 8px 28px rgba(254,171,39,0.60), 0 4px 14px rgba(0,0,0,0.18) !important; }
+          .refer-fab:active { transform: scale(0.97) !important; }
         `}</style>
       </div>
 
       {/* ── Rewards ── */}
-      <div style={{ padding: "22px 26px 44px" }}>
-        <h3 style={{ margin: "0 0 20px", fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, color: "#202020" }}>
+      <div style={{ padding: "24px 20px 48px" }}>
+        <h3 style={{ margin: "0 0 16px", fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, color: "#202020" }}>
           Rewards
         </h3>
-
-        {/* Free Classes pair (unlocks every 5 refs) */}
-        <div style={{ display: "flex", gap: "12px", marginBottom: "11px" }}>
-          {([
-            { label: "+10 Free Classes", refs: "5 Referrals", need: 5, img: imgPose81 },
-            { label: "+20 Free Classes", refs: "10 Referrals", need: 10, img: imgPose811 },
-          ] as const).map((reward, i) => {
-            const unlocked = totalRefs >= reward.need;
-            return (
-              <div key={i} style={{ flex: 1 }}>
-                <div
-                  style={{
-                    borderRadius: "12px",
-                    height: "166px",
-                    backgroundImage: `url("${reward.img}")`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    display: "flex",
-                    alignItems: "flex-start",
-                    padding: "10px",
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                >
-                  {!unlocked && (
-                    <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.45)", borderRadius: "12px" }} />
-                  )}
-                  {unlocked ? (
-                    <div style={{ width: "71px", height: "23px", borderRadius: "30px", background: "#22C55E", display: "flex", alignItems: "center", justifyContent: "center", position: "relative", zIndex: 1 }}>
-                      <span style={{ fontFamily: "Outfit", fontSize: "9px", fontWeight: 600, color: "#FFF" }}>UNLOCKED</span>
-                    </div>
-                  ) : (
-                    <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 1 }}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
-                        <path d="M12 16.5V10.5C12 8.9087 12.6321 7.38258 13.7574 6.25736C14.8826 5.13214 16.4087 4.5 18 4.5C19.5913 4.5 21.1174 5.13214 22.2426 6.25736C23.3679 7.38258 24 8.9087 24 10.5V16.5M7.5 19.5C7.5 18.7044 7.81607 17.9413 8.37868 17.3787C8.94129 16.8161 9.70435 16.5 10.5 16.5H25.5C26.2956 16.5 27.0587 16.8161 27.6213 17.3787C28.1839 17.9413 28.5 18.7044 28.5 19.5V28.5C28.5 29.2956 28.1839 30.0587 27.6213 30.6213C27.0587 31.1839 26.2956 31.5 25.5 31.5H10.5C9.70435 31.5 8.94129 31.1839 8.37868 30.6213C7.81607 30.0587 7.5 29.2956 7.5 28.5V19.5ZM16.5 24C16.5 24.3978 16.658 24.7794 16.9393 25.0607C17.2206 25.342 17.6022 25.5 18 25.5C18.3978 25.5 18.7794 25.342 19.0607 25.0607C19.342 24.7794 19.5 24.3978 19.5 24C19.5 23.6022 19.342 23.2206 19.0607 22.9393C18.7794 22.658 18.3978 22.5 18 22.5C17.6022 22.5 17.2206 22.658 16.9393 22.9393C16.658 23.2206 16.5 23.6022 16.5 24Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-                <b style={{ fontFamily: "Outfit", fontSize: "14px", display: "block", marginTop: "6px", color: "#000" }}>
-                  {reward.label}
-                </b>
-                <b style={{ fontFamily: "Outfit", fontSize: "14px", color: "#FEAB27", display: "block" }}>
-                  {reward.refs}
-                </b>
-                {unlocked && (
-                  <button
-                    style={{
-                      marginTop: "6px",
-                      height: "34px",
-                      borderRadius: "8px",
-                      border: "1px solid #FEAB27",
-                      background: "transparent",
-                      cursor: "pointer",
-                      fontFamily: "Outfit",
-                      fontSize: "12px",
-                      fontWeight: 600,
-                      color: "#FEAB27",
-                      width: "100%",
-                    }}
-                  >
-                    Claimed
-                  </button>
-                )}
-                {!unlocked && refsForNextClasses !== null && i === 0 && (
-                  <p style={{ margin: "4px 0 0", fontFamily: "Outfit", fontSize: "10px", fontWeight: 500, color: "#9C9C9C" }}>
-                    {refsForNextClasses} more needed
-                  </p>
-                )}
-              </div>
-            );
-          })}
-        </div>
-
-        {/* Gift pair (unlocks at 20 and 40 refs) */}
         <div style={{ display: "flex", gap: "12px" }}>
-          {([
-            { label: "Healthyday T-shirt", refs: "20 Referrals", need: 20, img: imgUnsplashG },
-            { label: "Special Gift", refs: "40 Referrals", need: 40, img: imgUnsplashM },
-          ] as const).map((reward, i) => {
-            const progress = Math.min(100, (totalRefs / reward.need) * 100);
-            const unlocked = totalRefs >= reward.need;
-            return (
-              <div key={i} style={{ flex: 1 }}>
-                <div
-                  style={{
-                    borderRadius: "12px",
-                    height: "166px",
-                    backgroundImage: `url("${reward.img}")`,
-                    backgroundSize: "cover",
-                    backgroundPosition: "center",
-                    position: "relative",
-                    overflow: "hidden",
-                  }}
-                >
-                  {!unlocked && (
-                    <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.50)", borderRadius: "12px" }} />
-                  )}
-                  {unlocked ? (
-                    <div style={{ padding: "10px", position: "relative", zIndex: 1 }}>
-                      <div style={{ width: "71px", height: "23px", borderRadius: "30px", background: "#22C55E", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                        <span style={{ fontFamily: "Outfit", fontSize: "9px", fontWeight: 600, color: "#FFF" }}>UNLOCKED</span>
-                      </div>
-                    </div>
-                  ) : (
-                    <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)", zIndex: 2 }}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 36 36" fill="none">
-                        <path d="M12 16.5V10.5C12 8.9087 12.6321 7.38258 13.7574 6.25736C14.8826 5.13214 16.4087 4.5 18 4.5C19.5913 4.5 21.1174 5.13214 22.2426 6.25736C23.3679 7.38258 24 8.9087 24 10.5V16.5M7.5 19.5C7.5 18.7044 7.81607 17.9413 8.37868 17.3787C8.94129 16.8161 9.70435 16.5 10.5 16.5H25.5C26.2956 16.5 27.0587 16.8161 27.6213 17.3787C28.1839 17.9413 28.5 18.7044 28.5 19.5V28.5C28.5 29.2956 28.1839 30.0587 27.6213 30.6213C27.0587 31.1839 26.2956 31.5 25.5 31.5H10.5C9.70435 31.5 8.94129 31.1839 8.37868 30.6213C7.81607 30.0587 7.5 29.2956 7.5 28.5V19.5ZM16.5 24C16.5 24.3978 16.658 24.7794 16.9393 25.0607C17.2206 25.342 17.6022 25.5 18 25.5C18.3978 25.5 18.7794 25.342 19.0607 25.0607C19.342 24.7794 19.5 24.3978 19.5 24C19.5 23.6022 19.342 23.2206 19.0607 22.9393C18.7794 22.658 18.3978 22.5 18 22.5C17.6022 22.5 17.2206 22.658 16.9393 22.9393C16.658 23.2206 16.5 23.6022 16.5 24Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </div>
-                  )}
-                </div>
-                <b style={{ fontFamily: "Outfit", fontSize: "14px", display: "block", marginTop: "6px", color: "#000" }}>
-                  {reward.label}
-                </b>
-                <b style={{ fontFamily: "Outfit", fontSize: "14px", color: "#FEAB27", display: "block" }}>
-                  {reward.refs}
-                </b>
-                {!unlocked && (
-                  <div style={{ marginTop: "6px" }}>
-                    <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "4px" }}>
-                      <span style={{ fontFamily: "Outfit", fontSize: "10px", fontWeight: 600 }}>
-                        {totalRefs}/{reward.need}
-                        {i === 0 && refsForNextGift !== null && (
-                          <span style={{ color: "#9C9C9C", fontWeight: 500 }}> · {refsForNextGift} more</span>
-                        )}
-                      </span>
-                      <span style={{ fontFamily: "Outfit", fontSize: "10px", fontWeight: 600 }}>
-                        {Math.round(progress)}%
-                      </span>
-                    </div>
-                    <div style={{ height: "6px", background: "#E8DDD2", borderRadius: "3px", overflow: "hidden" }}>
-                      <div style={{ height: "6px", width: `${progress}%`, background: "#FEAB27", borderRadius: "3px" }} />
-                    </div>
-                  </div>
-                )}
-                {unlocked && (
-                  <button
-                    style={{
-                      marginTop: "6px",
-                      height: "34px",
-                      borderRadius: "8px",
-                      border: "1px solid #FEAB27",
-                      background: "transparent",
-                      cursor: "pointer",
-                      fontFamily: "Outfit",
-                      fontSize: "12px",
-                      fontWeight: 600,
-                      color: "#FEAB27",
-                      width: "100%",
-                    }}
-                  >
-                    Claimed
-                  </button>
-                )}
-              </div>
-            );
-          })}
+          {REWARDS.map((reward) => (
+            <RewardCard key={reward.key} reward={reward} verifiedRefs={verifiedRefs} />
+          ))}
         </div>
       </div>
+
+      {/* ── All Referrals Drawer ── */}
+      {drawerOpen && (
+        <>
+          <div
+            className={drawerClosing ? "drawer-backdrop-out" : "drawer-backdrop"}
+            onClick={closeDrawer}
+            style={{ position: "fixed", inset: 0, background: "rgba(0,0,0,0.45)", zIndex: 100 }}
+          />
+          <div
+            className={drawerClosing ? "drawer-slide-down" : "drawer-slide-up"}
+            style={{
+              position: "fixed",
+              bottom: 0,
+              left: "50%",
+              transform: "translateX(-50%)",
+              width: "100%",
+              maxWidth: "412px",
+              background: "#FFF",
+              borderRadius: "20px 20px 0 0",
+              zIndex: 101,
+              display: "flex",
+              flexDirection: "column",
+              maxHeight: "82vh",
+            }}
+          >
+            {/* Drawer header */}
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 20px 12px", flexShrink: 0 }}>
+              <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>
+                All Referrals ({referrals.length})
+              </span>
+              <button
+                onClick={closeDrawer}
+                style={{ background: "none", border: "none", cursor: "pointer", fontSize: "20px", color: "#202020", padding: "4px", lineHeight: 1 }}
+              >
+                ✕
+              </button>
+            </div>
+
+            {/* Scrollable referral list */}
+            <div style={{ overflowY: "auto", flex: 1, padding: "0 16px 12px" }}>
+              <div style={{ background: "#FFF", borderRadius: "20px", border: "1px solid #FEAB27", overflow: "hidden", padding: "0 12px" }}>
+                {referrals.map((ref, i) => (
+                  <ReferralRow key={i} referral={ref} language={language} isLast={i === referrals.length - 1} />
+                ))}
+              </div>
+            </div>
+
+            {/* Total bar */}
+            <div style={{ flexShrink: 0, margin: "0 16px 16px", height: "52px", borderRadius: "14px", background: "#FEAB27", display: "flex", alignItems: "center", justifyContent: "space-between", padding: "0 20px" }}>
+              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "15px", fontWeight: 700 }}>Verified Referrals</span>
+              <div style={{ background: "#FFF", borderRadius: "8px", padding: "4px 14px" }}>
+                <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700 }}>
+                  {verifiedRefs}
+                </span>
+              </div>
+            </div>
+          </div>
+        </>
+      )}
     </div>
   );
 };
