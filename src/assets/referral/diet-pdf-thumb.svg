@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120">
+  <!-- Background -->
+  <rect width="120" height="120" rx="14" fill="#D1FAE5"/>
+  <!-- Document shadow -->
+  <rect x="24" y="18" width="72" height="88" rx="8" fill="#16A34A" opacity="0.25"/>
+  <!-- Document body -->
+  <rect x="20" y="14" width="72" height="88" rx="8" fill="#22C55E"/>
+  <!-- Folded corner -->
+  <polygon points="78,14 92,28 78,28" fill="#15803D"/>
+  <!-- Lines -->
+  <rect x="30" y="38" width="48" height="5" rx="2.5" fill="white" opacity="0.85"/>
+  <rect x="30" y="50" width="48" height="5" rx="2.5" fill="white" opacity="0.85"/>
+  <rect x="30" y="62" width="34" height="5" rx="2.5" fill="white" opacity="0.85"/>
+  <!-- Leaf icon -->
+  <path d="M56 76 C50 70 42 74 44 82 C46 88 54 89 56 76Z" fill="white" opacity="0.9"/>
+  <path d="M56 76 C62 70 70 74 68 82 C66 88 58 89 56 76Z" fill="white" opacity="0.9"/>
+  <line x1="56" y1="76" x2="56" y2="90" stroke="white" stroke-width="2.5" stroke-linecap="round"/>
+  <!-- Bottom label -->
+  <rect x="20" y="94" width="72" height="20" rx="0 0 8 8" fill="#15803D"/>
+  <rect x="20" y="94" width="72" height="20" rx="8" fill="#15803D"/>
+  <text x="56" y="108" text-anchor="middle" font-size="10" fill="white" font-family="Arial,sans-serif" font-weight="700" letter-spacing="0.5">DIET PDF</text>
+</svg>
