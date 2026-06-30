@@ -12,7 +12,6 @@ import { ReferralProgressBar } from "@/components/ReferWinPopup";
 import { ShareReferralActions } from "@/components/ShareReferralActions";
 import NoSessionsCard from "@/components/NoSessionsCard";
 import ReferWinCard from "@/components/ReferWinCard";
-import ReferAndWin500 from "@/components/ReferAndWin500";
 import HeaderDaysLeft from "@/components/HeaderDaysLeft";
 
 import thumbFaceYogaTel from "@/assets/bonus/Face Yoga Thumbnail.jpg";
@@ -770,19 +769,9 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
               />
             </div>
 
-            {/* Refer & Win 500 card */}
+            {/* Refer & Win card */}
             <div style={{ padding: "18px 20px 0" }}>
-              <ReferAndWin500 onClick={() => navigate(`/${mobile || ""}/leaderboard`)} />
-            </div>
-
-            {/* Refer & Win Yoga Kit button */}
-            <div style={{ padding: "18px 20px 0" }}>
-              <button
-                onClick={() => { const w = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`; window.open(`https://wa.me/?text=${encodeURIComponent(w)}`, "_blank"); }}
-                style={{ width: "100%", height: "40px", borderRadius: "30px", background: "#FEAB27", border: "none", cursor: "pointer", fontFamily: "Outfit", fontSize: "16px", fontWeight: 500, color: "#202020", textTransform: "uppercase", letterSpacing: "0.5px", boxShadow: "0px 4px 2px rgba(0,0,0,0.25)" }}
-              >
-                Refer &amp; Win Yoga Kit
-              </button>
+              <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
             </div>
 
             {/* 14 Days Attendance — commented out */}
@@ -832,7 +821,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
 
             {/* Refer & Win card */}
             {/* <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
+              <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
             </div> */}
 
             {/* Week 2 Bonus: show payment section instead */}
@@ -843,7 +832,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
                   <p style={{ width: "100%", maxWidth: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
                 </div>
                 {/* <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-                  <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
+                  <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
                 </div> */}
               </>
             )}
@@ -1170,19 +1159,9 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
           />
         </div>
 
-        {/* Refer & Win 500 card */}
+        {/* Refer & Win card */}
         <div style={{ padding: "18px 20px 0" }}>
-          <ReferAndWin500 onClick={() => navigate(`/${mobile || ""}/leaderboard`)} />
-        </div>
-
-        {/* Refer & Win Yoga Kit button */}
-        <div style={{ padding: "18px 20px 0" }}>
-          <button
-            onClick={() => { const w = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`; window.open(`https://wa.me/?text=${encodeURIComponent(w)}`, "_blank"); }}
-            style={{ width: "100%", height: "40px", borderRadius: "30px", background: "#FEAB27", border: "none", cursor: "pointer", fontFamily: "Outfit", fontSize: "16px", fontWeight: 500, color: "#202020", textTransform: "uppercase", letterSpacing: "0.5px", boxShadow: "0px 4px 2px rgba(0,0,0,0.25)" }}
-          >
-            Refer &amp; Win Yoga Kit
-          </button>
+          <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
         </div>
 
         {/* 14 Days Attendance — commented out */}
@@ -1238,7 +1217,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
               <p style={{ width: "100%", maxWidth: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
             </div>
             <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
+              <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
             </div>
           </>
         ) */}
@@ -1707,19 +1686,9 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
           </div>
         )}
 
-        {/* Refer & Win 500 card */}
+        {/* Refer & Win card */}
         <div style={{ padding: "18px 22px 0" }}>
-          <ReferAndWin500 onClick={() => navigate(`/${mobile || ""}/leaderboard`)} />
-        </div>
-
-        {/* Refer & Win Yoga Kit button */}
-        <div style={{ padding: "18px 22px 0" }}>
-          <button
-            onClick={() => { const w = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`; window.open(`https://wa.me/?text=${encodeURIComponent(w)}`, "_blank"); }}
-            style={{ width: "100%", height: "40px", borderRadius: "30px", background: "#FEAB27", border: "none", cursor: "pointer", fontFamily: "Outfit", fontSize: "16px", fontWeight: 500, color: "#202020", textTransform: "uppercase", letterSpacing: "0.5px", boxShadow: "0px 4px 2px rgba(0,0,0,0.25)" }}
-          >
-            Refer &amp; Win Yoga Kit
-          </button>
+          <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
         </div>
 
         {/* Your Weekly Attendance */}
@@ -1747,7 +1716,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
         {/* Refer & Win Card */}
         {/* {!showPlanRenewal && (
           <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-            <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/leaderboard`} />
+            <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
           </div>
         )} */}
 
@@ -1822,7 +1791,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
               }}>
                 <ShareReferralActions
                   shareLink={shareLink}
-                  referralsUrl={`/${mobile || ""}/leaderboard`}
+                  referralsUrl={`/${mobile || ""}/referrals`}
                 />
               </div>
             </div>
@@ -2052,7 +2021,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
         </div>
         {/* Refer & Earn */}
         <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-          <ReferWinCard showTitle={false} shareLink={referralLink} referralsUrl={`/referral?count=&mobile=`} />
+          <ReferWinCard showTitle={false} shareLink={referralLink} referralsUrl={`/${mobile || ""}/referrals`} />
         </div>
       </div>
     );
@@ -2255,9 +2224,9 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
         );
       })()}
 
-      {/* Refer & Win 500 card */}
+      {/* Refer & Win card */}
       <div style={{ padding: "18px 20px 0" }}>
-        <ReferAndWin500 onClick={() => navigate(`/${mobile || ""}/leaderboard`)} />
+        <ReferWinCard showTitle={false} shareLink={mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : (studentData?.referral_link ?? "")} referralsUrl={`/${mobile || ""}/referrals`} />
       </div>
 
       {/* Try these 15 Minutes Yoga Section */}

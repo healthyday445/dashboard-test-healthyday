@@ -377,11 +377,10 @@ const RewardCard: React.FC<{ reward: (typeof REWARDS)[number]; verifiedRefs: num
 
 const ReferralStatus = () => {
   const location = useLocation();
-  const { mobile: urlMobile, count: urlCount } = useParams<{ mobile: string; count: string }>();
+  const { mobile: urlMobile } = useParams<{ mobile: string }>();
   const searchParams = new URLSearchParams(location.search);
 
   const initialCount =
-    Number(urlCount) ||
     Number(searchParams.get("count")) ||
     Number(safeSessionStorage.getItem("total_referral_count")) ||
     0;

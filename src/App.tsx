@@ -35,7 +35,7 @@ const App = () => {
           <Route path="/referral" element={<Referral />} />
           <Route path="/referral-status" element={<ReferralStatus />} />
           <Route path="/" element={<Index />} />
-          <Route path="/:mobile/referrals/:count" element={<ReferralStatus />} />
+          <Route path="/:mobile/referrals" element={<ReferralStatus />} />
           <Route path="/attendance-page" element={<AttendancePage />} />
           <Route path="/:mobile/attendance" element={<AttendancePage />} />
           <Route path="/:mobile/recordings" element={<AllRecordings />} />
