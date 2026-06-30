@@ -503,9 +503,8 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
   const studentStatus = studentData?.status;
   const isOngoingStatus = studentStatus === "registered" || studentStatus === "14DaysOngoing" || studentStatus === "14daysongoing";
   const isPaid = studentStatus === "paid";
-  const paidInActiveBatch = isPaid && batchInfo.isActive;
   const sessionJoinLink = studentData?.free_classes_joining_link || studentData?.free_class_join_link;
-  const hasBatchAccess = (isOngoingStatus || paidInActiveBatch) && batchInfo.isActive && !!sessionJoinLink;
+  const hasBatchAccess = isOngoingStatus && batchInfo.isActive && !!sessionJoinLink;
 
   // Days remaining until June 30 2026 — shared across all dashboard states
   const daysUntilJune30 = (() => {
