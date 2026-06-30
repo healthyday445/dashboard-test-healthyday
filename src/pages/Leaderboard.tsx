@@ -130,6 +130,7 @@ const Leaderboard: React.FC = () => {
   const [referralsData, setReferralsData] = useState<{ language?: string; total_referrals: number; referrals: { referred_mobile: string; referred_name: string; referral_confirmation_status: string }[] } | null>(null);
   const [referralsLoading, setReferralsLoading] = useState(false);
   const [isPaidUser, setIsPaidUser] = useState(false);
+  const [userLanguage, setUserLanguage] = useState("");
 
   const closeDrawer = () => {
     setDrawerClosing(true);
@@ -204,6 +205,7 @@ const Leaderboard: React.FC = () => {
       .then((r) => r.json())
       .then((data) => {
         if (data?.status?.toLowerCase() === "paid") setIsPaidUser(true);
+        if (data?.language) setUserLanguage(data.language);
       })
       .catch(() => {});
   }, [mobile]);
@@ -529,7 +531,7 @@ const Leaderboard: React.FC = () => {
             {hasRefs && (
               <>
                 <PostContestRankCard userName={userName} rank={rank} referralCount={refCount} />
-                {!isPaidUser && <YourRewardsCard showCoupon={refCount >= 3} />}
+                {!isPaidUser && <YourRewardsCard showCoupon={refCount >= 3} language={userLanguage} />}
               </>
             )}
           </>
@@ -1460,7 +1462,7 @@ const AddressDetailsCard: React.FC = () => (
       Provide your address details to claim reward
     </p>
     <button
-      onClick={() => window.open("https://wa.me/919052888968?text=Address+Details", "_blank")}
+      onClick={() => window.open("https://forms.gle/p8jPXp3toqdpDtC69", "_blank")}
       style={{
         flexShrink: 0,
         width: "114px",
@@ -1617,7 +1619,12 @@ const PostContestRankCard: React.FC<{ userName: string; rank: number; referralCo
   );
 };
 
-const YourRewardsCard: React.FC<{ showCoupon: boolean }> = ({ showCoupon }) => (
+const DIET_PDF_URL = {
+  Telugu: "https://d3jt6ku4g6z5l8.cloudfront.net/FILE/6795ce3db71ab6291dfa64b7/5894347_RECIPE%20HANBOOKTELUGU%203compressed.pdf",
+  English: "https://d3jt6ku4g6z5l8.cloudfront.net/FILE/6795ce3db71ab6291dfa64b7/9278824_RECIPE%20HANDBOOK%20%20ENGLISH%202compressed.pdf",
+};
+
+const YourRewardsCard: React.FC<{ showCoupon: boolean; language?: string }> = ({ showCoupon, language }) => (
   <div style={{ width: "calc(100% - 32px)", marginTop: "16px" }}>
     <div style={{ display: "flex", alignItems: "center", gap: "6px", marginBottom: "10px" }}>
       <span style={{ fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, color: "#012755" }}>
@@ -1660,7 +1667,7 @@ const YourRewardsCard: React.FC<{ showCoupon: boolean }> = ({ showCoupon }) => (
           Diet e-Handbook PDF
         </span>
         <button
-          onClick={() => {}}
+          onClick={() => window.open(language === "Telugu" ? DIET_PDF_URL.Telugu : DIET_PDF_URL.English, "_blank")}
           style={{
             flexShrink: 0,
             width: "80px",
@@ -1726,7 +1733,7 @@ const YourRewardsCard: React.FC<{ showCoupon: boolean }> = ({ showCoupon }) => (
               </p>
             </div>
             <button
-              onClick={() => {}}
+              onClick={() => window.open("https://yoga.healthyday.co.in/pricing", "_blank")}
               style={{
                 flexShrink: 0,
                 width: "80px",
