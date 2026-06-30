@@ -219,9 +219,15 @@ const YouAreHereRow: React.FC<{ count: number }> = ({ count }) => {
   );
 };
 
+const DIET_PDF_URL = {
+  Telugu: "https://d3jt6ku4g6z5l8.cloudfront.net/FILE/6795ce3db71ab6291dfa64b7/5894347_RECIPE%20HANBOOKTELUGU%203compressed.pdf",
+  English: "https://d3jt6ku4g6z5l8.cloudfront.net/FILE/6795ce3db71ab6291dfa64b7/9278824_RECIPE%20HANDBOOK%20%20ENGLISH%202compressed.pdf",
+};
+
 // Download button shown on unlocked Free Diet PDF row
-const DownloadButton = () => (
+const DownloadButton: React.FC<{ language?: string }> = ({ language }) => (
   <button
+    onClick={() => window.open(language === "Telugu" ? DIET_PDF_URL.Telugu : DIET_PDF_URL.English, "_blank")}
     style={{ display: "flex", alignItems: "center", gap: "4px", background: "#FEAB27", border: "none", borderRadius: "5px", width: "88px", height: "22px", boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)", cursor: "pointer", justifyContent: "center", flexShrink: 0 }}
   >
     <img src={imgMsDownloadIcon} alt="" style={{ width: "17px", height: "17px", objectFit: "contain" }} />
@@ -233,7 +239,7 @@ const DownloadButton = () => (
 //   0 refs       → you-are-here(top) → dashed → PDF(locked gray) → dashed → T-shirt(locked gray)
 //   1–19 refs    → PDF(unlocked+Download) → solid → you-are-here → dashed → T-shirt(locked yellow)
 //   20+ refs     → PDF(unlocked+Download) → solid → T-shirt(unlocked)
-const ReferralRewardsCard: React.FC<{ verifiedRefs: number }> = ({ verifiedRefs }) => {
+const ReferralRewardsCard: React.FC<{ verifiedRefs: number; language?: string }> = ({ verifiedRefs, language }) => {
   const pdfUnlocked = verifiedRefs >= DIET_PDF_REFS;
   const tshirtUnlocked = verifiedRefs >= TSHIRT_REFS;
   const isZero = verifiedRefs === 0;
@@ -258,7 +264,7 @@ const ReferralRewardsCard: React.FC<{ verifiedRefs: number }> = ({ verifiedRefs 
               <span style={{ fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, color: pdfUnlocked ? "#377456" : isZero ? "#9A9797" : "#FEAB27" }}>
                 Free Diet PDF
               </span>
-              {pdfUnlocked && <DownloadButton />}
+              {pdfUnlocked && <DownloadButton language={language} />}
             </div>
             <span style={{ fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, color: "#9C9C9C" }}>1 Referral</span>
           </div>
@@ -468,7 +474,7 @@ const ReferralStatus = () => {
         <h3 style={{ margin: "0 0 16px", fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, color: "#202020" }}>
           Your Referral Rewards
         </h3>
-        <ReferralRewardsCard verifiedRefs={verifiedRefs} />
+        <ReferralRewardsCard verifiedRefs={verifiedRefs} language={language} />
       </div>
 
       {/* ── Your Recent Referrals ── */}
