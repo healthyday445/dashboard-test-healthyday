@@ -408,7 +408,7 @@ const ReferralStatus = () => {
   useEffect(() => {
     if (!mobile) { setLoading(false); return; }
     const apiMobile = `+${mobile.replace(/\D/g, "")}`;
-    fetch(`/.netlify/functions/referrals?mobile=${encodeURIComponent(apiMobile)}`)
+    fetch(`/.netlify/functions/referrals?mobile=${encodeURIComponent(apiMobile)}&include_contest=false`)
       .then((r) => r.json())
       .then((data: ReferralsApiData) => setApiData(data))
       .catch((err) => setApiError(String(err)))
