@@ -16,7 +16,7 @@ These sessions appear as a standalone, exclusive "Special Bonus Session" card th
 | :---: | :--- | :--- | :--- |
 | **Day 4** | 8:30 PM | Face Yoga Session | `./faceyoga` |
 | **Day 8** | 10:30 AM | Weight Loss Session | `./weightlosssession` |
-| **Day 11** | 8:00 PM | Meditation Session | `./meditation_tel` |
+| **Day 11** | 8:00 PM | Meditation Session | `https://www.youtube.com/watch?v=cXaVIxH3RKA` |
 | **Day 15** | 8:30 PM | Breath Work Session | `./breathwork` |
 | **Day 18** | 8:30 PM | Live Q&A Session | `./liveqa` |
 | **Day 22** | 10:30 AM | Graduation Session | `./graduation` |
