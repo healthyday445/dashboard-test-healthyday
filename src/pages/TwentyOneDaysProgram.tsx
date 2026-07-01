@@ -161,6 +161,12 @@ function RewardCard({
       } else {
         window.open("https://youtube.com/live/Nc7figrxfuQ", "_blank");
       }
+    } else if (levelData.level === 4) {
+      if (lang === "English") {
+        window.open("https://www.youtube.com/live/IqESKRcvU8E", "_blank");
+      } else {
+        window.open("https://www.youtube.com/live/WnITjDbnCPY", "_blank");
+      }
     }
   };
 
