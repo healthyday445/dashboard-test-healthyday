@@ -38,7 +38,6 @@ export async function handler(event) {
     await db.collection('portal_session_clicks').add({
       ...body,
       date,
-      timestamp: admin.firestore.FieldValue.serverTimestamp(),
     });
 
     return {
