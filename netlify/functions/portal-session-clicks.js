@@ -31,8 +31,15 @@ export async function handler(event) {
   try {
     const body = JSON.parse(event.body || "{}");
 
-    // Dump the raw body fields as-is into Firestore — no extra fields added
-    await db.collection('portal_session_clicks').add(body);
+    // Server-authoritative time (IST), independent of the client's clock
+    const nowIST = new Date(Date.now() + 5.5 * 60 * 60 * 1000);
+    const date = nowIST.toISOString().split("T")[0]; // YYYY-MM-DD
+
+    await db.collection('portal_session_clicks').add({
+      ...body,
+      date,
+      timestamp: admin.firestore.FieldValue.serverTimestamp(),
+    });
 
     return {
       statusCode: 200,
