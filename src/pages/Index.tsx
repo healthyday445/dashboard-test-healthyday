@@ -771,7 +771,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
 
             {/* Refer & Win card */}
             <div style={{ padding: "18px 20px 0" }}>
-              <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
+              <ReferWinCard showTitle={true} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
             </div>
 
             {/* 14 Days Attendance — commented out */}
@@ -821,7 +821,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
 
             {/* Refer & Win card */}
             {/* <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
+              <ReferWinCard showTitle={true} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
             </div> */}
 
             {/* Week 2 Bonus: show payment section instead */}
@@ -832,7 +832,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
                   <p style={{ width: "100%", maxWidth: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
                 </div>
                 {/* <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-                  <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
+                  <ReferWinCard showTitle={true} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
                 </div> */}
               </>
             )}
@@ -1161,7 +1161,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
 
         {/* Refer & Win card */}
         <div style={{ padding: "18px 20px 0" }}>
-          <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
+          <ReferWinCard showTitle={true} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
         </div>
 
         {/* 14 Days Attendance — commented out */}
@@ -1217,7 +1217,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
               <p style={{ width: "100%", maxWidth: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
             </div>
             <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
+              <ReferWinCard showTitle={true} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
             </div>
           </>
         ) */}
@@ -1688,7 +1688,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
 
         {/* Refer & Win card */}
         <div style={{ padding: "18px 22px 0" }}>
-          <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
+          <ReferWinCard showTitle={true} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
         </div>
 
         {/* Your Weekly Attendance */}
@@ -1716,7 +1716,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
         {/* Refer & Win Card */}
         {/* {!showPlanRenewal && (
           <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-            <ReferWinCard showTitle={false} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
+            <ReferWinCard showTitle={true} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
           </div>
         )} */}
 
@@ -2021,7 +2021,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
         </div>
         {/* Refer & Earn */}
         <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-          <ReferWinCard showTitle={false} shareLink={referralLink} referralsUrl={`/${mobile || ""}/referrals`} />
+          <ReferWinCard showTitle={true} shareLink={referralLink} referralsUrl={`/${mobile || ""}/referrals`} />
         </div>
       </div>
     );
@@ -2226,7 +2226,7 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
 
       {/* Refer & Win card */}
       <div style={{ padding: "18px 20px 0" }}>
-        <ReferWinCard showTitle={false} shareLink={mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : (studentData?.referral_link ?? "")} referralsUrl={`/${mobile || ""}/referrals`} />
+        <ReferWinCard showTitle={true} shareLink={mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : (studentData?.referral_link ?? "")} referralsUrl={`/${mobile || ""}/referrals`} />
       </div>
 
       {/* Try these 15 Minutes Yoga Section */}
