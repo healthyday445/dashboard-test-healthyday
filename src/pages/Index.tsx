@@ -3,6 +3,7 @@ import tabSubtract from "@/assets/tab_subtract.svg";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { LevelCard } from "@/components/LevelCard";
 import { trackVisit } from "@/lib/trackVisit";
+import { trackSessionClick } from "@/lib/trackSessionClick";
 import logo from "@/assets/Primary_logo.svg";
 import imgIngredients from "@/assets/Ingredients.png";
 import sessionTimeIcon from "@/assets/leaderboard/session_time_icon.webp";
@@ -675,6 +676,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
       };
 
       const bonusSession = getBonusInfo(currentDay, lang);
+      const bonusSessionCode = `free_bonus_${bonusSession.name.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`;
       const _timeParam = new URLSearchParams(location.search).get("time");
       const totalMin = (() => { if (_timeParam) { const isPM = _timeParam.toLowerCase().endsWith("pm"); const s = _timeParam.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
       const showBonus = isOngoingStatus && totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
@@ -705,7 +707,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
 
               {isLive ? (
                 <>
-                  <a href={bonusSession.sessionLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px", overflow: "hidden", background: "#000", position: "relative", marginBottom: "12px" }}>
+                  <a href={bonusSession.sessionLink} target="_blank" rel="noopener noreferrer" onClick={() => trackSessionClick(mobile, bonusSessionCode)} style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px", overflow: "hidden", background: "#000", position: "relative", marginBottom: "12px" }}>
                     <img
                       src={bonusSession.thumbnail}
                       alt={bonusSession.name}
@@ -723,6 +725,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
                       href={bonusSession.sessionLink}
                       target="_blank"
                       rel="noopener noreferrer"
+                      onClick={() => trackSessionClick(mobile, bonusSessionCode)}
                       style={{
                         display: "flex", alignItems: "center", gap: "8px",
                         height: "38px", padding: "0 18px", borderRadius: "8px",
@@ -1060,7 +1063,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
                   {/* Session Card */}
                   <div style={{ width: "100%" }}>
                     {/* Thumbnail */}
-                    <a href={showBonus && bonusSessionData ? bonusSessionData.sessionLink : sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{ display: "block", textDecoration: "none" }}>
+                    <a href={showBonus && bonusSessionData ? bonusSessionData.sessionLink : sessionLink} target="_blank" rel="noopener noreferrer" onClick={() => { markTodayJoined(); trackSessionClick(mobile, showBonus && bonusSessionData ? `free_bonus_${bonusSessionData.fullName.toLowerCase().replace(/[^a-z0-9]+/g, "_")}` : freeSessionCode); }} style={{ display: "block", textDecoration: "none" }}>
                       <div style={{
                         width: "100%",
                         height: "auto",
@@ -1103,7 +1106,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
                         // 30 min before bonus: show JOIN button linking to bonus
                         if (showBonus && bonusSessionData) {
                           return (
-                            <a href={bonusSessionData.sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{
+                            <a href={bonusSessionData.sessionLink} target="_blank" rel="noopener noreferrer" onClick={() => { markTodayJoined(); trackSessionClick(mobile, `free_bonus_${bonusSessionData.fullName.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`); }} style={{
                               width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27",
                               display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none",
                             }}>
@@ -1126,7 +1129,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
                         }
                         // Regular day: show JOIN SESSION with API link
                         return (
-                          <a href={sessionLink} target="_blank" rel="noopener noreferrer" onClick={markTodayJoined} style={{
+                          <a href={sessionLink} target="_blank" rel="noopener noreferrer" onClick={() => { markTodayJoined(); trackSessionClick(mobile, freeSessionCode); }} style={{
                             width: "300px",
                             height: "40px",
                             borderRadius: "10px",
@@ -1301,7 +1304,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
     // whose active window (startMin-30 to startMin+45) matches current time.
     // This ensures sessions like Diet (8 PM) and Breath to Heal (9 PM) can
     // both show for 12-month Telugu users at the correct time.
-    type BonusCard = { name: string; fullName: string; startMin: number; sessionLink: string; thumbnail: string };
+    type BonusCard = { name: string; fullName: string; startMin: number; sessionLink: string; thumbnail: string; code: string };
     const eligibleBonusSessions: BonusCard[] = [];
 
     const getApiBonusLink = (code: string, fallback: string) => {
@@ -1326,6 +1329,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
           startMin: 690,
           sessionLink: link,
           thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8"),
+          code: "face_yoga",
         });
       } else if (paidLang === "English" && !isTeluguFaceYogaWeek) {
         const link = getApiBonusLink("face_yoga", "https://join.healthyday.co.in/healthyface_eng");
@@ -1335,6 +1339,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
           startMin: 690,
           sessionLink: link,
           thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8"),
+          code: "face_yoga",
         });
       }
     }
@@ -1349,6 +1354,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
         startMin: 1200,
         sessionLink: link,
         thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8"),
+        code: "paid_diet",
       });
     }
 
@@ -1362,6 +1368,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
         startMin: 1260,
         sessionLink: link,
         thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8"),
+        code: "b2h",
       });
     }
 
@@ -1478,7 +1485,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
 
               {/* Session card */}
               <div style={{ width: "100%" }}>
-                <a href={activeBonusCard.sessionLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
+                <a href={activeBonusCard.sessionLink} target="_blank" rel="noopener noreferrer" onClick={() => trackSessionClick(mobile, activeBonusCard.code)} style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
                   <img
                     src={activeBonusCard.thumbnail}
                     alt={activeBonusCard.name}
@@ -1496,7 +1503,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
                   display: "flex", alignItems: "center", justifyContent: "center", boxSizing: "border-box",
                 }}>
                   {bonusIsLive ? (
-                    <a href={activeBonusCard.sessionLink} target="_blank" rel="noopener noreferrer" style={{
+                    <a href={activeBonusCard.sessionLink} target="_blank" rel="noopener noreferrer" onClick={() => trackSessionClick(mobile, activeBonusCard.code)} style={{
                       width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27",
                       display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none",
                       boxShadow: "0 2px 8px rgba(254,171,39,0.35)",
@@ -1545,7 +1552,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
 
                   {/* Session Card — regular yoga */}
                   <div style={{ width: "100%" }}>
-                    <a href={paidJoinLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none" }}>
+                    <a href={paidJoinLink} target="_blank" rel="noopener noreferrer" onClick={() => trackSessionClick(mobile, sessionCodeForNow)} style={{ display: "block", textDecoration: "none" }}>
                       <div style={{
                         width: "100%", aspectRatio: "178/93", borderRadius: "12px 12px 0 0",
                         overflow: "hidden",
@@ -1582,7 +1589,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
                       boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
                       display: "flex", alignItems: "center", justifyContent: "center", boxSizing: "border-box",
                     }}>
-                      <a href={paidJoinLink} target="_blank" rel="noopener noreferrer" style={{
+                      <a href={paidJoinLink} target="_blank" rel="noopener noreferrer" onClick={() => trackSessionClick(mobile, sessionCodeForNow)} style={{
                         width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27",
                         display: "flex", alignItems: "center", justifyContent: "center", gap: "5px", textDecoration: "none",
                       }}>
