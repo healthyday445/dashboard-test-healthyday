@@ -13,7 +13,6 @@ import { ReferralProgressBar } from "@/components/ReferWinPopup";
 import { ShareReferralActions } from "@/components/ShareReferralActions";
 import NoSessionsCard from "@/components/NoSessionsCard";
 import ReferWinCard from "@/components/ReferWinCard";
-import HeaderDaysLeft from "@/components/HeaderDaysLeft";
 
 import thumbFaceYogaTel from "@/assets/bonus/Face Yoga Thumbnail.jpg";
 import thumbFaceYogaEng from "@/assets/bonus/Face Yoga Thumbnail.jpg";
@@ -521,16 +520,6 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   const isPaid = studentStatus === "paid";
   const sessionJoinLink = studentData?.free_classes_joining_link || studentData?.free_class_join_link;
   const hasBatchAccess = isOngoingStatus && batchInfo.isActive && !!sessionJoinLink;
-
-  // Days remaining until June 30 2026 — shared across all dashboard states
-  const daysUntilJune30 = (() => {
-    const target = new Date(2026, 5, 30);
-    target.setHours(0, 0, 0, 0);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    return Math.max(0, Math.ceil((target.getTime() - today.getTime()) / 86400000));
-  })();
-
 
   // --- Active Batch Dashboard (Week 1 or Week 2) ---
   if (hasBatchAccess) {
@@ -1462,7 +1451,6 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
         {/* Header */}
         <header className="hd-header bg-white">
           <img src={logo} alt="Healthyday" className="h-7" />
-          <HeaderDaysLeft daysLeft={daysUntilJune30} />
         </header>
 
         {/* Bonus Special Session (Paid) */}
@@ -1853,7 +1841,6 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
         {/* Header */}
         <header className="hd-header bg-white">
           <img src={logo} alt="Healthyday" className="h-7" />
-          <HeaderDaysLeft daysLeft={daysUntilJune30} />
         </header>
 
         <div style={{ padding: "0 20px", display: "flex", flexDirection: "column", alignItems: "center" }}>
@@ -2011,7 +1998,6 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
         {/* Header */}
         <header className="hd-header bg-background">
           <img src={logo} alt="Healthyday" className="h-7" />
-          <HeaderDaysLeft daysLeft={daysUntilJune30} />
         </header>
 
         {/* 14-Days Completed Banner */}

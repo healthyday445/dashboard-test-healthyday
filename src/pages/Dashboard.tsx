@@ -1,7 +1,6 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
-import HeaderDaysLeft from "@/components/HeaderDaysLeft";
 import DashboardTabBar from "@/components/DashboardTabBar";
 import Index from "@/pages/Index";
 import TwentyOneDaysProgram from "@/pages/TwentyOneDaysProgram";
@@ -72,17 +71,10 @@ const Dashboard = () => {
   }
 
   // June-21-2026 free batch student → show the tab experience
-  const june30 = new Date(2026, 5, 30);
-  june30.setHours(0, 0, 0, 0);
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-  const daysUntilJune30 = Math.max(0, Math.ceil((june30.getTime() - today.getTime()) / 86400000));
-
   return (
     <div className="hd-page" style={{ fontFamily: "Outfit, sans-serif" }}>
       <header className="hd-header bg-white">
         <img src={logo} alt="Healthyday" className="h-7" />
-        <HeaderDaysLeft daysLeft={daysUntilJune30} />
       </header>
 
       <div style={{ position: "relative" }}>
