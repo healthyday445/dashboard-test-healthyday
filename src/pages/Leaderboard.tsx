@@ -1459,7 +1459,7 @@ const AddressDetailsCard: React.FC = () => (
         lineHeight: 1.4,
       }}
     >
-      Provide your address details to claim reward
+      Submit your address details to claim reward
     </p>
     <button
       onClick={() => window.open("https://forms.gle/p8jPXp3toqdpDtC69", "_blank")}
@@ -1488,7 +1488,7 @@ const AddressDetailsCard: React.FC = () => (
           letterSpacing: "0.3px",
         }}
       >
-        PROVIDE ADDRESS
+        SUBMIT ADDRESS
       </span>
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
         <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
@@ -1717,7 +1717,7 @@ const YourRewardsCard: React.FC<{ showCoupon: boolean; language?: string }> = ({
                   maxWidth: "191px",
                 }}
               >
-                1 Month FREE Yoga Coupon*
+                1 Month Extra Coupon on Paid Plans*
               </p>
               <p
                 style={{
