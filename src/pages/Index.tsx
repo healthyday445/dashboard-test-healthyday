@@ -25,6 +25,21 @@ import thumbBreathWorkEng from "@/assets/bonus/bw_eng.jpg";
 
 const ytThumb = (id: string) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 
+const START_DATE_MONTHS = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
+const getOrdinalSuffix = (day: number) => (day >= 11 && day <= 13 ? "TH" : { 1: "ST", 2: "ND", 3: "RD" }[day % 10] ?? "TH");
+const StartDateLabel = ({ date }: { date: Date }) => (
+  <>{date.getDate()}<sup>{getOrdinalSuffix(date.getDate()).toLowerCase()}</sup> {START_DATE_MONTHS[date.getMonth()]}</>
+);
+// New batches always start on a Monday — the next upcoming one, never today even if today is Monday
+const getNextMonday = (from: Date = new Date()) => {
+  const d = new Date(from);
+  d.setHours(0, 0, 0, 0);
+  const dow = d.getDay();
+  const daysToAdd = dow === 0 ? 1 : dow === 1 ? 7 : 8 - dow;
+  d.setDate(d.getDate() + daysToAdd);
+  return d;
+};
+
 const MoonIcon = () => (
   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
     <path d="M15.9677 10.1262C14.9738 13.5804 11.7558 16 8.1468 16C3.65791 16 0 12.3421 0 7.8532C0 4.24417 2.4196 1.02618 5.87384 0.0322749C6.20786 -0.0654867 6.56632 0.064862 6.76999 0.341853C6.96551 0.626991 6.96551 1.00989 6.76184 1.28688C6.06937 2.25635 5.70276 3.3969 5.70276 4.59448C5.70276 7.73915 8.26085 10.2972 11.4055 10.2972C12.6031 10.2972 13.7436 9.93064 14.7131 9.23816C14.9901 9.03449 15.373 9.03449 15.6581 9.23001C15.9351 9.43368 16.0655 9.79214 15.9677 10.1262Z" fill="#5462F0" />
@@ -520,6 +535,9 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   if (hasBatchAccess) {
     const { currentDay, week, dateRangeLabel } = batchInfo;
 
+    // Level Card tracks the legacy 21-day journey (levels at day 3/6/9/12/15/18/21) — only meaningful for the June-21-2026 batch
+    const isLegacyTwentyOneDayBatch = studentData?.free_batch_start_date === "2026-06-21";
+
     // Combine attendance across all batches that share the active batch start date
     const freeBatches: any[] = studentData?.free_batches ?? [];
     const activeBatches = freeBatches.filter((b) => b.batch_start_date === studentData?.free_batch_start_date);
@@ -590,7 +608,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
     const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : referralLink;
     const handleCopyLink = () => navigator.clipboard.writeText(shareLink);
     const handleWhatsAppShare = () => {
-      const waMessage = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
+      const waMessage = `I am Inviting you to join me in\n*14-Days FREE YOGA* 🧘‍♀️😊\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
       window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank");
     };
 
@@ -759,16 +777,18 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
               </div>
             </div>
 
-            {/* Level Card — 21-day program progress */}
-            <div style={{ padding: "18px 20px 0" }}>
-              <LevelCard
-                freeDaysAttended={freeDaysAttended}
-                studentName={studentData?.name}
-                joinLink={sessionJoinLink || ""}
-                language={studentData?.language}
-                onViewMore={onSwitchToJourney}
-              />
-            </div>
+            {/* Level Card — 21-day journey progress, legacy June-21-2026 batch only */}
+            {isLegacyTwentyOneDayBatch && (
+              <div style={{ padding: "18px 20px 0" }}>
+                <LevelCard
+                  freeDaysAttended={freeDaysAttended}
+                  studentName={studentData?.name}
+                  joinLink={sessionJoinLink || ""}
+                  language={studentData?.language}
+                  onViewMore={onSwitchToJourney}
+                />
+              </div>
+            )}
 
             {/* Refer & Win card */}
             <div style={{ padding: "18px 20px 0" }}>
@@ -998,10 +1018,10 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
                   <>
                     <div style={{ paddingTop: "16px", textAlign: "center" }}>
                       <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#0A386F" }}>
-                        21-DAYS ONLINE FREE YOGA
+                        14-DAYS ONLINE FREE YOGA
                       </p>
                       <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
-                        Starts TODAY
+                        STARTING <StartDateLabel date={getNextMonday()} />
                       </p>
                     </div>
                     <div className="flex flex-col items-center m-3">
@@ -1149,16 +1169,18 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
           );
         })()}
 
-        {/* Level Card — 21-day program progress for free ongoing batch students */}
-        <div style={{ padding: "18px 20px 0" }}>
-          <LevelCard
-            freeDaysAttended={freeDaysAttended}
-            studentName={studentData?.name}
-            joinLink={sessionJoinLink || ""}
-            language={studentData?.language}
-            onViewMore={onSwitchToJourney}
-          />
-        </div>
+        {/* Level Card — 21-day journey progress, legacy June-21-2026 batch only */}
+        {isLegacyTwentyOneDayBatch && (
+          <div style={{ padding: "18px 20px 0" }}>
+            <LevelCard
+              freeDaysAttended={freeDaysAttended}
+              studentName={studentData?.name}
+              joinLink={sessionJoinLink || ""}
+              language={studentData?.language}
+              onViewMore={onSwitchToJourney}
+            />
+          </div>
+        )}
 
         {/* Refer & Win card */}
         <div style={{ padding: "18px 20px 0" }}>
@@ -1947,7 +1969,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
     };
 
     const handleWhatsAppShare = () => {
-      const waMessage = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
+      const waMessage = `I am Inviting you to join me in\n*14-Days FREE YOGA* 🧘‍♀️😊\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
       window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank");
     };
 
@@ -2038,32 +2060,6 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
     ? "https://www.youtube.com/@HealthydayEnglish"
     : "https://www.youtube.com/@healthydayyoga";
 
-  const _months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
-  const _getSuffix = (day: number) => [1, 21, 31].includes(day) ? "st" : [2, 22].includes(day) ? "nd" : [3, 23].includes(day) ? "rd" : "th";
-  const _batchD = studentData?.free_batch_start_date;
-  let dateLabel: string;
-  let _dateLabelDay: number;
-  let _dateLabelSuffix: string;
-  let _dateLabelMonth: string;
-  if (!_batchD) {
-    const _today = new Date();
-    const _dow = _today.getDay();
-    const _daysToMon = _dow === 0 ? 1 : _dow === 1 ? 7 : (8 - _dow);
-    const _nextMon = new Date(_today);
-    _nextMon.setDate(_today.getDate() + _daysToMon);
-    _dateLabelDay = _nextMon.getDate();
-    _dateLabelSuffix = _getSuffix(_dateLabelDay);
-    _dateLabelMonth = _months[_nextMon.getMonth()].toUpperCase();
-    dateLabel = `${_months[_nextMon.getMonth()]} ${_dateLabelDay}${_dateLabelSuffix}`;
-  } else {
-    const _date = new Date(_batchD);
-    _dateLabelDay = _date.getDate();
-    _dateLabelSuffix = _getSuffix(_dateLabelDay);
-    _dateLabelMonth = _months[_date.getMonth()].toUpperCase();
-    dateLabel = `${_months[_date.getMonth()]} ${_dateLabelDay}${_dateLabelSuffix}`;
-  }
-  if (_dateLabelDay === 21) { _dateLabelDay = 20; _dateLabelSuffix = "th"; }
-
   return (
     <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
       <header className="hd-header bg-white">
@@ -2073,10 +2069,10 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
       {/* Hero Text */}
       <div style={{ paddingTop: "16px", textAlign: "center" }}>
         <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#0A386F" }}>
-          21-DAYS ONLINE FREE YOGA
+          14-DAYS ONLINE FREE YOGA
         </p>
         <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
-          Starts TOMORROW
+          STARTING <StartDateLabel date={getNextMonday()} />
         </p>
       </div>
 

@@ -115,7 +115,7 @@ const renderText = (text: string, mobile?: string, navigate?: any) => {
       const beforeLink = line.substring(0, referMatch.index);
       const afterLink = line.substring(referMatch.index! + referMatch[0].length);
       const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : "healthyday.app/ref=ggtujev58";
-      const w = `I am Inviting you to join me in\n*21-Days FREE YOGA* 🧘‍♀️😊\n🗓️ Starts *21st JUNE*\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
+      const w = `I am Inviting you to join me in\n*14-Days FREE YOGA* 🧘‍♀️😊\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
       const buttonText = referMatch[0] === "<REFER & WIN YOGA KIT>" ? "Refer & Win Yoga Kit" : "Invite Friends & Family";
       return (
         <span key={i} className="block mt-4 mb-2">
