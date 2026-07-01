@@ -1459,7 +1459,7 @@ const AddressDetailsCard: React.FC = () => (
         lineHeight: 1.4,
       }}
     >
-      Submit your address details to claim reward
+      Provide your address details to claim reward
     </p>
     <button
       onClick={() => window.open("https://forms.gle/p8jPXp3toqdpDtC69", "_blank")}
@@ -1717,7 +1717,7 @@ const YourRewardsCard: React.FC<{ showCoupon: boolean; language?: string }> = ({
                   maxWidth: "191px",
                 }}
               >
-                1 Month Extra Coupon on Paid Plans*
+                Get 1 Month extra with paid plan
               </p>
               <p
                 style={{
