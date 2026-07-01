@@ -1,4 +1,3 @@
-import { useNavigate } from "react-router-dom";
 import lvl1Inprogress from "@/assets/dashboard-level-card/lvl1_inprogress.webp";
 import lvl2Inprogress from "@/assets/dashboard-level-card/lvl2_inprogress.webp";
 import lvl3Inprogress from "@/assets/dashboard-level-card/lvl3_inprogress.webp";
@@ -57,17 +56,16 @@ const LEVEL_CARD_DATA = [
 export function LevelCard({
   freeDaysAttended,
   studentName,
-  mobile,
   joinLink,
   language,
+  onViewMore,
 }: {
   freeDaysAttended: number;
   studentName?: string;
-  mobile?: string;
   joinLink: string;
   language?: string;
+  onViewMore?: () => void;
 }) {
-  const navigate = useNavigate();
   const safeDay = Math.min(Math.max(0, freeDaysAttended), LEVEL_CARD_DATA.length - 1);
   const config = LEVEL_CARD_DATA[safeDay];
   const { isUnlocked } = config;
@@ -76,8 +74,6 @@ export function LevelCard({
   const rewardIdx = Math.min(level - 1, LEVEL_REWARDS.length - 1);
   const reward = LEVEL_REWARDS[rewardIdx];
   const classesNeeded = 3 - (safeDay % 3);
-
-  const viewMoreTarget = mobile ? `/${mobile}/21daysprogram` : "/21daysprogram";
 
   // Figma absolute positions relative to card top-left (card starts at page x=26, y=418)
   // In-progress: title top=13, subtitle top=50, reward top=91, img left=146 top=33
@@ -121,7 +117,7 @@ export function LevelCard({
           alignItems: "center",
           cursor: "pointer",
         }}
-        onClick={() => navigate(viewMoreTarget)}
+        onClick={() => onViewMore?.()}
       >
         <span style={{ color: "#feab27", fontSize: 14, fontWeight: 600 }}>View more</span>
         <img

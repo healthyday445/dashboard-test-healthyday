@@ -162,9 +162,10 @@ import { safeSessionStorage, safeLocalStorage } from "@/lib/storage";
 
 interface IndexProps {
   initialStudentData?: any;
+  onSwitchToJourney?: () => void;
 }
 
-const Index = ({ initialStudentData }: IndexProps = {}) => {
+const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   const navigate = useNavigate();
   const { mobile: pathMobile } = useParams<{ mobile: string }>();
   const location = useLocation();
@@ -763,9 +764,9 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
               <LevelCard
                 freeDaysAttended={freeDaysAttended}
                 studentName={studentData?.name}
-                mobile={mobile}
                 joinLink={sessionJoinLink || ""}
                 language={studentData?.language}
+                onViewMore={onSwitchToJourney}
               />
             </div>
 
@@ -1153,9 +1154,9 @@ const Index = ({ initialStudentData }: IndexProps = {}) => {
           <LevelCard
             freeDaysAttended={freeDaysAttended}
             studentName={studentData?.name}
-            mobile={mobile}
             joinLink={sessionJoinLink || ""}
             language={studentData?.language}
+            onViewMore={onSwitchToJourney}
           />
         </div>
 

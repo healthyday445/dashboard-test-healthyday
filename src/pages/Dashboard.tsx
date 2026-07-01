@@ -92,7 +92,7 @@ const Dashboard = () => {
         {/* Layer 2: content — each view's own spacer holds its Subtract shape */}
         <div style={{ marginTop: "-68px", position: "relative", zIndex: 5 }}>
           <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
-            <Index initialStudentData={studentData} />
+            <Index initialStudentData={studentData} onSwitchToJourney={() => handleTabChange("journey")} />
           </div>
           {journeyMounted && (
             <div style={{ display: activeTab === "journey" ? "block" : "none" }}>
