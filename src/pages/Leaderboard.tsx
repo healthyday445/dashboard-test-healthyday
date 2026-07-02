@@ -32,6 +32,15 @@ import imgPostRankCardBg from "@/assets/leaderboard/post-contest-rank-bg.webp";
 import imgPostInstructor from "@/assets/leaderboard/post-contest-instructor.webp";
 import imgPostDietThumb from "@/assets/leaderboard/post-contest-diet-thumb.webp";
 import imgPostCouponThumb from "@/assets/leaderboard/post-contest-coupon-thumb.webp";
+import imgForward from "@/assets/leaderboard/Forward.png";
+import imgTrophyBadgeBg from "@/assets/leaderboard/trophy-badge-bg.svg";
+import imgTrophyIcon from "@/assets/leaderboard/trophy-icon.png";
+import imgTrophyStar from "@/assets/leaderboard/trophy-star.png";
+import imgPeopleBadgeBg from "@/assets/leaderboard/people-badge-bg.svg";
+import imgPeopleIconGroup from "@/assets/leaderboard/people-icon-group.png";
+import imgPeopleIconFront from "@/assets/leaderboard/people-icon-front.png";
+import imgWinnersConfetti from "@/assets/leaderboard/winners-confetti.png";
+import imgGiftIcon from "@/assets/leaderboard/gift-icon.png";
 import imgDownloadIcon from "@/assets/referral/downloading-updates.png";
 
 const CONTEST_START = "2026-06-01";
@@ -228,20 +237,6 @@ const Leaderboard: React.FC = () => {
         className="hd-header"
         style={{ background: "#FFF" }}
       >
-        <button
-          onClick={() => navigate(-1)}
-          style={{
-            background: "none",
-            border: "none",
-            cursor: "pointer",
-            marginRight: "12px",
-            padding: "4px",
-          }}
-        >
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
-            <path d="M20 11H7.83L13.42 5.41L12 4L4 12L12 20L13.41 18.59L7.83 13H20V11Z" fill="#202020" />
-          </svg>
-        </button>
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
 
@@ -571,8 +566,11 @@ const Leaderboard: React.FC = () => {
         }}
       >
         <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", paddingTop: "16px", paddingInline: "16px" }}>
-          <span style={{ color: "#003472", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, marginLeft: "8px" }}>
+          <span style={{ display: "flex", alignItems: "center", color: "#003472", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, marginLeft: "8px" }}>
             {isContestOver ? "Referral Contest Winners" : "Leaderboard"}
+            {isContestOver && (
+              <img src={imgWinnersConfetti} alt="" style={{ width: "31px", height: "31px", marginLeft: "4px" }} />
+            )}
           </span>
           {!isContestOver && (
             <div style={{ display: "flex", alignItems: "center", gap: "3px", background: "#FFFFFF", borderRadius: "20px", padding: "3px 10px" }}>
@@ -1254,16 +1252,16 @@ const PostContestBanner: React.FC = () => (
       background: "#FFCDCD",
       display: "flex",
       alignItems: "center",
-      overflow: "hidden",
+      // overflow: "hidden",
       marginTop: "10px",
       boxSizing: "border-box",
       flexShrink: 0,
     }}
   >
-    <div style={{ width: "4px", height: "100%", background: "#FF8C00", flexShrink: 0 }} />
+    <div style={{ width: "10px", height: "100%", background: "#FF402B", flexShrink: 0 }} />
     <span
       style={{
-        paddingLeft: "10px",
+        paddingLeft: "8px",
         color: "#505050",
         fontFamily: "Outfit",
         fontSize: "12px",
@@ -1302,7 +1300,7 @@ const CongratulationsCard: React.FC<{ userName: string; rank: number; referralCo
       {/* Left content */}
       <div style={{ position: "absolute", left: "16px", top: "12px", zIndex: 1, maxWidth: "185px" }}>
         <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "11px", fontWeight: 500, color: "#000" }}>
-          Hi {displayName},
+          Hi {displayName} ji,
         </p>
         <p
           style={{
@@ -1339,18 +1337,21 @@ const CongratulationsCard: React.FC<{ userName: string; rank: number; referralCo
               style={{
                 width: "22px",
                 height: "22px",
-                borderRadius: "50%",
-                background: "#FEAB27",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                position: "relative",
                 flexShrink: 0,
               }}
             >
-              <svg width="12" height="12" viewBox="0 0 24 24" fill="none">
-                <path d="M8 21H16M12 17V21M6 3H18L17 10C17 12.7614 14.7614 15 12 15C9.23858 15 7 12.7614 7 10L6 3Z" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M6 4H4C3 4 2 5 2 6C2 7 3 9 5 9M18 4H20C21 4 22 5 22 6C22 7 21 9 19 9" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <img src={imgTrophyBadgeBg} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
+              <img
+                src={imgTrophyIcon}
+                alt=""
+                style={{ position: "absolute", left: "3px", top: "5px", width: "16px", height: "14px" }}
+              />
+              <img
+                src={imgTrophyStar}
+                alt=""
+                style={{ position: "absolute", left: "9px", top: "8px", width: "4px", height: "4px" }}
+              />
             </div>
             <div>
               <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "6px", color: "#000" }}>Your Final Rank</p>
@@ -1363,20 +1364,21 @@ const CongratulationsCard: React.FC<{ userName: string; rank: number; referralCo
               style={{
                 width: "22px",
                 height: "22px",
-                borderRadius: "50%",
-                background: "#EEF3FF",
-                display: "flex",
-                alignItems: "center",
-                justifyContent: "center",
+                position: "relative",
                 flexShrink: 0,
               }}
             >
-              <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-                <path d="M17 21V19C17 16.7909 15.2091 15 13 15H5C2.79086 15 1 16.7909 1 19V21" stroke="#0D468B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                <circle cx="9" cy="7" r="4" stroke="#0D468B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M23 21V19C22.9986 17.1771 21.765 15.5857 20 15.13" stroke="#0D468B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                <path d="M16 3.13C17.7699 3.58399 19.0078 5.17781 19.0078 7.005C19.0078 8.83219 17.7699 10.426 16 10.88" stroke="#0D468B" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-              </svg>
+              <img src={imgPeopleBadgeBg} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%" }} />
+              <img
+                src={imgPeopleIconGroup}
+                alt=""
+                style={{ position: "absolute", left: "2px", top: "2px", width: "18px", height: "18px" }}
+              />
+              <img
+                src={imgPeopleIconFront}
+                alt=""
+                style={{ position: "absolute", left: "2px", top: "2px", width: "18px", height: "18px" }}
+              />
             </div>
             <div>
               <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "6px", color: "#000" }}>Total Referrals</p>
@@ -1399,7 +1401,7 @@ const CongratulationsCard: React.FC<{ userName: string; rank: number; referralCo
         <img
           src={imgPostProductImg}
           alt=""
-          style={{ width: "100%", height: "120%", objectFit: "cover", objectPosition: "center top" }}
+          style={{ width: "100%", height: "120%", objectFit: "contain", objectPosition: "center top" }}
         />
       </div>
     </div>
@@ -1428,7 +1430,7 @@ const AddressDetailsCard: React.FC = () => (
         width: "34px",
         height: "34px",
         borderRadius: "50%",
-        background: "rgba(255,255,255,0.18)",
+        background: "#FF9F00",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -1484,9 +1486,7 @@ const AddressDetailsCard: React.FC = () => (
       >
         SUBMIT ADDRESS
       </span>
-      <svg width="13" height="13" viewBox="0 0 24 24" fill="none">
-        <path d="M5 12H19M19 12L12 5M19 12L12 19" stroke="white" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" />
-      </svg>
+      <img src={imgForward} alt="" style={{ width: "1.0625rem", height: "1.0625rem", aspectRatio: "1/1" }} />
     </button>
   </div>
 );
@@ -1517,7 +1517,7 @@ const PostContestRankCard: React.FC<{ userName: string; rank: number; referralCo
       {/* Left content */}
       <div style={{ position: "absolute", left: "16px", top: "14px", zIndex: 1, maxWidth: "210px" }}>
         <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "11px", fontWeight: 500, color: "#000" }}>
-          Hi {displayName},
+          Hi {displayName} ji,
         </p>
         <div style={{ display: "flex", alignItems: "baseline", gap: "4px", flexWrap: "wrap", marginTop: "2px" }}>
           <span style={{ fontFamily: "Outfit", fontSize: "17px", fontWeight: 800, color: "#0d468b" }}>
@@ -1596,7 +1596,7 @@ const PostContestRankCard: React.FC<{ userName: string; rank: number; referralCo
         style={{
           position: "absolute",
           right: 0,
-          top: "12px",
+          top: 0,
           width: "120px",
           height: "128px",
           borderTopRightRadius: "11px",
@@ -1624,15 +1624,7 @@ const YourRewardsCard: React.FC<{ showCoupon: boolean; language?: string }> = ({
       <span style={{ fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, color: "#012755" }}>
         Your Rewards
       </span>
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-        <path
-          d="M20 12V22H4V12M22 7H2V12H22V7ZM12 22V7M12 7H7.5C6.11929 7 5 5.88071 5 4.5C5 3.11929 6.11929 2 7.5 2C9.5 2 12 7 12 7ZM12 7H16.5C17.8807 7 19 5.88071 19 4.5C19 3.11929 17.8807 2 16.5 2C14.5 2 12 7 12 7Z"
-          stroke="#012755"
-          strokeWidth="2"
-          strokeLinecap="round"
-          strokeLinejoin="round"
-        />
-      </svg>
+      <img src={imgGiftIcon} alt="" style={{ width: "18px", height: "18px" }} />
     </div>
     <div
       style={{
@@ -1712,18 +1704,6 @@ const YourRewardsCard: React.FC<{ showCoupon: boolean; language?: string }> = ({
                 }}
               >
                 Get 1 Month extra with paid plan
-              </p>
-              <p
-                style={{
-                  margin: "2px 0 0",
-                  fontFamily: "Outfit",
-                  fontSize: "8px",
-                  fontWeight: 400,
-                  color: "#797a7a",
-                  whiteSpace: "nowrap",
-                }}
-              >
-                *Redeem automatically with the paid plan
               </p>
             </div>
             <button
