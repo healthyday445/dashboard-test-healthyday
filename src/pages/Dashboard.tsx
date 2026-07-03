@@ -11,13 +11,15 @@ const FREE_BATCH_DATE = "2026-06-21";
 const Dashboard = () => {
   const { mobile: pathMobile } = useParams<{ mobile: string }>();
   const location = useLocation();
-  const queryMobile = new URLSearchParams(location.search).get("mobile");
+  const searchParams = new URLSearchParams(location.search);
+  const queryMobile = searchParams.get("mobile");
   const mobile = pathMobile || queryMobile || undefined;
+  const previewLevels = searchParams.get("preview_levels");
 
   const [studentData, setStudentData] = useState<any>(null);
   const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"dashboard" | "journey">("dashboard");
-  const [journeyMounted, setJourneyMounted] = useState(false);
+  const [activeTab, setActiveTab] = useState<"dashboard" | "journey">(previewLevels !== null ? "journey" : "dashboard");
+  const [journeyMounted, setJourneyMounted] = useState(previewLevels !== null);
 
   useEffect(() => {
     if (!mobile) {
@@ -62,8 +64,9 @@ const Dashboard = () => {
   // must be in the June-21-2026 free batch AND not paid/pastdue
   const status = studentData?.status;
   const isEligibleForJourneyTab =
-    studentData?.free_batch_start_date === FREE_BATCH_DATE &&
-    (status === "registered" || status === "14DaysOngoing" || status === "14daysongoing");
+    previewLevels !== null ||
+    (studentData?.free_batch_start_date === FREE_BATCH_DATE &&
+      (status === "registered" || status === "14DaysOngoing" || status === "14daysongoing"));
 
   // Not eligible for journey tab → render Index standalone (Index owns its own layout)
   if (!isEligibleForJourneyTab) {

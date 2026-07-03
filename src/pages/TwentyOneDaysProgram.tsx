@@ -479,6 +479,11 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
 
   useEffect(() => {
     if (initialStudentData) return; // data already provided by parent
+    const previewParams = new URLSearchParams(window.location.search);
+    if (previewParams.get("preview_levels") !== null || previewParams.get("forceDay") !== null) {
+      setLoading(false);
+      return;
+    }
     if (!mobile) {
       setLoading(false);
       return;
@@ -526,9 +531,10 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
 
   // Derive days attended from free_batches attendance_tracker, capped at 21
   const daysAttended: number = (() => {
-    const forceDayParam = new URLSearchParams(window.location.search).get("forceDay");
-    if (forceDayParam !== null) {
-      return Math.min(21, Math.max(0, parseInt(forceDayParam, 10)));
+    const params = new URLSearchParams(window.location.search);
+    const previewParam = params.get("preview_levels") ?? params.get("forceDay");
+    if (previewParam !== null) {
+      return Math.min(21, Math.max(0, parseInt(previewParam, 10)));
     }
     if (!studentData) return 0;
     const freeBatches = (studentData?.free_batches ?? []) as { batch_start_date: string; attendance_tracker: string[] }[];

@@ -175,6 +175,84 @@ const VideoCard = ({ video }: { video: (typeof teluguVideos)[0] }) => {
 
 import { safeSessionStorage, safeLocalStorage } from "@/lib/storage";
 
+// ── Preview mode ──────────────────────────────────────────────────────────────
+// ?preview_dashboard=<key> seeds mock studentData so each render state of the
+// Live Sessions tab can be checked without real API data. Existing per-state
+// fine-tuning params (forceDay, time, forceTime, forceLang, forceWeek) still
+// work on top of whichever state is selected here.
+const toLocalDateStr = (d: Date) => {
+  const yyyy = d.getFullYear();
+  const mm = String(d.getMonth() + 1).padStart(2, "0");
+  const dd = String(d.getDate()).padStart(2, "0");
+  return `${yyyy}-${mm}-${dd}`;
+};
+
+const buildPreviewDashboardData = (key: string): any | null => {
+  const today = new Date();
+  switch (key) {
+    case "coming_soon":
+      return { status: "registered", language: "Hindi", name: "Preview User" };
+
+    case "onboarding":
+      return {
+        status: "registered",
+        language: "Telugu",
+        name: "Preview User",
+        free_batch_start_date: null,
+        free_classes_joining_link: null,
+        referral_link: "healthyday.app/ref=preview",
+      };
+
+    case "free_active": {
+      const batchStart = toLocalDateStr(today);
+      return {
+        status: "14DaysOngoing",
+        language: "Telugu",
+        name: "Preview User",
+        free_batch_start_date: batchStart,
+        free_classes_joining_link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        free_batches: [{ batch_start_date: batchStart, attendance_tracker: [] }],
+        total_referral_count: 3,
+      };
+    }
+
+    case "paid": {
+      const subEnd = new Date(today);
+      subEnd.setDate(subEnd.getDate() + 90);
+      return {
+        status: "paid",
+        language: "Telugu",
+        name: "Preview User",
+        subscriptions: [{ subscription_status: "active", plan_type: "12_months", subscription_end: toLocalDateStr(subEnd) }],
+        paid_classes_joining_link: "https://www.youtube.com/c/Healthyday",
+        classes_joining_link: "https://www.youtube.com/c/Healthyday",
+        attendance_tracker: [],
+        paid_attendance_tracker: ["mon", "wed"],
+        sub_end_date: toLocalDateStr(subEnd),
+        total_referral_count: 5,
+        referral_link: "healthyday.app/ref=preview",
+      };
+    }
+
+    case "pastdue": {
+      const subEnd = new Date(today);
+      subEnd.setDate(subEnd.getDate() - 10);
+      return {
+        status: "pastdue",
+        language: "Telugu",
+        name: "Preview User",
+        subscriptions: [{ subscription_status: "expired", subscription_end: toLocalDateStr(subEnd) }],
+      };
+    }
+
+    case "14day_completed":
+      return { status: "14DaysCompleted", language: "Telugu", name: "Preview User", total_referral_count: 4 };
+
+    default:
+      return null;
+  }
+};
+
 interface IndexProps {
   initialStudentData?: any;
   onSwitchToJourney?: () => void;
@@ -190,6 +268,10 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   // Reads ?mobile= query param and redirects to clean path-based URL (/919110378176)
   const queryMobile = searchParams.get("mobile");
   const mobile = pathMobile || queryMobile || undefined;
+
+  const previewDashboardKey = searchParams.get("preview_dashboard");
+  const previewStudentData = previewDashboardKey ? buildPreviewDashboardData(previewDashboardKey) : null;
+  const effectiveInitialData = previewStudentData ?? initialStudentData;
 
   useEffect(() => {
     if (!pathMobile && queryMobile) {
@@ -225,17 +307,17 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   }, []);
 
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
-  const [loading, setLoading] = useState(!initialStudentData);
+  const [loading, setLoading] = useState(!effectiveInitialData);
   const [error, setError] = useState<string | null>(null);
-  const [studentData, setStudentData] = useState<any>(initialStudentData ?? null);
+  const [studentData, setStudentData] = useState<any>(effectiveInitialData ?? null);
   const [showComingSoon, setShowComingSoon] = useState(
-    initialStudentData
-      ? !(initialStudentData.language === "Telugu" || initialStudentData.language === "English")
+    effectiveInitialData
+      ? !(effectiveInitialData.language === "Telugu" || effectiveInitialData.language === "English")
       : false
   );
   const [authenticated, setAuthenticated] = useState(
-    initialStudentData
-      ? (initialStudentData.language === "Telugu" || initialStudentData.language === "English")
+    effectiveInitialData
+      ? (effectiveInitialData.language === "Telugu" || effectiveInitialData.language === "English")
       : false
   );
   const [sessionLinks, setSessionLinks] = useState<any[]>([]);
@@ -251,7 +333,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   });
 
   useEffect(() => {
-    if (initialStudentData) return; // data already provided by parent
+    if (effectiveInitialData) return; // data already provided by parent or preview
     // Helper: get local date string (YYYY-MM-DD) without UTC timezone shift
     const toLocalDateStr = (d: Date) => {
       const yyyy = d.getFullYear();
