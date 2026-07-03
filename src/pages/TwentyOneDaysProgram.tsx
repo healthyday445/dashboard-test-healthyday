@@ -555,8 +555,8 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
       ? "🌿 I Just Completed all 21 Days of the Yoga Challenge with Healthyday! 🎉🏅\n"
       : `🌿 I Just Completed LEVEL ${badgeCardLevel} of the 21 Days Yoga Challenge with Healthyday!🧘🏻‍♀️✨\n`) +
     `Honestly, if I can do it, you can do it too! 💚\n\n` +
-    `🌿 21-Days FREE Yoga Challenge\n` +
-    `📅 Starts Tomorrow\n\n` +
+    `🌿 14-Days FREE Yoga Challenge\n` +
+    `📅 Starts Next Monday\n\n` +
     `✅ Daily Yoga\n` +
     `🥗 Simple Diet Guidance\n` +
     `🌿 Healthy Lifestyle Habits\n\n` +
