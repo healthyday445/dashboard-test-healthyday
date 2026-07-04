@@ -18,6 +18,9 @@ const Dashboard = () => {
   const mobile = pathMobile || queryMobile || undefined;
   const previewLevels = searchParams.get("preview_levels");
   const previewDashboard = searchParams.get("preview_dashboard");
+  // preview_dashboard alone can't tell us the programme type (no real studentData to
+  // read free_batch_start_date from) — preview_programme=21day forces IndexTwentyOneDay.
+  const previewProgramme = searchParams.get("preview_programme");
 
   const [studentData, setStudentData] = useState<any>(null);
   const [loading, setLoading] = useState(!previewDashboard && previewLevels === null);
@@ -73,7 +76,7 @@ const Dashboard = () => {
   // Batch type is the first thing we check: it decides which Live Sessions
   // component this student gets. 14-day general public uses Index; the
   // 21-day/22-day June-21-2026 cohort uses the dedicated IndexTwentyOneDay copy.
-  const is21DayBatch = studentData?.free_batch_start_date === FREE_BATCH_DATE;
+  const is21DayBatch = previewProgramme === "21day" || studentData?.free_batch_start_date === FREE_BATCH_DATE;
   const LiveSessions = is21DayBatch ? IndexTwentyOneDay : Index;
 
   // Determine if this student gets the journey tab:

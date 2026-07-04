@@ -480,7 +480,7 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
   useEffect(() => {
     if (initialStudentData) return; // data already provided by parent
     const previewParams = new URLSearchParams(window.location.search);
-    if (previewParams.get("preview_levels") !== null || previewParams.get("forceDay") !== null) {
+    if (previewParams.get("preview_levels") !== null) {
       setLoading(false);
       return;
     }
@@ -529,10 +529,13 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
     fetchData();
   }, [mobile, navigate]);
 
-  // Derive days attended from free_batches attendance_tracker, capped at 21
+  // Derive days attended from free_batches attendance_tracker, capped at 21.
+  // preview_levels is the only override here — forceDay/time are reserved for
+  // the Live Sessions tab (Index.tsx / IndexTwentyOneDay.tsx) and must not leak
+  // into this tab, since both tabs read the same URL simultaneously.
   const daysAttended: number = (() => {
     const params = new URLSearchParams(window.location.search);
-    const previewParam = params.get("preview_levels") ?? params.get("forceDay");
+    const previewParam = params.get("preview_levels");
     if (previewParam !== null) {
       return Math.min(21, Math.max(0, parseInt(previewParam, 10)));
     }

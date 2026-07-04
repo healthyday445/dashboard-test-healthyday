@@ -204,7 +204,9 @@ const buildPreviewDashboardData = (key: string): any | null => {
       };
 
     case "free_active": {
-      const batchStart = toLocalDateStr(today);
+      // Anchored to the real 21-day cohort start date (not "today") so the
+      // Level Card and dateRangeLabel render faithfully; use forceDay to pick a day.
+      const batchStart = "2026-06-21";
       return {
         status: "14DaysOngoing",
         language: "Telugu",

@@ -6,7 +6,9 @@ None of these params affect production behavior for real users — they're only 
 
 ## Live Sessions tab (`/`, `/:mobile`)
 
-`Index.tsx`, rendered standalone at `/` or embedded as the default tab of `Dashboard.tsx` at `/:mobile`.
+`Index.tsx` (14-day general public) or `IndexTwentyOneDay.tsx` (21-day/22-day June-21-2026 cohort) — `Dashboard.tsx` picks between them based on batch type. Rendered standalone at `/` or embedded as the default tab of `Dashboard.tsx` at `/:mobile`.
+
+`forceDay` and `time` are reserved for this tab only — they control the day-of-batch and time-of-day shown here. They do not affect the Journey tab (see below), even though both tabs are mounted against the same URL.
 
 ### `?preview_dashboard=<key>`
 
@@ -23,11 +25,17 @@ Seeds mock student data so a given render state shows immediately, skipping the 
 
 Example: `/9999999999?preview_dashboard=onboarding`
 
+### `?preview_programme=21day`
+
+`preview_dashboard` seeds mock data but doesn't set a real `free_batch_start_date`, so `Dashboard.tsx` has nothing to read the batch type from and defaults to the 14-day `Index`. Add `preview_programme=21day` to force it to render `IndexTwentyOneDay` instead — needed to preview the 21-day cohort's day 15-22 states without a real June-21 account.
+
+Example: `/anything?preview_dashboard=free_active&preview_programme=21day&forceDay=15&time=8.45pm`
+
 ### Fine-tuning params (work standalone or on top of `preview_dashboard`)
 
 | Param | Applies to | Value | Effect |
 |---|---|---|---|
-| `forceDay` | Free batch | integer | Overrides current day-of-batch (1–14) |
+| `forceDay` | Free batch | integer | Overrides current day-of-batch (1–14 for `Index`, 1–22 for `IndexTwentyOneDay`) |
 | `time` | Free batch | `"7.00PM"`, `"5.30AM"` | Overrides current time-of-day (session live/upcoming logic, bonus windows) |
 | `forceTime` | Paid dashboard | integer (minutes since midnight IST) | Overrides current time-of-day |
 | `forceDay` | Paid dashboard | integer (0=Sun … 6=Sat) | Overrides current day-of-week |
@@ -66,7 +74,7 @@ Forces `daysAttended` (0–21), which drives which of the 7 levels is unlocked/i
 
 Example: `/9999999999?preview_levels=9`
 
-`?forceDay=<days>` is a legacy alias for the same thing (kept for back-compat) but does **not** force the tab open by itself — pair it with `?preview_levels` or navigate the tab manually.
+`forceDay`/`time` do **not** affect this tab — they're reserved for the Live Sessions tab (below). Since `Dashboard.tsx` mounts both tabs against the same URL, `preview_levels` is kept as a distinct param specifically so a Live Sessions preview URL can't accidentally also force the Journey tab's day, and vice versa.
 
 ## Referrals page (`/:mobile/referrals`, `/referral-status`)
 

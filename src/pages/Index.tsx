@@ -1095,7 +1095,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
                         14-DAYS ONLINE FREE YOGA
                       </p>
                       <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
-                        STARTING <StartDateLabel date={getNextMonday()} />
+                        STARTING <StartDateLabel date={batchOrigin} />
                       </p>
                     </div>
                     <div className="flex flex-col items-center m-3">
@@ -2134,6 +2134,11 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   const viewAllLink = userLanguage === "English"
     ? "https://www.youtube.com/@HealthydayEnglish"
     : "https://www.youtube.com/@healthydayyoga";
+  // Prefer the real assigned batch date; only fall back to "next Monday" when
+  // the student has no batch assigned yet (e.g. brand-new registrant).
+  const onboardingStartDate = studentData?.free_batch_start_date
+    ? new Date(studentData.free_batch_start_date)
+    : getNextMonday();
 
   return (
     <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
@@ -2147,7 +2152,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
           14-DAYS ONLINE FREE YOGA
         </p>
         <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
-          STARTING <StartDateLabel date={getNextMonday()} />
+          STARTING <StartDateLabel date={onboardingStartDate} />
         </p>
       </div>
 
