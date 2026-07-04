@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
-import tabSubtract from "@/assets/tab_subtract.svg";
 import heroBg from "@/assets/21daysprogram/hero-bg.webp";
 import lockIcon from "@/assets/21daysprogram/lock_icon.png";
 import lockLarge from "@/assets/21daysprogram/lock_large.png";
@@ -698,18 +697,7 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
 
       <div
         className="relative"
-        style={{
-          backgroundImage: `url(${heroBg})`,
-          backgroundSize: "100% 32.5rem",
-          backgroundPosition: "top center",
-          backgroundRepeat: "no-repeat",
-        }}
       >
-        {/* 68px spacer — Subtract marks journey tab as part of this view */}
-        <div style={{ height: 68, position: "relative" }}>
-          <img src={tabSubtract} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} />
-        </div>
-
         {/* Hero section with badge card overlay */}
         <div className="relative overflow-hidden" style={{ height: 180 }}>
 

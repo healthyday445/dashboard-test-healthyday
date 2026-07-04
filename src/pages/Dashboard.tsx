@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
-import DashboardTabBar from "@/components/DashboardTabBar";
+import HeroBannerWithTabs from "@/components/HeroBannerWithTabs";
 import Index from "@/pages/Index";
 import IndexTwentyOneDay from "@/pages/IndexTwentyOneDay";
 import TwentyOneDaysProgram from "@/pages/TwentyOneDaysProgram";
@@ -99,27 +99,20 @@ const Dashboard = () => {
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
 
-      <div style={{ position: "relative" }}>
-        {/* Layer 1: blue tab bar background */}
-        <div style={{ height: 68, background: "#E2EFFF" }} />
+      <HeroBannerWithTabs
+        batchEndDate={studentData?.free_batch_end_date}
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+      />
 
-        {/* Layer 2: content — each view's own spacer holds its Subtract shape */}
-        <div style={{ marginTop: "-68px", position: "relative", zIndex: 5 }}>
-          <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
-            <LiveSessions initialStudentData={studentData} onSwitchToJourney={() => handleTabChange("journey")} />
-          </div>
-          {journeyMounted && (
-            <div style={{ display: activeTab === "journey" ? "block" : "none" }}>
-              <TwentyOneDaysProgram initialStudentData={studentData} />
-            </div>
-          )}
-        </div>
-
-        {/* Layer 3: tab labels float above the content */}
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 68, zIndex: 10 }}>
-          <DashboardTabBar active={activeTab} onTabChange={handleTabChange} />
-        </div>
+      <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
+        <LiveSessions initialStudentData={studentData} onSwitchToJourney={() => handleTabChange("journey")} />
       </div>
+      {journeyMounted && (
+        <div style={{ display: activeTab === "journey" ? "block" : "none" }}>
+          <TwentyOneDaysProgram initialStudentData={studentData} />
+        </div>
+      )}
     </div>
   );
 };

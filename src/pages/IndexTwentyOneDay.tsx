@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import tabSubtract from "@/assets/tab_subtract.svg";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { LevelCard } from "@/components/LevelCard";
 import { trackVisit } from "@/lib/trackVisit";
@@ -766,10 +765,6 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
         const nextWhen = isAMSession ? "at 4:00 PM" : "tomorrow at 5:00 AM";
         return (
           <div>
-            <div style={{ height: 68, background: "white", position: "relative" }}>
-              <img src={tabSubtract} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", transform: "scaleX(-1)", pointerEvents: "none" }} />
-            </div>
-
             {/* Bonus Special Session */}
             <div style={{ padding: "24px 20px 0" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
@@ -993,10 +988,6 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
 
     return (
       <div>
-        <div style={{ height: 68, background: "white", position: "relative" }}>
-              <img src={tabSubtract} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", transform: "scaleX(-1)", pointerEvents: "none" }} />
-            </div>
-
         {activeRecurringBonusCard && (() => {
           const rTotalMin = (() => { const _t = new URLSearchParams(location.search).get("time"); if (_t) { const isPM = _t.toLowerCase().endsWith("pm"); const s = _t.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
           const bonusIsLive = rTotalMin >= activeRecurringBonusCard.startMin && rTotalMin < activeRecurringBonusCard.startMin + 30;
