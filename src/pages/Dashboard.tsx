@@ -21,6 +21,7 @@ const Dashboard = () => {
   // preview_dashboard alone can't tell us the programme type (no real studentData to
   // read free_batch_start_date from) — preview_programme=21day forces IndexTwentyOneDay.
   const previewProgramme = searchParams.get("preview_programme");
+  const forceDayParam = searchParams.get("forceDay");
 
   const [studentData, setStudentData] = useState<any>(null);
   const [loading, setLoading] = useState(!previewDashboard && previewLevels === null);
@@ -92,6 +93,21 @@ const Dashboard = () => {
     return <LiveSessions initialStudentData={studentData} />;
   }
 
+  // forceDay previews a specific batch day everywhere else (Live Sessions tab,
+  // Journey tab) — the banner's "days left" countdown needs to follow it too,
+  // instead of always reading the real calendar date.
+  const daysLeftOverride = (() => {
+    if (forceDayParam === null) return undefined;
+    if (!studentData?.free_batch_start_date || !studentData?.free_batch_end_date) return undefined;
+    const batchStart = new Date(studentData.free_batch_start_date);
+    batchStart.setHours(0, 0, 0, 0);
+    const batchEnd = new Date(studentData.free_batch_end_date);
+    batchEnd.setHours(0, 0, 0, 0);
+    const simulatedToday = new Date(batchStart);
+    simulatedToday.setDate(batchStart.getDate() + (parseInt(forceDayParam, 10) - 1));
+    return Math.max(0, Math.ceil((batchEnd.getTime() - simulatedToday.getTime()) / 86400000));
+  })();
+
   // June-21-2026 free batch student → show the tab experience
   return (
     <div className="hd-page" style={{ fontFamily: "Outfit, sans-serif" }}>
@@ -101,6 +117,7 @@ const Dashboard = () => {
 
       <HeroBannerWithTabs
         batchEndDate={studentData?.free_batch_end_date}
+        daysLeftOverride={daysLeftOverride}
         activeTab={activeTab}
         onTabChange={handleTabChange}
       />

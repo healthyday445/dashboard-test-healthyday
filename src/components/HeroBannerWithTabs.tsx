@@ -6,9 +6,25 @@ import journeyHeroBg from "@/assets/21daysprogram/journey_hero_bg.webp";
 const MONTHS = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
 const getOrdinalSuffix = (day: number) => (day >= 11 && day <= 13 ? "th" : ({ 1: "st", 2: "nd", 3: "rd" } as Record<number, string>)[day % 10] ?? "th");
 
+// Days 15-22 of the 21-day programme (the last week) get specific promotional
+// copy instead of the generic countdown, keyed by daysLeft until batchEndDate.
+const SPECIAL_DAY_MESSAGES: Record<number, string> = {
+  7: "Only 7 Days Left!",
+  6: "Only 431 Slots Left!",
+  5: "Only 5 Days Left!",
+  4: "Very Few Slots Left!",
+  3: "Only 3 Days Left!",
+  2: "Only 106 Slots Left!",
+  1: "Last Day Tomorrow!",
+  0: "Free Program Ends Today!",
+};
+
 interface HeroBannerWithTabsProps {
   // The free batch's last day — the daily/paid batch is assumed to start the day after.
   batchEndDate?: string | null;
+  // Parent-computed override for previewing a specific batch day (?forceDay=N)
+  // instead of the real calendar date — see Dashboard.tsx.
+  daysLeftOverride?: number;
   activeTab: "dashboard" | "journey";
   onTabChange: (tab: "dashboard" | "journey") => void;
 }
@@ -17,14 +33,15 @@ interface HeroBannerWithTabsProps {
 // blue/peach illustration for Your Yoga Journey) so the active tab can "pop"
 // as a white pill that visually connects to its white content view below —
 // the inactive tab has no box, it just sits on the shared background.
-const HeroBannerWithTabs = ({ batchEndDate, activeTab, onTabChange }: HeroBannerWithTabsProps) => {
+const HeroBannerWithTabs = ({ batchEndDate, daysLeftOverride, activeTab, onTabChange }: HeroBannerWithTabsProps) => {
   if (!batchEndDate) return null;
 
   const batchEnd = new Date(batchEndDate);
   batchEnd.setHours(0, 0, 0, 0);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
-  const daysLeft = Math.max(0, Math.ceil((batchEnd.getTime() - today.getTime()) / 86400000));
+  const realDaysLeft = Math.max(0, Math.ceil((batchEnd.getTime() - today.getTime()) / 86400000));
+  const daysLeft = daysLeftOverride ?? realDaysLeft;
 
   const nextBatchStart = new Date(batchEnd);
   nextBatchStart.setDate(nextBatchStart.getDate() + 1);
@@ -68,17 +85,18 @@ const HeroBannerWithTabs = ({ batchEndDate, activeTab, onTabChange }: HeroBanner
             margin: 0,
             fontFamily: "Poppins, sans-serif",
             fontWeight: 800,
-            fontSize: "28px",
+            fontSize: daysLeft === 0 ? "24px" : "28px",
+            whiteSpace: daysLeft === 0 ? "nowrap" : "normal",
             color: "#002B5E",
             textShadow: "0px 2px 4px rgba(0,0,0,0.25)",
             textTransform: "uppercase",
           }}
         >
-          {daysLeft === 0 ? "Ends Today!" : `Only ${daysLeft} ${daysLeft === 1 ? "Day" : "Days"} Left!`}
+          {SPECIAL_DAY_MESSAGES[daysLeft] ?? `Only ${daysLeft} ${daysLeft === 1 ? "Day" : "Days"} Left!`}
         </p>
         <p
           style={{
-            margin: "8px 0 16px",
+            margin: "5px 0 12px",
             fontFamily: "Outfit, sans-serif",
             fontWeight: 500,
             fontSize: "12px",
@@ -96,7 +114,7 @@ const HeroBannerWithTabs = ({ batchEndDate, activeTab, onTabChange }: HeroBanner
             background: "#0A386F",
             border: "none",
             borderRadius: "30px",
-            padding: "12px 28px",
+            padding: "8px 28px",
             color: "#FFF",
             fontFamily: "Outfit, sans-serif",
             fontWeight: 600,
