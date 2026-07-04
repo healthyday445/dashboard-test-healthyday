@@ -6,7 +6,6 @@ import { trackSessionClick } from "@/lib/trackSessionClick";
 import logo from "@/assets/Primary_logo.svg";
 import imgIngredients from "@/assets/Ingredients.png";
 import sessionTimeIcon from "@/assets/leaderboard/session_time_icon.webp";
-import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 import { ReferralMilestonesCard } from "@/components/ReferralMilestonesCard";
 import { ReferralProgressBar } from "@/components/ReferWinPopup";
 import { ShareReferralActions } from "@/components/ShareReferralActions";
@@ -312,7 +311,6 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
       .catch(() => { });
   }, []);
 
-  const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
   const [loading, setLoading] = useState(!effectiveInitialData);
   const [error, setError] = useState<string | null>(null);
   const [studentData, setStudentData] = useState<any>(effectiveInitialData ?? null);
@@ -1285,11 +1283,6 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
           </div>
         </div> */}
 
-        {/* Week 2 Pricing & Comparison */}
-        {/* {week === 2 && (
-          <PricingAndComparisonSection selectedPlanIdx={selectedPlanIdx} setSelectedPlanIdx={setSelectedPlanIdx} daysLeft={Math.max(0, 15 - currentDay)} useOngoingPricing={true} />
-        )} */}
-
         {/* Your Referral Gifts Section — commented out */}
         {/* {week === 1 && (
           <>
@@ -1851,14 +1844,6 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
               </p>
             </div>
 
-            {/* Pricing Section */}
-            <PricingAndComparisonSection
-              selectedPlanIdx={selectedPlanIdx}
-              setSelectedPlanIdx={setSelectedPlanIdx}
-              daysLeft={daysUntilPlanEnds ?? 0}
-              hideDaysLeft={true}
-            />
-
             {/* Separator */}
             <div style={{ padding: "32px 20px 0", textAlign: "center" }}>
               <div style={{ width: "100%", maxWidth: "358px", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
@@ -2008,15 +1993,6 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
           </p>
         </div>
 
-        {/* Pricing Section */}
-        <div style={{ marginTop: "-30px" }}>
-          <PricingAndComparisonSection
-            selectedPlanIdx={selectedPlanIdx}
-            setSelectedPlanIdx={setSelectedPlanIdx}
-            daysLeft={0}
-            hideDaysLeft={true}
-          />
-        </div>
         <div style={{ height: "40px" }} />
       </div>
     );
@@ -2104,13 +2080,6 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
           </p>
         </div>
 
-        <PricingAndComparisonSection
-          selectedPlanIdx={selectedPlanIdx}
-          setSelectedPlanIdx={setSelectedPlanIdx}
-          daysLeft={0}
-          hideDaysLeft={true}
-          useOngoingPricing={true}
-        />
         {/* Want More FREE Classes heading */}
         <div style={{ padding: "32px 20px 0", textAlign: "center" }}>
           <div style={{ width: "100%", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />

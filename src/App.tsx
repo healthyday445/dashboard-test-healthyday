@@ -14,6 +14,7 @@ import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
 import Faqs from "./pages/Faqs";
 import Index from "./pages/Index";
+import Pricing from "./pages/Pricing";
 
 const queryClient = new QueryClient();
 
@@ -41,6 +42,7 @@ const App = () => {
           <Route path="/:mobile/recordings" element={<AllRecordings />} />
           <Route path="/leaderboard" element={<Login />} />
           <Route path="/:mobile/leaderboard" element={<Leaderboard />} />
+          <Route path="/pricing" element={<Pricing />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>

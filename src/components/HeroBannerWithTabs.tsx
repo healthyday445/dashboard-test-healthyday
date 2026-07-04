@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router-dom";
 import tabYoutubeLive from "@/assets/tab_youtube_live.webp";
 import tabGuru from "@/assets/tab_guru.webp";
 import tabActivePill from "@/assets/tab_active_pill.svg";
@@ -34,6 +35,7 @@ interface HeroBannerWithTabsProps {
 // as a white pill that visually connects to its white content view below —
 // the inactive tab has no box, it just sits on the shared background.
 const HeroBannerWithTabs = ({ batchEndDate, daysLeftOverride, activeTab, onTabChange }: HeroBannerWithTabsProps) => {
+  const navigate = useNavigate();
   if (!batchEndDate) return null;
 
   const batchEnd = new Date(batchEndDate);
@@ -110,6 +112,7 @@ const HeroBannerWithTabs = ({ batchEndDate, daysLeftOverride, activeTab, onTabCh
         </p>
         <button
           type="button"
+          onClick={() => navigate("/pricing")}
           style={{
             background: "#0A386F",
             border: "none",
