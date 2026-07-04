@@ -10,7 +10,7 @@ lerna-debug.log*
 node_modules
 dist
 dist-ssr
-*.local
+*.local*
 
 # Environment variable files — never commit secrets
 .env

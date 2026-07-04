@@ -213,6 +213,12 @@ export function LevelCard({
                 } else {
                   window.open("https://www.youtube.com/live/WnITjDbnCPY", "_blank");
                 }
+              } else if (level === 5) {
+                if (language === "English") {
+                  window.open("https://youtube.com/live/LJzX5ltIFPw", "_blank");
+                } else {
+                  window.open("https://www.youtube.com/live/dwGVmXjBskg", "_blank");
+                }
               } else {
                 window.open(joinLink, "_blank");
               }

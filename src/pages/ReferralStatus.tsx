@@ -48,6 +48,34 @@ const getDisplayName = (ref: ApiReferral) =>
     ? ref.referred_mobile
     : ref.referred_name;
 
+// ── Preview mode ──────────────────────────────────────────────────────────────
+// ?preview=<count> forces <count> verified referrals so milestone/reward states
+// (0, 1, 19, 20, etc.) can be checked without real API data.
+const buildPreviewData = (count: number): ReferralsApiData => {
+  const referrals: ApiReferral[] = Array.from({ length: count }, (_, i) => {
+    const date = new Date();
+    date.setDate(date.getDate() - i);
+    return {
+      referred_mobile: `9${String(100000000 + i).padStart(9, "0")}`,
+      referred_name: `Preview Referral ${count - i}`,
+      referral_date: date.toISOString().slice(0, 10),
+      is_redeemed_for_free_classes: false,
+      is_redeemed_for_gift: false,
+      referral_confirmation_status: "verified",
+    };
+  });
+
+  return {
+    total_referrals: count,
+    pending_referrals: 0,
+    verified_referrals: count,
+    referrals_required_for_next_free_classes: Math.max(0, DIET_PDF_REFS - count),
+    referrals_required_for_next_gift: Math.max(0, TSHIRT_REFS - count),
+    language: "English",
+    referrals,
+  };
+};
+
 // Single referral row — flat joined list style (Figma 696-7116)
 const ReferralRow: React.FC<{ referral: ApiReferral; language?: string; isLast?: boolean }> = ({ referral, language, isLast = false }) => {
   const displayName = getDisplayName(referral);
@@ -382,6 +410,9 @@ const ReferralStatus = () => {
     searchParams.get("mobile") ||
     safeSessionStorage.getItem("referrer_mobile") ||
     "";
+  const previewParam = searchParams.get("preview_referrals");
+  const previewCount =
+    previewParam !== null && /^\d+$/.test(previewParam) ? Number(previewParam) : null;
 
   const [apiData, setApiData] = useState<ReferralsApiData | null>(null);
   const [loading, setLoading] = useState(true);
@@ -399,6 +430,11 @@ const ReferralStatus = () => {
     : "https://yoga.healthyday.co.in";
 
   useEffect(() => {
+    if (previewCount !== null) {
+      setApiData(buildPreviewData(previewCount));
+      setLoading(false);
+      return;
+    }
     if (!mobile) { setLoading(false); return; }
     const apiMobile = `+${mobile.replace(/\D/g, "")}`;
     fetch(`/.netlify/functions/referrals?mobile=${encodeURIComponent(apiMobile)}&include_contest=false`)
@@ -406,7 +442,7 @@ const ReferralStatus = () => {
       .then((data: ReferralsApiData) => setApiData(data))
       .catch((err) => setApiError(String(err)))
       .finally(() => setLoading(false));
-  }, [mobile]);
+  }, [mobile, previewCount]);
 
   // Use verified_referrals for all gift progress; fall back to 0 while loading
   const verifiedRefs = loading ? 0 : (apiData?.verified_referrals ?? 0);

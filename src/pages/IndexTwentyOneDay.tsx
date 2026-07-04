@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import tabSubtract from "@/assets/tab_subtract.svg";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { LevelCard } from "@/components/LevelCard";
 import { trackVisit } from "@/lib/trackVisit";
@@ -7,7 +6,6 @@ import { trackSessionClick } from "@/lib/trackSessionClick";
 import logo from "@/assets/Primary_logo.svg";
 import imgIngredients from "@/assets/Ingredients.png";
 import sessionTimeIcon from "@/assets/leaderboard/session_time_icon.webp";
-import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 import { ReferralMilestonesCard } from "@/components/ReferralMilestonesCard";
 import { ReferralProgressBar } from "@/components/ReferWinPopup";
 import { ShareReferralActions } from "@/components/ShareReferralActions";
@@ -204,7 +202,9 @@ const buildPreviewDashboardData = (key: string): any | null => {
       };
 
     case "free_active": {
-      const batchStart = toLocalDateStr(today);
+      // Anchored to the real 21-day cohort start date (not "today") so the
+      // Level Card and dateRangeLabel render faithfully; use forceDay to pick a day.
+      const batchStart = "2026-06-21";
       return {
         status: "14DaysOngoing",
         language: "Telugu",
@@ -253,12 +253,17 @@ const buildPreviewDashboardData = (key: string): any | null => {
   }
 };
 
-interface IndexProps {
+// Live Sessions tab for the 21-day/22-day special programme (June-21-2026 cohort).
+// Kept as a dedicated copy of Index.tsx rather than sharing logic, since the two
+// programme types (14-day general public vs. 21-day special cohort) are expected
+// to diverge further over time. Dashboard.tsx picks this component based on
+// free_batch_start_date; see BONUS_SESSIONS_ALL.md for the day 15-22 bonus schedule.
+interface IndexTwentyOneDayProps {
   initialStudentData?: any;
   onSwitchToJourney?: () => void;
 }
 
-const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
+const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwentyOneDayProps = {}) => {
   const navigate = useNavigate();
   const { mobile: pathMobile } = useParams<{ mobile: string }>();
   const location = useLocation();
@@ -306,7 +311,6 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
       .catch(() => { });
   }, []);
 
-  const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
   const [loading, setLoading] = useState(!effectiveInitialData);
   const [error, setError] = useState<string | null>(null);
   const [studentData, setStudentData] = useState<any>(effectiveInitialData ?? null);
@@ -558,6 +562,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   }
 
   // --- Active Batch: helper ---
+  // This programme runs 22 days (June 21 – July 12), not 14 — see BONUS_SESSIONS_ALL.md.
   const getActiveBatchInfo = (batchDateStr: string | null | undefined) => {
     if (!batchDateStr) return { isActive: false as const };
     const batchStart = new Date(batchDateStr);
@@ -565,11 +570,11 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const diffDays = Math.floor((today.getTime() - batchStart.getTime()) / 86400000);
-    if (diffDays < 0 || diffDays >= 14) return { isActive: false as const };
+    if (diffDays < 0 || diffDays >= 22) return { isActive: false as const };
     const currentDay = diffDays + 1; // 1-indexed
     const week = currentDay <= 7 ? 1 : 2;
     const batchEnd = new Date(batchStart);
-    batchEnd.setDate(batchStart.getDate() + 13);
+    batchEnd.setDate(batchStart.getDate() + 21);
     const DAY_NAMES = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
     const MON_NAMES = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
     const fmt = (d: Date) => `${DAY_NAMES[d.getDay()]}, ${MON_NAMES[d.getMonth()]} ${d.getDate()}`;
@@ -589,7 +594,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
       const bs = new Date(studentData.free_batch_start_date);
       bs.setHours(0, 0, 0, 0);
       const be = new Date(bs);
-      be.setDate(bs.getDate() + 13);
+      be.setDate(bs.getDate() + 21);
       const DN = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
       const MN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
       const fmt = (d: Date) => `${DN[d.getDay()]}, ${MN[d.getMonth()]} ${d.getDate()}`;
@@ -758,10 +763,6 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
         const nextWhen = isAMSession ? "at 4:00 PM" : "tomorrow at 5:00 AM";
         return (
           <div>
-            <div style={{ height: 68, background: "white", position: "relative" }}>
-              <img src={tabSubtract} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", transform: "scaleX(-1)", pointerEvents: "none" }} />
-            </div>
-
             {/* Bonus Special Session */}
             <div style={{ padding: "24px 20px 0" }}>
               <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
@@ -985,10 +986,6 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
 
     return (
       <div>
-        <div style={{ height: 68, background: "white", position: "relative" }}>
-              <img src={tabSubtract} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", transform: "scaleX(-1)", pointerEvents: "none" }} />
-            </div>
-
         {activeRecurringBonusCard && (() => {
           const rTotalMin = (() => { const _t = new URLSearchParams(location.search).get("time"); if (_t) { const isPM = _t.toLowerCase().endsWith("pm"); const s = _t.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
           const bonusIsLive = rTotalMin >= activeRecurringBonusCard.startMin && rTotalMin < activeRecurringBonusCard.startMin + 30;
@@ -1095,7 +1092,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
                         14-DAYS ONLINE FREE YOGA
                       </p>
                       <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
-                        STARTING <StartDateLabel date={batchOrigin} />
+                        STARTING <StartDateLabel date={getNextMonday()} />
                       </p>
                     </div>
                     <div className="flex flex-col items-center m-3">
@@ -1285,11 +1282,6 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
             </div>
           </div>
         </div> */}
-
-        {/* Week 2 Pricing & Comparison */}
-        {/* {week === 2 && (
-          <PricingAndComparisonSection selectedPlanIdx={selectedPlanIdx} setSelectedPlanIdx={setSelectedPlanIdx} daysLeft={Math.max(0, 15 - currentDay)} useOngoingPricing={true} />
-        )} */}
 
         {/* Your Referral Gifts Section — commented out */}
         {/* {week === 1 && (
@@ -1852,14 +1844,6 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
               </p>
             </div>
 
-            {/* Pricing Section */}
-            <PricingAndComparisonSection
-              selectedPlanIdx={selectedPlanIdx}
-              setSelectedPlanIdx={setSelectedPlanIdx}
-              daysLeft={daysUntilPlanEnds ?? 0}
-              hideDaysLeft={true}
-            />
-
             {/* Separator */}
             <div style={{ padding: "32px 20px 0", textAlign: "center" }}>
               <div style={{ width: "100%", maxWidth: "358px", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
@@ -2009,21 +1993,12 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
           </p>
         </div>
 
-        {/* Pricing Section */}
-        <div style={{ marginTop: "-30px" }}>
-          <PricingAndComparisonSection
-            selectedPlanIdx={selectedPlanIdx}
-            setSelectedPlanIdx={setSelectedPlanIdx}
-            daysLeft={0}
-            hideDaysLeft={true}
-          />
-        </div>
         <div style={{ height: "40px" }} />
       </div>
     );
   }
 
-  // --- Detect ongoing users whose 14-day batch has elapsed ---
+  // --- Detect ongoing users whose 22-day programme has elapsed ---
   const batchElapsed = (() => {
     if (!studentData?.free_batch_start_date) return false;
     const batchStart = new Date(studentData?.free_batch_start_date);
@@ -2031,7 +2006,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
     const today = new Date();
     today.setHours(0, 0, 0, 0);
     const diffDays = Math.floor((today.getTime() - batchStart.getTime()) / 86400000);
-    return diffDays >= 14;
+    return diffDays >= 22;
   })();
   const show14DayCompleted = (studentData?.status === "14 day completed" || studentData?.status === "14DaysCompleted") || (isOngoingStatus && batchElapsed);
 
@@ -2105,13 +2080,6 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
           </p>
         </div>
 
-        <PricingAndComparisonSection
-          selectedPlanIdx={selectedPlanIdx}
-          setSelectedPlanIdx={setSelectedPlanIdx}
-          daysLeft={0}
-          hideDaysLeft={true}
-          useOngoingPricing={true}
-        />
         {/* Want More FREE Classes heading */}
         <div style={{ padding: "32px 20px 0", textAlign: "center" }}>
           <div style={{ width: "100%", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
@@ -2134,11 +2102,6 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   const viewAllLink = userLanguage === "English"
     ? "https://www.youtube.com/@HealthydayEnglish"
     : "https://www.youtube.com/@healthydayyoga";
-  // Prefer the real assigned batch date; only fall back to "next Monday" when
-  // the student has no batch assigned yet (e.g. brand-new registrant).
-  const onboardingStartDate = studentData?.free_batch_start_date
-    ? new Date(studentData.free_batch_start_date)
-    : getNextMonday();
 
   return (
     <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
@@ -2152,7 +2115,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
           14-DAYS ONLINE FREE YOGA
         </p>
         <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
-          STARTING <StartDateLabel date={onboardingStartDate} />
+          STARTING <StartDateLabel date={getNextMonday()} />
         </p>
       </div>
 
@@ -2355,4 +2318,4 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   );
 };
 
-export default Index;
+export default IndexTwentyOneDay;

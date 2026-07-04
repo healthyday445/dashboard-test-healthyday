@@ -1,25 +1,41 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
-import DashboardTabBar from "@/components/DashboardTabBar";
+import HeroBannerWithTabs from "@/components/HeroBannerWithTabs";
 import Index from "@/pages/Index";
+import IndexTwentyOneDay from "@/pages/IndexTwentyOneDay";
 import TwentyOneDaysProgram from "@/pages/TwentyOneDaysProgram";
 
-// Only students in this specific free batch get the journey tab
+// The one-off June-21-2026 cohort runs the special 21-day (22-day) programme;
+// every other free batch is the standard 14-day general-public batch.
 const FREE_BATCH_DATE = "2026-06-21";
 
 const Dashboard = () => {
   const { mobile: pathMobile } = useParams<{ mobile: string }>();
   const location = useLocation();
-  const queryMobile = new URLSearchParams(location.search).get("mobile");
+  const searchParams = new URLSearchParams(location.search);
+  const queryMobile = searchParams.get("mobile");
   const mobile = pathMobile || queryMobile || undefined;
+  const previewLevels = searchParams.get("preview_levels");
+  const previewDashboard = searchParams.get("preview_dashboard");
+  // preview_dashboard alone can't tell us the programme type (no real studentData to
+  // read free_batch_start_date from) — preview_programme=21day forces IndexTwentyOneDay.
+  const previewProgramme = searchParams.get("preview_programme");
+  const forceDayParam = searchParams.get("forceDay");
 
   const [studentData, setStudentData] = useState<any>(null);
-  const [loading, setLoading] = useState(true);
-  const [activeTab, setActiveTab] = useState<"dashboard" | "journey">("dashboard");
-  const [journeyMounted, setJourneyMounted] = useState(false);
+  const [loading, setLoading] = useState(!previewDashboard && previewLevels === null);
+  const [activeTab, setActiveTab] = useState<"dashboard" | "journey">(previewLevels !== null ? "journey" : "dashboard");
+  const [journeyMounted, setJourneyMounted] = useState(previewLevels !== null);
 
   useEffect(() => {
+    // A preview param means we want canned data, not whatever real account
+    // happens to live at this mobile number — skip the real fetch so the tab
+    // chrome/eligibility isn't decided by unrelated real account state.
+    if (previewDashboard || previewLevels !== null) {
+      setLoading(false);
+      return;
+    }
     if (!mobile) {
       setLoading(false);
       return;
@@ -36,7 +52,7 @@ const Dashboard = () => {
       .then(data => setStudentData(data))
       .catch(() => {})
       .finally(() => setLoading(false));
-  }, [mobile]);
+  }, [mobile, previewDashboard, previewLevels]);
 
   const handleTabChange = (tab: "dashboard" | "journey") => {
     if (tab === "journey") setJourneyMounted(true);
@@ -58,17 +74,39 @@ const Dashboard = () => {
     );
   }
 
+  // Batch type is the first thing we check: it decides which Live Sessions
+  // component this student gets. 14-day general public uses Index; the
+  // 21-day/22-day June-21-2026 cohort uses the dedicated IndexTwentyOneDay copy.
+  const is21DayBatch = previewProgramme === "21day" || studentData?.free_batch_start_date === FREE_BATCH_DATE;
+  const LiveSessions = is21DayBatch ? IndexTwentyOneDay : Index;
+
   // Determine if this student gets the journey tab:
   // must be in the June-21-2026 free batch AND not paid/pastdue
   const status = studentData?.status;
   const isEligibleForJourneyTab =
-    studentData?.free_batch_start_date === FREE_BATCH_DATE &&
-    (status === "registered" || status === "14DaysOngoing" || status === "14daysongoing");
+    previewLevels !== null ||
+    (is21DayBatch &&
+      (status === "registered" || status === "14DaysOngoing" || status === "14daysongoing"));
 
-  // Not eligible for journey tab → render Index standalone (Index owns its own layout)
+  // Not eligible for journey tab → render the Live Sessions component standalone (it owns its own layout)
   if (!isEligibleForJourneyTab) {
-    return <Index initialStudentData={studentData} />;
+    return <LiveSessions initialStudentData={studentData} />;
   }
+
+  // forceDay previews a specific batch day everywhere else (Live Sessions tab,
+  // Journey tab) — the banner's "days left" countdown needs to follow it too,
+  // instead of always reading the real calendar date.
+  const daysLeftOverride = (() => {
+    if (forceDayParam === null) return undefined;
+    if (!studentData?.free_batch_start_date || !studentData?.free_batch_end_date) return undefined;
+    const batchStart = new Date(studentData.free_batch_start_date);
+    batchStart.setHours(0, 0, 0, 0);
+    const batchEnd = new Date(studentData.free_batch_end_date);
+    batchEnd.setHours(0, 0, 0, 0);
+    const simulatedToday = new Date(batchStart);
+    simulatedToday.setDate(batchStart.getDate() + (parseInt(forceDayParam, 10) - 1));
+    return Math.max(0, Math.ceil((batchEnd.getTime() - simulatedToday.getTime()) / 86400000));
+  })();
 
   // June-21-2026 free batch student → show the tab experience
   return (
@@ -77,27 +115,21 @@ const Dashboard = () => {
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
 
-      <div style={{ position: "relative" }}>
-        {/* Layer 1: blue tab bar background */}
-        <div style={{ height: 68, background: "#E2EFFF" }} />
+      <HeroBannerWithTabs
+        batchEndDate={studentData?.free_batch_end_date}
+        daysLeftOverride={daysLeftOverride}
+        activeTab={activeTab}
+        onTabChange={handleTabChange}
+      />
 
-        {/* Layer 2: content — each view's own spacer holds its Subtract shape */}
-        <div style={{ marginTop: "-68px", position: "relative", zIndex: 5 }}>
-          <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
-            <Index initialStudentData={studentData} onSwitchToJourney={() => handleTabChange("journey")} />
-          </div>
-          {journeyMounted && (
-            <div style={{ display: activeTab === "journey" ? "block" : "none" }}>
-              <TwentyOneDaysProgram initialStudentData={studentData} />
-            </div>
-          )}
-        </div>
-
-        {/* Layer 3: tab labels float above the content */}
-        <div style={{ position: "absolute", top: 0, left: 0, right: 0, height: 68, zIndex: 10 }}>
-          <DashboardTabBar active={activeTab} onTabChange={handleTabChange} />
-        </div>
+      <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
+        <LiveSessions initialStudentData={studentData} onSwitchToJourney={() => handleTabChange("journey")} />
       </div>
+      {journeyMounted && (
+        <div style={{ display: activeTab === "journey" ? "block" : "none" }}>
+          <TwentyOneDaysProgram initialStudentData={studentData} />
+        </div>
+      )}
     </div>
   );
 };

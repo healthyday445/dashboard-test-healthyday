@@ -1,7 +1,6 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
-import tabSubtract from "@/assets/tab_subtract.svg";
 import heroBg from "@/assets/21daysprogram/hero-bg.webp";
 import lockIcon from "@/assets/21daysprogram/lock_icon.png";
 import lockLarge from "@/assets/21daysprogram/lock_large.png";
@@ -166,6 +165,12 @@ function RewardCard({
         window.open("https://www.youtube.com/live/IqESKRcvU8E", "_blank");
       } else {
         window.open("https://www.youtube.com/live/WnITjDbnCPY", "_blank");
+      }
+    } else if (levelData.level === 5) {
+      if (lang === "English") {
+        window.open("https://youtube.com/live/LJzX5ltIFPw", "_blank");
+      } else {
+        window.open("https://www.youtube.com/live/dwGVmXjBskg", "_blank");
       }
     }
   };
@@ -479,6 +484,11 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
 
   useEffect(() => {
     if (initialStudentData) return; // data already provided by parent
+    const previewParams = new URLSearchParams(window.location.search);
+    if (previewParams.get("preview_levels") !== null) {
+      setLoading(false);
+      return;
+    }
     if (!mobile) {
       setLoading(false);
       return;
@@ -524,11 +534,15 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
     fetchData();
   }, [mobile, navigate]);
 
-  // Derive days attended from free_batches attendance_tracker, capped at 21
+  // Derive days attended from free_batches attendance_tracker, capped at 21.
+  // preview_levels is the only override here — forceDay/time are reserved for
+  // the Live Sessions tab (Index.tsx / IndexTwentyOneDay.tsx) and must not leak
+  // into this tab, since both tabs read the same URL simultaneously.
   const daysAttended: number = (() => {
-    const forceDayParam = new URLSearchParams(window.location.search).get("forceDay");
-    if (forceDayParam !== null) {
-      return Math.min(21, Math.max(0, parseInt(forceDayParam, 10)));
+    const params = new URLSearchParams(window.location.search);
+    const previewParam = params.get("preview_levels");
+    if (previewParam !== null) {
+      return Math.min(21, Math.max(0, parseInt(previewParam, 10)));
     }
     if (!studentData) return 0;
     const freeBatches = (studentData?.free_batches ?? []) as { batch_start_date: string; attendance_tracker: string[] }[];
@@ -689,18 +703,7 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
 
       <div
         className="relative"
-        style={{
-          backgroundImage: `url(${heroBg})`,
-          backgroundSize: "100% 32.5rem",
-          backgroundPosition: "top center",
-          backgroundRepeat: "no-repeat",
-        }}
       >
-        {/* 68px spacer — Subtract marks journey tab as part of this view */}
-        <div style={{ height: 68, position: "relative" }}>
-          <img src={tabSubtract} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", pointerEvents: "none" }} />
-        </div>
-
         {/* Hero section with badge card overlay */}
         <div className="relative overflow-hidden" style={{ height: 180 }}>
 
