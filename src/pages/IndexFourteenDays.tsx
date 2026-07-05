@@ -1,11 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { trackVisit } from "@/lib/trackVisit";
+import { trackSessionClick } from "@/lib/trackSessionClick";
 import logo from "@/assets/Primary_logo.svg";
 import imgIngredients from "@/assets/Ingredients.png";
 import sessionTimeIcon from "@/assets/leaderboard/session_time_icon.webp";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 import { ShareReferralActions } from "@/components/ShareReferralActions";
+import NoSessionsCard from "@/components/NoSessionsCard";
 import ReferWinCard from "@/components/ReferWinCard";
 import { FourteenDaySessionCard } from "@/components/FourteenDaySessionCard";
 import { FourteenDayBonusSessionCard, getBonusInfo, BONUS_DAYS_TELUGU, BONUS_DAYS_ENGLISH } from "@/components/FourteenDayBonusSessionCard";
