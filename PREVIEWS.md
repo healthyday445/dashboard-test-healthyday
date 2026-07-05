@@ -44,6 +44,12 @@ Example: `/anything?preview_dashboard=free_active&preview_programme=21day&forceD
 
 `forceDay` means different things on the free vs. paid path — read as day-of-batch on `free_active`, day-of-week on `paid`.
 
+### `?forceDay=0` (14-day `Index.tsx` only)
+
+Reserved sentinel — batch day-of-batch is otherwise 1-14, so `0` forces the pre-batch onboarding screen regardless of the account's real status (bypasses the active/paid/pastdue/14-day-completed branches). Combine with `time` to preview the July 5, 2026 one-off introductory session card's live window (10:30 AM–12:00 PM IST) without waiting for the real date/time.
+
+Example: `/9999999999?forceDay=0&time=11.00am` — onboarding screen with the intro session card live. `time=10.00am` or `time=1.00pm` shows it hidden (before/after the window).
+
 ### Examples
 
 | URL | What it shows |
