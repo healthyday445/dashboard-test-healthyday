@@ -1,5 +1,4 @@
 import { useState, useEffect } from "react";
-import tabSubtract from "@/assets/tab_subtract.svg";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { LevelCard } from "@/components/LevelCard";
 import { trackVisit } from "@/lib/trackVisit";
@@ -582,6 +581,10 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   };
 
   const _globalForceDayParam = new URLSearchParams(location.search).get("forceDay");
+  // forceDay=0 is a reserved sentinel (batch day-of-batch is otherwise 1-14) that
+  // forces the pre-batch onboarding screen — used to preview the July 5 intro
+  // session card without needing a real not-yet-started account.
+  const isForceOnboardingPreview = _globalForceDayParam === "0";
   const batchInfo = (() => {
     const real = getActiveBatchInfo(studentData?.free_batch_start_date);
     if (_globalForceDayParam !== null && studentData?.free_batch_start_date) {
@@ -604,7 +607,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   const hasBatchAccess = isOngoingStatus && batchInfo.isActive && !!sessionJoinLink;
 
   // --- Active Batch Dashboard (Week 1 or Week 2) ---
-  if (hasBatchAccess) {
+  if (hasBatchAccess && !isForceOnboardingPreview) {
     const { currentDay, week, dateRangeLabel } = batchInfo;
 
     // Level Card tracks the legacy 21-day journey (levels at day 3/6/9/12/15/18/21) — only meaningful for the June-21-2026 batch
@@ -758,9 +761,9 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
         const nextWhen = isAMSession ? "at 4:00 PM" : "tomorrow at 5:00 AM";
         return (
           <div>
-            <div style={{ height: 68, background: "white", position: "relative" }}>
-              <img src={tabSubtract} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", transform: "scaleX(-1)", pointerEvents: "none" }} />
-            </div>
+            <header className="hd-header bg-white">
+              <img src={logo} alt="Healthyday" className="h-7" />
+            </header>
 
             {/* Bonus Special Session */}
             <div style={{ padding: "24px 20px 0" }}>
@@ -985,9 +988,9 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
 
     return (
       <div>
-        <div style={{ height: 68, background: "white", position: "relative" }}>
-              <img src={tabSubtract} alt="" style={{ position: "absolute", inset: 0, width: "100%", height: "100%", transform: "scaleX(-1)", pointerEvents: "none" }} />
-            </div>
+        <header className="hd-header bg-white">
+          <img src={logo} alt="Healthyday" className="h-7" />
+        </header>
 
         {activeRecurringBonusCard && (() => {
           const rTotalMin = (() => { const _t = new URLSearchParams(location.search).get("time"); if (_t) { const isPM = _t.toLowerCase().endsWith("pm"); const s = _t.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
@@ -1324,7 +1327,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   }
 
   // --- Paid Member Dashboard ---
-  if (isPaid) {
+  if (isPaid && !isForceOnboardingPreview) {
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
     const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : referralLink;
 
@@ -1904,7 +1907,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   }
 
   // --- Past Due / Subscription Expired Dashboard ---
-  if (studentStatus === "pastdue") {
+  if (studentStatus === "pastdue" && !isForceOnboardingPreview) {
     // Format expired date
     const expiredSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "expired") || studentData?.subscriptions?.[studentData.subscriptions.length - 1];
     const expiredDateRaw = expiredSub?.subscription_end || studentData?.sub_end_date || studentData?.plan_end_date || studentData?.plan_expired_date;
@@ -2036,7 +2039,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   const show14DayCompleted = (studentData?.status === "14 day completed" || studentData?.status === "14DaysCompleted") || (isOngoingStatus && batchElapsed);
 
   // --- 14 Days Completed Page ---
-  if (show14DayCompleted) {
+  if (show14DayCompleted && !isForceOnboardingPreview) {
     const referralLink = "healthyday.app/ref=ggtujev58";
     const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : referralLink;
 
@@ -2175,77 +2178,45 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
         </div>
       </div>
 
-      {/* Introductory Session Card */}
+      {/* Introductory Session Card — one-off, July 5 2026, ahead of the July 6 batch start.
+          ?forceDay=0 (see isForceOnboardingPreview) + ?time=<hh.mmam/pm> lets QA preview
+          this card's live/hidden states without waiting for the real date/time. */}
       {(() => {
-        const _nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
-        const _totalMin = _nowIST.getUTCHours() * 60 + _nowIST.getUTCMinutes();
-        const _year = _nowIST.getUTCFullYear();
-        const _month = _nowIST.getUTCMonth(); // 5 = June
-        const _date = _nowIST.getUTCDate();
+        const _timeParam = new URLSearchParams(location.search).get("time");
+        const _totalMin = (() => {
+          if (_timeParam) {
+            const isPM = _timeParam.toLowerCase().endsWith("pm");
+            const s = _timeParam.toLowerCase().replace("am", "").replace("pm", "");
+            const [hStr, mStr] = s.split(".");
+            let h = parseInt(hStr, 10);
+            const m = parseInt(mStr ?? "0", 10);
+            if (isPM && h !== 12) h += 12;
+            if (!isPM && h === 12) h = 0;
+            return h * 60 + m;
+          }
+          const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+          return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
+        })();
+
+        if (!isForceOnboardingPreview) {
+          const _nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+          const _year = _nowIST.getUTCFullYear();
+          const _month = _nowIST.getUTCMonth(); // 6 = July
+          const _date = _nowIST.getUTCDate();
+          // Only active July 5, 2026
+          if (_year !== 2026 || _month !== 6 || _date !== 5) return null;
+        }
+
+        const liveStart = 630; // 10:30 AM IST
+        const liveEnd   = 720; // 12:00 PM IST
+
+        // Before 10:30 AM or after 12:00 PM: hide entirely
+        if (_totalMin < liveStart || _totalMin >= liveEnd) return null;
 
         const isTelugu = userLanguage !== "English";
-
-        const SESSION_DATA: Record<number, { telugu: { id: string; link: string }; english: { id: string; link: string }; dayName: string }> = {
-          17: { telugu: { id: "HaWU4AHsKXc", link: "https://www.youtube.com/live/HaWU4AHsKXc" },   english: { id: "OskBc7sb-_0", link: "https://www.youtube.com/live/OskBc7sb-_0" },   dayName: "Wednesday" },
-          18: { telugu: { id: "dHRQc6tTBOU", link: "https://www.youtube.com/watch?v=dHRQc6tTBOU" }, english: { id: "JzA-vJ5-Yxw", link: "https://www.youtube.com/watch?v=JzA-vJ5-Yxw" }, dayName: "Thursday"  },
-          19: { telugu: { id: "mnt9cvRztHA", link: "https://www.youtube.com/watch?v=mnt9cvRztHA" }, english: { id: "yAzo4cfwRtM", link: "https://www.youtube.com/watch?v=yAzo4cfwRtM" }, dayName: "Friday"    },
-          20: { telugu: { id: "jr7uu4lhcLw", link: "https://www.youtube.com/watch?v=jr7uu4lhcLw" }, english: { id: "fY4d10K3iQI", link: "https://www.youtube.com/watch?v=fY4d10K3iQI" }, dayName: "Saturday"  },
-        };
-
-        const liveStart = 1170; // 7:30 PM IST
-        const liveEnd   = 1260; // 9:00 PM IST
-        const noon      = 720;  // 12:00 PM IST
-
-        // Only active June 17–20, 2026
-        if (_year !== 2026 || _month !== 5 || _date < 17 || _date > 20) return null;
-        // After June 20 session ends, hide entirely
-        if (_date === 20 && _totalMin >= liveEnd) return null;
-
-        // Determine display state
-        let displayDay: number;
-        let isEnded: boolean;
-        let isLive = false;
-
-        if (_totalMin >= noon && _totalMin < liveEnd) {
-          // 12:00 PM – 9:00 PM: show today's session card
-          displayDay = _date;
-          isEnded = false;
-          isLive = _totalMin >= liveStart;
-        } else if (_totalMin < noon) {
-          // Morning before noon: show "ended" — next session is today at 8 PM
-          displayDay = _date;
-          isEnded = true;
-        } else {
-          // After 9 PM: show "ended" — next session is tomorrow
-          displayDay = _date + 1;
-          if (displayDay > 20) return null;
-          isEnded = true;
-        }
-
-        const session = SESSION_DATA[displayDay];
-        if (!session) return null;
-        const lang = isTelugu ? session.telugu : session.english;
-        const { link, id: videoId } = lang;
+        const videoId = isTelugu ? "M_9PsFKNshA" : "HI3myN11FKA";
+        const link = `https://www.youtube.com/watch?v=${videoId}`;
         const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
-
-        if (isEnded) {
-          return (
-            <div style={{ padding: "18px 20px 0" }}>
-              <div style={{ background: "#fff", borderRadius: "10px", boxShadow: "0px 0px 8px 0px rgba(0,0,0,0.25)", display: "flex", alignItems: "center", gap: "14px", padding: "14px 16px" }}>
-                <img src={sessionTimeIcon} alt="" style={{ width: "52px", height: "52px", flexShrink: 0, objectFit: "contain" }} />
-                <div style={{ flex: 1, wordBreak: "break-word" }}>
-                  <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "14px", fontWeight: 700, color: "#202020", lineHeight: "1.35" }}>INTRODUCTION LIVE HAS ENDED!</p>
-                  <p style={{ margin: "5px 0 0", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400, color: "#575656", lineHeight: "15px" }}>
-                    The next Intro session will be live again on
-                  </p>
-                  <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, color: "#0D468B", lineHeight: "15px" }}>
-                    {displayDay}<sup>th</sup> June ({session.dayName}) at 8:00 PM IST
-                  </p>
-                </div>
-              </div>
-            </div>
-          );
-        }
 
         return (
           <div style={{ padding: "18px 20px 0" }}>
@@ -2254,12 +2225,10 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
               <p style={{ color: "#202020", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal", margin: 0 }}>
                 Introductory Session
               </p>
-              {isLive && (
-                <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
-                  <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
-                  <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>LIVE</span>
-                </div>
-              )}
+              <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
+                <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
+                <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>LIVE</span>
+              </div>
             </div>
 
             <div style={{ borderRadius: "12px", overflow: "hidden", boxShadow: "1px 0 4px rgba(0,0,0,0.25), -1px -1px 4px rgba(0,0,0,0.25)" }}>
@@ -2280,20 +2249,12 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
                   rel="noopener noreferrer"
                   style={{ width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none" }}
                 >
-                  {isLive ? (
-                    <>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                        <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                      <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION NOW</span>
-                    </>
-                  ) : (
-                    <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>
-                      JOIN AT 8:00 PM IST
-                    </span>
-                  )}
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION NOW</span>
                 </a>
               </div>
             </div>
