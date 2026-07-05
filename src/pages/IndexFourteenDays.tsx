@@ -1,26 +1,22 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { LevelCard } from "@/components/LevelCard";
 import { trackVisit } from "@/lib/trackVisit";
-import { trackSessionClick } from "@/lib/trackSessionClick";
 import logo from "@/assets/Primary_logo.svg";
 import imgIngredients from "@/assets/Ingredients.png";
 import sessionTimeIcon from "@/assets/leaderboard/session_time_icon.webp";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
-import { ReferralMilestonesCard } from "@/components/ReferralMilestonesCard";
-import { ReferralProgressBar } from "@/components/ReferWinPopup";
 import { ShareReferralActions } from "@/components/ShareReferralActions";
-import NoSessionsCard from "@/components/NoSessionsCard";
 import ReferWinCard from "@/components/ReferWinCard";
+import { FourteenDaySessionCard } from "@/components/FourteenDaySessionCard";
+import { FourteenDayBonusSessionCard, getBonusInfo, BONUS_DAYS_TELUGU, BONUS_DAYS_ENGLISH } from "@/components/FourteenDayBonusSessionCard";
+import { BatchProgressSection } from "@/components/BatchProgressSection";
+import type { DayStatus } from "@/components/AttendanceGrid";
 
 import thumbFaceYogaTel from "@/assets/bonus/Face Yoga Thumbnail.jpg";
 import thumbFaceYogaEng from "@/assets/bonus/Face Yoga Thumbnail.jpg";
 import thumbWeightLossTel from "@/assets/bonus/weightlosssession.jpg";
 import thumbWeightLossEng from "@/assets/bonus/weightlosssession_eng.jpg";
-import thumbMeditationTel from "@/assets/bonus/meditation_tel.jpg";
 import thumbMeditationEng from "@/assets/bonus/meditation_eng.jpg";
-import thumbBreathWorkTel from "@/assets/bonus/breathwork.jpg";
-import thumbBreathWorkEng from "@/assets/bonus/bw_eng.jpg";
 
 const ytThumb = (id: string) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 
@@ -179,7 +175,7 @@ interface IndexProps {
   onSwitchToJourney?: () => void;
 }
 
-const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
+const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   const navigate = useNavigate();
   const { mobile: pathMobile } = useParams<{ mobile: string }>();
   const location = useLocation();
@@ -529,20 +525,11 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   if (hasBatchAccess && !isForceOnboardingPreview) {
     const { currentDay, week, dateRangeLabel } = batchInfo;
 
-    // Level Card tracks the legacy 21-day journey (levels at day 3/6/9/12/15/18/21) — only meaningful for the June-21-2026 batch
-    const isLegacyTwentyOneDayBatch = studentData?.free_batch_start_date === "2026-06-21";
-
     // Combine attendance across all batches that share the active batch start date
     const freeBatches: any[] = studentData?.free_batches ?? [];
     const activeBatches = freeBatches.filter((b) => b.batch_start_date === studentData?.free_batch_start_date);
     const batchesToCheck = activeBatches.length > 0 ? activeBatches : freeBatches;
     const attendedDates = new Set<string>(batchesToCheck.flatMap((b) => b.attendance_tracker ?? []));
-    const freeDaysAttended = (() => {
-      if (_globalForceDayParam !== null) {
-        return Math.min(21, Math.max(0, parseInt(_globalForceDayParam, 10)));
-      }
-      return Math.min(attendedDates.size, 21);
-    })();
     const batchOrigin = new Date(studentData?.free_batch_start_date!);
     batchOrigin.setHours(0, 0, 0, 0);
 
@@ -556,7 +543,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
     };
 
     // Build 14 status values: "green" | "yellow" | "future"
-    const dayStatus = Array.from({ length: 14 }, (_, i) => {
+    const dayStatus: DayStatus[] = Array.from({ length: 14 }, (_, i) => {
       const dayNum = i + 1;
       if (dayNum > currentDay) return "future";
       const didJoin = joinedDays.includes(dayNum);
@@ -586,660 +573,61 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
     const isMorning = totalMinCalc < (15 * 60 + 30); // < 3:30 PM IST
     const timeOfDayStr = isMorning ? "morning" : "evening";
     const freeLangKey = (studentData?.language || "Telugu").toLowerCase();
-    const freeSessionCode = `iyd_2026_${timeOfDayStr}`;
+    const freeSessionCode = `14d_week${week}_${timeOfDayStr}`;
 
     const freeApiSessionEntry = sessionLinks.find(
       (s: any) => s.session_code === freeSessionCode && s.language === freeLangKey
     );
     const freeApiSessionLink = freeApiSessionEntry?.link || null;
-    const apiSessionName = freeApiSessionEntry?.session_name || null; // Can be used to show title if needed
 
     const sessionLink = freeApiSessionLink || sessionJoinLink || "https://www.youtube.com/c/Healthyday";
     const ytIdMatch = sessionLink.match(/(?:v=|youtu\.be\/|\/live\/|\/shorts\/|\/embed\/)([a-zA-Z0-9_-]{11})/);
     const sessionVideoId = ytIdMatch ? ytIdMatch[1] : null;
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
-
     const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : referralLink;
-    const handleCopyLink = () => navigator.clipboard.writeText(shareLink);
-    const handleWhatsAppShare = () => {
-      const waMessage = `I am Inviting you to join me in\n*14-Days FREE YOGA* 🧘‍♀️😊\n\n🧘 Daily Yoga\n🥗 Simple Diet\n🌿 Lifestyle Habits\n\nWith *JAGAN* 🧘🏻‍♂️\n🌍Internationally Certified Yoga Teacher\n👥 6,00,000+ Students\n\n*Register for FREE Now* 👇🏻👇🏻\n${shareLink}`;
-      window.open(`https://wa.me/?text=${encodeURIComponent(waMessage)}`, "_blank");
-    };
 
-    const DayBox = ({ status, dayLabel }: { status: string; dayLabel: string }) => (
-      <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "42px" }}>
-        <div style={{
-          width: "36.763px", height: "36.763px", aspectRatio: "1/1", borderRadius: "5px",
-          background: status === "future"
-            ? "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B"
-            : status === "yellow" ? "#FEAB27" : "#0D9400",
-          opacity: status === "future" ? 0.5 : 1,
-          display: "flex", alignItems: "center", justifyContent: "center", marginBottom: "4px",
-        }}>
-          {status === "green" && (
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <circle cx="8.7071" cy="8.7071" r="8.7071" fill="white" />
-              <path d="M4.5 8.90237L7.77251 11.8047L14.3175 6" stroke="#0D9400" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          )}
-          {status === "yellow" && (
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <circle cx="8.7071" cy="8.7071" r="8.7071" fill="white" />
-              <path d="M11.9619 4.83728L4.10791 12.5769M4.10791 4.83728L11.9619 12.5769" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-          )}
-          {status === "future" && (
-            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-              <circle opacity="0.5" cx="8.7071" cy="8.7071" r="8.7071" fill="white" />
-            </svg>
-          )}
-        </div>
-        <span style={{ color: "#666", fontFamily: "Outfit", fontSize: "10px", fontWeight: 600 }}>{dayLabel}</span>
-      </div>
-    );
-
-    // --- Bonus Special Sessions ---
+    // --- One-off "Special Bonus Session" (Face Yoga / Weight Loss / Meditation) ---
     const lang = studentData?.language === "English" ? "English" : "Telugu";
-    const BONUS_DAYS = lang === "English" ? [5, 8, 12, 15, 19, 22] : [4, 8, 11, 15, 18, 22];
-
-    if (BONUS_DAYS.includes(currentDay)) {
-      type BonusInfo = { name: string; fullName: string; startMin: number; videoId: string; sessionLink: string; thumbnail: string; liveDuration?: number; activeEndOffset?: number };
-      const getBonusInfo = (day: number, l: string): BonusInfo => {
-        if (l === "Telugu") {
-          switch (day) {
-            case 4: return { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga", thumbnail: thumbFaceYogaTel, liveDuration: 60, activeEndOffset: 60 };
-            case 8: return { name: "Weight Loss Session", fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession", thumbnail: thumbWeightLossTel };
-            case 11: return { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "cXaVIxH3RKA", sessionLink: "https://www.youtube.com/watch?v=cXaVIxH3RKA", thumbnail: ytThumb("cXaVIxH3RKA") };
-            case 15: return { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/breathwork", thumbnail: thumbBreathWorkTel, liveDuration: 30, activeEndOffset: 60 };
-            case 18: return { name: "Live Q&A", fullName: "Live Q&A Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/liveqa", thumbnail: ytThumb("SyjnCjDtNS8"), liveDuration: 60, activeEndOffset: 60 };
-            case 22: return { name: "Graduation Session", fullName: "Graduation Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/graduation", thumbnail: ytThumb("SyjnCjDtNS8") };
-            default: return {} as BonusInfo;
-          }
-        } else {
-          switch (day) {
-            case 5: return { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga_eng", thumbnail: thumbFaceYogaEng, liveDuration: 60, activeEndOffset: 60 };
-            case 8: return { name: "Weight Loss Orientation", fullName: "Weight Loss Orientation at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession_eng", thumbnail: thumbWeightLossEng };
-            case 12: return { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "u1Hom0s7ibU", sessionLink: "https://start.dailyyogawithjagan.com/meditation_eng", thumbnail: thumbMeditationEng };
-            case 15: return { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/bw_eng", thumbnail: thumbBreathWorkEng, liveDuration: 30, activeEndOffset: 60 };
-            case 19: return { name: "Live Q&A", fullName: "Live Q&A Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/liveqa_eng", thumbnail: ytThumb("SyjnCjDtNS8"), liveDuration: 60, activeEndOffset: 60 };
-            case 22: return { name: "Graduation Session", fullName: "Graduation Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/graduation_eng", thumbnail: ytThumb("SyjnCjDtNS8") };
-            default: return {} as BonusInfo;
-          }
-        }
-      };
-
-      const bonusSession = getBonusInfo(currentDay, lang);
-      const bonusSessionCode = `free_bonus_${bonusSession.name.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`;
-      const _timeParam = new URLSearchParams(location.search).get("time");
-      const totalMin = (() => { if (_timeParam) { const isPM = _timeParam.toLowerCase().endsWith("pm"); const s = _timeParam.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
-      const showBonus = isOngoingStatus && totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
-      if (showBonus) {
-        const isLive = totalMin >= bonusSession.startMin && totalMin < bonusSession.startMin + (bonusSession.liveDuration ?? 30);
-        const isAMSession = bonusSession.startMin < 12 * 60;
-        const nextSlots = isAMSession ? ["4:00 PM", "5:30 PM", "6:30 PM"] : ["5:00 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
-        const nextWhen = isAMSession ? "at 4:00 PM" : "tomorrow at 5:00 AM";
-        return (
-          <div>
-            <header className="hd-header bg-white">
-              <img src={logo} alt="Healthyday" className="h-7" />
-            </header>
-
-            {/* Bonus Special Session */}
-            <div style={{ padding: "24px 20px 0" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-                <h2 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>
-                  Special Bonus Session
-                </h2>
-                {isLive && (
-                  <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
-                    <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
-                    <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>Ongoing now</span>
-                  </div>
-                )}
-              </div>
-
-              {isLive ? (
-                <>
-                  <a href={bonusSession.sessionLink} target="_blank" rel="noopener noreferrer" onClick={() => trackSessionClick(mobile, bonusSessionCode)} style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px", overflow: "hidden", background: "#000", position: "relative", marginBottom: "12px" }}>
-                    <img
-                      src={bonusSession.thumbnail}
-                      alt={bonusSession.name}
-                      style={{ width: "100%", height: "auto", aspectRatio: "372/204", objectFit: "cover", opacity: 0.85, display: "block" }}
-                    />
-                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <PlayButton />
-                    </div>
-                  </a>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-                    <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>
-                      {bonusSession.name}
-                    </span>
-                    <a
-                      href={bonusSession.sessionLink}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      onClick={() => trackSessionClick(mobile, bonusSessionCode)}
-                      style={{
-                        display: "flex", alignItems: "center", gap: "8px",
-                        height: "38px", padding: "0 18px", borderRadius: "8px",
-                        background: "#FEAB27", textDecoration: "none",
-                        boxShadow: "0 2px 8px rgba(254,171,39,0.35)",
-                      }}
-                    >
-                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white">
-                        <path d="M8 5v14l11-7z" />
-                      </svg>
-                      <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700 }}>JOIN NOW</span>
-                    </a>
-                  </div>
-                </>
-              ) : (
-                <div style={{ marginBottom: "16px" }}>
-                  <a href={bonusSession.sessionLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
-                    <img
-                      src={bonusSession.thumbnail}
-                      alt={bonusSession.name}
-                      style={{ width: "100%", height: "auto", aspectRatio: "360/197", objectFit: "cover", opacity: 0.85, display: "block" }}
-                    />
-                    <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                      <PlayButton />
-                    </div>
-                  </a>
-                  <div style={{
-                    width: "100%", height: "58px",
-                    borderRadius: "0 0 12px 12px",
-                    border: "1.5px solid #E9E9E9", background: "#FFF",
-                    boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
-                    display: "flex", alignItems: "center", paddingLeft: "16px", boxSizing: "border-box",
-                  }}>
-                    <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>
-                      {bonusSession.fullName}
-                    </span>
-                  </div>
-                </div>
-              )}
-
-              {/* Next regular session card replaced by grey note */}
-              <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px", marginTop: "10px" }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
-                  <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
-                  <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
-                  <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D" />
-                  <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                </svg>
-                <span style={{ width: "343px", color: "#747474", fontFamily: "Outfit", fontSize: "13px", fontWeight: 400, lineHeight: "22px", textAlign: "center" }}>
-                  Next Yoga Session is {isAMSession ? "at 4:30 PM" : "tomorrow at 5:30 AM"}. Currently, Bonus Session is going on! Click on the link above to join
-                </span>
-              </div>
-            </div>
-
-            {/* Level Card — 21-day journey progress, legacy June-21-2026 batch only */}
-            {isLegacyTwentyOneDayBatch && (
-              <div style={{ padding: "18px 20px 0" }}>
-                <LevelCard
-                  freeDaysAttended={freeDaysAttended}
-                  studentName={studentData?.name}
-                  joinLink={sessionJoinLink || ""}
-                  language={studentData?.language}
-                  onViewMore={onSwitchToJourney}
-                />
-              </div>
-            )}
-
-            {/* Refer & Win card */}
-            <div style={{ padding: "18px 20px 0" }}>
-              <ReferWinCard showTitle={true} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
-            </div>
-
-            {/* 14 Days Attendance — commented out */}
-            {/* <div style={{ padding: "28px 20px 0" }}>
-              <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, marginBottom: "12px" }}>
-                Your 14 Days Attendance
-              </h3>
-              <div style={{ width: "100%", borderRadius: "15px", border: "1px solid #FFC76F", padding: "16px 12px", background: "#FFE5BA", boxSizing: "border-box" }}>
-                <p style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700, marginBottom: "14px" }}>
-                  {dateRangeLabel}
-                </p>
-                <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "14px" }}>
-                  {dayStatus.slice(0, 7).map((status, i) => (
-                    <DayBox key={i} status={status} dayLabel={`Day ${i + 1}`} />
-                  ))}
-                </div>
-                <div style={{ display: "flex", justifyContent: "space-between" }}>
-                  {dayStatus.slice(7, 14).map((status, i) => (
-                    <DayBox key={i} status={status} dayLabel={`Day ${i + 8}`} />
-                  ))}
-                </div>
-              </div>
-            </div> */}
-
-            {/* Your Referral Gifts — commented out */}
-            {/* {week === 1 && (() => {
-              const refCount = studentData?.total_referral_count ?? 0;
-              const milestones = [
-                { label: "10 Free Classes", reward: "+10", refs: 5 },
-                { label: "20 Free Classes", reward: "+20", refs: 10 },
-                { label: "Healthyday T-shirt", reward: null, refs: 20 },
-                { label: "Water Bottle", reward: null, refs: 40 },
-                { label: "Yoga Mat", reward: null, refs: 60 },
-              ];
-              return (
-                <div style={{ padding: "28px 20px 0" }}>
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-                    <h3>Your Referral Gifts</h3>
-                    <span onClick={() => navigate(`/${mobile || ""}/leaderboard`)}>View More</span>
-                  </div>
-                  <div>
-                    <ReferralMilestonesCard refCount={refCount} milestones={milestones} nextLabel="NEXT GOAL" />
-                  </div>
-                </div>
-              );
-            })()} */}
-
-            {/* Refer & Win card */}
-            {/* <div style={{ padding: "28px 20px 40px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard showTitle={true} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
-            </div> */}
-
-            {/* Week 2 Bonus: show payment section instead */}
-            {week === 2 && (
-              <>
-                <div style={{ padding: "32px 20px 0", textAlign: "center" }}>
-                  <div style={{ width: "100%", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
-                  <p style={{ width: "100%", maxWidth: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
-                </div>
-                {/* <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-                  <ReferWinCard showTitle={true} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
-                </div> */}
-              </>
-            )}
-
-          </div>
-        );
-      } // end if (showBonus)
-    } // end if (BONUS_DAYS)
-
-    let activeRecurringBonusCard: any = null;
-    if (isPaid) {
-      const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
-      const _forceTime = new URLSearchParams(location.search).get("time");
-      const _forceDay = new URLSearchParams(location.search).get("forceDay");
-      const totalMin = (() => { if (_forceTime) { const isPM = _forceTime.toLowerCase().endsWith("pm"); const s = _forceTime.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
-      const currentDow = _forceDay !== null ? parseInt(_forceDay, 10) : nowIST.getUTCDay();
-
-      const activeSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "active" || s.subscription_status === "ongoing") || studentData?.subscriptions?.[0];
-      const planType = activeSub?.plan_type || studentData?.current_plan || studentData?.plan_type;
-      const is6Month = planType === "6_months" || planType === "6_months_upgrade";
-      const is12Month = planType === "12_months" || planType === "12_months_upgrade";
-      const paidLang = studentData?.language === "English" ? "English" : "Telugu";
-      const langKey = paidLang.toLowerCase();
-
-      const anchorDate = new Date(Date.UTC(2026, 3, 5));
-      const diffMs = nowIST.getTime() - anchorDate.getTime();
-      const diffWeeks = Math.floor(diffMs / (1000 * 60 * 60 * 24 * 7));
-      const isTeluguFaceYogaWeek = diffWeeks % 2 === 0;
-
-      const eligibleBonusSessions: any[] = [];
-      const getApiBonusLink = (code: string, fallback: string) => { const match = sessionLinks.find((s: any) => s.session_code === code && s.language === langKey); return match?.link || fallback; };
-      const getDynamicThumbnail = (link: string, fallbackId: string) => { if (!link) return ytThumb(fallbackId); const match = link.match(/(?:v=|youtu\.be\/|\/live\/|\/shorts\/|\/embed\/)([a-zA-Z0-9_-]{11})/); return ytThumb(match ? match[1] : fallbackId); };
-      
-      if (is12Month && currentDow === 0) {
-        if (paidLang === "Telugu" && isTeluguFaceYogaWeek) {
-          const link = getApiBonusLink("face_yoga", "https://join.healthyday.co.in/healthyface");
-          eligibleBonusSessions.push({ name: "Face Yoga Session", fullName: "Face Yoga Session at 11:30 AM", startMin: 690, sessionLink: link, thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8") });
-        } else if (paidLang === "English" && !isTeluguFaceYogaWeek) {
-          const link = getApiBonusLink("face_yoga", "https://join.healthyday.co.in/healthyface_eng");
-          eligibleBonusSessions.push({ name: "Face Yoga Session", fullName: "Face Yoga Session at 11:30 AM", startMin: 690, sessionLink: link, thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8") });
-        }
-      }
-      if (is12Month) {
-        const link = getApiBonusLink("paid_diet", paidLang === "English" ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet");
-        eligibleBonusSessions.push({ name: "Diet Session", fullName: "Diet Session at 8:00 PM", startMin: 1200, sessionLink: link, thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8") });
-      }
-      if ((is6Month || is12Month) && !(paidLang === "English" && currentDow === 0)) {
-        const link = getApiBonusLink("b2h", paidLang === "English" ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession");
-        eligibleBonusSessions.push({ name: "Breath to Heal Session", fullName: "Breath to Heal Session at 9:00 PM", startMin: 1260, sessionLink: link, thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8") });
-      }
-
-      activeRecurringBonusCard = eligibleBonusSessions.find(s => totalMin >= s.startMin - 30 && totalMin < s.startMin + 45) || null;
-    }
+    const bonusDaysForLang = lang === "English" ? BONUS_DAYS_ENGLISH : BONUS_DAYS_TELUGU;
+    const bonusInfo = bonusDaysForLang.includes(currentDay)
+      ? getBonusInfo(currentDay, lang, { faceYogaTel: thumbFaceYogaTel, faceYogaEng: thumbFaceYogaEng, weightLossTel: thumbWeightLossTel, weightLossEng: thumbWeightLossEng, meditationEng: thumbMeditationEng })
+      : null;
+    const showBonus = !!bonusInfo && totalMinCalc >= bonusInfo.startMin - 30 && totalMinCalc < bonusInfo.startMin + (bonusInfo.activeEndOffset ?? 30);
+    const bonusIsLive = !!bonusInfo && totalMinCalc >= bonusInfo.startMin && totalMinCalc < bonusInfo.startMin + (bonusInfo.liveDuration ?? 30);
 
     return (
-      <div>
+      <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
         <header className="hd-header bg-white">
           <img src={logo} alt="Healthyday" className="h-7" />
         </header>
 
-        {activeRecurringBonusCard && (() => {
-          const rTotalMin = (() => { const _t = new URLSearchParams(location.search).get("time"); if (_t) { const isPM = _t.toLowerCase().endsWith("pm"); const s = _t.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
-          const bonusIsLive = rTotalMin >= activeRecurringBonusCard.startMin && rTotalMin < activeRecurringBonusCard.startMin + 30;
-          const bonusTimeLabel = activeRecurringBonusCard.fullName.replace(/^.*at\s+/, '');
-          return (
-            <div style={{ padding: "24px 20px 0" }}>
-              <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-                <h2 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>
-                  {bonusIsLive ? `${activeRecurringBonusCard.name} - Live Now` : `Next Session - ${activeRecurringBonusCard.name}`}
-                </h2>
-                {bonusIsLive && (
-                  <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
-                    <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
-                    <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>LIVE</span>
-                  </div>
-                )}
-              </div>
-              <div style={{ width: "100%" }}>
-                <a href={activeRecurringBonusCard.sessionLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
-                  <img src={activeRecurringBonusCard.thumbnail} alt={activeRecurringBonusCard.name} style={{ width: "100%", height: "auto", aspectRatio: "372/204", objectFit: "cover", opacity: 0.85, display: "block" }} />
-                  <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}><PlayButton /></div>
-                </a>
-                <div style={{ width: "100%", height: "67px", borderRadius: "0 0 12px 12px", border: "1.5px solid #E9E9E9", background: "#FFF", boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)", display: "flex", alignItems: "center", justifyContent: "center", boxSizing: "border-box" }}>
-                  {bonusIsLive ? (
-                    <a href={activeRecurringBonusCard.sessionLink} target="_blank" rel="noopener noreferrer" style={{ width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none", boxShadow: "0 2px 8px rgba(254,171,39,0.35)" }}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none"><path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /><path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" /></svg>
-                      <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN NOW</span>
-                    </a>
-                  ) : (
-                    <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>Session Starts at {bonusTimeLabel}</span>
-                  )}
-                </div>
-              </div>
-            </div>
-          );
-        })()}
-
-        {/* Your Yoga Session — live/not-live */}
-        {(() => {
-          const _timeParam2 = new URLSearchParams(location.search).get("time");
-          const totalMin = (() => { if (_timeParam2) { const isPM = _timeParam2.toLowerCase().endsWith("pm"); const s = _timeParam2.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
-
-          // Bonus session detection for regular session card
-          const BONUS_DAYS = [3, 5, 7, 10, 14];
-          const bonusByDayMap: Record<number, Record<string, { fullName: string; startMin: number; sessionLink: string; thumbnail: string; liveDuration?: number; activeEndOffset?: number }>> = {
-            3: {
-              Telugu: { fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/faceyoga", thumbnail: ytThumb("SyjnCjDtNS8") },
-              English: { fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/faceyoga_eng", thumbnail: ytThumb("SyjnCjDtNS8") }
-            },
-            5: { Telugu: { fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, sessionLink: "https://start.dailyyogawithjagan.com/meditation_tel", thumbnail: ytThumb("raCc7Z31LYw") }, English: { fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, sessionLink: "https://start.dailyyogawithjagan.com/meditation_eng", thumbnail: ytThumb("u1Hom0s7ibU") } },
-            7: { Telugu: { fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession", thumbnail: ytThumb("SyjnCjDtNS8") }, English: { fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession_eng", thumbnail: ytThumb("SyjnCjDtNS8") } },
-            10: {
-              Telugu: { fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/breathwork", thumbnail: ytThumb("SyjnCjDtNS8") },
-              English: { fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/bw_eng", thumbnail: ytThumb("SyjnCjDtNS8") }
-            },
-            14: { Telugu: { fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/sleepsession", thumbnail: ytThumb("SyjnCjDtNS8") }, English: { fullName: "Sleep Session at 10:30 AM", startMin: 10 * 60 + 30, sessionLink: "https://start.dailyyogawithjagan.com/sleepsession_eng", thumbnail: ytThumb("SyjnCjDtNS8") } },
-          };
-          const bonusLang = studentData?.language === "English" ? "English" : "Telugu";
-          const isBonusDay = BONUS_DAYS.includes(currentDay);
-          const bonusSessionData = isBonusDay ? bonusByDayMap[currentDay][bonusLang] : null;
-          const showBonus = isPaid && isBonusDay && bonusSessionData !== null && totalMin >= bonusSessionData.startMin - 30 && totalMin < bonusSessionData.startMin + (bonusSessionData.activeEndOffset ?? 30);
-
-          const MORNING_SLOTS = [
-            { start: 4 * 60 + 30, end: 6 * 60 + 30, label: "5:30 AM" }, // Starts at 4:45 AM
-            { start: 6 * 60 + 30, end: 7 * 60 + 30, label: "6:30 AM" },
-            { start: 7 * 60 + 30, end: 8 * 60 + 30, label: "7:30 AM" },
-            { start: 8 * 60 + 30, end: 9 * 60 + 30, label: "8:30 AM" },
-          ];
-          const EVENING_SLOTS = [
-            { start: 15 * 60 + 30, end: 17 * 60 + 30, label: "4:30 PM" }, // Starts at 3:30 PM
-            { start: 17 * 60 + 30, end: 18 * 60 + 30, label: "5:30 PM" },
-            { start: 18 * 60 + 30, end: 19 * 60 + 30, label: "6:30 PM" },
-          ];
-          const allSlots = [...MORNING_SLOTS, ...EVENING_SLOTS];
-          const liveSlot = allSlots.find(s => totalMin >= s.start && totalMin < s.end);
-          const nextSlot = allSlots.find(s => s.start > totalMin);
-          const isTomorrow = !liveSlot && !nextSlot;
-          const displaySlots = (!liveSlot && nextSlot)
-            ? (MORNING_SLOTS.some(s => s.label === nextSlot.label) ? MORNING_SLOTS : EVENING_SLOTS)
-            : MORNING_SLOTS; // tomorrow: show morning slots
-
-          const nextLabel = nextSlot ? nextSlot.label : "5:30 AM";
-          const nextText = isTomorrow ? `tomorrow at ${nextLabel}` : `at ${nextLabel}`;
-
-          // If there's an active recurring bonus card and nothing else is live, hide this section
-          if (activeRecurringBonusCard && !liveSlot && !showBonus) {
-            return null;
-          }
-
-          let noteText: string | null = null;
-          if (showBonus && bonusSessionData) {
-            noteText = `Next Yoga Session is ${nextText}. Currently, Bonus Session is going on! Click on the link above to join`;
-          } else if (!liveSlot) {
-            noteText = null;
-          }
-
-          return (
-            <div style={{ padding: "24px 20px 0" }}>
-              {(!liveSlot && !showBonus) ? (
-                (currentDay === 1 && !isTomorrow && !(nextSlot && EVENING_SLOTS.some(s => s.label === nextSlot.label))) ? (
-                  <>
-                    <div style={{ paddingTop: "16px", textAlign: "center" }}>
-                      <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#0A386F" }}>
-                        14-DAYS ONLINE FREE YOGA
-                      </p>
-                      <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
-                        STARTING <StartDateLabel date={batchOrigin} />
-                      </p>
-                    </div>
-                    <div className="flex flex-col items-center m-3">
-                      <div style={{ maxWidth: "342px", display: "flex", alignItems: "center", gap: "6px" }}>
-                        <SunIcon />
-                        <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "9px", fontWeight: 700, lineHeight: "normal" }}>
-                          MOR - 5:30AM | 6:30AM | 7:30AM | 8:30AM IST
-                        </span>
-                      </div>
-                      <div style={{ maxWidth: "342px", display: "flex", alignItems: "center", gap: "6px" }}>
-                        <MoonIcon />
-                        <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "9px", fontWeight: 700, lineHeight: "normal" }}>
-                          EVE - 4:30PM | 5:30PM | 6:30PM IST
-                        </span>
-                      </div>
-                    </div>
-                  </>
-                ) : (
-                  <div style={{ display: "flex", justifyContent: "center" }}>
-                    <NoSessionsCard totalMin={totalMin} isFreeBatch={true} />
-                  </div>
-                )
-              ) : (
-                <>
-                  {/* Header */}
-                  <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
-                    <h2 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Your Yoga Session</h2>
-                    {liveSlot && (
-                      <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
-                        <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
-                        <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>Ongoing now</span>
-                      </div>
-                    )}
-                  </div>
-
-                  {/* Session Card */}
-                  <div style={{ width: "100%" }}>
-                    {/* Thumbnail */}
-                    <a href={showBonus && bonusSessionData ? bonusSessionData.sessionLink : sessionLink} target="_blank" rel="noopener noreferrer" onClick={() => { markTodayJoined(); trackSessionClick(mobile, showBonus && bonusSessionData ? `free_bonus_${bonusSessionData.fullName.toLowerCase().replace(/[^a-z0-9]+/g, "_")}` : freeSessionCode); }} style={{ display: "block", textDecoration: "none" }}>
-                      <div style={{
-                        width: "100%",
-                        height: "auto",
-                        aspectRatio: "178/93",
-                        borderRadius: "12px 12px 0 0",
-                        background: (() => {
-                          if (showBonus && bonusSessionData) return `url(${bonusSessionData.thumbnail}) lightgray 50% / cover no-repeat`;
-                          if (sessionVideoId) {
-                            return `url(https://img.youtube.com/vi/${sessionVideoId}/maxresdefault.jpg) lightgray 50% / cover no-repeat`;
-                          }
-                          const lang = studentData?.language;
-                          if (lang === "English") return "url(/language%20English.jpg) lightgray 50% / cover no-repeat";
-                          return "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat";
-                        })(),
-                        boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
-                        position: "relative",
-                      }}>
-                        <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px", background: "rgba(0, 0, 0, 0.32)" }} />
-                        <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-                          <PlayButton />
-                        </div>
-                      </div>
-                    </a>
-
-                    {/* Bottom bar */}
-                    <div style={{
-                      width: "100%",
-                      height: "67px",
-                      borderRadius: "0 0 12px 12px",
-                      border: "1.5px solid #E9E9E9",
-                      background: "#FFF",
-                      boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      boxSizing: "border-box",
-                      paddingLeft: "16px",
-                    }}>
-                      {(() => {
-                        // 30 min before bonus: show JOIN button linking to bonus
-                        if (showBonus && bonusSessionData) {
-                          return (
-                            <a href={bonusSessionData.sessionLink} target="_blank" rel="noopener noreferrer" onClick={() => { markTodayJoined(); trackSessionClick(mobile, `free_bonus_${bonusSessionData.fullName.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`); }} style={{
-                              width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27",
-                              display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none",
-                            }}>
-                              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                                <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                              </svg>
-                              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION</span>
-                            </a>
-                          );
-                        }
-                        // Bonus day but outside 30-min window, and no regular session is live: show bonus session name text
-                        if (isBonusDay && bonusSessionData && !liveSlot) {
-                          return (
-                            <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>
-                              {bonusSessionData.fullName}
-                            </span>
-                          );
-                        }
-                        // Regular day: show JOIN SESSION with API link
-                        return (
-                          <a href={sessionLink} target="_blank" rel="noopener noreferrer" onClick={() => { markTodayJoined(); trackSessionClick(mobile, freeSessionCode); }} style={{
-                            width: "300px",
-                            height: "40px",
-                            borderRadius: "10px",
-                            background: "#FEAB27",
-                            display: "flex",
-                            alignItems: "center",
-                            justifyContent: "center",
-                            gap: "8px",
-                            textDecoration: "none",
-                          }}>
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                              <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                              <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                              <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                            </svg>
-                            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION</span>
-                          </a>
-                        );
-                      })()}
-                    </div>
-                  </div>
-
-                  {/* Note — conditionally shown */}
-                  {noteText && (
-                    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "center", gap: "5px", marginTop: "10px" }}>
-                      <svg xmlns="http://www.w3.org/2000/svg" width="14.764" height="14.764" viewBox="0 0 17 17" fill="none" style={{ flexShrink: 0, marginTop: "3px" }}>
-                        <path d="M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" fill="#9D9D9D" />
-                        <path d="M8.38188 5.92126H8.39009H8.38188Z" fill="#9D9D9D" />
-                        <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D" />
-                        <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                      <span style={{ width: "343px", color: "#747474", fontFamily: "Outfit", fontSize: "13px", fontWeight: 400, lineHeight: "22px", textAlign: "center" }}>
-                        {noteText}
-                      </span>
-                    </div>
-                  )}
-                </>
-              )}
-            </div>
-          );
-        })()}
-
-        {/* Level Card — 21-day journey progress, legacy June-21-2026 batch only */}
-        {isLegacyTwentyOneDayBatch && (
-          <div style={{ padding: "18px 20px 0" }}>
-            <LevelCard
-              freeDaysAttended={freeDaysAttended}
-              studentName={studentData?.name}
-              joinLink={sessionJoinLink || ""}
-              language={studentData?.language}
-              onViewMore={onSwitchToJourney}
-            />
-          </div>
+        {showBonus && bonusInfo ? (
+          <FourteenDayBonusSessionCard bonusSession={bonusInfo} isLive={bonusIsLive} mobile={mobile} />
+        ) : (
+          <FourteenDaySessionCard
+            currentDay={currentDay}
+            batchOrigin={batchOrigin}
+            sessionLink={sessionLink}
+            sessionVideoId={sessionVideoId}
+            language={studentData?.language}
+            mobile={mobile}
+            freeSessionCode={freeSessionCode}
+            onJoin={markTodayJoined}
+          />
         )}
 
-        {/* Refer & Win card */}
-        <div style={{ padding: "18px 20px 0" }}>
-          <ReferWinCard showTitle={true} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
-        </div>
-
-        {/* 14 Days Attendance — commented out */}
-        {/* <div style={{ padding: "28px 20px 0" }}>
-          <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, marginBottom: "12px" }}>
-            Your 14 Days Attendance
-          </h3>
-          <div style={{
-            width: "100%", borderRadius: "15px",
-            border: "1px solid #FFC76F", padding: "16px 12px", background: "#FFE5BA", boxSizing: "border-box",
-          }}>
-            <p style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700, marginBottom: "14px" }}>
-              {dateRangeLabel}
-            </p>
-            <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "14px" }}>
-              {dayStatus.slice(0, 7).map((status, i) => (
-                <DayBox key={i} status={status} dayLabel={`Day ${i + 1}`} />
-              ))}
-            </div>
-            <div style={{ display: "flex", justifyContent: "space-between" }}>
-              {dayStatus.slice(7, 14).map((status, i) => (
-                <DayBox key={i} status={status} dayLabel={`Day ${i + 8}`} />
-              ))}
-            </div>
-          </div>
-        </div> */}
-
-        {/* Week 2 Pricing & Comparison */}
-        {/* {week === 2 && (
-          <PricingAndComparisonSection selectedPlanIdx={selectedPlanIdx} setSelectedPlanIdx={setSelectedPlanIdx} daysLeft={Math.max(0, 15 - currentDay)} useOngoingPricing={true} />
-        )} */}
-
-        {/* Your Referral Gifts Section — commented out */}
-        {/* {week === 1 && (
-          <>
-            {(() => {
-              const refCount = studentData?.total_referral_count ?? 0;
-              const milestones = [...];
-              return (
-                <div>
-                  <h3>Your Referral Gifts</h3>
-                  <ReferralMilestonesCard refCount={refCount} milestones={milestones} />
-                </div>
-              );
-            })()}
-          </>
-        )} */}
-
-        {/* week === 2 && (
-          <>
-            <div style={{ padding: "32px 20px 0", textAlign: "center" }}>
-              <div style={{ width: "100%", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
-              <p style={{ width: "100%", maxWidth: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
-            </div>
-            <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-              <ReferWinCard showTitle={true} shareLink={shareLink} referralsUrl={`/${mobile || ""}/referrals`} />
-            </div>
-          </>
-        ) */}
-
+        <BatchProgressSection
+          dayStatus={dayStatus}
+          dateRangeLabel={dateRangeLabel}
+          week={week as 1 | 2}
+          currentDay={currentDay}
+          totalReferralCount={studentData?.total_referral_count ?? 0}
+          language={studentData?.language}
+          selectedPlanIdx={selectedPlanIdx}
+          setSelectedPlanIdx={setSelectedPlanIdx}
+          shareLink={shareLink}
+          referralsUrl={`/${mobile || ""}/referrals`}
+        />
       </div>
     );
   }
@@ -2242,4 +1630,4 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   );
 };
 
-export default Index;
+export default IndexFourteenDays;
