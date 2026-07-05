@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import HeroBannerWithTabs from "@/components/HeroBannerWithTabs";
-import Index from "@/pages/Index";
+import IndexFourteenDays from "@/pages/IndexFourteenDays";
 import IndexTwentyOneDay from "@/pages/IndexTwentyOneDay";
 import TwentyOneDaysProgram from "@/pages/TwentyOneDaysProgram";
 
@@ -75,10 +75,10 @@ const Dashboard = () => {
   }
 
   // Batch type is the first thing we check: it decides which Live Sessions
-  // component this student gets. 14-day general public uses Index; the
+  // component this student gets. 14-day general public uses IndexFourteenDays; the
   // 21-day/22-day June-21-2026 cohort uses the dedicated IndexTwentyOneDay copy.
   const is21DayBatch = previewProgramme === "21day" || studentData?.free_batch_start_date === FREE_BATCH_DATE;
-  const LiveSessions = is21DayBatch ? IndexTwentyOneDay : Index;
+  const LiveSessions = is21DayBatch ? IndexTwentyOneDay : IndexFourteenDays;
 
   // Determine if this student gets the journey tab:
   // must be in the June-21-2026 free batch AND not paid/pastdue
