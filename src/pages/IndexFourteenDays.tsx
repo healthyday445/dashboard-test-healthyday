@@ -7,6 +7,7 @@ import ReferWinCard from "@/components/ReferWinCard";
 import { FourteenDaySessionCard } from "@/components/FourteenDaySessionCard";
 import { FourteenDayBonusSessionCard, getBonusInfo, BONUS_DAYS } from "@/components/FourteenDayBonusSessionCard";
 import { BatchProgressSection } from "@/components/BatchProgressSection";
+import { WeekTwoCountdownBanner } from "@/components/WeekTwoCountdownBanner";
 import IndexPaid from "@/pages/IndexPaid";
 import type { DayStatus } from "@/components/AttendanceGrid";
 
@@ -612,6 +613,8 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
           <img src={logo} alt="Healthyday" className="h-7" />
         </header>
 
+        {week === 2 && <WeekTwoCountdownBanner daysLeft={Math.max(0, 15 - currentDay)} />}
+
         {showBonus && bonusInfo ? (
           <FourteenDayBonusSessionCard bonusSession={bonusInfo} isLive={bonusIsLive} mobile={mobile} />
         ) : (
@@ -631,11 +634,8 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
           dayStatus={dayStatus}
           dateRangeLabel={dateRangeLabel}
           week={week as 1 | 2}
-          currentDay={currentDay}
           totalReferralCount={studentData?.total_referral_count ?? 0}
           language={studentData?.language}
-          selectedPlanIdx={selectedPlanIdx}
-          setSelectedPlanIdx={setSelectedPlanIdx}
           shareLink={shareLink}
           referralsUrl={`/${mobile || ""}/referrals`}
         />

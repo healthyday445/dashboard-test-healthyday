@@ -6,7 +6,7 @@ import imgLanguageEnglish from "@/assets/language_English.webp";
 import imgLanguageTelugu from "@/assets/language_Telugu.webp";
 import img0da635 from "@/assets/0da635826ff23e34b2bf7680030cac545d32dcfb.webp";
 import img5ce328 from "@/assets/5ce32860a765bdcaeb0504ff13008eea60a6cd55.webp";
-import imgFaceYogaTelugu from "@/assets/bonus/Week-1 Telugu - Face Yoga.jpg";
+import imgFaceYogaTelugu from "@/assets/bonus/faceyoga_tel.jpg";
 import imgFaceYogaEnglish from "@/assets/bonus/faceyoga_eng.jpg";
 
 // classRecordings is now built dynamically inside the component based on student language & API data
