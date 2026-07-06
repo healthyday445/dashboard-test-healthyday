@@ -1444,8 +1444,11 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
       [945, 1170], // Evening: 3:45 PM - 7:30 PM
     ].some(([s, e]) => totalMin >= s && totalMin < e);
 
-    // Plan renewal detection (7 days before plan ends)
-    const planEndDateStr = studentData?.sub_end_date || studentData?.plan_end_date || studentData?.plan_expired_date;
+    // Plan renewal detection (7 days before plan ends). payment_due_date is preferred
+    // over sub_end_date since renewing appends a new subscription entry instead of
+    // updating the original one's end date — sub_end_date alone would keep showing
+    // the "plan expiring" upsell to someone who already renewed.
+    const planEndDateStr = studentData?.payment_due_date || studentData?.sub_end_date || studentData?.plan_end_date || studentData?.plan_expired_date;
     const planEndDate = planEndDateStr ? (() => {
       const parts = planEndDateStr.split('T')[0].split('-');
       if (parts.length === 3) {
