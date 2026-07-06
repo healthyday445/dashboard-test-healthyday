@@ -5,16 +5,21 @@ import logo from "@/assets/Primary_logo.svg";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 import ReferWinCard from "@/components/ReferWinCard";
 import { FourteenDaySessionCard } from "@/components/FourteenDaySessionCard";
-import { FourteenDayBonusSessionCard, getBonusInfo, BONUS_DAYS_TELUGU, BONUS_DAYS_ENGLISH } from "@/components/FourteenDayBonusSessionCard";
+import { FourteenDayBonusSessionCard, getBonusInfo, BONUS_DAYS } from "@/components/FourteenDayBonusSessionCard";
 import { BatchProgressSection } from "@/components/BatchProgressSection";
 import IndexPaid from "@/pages/IndexPaid";
 import type { DayStatus } from "@/components/AttendanceGrid";
 
-import thumbFaceYogaTel from "@/assets/bonus/Face Yoga Thumbnail.jpg";
-import thumbFaceYogaEng from "@/assets/bonus/Face Yoga Thumbnail.jpg";
+import thumbFaceYogaTel from "@/assets/bonus/faceyoga_tel.jpg";
+import thumbFaceYogaEng from "@/assets/bonus/faceyoga_eng.jpg";
 import thumbWeightLossTel from "@/assets/bonus/weightlosssession.jpg";
 import thumbWeightLossEng from "@/assets/bonus/weightlosssession_eng.jpg";
+import thumbBreathWorkTel from "@/assets/bonus/breathwork.jpg";
+import thumbBreathWorkEng from "@/assets/bonus/bw_eng.jpg";
+import thumbMeditationTel from "@/assets/bonus/meditation_tel.jpg";
 import thumbMeditationEng from "@/assets/bonus/meditation_eng.jpg";
+import thumbSleepTel from "@/assets/bonus/sleepsession.jpg";
+import thumbSleepEng from "@/assets/bonus/sleepsession_eng.jpg";
 
 const START_DATE_MONTHS = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
 const getOrdinalSuffix = (day: number) => (day >= 11 && day <= 13 ? "TH" : { 1: "ST", 2: "ND", 3: "RD" }[day % 10] ?? "TH");
@@ -582,11 +587,21 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
     const referralLink = studentData?.referral_link ?? "healthyday.app/ref=ggtujev58";
     const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : referralLink;
 
-    // --- One-off "Special Bonus Session" (Face Yoga / Weight Loss / Meditation) ---
+    // --- One-off "Special Bonus Session" (Face Yoga / Weight Loss / Breath Work / Meditation / Sleep) ---
     const lang = studentData?.language === "English" ? "English" : "Telugu";
-    const bonusDaysForLang = lang === "English" ? BONUS_DAYS_ENGLISH : BONUS_DAYS_TELUGU;
-    const bonusInfo = bonusDaysForLang.includes(currentDay)
-      ? getBonusInfo(currentDay, lang, { faceYogaTel: thumbFaceYogaTel, faceYogaEng: thumbFaceYogaEng, weightLossTel: thumbWeightLossTel, weightLossEng: thumbWeightLossEng, meditationEng: thumbMeditationEng })
+    const bonusInfo = BONUS_DAYS.includes(currentDay)
+      ? getBonusInfo(currentDay, lang, {
+          faceYogaTel: thumbFaceYogaTel,
+          faceYogaEng: thumbFaceYogaEng,
+          weightLossTel: thumbWeightLossTel,
+          weightLossEng: thumbWeightLossEng,
+          breathWorkTel: thumbBreathWorkTel,
+          breathWorkEng: thumbBreathWorkEng,
+          meditationTel: thumbMeditationTel,
+          meditationEng: thumbMeditationEng,
+          sleepTel: thumbSleepTel,
+          sleepEng: thumbSleepEng,
+        })
       : null;
     const showBonus = !!bonusInfo && totalMinCalc >= bonusInfo.startMin - 30 && totalMinCalc < bonusInfo.startMin + (bonusInfo.activeEndOffset ?? 30);
     const bonusIsLive = !!bonusInfo && totalMinCalc >= bonusInfo.startMin && totalMinCalc < bonusInfo.startMin + (bonusInfo.liveDuration ?? 30);

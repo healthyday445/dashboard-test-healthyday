@@ -14,30 +14,91 @@ interface BonusThumbnails {
   faceYogaEng: string;
   weightLossTel: string;
   weightLossEng: string;
+  breathWorkTel: string;
+  breathWorkEng: string;
+  meditationTel: string;
   meditationEng: string;
+  sleepTel: string;
+  sleepEng: string;
 }
 
-// Day → bonus session info, keyed by language. Days beyond 14 belong to the
-// 21/22-day cohort and are never reached here since this page caps at day 14.
+// Day → bonus session info — same 5 days for both languages. startMin is the actual
+// session start (not the waiting screen); the card starts showing 30 min before that,
+// and "live"/JOIN runs for the session's real duration below. Days beyond 14 belong to
+// the 21/22-day cohort and are never reached here since this page caps at day 14.
+//
+// Day  Session       Card shows from   Actual session time
+// 3    Face Yoga     8:00 PM           8:30 – 9:00 PM  (30 min)
+// 7    Weight Loss   10:30 AM          11:00 AM – 12:00 Noon (60 min)
+// 10   Breath Work   8:30 PM           9:00 – 9:30 PM  (30 min)
+// 12   Meditation    8:00 PM           8:30 – 9:00 PM  (30 min)
+// 14   Sleep         10:30 AM          11:00 – 11:45 AM (45 min)
 export const getBonusInfo = (day: number, lang: string, thumbnails: BonusThumbnails): BonusInfo | null => {
-  if (lang === "Telugu") {
-    switch (day) {
-      case 4: return { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga", thumbnail: thumbnails.faceYogaTel, liveDuration: 60, activeEndOffset: 60 };
-      case 8: return { name: "Weight Loss Session", fullName: "Weight Loss Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession", thumbnail: thumbnails.weightLossTel };
-      case 11: return { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "cXaVIxH3RKA", sessionLink: "https://www.youtube.com/watch?v=cXaVIxH3RKA", thumbnail: `https://img.youtube.com/vi/cXaVIxH3RKA/hqdefault.jpg` };
-      default: return null;
-    }
-  }
+  const isEnglish = lang === "English";
   switch (day) {
-    case 5: return { name: "Face Yoga Session", fullName: "Face Yoga Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/faceyoga_eng", thumbnail: thumbnails.faceYogaEng, liveDuration: 60, activeEndOffset: 60 };
-    case 8: return { name: "Weight Loss Orientation", fullName: "Weight Loss Orientation at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/weightlosssession_eng", thumbnail: thumbnails.weightLossEng };
-    case 12: return { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "u1Hom0s7ibU", sessionLink: "https://start.dailyyogawithjagan.com/meditation_eng", thumbnail: thumbnails.meditationEng };
-    default: return null;
+    case 3:
+      return {
+        name: "Face Yoga Session",
+        fullName: "Face Yoga Session at 8:30 PM",
+        startMin: 20 * 60 + 30,
+        videoId: "SyjnCjDtNS8",
+        sessionLink: isEnglish ? "https://start.dailyyogawithjagan.com/faceyoga_eng" : "https://start.dailyyogawithjagan.com/faceyoga",
+        thumbnail: isEnglish ? thumbnails.faceYogaEng : thumbnails.faceYogaTel,
+        liveDuration: 30,
+        activeEndOffset: 30,
+      };
+    case 7: {
+      const name = isEnglish ? "Weight Loss Orientation" : "Weight Loss Session";
+      return {
+        name,
+        fullName: `${name} at 11:00 AM`,
+        startMin: 11 * 60,
+        videoId: "SyjnCjDtNS8",
+        sessionLink: isEnglish ? "https://start.dailyyogawithjagan.com/weightlosssession_eng" : "https://start.dailyyogawithjagan.com/weightlosssession",
+        thumbnail: isEnglish ? thumbnails.weightLossEng : thumbnails.weightLossTel,
+        liveDuration: 60,
+        activeEndOffset: 60,
+      };
+    }
+    case 10:
+      return {
+        name: "Breath Work Session",
+        fullName: "Breath Work Session at 9:00 PM",
+        startMin: 21 * 60,
+        videoId: "SyjnCjDtNS8",
+        sessionLink: isEnglish ? "https://start.dailyyogawithjagan.com/bw_eng" : "https://start.dailyyogawithjagan.com/breathwork",
+        thumbnail: isEnglish ? thumbnails.breathWorkEng : thumbnails.breathWorkTel,
+        liveDuration: 30,
+        activeEndOffset: 30,
+      };
+    case 12:
+      return {
+        name: "Meditation Session",
+        fullName: "Meditation Session at 8:30 PM",
+        startMin: 20 * 60 + 30,
+        videoId: isEnglish ? "u1Hom0s7ibU" : "cXaVIxH3RKA",
+        sessionLink: isEnglish ? "https://start.dailyyogawithjagan.com/meditation_eng" : "https://www.youtube.com/watch?v=cXaVIxH3RKA",
+        thumbnail: isEnglish ? thumbnails.meditationEng : thumbnails.meditationTel,
+        liveDuration: 30,
+        activeEndOffset: 30,
+      };
+    case 14:
+      return {
+        name: "Sleep Session",
+        fullName: "Sleep Session at 11:00 AM",
+        startMin: 11 * 60,
+        videoId: "SyjnCjDtNS8",
+        sessionLink: isEnglish ? "https://start.dailyyogawithjagan.com/sleepsession_eng" : "https://start.dailyyogawithjagan.com/sleepsession",
+        thumbnail: isEnglish ? thumbnails.sleepEng : thumbnails.sleepTel,
+        liveDuration: 45,
+        activeEndOffset: 45,
+      };
+    default:
+      return null;
   }
 };
 
-export const BONUS_DAYS_TELUGU = [4, 8, 11];
-export const BONUS_DAYS_ENGLISH = [5, 8, 12];
+export const BONUS_DAYS = [3, 7, 10, 12, 14];
 
 interface FourteenDayBonusSessionCardProps {
   bonusSession: BonusInfo;

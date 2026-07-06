@@ -1,6 +1,8 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import imgIngredients from "@/assets/Ingredients.png";
+import imgLanguageEnglish from "@/assets/language_English.webp";
+import imgLanguageTelugu from "@/assets/language_Telugu.webp";
 import { getCurrentMinutesIST } from "@/lib/utils";
 import { getActivePaidBonusSession, isRegularSessionLive } from "@/lib/paidBonusSessions";
 import { getPlanRenewalInfo } from "@/lib/planRenewal";
@@ -59,7 +61,7 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, mobile
   const sessionVideoId = ytMatch ? ytMatch[1] : null;
   const sessionThumbnail = sessionVideoId
     ? `https://img.youtube.com/vi/${sessionVideoId}/hqdefault.jpg`
-    : `/language%20${studentData?.language === "English" ? "English" : "Telugu"}.jpg`;
+    : studentData?.language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
 
   // Face Yoga alternates Telugu/English by week, anchored to April 5, 2026
   const anchorDate = new Date(Date.UTC(2026, 3, 5));

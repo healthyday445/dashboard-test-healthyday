@@ -1,6 +1,8 @@
 import { useLocation } from "react-router-dom";
 import { trackSessionClick } from "@/lib/trackSessionClick";
 import NoSessionsCard from "@/components/NoSessionsCard";
+import imgLanguageEnglish from "@/assets/language_English.webp";
+import imgLanguageTelugu from "@/assets/language_Telugu.webp";
 
 const StartDateLabel = ({ date }: { date: Date }) => {
   const MONTHS = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
@@ -149,7 +151,7 @@ export const FourteenDaySessionCard: React.FC<FourteenDaySessionCardProps> = ({
                 position: "relative",
               }}>
                 <img
-                  src={sessionVideoId ? `https://img.youtube.com/vi/${sessionVideoId}/hqdefault.jpg` : language === "English" ? "/language%20English.jpg" : "/language%20Telugu.jpg"}
+                  src={sessionVideoId ? `https://img.youtube.com/vi/${sessionVideoId}/hqdefault.jpg` : language === "English" ? imgLanguageEnglish : imgLanguageTelugu}
                   alt=""
                   style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                   onLoad={(e) => {
@@ -157,12 +159,16 @@ export const FourteenDaySessionCard: React.FC<FourteenDaySessionCardProps> = ({
                     // thumbnail exists for a video — the browser treats that as a successful
                     // load, so onError never fires. Catch it here by its telltale small size.
                     const img = e.target as HTMLImageElement;
-                    if (img.naturalWidth <= 120 && !img.src.includes("language%20")) {
-                      img.src = language === "English" ? "/language%20English.jpg" : "/language%20Telugu.jpg";
+                    const fallback = language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
+                    if (img.naturalWidth <= 120 && img.src !== fallback) {
+                      img.src = fallback;
                     }
                   }}
                   onError={(e) => {
-                    (e.target as HTMLImageElement).src = language === "English" ? "/language%20English.jpg" : "/language%20Telugu.jpg";
+                    // Guard against retrying the same URL forever if the fallback itself is unreachable.
+                    const img = e.target as HTMLImageElement;
+                    const fallback = language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
+                    if (img.src !== fallback) img.src = fallback;
                   }}
                 />
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.32)" }} />

@@ -5,6 +5,8 @@ import { trackVisit } from "@/lib/trackVisit";
 import { trackSessionClick } from "@/lib/trackSessionClick";
 import logo from "@/assets/Primary_logo.svg";
 import imgIngredients from "@/assets/Ingredients.png";
+import imgLanguageEnglish from "@/assets/language_English.webp";
+import imgLanguageTelugu from "@/assets/language_Telugu.webp";
 import sessionTimeIcon from "@/assets/leaderboard/session_time_icon.webp";
 import { ReferralMilestonesCard } from "@/components/ReferralMilestonesCard";
 import { ReferralProgressBar } from "@/components/ReferWinPopup";
@@ -1145,7 +1147,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
                           src={(() => {
                             if (showBonus && bonusSessionData) return bonusSessionData.thumbnail;
                             if (sessionVideoId) return `https://img.youtube.com/vi/${sessionVideoId}/hqdefault.jpg`;
-                            return studentData?.language === "English" ? "/language%20English.jpg" : "/language%20Telugu.jpg";
+                            return studentData?.language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
                           })()}
                           alt=""
                           style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
@@ -1154,12 +1156,16 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
                             // thumbnail exists for a video — the browser treats that as a successful
                             // load, so onError never fires. Catch it here by its telltale small size.
                             const img = e.target as HTMLImageElement;
-                            if (!showBonus && img.naturalWidth <= 120 && !img.src.includes("language%20")) {
-                              img.src = studentData?.language === "English" ? "/language%20English.jpg" : "/language%20Telugu.jpg";
+                            const fallback = studentData?.language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
+                            if (!showBonus && img.naturalWidth <= 120 && img.src !== fallback) {
+                              img.src = fallback;
                             }
                           }}
                           onError={(e) => {
-                            (e.target as HTMLImageElement).src = studentData?.language === "English" ? "/language%20English.jpg" : "/language%20Telugu.jpg";
+                            // Guard against retrying the same URL forever if the fallback itself is unreachable.
+                            const img = e.target as HTMLImageElement;
+                            const fallback = studentData?.language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
+                            if (img.src !== fallback) img.src = fallback;
                           }}
                         />
                         <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.32)" }} />
@@ -1367,8 +1373,8 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
     const ytMatch = paidJoinLink.match(/(?:v=|youtu\.be\/|\/live\/)([a-zA-Z0-9_-]{11})/);
     const sessionVideoId = ytMatch ? ytMatch[1] : null;
     const sessionThumbnail = sessionVideoId
-      ? `https://img.youtube.com/vi/${sessionVideoId}/maxresdefault.jpg`
-      : `/language%20${studentData?.language === "English" ? "English" : "Telugu"}.jpg`;
+      ? `https://img.youtube.com/vi/${sessionVideoId}/hqdefault.jpg`
+      : studentData?.language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
 
     // Paid Bonus Sessions Logic
     const anchorDate = new Date(Date.UTC(2026, 3, 5)); // April 5, 2026
@@ -1641,9 +1647,21 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
                           src={sessionThumbnail}
                           alt={apiSessionName || "Yoga Session"}
                           style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                          onLoad={(e) => {
+                            // YouTube serves a tiny 120x90 gray placeholder with an HTTP 404 when no
+                            // thumbnail exists for a video — the browser treats that as a successful
+                            // load, so onError never fires. Catch it here by its telltale small size.
+                            const img = e.target as HTMLImageElement;
+                            const fallback = studentData?.language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
+                            if (img.naturalWidth <= 120 && img.src !== fallback) {
+                              img.src = fallback;
+                            }
+                          }}
                           onError={(e) => {
-                            // Fallback to static image if YouTube thumbnail fails
-                            (e.target as HTMLImageElement).src = `/language%20${studentData?.language === "English" ? "English" : "Telugu"}.jpg`;
+                            // Guard against retrying the same URL forever if the fallback itself is unreachable.
+                            const img = e.target as HTMLImageElement;
+                            const fallback = studentData?.language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
+                            if (img.src !== fallback) img.src = fallback;
                           }}
                         />
                         <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px 12px 0 0", background: "rgba(0,0,0,0.32)" }} />

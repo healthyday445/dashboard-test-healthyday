@@ -1,5 +1,7 @@
 import { trackSessionClick } from "@/lib/trackSessionClick";
 import NoSessionsCard from "@/components/NoSessionsCard";
+import imgLanguageEnglish from "@/assets/language_English.webp";
+import imgLanguageTelugu from "@/assets/language_Telugu.webp";
 
 const PlayButton = () => (
   <svg width="68" height="48" viewBox="0 0 68 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -70,13 +72,16 @@ export const PaidLiveSessionCard: React.FC<PaidLiveSessionCardProps> = ({
                 // thumbnail exists for a video — the browser treats that as a successful
                 // load, so onError never fires. Catch it here by its telltale small size.
                 const img = e.target as HTMLImageElement;
-                if (img.naturalWidth <= 120 && !img.src.includes("language%20")) {
-                  img.src = `/language%20${language === "English" ? "English" : "Telugu"}.jpg`;
+                const fallback = language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
+                if (img.naturalWidth <= 120 && img.src !== fallback) {
+                  img.src = fallback;
                 }
               }}
               onError={(e) => {
-                // Fallback to static image if YouTube thumbnail fails
-                (e.target as HTMLImageElement).src = `/language%20${language === "English" ? "English" : "Telugu"}.jpg`;
+                // Guard against retrying the same URL forever if the fallback itself is unreachable.
+                const img = e.target as HTMLImageElement;
+                const fallback = language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
+                if (img.src !== fallback) img.src = fallback;
               }}
             />
             <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px 12px 0 0", background: "rgba(0,0,0,0.32)" }} />
