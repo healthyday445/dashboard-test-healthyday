@@ -65,6 +65,15 @@ export const PaidLiveSessionCard: React.FC<PaidLiveSessionCardProps> = ({
               src={sessionThumbnail}
               alt={apiSessionName || "Yoga Session"}
               style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+              onLoad={(e) => {
+                // YouTube serves a tiny 120x90 gray placeholder with an HTTP 404 when no
+                // thumbnail exists for a video — the browser treats that as a successful
+                // load, so onError never fires. Catch it here by its telltale small size.
+                const img = e.target as HTMLImageElement;
+                if (img.naturalWidth <= 120 && !img.src.includes("language%20")) {
+                  img.src = `/language%20${language === "English" ? "English" : "Telugu"}.jpg`;
+                }
+              }}
               onError={(e) => {
                 // Fallback to static image if YouTube thumbnail fails
                 (e.target as HTMLImageElement).src = `/language%20${language === "English" ? "English" : "Telugu"}.jpg`;

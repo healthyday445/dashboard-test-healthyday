@@ -6,18 +6,18 @@ None of these params affect production behavior for real users — they're only 
 
 ## Live Sessions tab (`/`, `/:mobile`)
 
-`Index.tsx` (14-day general public) or `IndexTwentyOneDay.tsx` (21-day/22-day June-21-2026 cohort) — `Dashboard.tsx` picks between them based on batch type. Rendered standalone at `/` or embedded as the default tab of `Dashboard.tsx` at `/:mobile`.
+`IndexFourteenDays.tsx` (14-day general public — delegates to `IndexPaid.tsx` once a student's status is `paid`) or `IndexTwentyOneDay.tsx` (21-day/22-day June-21-2026 cohort) — `Dashboard.tsx` picks between them based on batch type. Rendered standalone at `/` or embedded as the default tab of `Dashboard.tsx` at `/:mobile`.
 
 `forceDay` and `time` are reserved for this tab only — they control the day-of-batch and time-of-day shown here. They do not affect the Journey tab (see below), even though both tabs are mounted against the same URL.
 
-### 14-day `Index.tsx` — `forceDay` and `time` only
+### 14-day `IndexFourteenDays.tsx` — `forceDay` and `time` only
 
 The 14-day page needs a real account (registered/active) to preview against — it no longer seeds mock data, so `forceDay`/`time` only reshape a real student's real data.
 
 | Param | Value | Effect |
 |---|---|---|
-| `forceDay` | integer | Simulated day-of-batch, counted from `free_batch_start_date`. `1` = batch start date, `2` = start date + 1 day, etc. `0` = the day *before* the batch starts — forces the pre-batch onboarding screen regardless of the account's real status (bypasses the active/paid/pastdue/14-day-completed branches). |
-| `time` | `"7.00PM"`, `"5.30AM"` | Overrides current time-of-day (session live/upcoming logic, bonus windows, the July 5 2026 intro session card, paid bonus sessions) |
+| `forceDay` | integer | Simulated day-of-batch, counted from `free_batch_start_date`. `1` = batch start date, `2` = start date + 1 day, etc. `0` = the day *before* the batch starts — forces the pre-batch onboarding screen regardless of the account's real status (bypasses the active/paid/pastdue/14-day-completed branches, **including a real paid account** — see `forcePaidDay` below if you need to preview the paid dashboard itself). |
+| `time` | `"7.00PM"`, `"5.30AM"` | Overrides current time-of-day (session live/upcoming logic, bonus windows, the July 5 2026 intro session card) |
 
 Examples:
 
@@ -27,6 +27,23 @@ Examples:
 | `/9999999999?forceDay=1&time=4.30am` | Active batch, day 1, 5:30 AM session live (window opens 1hr early) |
 | `/9999999999?forceDay=7&time=7.00PM` | Active batch, day 7, 7:00 PM (evening session live) |
 | `/9999999999?forceDay=14` | Active batch, last day, current real time |
+
+### Paid dashboard `IndexPaid.tsx` — `forcePaidDay` and `time`
+
+Reached automatically once a real account's status is `paid` (via `IndexFourteenDays.tsx`). Uses `time` the same way as above, but day-of-week overrides use their own **`forcePaidDay`** param (0=Sun … 6=Sat) instead of `forceDay` — `forceDay=0` is reserved as the onboarding-preview sentinel above, so reusing it here would force the onboarding screen instead of the paid dashboard, even for a real paid account.
+
+| Param | Value | Effect |
+|---|---|---|
+| `forcePaidDay` | integer (0=Sun … 6=Sat) | Overrides current day-of-week — needed for Face Yoga, which only shows on Sundays |
+| `time` | `"11.40AM"`, `"8.15PM"` | Overrides current time-of-day (regular session + bonus session windows: Face Yoga 11:30 AM Sun, Diet 8:00 PM, Breath to Heal 9:00 PM) |
+
+Examples:
+
+| URL | What it shows |
+|---|---|
+| `/9999999999?time=8.15pm` | Diet Session live (12-month plan) |
+| `/9999999999?time=9.10pm` | Breath to Heal live (6 or 12-month plan) |
+| `/9999999999?forcePaidDay=0&time=11.40am` | Face Yoga live (12-month plan, Sunday only) |
 
 ### 21-day `IndexTwentyOneDay.tsx` — full preview param set (unchanged)
 

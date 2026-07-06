@@ -144,15 +144,28 @@ export const FourteenDaySessionCard: React.FC<FourteenDaySessionCardProps> = ({
                 height: "auto",
                 aspectRatio: "178/93",
                 borderRadius: "12px 12px 0 0",
-                background: sessionVideoId
-                  ? `url(https://img.youtube.com/vi/${sessionVideoId}/maxresdefault.jpg) lightgray 50% / cover no-repeat`
-                  : language === "English"
-                    ? "url(/language%20English.jpg) lightgray 50% / cover no-repeat"
-                    : "url(/language%20Telugu.jpg) lightgray 50% / cover no-repeat",
+                overflow: "hidden",
                 boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
                 position: "relative",
               }}>
-                <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px", background: "rgba(0, 0, 0, 0.32)" }} />
+                <img
+                  src={sessionVideoId ? `https://img.youtube.com/vi/${sessionVideoId}/hqdefault.jpg` : language === "English" ? "/language%20English.jpg" : "/language%20Telugu.jpg"}
+                  alt=""
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  onLoad={(e) => {
+                    // YouTube serves a tiny 120x90 gray placeholder with an HTTP 404 when no
+                    // thumbnail exists for a video — the browser treats that as a successful
+                    // load, so onError never fires. Catch it here by its telltale small size.
+                    const img = e.target as HTMLImageElement;
+                    if (img.naturalWidth <= 120 && !img.src.includes("language%20")) {
+                      img.src = language === "English" ? "/language%20English.jpg" : "/language%20Telugu.jpg";
+                    }
+                  }}
+                  onError={(e) => {
+                    (e.target as HTMLImageElement).src = language === "English" ? "/language%20English.jpg" : "/language%20Telugu.jpg";
+                  }}
+                />
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.32)" }} />
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <PlayButton />
                 </div>

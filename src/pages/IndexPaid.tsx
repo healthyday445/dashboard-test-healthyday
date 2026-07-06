@@ -32,11 +32,13 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, mobile
   const shareLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : referralLink;
   const referralsUrl = `/${mobile || ""}/referrals`;
 
-  // Session live detection (IST)
+  // Session live detection (IST). forcePaidDay is its own param (not forceDay) since
+  // forceDay=0 is reserved on the free-batch page to force the onboarding-preview
+  // screen — reusing it here would make that check misfire for paid students too.
   const totalMin = getCurrentMinutesIST(searchParams.get("time"));
-  const forceDay = searchParams.get("forceDay");
+  const forcePaidDay = searchParams.get("forcePaidDay");
   const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
-  const currentDow = forceDay !== null ? parseInt(forceDay, 10) : nowIST.getUTCDay(); // 0 is Sunday
+  const currentDow = forcePaidDay !== null ? parseInt(forcePaidDay, 10) : nowIST.getUTCDay(); // 0 is Sunday
 
   // Subscription plan duration check
   const activeSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "active" || s.subscription_status === "ongoing") || studentData?.subscriptions?.[0];
@@ -56,7 +58,7 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, mobile
   const ytMatch = paidJoinLink.match(/(?:v=|youtu\.be\/|\/live\/)([a-zA-Z0-9_-]{11})/);
   const sessionVideoId = ytMatch ? ytMatch[1] : null;
   const sessionThumbnail = sessionVideoId
-    ? `https://img.youtube.com/vi/${sessionVideoId}/maxresdefault.jpg`
+    ? `https://img.youtube.com/vi/${sessionVideoId}/hqdefault.jpg`
     : `/language%20${studentData?.language === "English" ? "English" : "Telugu"}.jpg`;
 
   // Face Yoga alternates Telugu/English by week, anchored to April 5, 2026
