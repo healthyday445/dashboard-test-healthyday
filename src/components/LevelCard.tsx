@@ -219,13 +219,16 @@ export function LevelCard({
                 } else {
                   window.open("https://www.youtube.com/live/dwGVmXjBskg", "_blank");
                 }
+              } else if (level === 7) {
+                const targetUrl = studentName ? `/certificate?name=${encodeURIComponent(studentName)}` : "/certificate";
+                window.open(targetUrl, "_blank");
               } else {
                 window.open(joinLink, "_blank");
               }
             }}
           >
             <img src={circledPlayButton} alt="" style={{ width: 12, height: 12 }} />
-            <span style={{ color: "white", fontSize: 12, fontWeight: 700 }}>Join now</span>
+            <span style={{ color: "white", fontSize: 12, fontWeight: 700 }}>{level === 7 ? "Get Cert" : "Join now"}</span>
           </div>
         </>
       ) : (

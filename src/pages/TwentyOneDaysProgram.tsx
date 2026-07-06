@@ -172,6 +172,13 @@ function RewardCard({
       } else {
         window.open("https://www.youtube.com/live/dwGVmXjBskg", "_blank");
       }
+    } else if (levelData.level === 7) {
+      const urlParams = new URLSearchParams(window.location.search);
+      const mobileParam = urlParams.get("mobile") || "";
+      const pathParts = window.location.pathname.split("/");
+      const maybeMobile = pathParts[1] && /^\+?\d+$/.test(pathParts[1]) ? pathParts[1] : mobileParam;
+      const targetUrl = maybeMobile ? `/${maybeMobile}/certificate` : "/certificate";
+      window.open(targetUrl, "_blank");
     }
   };
 

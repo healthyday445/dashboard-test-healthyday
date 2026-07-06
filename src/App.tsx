@@ -15,6 +15,7 @@ import Login from "./pages/Login";
 import Faqs from "./pages/Faqs";
 import IndexFourteenDays from "./pages/IndexFourteenDays";
 import Pricing from "./pages/Pricing";
+import Certificate from "./pages/Certificate";
 
 const queryClient = new QueryClient();
 
@@ -30,6 +31,8 @@ const App = () => {
       <Sonner />
       <BrowserRouter>
         <Routes>
+          <Route path="/certificate" element={<Certificate />} />
+          <Route path="/:mobile/certificate" element={<Certificate />} />
           <Route path="/faqs" element={<Faqs />} />
           <Route path="/:mobile/faqs" element={<Faqs />} />
           <Route path="/:mobile" element={<Dashboard />} />
