@@ -177,9 +177,9 @@ export default function Certificate() {
 
     const displayName = (name || "Your Name Here").trim();
 
-    // Ensure Times New Roman MT font is loaded before drawing
+    // Ensure Times New Roman font is loaded before drawing
     const scaledFontSize = Math.round(fontSize * (canvas.width / 500));
-    const fontSpec = `700 ${scaledFontSize}px "Times New Roman MT", "Times New Roman", serif`;
+    const fontSpec = `normal ${scaledFontSize}px "Times New Roman", serif`;
 
     try {
       if (document.fonts && document.fonts.load) {
