@@ -1,16 +1,16 @@
 # Graph Report - dashboard-test-healthyday  (2026-07-07)
 
 ## Corpus Check
-- 140 files · ~305,139 words
+- 139 files · ~297,713 words
 - Verdict: corpus is large enough that graph structure adds value.
 
 ## Summary
-- 887 nodes · 1127 edges · 95 communities (75 shown, 20 thin omitted)
+- 879 nodes · 1112 edges · 85 communities (70 shown, 15 thin omitted)
 - Extraction: 99% EXTRACTED · 1% INFERRED · 0% AMBIGUOUS · INFERRED: 6 edges (avg confidence: 0.8)
 - Token cost: 0 input · 0 output
 
 ## Graph Freshness
-- Built from commit: `21e0e0a9`
+- Built from commit: `8ae4405d`
 - Run `git rev-parse HEAD` and compare to check if the graph is stale.
 - Run `graphify update .` after code changes (no API cost).
 
@@ -73,26 +73,16 @@
 - [[_COMMUNITY_Community 68|Community 68]]
 - [[_COMMUNITY_Community 69|Community 69]]
 - [[_COMMUNITY_Community 70|Community 70]]
-- [[_COMMUNITY_Community 71|Community 71]]
 - [[_COMMUNITY_Community 72|Community 72]]
 - [[_COMMUNITY_Community 73|Community 73]]
 - [[_COMMUNITY_Community 74|Community 74]]
 - [[_COMMUNITY_Community 75|Community 75]]
-- [[_COMMUNITY_Community 76|Community 76]]
 - [[_COMMUNITY_Community 77|Community 77]]
 - [[_COMMUNITY_Community 78|Community 78]]
 - [[_COMMUNITY_Community 79|Community 79]]
 - [[_COMMUNITY_Community 80|Community 80]]
 - [[_COMMUNITY_Community 81|Community 81]]
 - [[_COMMUNITY_Community 82|Community 82]]
-- [[_COMMUNITY_Community 87|Community 87]]
-- [[_COMMUNITY_Community 88|Community 88]]
-- [[_COMMUNITY_Community 89|Community 89]]
-- [[_COMMUNITY_Community 90|Community 90]]
-- [[_COMMUNITY_Community 91|Community 91]]
-- [[_COMMUNITY_Community 92|Community 92]]
-- [[_COMMUNITY_Community 93|Community 93]]
-- [[_COMMUNITY_Community 94|Community 94]]
 
 ## God Nodes (most connected - your core abstractions)
 1. `cn()` - 71 edges
@@ -118,15 +108,15 @@
 - `AlertDialogFooter()` --calls--> `cn()`  [EXTRACTED]
   src/components/ui/alert-dialog.tsx → src/lib/utils.ts
 
-## Communities (95 total, 20 thin omitted)
+## Communities (85 total, 15 thin omitted)
 
 ### Community 0 - "dependencies / class-variance-authority"
 Cohesion: 0.04
-Nodes (51): dependencies, class-variance-authority, cmdk, date-fns, embla-carousel-react, firebase-admin, @fontsource/outfit, @hookform/resolvers (+43 more)
+Nodes (52): dependencies, class-variance-authority, clsx, cmdk, date-fns, embla-carousel-react, firebase-admin, @fontsource/outfit (+44 more)
 
 ### Community 1 - "useIsMobile() / input.tsx"
-Cohesion: 0.07
-Nodes (25): Sidebar, SidebarContent, SidebarContext, SidebarFooter, SidebarGroup, SidebarGroupAction, SidebarGroupContent, SidebarGroupLabel (+17 more)
+Cohesion: 0.05
+Nodes (38): useIsMobile(), Input, Separator, SheetContent, SheetContentProps, SheetDescription, SheetFooter(), SheetHeader() (+30 more)
 
 ### Community 2 - "NoSessionsCard() / NoSessionsCardProps"
 Cohesion: 0.13
@@ -141,20 +131,20 @@ Cohesion: 0.24
 Nodes (9): AttendanceGrid(), AttendanceGridProps, DayStatus, DayStatusBox(), DayStatusBoxProps, WeeklyAttendanceCard(), WeeklyAttendanceCardProps, WEEK_DAY_LABELS (+1 more)
 
 ### Community 5 - "Action / ActionType"
-Cohesion: 0.12
-Nodes (23): Action, ActionType, actionTypes, addToRemoveQueue(), dispatch(), genId(), listeners, memoryState (+15 more)
+Cohesion: 0.11
+Nodes (24): Action, ActionType, actionTypes, addToRemoveQueue(), dispatch(), genId(), listeners, memoryState (+16 more)
 
 ### Community 6 - "compilerOptions / allowImportingTsExtensions"
 Cohesion: 0.09
 Nodes (22): compilerOptions, allowImportingTsExtensions, baseUrl, isolatedModules, jsx, lib, module, moduleDetection (+14 more)
 
 ### Community 7 - "clsx / cn()"
-Cohesion: 0.17
-Nodes (17): clsx, cn(), Button, ButtonProps, buttonVariants, Calendar(), CalendarProps, Pagination() (+9 more)
+Cohesion: 0.19
+Nodes (15): cn(), ButtonProps, buttonVariants, Calendar(), CalendarProps, Pagination(), PaginationContent, PaginationEllipsis() (+7 more)
 
 ### Community 8 - "NavLink / NavLinkCompatProps"
-Cohesion: 0.11
-Nodes (13): WeekTwoCountdownBanner(), WeekTwoCountdownBannerProps, formatBatchStartLabel(), getNextMonday(), getOrdinalSuffix(), parseTimeStringToMinutes(), START_DATE_MONTHS, Checkbox (+5 more)
+Cohesion: 0.09
+Nodes (14): NavLink, NavLinkCompatProps, getCurrentMinutesIST(), parseTimeStringToMinutes(), Checkbox, HoverCardContent, PopoverContent, Progress (+6 more)
 
 ### Community 9 - "command.tsx / dialog.tsx"
 Cohesion: 0.12
@@ -173,8 +163,8 @@ Cohesion: 0.14
 Nodes (11): FormControl, FormDescription, FormFieldContext, FormFieldContextValue, FormItem, FormItemContext, FormItemContextValue, FormLabel (+3 more)
 
 ### Community 13 - "carousel.tsx / Carousel"
-Cohesion: 0.14
-Nodes (12): Carousel, CarouselApi, CarouselContent, CarouselContext, CarouselContextProps, CarouselItem, CarouselNext, CarouselOptions (+4 more)
+Cohesion: 0.13
+Nodes (13): Button, Carousel, CarouselApi, CarouselContent, CarouselContext, CarouselContextProps, CarouselItem, CarouselNext (+5 more)
 
 ### Community 14 - "compilerOptions / allowJs"
 Cohesion: 0.15
@@ -205,8 +195,8 @@ Cohesion: 0.22
 Nodes (8): Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow
 
 ### Community 21 - "Community 21"
-Cohesion: 0.26
-Nodes (9): PaidActionCard(), PaidActionCardProps, isRegularSessionLive(), getPlanRenewalInfo(), PlanRenewalInfo, getCurrentMinutesIST(), getWeeklyAttendance(), IndexPaid() (+1 more)
+Cohesion: 0.27
+Nodes (6): englishFaqs, generalFaqs, teluguFaqs, AccordionContent, AccordionItem, AccordionTrigger
 
 ### Community 22 - "navigation-menu.tsx / NavigationMenu"
 Cohesion: 0.25
@@ -244,13 +234,9 @@ Nodes (4): InputOTP, InputOTPGroup, InputOTPSeparator, InputOTPSlot
 Cohesion: 0.40
 Nodes (4): permissions, additionalDirectories, allow, defaultMode
 
-### Community 32 - "Community 32"
-Cohesion: 0.15
-Nodes (6): BatchProgressSection(), BatchProgressSectionProps, ReferAndWinTeaser(), ReferAndWinTeaserProps, DIET_PDF_URL, ReferralRewardsCard()
-
 ### Community 33 - "tabs.tsx / TabsContent"
-Cohesion: 0.15
-Nodes (8): ALL_SLOTS, EVENING_SLOTS, FourteenDaySessionCard(), FourteenDaySessionCardProps, getCurrentTotalMin(), MORNING_SLOTS, parseTimeParam(), NoSessionsCardProps
+Cohesion: 0.07
+Nodes (27): ALL_SLOTS, EVENING_SLOTS, FourteenDaySessionCard(), FourteenDaySessionCardProps, getCurrentTotalMin(), MORNING_SLOTS, parseTimeParam(), NoSessionsCardProps (+19 more)
 
 ### Community 34 - "avatar.tsx / Avatar"
 Cohesion: 0.50
@@ -265,16 +251,16 @@ Cohesion: 0.22
 Nodes (8): AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter(), AlertDialogHeader(), AlertDialogOverlay, AlertDialogTitle
 
 ### Community 38 - "Community 38"
-Cohesion: 0.22
-Nodes (6): PaidBonusSessionCard(), PaidBonusSessionCardProps, PaidLiveSessionCard(), PaidLiveSessionCardProps, PaidBonusCard, trackSessionClick()
+Cohesion: 0.40
+Nodes (4): BatchProgressSection(), BatchProgressSectionProps, ReferAndWinTeaser(), ReferAndWinTeaserProps
 
 ### Community 53 - "Community 53"
 Cohesion: 0.12
-Nodes (16): BONUS_DAYS, BONUS_DAYS_ENGLISH, BONUS_DAYS_TELUGU, BonusInfo, BonusThumbnails, FourteenDayBonusSessionCard(), FourteenDayBonusSessionCardProps, getBonusInfo() (+8 more)
+Nodes (15): BONUS_DAYS_ENGLISH, BONUS_DAYS_TELUGU, BonusInfo, BonusThumbnails, FourteenDayBonusSessionCard(), FourteenDayBonusSessionCardProps, getBonusInfo(), englishVideos (+7 more)
 
 ### Community 54 - "Community 54"
-Cohesion: 0.05
-Nodes (14): englishFaqs, generalFaqs, teluguFaqs, DIET_PDF_URL, LeaderboardEntry, PRIZE_IMAGES, UserRank, queryClient (+6 more)
+Cohesion: 0.06
+Nodes (13): DAY_ABBR_TO_DOW, fmt(), getWeekMonday(), mergePaidDataToStorage(), MONTH_NAMES, WEEK_HEADERS, DIET_PDF_URL, LeaderboardEntry (+5 more)
 
 ### Community 55 - "Community 55"
 Cohesion: 0.11
@@ -321,12 +307,8 @@ Cohesion: 0.18
 Nodes (10): ✅ All Paid Users (Telugu + English), code:block1 (status === "paid"), Diet Session (12-Month users only), 🇬🇧 English (4 Videos), Logic Summary, 📹 Paid User — Recordings Reference, Quick Reference: All Session Links, Section 1: Most Recent Session Recordings (+2 more)
 
 ### Community 66 - "Community 66"
-Cohesion: 0.25
-Nodes (5): features, ongoingPlans, paidPlans, plans, PricingAndComparisonSection()
-
-### Community 68 - "Community 68"
-Cohesion: 0.32
-Nodes (4): PlanRenewalSection(), PlanRenewalSectionProps, ReferWinCardProps, ShareReferralActions()
+Cohesion: 0.20
+Nodes (7): PlanRenewalSection(), PlanRenewalSectionProps, features, ongoingPlans, paidPlans, plans, PricingAndComparisonSection()
 
 ### Community 69 - "Community 69"
 Cohesion: 0.29
@@ -336,41 +318,29 @@ Nodes (5): ALL_REF_MILESTONES, getRefWindow(), ReferralProgressBar(), ReferWinPo
 Cohesion: 0.29
 Nodes (6): 🆓 1. Free Student Schedule (21-Day Journey), 👑 2. Paid Student Schedule (14-Day Journey), Bonus Sessions Documentation, 🔵 English Schedule, How to Test Locally, 🟢 Telugu Schedule
 
-### Community 71 - "Community 71"
-Cohesion: 0.28
-Nodes (6): DAY_ABBR_TO_DOW, fmt(), getWeekMonday(), mergePaidDataToStorage(), MONTH_NAMES, WEEK_HEADERS
-
 ### Community 72 - "Community 72"
-Cohesion: 0.29
-Nodes (5): { container }, dayBoxes, queryClient, statusDiv, TooltipContent
-
-### Community 76 - "Community 76"
-Cohesion: 0.22
-Nodes (8): SheetContent, SheetContentProps, SheetDescription, SheetFooter(), SheetHeader(), SheetOverlay, SheetTitle, sheetVariants
-
-### Community 87 - "Community 87"
-Cohesion: 0.53
-Nodes (5): getActivePaidBonusSession(), GetActivePaidBonusSessionParams, getApiLink(), getDynamicThumbnail(), ytThumb()
+Cohesion: 0.40
+Nodes (4): { container }, dayBoxes, queryClient, statusDiv
 
 ## Knowledge Gaps
-- **483 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+478 more)
+- **481 isolated node(s):** `$schema`, `style`, `rsc`, `tsx`, `config` (+476 more)
   These have ≤1 connection - possible missing edges or undocumented components.
-- **20 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **15 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
-- **Why does `cn()` connect `clsx / cn()` to `useIsMobile() / input.tsx`, `Action / ActionType`, `NavLink / NavLinkCompatProps`, `command.tsx / dialog.tsx`, `form.tsx / label.tsx`, `carousel.tsx / Carousel`, `menubar.tsx / Menubar`, `chart.tsx / ChartConfig`, `dropdown-menu.tsx / DropdownMenuCheckboxItem`, `context-menu.tsx / ContextMenuCheckboxItem`, `table.tsx / Table`, `navigation-menu.tsx / NavigationMenu`, `select.tsx / SelectContent`, `breadcrumb.tsx / Breadcrumb`, `drawer.tsx / Drawer()`, `card.tsx / Card`, `toggle-group.tsx / toggle.tsx`, `alert.tsx / Alert`, `input-otp.tsx / InputOTP`, `avatar.tsx / Avatar`, `badge.tsx / Badge()`, `textarea.tsx / Textarea`, `Community 54`, `Community 64`, `Community 67`, `Community 72`, `Community 76`, `Community 88`, `Community 89`, `Community 90`, `Community 92`, `Community 93`, `Community 94`?**
-  _High betweenness centrality (0.242) - this node is a cross-community bridge._
-- **Why does `dependencies` connect `dependencies / class-variance-authority` to `devDependencies / autoprefixer`, `clsx / cn()`?**
-  _High betweenness centrality (0.142) - this node is a cross-community bridge._
-- **Why does `clsx` connect `clsx / cn()` to `dependencies / class-variance-authority`?**
-  _High betweenness centrality (0.135) - this node is a cross-community bridge._
+- **Why does `cn()` connect `clsx / cn()` to `dependencies / class-variance-authority`, `useIsMobile() / input.tsx`, `Action / ActionType`, `NavLink / NavLinkCompatProps`, `command.tsx / dialog.tsx`, `form.tsx / label.tsx`, `carousel.tsx / Carousel`, `menubar.tsx / Menubar`, `chart.tsx / ChartConfig`, `dropdown-menu.tsx / DropdownMenuCheckboxItem`, `context-menu.tsx / ContextMenuCheckboxItem`, `table.tsx / Table`, `Community 21`, `navigation-menu.tsx / NavigationMenu`, `select.tsx / SelectContent`, `breadcrumb.tsx / Breadcrumb`, `drawer.tsx / Drawer()`, `card.tsx / Card`, `toggle-group.tsx / toggle.tsx`, `alert.tsx / Alert`, `input-otp.tsx / InputOTP`, `avatar.tsx / Avatar`, `badge.tsx / Badge()`, `textarea.tsx / Textarea`, `Community 64`, `Community 67`?**
+  _High betweenness centrality (0.246) - this node is a cross-community bridge._
+- **Why does `dependencies` connect `dependencies / class-variance-authority` to `devDependencies / autoprefixer`?**
+  _High betweenness centrality (0.143) - this node is a cross-community bridge._
+- **Why does `clsx` connect `dependencies / class-variance-authority` to `clsx / cn()`?**
+  _High betweenness centrality (0.136) - this node is a cross-community bridge._
 - **What connects `$schema`, `style`, `rsc` to the rest of the system?**
-  _483 weakly-connected nodes found - possible documentation gaps or missing edges._
+  _481 weakly-connected nodes found - possible documentation gaps or missing edges._
 - **Should `dependencies / class-variance-authority` be split into smaller, more focused modules?**
-  _Cohesion score 0.0392156862745098 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.038461538461538464 - nodes in this community are weakly interconnected._
 - **Should `useIsMobile() / input.tsx` be split into smaller, more focused modules?**
-  _Cohesion score 0.07407407407407407 - nodes in this community are weakly interconnected._
+  _Cohesion score 0.04927536231884058 - nodes in this community are weakly interconnected._
 - **Should `NoSessionsCard() / NoSessionsCardProps` be split into smaller, more focused modules?**
   _Cohesion score 0.1323529411764706 - nodes in this community are weakly interconnected._
