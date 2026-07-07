@@ -16,7 +16,7 @@ import ReferWinCard from "@/components/ReferWinCard";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 import { CompletedBatchTabs, type CompletedBatchTab } from "@/components/CompletedBatchTabs";
 import { YogaJourneyCompletedPage } from "@/components/YogaJourneyCompletedPage";
-import journeyHeroBg from "@/assets/21daysprogram/journey_hero_bg.webp";
+import journeyHeroBg from "@/assets/21daysprogram/completed_journey_hero_bg.webp";
 
 import thumbFaceYogaTel from "@/assets/bonus/Face Yoga Thumbnail.jpg";
 import thumbFaceYogaEng from "@/assets/bonus/Face Yoga Thumbnail.jpg";
@@ -2102,7 +2102,11 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
 
         <div style={{
           position: "relative",
-          ...(completedTab === "journey" ? { backgroundImage: `url(${journeyHeroBg})`, backgroundSize: "cover", backgroundPosition: "top center", backgroundRepeat: "no-repeat" } : {}),
+          // Scale to container width and let height follow naturally (the source image is a
+          // tall portrait graphic meant to fade to white well before its bottom edge) — using
+          // "cover" here would stretch it to match the full (much taller) content column and
+          // crop the leaf/star decorations out entirely.
+          ...(completedTab === "journey" ? { backgroundImage: `url(${journeyHeroBg})`, backgroundSize: "100% auto", backgroundPosition: "top center", backgroundRepeat: "no-repeat" } : {}),
         }}>
           <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 2 }}>
             <CompletedBatchTabs activeTab={completedTab} onChange={setCompletedTab} />
