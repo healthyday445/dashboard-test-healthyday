@@ -5,6 +5,7 @@ import HeroBannerWithTabs from "@/components/HeroBannerWithTabs";
 import IndexFourteenDays from "@/pages/IndexFourteenDays";
 import IndexTwentyOneDay from "@/pages/IndexTwentyOneDay";
 import TwentyOneDaysProgram from "@/pages/TwentyOneDaysProgram";
+import { getEffectiveStatus } from "@/lib/studentStatus";
 
 // The one-off June-21-2026 cohort runs the special 21-day (22-day) programme;
 // every other free batch is the standard 14-day general-public batch.
@@ -80,17 +81,24 @@ const Dashboard = () => {
   const is21DayBatch = previewProgramme === "21day" || studentData?.free_batch_start_date === FREE_BATCH_DATE;
   const LiveSessions = is21DayBatch ? IndexTwentyOneDay : IndexFourteenDays;
 
+  // The backend can report status:"paid" before the purchased plan actually starts
+  // (e.g. a referral-reward/renewal subscription scheduled for later) while the student
+  // is still inside their free-batch window — treat them as ongoing-free until then.
+  const effectiveStatus = getEffectiveStatus(studentData);
+  const effectiveStudentData = studentData && effectiveStatus !== studentData?.status
+    ? { ...studentData, status: effectiveStatus }
+    : studentData;
+
   // Determine if this student gets the journey tab:
   // must be in the June-21-2026 free batch AND not paid/pastdue
-  const status = studentData?.status;
   const isEligibleForJourneyTab =
     previewLevels !== null ||
     (is21DayBatch &&
-      (status === "registered" || status === "14DaysOngoing" || status === "14daysongoing"));
+      (effectiveStatus === "registered" || effectiveStatus === "14DaysOngoing" || effectiveStatus === "14daysongoing"));
 
   // Not eligible for journey tab → render the Live Sessions component standalone (it owns its own layout)
   if (!isEligibleForJourneyTab) {
-    return <LiveSessions initialStudentData={studentData} />;
+    return <LiveSessions initialStudentData={effectiveStudentData} />;
   }
 
   // forceDay previews a specific batch day everywhere else (Live Sessions tab,
@@ -123,11 +131,11 @@ const Dashboard = () => {
       />
 
       <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
-        <LiveSessions initialStudentData={studentData} onSwitchToJourney={() => handleTabChange("journey")} />
+        <LiveSessions initialStudentData={effectiveStudentData} onSwitchToJourney={() => handleTabChange("journey")} />
       </div>
       {journeyMounted && (
         <div style={{ display: activeTab === "journey" ? "block" : "none" }}>
-          <TwentyOneDaysProgram initialStudentData={studentData} />
+          <TwentyOneDaysProgram initialStudentData={effectiveStudentData} />
         </div>
       )}
     </div>
