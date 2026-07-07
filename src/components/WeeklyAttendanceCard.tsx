@@ -13,7 +13,7 @@ export const WeeklyAttendanceCard: React.FC<WeeklyAttendanceCardProps> = ({ week
     <div style={{ padding: "24px 22px 0" }}>
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
         <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, margin: 0 }}>Your Weekly Attendance</h3>
-        <a href={viewProgressUrl} style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#FEAB27", textDecoration: "none" }}>View progress</a>
+        {/* <a href={viewProgressUrl} style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#FEAB27", textDecoration: "none" }}>View progress</a> */}
       </div>
     </div>
 
