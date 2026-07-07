@@ -53,6 +53,19 @@ const LEVEL_CARD_DATA = [
   { img: lvl7Unlocked,   isUnlocked: true  }, // Day 21 — Level 7 unlocked
 ];
 
+/** Resolves the join/watch/download link for a given level's reward — shared between the in-progress LevelCard and the all-completed Yoga Journey rewards list. */
+export function getLevelRewardLink(level: number, language: string | undefined, studentName: string | undefined, joinLink: string): string {
+  if (level === 1) return language === "English" ? "https://www.youtube.com/watch?v=bDvlif1ofKA" : "https://www.youtube.com/watch?v=ARr1TMvXYSA";
+  if (level === 2) return language === "English" ? "https://www.youtube.com/live/xDFA6-KCE8k" : "https://www.youtube.com/watch?v=d3HiE2QhlZA";
+  if (level === 3) return language === "English" ? "https://youtube.com/live/J3aX2kUMLno" : "https://youtube.com/live/Nc7figrxfuQ";
+  if (level === 4) return language === "English" ? "https://www.youtube.com/live/IqESKRcvU8E" : "https://www.youtube.com/live/WnITjDbnCPY";
+  if (level === 5) return language === "English" ? "https://youtube.com/live/LJzX5ltIFPw" : "https://www.youtube.com/live/dwGVmXjBskg";
+  if (level === 7) return studentName ? `/certificate?name=${encodeURIComponent(studentName)}` : "/certificate";
+  return joinLink;
+}
+
+export { LEVEL_REWARDS };
+
 export function LevelCard({
   freeDaysAttended,
   studentName,
@@ -188,44 +201,7 @@ export function LevelCard({
               gap: 4,
               cursor: "pointer",
             }}
-            onClick={() => {
-              if (level === 1) {
-                if (language === "English") {
-                  window.open("https://www.youtube.com/watch?v=bDvlif1ofKA", "_blank");
-                } else {
-                  window.open("https://www.youtube.com/watch?v=ARr1TMvXYSA", "_blank");
-                }
-              } else if (level === 2) {
-                if (language === "English") {
-                  window.open("https://www.youtube.com/live/xDFA6-KCE8k", "_blank");
-                } else {
-                  window.open("https://www.youtube.com/watch?v=d3HiE2QhlZA", "_blank");
-                }
-              } else if (level === 3) {
-                if (language === "English") {
-                  window.open("https://youtube.com/live/J3aX2kUMLno", "_blank");
-                } else {
-                  window.open("https://youtube.com/live/Nc7figrxfuQ", "_blank");
-                }
-              } else if (level === 4) {
-                if (language === "English") {
-                  window.open("https://www.youtube.com/live/IqESKRcvU8E", "_blank");
-                } else {
-                  window.open("https://www.youtube.com/live/WnITjDbnCPY", "_blank");
-                }
-              } else if (level === 5) {
-                if (language === "English") {
-                  window.open("https://youtube.com/live/LJzX5ltIFPw", "_blank");
-                } else {
-                  window.open("https://www.youtube.com/live/dwGVmXjBskg", "_blank");
-                }
-              } else if (level === 7) {
-                const targetUrl = studentName ? `/certificate?name=${encodeURIComponent(studentName)}` : "/certificate";
-                window.open(targetUrl, "_blank");
-              } else {
-                window.open(joinLink, "_blank");
-              }
-            }}
+            onClick={() => window.open(getLevelRewardLink(level, language, studentName, joinLink), "_blank")}
           >
             <img src={circledPlayButton} alt="" style={{ width: 12, height: 12 }} />
             <span style={{ color: "white", fontSize: 12, fontWeight: 700 }}>{level === 7 ? "Get Cert" : "Join now"}</span>

@@ -13,6 +13,10 @@ import { ReferralProgressBar } from "@/components/ReferWinPopup";
 import { ShareReferralActions } from "@/components/ShareReferralActions";
 import NoSessionsCard from "@/components/NoSessionsCard";
 import ReferWinCard from "@/components/ReferWinCard";
+import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
+import { CompletedBatchTabs, type CompletedBatchTab } from "@/components/CompletedBatchTabs";
+import { YogaJourneyCompletedPage } from "@/components/YogaJourneyCompletedPage";
+import journeyHeroBg from "@/assets/21daysprogram/journey_hero_bg.webp";
 
 import thumbFaceYogaTel from "@/assets/bonus/Face Yoga Thumbnail.jpg";
 import thumbFaceYogaEng from "@/assets/bonus/Face Yoga Thumbnail.jpg";
@@ -327,6 +331,11 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
       : false
   );
   const [sessionLinks, setSessionLinks] = useState<any[]>([]);
+  const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
+  // Completed-batch page tab — defaults to "live", or override via ?tab=journey for direct preview
+  const [completedTab, setCompletedTab] = useState<CompletedBatchTab>(
+    searchParams.get("tab") === "journey" ? "journey" : "live"
+  );
   const [joinedDays, setJoinedDays] = useState<number[]>(() => {
     try {
       const keys = safeLocalStorage.keys().filter(k => k.startsWith("hd_joined_"));
@@ -2091,37 +2100,68 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
           <img src={logo} alt="Healthyday" className="h-7" />
         </header>
 
-        {/* 14-Days Completed Banner */}
-        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "28px 20px 0", gap: "12px" }}>
-          {/* Red pill badge */}
-          <div style={{
-            width: "129px", height: "30px", borderRadius: "40px",
-            border: "0.25px solid #DA8D8D", background: "#FFEDED",
-            display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
-          }}>
-            <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ width: "11px", height: "11px", aspectRatio: "1/1" }}>
-              <path d="M6 4.16667H6.00611M5.38889 6H6V8.44444H6.61111M0.5 6C0.5 6.72227 0.642262 7.43747 0.918663 8.10476C1.19506 8.77205 1.60019 9.37836 2.11091 9.88909C2.62163 10.3998 3.22795 10.8049 3.89524 11.0813C4.56253 11.3577 5.27773 11.5 6 11.5C6.72227 11.5 7.43747 11.3577 8.10476 11.0813C8.77205 10.8049 9.37836 10.3998 9.88909 9.88909C10.3998 9.37836 10.8049 8.77205 11.0813 8.10476C11.3577 7.43747 11.5 6.72227 11.5 6C11.5 4.54131 10.9205 3.14236 9.88909 2.11091C8.85764 1.07946 7.45869 0.5 6 0.5C4.54131 0.5 3.14236 1.07946 2.11091 2.11091C1.07946 3.14236 0.5 4.54131 0.5 6Z" stroke="#B71C1C" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
-            </svg>
-            <span style={{ color: "#B71C1C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 800, lineHeight: "22px", letterSpacing: "0.88px" }}>TRIAL ENDED</span>
+        <div style={{
+          position: "relative",
+          ...(completedTab === "journey" ? { backgroundImage: `url(${journeyHeroBg})`, backgroundSize: "cover", backgroundPosition: "top center", backgroundRepeat: "no-repeat" } : {}),
+        }}>
+          <div style={{ position: "absolute", top: 0, left: 0, right: 0, zIndex: 2 }}>
+            <CompletedBatchTabs activeTab={completedTab} onChange={setCompletedTab} />
           </div>
-          {/* Title */}
-          <p style={{ width: "308px", color: "#000", textAlign: "center", fontFamily: "Outfit", fontSize: "27px", fontWeight: 800, lineHeight: "normal", margin: 0 }}>
-            Your <span style={{ color: "#D70000" }}>14-Days FREE</span> Classes are completed
-          </p>
-          {/* Subtitle */}
-          <p style={{ width: "293px", color: "#7C7B7B", textAlign: "center", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, lineHeight: "18px", margin: 0 }}>
-            Join Healthyday Daily Yoga Classes with most affordable Subscription Plans
-          </p>
-        </div>
 
-        {/* Want More FREE Classes heading */}
-        <div style={{ padding: "32px 20px 0", textAlign: "center" }}>
-          <div style={{ width: "100%", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
-          <p style={{ width: "100%", maxWidth: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
-        </div>
-        {/* Refer & Earn */}
-        <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
-          <ReferWinCard showTitle={true} shareLink={referralLink} referralsUrl={`/${mobile || ""}/referrals`} />
+          <div style={{ paddingTop: "68px" }}>
+            {completedTab === "journey" ? (
+              <YogaJourneyCompletedPage studentName={studentData?.name} language={studentData?.language} joinLink={sessionJoinLink || ""} />
+            ) : (
+              <>
+                {/* 21-Days Completed Banner */}
+            <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "28px 20px 0", gap: "12px" }}>
+              {/* Red pill badge */}
+              <div style={{
+                width: "129px", height: "30px", borderRadius: "40px",
+                border: "0.25px solid #DA8D8D", background: "#FFEDED",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "6px",
+              }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 12 12" fill="none" style={{ width: "11px", height: "11px", aspectRatio: "1/1" }}>
+                  <path d="M6 4.16667H6.00611M5.38889 6H6V8.44444H6.61111M0.5 6C0.5 6.72227 0.642262 7.43747 0.918663 8.10476C1.19506 8.77205 1.60019 9.37836 2.11091 9.88909C2.62163 10.3998 3.22795 10.8049 3.89524 11.0813C4.56253 11.3577 5.27773 11.5 6 11.5C6.72227 11.5 7.43747 11.3577 8.10476 11.0813C8.77205 10.8049 9.37836 10.3998 9.88909 9.88909C10.3998 9.37836 10.8049 8.77205 11.0813 8.10476C11.3577 7.43747 11.5 6.72227 11.5 6C11.5 4.54131 10.9205 3.14236 9.88909 2.11091C8.85764 1.07946 7.45869 0.5 6 0.5C4.54131 0.5 3.14236 1.07946 2.11091 2.11091C1.07946 3.14236 0.5 4.54131 0.5 6Z" stroke="#B71C1C" strokeWidth="1" strokeLinecap="round" strokeLinejoin="round" />
+                </svg>
+                <span style={{ color: "#B71C1C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 800, lineHeight: "22px", letterSpacing: "0.88px" }}>TRIAL ENDED</span>
+              </div>
+              {/* Title */}
+              <p style={{ width: "308px", color: "#000", textAlign: "center", fontFamily: "Outfit", fontSize: "25px", fontWeight: 800, lineHeight: "normal", margin: 0 }}>
+                Your <span style={{ color: "#D70000" }}>21-Days FREE</span> Classes are completed
+              </p>
+              {/* Subtitle */}
+              <p style={{ width: "293px", color: "#7C7B7B", textAlign: "center", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, lineHeight: "18px", margin: 0 }}>
+                Get a subscription now to continue your Yoga journey without interruption.
+              </p>
+            </div>
+
+            {/* Join our community heading */}
+            <div style={{ padding: "24px 20px 0", textAlign: "center" }}>
+              <p style={{ margin: 0, color: "#0D468B", fontFamily: "Outfit", fontSize: "24px", fontWeight: 700, lineHeight: "normal" }}>Join our community for</p>
+              <p style={{ margin: "6px 0 0", color: "#0D468B", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal" }}>DAILY YOGA SESSIONS</p>
+            </div>
+
+            <PricingAndComparisonSection
+              selectedPlanIdx={selectedPlanIdx}
+              setSelectedPlanIdx={setSelectedPlanIdx}
+              daysLeft={0}
+              hideDaysLeft={true}
+              useOngoingPricing={true}
+            />
+
+            {/* Want More FREE Classes heading */}
+            <div style={{ padding: "32px 20px 0", textAlign: "center" }}>
+              <div style={{ width: "100%", height: "1.5px", background: "#D1D1D1", margin: "0 auto 25px" }} />
+              <p style={{ width: "100%", maxWidth: "343px", margin: "0 auto", color: "#0D468B", textAlign: "center", fontFamily: "Outfit", fontSize: "24px", fontWeight: 600, lineHeight: "normal" }}>Want More FREE Classes?</p>
+            </div>
+                {/* Refer & Earn */}
+                <div style={{ padding: "32px 20px 32px", display: "flex", justifyContent: "center" }}>
+                  <ReferWinCard showTitle={true} shareLink={referralLink} referralsUrl={`/${mobile || ""}/referrals`} />
+                </div>
+              </>
+            )}
+          </div>
         </div>
       </div>
     );
