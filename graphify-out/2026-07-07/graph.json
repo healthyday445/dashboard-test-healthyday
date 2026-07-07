@@ -585,7 +585,7 @@
       "source_file": "package.json",
       "source_location": "L48",
       "id": "dashboard_test_healthyday_package_dependencies_clsx",
-      "community": 0,
+      "community": 7,
       "norm_label": "clsx"
     },
     {
@@ -1773,7 +1773,7 @@
       "source_file": "src/App.tsx",
       "source_location": "L1",
       "id": "src_app_tsx",
-      "community": 54,
+      "community": 5,
       "norm_label": "app.tsx"
     },
     {
@@ -1782,7 +1782,7 @@
       "source_file": "src/App.tsx",
       "source_location": "L20",
       "id": "src_app_queryclient",
-      "community": 54,
+      "community": 5,
       "norm_label": "queryclient"
     },
     {
@@ -1791,7 +1791,7 @@
       "source_file": "src/App.tsx",
       "source_location": "L22",
       "id": "src_app_app",
-      "community": 54,
+      "community": 5,
       "norm_label": "app()"
     },
     {
@@ -1854,7 +1854,7 @@
       "source_file": "src/components/AttendanceGrid.tsx",
       "source_location": "L1",
       "id": "src_components_attendancegrid_tsx",
-      "community": 4,
+      "community": 64,
       "norm_label": "attendancegrid.tsx"
     },
     {
@@ -1863,7 +1863,7 @@
       "source_file": "src/components/AttendanceGrid.tsx",
       "source_location": "L5",
       "id": "components_attendancegrid_attendancegridprops",
-      "community": 4,
+      "community": 64,
       "norm_label": "attendancegridprops"
     },
     {
@@ -1872,7 +1872,7 @@
       "source_file": "src/components/AttendanceGrid.tsx",
       "source_location": "L11",
       "id": "components_attendancegrid_attendancegrid",
-      "community": 4,
+      "community": 71,
       "norm_label": "attendancegrid()"
     },
     {
@@ -1881,7 +1881,7 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L1",
       "id": "src_components_batchprogresssection_tsx",
-      "community": 38,
+      "community": 71,
       "norm_label": "batchprogresssection.tsx"
     },
     {
@@ -1890,7 +1890,7 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L7",
       "id": "components_batchprogresssection_batchprogresssectionprops",
-      "community": 38,
+      "community": 71,
       "norm_label": "batchprogresssectionprops"
     },
     {
@@ -1899,7 +1899,7 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L25",
       "id": "components_batchprogresssection_batchprogresssection",
-      "community": 38,
+      "community": 71,
       "norm_label": "batchprogresssection()"
     },
     {
@@ -1908,7 +1908,7 @@
       "source_file": "src/components/DayStatusBox.tsx",
       "source_location": "L1",
       "id": "src_components_daystatusbox_tsx",
-      "community": 4,
+      "community": 64,
       "norm_label": "daystatusbox.tsx"
     },
     {
@@ -1917,7 +1917,7 @@
       "source_file": "src/components/DayStatusBox.tsx",
       "source_location": "L1",
       "id": "components_daystatusbox_daystatus",
-      "community": 4,
+      "community": 64,
       "norm_label": "daystatus"
     },
     {
@@ -1926,7 +1926,7 @@
       "source_file": "src/components/DayStatusBox.tsx",
       "source_location": "L3",
       "id": "components_daystatusbox_daystatusboxprops",
-      "community": 4,
+      "community": 64,
       "norm_label": "daystatusboxprops"
     },
     {
@@ -1935,7 +1935,7 @@
       "source_file": "src/components/DayStatusBox.tsx",
       "source_location": "L9",
       "id": "components_daystatusbox_daystatusbox",
-      "community": 4,
+      "community": 64,
       "norm_label": "daystatusbox()"
     },
     {
@@ -2439,7 +2439,7 @@
       "source_file": "src/components/PlanRenewalSection.tsx",
       "source_location": "L1",
       "id": "src_components_planrenewalsection_tsx",
-      "community": 66,
+      "community": 68,
       "norm_label": "planrenewalsection.tsx"
     },
     {
@@ -2448,7 +2448,7 @@
       "source_file": "src/components/PlanRenewalSection.tsx",
       "source_location": "L4",
       "id": "components_planrenewalsection_planrenewalsectionprops",
-      "community": 66,
+      "community": 68,
       "norm_label": "planrenewalsectionprops"
     },
     {
@@ -2457,7 +2457,7 @@
       "source_file": "src/components/PlanRenewalSection.tsx",
       "source_location": "L13",
       "id": "components_planrenewalsection_planrenewalsection",
-      "community": 66,
+      "community": 68,
       "norm_label": "planrenewalsection()"
     },
     {
@@ -2547,7 +2547,7 @@
       "source_file": "src/components/ReferAndWinTeaser.tsx",
       "source_location": "L1",
       "id": "src_components_referandwinteaser_tsx",
-      "community": 38,
+      "community": 71,
       "norm_label": "referandwinteaser.tsx"
     },
     {
@@ -2556,7 +2556,7 @@
       "source_file": "src/components/ReferAndWinTeaser.tsx",
       "source_location": "L4",
       "id": "components_referandwinteaser_referandwinteaserprops",
-      "community": 38,
+      "community": 71,
       "norm_label": "referandwinteaserprops"
     },
     {
@@ -2565,7 +2565,7 @@
       "source_file": "src/components/ReferAndWinTeaser.tsx",
       "source_location": "L9",
       "id": "components_referandwinteaser_referandwinteaser",
-      "community": 38,
+      "community": 71,
       "norm_label": "referandwinteaser()"
     },
     {
@@ -2619,7 +2619,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L1",
       "id": "src_components_referralrewardscard_tsx",
-      "community": 32,
+      "community": 67,
       "norm_label": "referralrewardscard.tsx"
     },
     {
@@ -2628,7 +2628,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L10",
       "id": "components_referralrewardscard_diet_pdf_url",
-      "community": 32,
+      "community": 67,
       "norm_label": "diet_pdf_url"
     },
     {
@@ -2637,7 +2637,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L17",
       "id": "components_referralrewardscard_milestoneline",
-      "community": 32,
+      "community": 67,
       "norm_label": "milestoneline()"
     },
     {
@@ -2646,7 +2646,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L30",
       "id": "components_referralrewardscard_unlockedmilestoneicon",
-      "community": 32,
+      "community": 67,
       "norm_label": "unlockedmilestoneicon()"
     },
     {
@@ -2655,7 +2655,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L45",
       "id": "components_referralrewardscard_lockedmilestoneicon",
-      "community": 32,
+      "community": 67,
       "norm_label": "lockedmilestoneicon()"
     },
     {
@@ -2664,7 +2664,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L66",
       "id": "components_referralrewardscard_youarehereicon",
-      "community": 32,
+      "community": 67,
       "norm_label": "youarehereicon()"
     },
     {
@@ -2673,7 +2673,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L73",
       "id": "components_referralrewardscard_youarehererow",
-      "community": 32,
+      "community": 67,
       "norm_label": "youarehererow()"
     },
     {
@@ -2682,7 +2682,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L107",
       "id": "components_referralrewardscard_downloadbutton",
-      "community": 32,
+      "community": 67,
       "norm_label": "downloadbutton()"
     },
     {
@@ -2691,7 +2691,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L125",
       "id": "components_referralrewardscard_referralrewardscard",
-      "community": 32,
+      "community": 67,
       "norm_label": "referralrewardscard()"
     },
     {
@@ -2817,7 +2817,7 @@
       "source_file": "src/components/WeeklyAttendanceCard.tsx",
       "source_location": "L1",
       "id": "src_components_weeklyattendancecard_tsx",
-      "community": 4,
+      "community": 64,
       "norm_label": "weeklyattendancecard.tsx"
     },
     {
@@ -2826,7 +2826,7 @@
       "source_file": "src/components/WeeklyAttendanceCard.tsx",
       "source_location": "L4",
       "id": "components_weeklyattendancecard_weeklyattendancecardprops",
-      "community": 4,
+      "community": 64,
       "norm_label": "weeklyattendancecardprops"
     },
     {
@@ -2835,7 +2835,7 @@
       "source_file": "src/components/WeeklyAttendanceCard.tsx",
       "source_location": "L11",
       "id": "components_weeklyattendancecard_weeklyattendancecard",
-      "community": 4,
+      "community": 64,
       "norm_label": "weeklyattendancecard()"
     },
     {
@@ -2844,7 +2844,7 @@
       "source_file": "src/components/ui/accordion.tsx",
       "source_location": "L1",
       "id": "src_components_ui_accordion_tsx",
-      "community": 21,
+      "community": 32,
       "norm_label": "accordion.tsx"
     },
     {
@@ -2853,7 +2853,7 @@
       "source_file": "src/components/ui/accordion.tsx",
       "source_location": "L9",
       "id": "ui_accordion_accordionitem",
-      "community": 21,
+      "community": 32,
       "norm_label": "accordionitem"
     },
     {
@@ -2862,7 +2862,7 @@
       "source_file": "src/components/ui/accordion.tsx",
       "source_location": "L17",
       "id": "ui_accordion_accordiontrigger",
-      "community": 21,
+      "community": 32,
       "norm_label": "accordiontrigger"
     },
     {
@@ -2871,7 +2871,7 @@
       "source_file": "src/components/ui/accordion.tsx",
       "source_location": "L37",
       "id": "ui_accordion_accordioncontent",
-      "community": 21,
+      "community": 32,
       "norm_label": "accordioncontent"
     },
     {
@@ -2880,7 +2880,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L1",
       "id": "src_components_ui_alert_dialog_tsx",
-      "community": 37,
+      "community": 21,
       "norm_label": "alert-dialog.tsx"
     },
     {
@@ -2889,7 +2889,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L13",
       "id": "ui_alert_dialog_alertdialogoverlay",
-      "community": 37,
+      "community": 21,
       "norm_label": "alertdialogoverlay"
     },
     {
@@ -2898,7 +2898,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L28",
       "id": "ui_alert_dialog_alertdialogcontent",
-      "community": 37,
+      "community": 21,
       "norm_label": "alertdialogcontent"
     },
     {
@@ -2907,7 +2907,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L46",
       "id": "ui_alert_dialog_alertdialogheader",
-      "community": 37,
+      "community": 21,
       "norm_label": "alertdialogheader()"
     },
     {
@@ -2916,7 +2916,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L51",
       "id": "ui_alert_dialog_alertdialogfooter",
-      "community": 37,
+      "community": 21,
       "norm_label": "alertdialogfooter()"
     },
     {
@@ -2925,7 +2925,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L56",
       "id": "ui_alert_dialog_alertdialogtitle",
-      "community": 37,
+      "community": 21,
       "norm_label": "alertdialogtitle"
     },
     {
@@ -2934,7 +2934,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L64",
       "id": "ui_alert_dialog_alertdialogdescription",
-      "community": 37,
+      "community": 21,
       "norm_label": "alertdialogdescription"
     },
     {
@@ -2943,7 +2943,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L72",
       "id": "ui_alert_dialog_alertdialogaction",
-      "community": 37,
+      "community": 21,
       "norm_label": "alertdialogaction"
     },
     {
@@ -2952,7 +2952,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L80",
       "id": "ui_alert_dialog_alertdialogcancel",
-      "community": 37,
+      "community": 21,
       "norm_label": "alertdialogcancel"
     },
     {
@@ -3186,7 +3186,7 @@
       "source_file": "src/components/ui/button.tsx",
       "source_location": "L39",
       "id": "ui_button_button",
-      "community": 13,
+      "community": 7,
       "norm_label": "button"
     },
     {
@@ -4464,7 +4464,7 @@
       "source_file": "src/components/ui/radio-group.tsx",
       "source_location": "L1",
       "id": "src_components_ui_radio_group_tsx",
-      "community": 67,
+      "community": 38,
       "norm_label": "radio-group.tsx"
     },
     {
@@ -4473,7 +4473,7 @@
       "source_file": "src/components/ui/radio-group.tsx",
       "source_location": "L7",
       "id": "ui_radio_group_radiogroup",
-      "community": 67,
+      "community": 38,
       "norm_label": "radiogroup"
     },
     {
@@ -4482,7 +4482,7 @@
       "source_file": "src/components/ui/radio-group.tsx",
       "source_location": "L15",
       "id": "ui_radio_group_radiogroupitem",
-      "community": 67,
+      "community": 38,
       "norm_label": "radiogroupitem"
     },
     {
@@ -4518,7 +4518,7 @@
       "source_file": "src/components/ui/scroll-area.tsx",
       "source_location": "L1",
       "id": "src_components_ui_scroll_area_tsx",
-      "community": 8,
+      "community": 76,
       "norm_label": "scroll-area.tsx"
     },
     {
@@ -4527,7 +4527,7 @@
       "source_file": "src/components/ui/scroll-area.tsx",
       "source_location": "L6",
       "id": "ui_scroll_area_scrollarea",
-      "community": 8,
+      "community": 76,
       "norm_label": "scrollarea"
     },
     {
@@ -4536,7 +4536,7 @@
       "source_file": "src/components/ui/scroll-area.tsx",
       "source_location": "L18",
       "id": "ui_scroll_area_scrollbar",
-      "community": 8,
+      "community": 76,
       "norm_label": "scrollbar"
     },
     {
@@ -4995,7 +4995,7 @@
       "source_file": "src/components/ui/sonner.tsx",
       "source_location": "L1",
       "id": "src_components_ui_sonner_tsx",
-      "community": 54,
+      "community": 5,
       "norm_label": "sonner.tsx"
     },
     {
@@ -5004,7 +5004,7 @@
       "source_file": "src/components/ui/sonner.tsx",
       "source_location": "L4",
       "id": "ui_sonner_toasterprops",
-      "community": 54,
+      "community": 5,
       "norm_label": "toasterprops"
     },
     {
@@ -5013,7 +5013,7 @@
       "source_file": "src/components/ui/sonner.tsx",
       "source_location": "L6",
       "id": "ui_sonner_toaster",
-      "community": 54,
+      "community": 5,
       "norm_label": "toaster()"
     },
     {
@@ -5121,7 +5121,7 @@
       "source_file": "src/components/ui/tabs.tsx",
       "source_location": "L1",
       "id": "src_components_ui_tabs_tsx",
-      "community": 64,
+      "community": 8,
       "norm_label": "tabs.tsx"
     },
     {
@@ -5130,7 +5130,7 @@
       "source_file": "src/components/ui/tabs.tsx",
       "source_location": "L8",
       "id": "ui_tabs_tabslist",
-      "community": 64,
+      "community": 8,
       "norm_label": "tabslist"
     },
     {
@@ -5139,7 +5139,7 @@
       "source_file": "src/components/ui/tabs.tsx",
       "source_location": "L23",
       "id": "ui_tabs_tabstrigger",
-      "community": 64,
+      "community": 8,
       "norm_label": "tabstrigger"
     },
     {
@@ -5148,7 +5148,7 @@
       "source_file": "src/components/ui/tabs.tsx",
       "source_location": "L38",
       "id": "ui_tabs_tabscontent",
-      "community": 64,
+      "community": 8,
       "norm_label": "tabscontent"
     },
     {
@@ -5157,7 +5157,7 @@
       "source_file": "src/components/ui/textarea.tsx",
       "source_location": "L1",
       "id": "src_components_ui_textarea_tsx",
-      "community": 8,
+      "community": 37,
       "norm_label": "textarea.tsx"
     },
     {
@@ -5166,7 +5166,7 @@
       "source_file": "src/components/ui/textarea.tsx",
       "source_location": "L5",
       "id": "ui_textarea_textareaprops",
-      "community": 8,
+      "community": 37,
       "norm_label": "textareaprops"
     },
     {
@@ -5175,7 +5175,7 @@
       "source_file": "src/components/ui/textarea.tsx",
       "source_location": "L7",
       "id": "ui_textarea_textarea",
-      "community": 8,
+      "community": 37,
       "norm_label": "textarea"
     },
     {
@@ -5742,7 +5742,7 @@
       "source_file": "src/lib/weeklyAttendance.ts",
       "source_location": "L1",
       "id": "src_lib_weeklyattendance_ts",
-      "community": 4,
+      "community": 64,
       "norm_label": "weeklyattendance.ts"
     },
     {
@@ -5751,7 +5751,7 @@
       "source_file": "src/lib/weeklyAttendance.ts",
       "source_location": "L3",
       "id": "lib_weeklyattendance_week_day_labels",
-      "community": 4,
+      "community": 64,
       "norm_label": "week_day_labels"
     },
     {
@@ -5760,7 +5760,7 @@
       "source_file": "src/lib/weeklyAttendance.ts",
       "source_location": "L5",
       "id": "lib_weeklyattendance_weeklyattendance",
-      "community": 4,
+      "community": 64,
       "norm_label": "weeklyattendance"
     },
     {
@@ -5886,7 +5886,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L1",
       "id": "src_pages_attendancepage_tsx",
-      "community": 54,
+      "community": 4,
       "norm_label": "attendancepage.tsx"
     },
     {
@@ -5895,7 +5895,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L5",
       "id": "pages_attendancepage_week_headers",
-      "community": 54,
+      "community": 4,
       "norm_label": "week_headers"
     },
     {
@@ -5904,7 +5904,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L6",
       "id": "pages_attendancepage_month_names",
-      "community": 54,
+      "community": 4,
       "norm_label": "month_names"
     },
     {
@@ -5913,7 +5913,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L12",
       "id": "pages_attendancepage_day_abbr_to_dow",
-      "community": 54,
+      "community": 4,
       "norm_label": "day_abbr_to_dow"
     },
     {
@@ -5922,7 +5922,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L16",
       "id": "pages_attendancepage_fmt",
-      "community": 54,
+      "community": 4,
       "norm_label": "fmt()"
     },
     {
@@ -5931,7 +5931,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L21",
       "id": "pages_attendancepage_getweekmonday",
-      "community": 54,
+      "community": 4,
       "norm_label": "getweekmonday()"
     },
     {
@@ -5940,7 +5940,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L34",
       "id": "pages_attendancepage_mergepaiddatatostorage",
-      "community": 54,
+      "community": 4,
       "norm_label": "mergepaiddatatostorage()"
     },
     {
@@ -5949,7 +5949,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L87",
       "id": "pages_attendancepage_readpaiddatafromstorage",
-      "community": 54,
+      "community": 4,
       "norm_label": "readpaiddatafromstorage()"
     },
     {
@@ -5958,7 +5958,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L100",
       "id": "pages_attendancepage_attendancepage",
-      "community": 54,
+      "community": 4,
       "norm_label": "attendancepage()"
     },
     {
@@ -5971,19 +5971,10 @@
       "norm_label": "certificate.tsx"
     },
     {
-      "label": "COUNTRIES",
-      "file_type": "code",
-      "source_file": "src/pages/Certificate.tsx",
-      "source_location": "L8",
-      "id": "pages_certificate_countries",
-      "community": 63,
-      "norm_label": "countries"
-    },
-    {
       "label": "Certificate()",
       "file_type": "code",
       "source_file": "src/pages/Certificate.tsx",
-      "source_location": "L28",
+      "source_location": "L8",
       "id": "pages_certificate_certificate",
       "community": 63,
       "norm_label": "certificate()"
@@ -6012,7 +6003,7 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L1",
       "id": "src_pages_faqs_tsx",
-      "community": 21,
+      "community": 32,
       "norm_label": "faqs.tsx"
     },
     {
@@ -6021,7 +6012,7 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L7",
       "id": "pages_faqs_generalfaqs",
-      "community": 21,
+      "community": 32,
       "norm_label": "generalfaqs"
     },
     {
@@ -6030,7 +6021,7 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L38",
       "id": "pages_faqs_telugufaqs",
-      "community": 21,
+      "community": 32,
       "norm_label": "telugufaqs"
     },
     {
@@ -6039,7 +6030,7 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L72",
       "id": "pages_faqs_englishfaqs",
-      "community": 21,
+      "community": 32,
       "norm_label": "englishfaqs"
     },
     {
@@ -6048,7 +6039,7 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L105",
       "id": "pages_faqs_rendertext",
-      "community": 21,
+      "community": 32,
       "norm_label": "rendertext()"
     },
     {
@@ -6057,7 +6048,7 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L225",
       "id": "pages_faqs_faqs",
-      "community": 21,
+      "community": 32,
       "norm_label": "faqs()"
     },
     {
@@ -6687,7 +6678,7 @@
       "source_file": "src/pages/Maintenance.tsx",
       "source_location": "L1",
       "id": "src_pages_maintenance_tsx",
-      "community": 54,
+      "community": 5,
       "norm_label": "maintenance.tsx"
     },
     {
@@ -6696,7 +6687,7 @@
       "source_file": "src/pages/Maintenance.tsx",
       "source_location": "L4",
       "id": "pages_maintenance_maintenance",
-      "community": 54,
+      "community": 5,
       "norm_label": "maintenance()"
     },
     {
@@ -6705,7 +6696,7 @@
       "source_file": "src/pages/NotFound.tsx",
       "source_location": "L1",
       "id": "src_pages_notfound_tsx",
-      "community": 54,
+      "community": 5,
       "norm_label": "notfound.tsx"
     },
     {
@@ -6714,7 +6705,7 @@
       "source_file": "src/pages/NotFound.tsx",
       "source_location": "L4",
       "id": "pages_notfound_notfound",
-      "community": 54,
+      "community": 5,
       "norm_label": "notfound()"
     },
     {
@@ -8162,9 +8153,9 @@
       "source_file": "package.json",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_package_scripts",
-      "target": "dashboard_test_healthyday_package_scripts_start"
+      "target": "dashboard_test_healthyday_package_scripts_start",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8823,9 +8814,9 @@
       "source_file": "package.json",
       "source_location": "L77",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_package_devdependencies",
-      "target": "dashboard_test_healthyday_package_devdependencies_vitejs_plugin_legacy"
+      "target": "dashboard_test_healthyday_package_devdependencies_vitejs_plugin_legacy",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8913,9 +8904,9 @@
       "source_file": "package.json",
       "source_location": "L86",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_package_devdependencies",
-      "target": "dashboard_test_healthyday_package_devdependencies_playwright"
+      "target": "dashboard_test_healthyday_package_devdependencies_playwright",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8943,9 +8934,9 @@
       "source_file": "package.json",
       "source_location": "L89",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_package_devdependencies",
-      "target": "dashboard_test_healthyday_package_devdependencies_terser"
+      "target": "dashboard_test_healthyday_package_devdependencies_terser",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -8993,9 +8984,9 @@
       "source_file": "test-regex.js",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "test_regex_js",
-      "target": "dashboard_test_healthyday_test_regex_match"
+      "target": "dashboard_test_healthyday_test_regex_match",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9503,9 +9494,9 @@
       "source_file": "vite.config.ts.timestamp-1782011907764-278f201418ef4.mjs",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "vite_config_ts_timestamp_1782011907764_278f201418ef4_mjs",
-      "target": "dashboard_test_healthyday_vite_config_ts_timestamp_1782011907764_278f201418ef4_env"
+      "target": "dashboard_test_healthyday_vite_config_ts_timestamp_1782011907764_278f201418ef4_env",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9533,9 +9524,9 @@
       "source_file": ".claude/settings.json",
       "source_location": "L28",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_settings_permissions",
-      "target": "claude_settings_permissions_defaultmode"
+      "target": "claude_settings_permissions_defaultmode",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9553,9 +9544,9 @@
       "source_file": "netlify/functions/leaderboard-rank.js",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "netlify_functions_leaderboard_rank_js",
-      "target": "functions_leaderboard_rank_handler"
+      "target": "functions_leaderboard_rank_handler",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9563,9 +9554,9 @@
       "source_file": "netlify/functions/leaderboard.js",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "netlify_functions_leaderboard_js",
-      "target": "functions_leaderboard_handler"
+      "target": "functions_leaderboard_handler",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9573,9 +9564,9 @@
       "source_file": "netlify/functions/ping-activity.js",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "netlify_functions_ping_activity_js",
-      "target": "functions_ping_activity_serviceaccount"
+      "target": "functions_ping_activity_serviceaccount",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9583,9 +9574,9 @@
       "source_file": "netlify/functions/ping-activity.js",
       "source_location": "L20",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "netlify_functions_ping_activity_js",
-      "target": "functions_ping_activity_db"
+      "target": "functions_ping_activity_db",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9593,9 +9584,9 @@
       "source_file": "netlify/functions/ping-activity.js",
       "source_location": "L22",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "netlify_functions_ping_activity_js",
-      "target": "functions_ping_activity_handler"
+      "target": "functions_ping_activity_handler",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9603,9 +9594,9 @@
       "source_file": "netlify/functions/portal-session-clicks.js",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "netlify_functions_portal_session_clicks_js",
-      "target": "functions_portal_session_clicks_serviceaccount"
+      "target": "functions_portal_session_clicks_serviceaccount",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9613,9 +9604,9 @@
       "source_file": "netlify/functions/portal-session-clicks.js",
       "source_location": "L20",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "netlify_functions_portal_session_clicks_js",
-      "target": "functions_portal_session_clicks_db"
+      "target": "functions_portal_session_clicks_db",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9623,9 +9614,9 @@
       "source_file": "netlify/functions/portal-session-clicks.js",
       "source_location": "L22",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "netlify_functions_portal_session_clicks_js",
-      "target": "functions_portal_session_clicks_handler"
+      "target": "functions_portal_session_clicks_handler",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9663,9 +9654,9 @@
       "source_file": "netlify/functions/update-language.js",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "netlify_functions_update_language_js",
-      "target": "functions_update_language_handler"
+      "target": "functions_update_language_handler",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -9729,9 +9720,9 @@
       "source_file": "src/App.tsx",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_app_tsx",
-      "target": "src_pages_dashboard_tsx"
+      "target": "src_pages_dashboard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -9740,9 +9731,9 @@
       "source_file": "src/App.tsx",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_app_tsx",
-      "target": "src_pages_maintenance_tsx"
+      "target": "src_pages_maintenance_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -9806,9 +9797,9 @@
       "source_file": "src/App.tsx",
       "source_location": "L13",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_app_tsx",
-      "target": "src_pages_leaderboard_tsx"
+      "target": "src_pages_leaderboard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -9817,9 +9808,9 @@
       "source_file": "src/App.tsx",
       "source_location": "L14",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_app_tsx",
-      "target": "src_pages_login_tsx"
+      "target": "src_pages_login_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -9828,9 +9819,9 @@
       "source_file": "src/App.tsx",
       "source_location": "L15",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_app_tsx",
-      "target": "src_pages_faqs_tsx"
+      "target": "src_pages_faqs_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -9839,9 +9830,9 @@
       "source_file": "src/App.tsx",
       "source_location": "L16",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_app_tsx",
-      "target": "src_pages_indexfourteendays_tsx"
+      "target": "src_pages_indexfourteendays_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -9850,9 +9841,9 @@
       "source_file": "src/App.tsx",
       "source_location": "L17",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_app_tsx",
-      "target": "src_pages_pricing_tsx"
+      "target": "src_pages_pricing_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -9861,9 +9852,9 @@
       "source_file": "src/App.tsx",
       "source_location": "L18",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_app_tsx",
-      "target": "src_pages_certificate_tsx"
+      "target": "src_pages_certificate_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9914,9 +9905,9 @@
       "source_file": "src/main.tsx",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_main_tsx",
-      "target": "src_components_errorboundary_tsx"
+      "target": "src_components_errorboundary_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9945,9 +9936,9 @@
       "source_file": "src/components/AttendanceGrid.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_attendancegrid_tsx",
-      "target": "src_components_daystatusbox_tsx"
+      "target": "src_components_daystatusbox_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -9956,9 +9947,9 @@
       "source_file": "src/components/AttendanceGrid.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_attendancegrid_tsx",
-      "target": "components_daystatusbox_daystatusbox"
+      "target": "components_daystatusbox_daystatusbox",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -9967,9 +9958,9 @@
       "source_file": "src/components/AttendanceGrid.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_attendancegrid_tsx",
-      "target": "components_daystatusbox_daystatus"
+      "target": "components_daystatusbox_daystatus",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9977,9 +9968,9 @@
       "source_file": "src/components/AttendanceGrid.tsx",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_attendancegrid_tsx",
-      "target": "components_attendancegrid_attendancegridprops"
+      "target": "components_attendancegrid_attendancegridprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -9987,9 +9978,9 @@
       "source_file": "src/components/AttendanceGrid.tsx",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_attendancegrid_tsx",
-      "target": "components_attendancegrid_attendancegrid"
+      "target": "components_attendancegrid_attendancegrid",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -9998,9 +9989,9 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_batchprogresssection_tsx",
-      "target": "src_components_attendancegrid_tsx"
+      "target": "src_components_attendancegrid_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10009,9 +10000,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "src_components_attendancegrid_tsx"
+      "target": "src_components_attendancegrid_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10020,9 +10011,9 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_batchprogresssection_tsx",
-      "target": "components_attendancegrid_attendancegrid"
+      "target": "components_attendancegrid_attendancegrid",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10031,9 +10022,9 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_batchprogresssection_tsx",
-      "target": "src_components_referralrewardscard_tsx"
+      "target": "src_components_referralrewardscard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10042,9 +10033,9 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_batchprogresssection_tsx",
-      "target": "components_referralrewardscard_referralrewardscard"
+      "target": "components_referralrewardscard_referralrewardscard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10053,9 +10044,9 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_batchprogresssection_tsx",
-      "target": "src_components_referandwinteaser_tsx"
+      "target": "src_components_referandwinteaser_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10064,9 +10055,9 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_batchprogresssection_tsx",
-      "target": "components_referandwinteaser_referandwinteaser"
+      "target": "components_referandwinteaser_referandwinteaser",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10075,9 +10066,9 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_batchprogresssection_tsx",
-      "target": "src_components_pricingandcomparisonsection_tsx"
+      "target": "src_components_pricingandcomparisonsection_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10086,9 +10077,9 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_batchprogresssection_tsx",
-      "target": "components_pricingandcomparisonsection_pricingandcomparisonsection"
+      "target": "components_pricingandcomparisonsection_pricingandcomparisonsection",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10097,9 +10088,9 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_batchprogresssection_tsx",
-      "target": "src_components_referwincard_tsx"
+      "target": "src_components_referwincard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10107,9 +10098,9 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_batchprogresssection_tsx",
-      "target": "components_batchprogresssection_batchprogresssectionprops"
+      "target": "components_batchprogresssection_batchprogresssectionprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10117,9 +10108,9 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L25",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_batchprogresssection_tsx",
-      "target": "components_batchprogresssection_batchprogresssection"
+      "target": "components_batchprogresssection_batchprogresssection",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10128,9 +10119,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "src_components_batchprogresssection_tsx"
+      "target": "src_components_batchprogresssection_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10139,9 +10130,9 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_batchprogresssection_tsx",
-      "target": "components_daystatusbox_daystatus"
+      "target": "components_daystatusbox_daystatus",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10150,9 +10141,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "components_batchprogresssection_batchprogresssection"
+      "target": "components_batchprogresssection_batchprogresssection",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10160,9 +10151,9 @@
       "source_file": "src/components/DayStatusBox.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_daystatusbox_tsx",
-      "target": "components_daystatusbox_daystatus"
+      "target": "components_daystatusbox_daystatus",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10170,9 +10161,9 @@
       "source_file": "src/components/DayStatusBox.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_daystatusbox_tsx",
-      "target": "components_daystatusbox_daystatusboxprops"
+      "target": "components_daystatusbox_daystatusboxprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10180,9 +10171,9 @@
       "source_file": "src/components/DayStatusBox.tsx",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_daystatusbox_tsx",
-      "target": "components_daystatusbox_daystatusbox"
+      "target": "components_daystatusbox_daystatusbox",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10191,9 +10182,9 @@
       "source_file": "src/components/WeeklyAttendanceCard.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_weeklyattendancecard_tsx",
-      "target": "src_components_daystatusbox_tsx"
+      "target": "src_components_daystatusbox_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10202,9 +10193,9 @@
       "source_file": "src/lib/weeklyAttendance.ts",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_weeklyattendance_ts",
-      "target": "src_components_daystatusbox_tsx"
+      "target": "src_components_daystatusbox_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10213,9 +10204,9 @@
       "source_file": "src/components/WeeklyAttendanceCard.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_weeklyattendancecard_tsx",
-      "target": "components_daystatusbox_daystatus"
+      "target": "components_daystatusbox_daystatus",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10224,9 +10215,9 @@
       "source_file": "src/lib/weeklyAttendance.ts",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_weeklyattendance_ts",
-      "target": "components_daystatusbox_daystatus"
+      "target": "components_daystatusbox_daystatus",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10235,9 +10226,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "components_daystatusbox_daystatus"
+      "target": "components_daystatusbox_daystatus",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10246,9 +10237,9 @@
       "source_file": "src/components/WeeklyAttendanceCard.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_weeklyattendancecard_tsx",
-      "target": "components_daystatusbox_daystatusbox"
+      "target": "components_daystatusbox_daystatusbox",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10256,9 +10247,9 @@
       "source_file": "src/components/ErrorBoundary.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_errorboundary_tsx",
-      "target": "components_errorboundary_props"
+      "target": "components_errorboundary_props",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10266,9 +10257,9 @@
       "source_file": "src/components/ErrorBoundary.tsx",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_errorboundary_tsx",
-      "target": "components_errorboundary_state"
+      "target": "components_errorboundary_state",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10276,9 +10267,9 @@
       "source_file": "src/components/ErrorBoundary.tsx",
       "source_location": "L12",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_errorboundary_tsx",
-      "target": "components_errorboundary_errorboundary"
+      "target": "components_errorboundary_errorboundary",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -10286,9 +10277,9 @@
       "source_file": "src/components/ErrorBoundary.tsx",
       "source_location": "L18",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "components_errorboundary_errorboundary",
-      "target": "components_errorboundary_errorboundary_getderivedstatefromerror"
+      "target": "components_errorboundary_errorboundary_getderivedstatefromerror",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -10296,9 +10287,9 @@
       "source_file": "src/components/ErrorBoundary.tsx",
       "source_location": "L23",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "components_errorboundary_errorboundary",
-      "target": "components_errorboundary_errorboundary_componentdidcatch"
+      "target": "components_errorboundary_errorboundary_componentdidcatch",
+      "confidence_score": 1.0
     },
     {
       "relation": "method",
@@ -10306,9 +10297,9 @@
       "source_file": "src/components/ErrorBoundary.tsx",
       "source_location": "L27",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "components_errorboundary_errorboundary",
-      "target": "components_errorboundary_errorboundary_render"
+      "target": "components_errorboundary_errorboundary_render",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -10328,9 +10319,9 @@
       "source_file": "src/components/FourteenDayBonusSessionCard.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaybonussessioncard_tsx",
-      "target": "src_lib_tracksessionclick_ts"
+      "target": "src_lib_tracksessionclick_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10339,9 +10330,9 @@
       "source_file": "src/components/FourteenDayBonusSessionCard.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaybonussessioncard_tsx",
-      "target": "lib_tracksessionclick_tracksessionclick"
+      "target": "lib_tracksessionclick_tracksessionclick",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10349,9 +10340,9 @@
       "source_file": "src/components/FourteenDayBonusSessionCard.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaybonussessioncard_tsx",
-      "target": "components_fourteendaybonussessioncard_playbutton"
+      "target": "components_fourteendaybonussessioncard_playbutton",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10359,9 +10350,9 @@
       "source_file": "src/components/FourteenDayBonusSessionCard.tsx",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaybonussessioncard_tsx",
-      "target": "components_fourteendaybonussessioncard_bonusinfo"
+      "target": "components_fourteendaybonussessioncard_bonusinfo",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10369,9 +10360,9 @@
       "source_file": "src/components/FourteenDayBonusSessionCard.tsx",
       "source_location": "L12",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaybonussessioncard_tsx",
-      "target": "components_fourteendaybonussessioncard_bonusthumbnails"
+      "target": "components_fourteendaybonussessioncard_bonusthumbnails",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10379,9 +10370,9 @@
       "source_file": "src/components/FourteenDayBonusSessionCard.tsx",
       "source_location": "L22",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaybonussessioncard_tsx",
-      "target": "components_fourteendaybonussessioncard_getbonusinfo"
+      "target": "components_fourteendaybonussessioncard_getbonusinfo",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10389,9 +10380,9 @@
       "source_file": "src/components/FourteenDayBonusSessionCard.tsx",
       "source_location": "L39",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaybonussessioncard_tsx",
-      "target": "components_fourteendaybonussessioncard_bonus_days_telugu"
+      "target": "components_fourteendaybonussessioncard_bonus_days_telugu",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10399,9 +10390,9 @@
       "source_file": "src/components/FourteenDayBonusSessionCard.tsx",
       "source_location": "L40",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaybonussessioncard_tsx",
-      "target": "components_fourteendaybonussessioncard_bonus_days_english"
+      "target": "components_fourteendaybonussessioncard_bonus_days_english",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10409,9 +10400,9 @@
       "source_file": "src/components/FourteenDayBonusSessionCard.tsx",
       "source_location": "L42",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaybonussessioncard_tsx",
-      "target": "components_fourteendaybonussessioncard_fourteendaybonussessioncardprops"
+      "target": "components_fourteendaybonussessioncard_fourteendaybonussessioncardprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10419,9 +10410,9 @@
       "source_file": "src/components/FourteenDayBonusSessionCard.tsx",
       "source_location": "L49",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaybonussessioncard_tsx",
-      "target": "components_fourteendaybonussessioncard_fourteendaybonussessioncard"
+      "target": "components_fourteendaybonussessioncard_fourteendaybonussessioncard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10430,9 +10421,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "src_components_fourteendaybonussessioncard_tsx"
+      "target": "src_components_fourteendaybonussessioncard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10441,9 +10432,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "components_fourteendaybonussessioncard_getbonusinfo"
+      "target": "components_fourteendaybonussessioncard_getbonusinfo",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -10485,9 +10476,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "components_fourteendaybonussessioncard_bonus_days_telugu"
+      "target": "components_fourteendaybonussessioncard_bonus_days_telugu",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10496,9 +10487,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "components_fourteendaybonussessioncard_bonus_days_english"
+      "target": "components_fourteendaybonussessioncard_bonus_days_english",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10507,9 +10498,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "components_fourteendaybonussessioncard_fourteendaybonussessioncard"
+      "target": "components_fourteendaybonussessioncard_fourteendaybonussessioncard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10518,9 +10509,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaysessioncard_tsx",
-      "target": "src_lib_tracksessionclick_ts"
+      "target": "src_lib_tracksessionclick_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10529,9 +10520,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaysessioncard_tsx",
-      "target": "lib_tracksessionclick_tracksessionclick"
+      "target": "lib_tracksessionclick_tracksessionclick",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10540,9 +10531,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaysessioncard_tsx",
-      "target": "src_components_nosessionscard_tsx"
+      "target": "src_components_nosessionscard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10550,9 +10541,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaysessioncard_tsx",
-      "target": "components_fourteendaysessioncard_startdatelabel"
+      "target": "components_fourteendaysessioncard_startdatelabel",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10560,9 +10551,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaysessioncard_tsx",
-      "target": "components_fourteendaysessioncard_sunicon"
+      "target": "components_fourteendaysessioncard_sunicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10570,9 +10561,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L19",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaysessioncard_tsx",
-      "target": "components_fourteendaysessioncard_moonicon"
+      "target": "components_fourteendaysessioncard_moonicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10580,9 +10571,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L25",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaysessioncard_tsx",
-      "target": "components_fourteendaysessioncard_playbutton"
+      "target": "components_fourteendaysessioncard_playbutton",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10590,9 +10581,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L32",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaysessioncard_tsx",
-      "target": "components_fourteendaysessioncard_parsetimeparam"
+      "target": "components_fourteendaysessioncard_parsetimeparam",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10600,9 +10591,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L44",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaysessioncard_tsx",
-      "target": "components_fourteendaysessioncard_getcurrenttotalmin"
+      "target": "components_fourteendaysessioncard_getcurrenttotalmin",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10610,9 +10601,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L51",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaysessioncard_tsx",
-      "target": "components_fourteendaysessioncard_morning_slots"
+      "target": "components_fourteendaysessioncard_morning_slots",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10620,9 +10611,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L57",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaysessioncard_tsx",
-      "target": "components_fourteendaysessioncard_evening_slots"
+      "target": "components_fourteendaysessioncard_evening_slots",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10630,9 +10621,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L62",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaysessioncard_tsx",
-      "target": "components_fourteendaysessioncard_all_slots"
+      "target": "components_fourteendaysessioncard_all_slots",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10640,9 +10631,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L64",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaysessioncard_tsx",
-      "target": "components_fourteendaysessioncard_fourteendaysessioncardprops"
+      "target": "components_fourteendaysessioncard_fourteendaysessioncardprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10650,9 +10641,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L76",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_fourteendaysessioncard_tsx",
-      "target": "components_fourteendaysessioncard_fourteendaysessioncard"
+      "target": "components_fourteendaysessioncard_fourteendaysessioncard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10661,9 +10652,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "src_components_fourteendaysessioncard_tsx"
+      "target": "src_components_fourteendaysessioncard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -10672,9 +10663,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L45",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "components_fourteendaysessioncard_getcurrenttotalmin",
-      "target": "components_fourteendaysessioncard_parsetimeparam"
+      "target": "components_fourteendaysessioncard_parsetimeparam",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -10683,9 +10674,9 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L87",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "components_fourteendaysessioncard_fourteendaysessioncard",
-      "target": "components_fourteendaysessioncard_getcurrenttotalmin"
+      "target": "components_fourteendaysessioncard_getcurrenttotalmin",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10694,9 +10685,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "components_fourteendaysessioncard_fourteendaysessioncard"
+      "target": "components_fourteendaysessioncard_fourteendaysessioncard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10704,9 +10695,9 @@
       "source_file": "src/components/HeroBannerWithTabs.tsx",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_herobannerwithtabs_tsx",
-      "target": "components_herobannerwithtabs_months"
+      "target": "components_herobannerwithtabs_months",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10714,9 +10705,9 @@
       "source_file": "src/components/HeroBannerWithTabs.tsx",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_herobannerwithtabs_tsx",
-      "target": "components_herobannerwithtabs_getordinalsuffix"
+      "target": "components_herobannerwithtabs_getordinalsuffix",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10724,9 +10715,9 @@
       "source_file": "src/components/HeroBannerWithTabs.tsx",
       "source_location": "L12",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_herobannerwithtabs_tsx",
-      "target": "components_herobannerwithtabs_special_day_messages"
+      "target": "components_herobannerwithtabs_special_day_messages",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10734,9 +10725,9 @@
       "source_file": "src/components/HeroBannerWithTabs.tsx",
       "source_location": "L23",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_herobannerwithtabs_tsx",
-      "target": "components_herobannerwithtabs_herobannerwithtabsprops"
+      "target": "components_herobannerwithtabs_herobannerwithtabsprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10744,9 +10735,9 @@
       "source_file": "src/components/HeroBannerWithTabs.tsx",
       "source_location": "L37",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_herobannerwithtabs_tsx",
-      "target": "components_herobannerwithtabs_herobannerwithtabs"
+      "target": "components_herobannerwithtabs_herobannerwithtabs",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10755,9 +10746,9 @@
       "source_file": "src/pages/Dashboard.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_dashboard_tsx",
-      "target": "src_components_herobannerwithtabs_tsx"
+      "target": "src_components_herobannerwithtabs_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -10766,9 +10757,9 @@
       "source_file": "src/components/HeroBannerWithTabs.tsx",
       "source_location": "L110",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "components_herobannerwithtabs_herobannerwithtabs",
-      "target": "components_herobannerwithtabs_getordinalsuffix"
+      "target": "components_herobannerwithtabs_getordinalsuffix",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10776,9 +10767,9 @@
       "source_file": "src/components/LevelCard.tsx",
       "source_location": "L20",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_levelcard_tsx",
-      "target": "components_levelcard_level_rewards"
+      "target": "components_levelcard_level_rewards",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10786,9 +10777,9 @@
       "source_file": "src/components/LevelCard.tsx",
       "source_location": "L31",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_levelcard_tsx",
-      "target": "components_levelcard_level_card_data"
+      "target": "components_levelcard_level_card_data",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10796,9 +10787,9 @@
       "source_file": "src/components/LevelCard.tsx",
       "source_location": "L56",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_levelcard_tsx",
-      "target": "components_levelcard_levelcard"
+      "target": "components_levelcard_levelcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10807,9 +10798,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_index_tsx",
-      "target": "src_components_levelcard_tsx"
+      "target": "src_components_levelcard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10818,9 +10809,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "src_components_levelcard_tsx"
+      "target": "src_components_levelcard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10829,9 +10820,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_index_tsx",
-      "target": "components_levelcard_levelcard"
+      "target": "components_levelcard_levelcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10840,9 +10831,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "components_levelcard_levelcard"
+      "target": "components_levelcard_levelcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10913,9 +10904,9 @@
       "source_file": "src/components/PaidLiveSessionCard.tsx",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidlivesessioncard_tsx",
-      "target": "src_components_nosessionscard_tsx"
+      "target": "src_components_nosessionscard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10935,9 +10926,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L12",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "src_components_nosessionscard_tsx"
+      "target": "src_components_nosessionscard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10945,9 +10936,9 @@
       "source_file": "src/components/PaidActionCard.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidactioncard_tsx",
-      "target": "components_paidactioncard_paidactioncardprops"
+      "target": "components_paidactioncard_paidactioncardprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -10955,9 +10946,9 @@
       "source_file": "src/components/PaidActionCard.tsx",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidactioncard_tsx",
-      "target": "components_paidactioncard_paidactioncard"
+      "target": "components_paidactioncard_paidactioncard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10966,9 +10957,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "src_components_paidactioncard_tsx"
+      "target": "src_components_paidactioncard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10977,9 +10968,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "components_paidactioncard_paidactioncard"
+      "target": "components_paidactioncard_paidactioncard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -10988,9 +10979,9 @@
       "source_file": "src/components/PaidBonusSessionCard.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidbonussessioncard_tsx",
-      "target": "src_lib_tracksessionclick_ts"
+      "target": "src_lib_tracksessionclick_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -10999,9 +10990,9 @@
       "source_file": "src/components/PaidBonusSessionCard.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidbonussessioncard_tsx",
-      "target": "lib_tracksessionclick_tracksessionclick"
+      "target": "lib_tracksessionclick_tracksessionclick",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11010,9 +11001,9 @@
       "source_file": "src/components/PaidBonusSessionCard.tsx",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidbonussessioncard_tsx",
-      "target": "src_lib_paidbonussessions_ts"
+      "target": "src_lib_paidbonussessions_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11021,9 +11012,9 @@
       "source_file": "src/components/PaidBonusSessionCard.tsx",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidbonussessioncard_tsx",
-      "target": "lib_paidbonussessions_paidbonuscard"
+      "target": "lib_paidbonussessions_paidbonuscard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11031,9 +11022,9 @@
       "source_file": "src/components/PaidBonusSessionCard.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidbonussessioncard_tsx",
-      "target": "components_paidbonussessioncard_playbutton"
+      "target": "components_paidbonussessioncard_playbutton",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11041,9 +11032,9 @@
       "source_file": "src/components/PaidBonusSessionCard.tsx",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidbonussessioncard_tsx",
-      "target": "components_paidbonussessioncard_paidbonussessioncardprops"
+      "target": "components_paidbonussessioncard_paidbonussessioncardprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11051,9 +11042,9 @@
       "source_file": "src/components/PaidBonusSessionCard.tsx",
       "source_location": "L18",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidbonussessioncard_tsx",
-      "target": "components_paidbonussessioncard_paidbonussessioncard"
+      "target": "components_paidbonussessioncard_paidbonussessioncard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11062,9 +11053,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "src_components_paidbonussessioncard_tsx"
+      "target": "src_components_paidbonussessioncard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11073,9 +11064,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L8",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "components_paidbonussessioncard_paidbonussessioncard"
+      "target": "components_paidbonussessioncard_paidbonussessioncard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11084,9 +11075,9 @@
       "source_file": "src/components/PaidLiveSessionCard.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidlivesessioncard_tsx",
-      "target": "src_lib_tracksessionclick_ts"
+      "target": "src_lib_tracksessionclick_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11095,9 +11086,9 @@
       "source_file": "src/components/PaidLiveSessionCard.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidlivesessioncard_tsx",
-      "target": "lib_tracksessionclick_tracksessionclick"
+      "target": "lib_tracksessionclick_tracksessionclick",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11105,9 +11096,9 @@
       "source_file": "src/components/PaidLiveSessionCard.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidlivesessioncard_tsx",
-      "target": "components_paidlivesessioncard_playbutton"
+      "target": "components_paidlivesessioncard_playbutton",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11115,9 +11106,9 @@
       "source_file": "src/components/PaidLiveSessionCard.tsx",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidlivesessioncard_tsx",
-      "target": "components_paidlivesessioncard_paidlivesessioncardprops"
+      "target": "components_paidlivesessioncard_paidlivesessioncardprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11125,9 +11116,9 @@
       "source_file": "src/components/PaidLiveSessionCard.tsx",
       "source_location": "L24",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_paidlivesessioncard_tsx",
-      "target": "components_paidlivesessioncard_paidlivesessioncard"
+      "target": "components_paidlivesessioncard_paidlivesessioncard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11136,9 +11127,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "src_components_paidlivesessioncard_tsx"
+      "target": "src_components_paidlivesessioncard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11147,9 +11138,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "components_paidlivesessioncard_paidlivesessioncard"
+      "target": "components_paidlivesessioncard_paidlivesessioncard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11158,9 +11149,9 @@
       "source_file": "src/components/PlanRenewalSection.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_planrenewalsection_tsx",
-      "target": "src_components_pricingandcomparisonsection_tsx"
+      "target": "src_components_pricingandcomparisonsection_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11169,9 +11160,9 @@
       "source_file": "src/components/PlanRenewalSection.tsx",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_planrenewalsection_tsx",
-      "target": "components_pricingandcomparisonsection_pricingandcomparisonsection"
+      "target": "components_pricingandcomparisonsection_pricingandcomparisonsection",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11180,9 +11171,9 @@
       "source_file": "src/components/PlanRenewalSection.tsx",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_planrenewalsection_tsx",
-      "target": "src_components_sharereferralactions_tsx"
+      "target": "src_components_sharereferralactions_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11191,9 +11182,9 @@
       "source_file": "src/components/PlanRenewalSection.tsx",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_planrenewalsection_tsx",
-      "target": "components_sharereferralactions_sharereferralactions"
+      "target": "components_sharereferralactions_sharereferralactions",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11201,9 +11192,9 @@
       "source_file": "src/components/PlanRenewalSection.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_planrenewalsection_tsx",
-      "target": "components_planrenewalsection_planrenewalsectionprops"
+      "target": "components_planrenewalsection_planrenewalsectionprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11211,9 +11202,9 @@
       "source_file": "src/components/PlanRenewalSection.tsx",
       "source_location": "L13",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_planrenewalsection_tsx",
-      "target": "components_planrenewalsection_planrenewalsection"
+      "target": "components_planrenewalsection_planrenewalsection",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11222,9 +11213,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L12",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "src_components_planrenewalsection_tsx"
+      "target": "src_components_planrenewalsection_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11233,9 +11224,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L12",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "components_planrenewalsection_planrenewalsection"
+      "target": "components_planrenewalsection_planrenewalsection",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11243,9 +11234,9 @@
       "source_file": "src/components/PricingAndComparisonSection.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_pricingandcomparisonsection_tsx",
-      "target": "components_pricingandcomparisonsection_ongoingplans"
+      "target": "components_pricingandcomparisonsection_ongoingplans",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11253,9 +11244,9 @@
       "source_file": "src/components/PricingAndComparisonSection.tsx",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_pricingandcomparisonsection_tsx",
-      "target": "components_pricingandcomparisonsection_paidplans"
+      "target": "components_pricingandcomparisonsection_paidplans",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11305,9 +11296,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "src_components_pricingandcomparisonsection_tsx"
+      "target": "src_components_pricingandcomparisonsection_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11316,9 +11307,9 @@
       "source_file": "src/pages/Pricing.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_pricing_tsx",
-      "target": "src_components_pricingandcomparisonsection_tsx"
+      "target": "src_components_pricingandcomparisonsection_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11348,9 +11339,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "components_pricingandcomparisonsection_pricingandcomparisonsection"
+      "target": "components_pricingandcomparisonsection_pricingandcomparisonsection",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11359,9 +11350,9 @@
       "source_file": "src/pages/Pricing.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_pricing_tsx",
-      "target": "components_pricingandcomparisonsection_pricingandcomparisonsection"
+      "target": "components_pricingandcomparisonsection_pricingandcomparisonsection",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11369,9 +11360,9 @@
       "source_file": "src/components/ReferAndWin500.tsx",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_referandwin500_tsx",
-      "target": "components_referandwin500_referandwin500props"
+      "target": "components_referandwin500_referandwin500props",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11379,9 +11370,9 @@
       "source_file": "src/components/ReferAndWin500.tsx",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_referandwin500_tsx",
-      "target": "components_referandwin500_referandwin500"
+      "target": "components_referandwin500_referandwin500",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11389,9 +11380,9 @@
       "source_file": "src/components/ReferAndWinTeaser.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_referandwinteaser_tsx",
-      "target": "components_referandwinteaser_referandwinteaserprops"
+      "target": "components_referandwinteaser_referandwinteaserprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11399,9 +11390,9 @@
       "source_file": "src/components/ReferAndWinTeaser.tsx",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_referandwinteaser_tsx",
-      "target": "components_referandwinteaser_referandwinteaser"
+      "target": "components_referandwinteaser_referandwinteaser",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11461,9 +11452,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "src_components_referralmilestonescard_tsx"
+      "target": "src_components_referralmilestonescard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11494,9 +11485,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "components_referralmilestonescard_referralmilestonescard"
+      "target": "components_referralmilestonescard_referralmilestonescard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11515,9 +11506,9 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_referralrewardscard_tsx",
-      "target": "components_referralrewardscard_diet_pdf_url"
+      "target": "components_referralrewardscard_diet_pdf_url",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11525,9 +11516,9 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L17",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_referralrewardscard_tsx",
-      "target": "components_referralrewardscard_milestoneline"
+      "target": "components_referralrewardscard_milestoneline",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11535,9 +11526,9 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L30",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_referralrewardscard_tsx",
-      "target": "components_referralrewardscard_unlockedmilestoneicon"
+      "target": "components_referralrewardscard_unlockedmilestoneicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11545,9 +11536,9 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L45",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_referralrewardscard_tsx",
-      "target": "components_referralrewardscard_lockedmilestoneicon"
+      "target": "components_referralrewardscard_lockedmilestoneicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11555,9 +11546,9 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L66",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_referralrewardscard_tsx",
-      "target": "components_referralrewardscard_youarehereicon"
+      "target": "components_referralrewardscard_youarehereicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11565,9 +11556,9 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L73",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_referralrewardscard_tsx",
-      "target": "components_referralrewardscard_youarehererow"
+      "target": "components_referralrewardscard_youarehererow",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11575,9 +11566,9 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L107",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_referralrewardscard_tsx",
-      "target": "components_referralrewardscard_downloadbutton"
+      "target": "components_referralrewardscard_downloadbutton",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11585,9 +11576,9 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L125",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_referralrewardscard_tsx",
-      "target": "components_referralrewardscard_referralrewardscard"
+      "target": "components_referralrewardscard_referralrewardscard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11596,9 +11587,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L13",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "src_components_referralrewardscard_tsx"
+      "target": "src_components_referralrewardscard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11607,9 +11598,9 @@
       "source_file": "src/pages/ReferralStatus.tsx",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_referralstatus_tsx",
-      "target": "src_components_referralrewardscard_tsx"
+      "target": "src_components_referralrewardscard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11618,9 +11609,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L13",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "components_referralrewardscard_referralrewardscard"
+      "target": "components_referralrewardscard_referralrewardscard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11629,9 +11620,9 @@
       "source_file": "src/pages/ReferralStatus.tsx",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_referralstatus_tsx",
-      "target": "components_referralrewardscard_referralrewardscard"
+      "target": "components_referralrewardscard_referralrewardscard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11693,9 +11684,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "src_components_referwincard_tsx"
+      "target": "src_components_referwincard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11704,9 +11695,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L14",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "src_components_referwincard_tsx"
+      "target": "src_components_referwincard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11715,9 +11706,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L13",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "src_components_referwincard_tsx"
+      "target": "src_components_referwincard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11726,9 +11717,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "src_components_referwincard_tsx"
+      "target": "src_components_referwincard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11818,9 +11809,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "src_components_referwinpopup_tsx"
+      "target": "src_components_referwinpopup_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -11851,9 +11842,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "components_referwinpopup_referralprogressbar"
+      "target": "components_referwinpopup_referralprogressbar",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11894,9 +11885,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "src_components_sharereferralactions_tsx"
+      "target": "src_components_sharereferralactions_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11916,9 +11907,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "components_sharereferralactions_sharereferralactions"
+      "target": "components_sharereferralactions_sharereferralactions",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11927,9 +11918,9 @@
       "source_file": "src/components/WeeklyAttendanceCard.tsx",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_weeklyattendancecard_tsx",
-      "target": "src_lib_weeklyattendance_ts"
+      "target": "src_lib_weeklyattendance_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11938,9 +11929,9 @@
       "source_file": "src/components/WeeklyAttendanceCard.tsx",
       "source_location": "L2",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_weeklyattendancecard_tsx",
-      "target": "lib_weeklyattendance_week_day_labels"
+      "target": "lib_weeklyattendance_week_day_labels",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11948,9 +11939,9 @@
       "source_file": "src/components/WeeklyAttendanceCard.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_weeklyattendancecard_tsx",
-      "target": "components_weeklyattendancecard_weeklyattendancecardprops"
+      "target": "components_weeklyattendancecard_weeklyattendancecardprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -11958,9 +11949,9 @@
       "source_file": "src/components/WeeklyAttendanceCard.tsx",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_components_weeklyattendancecard_tsx",
-      "target": "components_weeklyattendancecard_weeklyattendancecard"
+      "target": "components_weeklyattendancecard_weeklyattendancecard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -11969,9 +11960,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "src_components_weeklyattendancecard_tsx"
+      "target": "src_components_weeklyattendancecard_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -11980,9 +11971,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "components_weeklyattendancecard_weeklyattendancecard"
+      "target": "components_weeklyattendancecard_weeklyattendancecard",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -12043,9 +12034,9 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_faqs_tsx",
-      "target": "src_components_ui_accordion_tsx"
+      "target": "src_components_ui_accordion_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -12054,9 +12045,9 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_faqs_tsx",
-      "target": "ui_accordion_accordionitem"
+      "target": "ui_accordion_accordionitem",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -12065,9 +12056,9 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_faqs_tsx",
-      "target": "ui_accordion_accordiontrigger"
+      "target": "ui_accordion_accordiontrigger",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -12076,9 +12067,9 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_faqs_tsx",
-      "target": "ui_accordion_accordioncontent"
+      "target": "ui_accordion_accordioncontent",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16329,9 +16320,9 @@
       "source_file": "src/lib/paidBonusSessions.ts",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_paidbonussessions_ts",
-      "target": "lib_paidbonussessions_ytthumb"
+      "target": "lib_paidbonussessions_ytthumb",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16339,9 +16330,9 @@
       "source_file": "src/lib/paidBonusSessions.ts",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_paidbonussessions_ts",
-      "target": "lib_paidbonussessions_paidbonuscard"
+      "target": "lib_paidbonussessions_paidbonuscard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16349,9 +16340,9 @@
       "source_file": "src/lib/paidBonusSessions.ts",
       "source_location": "L12",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_paidbonussessions_ts",
-      "target": "lib_paidbonussessions_getactivepaidbonussessionparams"
+      "target": "lib_paidbonussessions_getactivepaidbonussessionparams",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16359,9 +16350,9 @@
       "source_file": "src/lib/paidBonusSessions.ts",
       "source_location": "L22",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_paidbonussessions_ts",
-      "target": "lib_paidbonussessions_getapilink"
+      "target": "lib_paidbonussessions_getapilink",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16369,9 +16360,9 @@
       "source_file": "src/lib/paidBonusSessions.ts",
       "source_location": "L27",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_paidbonussessions_ts",
-      "target": "lib_paidbonussessions_getdynamicthumbnail"
+      "target": "lib_paidbonussessions_getdynamicthumbnail",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16379,9 +16370,9 @@
       "source_file": "src/lib/paidBonusSessions.ts",
       "source_location": "L38",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_paidbonussessions_ts",
-      "target": "lib_paidbonussessions_getactivepaidbonussession"
+      "target": "lib_paidbonussessions_getactivepaidbonussession",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16389,9 +16380,9 @@
       "source_file": "src/lib/paidBonusSessions.ts",
       "source_location": "L77",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_paidbonussessions_ts",
-      "target": "lib_paidbonussessions_isregularsessionlive"
+      "target": "lib_paidbonussessions_isregularsessionlive",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16400,9 +16391,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "src_lib_paidbonussessions_ts"
+      "target": "src_lib_paidbonussessions_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -16411,9 +16402,9 @@
       "source_file": "src/lib/paidBonusSessions.ts",
       "source_location": "L28",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "lib_paidbonussessions_getdynamicthumbnail",
-      "target": "lib_paidbonussessions_ytthumb"
+      "target": "lib_paidbonussessions_ytthumb",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -16422,9 +16413,9 @@
       "source_file": "src/lib/paidBonusSessions.ts",
       "source_location": "L53",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "lib_paidbonussessions_getactivepaidbonussession",
-      "target": "lib_paidbonussessions_getapilink"
+      "target": "lib_paidbonussessions_getapilink",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -16433,9 +16424,9 @@
       "source_file": "src/lib/paidBonusSessions.ts",
       "source_location": "L54",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "lib_paidbonussessions_getactivepaidbonussession",
-      "target": "lib_paidbonussessions_getdynamicthumbnail"
+      "target": "lib_paidbonussessions_getdynamicthumbnail",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -16466,9 +16457,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "lib_paidbonussessions_getactivepaidbonussession"
+      "target": "lib_paidbonussessions_getactivepaidbonussession",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -16488,9 +16479,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "lib_paidbonussessions_isregularsessionlive"
+      "target": "lib_paidbonussessions_isregularsessionlive",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -16509,9 +16500,9 @@
       "source_file": "src/lib/planRenewal.ts",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_planrenewal_ts",
-      "target": "lib_planrenewal_planrenewalinfo"
+      "target": "lib_planrenewal_planrenewalinfo",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16519,9 +16510,9 @@
       "source_file": "src/lib/planRenewal.ts",
       "source_location": "L14",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_planrenewal_ts",
-      "target": "lib_planrenewal_getplanrenewalinfo"
+      "target": "lib_planrenewal_getplanrenewalinfo",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16530,9 +16521,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "src_lib_planrenewal_ts"
+      "target": "src_lib_planrenewal_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16541,9 +16532,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "lib_planrenewal_getplanrenewalinfo"
+      "target": "lib_planrenewal_getplanrenewalinfo",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -16562,9 +16553,9 @@
       "source_file": "src/lib/storage.ts",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_storage_ts",
-      "target": "lib_storage_safelocalstorage"
+      "target": "lib_storage_safelocalstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16572,9 +16563,9 @@
       "source_file": "src/lib/storage.ts",
       "source_location": "L38",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_storage_ts",
-      "target": "lib_storage_safesessionstorage"
+      "target": "lib_storage_safesessionstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16583,9 +16574,9 @@
       "source_file": "src/lib/trackVisit.ts",
       "source_location": "L12",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_trackvisit_ts",
-      "target": "src_lib_storage_ts"
+      "target": "src_lib_storage_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16594,9 +16585,9 @@
       "source_file": "src/pages/AllRecordings.tsx",
       "source_location": "L223",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_allrecordings_tsx",
-      "target": "src_lib_storage_ts"
+      "target": "src_lib_storage_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16605,9 +16596,9 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L98",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_attendancepage_tsx",
-      "target": "src_lib_storage_ts"
+      "target": "src_lib_storage_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16616,9 +16607,9 @@
       "source_file": "src/pages/Certificate.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_certificate_tsx",
-      "target": "src_lib_storage_ts"
+      "target": "src_lib_storage_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16627,9 +16618,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L175",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_index_tsx",
-      "target": "src_lib_storage_ts"
+      "target": "src_lib_storage_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16638,9 +16629,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L167",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "src_lib_storage_ts"
+      "target": "src_lib_storage_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16649,9 +16640,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L174",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "src_lib_storage_ts"
+      "target": "src_lib_storage_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16660,9 +16651,9 @@
       "source_file": "src/pages/Login.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_login_tsx",
-      "target": "src_lib_storage_ts"
+      "target": "src_lib_storage_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16671,9 +16662,9 @@
       "source_file": "src/pages/Referral.tsx",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_referral_tsx",
-      "target": "src_lib_storage_ts"
+      "target": "src_lib_storage_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16682,9 +16673,9 @@
       "source_file": "src/pages/ReferralStatus.tsx",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_referralstatus_tsx",
-      "target": "src_lib_storage_ts"
+      "target": "src_lib_storage_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16693,9 +16684,9 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L98",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_attendancepage_tsx",
-      "target": "lib_storage_safelocalstorage"
+      "target": "lib_storage_safelocalstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16704,9 +16695,9 @@
       "source_file": "src/pages/Certificate.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_certificate_tsx",
-      "target": "lib_storage_safelocalstorage"
+      "target": "lib_storage_safelocalstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16715,9 +16706,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L175",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_index_tsx",
-      "target": "lib_storage_safelocalstorage"
+      "target": "lib_storage_safelocalstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16726,9 +16717,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L167",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "lib_storage_safelocalstorage"
+      "target": "lib_storage_safelocalstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16737,9 +16728,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L174",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "lib_storage_safelocalstorage"
+      "target": "lib_storage_safelocalstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16748,9 +16739,9 @@
       "source_file": "src/pages/Login.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_login_tsx",
-      "target": "lib_storage_safelocalstorage"
+      "target": "lib_storage_safelocalstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16759,9 +16750,9 @@
       "source_file": "src/lib/trackVisit.ts",
       "source_location": "L12",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_trackvisit_ts",
-      "target": "lib_storage_safesessionstorage"
+      "target": "lib_storage_safesessionstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16770,9 +16761,9 @@
       "source_file": "src/pages/AllRecordings.tsx",
       "source_location": "L223",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_allrecordings_tsx",
-      "target": "lib_storage_safesessionstorage"
+      "target": "lib_storage_safesessionstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16781,9 +16772,9 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L98",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_attendancepage_tsx",
-      "target": "lib_storage_safesessionstorage"
+      "target": "lib_storage_safesessionstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16792,9 +16783,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L175",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_index_tsx",
-      "target": "lib_storage_safesessionstorage"
+      "target": "lib_storage_safesessionstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16803,9 +16794,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L167",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "lib_storage_safesessionstorage"
+      "target": "lib_storage_safesessionstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16814,9 +16805,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L174",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "lib_storage_safesessionstorage"
+      "target": "lib_storage_safesessionstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16825,9 +16816,9 @@
       "source_file": "src/pages/Referral.tsx",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_referral_tsx",
-      "target": "lib_storage_safesessionstorage"
+      "target": "lib_storage_safesessionstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16836,9 +16827,9 @@
       "source_file": "src/pages/ReferralStatus.tsx",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_referralstatus_tsx",
-      "target": "lib_storage_safesessionstorage"
+      "target": "lib_storage_safesessionstorage",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16846,9 +16837,9 @@
       "source_file": "src/lib/trackSessionClick.ts",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_tracksessionclick_ts",
-      "target": "lib_tracksessionclick_tracksessionclick"
+      "target": "lib_tracksessionclick_tracksessionclick",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16857,9 +16848,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_index_tsx",
-      "target": "src_lib_tracksessionclick_ts"
+      "target": "src_lib_tracksessionclick_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16868,9 +16859,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "src_lib_tracksessionclick_ts"
+      "target": "src_lib_tracksessionclick_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16879,9 +16870,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_index_tsx",
-      "target": "lib_tracksessionclick_tracksessionclick"
+      "target": "lib_tracksessionclick_tracksessionclick",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16890,9 +16881,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "lib_tracksessionclick_tracksessionclick"
+      "target": "lib_tracksessionclick_tracksessionclick",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16900,9 +16891,9 @@
       "source_file": "src/lib/trackVisit.ts",
       "source_location": "L14",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_trackvisit_ts",
-      "target": "lib_trackvisit_gettrackedkey"
+      "target": "lib_trackvisit_gettrackedkey",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -16932,9 +16923,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "src_lib_trackvisit_ts"
+      "target": "src_lib_trackvisit_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -16943,9 +16934,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "src_lib_trackvisit_ts"
+      "target": "src_lib_trackvisit_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -16954,9 +16945,9 @@
       "source_file": "src/lib/trackVisit.ts",
       "source_location": "L20",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "lib_trackvisit_trackvisit",
-      "target": "lib_trackvisit_gettrackedkey"
+      "target": "lib_trackvisit_gettrackedkey",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16976,9 +16967,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "lib_trackvisit_trackvisit"
+      "target": "lib_trackvisit_trackvisit",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -16987,9 +16978,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "lib_trackvisit_trackvisit"
+      "target": "lib_trackvisit_trackvisit",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17007,9 +16998,9 @@
       "source_file": "src/lib/utils.ts",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_utils_ts",
-      "target": "lib_utils_parsetimestringtominutes"
+      "target": "lib_utils_parsetimestringtominutes",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17017,9 +17008,9 @@
       "source_file": "src/lib/utils.ts",
       "source_location": "L21",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_utils_ts",
-      "target": "lib_utils_getcurrentminutesist"
+      "target": "lib_utils_getcurrentminutesist",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -17028,9 +17019,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "src_lib_utils_ts"
+      "target": "src_lib_utils_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -17039,9 +17030,9 @@
       "source_file": "src/lib/utils.ts",
       "source_location": "L22",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "lib_utils_getcurrentminutesist",
-      "target": "lib_utils_parsetimestringtominutes"
+      "target": "lib_utils_parsetimestringtominutes",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -17050,9 +17041,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "lib_utils_getcurrentminutesist"
+      "target": "lib_utils_getcurrentminutesist",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -17071,9 +17062,9 @@
       "source_file": "src/lib/weeklyAttendance.ts",
       "source_location": "L3",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_weeklyattendance_ts",
-      "target": "lib_weeklyattendance_week_day_labels"
+      "target": "lib_weeklyattendance_week_day_labels",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17081,9 +17072,9 @@
       "source_file": "src/lib/weeklyAttendance.ts",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_weeklyattendance_ts",
-      "target": "lib_weeklyattendance_weeklyattendance"
+      "target": "lib_weeklyattendance_weeklyattendance",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17091,9 +17082,9 @@
       "source_file": "src/lib/weeklyAttendance.ts",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_lib_weeklyattendance_ts",
-      "target": "lib_weeklyattendance_getweeklyattendance"
+      "target": "lib_weeklyattendance_getweeklyattendance",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -17102,9 +17093,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "src_lib_weeklyattendance_ts"
+      "target": "src_lib_weeklyattendance_ts",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports",
@@ -17113,9 +17104,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "lib_weeklyattendance_getweeklyattendance"
+      "target": "lib_weeklyattendance_getweeklyattendance",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -17380,29 +17371,8 @@
       "source_location": "L8",
       "weight": 1.0,
       "source": "src_pages_certificate_tsx",
-      "target": "pages_certificate_countries",
+      "target": "pages_certificate_certificate",
       "confidence_score": 1.0
-    },
-    {
-      "relation": "contains",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/Certificate.tsx",
-      "source_location": "L8",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_certificate_tsx",
-      "target": "pages_certificate_certificate"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/Certificate.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_certificate_tsx",
-      "target": "src_pages_login_tsx"
     },
     {
       "relation": "imports_from",
@@ -17411,9 +17381,9 @@
       "source_file": "src/pages/Dashboard.tsx",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_dashboard_tsx",
-      "target": "src_pages_indexfourteendays_tsx"
+      "target": "src_pages_indexfourteendays_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -17422,9 +17392,9 @@
       "source_file": "src/pages/Dashboard.tsx",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_dashboard_tsx",
-      "target": "src_pages_indextwentyoneday_tsx"
+      "target": "src_pages_indextwentyoneday_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -17433,9 +17403,9 @@
       "source_file": "src/pages/Dashboard.tsx",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_dashboard_tsx",
-      "target": "src_pages_twentyonedaysprogram_tsx"
+      "target": "src_pages_twentyonedaysprogram_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17443,9 +17413,9 @@
       "source_file": "src/pages/Dashboard.tsx",
       "source_location": "L13",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_dashboard_tsx",
-      "target": "pages_dashboard_dashboard"
+      "target": "pages_dashboard_dashboard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17453,9 +17423,9 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_faqs_tsx",
-      "target": "pages_faqs_generalfaqs"
+      "target": "pages_faqs_generalfaqs",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17463,9 +17433,9 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L38",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_faqs_tsx",
-      "target": "pages_faqs_telugufaqs"
+      "target": "pages_faqs_telugufaqs",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17473,9 +17443,9 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L72",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_faqs_tsx",
-      "target": "pages_faqs_englishfaqs"
+      "target": "pages_faqs_englishfaqs",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17483,9 +17453,9 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L105",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_faqs_tsx",
-      "target": "pages_faqs_rendertext"
+      "target": "pages_faqs_rendertext",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17493,9 +17463,9 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L225",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_faqs_tsx",
-      "target": "pages_faqs_faqs"
+      "target": "pages_faqs_faqs",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17503,9 +17473,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L25",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_index_tsx",
-      "target": "pages_index_ytthumb"
+      "target": "pages_index_ytthumb",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17513,9 +17483,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L27",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_index_tsx",
-      "target": "pages_index_start_date_months"
+      "target": "pages_index_start_date_months",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17523,9 +17493,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L28",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_index_tsx",
-      "target": "pages_index_getordinalsuffix"
+      "target": "pages_index_getordinalsuffix",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17533,9 +17503,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L29",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_index_tsx",
-      "target": "pages_index_startdatelabel"
+      "target": "pages_index_startdatelabel",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17543,9 +17513,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L33",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_index_tsx",
-      "target": "pages_index_getnextmonday"
+      "target": "pages_index_getnextmonday",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17613,9 +17583,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L177",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_index_tsx",
-      "target": "pages_index_indexprops"
+      "target": "pages_index_indexprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17656,9 +17626,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L30",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "pages_index_startdatelabel",
-      "target": "pages_index_getordinalsuffix"
+      "target": "pages_index_getordinalsuffix",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -17667,9 +17637,9 @@
       "source_file": "src/pages/Index.tsx",
       "source_location": "L2070",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "pages_index_index",
-      "target": "pages_index_getnextmonday"
+      "target": "pages_index_getnextmonday",
+      "confidence_score": 1.0
     },
     {
       "relation": "imports_from",
@@ -17678,9 +17648,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L10",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "src_pages_indexpaid_tsx"
+      "target": "src_pages_indexpaid_tsx",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17688,9 +17658,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L19",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "pages_indexfourteendays_start_date_months"
+      "target": "pages_indexfourteendays_start_date_months",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17698,9 +17668,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L20",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "pages_indexfourteendays_getordinalsuffix"
+      "target": "pages_indexfourteendays_getordinalsuffix",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17708,9 +17678,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L21",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "pages_indexfourteendays_startdatelabel"
+      "target": "pages_indexfourteendays_startdatelabel",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17718,9 +17688,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L25",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "pages_indexfourteendays_getnextmonday"
+      "target": "pages_indexfourteendays_getnextmonday",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17728,9 +17698,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L34",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "pages_indexfourteendays_moonicon"
+      "target": "pages_indexfourteendays_moonicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17738,9 +17708,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L40",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "pages_indexfourteendays_sunicon"
+      "target": "pages_indexfourteendays_sunicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17748,9 +17718,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L48",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "pages_indexfourteendays_playbutton"
+      "target": "pages_indexfourteendays_playbutton",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17758,9 +17728,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L55",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "pages_indexfourteendays_teluguvideos"
+      "target": "pages_indexfourteendays_teluguvideos",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17768,9 +17738,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L82",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "pages_indexfourteendays_englishvideos"
+      "target": "pages_indexfourteendays_englishvideos",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17778,9 +17748,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L109",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "pages_indexfourteendays_videocard"
+      "target": "pages_indexfourteendays_videocard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17788,9 +17758,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L169",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "pages_indexfourteendays_indexprops"
+      "target": "pages_indexfourteendays_indexprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17798,9 +17768,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L174",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexfourteendays_tsx",
-      "target": "pages_indexfourteendays_indexfourteendays"
+      "target": "pages_indexfourteendays_indexfourteendays",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -17809,9 +17779,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L22",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "pages_indexfourteendays_startdatelabel",
-      "target": "pages_indexfourteendays_getordinalsuffix"
+      "target": "pages_indexfourteendays_getordinalsuffix",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -17820,9 +17790,9 @@
       "source_file": "src/pages/IndexFourteenDays.tsx",
       "source_location": "L879",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "pages_indexfourteendays_indexfourteendays",
-      "target": "pages_indexfourteendays_getnextmonday"
+      "target": "pages_indexfourteendays_getnextmonday",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17830,9 +17800,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L16",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "pages_indexpaid_indexpaidprops"
+      "target": "pages_indexpaid_indexpaidprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17840,9 +17810,9 @@
       "source_file": "src/pages/IndexPaid.tsx",
       "source_location": "L25",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indexpaid_tsx",
-      "target": "pages_indexpaid_indexpaid"
+      "target": "pages_indexpaid_indexpaid",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17850,9 +17820,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L24",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_ytthumb"
+      "target": "pages_indextwentyoneday_ytthumb",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17860,9 +17830,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L26",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_start_date_months"
+      "target": "pages_indextwentyoneday_start_date_months",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17870,9 +17840,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L27",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_getordinalsuffix"
+      "target": "pages_indextwentyoneday_getordinalsuffix",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17880,9 +17850,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L28",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_startdatelabel"
+      "target": "pages_indextwentyoneday_startdatelabel",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17890,9 +17860,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L32",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_getnextmonday"
+      "target": "pages_indextwentyoneday_getnextmonday",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17900,9 +17870,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L41",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_moonicon"
+      "target": "pages_indextwentyoneday_moonicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17910,9 +17880,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L47",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_sunicon"
+      "target": "pages_indextwentyoneday_sunicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17920,9 +17890,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L55",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_playbutton"
+      "target": "pages_indextwentyoneday_playbutton",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17930,9 +17900,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L62",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_teluguvideos"
+      "target": "pages_indextwentyoneday_teluguvideos",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17940,9 +17910,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L89",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_englishvideos"
+      "target": "pages_indextwentyoneday_englishvideos",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17950,9 +17920,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L116",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_videocard"
+      "target": "pages_indextwentyoneday_videocard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17960,9 +17930,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L181",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_tolocaldatestr"
+      "target": "pages_indextwentyoneday_tolocaldatestr",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17970,9 +17940,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L188",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_buildpreviewdashboarddata"
+      "target": "pages_indextwentyoneday_buildpreviewdashboarddata",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17980,9 +17950,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L261",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_indextwentyonedayprops"
+      "target": "pages_indextwentyoneday_indextwentyonedayprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -17990,9 +17960,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L266",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_indextwentyoneday_tsx",
-      "target": "pages_indextwentyoneday_indextwentyoneday"
+      "target": "pages_indextwentyoneday_indextwentyoneday",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -18001,9 +17971,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L29",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "pages_indextwentyoneday_startdatelabel",
-      "target": "pages_indextwentyoneday_getordinalsuffix"
+      "target": "pages_indextwentyoneday_getordinalsuffix",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -18012,9 +17982,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L2134",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "pages_indextwentyoneday_indextwentyoneday",
-      "target": "pages_indextwentyoneday_getnextmonday"
+      "target": "pages_indextwentyoneday_getnextmonday",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -18023,9 +17993,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L226",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "pages_indextwentyoneday_buildpreviewdashboarddata",
-      "target": "pages_indextwentyoneday_tolocaldatestr"
+      "target": "pages_indextwentyoneday_tolocaldatestr",
+      "confidence_score": 1.0
     },
     {
       "relation": "calls",
@@ -18034,9 +18004,9 @@
       "source_file": "src/pages/IndexTwentyOneDay.tsx",
       "source_location": "L278",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "pages_indextwentyoneday_indextwentyoneday",
-      "target": "pages_indextwentyoneday_buildpreviewdashboarddata"
+      "target": "pages_indextwentyoneday_buildpreviewdashboarddata",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18044,9 +18014,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L50",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_leaderboardentry"
+      "target": "pages_leaderboard_leaderboardentry",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18054,9 +18024,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L57",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_userrank"
+      "target": "pages_leaderboard_userrank",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18064,9 +18034,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L66",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_backarrow"
+      "target": "pages_leaderboard_backarrow",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18074,9 +18044,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L72",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_trophyicon"
+      "target": "pages_leaderboard_trophyicon",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18084,9 +18054,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L82",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_prize_images"
+      "target": "pages_leaderboard_prize_images",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18094,9 +18064,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L91",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_referralnamenumber"
+      "target": "pages_leaderboard_referralnamenumber",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18104,9 +18074,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L107",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_pendingnote"
+      "target": "pages_leaderboard_pendingnote",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18114,9 +18084,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L118",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_leaderboard"
+      "target": "pages_leaderboard_leaderboard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18124,9 +18094,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L811",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_prizetiercard"
+      "target": "pages_leaderboard_prizetiercard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18134,9 +18104,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L902",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_leaderboardrowskeleton"
+      "target": "pages_leaderboard_leaderboardrowskeleton",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18144,9 +18114,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L910",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_leaderboardrow"
+      "target": "pages_leaderboard_leaderboardrow",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18154,9 +18124,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L996",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_rankreferralstab"
+      "target": "pages_leaderboard_rankreferralstab",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18164,9 +18134,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L1028",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_currentuserrankcard"
+      "target": "pages_leaderboard_currentuserrankcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18174,9 +18144,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L1246",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_postcontestbanner"
+      "target": "pages_leaderboard_postcontestbanner",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18184,9 +18154,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L1276",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_congratulationscard"
+      "target": "pages_leaderboard_congratulationscard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18194,9 +18164,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L1411",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_addressdetailscard"
+      "target": "pages_leaderboard_addressdetailscard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18204,9 +18174,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L1494",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_postcontestrankcard"
+      "target": "pages_leaderboard_postcontestrankcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18214,9 +18184,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L1616",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_diet_pdf_url"
+      "target": "pages_leaderboard_diet_pdf_url",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18224,9 +18194,9 @@
       "source_file": "src/pages/Leaderboard.tsx",
       "source_location": "L1621",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_leaderboard_tsx",
-      "target": "pages_leaderboard_yourrewardscard"
+      "target": "pages_leaderboard_yourrewardscard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18234,9 +18204,9 @@
       "source_file": "src/pages/Login.tsx",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_login_tsx",
-      "target": "pages_login_countries"
+      "target": "pages_login_countries",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18244,9 +18214,9 @@
       "source_file": "src/pages/Login.tsx",
       "source_location": "L26",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_login_tsx",
-      "target": "pages_login_login"
+      "target": "pages_login_login",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18254,9 +18224,9 @@
       "source_file": "src/pages/Maintenance.tsx",
       "source_location": "L4",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_maintenance_tsx",
-      "target": "pages_maintenance_maintenance"
+      "target": "pages_maintenance_maintenance",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18274,9 +18244,9 @@
       "source_file": "src/pages/Pricing.tsx",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_pricing_tsx",
-      "target": "pages_pricing_pricing"
+      "target": "pages_pricing_pricing",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18324,9 +18294,9 @@
       "source_file": "src/pages/ReferralStatus.tsx",
       "source_location": "L38",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_referralstatus_tsx",
-      "target": "pages_referralstatus_getdisplayname"
+      "target": "pages_referralstatus_getdisplayname",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18334,9 +18304,9 @@
       "source_file": "src/pages/ReferralStatus.tsx",
       "source_location": "L46",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_referralstatus_tsx",
-      "target": "pages_referralstatus_buildpreviewdata"
+      "target": "pages_referralstatus_buildpreviewdata",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18344,9 +18314,9 @@
       "source_file": "src/pages/ReferralStatus.tsx",
       "source_location": "L72",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_referralstatus_tsx",
-      "target": "pages_referralstatus_referralrow"
+      "target": "pages_referralstatus_referralrow",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18354,9 +18324,9 @@
       "source_file": "src/pages/ReferralStatus.tsx",
       "source_location": "L144",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_referralstatus_tsx",
-      "target": "pages_referralstatus_rewards"
+      "target": "pages_referralstatus_rewards",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18364,9 +18334,9 @@
       "source_file": "src/pages/ReferralStatus.tsx",
       "source_location": "L149",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_referralstatus_tsx",
-      "target": "pages_referralstatus_rewardcard"
+      "target": "pages_referralstatus_rewardcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18405,9 +18375,9 @@
       "source_file": "src/pages/ReferralStatus.tsx",
       "source_location": "L73",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "pages_referralstatus_referralrow",
-      "target": "pages_referralstatus_getdisplayname"
+      "target": "pages_referralstatus_getdisplayname",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18415,9 +18385,9 @@
       "source_file": "src/pages/TwentyOneDaysProgram.tsx",
       "source_location": "L38",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_twentyonedaysprogram_tsx",
-      "target": "pages_twentyonedaysprogram_level_data"
+      "target": "pages_twentyonedaysprogram_level_data",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18425,9 +18395,9 @@
       "source_file": "src/pages/TwentyOneDaysProgram.tsx",
       "source_location": "L49",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_twentyonedaysprogram_tsx",
-      "target": "pages_twentyonedaysprogram_badge_card_data"
+      "target": "pages_twentyonedaysprogram_badge_card_data",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18435,9 +18405,9 @@
       "source_file": "src/pages/TwentyOneDaysProgram.tsx",
       "source_location": "L97",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_twentyonedaysprogram_tsx",
-      "target": "pages_twentyonedaysprogram_badge_subtext_completed"
+      "target": "pages_twentyonedaysprogram_badge_subtext_completed",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18445,9 +18415,9 @@
       "source_file": "src/pages/TwentyOneDaysProgram.tsx",
       "source_location": "L108",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_twentyonedaysprogram_tsx",
-      "target": "pages_twentyonedaysprogram_badge_subtext_inprogress"
+      "target": "pages_twentyonedaysprogram_badge_subtext_inprogress",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18455,9 +18425,9 @@
       "source_file": "src/pages/TwentyOneDaysProgram.tsx",
       "source_location": "L118",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_twentyonedaysprogram_tsx",
-      "target": "pages_twentyonedaysprogram_daystatus"
+      "target": "pages_twentyonedaysprogram_daystatus",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18465,9 +18435,9 @@
       "source_file": "src/pages/TwentyOneDaysProgram.tsx",
       "source_location": "L120",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_twentyonedaysprogram_tsx",
-      "target": "pages_twentyonedaysprogram_getdaystatus"
+      "target": "pages_twentyonedaysprogram_getdaystatus",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18475,9 +18445,9 @@
       "source_file": "src/pages/TwentyOneDaysProgram.tsx",
       "source_location": "L132",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_twentyonedaysprogram_tsx",
-      "target": "pages_twentyonedaysprogram_rewardcard"
+      "target": "pages_twentyonedaysprogram_rewardcard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18485,9 +18455,9 @@
       "source_file": "src/pages/TwentyOneDaysProgram.tsx",
       "source_location": "L364",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_twentyonedaysprogram_tsx",
-      "target": "pages_twentyonedaysprogram_dayrow"
+      "target": "pages_twentyonedaysprogram_dayrow",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18495,9 +18465,9 @@
       "source_file": "src/pages/TwentyOneDaysProgram.tsx",
       "source_location": "L470",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_twentyonedaysprogram_tsx",
-      "target": "pages_twentyonedaysprogram_twentyonedaysprogramprops"
+      "target": "pages_twentyonedaysprogram_twentyonedaysprogramprops",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18505,9 +18475,9 @@
       "source_file": "src/pages/TwentyOneDaysProgram.tsx",
       "source_location": "L474",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "src_pages_twentyonedaysprogram_tsx",
-      "target": "pages_twentyonedaysprogram_twentyonedaysprogram"
+      "target": "pages_twentyonedaysprogram_twentyonedaysprogram",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18615,9 +18585,9 @@
       "source_file": "BONUS_SESSIONS_ALL.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "bonus_sessions_all_md",
-      "target": "dashboard_test_healthyday_bonus_sessions_all_bonus_sessions_documentation"
+      "target": "dashboard_test_healthyday_bonus_sessions_all_bonus_sessions_documentation",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18625,9 +18595,9 @@
       "source_file": "BONUS_SESSIONS_ALL.md",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_bonus_sessions_all_bonus_sessions_documentation",
-      "target": "dashboard_test_healthyday_bonus_sessions_all_1_free_student_schedule_21_day_journey"
+      "target": "dashboard_test_healthyday_bonus_sessions_all_1_free_student_schedule_21_day_journey",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18635,9 +18605,9 @@
       "source_file": "BONUS_SESSIONS_ALL.md",
       "source_location": "L38",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_bonus_sessions_all_bonus_sessions_documentation",
-      "target": "dashboard_test_healthyday_bonus_sessions_all_2_paid_student_schedule_14_day_journey"
+      "target": "dashboard_test_healthyday_bonus_sessions_all_2_paid_student_schedule_14_day_journey",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18645,9 +18615,9 @@
       "source_file": "BONUS_SESSIONS_ALL.md",
       "source_location": "L14",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_bonus_sessions_all_1_free_student_schedule_21_day_journey",
-      "target": "dashboard_test_healthyday_bonus_sessions_all_telugu_schedule"
+      "target": "dashboard_test_healthyday_bonus_sessions_all_telugu_schedule",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18655,9 +18625,9 @@
       "source_file": "BONUS_SESSIONS_ALL.md",
       "source_location": "L24",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_bonus_sessions_all_1_free_student_schedule_21_day_journey",
-      "target": "dashboard_test_healthyday_bonus_sessions_all_english_schedule"
+      "target": "dashboard_test_healthyday_bonus_sessions_all_english_schedule",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18665,9 +18635,9 @@
       "source_file": "BONUS_SESSIONS_ALL.md",
       "source_location": "L55",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_bonus_sessions_all_2_paid_student_schedule_14_day_journey",
-      "target": "dashboard_test_healthyday_bonus_sessions_all_how_to_test_locally"
+      "target": "dashboard_test_healthyday_bonus_sessions_all_how_to_test_locally",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18675,9 +18645,9 @@
       "source_file": "BONUS_TEST_REPORT_FREE.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "bonus_test_report_free_md",
-      "target": "dashboard_test_healthyday_bonus_test_report_free_bonus_session_automated_test_report_free_users"
+      "target": "dashboard_test_healthyday_bonus_test_report_free_bonus_session_automated_test_report_free_users",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18685,9 +18655,9 @@
       "source_file": "free_trial_14days_reference.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "free_trial_14days_reference_md",
-      "target": "dashboard_test_healthyday_free_trial_14days_reference_free_trial_14_day_batch_dashboard_structure_reference"
+      "target": "dashboard_test_healthyday_free_trial_14days_reference_free_trial_14_day_batch_dashboard_structure_reference",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18695,9 +18665,9 @@
       "source_file": "free_trial_14days_reference.md",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_free_trial_14days_reference_free_trial_14_day_batch_dashboard_structure_reference",
-      "target": "dashboard_test_healthyday_free_trial_14days_reference_1_regular_live_yoga_sessions"
+      "target": "dashboard_test_healthyday_free_trial_14days_reference_1_regular_live_yoga_sessions",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18705,9 +18675,9 @@
       "source_file": "free_trial_14days_reference.md",
       "source_location": "L22",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_free_trial_14days_reference_free_trial_14_day_batch_dashboard_structure_reference",
-      "target": "dashboard_test_healthyday_free_trial_14days_reference_2_special_bonus_sessions_day_3_5_7_10_14"
+      "target": "dashboard_test_healthyday_free_trial_14days_reference_2_special_bonus_sessions_day_3_5_7_10_14",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18715,9 +18685,9 @@
       "source_file": "free_trial_14days_reference.md",
       "source_location": "L39",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_free_trial_14days_reference_free_trial_14_day_batch_dashboard_structure_reference",
-      "target": "dashboard_test_healthyday_free_trial_14days_reference_3_day_by_day_dashboard_structure_map"
+      "target": "dashboard_test_healthyday_free_trial_14days_reference_3_day_by_day_dashboard_structure_map",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18725,9 +18695,9 @@
       "source_file": "free_trial_14days_reference.md",
       "source_location": "L128",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_free_trial_14days_reference_free_trial_14_day_batch_dashboard_structure_reference",
-      "target": "dashboard_test_healthyday_free_trial_14days_reference_4_attendance_day_box_status_logic"
+      "target": "dashboard_test_healthyday_free_trial_14days_reference_4_attendance_day_box_status_logic",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18735,9 +18705,9 @@
       "source_file": "free_trial_14days_reference.md",
       "source_location": "L157",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_free_trial_14days_reference_free_trial_14_day_batch_dashboard_structure_reference",
-      "target": "dashboard_test_healthyday_free_trial_14days_reference_5_referral_milestone_rewards"
+      "target": "dashboard_test_healthyday_free_trial_14days_reference_5_referral_milestone_rewards",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18745,9 +18715,9 @@
       "source_file": "free_trial_14days_reference.md",
       "source_location": "L11",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_free_trial_14days_reference_1_regular_live_yoga_sessions",
-      "target": "dashboard_test_healthyday_free_trial_14days_reference_daily_timings_ist"
+      "target": "dashboard_test_healthyday_free_trial_14days_reference_daily_timings_ist",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18755,9 +18725,9 @@
       "source_file": "free_trial_14days_reference.md",
       "source_location": "L27",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_free_trial_14days_reference_2_special_bonus_sessions_day_3_5_7_10_14",
-      "target": "dashboard_test_healthyday_free_trial_14days_reference_bonus_sessions_table"
+      "target": "dashboard_test_healthyday_free_trial_14days_reference_bonus_sessions_table",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18765,9 +18735,9 @@
       "source_file": "free_trial_14days_reference.md",
       "source_location": "L43",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_free_trial_14days_reference_3_day_by_day_dashboard_structure_map",
-      "target": "dashboard_test_healthyday_free_trial_14days_reference_week_1_days_1_to_7_onboarding_referral_focus"
+      "target": "dashboard_test_healthyday_free_trial_14days_reference_week_1_days_1_to_7_onboarding_referral_focus",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18775,9 +18745,9 @@
       "source_file": "free_trial_14days_reference.md",
       "source_location": "L81",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_free_trial_14days_reference_3_day_by_day_dashboard_structure_map",
-      "target": "dashboard_test_healthyday_free_trial_14days_reference_week_2_days_8_to_14_conversion_subscription_focus"
+      "target": "dashboard_test_healthyday_free_trial_14days_reference_week_2_days_8_to_14_conversion_subscription_focus",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18785,9 +18755,9 @@
       "source_file": "free_trial_14days_reference.md",
       "source_location": "L117",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_free_trial_14days_reference_3_day_by_day_dashboard_structure_map",
-      "target": "dashboard_test_healthyday_free_trial_14days_reference_day_15_trial_completed_ended_status"
+      "target": "dashboard_test_healthyday_free_trial_14days_reference_day_15_trial_completed_ended_status",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18795,9 +18765,9 @@
       "source_file": "free_trial_14days_reference.md",
       "source_location": "L132",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_free_trial_14days_reference_4_attendance_day_box_status_logic",
-      "target": "dashboard_test_healthyday_free_trial_14days_reference_codeblock_1"
+      "target": "dashboard_test_healthyday_free_trial_14days_reference_codeblock_1",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18805,9 +18775,9 @@
       "source_file": "paid_recordings_reference.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "paid_recordings_reference_md",
-      "target": "dashboard_test_healthyday_paid_recordings_reference_paid_user_recordings_reference"
+      "target": "dashboard_test_healthyday_paid_recordings_reference_paid_user_recordings_reference",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18815,9 +18785,9 @@
       "source_file": "paid_recordings_reference.md",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_recordings_reference_paid_user_recordings_reference",
-      "target": "dashboard_test_healthyday_paid_recordings_reference_section_1_most_recent_session_recordings"
+      "target": "dashboard_test_healthyday_paid_recordings_reference_section_1_most_recent_session_recordings",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18825,9 +18795,9 @@
       "source_file": "paid_recordings_reference.md",
       "source_location": "L30",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_recordings_reference_paid_user_recordings_reference",
-      "target": "dashboard_test_healthyday_paid_recordings_reference_section_2_youtube_videos"
+      "target": "dashboard_test_healthyday_paid_recordings_reference_section_2_youtube_videos",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18835,9 +18805,9 @@
       "source_file": "paid_recordings_reference.md",
       "source_location": "L57",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_recordings_reference_paid_user_recordings_reference",
-      "target": "dashboard_test_healthyday_paid_recordings_reference_quick_reference_all_session_links"
+      "target": "dashboard_test_healthyday_paid_recordings_reference_quick_reference_all_session_links",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18845,9 +18815,9 @@
       "source_file": "paid_recordings_reference.md",
       "source_location": "L68",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_recordings_reference_paid_user_recordings_reference",
-      "target": "dashboard_test_healthyday_paid_recordings_reference_logic_summary"
+      "target": "dashboard_test_healthyday_paid_recordings_reference_logic_summary",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18855,9 +18825,9 @@
       "source_file": "paid_recordings_reference.md",
       "source_location": "L13",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_recordings_reference_section_1_most_recent_session_recordings",
-      "target": "dashboard_test_healthyday_paid_recordings_reference_all_paid_users_telugu_english"
+      "target": "dashboard_test_healthyday_paid_recordings_reference_all_paid_users_telugu_english",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18865,9 +18835,9 @@
       "source_file": "paid_recordings_reference.md",
       "source_location": "L22",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_recordings_reference_section_1_most_recent_session_recordings",
-      "target": "dashboard_test_healthyday_paid_recordings_reference_diet_session_12_month_users_only"
+      "target": "dashboard_test_healthyday_paid_recordings_reference_diet_session_12_month_users_only",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18875,9 +18845,9 @@
       "source_file": "paid_recordings_reference.md",
       "source_location": "L34",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_recordings_reference_section_2_youtube_videos",
-      "target": "dashboard_test_healthyday_paid_recordings_reference_telugu_4_videos"
+      "target": "dashboard_test_healthyday_paid_recordings_reference_telugu_4_videos",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18885,9 +18855,9 @@
       "source_file": "paid_recordings_reference.md",
       "source_location": "L43",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_recordings_reference_section_2_youtube_videos",
-      "target": "dashboard_test_healthyday_paid_recordings_reference_english_4_videos"
+      "target": "dashboard_test_healthyday_paid_recordings_reference_english_4_videos",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18895,9 +18865,9 @@
       "source_file": "paid_recordings_reference.md",
       "source_location": "L70",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_recordings_reference_logic_summary",
-      "target": "dashboard_test_healthyday_paid_recordings_reference_codeblock_1"
+      "target": "dashboard_test_healthyday_paid_recordings_reference_codeblock_1",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18905,9 +18875,9 @@
       "source_file": "paid_user_testing_guide.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "paid_user_testing_guide_md",
-      "target": "dashboard_test_healthyday_paid_user_testing_guide_paid_user_testing_guide_test_cases"
+      "target": "dashboard_test_healthyday_paid_user_testing_guide_paid_user_testing_guide_test_cases",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18915,9 +18885,9 @@
       "source_file": "paid_user_testing_guide.md",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_user_testing_guide_paid_user_testing_guide_test_cases",
-      "target": "dashboard_test_healthyday_paid_user_testing_guide_1_structural_map_paid_user"
+      "target": "dashboard_test_healthyday_paid_user_testing_guide_1_structural_map_paid_user",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18925,9 +18895,9 @@
       "source_file": "paid_user_testing_guide.md",
       "source_location": "L35",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_user_testing_guide_paid_user_testing_guide_test_cases",
-      "target": "dashboard_test_healthyday_paid_user_testing_guide_2_test_scenarios"
+      "target": "dashboard_test_healthyday_paid_user_testing_guide_2_test_scenarios",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18935,9 +18905,9 @@
       "source_file": "paid_user_testing_guide.md",
       "source_location": "L9",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_user_testing_guide_1_structural_map_paid_user",
-      "target": "dashboard_test_healthyday_paid_user_testing_guide_main_dashboard"
+      "target": "dashboard_test_healthyday_paid_user_testing_guide_main_dashboard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18945,9 +18915,9 @@
       "source_file": "paid_user_testing_guide.md",
       "source_location": "L28",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_user_testing_guide_1_structural_map_paid_user",
-      "target": "dashboard_test_healthyday_paid_user_testing_guide_sub_pages"
+      "target": "dashboard_test_healthyday_paid_user_testing_guide_sub_pages",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18955,9 +18925,9 @@
       "source_file": "paid_user_testing_guide.md",
       "source_location": "L37",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_user_testing_guide_2_test_scenarios",
-      "target": "dashboard_test_healthyday_paid_user_testing_guide_a_general_initialization"
+      "target": "dashboard_test_healthyday_paid_user_testing_guide_a_general_initialization",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18965,9 +18935,9 @@
       "source_file": "paid_user_testing_guide.md",
       "source_location": "L43",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_user_testing_guide_2_test_scenarios",
-      "target": "dashboard_test_healthyday_paid_user_testing_guide_b_regular_yoga_session"
+      "target": "dashboard_test_healthyday_paid_user_testing_guide_b_regular_yoga_session",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18975,9 +18945,9 @@
       "source_file": "paid_user_testing_guide.md",
       "source_location": "L51",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_user_testing_guide_2_test_scenarios",
-      "target": "dashboard_test_healthyday_paid_user_testing_guide_c_bonus_special_sessions"
+      "target": "dashboard_test_healthyday_paid_user_testing_guide_c_bonus_special_sessions",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18985,9 +18955,9 @@
       "source_file": "paid_user_testing_guide.md",
       "source_location": "L63",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_user_testing_guide_2_test_scenarios",
-      "target": "dashboard_test_healthyday_paid_user_testing_guide_d_class_recordings_all_recordings"
+      "target": "dashboard_test_healthyday_paid_user_testing_guide_d_class_recordings_all_recordings",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -18995,9 +18965,9 @@
       "source_file": "paid_user_testing_guide.md",
       "source_location": "L72",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_user_testing_guide_2_test_scenarios",
-      "target": "dashboard_test_healthyday_paid_user_testing_guide_e_grocery_list_12_month_plan_feature"
+      "target": "dashboard_test_healthyday_paid_user_testing_guide_e_grocery_list_12_month_plan_feature",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19005,9 +18975,9 @@
       "source_file": "paid_user_testing_guide.md",
       "source_location": "L80",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_user_testing_guide_2_test_scenarios",
-      "target": "dashboard_test_healthyday_paid_user_testing_guide_f_weekly_attendance"
+      "target": "dashboard_test_healthyday_paid_user_testing_guide_f_weekly_attendance",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19015,9 +18985,9 @@
       "source_file": "paid_user_testing_guide.md",
       "source_location": "L89",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_user_testing_guide_2_test_scenarios",
-      "target": "dashboard_test_healthyday_paid_user_testing_guide_g_refer_win"
+      "target": "dashboard_test_healthyday_paid_user_testing_guide_g_refer_win",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19025,9 +18995,9 @@
       "source_file": "paid_user_testing_guide.md",
       "source_location": "L97",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_paid_user_testing_guide_2_test_scenarios",
-      "target": "dashboard_test_healthyday_paid_user_testing_guide_h_plan_renewal_expiry"
+      "target": "dashboard_test_healthyday_paid_user_testing_guide_h_plan_renewal_expiry",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19035,9 +19005,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "previews_md",
-      "target": "dashboard_test_healthyday_previews_preview_params"
+      "target": "dashboard_test_healthyday_previews_preview_params",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19045,9 +19015,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L7",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_preview_params",
-      "target": "dashboard_test_healthyday_previews_live_sessions_tab_mobile"
+      "target": "dashboard_test_healthyday_previews_live_sessions_tab_mobile",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19055,9 +19025,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L102",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_preview_params",
-      "target": "dashboard_test_healthyday_previews_your_yoga_journey_tab_mobile_journey_tab"
+      "target": "dashboard_test_healthyday_previews_your_yoga_journey_tab_mobile_journey_tab",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19065,9 +19035,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L114",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_preview_params",
-      "target": "dashboard_test_healthyday_previews_referrals_page_mobile_referrals_referral_status"
+      "target": "dashboard_test_healthyday_previews_referrals_page_mobile_referrals_referral_status",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19075,9 +19045,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L124",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_preview_params",
-      "target": "dashboard_test_healthyday_previews_attendance_page_mobile_attendance_attendance_page"
+      "target": "dashboard_test_healthyday_previews_attendance_page_mobile_attendance_attendance_page",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19085,9 +19055,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L134",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_preview_params",
-      "target": "dashboard_test_healthyday_previews_recordings_page_mobile_recordings"
+      "target": "dashboard_test_healthyday_previews_recordings_page_mobile_recordings",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19095,9 +19065,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L13",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_live_sessions_tab_mobile",
-      "target": "dashboard_test_healthyday_previews_14_day_indexfourteendays_tsx_forceday_and_time_only"
+      "target": "dashboard_test_healthyday_previews_14_day_indexfourteendays_tsx_forceday_and_time_only",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19105,9 +19075,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L31",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_live_sessions_tab_mobile",
-      "target": "dashboard_test_healthyday_previews_paid_dashboard_indexpaid_tsx_forcepaidday_and_time"
+      "target": "dashboard_test_healthyday_previews_paid_dashboard_indexpaid_tsx_forcepaidday_and_time",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19115,9 +19085,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L48",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_live_sessions_tab_mobile",
-      "target": "dashboard_test_healthyday_previews_21_day_indextwentyoneday_tsx_full_preview_param_set_unchanged"
+      "target": "dashboard_test_healthyday_previews_21_day_indextwentyoneday_tsx_full_preview_param_set_unchanged",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19125,9 +19095,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L52",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_21_day_indextwentyoneday_tsx_full_preview_param_set_unchanged",
-      "target": "dashboard_test_healthyday_previews_preview_dashboard_key"
+      "target": "dashboard_test_healthyday_previews_preview_dashboard_key",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19135,9 +19105,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L67",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_21_day_indextwentyoneday_tsx_full_preview_param_set_unchanged",
-      "target": "dashboard_test_healthyday_previews_preview_programme_21day"
+      "target": "dashboard_test_healthyday_previews_preview_programme_21day",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19145,9 +19115,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L73",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_21_day_indextwentyoneday_tsx_full_preview_param_set_unchanged",
-      "target": "dashboard_test_healthyday_previews_fine_tuning_params_work_standalone_or_on_top_of_preview_dashboard"
+      "target": "dashboard_test_healthyday_previews_fine_tuning_params_work_standalone_or_on_top_of_preview_dashboard",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19155,9 +19125,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L86",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_21_day_indextwentyoneday_tsx_full_preview_param_set_unchanged",
-      "target": "dashboard_test_healthyday_previews_examples"
+      "target": "dashboard_test_healthyday_previews_examples",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19165,9 +19135,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L106",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_your_yoga_journey_tab_mobile_journey_tab",
-      "target": "dashboard_test_healthyday_previews_preview_levels_days"
+      "target": "dashboard_test_healthyday_previews_preview_levels_days",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19175,9 +19145,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L118",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_referrals_page_mobile_referrals_referral_status",
-      "target": "dashboard_test_healthyday_previews_preview_referrals_count"
+      "target": "dashboard_test_healthyday_previews_preview_referrals_count",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19185,9 +19155,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L128",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_attendance_page_mobile_attendance_attendance_page",
-      "target": "dashboard_test_healthyday_previews_preview_paid"
+      "target": "dashboard_test_healthyday_previews_preview_paid",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19195,9 +19165,9 @@
       "source_file": "PREVIEWS.md",
       "source_location": "L138",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "dashboard_test_healthyday_previews_recordings_page_mobile_recordings",
-      "target": "dashboard_test_healthyday_previews_preview_key"
+      "target": "dashboard_test_healthyday_previews_preview_key",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19205,9 +19175,9 @@
       "source_file": "ROUTES.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "routes_md",
-      "target": "dashboard_test_healthyday_routes_app_routes"
+      "target": "dashboard_test_healthyday_routes_app_routes",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19215,9 +19185,9 @@
       "source_file": ".agents/rules/graphify.md",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "agents_rules_graphify_md",
-      "target": "rules_graphify_graphify"
+      "target": "rules_graphify_graphify",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19225,9 +19195,9 @@
       "source_file": ".agents/workflows/graphify.md",
       "source_location": "L6",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "agents_workflows_graphify_md",
-      "target": "workflows_graphify_workflow_graphify"
+      "target": "workflows_graphify_workflow_graphify",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19235,9 +19205,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L1",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_md",
-      "target": "claude_project_memory_healthyday_project_memory"
+      "target": "claude_project_memory_healthyday_project_memory",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19245,9 +19215,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L5",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_healthyday_project_memory",
-      "target": "claude_project_memory_project_type"
+      "target": "claude_project_memory_project_type",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19255,9 +19225,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L12",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_healthyday_project_memory",
-      "target": "claude_project_memory_main_structure"
+      "target": "claude_project_memory_main_structure",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19265,9 +19235,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L31",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_healthyday_project_memory",
-      "target": "claude_project_memory_routing"
+      "target": "claude_project_memory_routing",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19275,9 +19245,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L43",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_healthyday_project_memory",
-      "target": "claude_project_memory_important_files"
+      "target": "claude_project_memory_important_files",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19285,9 +19255,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L57",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_healthyday_project_memory",
-      "target": "claude_project_memory_core_product_logic"
+      "target": "claude_project_memory_core_product_logic",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19295,9 +19265,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L77",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_healthyday_project_memory",
-      "target": "claude_project_memory_preview_modes"
+      "target": "claude_project_memory_preview_modes",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19305,9 +19275,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L101",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_healthyday_project_memory",
-      "target": "claude_project_memory_styling_notes"
+      "target": "claude_project_memory_styling_notes",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19315,9 +19285,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L109",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_healthyday_project_memory",
-      "target": "claude_project_memory_ui_inventory"
+      "target": "claude_project_memory_ui_inventory",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19325,9 +19295,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L115",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_healthyday_project_memory",
-      "target": "claude_project_memory_backend_api_shape"
+      "target": "claude_project_memory_backend_api_shape",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19335,9 +19305,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L129",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_healthyday_project_memory",
-      "target": "claude_project_memory_dev_server_and_build"
+      "target": "claude_project_memory_dev_server_and_build",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19345,9 +19315,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L153",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_healthyday_project_memory",
-      "target": "claude_project_memory_maintenance_notes"
+      "target": "claude_project_memory_maintenance_notes",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19355,9 +19325,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L159",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_healthyday_project_memory",
-      "target": "claude_project_memory_how_to_use_this_note"
+      "target": "claude_project_memory_how_to_use_this_note",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19365,9 +19335,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L14",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_main_structure",
-      "target": "claude_project_memory_codeblock_1"
+      "target": "claude_project_memory_codeblock_1",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19375,9 +19345,9 @@
       "source_file": ".claude/project-memory.md",
       "source_location": "L119",
       "weight": 1.0,
-      "confidence_score": 1.0,
       "source": "claude_project_memory_backend_api_shape",
-      "target": "claude_project_memory_netlify_function_endpoints"
+      "target": "claude_project_memory_netlify_function_endpoints",
+      "confidence_score": 1.0
     },
     {
       "relation": "contains",
@@ -19411,5 +19381,5 @@
     }
   ],
   "hyperedges": [],
-  "built_at_commit": "8ae4405d1525ba9dcee5fcbb4e75b36fe6703f2f"
+  "built_at_commit": "b4d884c7608ddf5f963006fe8c61aa2782e0d7e5"
 }

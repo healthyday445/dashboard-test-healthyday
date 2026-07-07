@@ -585,7 +585,7 @@
       "source_file": "package.json",
       "source_location": "L48",
       "id": "dashboard_test_healthyday_package_dependencies_clsx",
-      "community": 0,
+      "community": 7,
       "norm_label": "clsx"
     },
     {
@@ -1854,7 +1854,7 @@
       "source_file": "src/components/AttendanceGrid.tsx",
       "source_location": "L1",
       "id": "src_components_attendancegrid_tsx",
-      "community": 4,
+      "community": 33,
       "norm_label": "attendancegrid.tsx"
     },
     {
@@ -1863,7 +1863,7 @@
       "source_file": "src/components/AttendanceGrid.tsx",
       "source_location": "L5",
       "id": "components_attendancegrid_attendancegridprops",
-      "community": 4,
+      "community": 33,
       "norm_label": "attendancegridprops"
     },
     {
@@ -1872,7 +1872,7 @@
       "source_file": "src/components/AttendanceGrid.tsx",
       "source_location": "L11",
       "id": "components_attendancegrid_attendancegrid",
-      "community": 4,
+      "community": 33,
       "norm_label": "attendancegrid()"
     },
     {
@@ -1881,7 +1881,7 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L1",
       "id": "src_components_batchprogresssection_tsx",
-      "community": 38,
+      "community": 33,
       "norm_label": "batchprogresssection.tsx"
     },
     {
@@ -1890,7 +1890,7 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L7",
       "id": "components_batchprogresssection_batchprogresssectionprops",
-      "community": 38,
+      "community": 33,
       "norm_label": "batchprogresssectionprops"
     },
     {
@@ -1899,7 +1899,7 @@
       "source_file": "src/components/BatchProgressSection.tsx",
       "source_location": "L25",
       "id": "components_batchprogresssection_batchprogresssection",
-      "community": 38,
+      "community": 33,
       "norm_label": "batchprogresssection()"
     },
     {
@@ -1908,7 +1908,7 @@
       "source_file": "src/components/DayStatusBox.tsx",
       "source_location": "L1",
       "id": "src_components_daystatusbox_tsx",
-      "community": 4,
+      "community": 33,
       "norm_label": "daystatusbox.tsx"
     },
     {
@@ -1917,7 +1917,7 @@
       "source_file": "src/components/DayStatusBox.tsx",
       "source_location": "L1",
       "id": "components_daystatusbox_daystatus",
-      "community": 4,
+      "community": 33,
       "norm_label": "daystatus"
     },
     {
@@ -1926,7 +1926,7 @@
       "source_file": "src/components/DayStatusBox.tsx",
       "source_location": "L3",
       "id": "components_daystatusbox_daystatusboxprops",
-      "community": 4,
+      "community": 33,
       "norm_label": "daystatusboxprops"
     },
     {
@@ -1935,7 +1935,7 @@
       "source_file": "src/components/DayStatusBox.tsx",
       "source_location": "L9",
       "id": "components_daystatusbox_daystatusbox",
-      "community": 4,
+      "community": 33,
       "norm_label": "daystatusbox()"
     },
     {
@@ -2088,7 +2088,7 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L1",
       "id": "src_components_fourteendaysessioncard_tsx",
-      "community": 33,
+      "community": 53,
       "norm_label": "fourteendaysessioncard.tsx"
     },
     {
@@ -2097,7 +2097,7 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L5",
       "id": "components_fourteendaysessioncard_startdatelabel",
-      "community": 33,
+      "community": 53,
       "norm_label": "startdatelabel()"
     },
     {
@@ -2106,7 +2106,7 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L11",
       "id": "components_fourteendaysessioncard_sunicon",
-      "community": 33,
+      "community": 53,
       "norm_label": "sunicon()"
     },
     {
@@ -2115,7 +2115,7 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L19",
       "id": "components_fourteendaysessioncard_moonicon",
-      "community": 33,
+      "community": 53,
       "norm_label": "moonicon()"
     },
     {
@@ -2124,7 +2124,7 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L25",
       "id": "components_fourteendaysessioncard_playbutton",
-      "community": 33,
+      "community": 53,
       "norm_label": "playbutton()"
     },
     {
@@ -2133,7 +2133,7 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L32",
       "id": "components_fourteendaysessioncard_parsetimeparam",
-      "community": 33,
+      "community": 53,
       "norm_label": "parsetimeparam()"
     },
     {
@@ -2142,7 +2142,7 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L44",
       "id": "components_fourteendaysessioncard_getcurrenttotalmin",
-      "community": 33,
+      "community": 53,
       "norm_label": "getcurrenttotalmin()"
     },
     {
@@ -2151,7 +2151,7 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L51",
       "id": "components_fourteendaysessioncard_morning_slots",
-      "community": 33,
+      "community": 53,
       "norm_label": "morning_slots"
     },
     {
@@ -2160,7 +2160,7 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L57",
       "id": "components_fourteendaysessioncard_evening_slots",
-      "community": 33,
+      "community": 53,
       "norm_label": "evening_slots"
     },
     {
@@ -2169,7 +2169,7 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L62",
       "id": "components_fourteendaysessioncard_all_slots",
-      "community": 33,
+      "community": 53,
       "norm_label": "all_slots"
     },
     {
@@ -2178,7 +2178,7 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L64",
       "id": "components_fourteendaysessioncard_fourteendaysessioncardprops",
-      "community": 33,
+      "community": 53,
       "norm_label": "fourteendaysessioncardprops"
     },
     {
@@ -2187,7 +2187,7 @@
       "source_file": "src/components/FourteenDaySessionCard.tsx",
       "source_location": "L76",
       "id": "components_fourteendaysessioncard_fourteendaysessioncard",
-      "community": 33,
+      "community": 53,
       "norm_label": "fourteendaysessioncard()"
     },
     {
@@ -2313,7 +2313,7 @@
       "source_file": "src/components/NoSessionsCard.tsx",
       "source_location": "L1",
       "id": "src_components_nosessionscard_tsx",
-      "community": 33,
+      "community": 53,
       "norm_label": "nosessionscard.tsx"
     },
     {
@@ -2322,7 +2322,7 @@
       "source_file": "src/components/NoSessionsCard.tsx",
       "source_location": "L14",
       "id": "components_nosessionscard_nosessionscardprops",
-      "community": 33,
+      "community": 53,
       "norm_label": "nosessionscardprops"
     },
     {
@@ -2331,7 +2331,7 @@
       "source_file": "src/components/NoSessionsCard.tsx",
       "source_location": "L21",
       "id": "components_nosessionscard_nosessionscard",
-      "community": 33,
+      "community": 53,
       "norm_label": "nosessionscard()"
     },
     {
@@ -2439,7 +2439,7 @@
       "source_file": "src/components/PlanRenewalSection.tsx",
       "source_location": "L1",
       "id": "src_components_planrenewalsection_tsx",
-      "community": 66,
+      "community": 68,
       "norm_label": "planrenewalsection.tsx"
     },
     {
@@ -2448,7 +2448,7 @@
       "source_file": "src/components/PlanRenewalSection.tsx",
       "source_location": "L4",
       "id": "components_planrenewalsection_planrenewalsectionprops",
-      "community": 66,
+      "community": 68,
       "norm_label": "planrenewalsectionprops"
     },
     {
@@ -2457,7 +2457,7 @@
       "source_file": "src/components/PlanRenewalSection.tsx",
       "source_location": "L13",
       "id": "components_planrenewalsection_planrenewalsection",
-      "community": 66,
+      "community": 68,
       "norm_label": "planrenewalsection()"
     },
     {
@@ -2547,7 +2547,7 @@
       "source_file": "src/components/ReferAndWinTeaser.tsx",
       "source_location": "L1",
       "id": "src_components_referandwinteaser_tsx",
-      "community": 38,
+      "community": 33,
       "norm_label": "referandwinteaser.tsx"
     },
     {
@@ -2556,7 +2556,7 @@
       "source_file": "src/components/ReferAndWinTeaser.tsx",
       "source_location": "L4",
       "id": "components_referandwinteaser_referandwinteaserprops",
-      "community": 38,
+      "community": 33,
       "norm_label": "referandwinteaserprops"
     },
     {
@@ -2565,7 +2565,7 @@
       "source_file": "src/components/ReferAndWinTeaser.tsx",
       "source_location": "L9",
       "id": "components_referandwinteaser_referandwinteaser",
-      "community": 38,
+      "community": 33,
       "norm_label": "referandwinteaser()"
     },
     {
@@ -2619,7 +2619,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L1",
       "id": "src_components_referralrewardscard_tsx",
-      "community": 32,
+      "community": 33,
       "norm_label": "referralrewardscard.tsx"
     },
     {
@@ -2628,7 +2628,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L10",
       "id": "components_referralrewardscard_diet_pdf_url",
-      "community": 32,
+      "community": 33,
       "norm_label": "diet_pdf_url"
     },
     {
@@ -2637,7 +2637,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L17",
       "id": "components_referralrewardscard_milestoneline",
-      "community": 32,
+      "community": 33,
       "norm_label": "milestoneline()"
     },
     {
@@ -2646,7 +2646,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L30",
       "id": "components_referralrewardscard_unlockedmilestoneicon",
-      "community": 32,
+      "community": 33,
       "norm_label": "unlockedmilestoneicon()"
     },
     {
@@ -2655,7 +2655,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L45",
       "id": "components_referralrewardscard_lockedmilestoneicon",
-      "community": 32,
+      "community": 33,
       "norm_label": "lockedmilestoneicon()"
     },
     {
@@ -2664,7 +2664,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L66",
       "id": "components_referralrewardscard_youarehereicon",
-      "community": 32,
+      "community": 33,
       "norm_label": "youarehereicon()"
     },
     {
@@ -2673,7 +2673,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L73",
       "id": "components_referralrewardscard_youarehererow",
-      "community": 32,
+      "community": 33,
       "norm_label": "youarehererow()"
     },
     {
@@ -2682,7 +2682,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L107",
       "id": "components_referralrewardscard_downloadbutton",
-      "community": 32,
+      "community": 33,
       "norm_label": "downloadbutton()"
     },
     {
@@ -2691,7 +2691,7 @@
       "source_file": "src/components/ReferralRewardsCard.tsx",
       "source_location": "L125",
       "id": "components_referralrewardscard_referralrewardscard",
-      "community": 32,
+      "community": 33,
       "norm_label": "referralrewardscard()"
     },
     {
@@ -2817,7 +2817,7 @@
       "source_file": "src/components/WeeklyAttendanceCard.tsx",
       "source_location": "L1",
       "id": "src_components_weeklyattendancecard_tsx",
-      "community": 4,
+      "community": 33,
       "norm_label": "weeklyattendancecard.tsx"
     },
     {
@@ -2826,7 +2826,7 @@
       "source_file": "src/components/WeeklyAttendanceCard.tsx",
       "source_location": "L4",
       "id": "components_weeklyattendancecard_weeklyattendancecardprops",
-      "community": 4,
+      "community": 33,
       "norm_label": "weeklyattendancecardprops"
     },
     {
@@ -2835,7 +2835,7 @@
       "source_file": "src/components/WeeklyAttendanceCard.tsx",
       "source_location": "L11",
       "id": "components_weeklyattendancecard_weeklyattendancecard",
-      "community": 4,
+      "community": 33,
       "norm_label": "weeklyattendancecard()"
     },
     {
@@ -2844,7 +2844,7 @@
       "source_file": "src/components/ui/accordion.tsx",
       "source_location": "L1",
       "id": "src_components_ui_accordion_tsx",
-      "community": 21,
+      "community": 54,
       "norm_label": "accordion.tsx"
     },
     {
@@ -2853,7 +2853,7 @@
       "source_file": "src/components/ui/accordion.tsx",
       "source_location": "L9",
       "id": "ui_accordion_accordionitem",
-      "community": 21,
+      "community": 54,
       "norm_label": "accordionitem"
     },
     {
@@ -2862,7 +2862,7 @@
       "source_file": "src/components/ui/accordion.tsx",
       "source_location": "L17",
       "id": "ui_accordion_accordiontrigger",
-      "community": 21,
+      "community": 54,
       "norm_label": "accordiontrigger"
     },
     {
@@ -2871,7 +2871,7 @@
       "source_file": "src/components/ui/accordion.tsx",
       "source_location": "L37",
       "id": "ui_accordion_accordioncontent",
-      "community": 21,
+      "community": 54,
       "norm_label": "accordioncontent"
     },
     {
@@ -2880,7 +2880,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L1",
       "id": "src_components_ui_alert_dialog_tsx",
-      "community": 37,
+      "community": 7,
       "norm_label": "alert-dialog.tsx"
     },
     {
@@ -2889,7 +2889,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L13",
       "id": "ui_alert_dialog_alertdialogoverlay",
-      "community": 37,
+      "community": 7,
       "norm_label": "alertdialogoverlay"
     },
     {
@@ -2898,7 +2898,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L28",
       "id": "ui_alert_dialog_alertdialogcontent",
-      "community": 37,
+      "community": 7,
       "norm_label": "alertdialogcontent"
     },
     {
@@ -2907,7 +2907,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L46",
       "id": "ui_alert_dialog_alertdialogheader",
-      "community": 37,
+      "community": 7,
       "norm_label": "alertdialogheader()"
     },
     {
@@ -2916,7 +2916,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L51",
       "id": "ui_alert_dialog_alertdialogfooter",
-      "community": 37,
+      "community": 7,
       "norm_label": "alertdialogfooter()"
     },
     {
@@ -2925,7 +2925,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L56",
       "id": "ui_alert_dialog_alertdialogtitle",
-      "community": 37,
+      "community": 7,
       "norm_label": "alertdialogtitle"
     },
     {
@@ -2934,7 +2934,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L64",
       "id": "ui_alert_dialog_alertdialogdescription",
-      "community": 37,
+      "community": 7,
       "norm_label": "alertdialogdescription"
     },
     {
@@ -2943,7 +2943,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L72",
       "id": "ui_alert_dialog_alertdialogaction",
-      "community": 37,
+      "community": 7,
       "norm_label": "alertdialogaction"
     },
     {
@@ -2952,7 +2952,7 @@
       "source_file": "src/components/ui/alert-dialog.tsx",
       "source_location": "L80",
       "id": "ui_alert_dialog_alertdialogcancel",
-      "community": 37,
+      "community": 7,
       "norm_label": "alertdialogcancel"
     },
     {
@@ -3186,7 +3186,7 @@
       "source_file": "src/components/ui/button.tsx",
       "source_location": "L39",
       "id": "ui_button_button",
-      "community": 13,
+      "community": 7,
       "norm_label": "button"
     },
     {
@@ -4059,7 +4059,7 @@
       "source_file": "src/components/ui/hover-card.tsx",
       "source_location": "L1",
       "id": "src_components_ui_hover_card_tsx",
-      "community": 8,
+      "community": 7,
       "norm_label": "hover-card.tsx"
     },
     {
@@ -4068,7 +4068,7 @@
       "source_file": "src/components/ui/hover-card.tsx",
       "source_location": "L10",
       "id": "ui_hover_card_hovercardcontent",
-      "community": 8,
+      "community": 7,
       "norm_label": "hovercardcontent"
     },
     {
@@ -4464,7 +4464,7 @@
       "source_file": "src/components/ui/radio-group.tsx",
       "source_location": "L1",
       "id": "src_components_ui_radio_group_tsx",
-      "community": 67,
+      "community": 8,
       "norm_label": "radio-group.tsx"
     },
     {
@@ -4473,7 +4473,7 @@
       "source_file": "src/components/ui/radio-group.tsx",
       "source_location": "L7",
       "id": "ui_radio_group_radiogroup",
-      "community": 67,
+      "community": 8,
       "norm_label": "radiogroup"
     },
     {
@@ -4482,7 +4482,7 @@
       "source_file": "src/components/ui/radio-group.tsx",
       "source_location": "L15",
       "id": "ui_radio_group_radiogroupitem",
-      "community": 67,
+      "community": 8,
       "norm_label": "radiogroupitem"
     },
     {
@@ -5121,7 +5121,7 @@
       "source_file": "src/components/ui/tabs.tsx",
       "source_location": "L1",
       "id": "src_components_ui_tabs_tsx",
-      "community": 64,
+      "community": 8,
       "norm_label": "tabs.tsx"
     },
     {
@@ -5130,7 +5130,7 @@
       "source_file": "src/components/ui/tabs.tsx",
       "source_location": "L8",
       "id": "ui_tabs_tabslist",
-      "community": 64,
+      "community": 8,
       "norm_label": "tabslist"
     },
     {
@@ -5139,7 +5139,7 @@
       "source_file": "src/components/ui/tabs.tsx",
       "source_location": "L23",
       "id": "ui_tabs_tabstrigger",
-      "community": 64,
+      "community": 8,
       "norm_label": "tabstrigger"
     },
     {
@@ -5148,7 +5148,7 @@
       "source_file": "src/components/ui/tabs.tsx",
       "source_location": "L38",
       "id": "ui_tabs_tabscontent",
-      "community": 64,
+      "community": 8,
       "norm_label": "tabscontent"
     },
     {
@@ -5157,7 +5157,7 @@
       "source_file": "src/components/ui/textarea.tsx",
       "source_location": "L1",
       "id": "src_components_ui_textarea_tsx",
-      "community": 8,
+      "community": 37,
       "norm_label": "textarea.tsx"
     },
     {
@@ -5166,7 +5166,7 @@
       "source_file": "src/components/ui/textarea.tsx",
       "source_location": "L5",
       "id": "ui_textarea_textareaprops",
-      "community": 8,
+      "community": 37,
       "norm_label": "textareaprops"
     },
     {
@@ -5175,7 +5175,7 @@
       "source_file": "src/components/ui/textarea.tsx",
       "source_location": "L7",
       "id": "ui_textarea_textarea",
-      "community": 8,
+      "community": 37,
       "norm_label": "textarea"
     },
     {
@@ -5283,7 +5283,7 @@
       "source_file": "src/components/ui/toaster.tsx",
       "source_location": "L4",
       "id": "ui_toaster_toaster",
-      "community": 5,
+      "community": 54,
       "norm_label": "toaster()"
     },
     {
@@ -5742,7 +5742,7 @@
       "source_file": "src/lib/weeklyAttendance.ts",
       "source_location": "L1",
       "id": "src_lib_weeklyattendance_ts",
-      "community": 4,
+      "community": 33,
       "norm_label": "weeklyattendance.ts"
     },
     {
@@ -5751,7 +5751,7 @@
       "source_file": "src/lib/weeklyAttendance.ts",
       "source_location": "L3",
       "id": "lib_weeklyattendance_week_day_labels",
-      "community": 4,
+      "community": 33,
       "norm_label": "week_day_labels"
     },
     {
@@ -5760,7 +5760,7 @@
       "source_file": "src/lib/weeklyAttendance.ts",
       "source_location": "L5",
       "id": "lib_weeklyattendance_weeklyattendance",
-      "community": 4,
+      "community": 33,
       "norm_label": "weeklyattendance"
     },
     {
@@ -5886,7 +5886,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L1",
       "id": "src_pages_attendancepage_tsx",
-      "community": 54,
+      "community": 4,
       "norm_label": "attendancepage.tsx"
     },
     {
@@ -5895,7 +5895,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L5",
       "id": "pages_attendancepage_week_headers",
-      "community": 54,
+      "community": 4,
       "norm_label": "week_headers"
     },
     {
@@ -5904,7 +5904,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L6",
       "id": "pages_attendancepage_month_names",
-      "community": 54,
+      "community": 4,
       "norm_label": "month_names"
     },
     {
@@ -5913,7 +5913,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L12",
       "id": "pages_attendancepage_day_abbr_to_dow",
-      "community": 54,
+      "community": 4,
       "norm_label": "day_abbr_to_dow"
     },
     {
@@ -5922,7 +5922,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L16",
       "id": "pages_attendancepage_fmt",
-      "community": 54,
+      "community": 4,
       "norm_label": "fmt()"
     },
     {
@@ -5931,7 +5931,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L21",
       "id": "pages_attendancepage_getweekmonday",
-      "community": 54,
+      "community": 4,
       "norm_label": "getweekmonday()"
     },
     {
@@ -5940,7 +5940,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L34",
       "id": "pages_attendancepage_mergepaiddatatostorage",
-      "community": 54,
+      "community": 4,
       "norm_label": "mergepaiddatatostorage()"
     },
     {
@@ -5949,7 +5949,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L87",
       "id": "pages_attendancepage_readpaiddatafromstorage",
-      "community": 54,
+      "community": 4,
       "norm_label": "readpaiddatafromstorage()"
     },
     {
@@ -5958,7 +5958,7 @@
       "source_file": "src/pages/AttendancePage.tsx",
       "source_location": "L100",
       "id": "pages_attendancepage_attendancepage",
-      "community": 54,
+      "community": 4,
       "norm_label": "attendancepage()"
     },
     {
@@ -5971,19 +5971,10 @@
       "norm_label": "certificate.tsx"
     },
     {
-      "label": "COUNTRIES",
-      "file_type": "code",
-      "source_file": "src/pages/Certificate.tsx",
-      "source_location": "L8",
-      "id": "pages_certificate_countries",
-      "community": 63,
-      "norm_label": "countries"
-    },
-    {
       "label": "Certificate()",
       "file_type": "code",
       "source_file": "src/pages/Certificate.tsx",
-      "source_location": "L28",
+      "source_location": "L9",
       "id": "pages_certificate_certificate",
       "community": 63,
       "norm_label": "certificate()"
@@ -6012,7 +6003,7 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L1",
       "id": "src_pages_faqs_tsx",
-      "community": 21,
+      "community": 54,
       "norm_label": "faqs.tsx"
     },
     {
@@ -6021,7 +6012,7 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L7",
       "id": "pages_faqs_generalfaqs",
-      "community": 21,
+      "community": 54,
       "norm_label": "generalfaqs"
     },
     {
@@ -6030,7 +6021,7 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L38",
       "id": "pages_faqs_telugufaqs",
-      "community": 21,
+      "community": 54,
       "norm_label": "telugufaqs"
     },
     {
@@ -6039,7 +6030,7 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L72",
       "id": "pages_faqs_englishfaqs",
-      "community": 21,
+      "community": 54,
       "norm_label": "englishfaqs"
     },
     {
@@ -6048,7 +6039,7 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L105",
       "id": "pages_faqs_rendertext",
-      "community": 21,
+      "community": 54,
       "norm_label": "rendertext()"
     },
     {
@@ -6057,7 +6048,7 @@
       "source_file": "src/pages/Faqs.tsx",
       "source_location": "L225",
       "id": "pages_faqs_faqs",
-      "community": 21,
+      "community": 54,
       "norm_label": "faqs()"
     },
     {
@@ -17374,13 +17365,14 @@
       "target": "pages_attendancepage_getweekmonday"
     },
     {
-      "relation": "contains",
+      "relation": "imports_from",
+      "context": "import",
       "confidence": "EXTRACTED",
       "source_file": "src/pages/Certificate.tsx",
-      "source_location": "L8",
+      "source_location": "L5",
       "weight": 1.0,
       "source": "src_pages_certificate_tsx",
-      "target": "pages_certificate_countries",
+      "target": "src_pages_login_tsx",
       "confidence_score": 1.0
     },
     {
@@ -17392,17 +17384,6 @@
       "confidence_score": 1.0,
       "source": "src_pages_certificate_tsx",
       "target": "pages_certificate_certificate"
-    },
-    {
-      "relation": "imports_from",
-      "context": "import",
-      "confidence": "EXTRACTED",
-      "source_file": "src/pages/Certificate.tsx",
-      "source_location": "L5",
-      "weight": 1.0,
-      "confidence_score": 1.0,
-      "source": "src_pages_certificate_tsx",
-      "target": "src_pages_login_tsx"
     },
     {
       "relation": "imports_from",

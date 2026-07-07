@@ -5,6 +5,26 @@ import logo from "@/assets/Primary_logo.svg";
 
 const CERTIFICATE_IMG_URL = "/FINAL.jpg";
 
+const COUNTRIES = [
+  { code: "91", iso: "in", name: "India" },
+  { code: "1", iso: "us", name: "USA/Canada" },
+  { code: "44", iso: "gb", name: "UK" },
+  { code: "61", iso: "au", name: "Australia" },
+  { code: "971", iso: "ae", name: "UAE" },
+  { code: "65", iso: "sg", name: "Singapore" },
+  { code: "60", iso: "my", name: "Malaysia" },
+  { code: "966", iso: "sa", name: "Saudi Arabia" },
+  { code: "968", iso: "om", name: "Oman" },
+  { code: "974", iso: "qa", name: "Qatar" },
+  { code: "965", iso: "kw", name: "Kuwait" },
+  { code: "973", iso: "bh", name: "Bahrain" },
+  { code: "49", iso: "de", name: "Germany" },
+  { code: "33", iso: "fr", name: "France" },
+  { code: "39", iso: "it", name: "Italy" },
+  { code: "81", iso: "jp", name: "Japan" },
+  { code: "86", iso: "cn", name: "China" },
+];
+
 export default function Certificate() {
   const { mobile: pathMobile } = useParams<{ mobile?: string }>();
   const location = useLocation();
@@ -45,16 +65,44 @@ export default function Certificate() {
   const imgRef = useRef<HTMLImageElement | null>(null);
   const certificateSectionRef = useRef<HTMLDivElement | null>(null);
 
+  const [inputMobile, setInputMobile] = useState<string>("");
+  const [countryCode, setCountryCode] = useState<string>("91");
+  const [mobileError, setMobileError] = useState<string>("");
+
+  const selectedCountry = COUNTRIES.find((c) => c.code === countryCode) || COUNTRIES[0];
+
+  const handleMobileSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    const cleaned = inputMobile.replace(/[\s\-\(\)\+]/g, "");
+    if (!/^\d{7,15}$/.test(cleaned)) {
+      setMobileError("Please enter a valid mobile number");
+      return;
+    }
+    let finalMobile = cleaned;
+    if (countryCode === "91") {
+      if (finalMobile.length === 10) {
+        finalMobile = `91${finalMobile}`;
+      } else if (!finalMobile.startsWith("91")) {
+        finalMobile = `91${finalMobile}`;
+      }
+    } else {
+      if (!finalMobile.startsWith(countryCode)) {
+        finalMobile = `${countryCode}${finalMobile}`;
+      }
+    }
+    safeLocalStorage.setItem("user_mobile", finalMobile);
+    safeLocalStorage.setItem("mobile", finalMobile);
+    navigate(`/${finalMobile}/certificate`);
+  };
+
   // Fetch student data if mobile is present to pre-fill name and check 7 days attendance
   useEffect(() => {
     if (!mobile) {
-      if (daysAttended === null) setDaysAttended(21); // Default to unlocked if no phone number provided
       setLoadingStudent(false);
       return;
     }
     const cleanedMobile = mobile.replace(/[\s\-\(\)\+]/g, "");
     if (!/^\d{7,15}$/.test(cleanedMobile)) {
-      if (daysAttended === null) setDaysAttended(21);
       setLoadingStudent(false);
       return;
     }
@@ -129,9 +177,9 @@ export default function Certificate() {
 
     const displayName = (name || "Your Name Here").trim();
 
-    // Ensure Shrikhand font is loaded before drawing
+    // Ensure Times New Roman MT font is loaded before drawing
     const scaledFontSize = Math.round(fontSize * (canvas.width / 500));
-    const fontSpec = `700 ${scaledFontSize}px "Shrikhand", cursive, sans-serif`;
+    const fontSpec = `700 ${scaledFontSize}px "Times New Roman MT", "Times New Roman", serif`;
 
     try {
       if (document.fonts && document.fonts.load) {
@@ -303,7 +351,58 @@ export default function Certificate() {
 
       {/* Main Container */}
       <div className="w-full max-w-3xl px-4 mt-6">
-        {loadingStudent && daysAttended === null ? (
+        {!mobile ? (
+          /* Mobile Number Entry State when accessed directly at /certificate */
+          <div className="bg-white rounded-[24px] p-6 md:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-[#FCE8CD] relative overflow-hidden animate-fade-in max-w-md mx-auto">
+            <h2 className="text-xl md:text-2xl font-bold text-[#202020] mb-2 text-center">
+              Enter Your WhatsApp Number
+            </h2>
+            <p className="text-sm text-[#798089] mb-6 text-center">
+              Please enter your registered WhatsApp number to check your attendance and unlock your completion certificate.
+            </p>
+            <form onSubmit={handleMobileSubmit} className="space-y-4">
+              <div className="relative flex items-center border border-[#D4D4D4] rounded-xl bg-white overflow-hidden focus-within:ring-1 focus-within:ring-[#FEAB27] focus-within:border-[#FEAB27] transition-all">
+                <div className="flex items-center pl-4 pr-2 py-3.5 bg-white relative">
+                  <select
+                    value={countryCode}
+                    onChange={(e) => setCountryCode(e.target.value)}
+                    className="absolute inset-0 opacity-0 cursor-pointer w-full"
+                    title="Select Country Code"
+                  >
+                    {COUNTRIES.map((c) => (
+                      <option key={c.iso + c.code} value={c.code}>
+                        {c.name} (+{c.code})
+                      </option>
+                    ))}
+                  </select>
+                  <img src={`https://flagcdn.com/w20/${selectedCountry.iso}.png`} alt={selectedCountry.name} className="w-5 rounded-[2px]" />
+                  <span className="text-[#202020] font-medium ml-2 text-sm">+{countryCode}</span>
+                  <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg" className="ml-1.5">
+                    <path d="M1 1L5 5L9 1" stroke="#888" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span className="text-[#D4D4D4] ml-2 mr-0.5 text-sm">·</span>
+                </div>
+                <input
+                  type="tel"
+                  value={inputMobile}
+                  onChange={(e) => {
+                    setInputMobile(e.target.value);
+                    if (mobileError) setMobileError("");
+                  }}
+                  placeholder="Enter Your Whatsapp Number"
+                  className="w-full py-3.5 pr-4 focus:outline-none bg-white placeholder:text-[#919CB4] text-[#202020] text-sm font-semibold"
+                />
+              </div>
+              {mobileError && <p className="text-[#D32F2F] text-xs font-medium bg-[#FFF3F3] p-2.5 rounded-lg text-center">{mobileError}</p>}
+              <button
+                type="submit"
+                className="w-full py-4 px-6 bg-gradient-to-r from-[#FEAB27] to-[#F39C12] hover:from-[#F39C12] hover:to-[#E67E22] text-[#111111] font-extrabold text-base rounded-full shadow-[0_6px_20px_rgba(254,171,39,0.35)] hover:shadow-[0_8px_25px_rgba(254,171,39,0.5)] transform hover:-translate-y-0.5 transition-all flex items-center justify-center gap-2 cursor-pointer"
+              >
+                Continue to Certificate →
+              </button>
+            </form>
+          </div>
+        ) : loadingStudent && daysAttended === null ? (
           <div className="bg-white rounded-[24px] p-12 text-center shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-[#FCE8CD]">
             <div className="w-10 h-10 border-4 border-[#FEAB27] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
             <p className="text-lg font-bold text-[#0D468B]">Verifying Your Attendance & Eligibility...</p>
@@ -470,7 +569,7 @@ export default function Certificate() {
                 <button
                   type="button"
                   onClick={() => handleNativeShare("general")}
-                  className="w-full py-3.5 px-5 bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#1EBD5A] hover:to-[#0E7064] text-white font-bold text-base rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2.5 cursor-pointer"
+                  className="w-full py-3.5 px-5 bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#1EBD5A] hover:to-[#0E7064] text-white font-bold text-base rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2.5 cursor-pointer btn-vibrate btn-shimmer"
                 >
                   <svg width="20" height="20" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                     <path d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -492,7 +591,7 @@ export default function Certificate() {
                   <button
                     type="button"
                     onClick={() => handleNativeShare("whatsapp")}
-                    className="w-full py-3 px-4 bg-[#E8FBF0] hover:bg-[#D2F7E2] text-[#128C7E] border border-[#A5EAC6] font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
+                    className="w-full py-3 px-4 bg-[#E8FBF0] hover:bg-[#D2F7E2] text-[#128C7E] border border-[#A5EAC6] font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer btn-vibrate btn-shimmer"
                   >
                     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                       <path d="M12.031 6.172C8.814 6.172 6.195 8.791 6.195 12.008C6.195 13.044 6.467 14.041 6.974 14.912L6.147 17.935L9.231 17.126C10.069 17.587 11.037 17.842 12.031 17.842C15.248 17.842 17.867 15.223 17.867 12.006C17.867 8.789 15.248 6.172 12.031 6.172ZM12.031 4C16.447 4 20.039 7.592 20.039 12.008C20.039 16.424 16.447 20.016 12.031 20.016C10.627 20.016 9.309 19.652 8.161 19.014L4 20.108L5.115 16.038C4.417 14.838 4.023 13.461 4.023 12.008C4.023 7.592 7.615 4 12.031 4ZM16.068 14.184C15.847 14.847 14.779 15.4 14.227 15.474C13.784 15.534 13.232 15.57 11.428 14.871C9.122 13.978 7.63 11.644 7.513 11.488C7.403 11.332 6.576 10.229 6.576 9.088C6.576 7.947 7.165 7.395 7.403 7.156C7.587 6.972 7.881 6.898 8.157 6.898C8.249 6.898 8.332 6.903 8.405 6.907C8.626 6.917 8.736 6.935 8.883 7.284C9.067 7.726 9.518 8.83 9.573 8.94C9.628 9.051 9.683 9.216 9.61 9.363C9.536 9.51 9.472 9.584 9.362 9.713C9.252 9.842 9.141 9.934 9.031 10.072C8.93 10.191 8.81 10.32 8.939 10.54C9.067 10.761 9.513 11.488 10.166 12.068C11.008 12.815 11.725 13.054 11.964 13.155C12.148 13.238 12.35 13.219 12.479 13.082C12.645 12.907 12.847 12.604 13.049 12.301C13.197 12.08 13.381 12.052 13.583 12.126C13.785 12.2 14.87 12.734 15.091 12.844C15.312 12.955 15.459 13.01 15.514 13.102C15.569 13.194 15.569 13.636 15.348 14.299" />

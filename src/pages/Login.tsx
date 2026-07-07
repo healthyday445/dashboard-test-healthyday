@@ -45,9 +45,9 @@ const Login = () => {
     }
     // Store the name in localStorage just in case we need it
     safeLocalStorage.setItem("user_name", name);
-    
+
     let finalMobile = cleanedMobile;
-    
+
     if (countryCode === "91") {
       if (finalMobile.length === 10) {
         finalMobile = `91${finalMobile}`;
@@ -61,7 +61,7 @@ const Login = () => {
         finalMobile = `${countryCode}${finalMobile}`;
       }
     }
-    
+
     navigate(`/${finalMobile}/leaderboard`);
   };
 
@@ -104,7 +104,7 @@ const Login = () => {
                 <img src={`https://flagcdn.com/w20/${selectedCountry.iso}.png`} alt={selectedCountry.name} className="w-[20px] rounded-[2px]" />
                 <span className="text-[#202020] font-medium ml-[8px] text-[15px]">+{countryCode}</span>
                 <svg width="10" height="6" viewBox="0 0 10 6" fill="none" xmlns="http://www.w3.org/2000/svg" className="ml-[6px]">
-                  <path d="M1 1L5 5L9 1" stroke="#888" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round"/>
+                  <path d="M1 1L5 5L9 1" stroke="#888" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
                 <span className="text-[#D4D4D4] ml-[8px] mr-[2px] text-[15px]">·</span>
               </div>
