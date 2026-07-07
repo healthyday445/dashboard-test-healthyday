@@ -60,6 +60,7 @@ export function getLevelRewardLink(level: number, language: string | undefined, 
   if (level === 3) return language === "English" ? "https://youtube.com/live/J3aX2kUMLno" : "https://youtube.com/live/Nc7figrxfuQ";
   if (level === 4) return language === "English" ? "https://www.youtube.com/live/IqESKRcvU8E" : "https://www.youtube.com/live/WnITjDbnCPY";
   if (level === 5) return language === "English" ? "https://youtube.com/live/LJzX5ltIFPw" : "https://www.youtube.com/live/dwGVmXjBskg";
+  if (level === 6) return language === "English" ? "https://youtube.com/live/54LLUNIoxRY" : "https://www.youtube.com/live/6CcEvvn6shU";
   if (level === 7) return studentName ? `/certificate?name=${encodeURIComponent(studentName)}` : "/certificate";
   return joinLink;
 }
