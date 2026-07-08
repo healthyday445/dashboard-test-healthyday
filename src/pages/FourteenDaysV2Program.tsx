@@ -6,9 +6,9 @@ import lockLarge from "@/assets/21daysprogram/lock_large.png";
 import completedBadge from "@/assets/21daysprogram/completed_badge.webp";
 import levelIcon1 from "@/assets/21daysprogram/level_icon_1.webp";
 import levelIcon2 from "@/assets/21daysprogram/level_icon_2.webp";
+import levelIcon3 from "@/assets/21daysprogram/level_icon_3.webp";
 import levelIcon4 from "@/assets/21daysprogram/level_icon_4.webp";
-import levelIcon6 from "@/assets/21daysprogram/level_icon_6.webp";
-import levelIcon7 from "@/assets/21daysprogram/level_icon_7.webp";
+import levelIcon5 from "@/assets/21daysprogram/level_icon_5.webp";
 import downloadIcon from "@/assets/21daysprogram/download_icon.png";
 import rewardLvl1 from "@/assets/21daysprogram/reward_lvl1.webp";
 import rewardLvl2 from "@/assets/21daysprogram/reward_lvl2.webp";
@@ -34,9 +34,9 @@ import { LEVEL_UNLOCK_DAYS_V2, getLevelRewardLinkV2 } from "@/components/Fourtee
 const LEVEL_DATA = [
   { level: 1, unlockDay: 3, rewardLine1: "3-Days Detox", rewardLine2: "Programme", badge: levelIcon1, rewardImg: rewardLvl1 },
   { level: 2, unlockDay: 6, rewardLine1: "3-Days", rewardLine2: "Breakfast Diet", badge: levelIcon2, rewardImg: rewardLvl2 },
-  { level: 3, unlockDay: 9, rewardLine1: "3-Days", rewardLine2: "Lunch Diet", badge: levelIcon4, rewardImg: rewardLvl4 },
-  { level: 4, unlockDay: 12, rewardLine1: "3-Days", rewardLine2: "Dinner Diet", badge: levelIcon6, rewardImg: rewardLvl6 },
-  { level: 5, unlockDay: 14, rewardLine1: "14-Days Yoga", rewardLine2: "Certificate", badge: levelIcon7, rewardImg: rewardLvl7 },
+  { level: 3, unlockDay: 9, rewardLine1: "3-Days", rewardLine2: "Lunch Diet", badge: levelIcon3, rewardImg: rewardLvl4 },
+  { level: 4, unlockDay: 12, rewardLine1: "3-Days", rewardLine2: "Dinner Diet", badge: levelIcon4, rewardImg: rewardLvl6 },
+  { level: 5, unlockDay: 14, rewardLine1: "14-Days Yoga", rewardLine2: "Certificate", badge: levelIcon5, rewardImg: rewardLvl7 },
 ];
 
 // One zone config per completed-reward count (0-5), reusing the exact gradients/character
@@ -487,7 +487,7 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
       <div className="relative overflow-hidden" style={{ height: 180 }}>
         <div className="absolute" style={{ top: 21, left: 26, right: 26, height: 138 }}>
           <div className="relative w-full h-full rounded-[20px] overflow-hidden" style={{ border: "1px solid #b8b8b8", boxShadow: "0px -1px 8px 0px rgba(0,0,0,0.05), 0px 1px 8px 0px rgba(0,0,0,0.05)", background: zoneConfig.gradient }}>
-            <div className="absolute flex flex-col" style={{ top: zoneConfig.titleCaps ? 14 : 11, bottom: zoneConfig.titleCaps ? 14 : 12, left: 23, right: zoneConfig.textRight, justifyContent: zoneConfig.titleCaps ? "center" : "flex-start", zIndex: 1 }}>
+            <div className="absolute flex flex-col gap-1" style={{ top: zoneConfig.titleCaps ? 14 : 11, bottom: zoneConfig.titleCaps ? 14 : 12, left: 23, right: zoneConfig.textRight, justifyContent: zoneConfig.titleCaps ? "center" : "flex-start", zIndex: 1 }}>
               <p className="font-medium text-[12px] leading-none" style={{ color: "#0a386f", fontFamily: "Outfit, sans-serif", marginBottom: zoneConfig.titleCaps ? 6 : 9 }}>
                 {studentData?.name ? `Namaste ${studentData.name.split(" ")[0]} Ji,` : "Namaste Ji,"}
               </p>
