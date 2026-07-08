@@ -172,6 +172,12 @@ function RewardCard({
       } else {
         window.open("https://www.youtube.com/live/dwGVmXjBskg", "_blank");
       }
+    } else if (levelData.level === 6) {
+      if (lang === "English") {
+        window.open("https://youtube.com/live/54LLUNIoxRY", "_blank");
+      } else {
+        window.open("https://www.youtube.com/live/6CcEvvn6shU", "_blank");
+      }
     } else if (levelData.level === 7) {
       const urlParams = new URLSearchParams(window.location.search);
       const mobileParam = urlParams.get("mobile") || "";
