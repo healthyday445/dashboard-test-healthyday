@@ -71,6 +71,7 @@ export default function Certificate() {
     return getCertificateCookie(mobile).generated;
   });
   const [shareFeedback, setShareFeedback] = useState<string>("");
+  const [templateImg, setTemplateImg] = useState<HTMLImageElement | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -163,13 +164,13 @@ export default function Certificate() {
     });
   }, [mobile]);
 
-  // Load the template image once and handle cached images
+  // Load the template image once and store in React state
   useEffect(() => {
     const img = new Image();
     img.src = CERTIFICATE_IMG_URL;
     const onImgReady = () => {
       imgRef.current = img;
-      renderCertificate();
+      setTemplateImg(img);
     };
     img.onload = onImgReady;
     if (img.complete && img.naturalWidth > 0) {
@@ -180,29 +181,20 @@ export default function Certificate() {
     };
   }, []);
 
-  // Redraw certificate whenever parameters change or view transitions (with retry for canvas mount timing)
+  // Synchronously draw canvas whenever templateImg loads, hasGenerated changes, or parameters change
   useEffect(() => {
-    if (hasGenerated) {
-      if (imgRef.current) {
-        renderCertificate();
-      } else {
-        const img = new Image();
-        img.src = CERTIFICATE_IMG_URL;
-        img.onload = () => {
-          imgRef.current = img;
-          renderCertificate();
-        };
-      }
-      const t = setTimeout(() => {
-        renderCertificate();
-      }, 120);
-      return () => clearTimeout(t);
-    }
-  }, [name, fontSize, yPercent, textColor, hasGenerated]);
+    if (!hasGenerated || !templateImg) return;
+    renderCertificate(templateImg);
+    const id1 = setTimeout(() => renderCertificate(templateImg), 60);
+    const id2 = setTimeout(() => renderCertificate(templateImg), 250);
+    return () => {
+      clearTimeout(id1);
+      clearTimeout(id2);
+    };
+  }, [hasGenerated, templateImg, name, fontSize, yPercent, textColor]);
 
-  const renderCertificate = async () => {
+  const renderCertificate = (img: HTMLImageElement) => {
     const canvas = canvasRef.current;
-    const img = imgRef.current;
     if (!canvas || !img || !img.complete || img.naturalWidth === 0) return;
 
     const ctx = canvas.getContext("2d");
@@ -214,41 +206,46 @@ export default function Certificate() {
     canvas.width = width;
     canvas.height = height;
 
-    const displayName = (name || "Your Name Here").trim();
+    // 1. Immediately draw background template synchronously so canvas is NEVER blank white
+    ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(img, 0, 0, width, height);
 
-    // Ensure Times New Roman font is loaded before drawing
-    const scaledFontSize = Math.round(fontSize * (canvas.width / 500));
+    const displayName = (name || "Your Name Here").trim();
+    const scaledFontSize = Math.round(fontSize * (width / 500));
     const fontSpec = `normal ${scaledFontSize}px "Times New Roman", serif`;
 
-    try {
-      if (document.fonts && document.fonts.load) {
-        await document.fonts.load(fontSpec, displayName);
-      }
-    } catch (e) {
-      console.warn("Font loading wait failed, drawing with fallback", e);
+    const drawTextOverlay = () => {
+      ctx.save();
+      ctx.font = fontSpec;
+      ctx.fillStyle = textColor;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetX = 1;
+      ctx.shadowOffsetY = 2;
+
+      const x = width / 2;
+      const y = Math.round(height * (yPercent / 100));
+
+      ctx.fillText(displayName, x, y);
+      ctx.restore();
+    };
+
+    // 2. Overlay student name after ensuring font is loaded
+    if (document.fonts && document.fonts.load) {
+      document.fonts.load(fontSpec, displayName).then(() => {
+        // Redraw base + text when font resolves
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height);
+        drawTextOverlay();
+      }).catch(() => {
+        drawTextOverlay();
+      });
+    } else {
+      drawTextOverlay();
     }
-
-    // Always draw base template after font wait so canvas is never left blank
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-    ctx.save();
-    ctx.font = fontSpec;
-    ctx.fillStyle = textColor;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    // Add subtle shadow for depth and readability
-    ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
-    ctx.shadowBlur = 4;
-    ctx.shadowOffsetX = 1;
-    ctx.shadowOffsetY = 2;
-
-    const x = canvas.width / 2;
-    const y = Math.round(canvas.height * (yPercent / 100));
-
-    ctx.fillText(displayName, x, y);
-    ctx.restore();
   };
 
   const handleGenerate = () => {
