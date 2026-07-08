@@ -1,15 +1,24 @@
 import { useState, useEffect } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
+import week1JourneyBg from "@/assets/21daysprogram/completed_journey_hero_bg.webp";
+import week2JourneyBg from "@/assets/21daysprogram/journey_hero_bg.webp";
 import HeroBannerWithTabs from "@/components/HeroBannerWithTabs";
+import { FourteenDaysV2TabBar } from "@/components/FourteenDaysV2TabBar";
+import { WeekTwoCountdownBanner } from "@/components/WeekTwoCountdownBanner";
 import IndexFourteenDays from "@/pages/IndexFourteenDays";
+import IndexFourteenDaysV2 from "@/pages/IndexFourteenDaysV2";
 import IndexTwentyOneDay from "@/pages/IndexTwentyOneDay";
 import TwentyOneDaysProgram from "@/pages/TwentyOneDaysProgram";
+import FourteenDaysV2Program from "@/pages/FourteenDaysV2Program";
 import { getEffectiveStatus } from "@/lib/studentStatus";
 
 // The one-off June-21-2026 cohort runs the special 21-day (22-day) programme;
-// every other free batch is the standard 14-day general-public batch.
+// the one-off July-6-2026 cohort keeps the original 14-day (no-tabs) experience;
+// every free batch from July-13-2026 onward (every following Monday) gets the
+// new tabbed 14-day-v2 experience.
 const FREE_BATCH_DATE = "2026-06-21";
+const FREE_BATCH_DATE_OLD_14DAY = "2026-07-06";
 
 const Dashboard = () => {
   const { mobile: pathMobile } = useParams<{ mobile: string }>();
@@ -76,10 +85,13 @@ const Dashboard = () => {
   }
 
   // Batch type is the first thing we check: it decides which Live Sessions
-  // component this student gets. 14-day general public uses IndexFourteenDays; the
-  // 21-day/22-day June-21-2026 cohort uses the dedicated IndexTwentyOneDay copy.
+  // component this student gets. The 21-day/22-day June-21-2026 cohort uses the dedicated
+  // IndexTwentyOneDay copy; the one-off July-6-2026 batch keeps the original IndexFourteenDays
+  // (no tabs); every other batch (July-13-2026 onward) gets the new tabbed IndexFourteenDaysV2.
   const is21DayBatch = previewProgramme === "21day" || studentData?.free_batch_start_date === FREE_BATCH_DATE;
-  const LiveSessions = is21DayBatch ? IndexTwentyOneDay : IndexFourteenDays;
+  const isLegacyFourteenDayBatch = previewProgramme === "legacy14day" || studentData?.free_batch_start_date === FREE_BATCH_DATE_OLD_14DAY;
+  const isNewFourteenDayBatch = !is21DayBatch && !isLegacyFourteenDayBatch;
+  const LiveSessions = is21DayBatch ? IndexTwentyOneDay : isLegacyFourteenDayBatch ? IndexFourteenDays : IndexFourteenDaysV2;
 
   // The backend can report status:"paid" before the purchased plan actually starts
   // (e.g. a referral-reward/renewal subscription scheduled for later) while the student
@@ -89,17 +101,49 @@ const Dashboard = () => {
     ? { ...studentData, status: effectiveStatus }
     : studentData;
 
-  // Determine if this student gets the journey tab:
-  // must be in the June-21-2026 free batch AND not paid/pastdue
+  // Whether a new-format 14-day batch has actually started yet — a "registered" student
+  // whose batch start date is still in the future should see the plain not-started
+  // onboarding screen (no tabs), not the ongoing tab chrome. forceDay=0 previews that same
+  // not-started state everywhere else, so it's treated the same way here; any other
+  // forceDay value simulates an active batch day.
+  const newBatchHasStarted = (() => {
+    if (!isNewFourteenDayBatch) return false;
+    if (forceDayParam !== null) return forceDayParam !== "0";
+    if (!studentData?.free_batch_start_date) return false;
+    const batchStart = new Date(studentData.free_batch_start_date);
+    batchStart.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return today.getTime() >= batchStart.getTime();
+  })();
+
+  // Determine if this student gets the journey tab: must be in the June-21-2026 free batch
+  // or an already-started new-format (July-13-2026+) 14-day batch, AND not paid/pastdue/completed.
+  const isOngoingFreeStatus = effectiveStatus === "registered" || effectiveStatus === "14DaysOngoing" || effectiveStatus === "14daysongoing";
   const isEligibleForJourneyTab =
     previewLevels !== null ||
-    (is21DayBatch &&
-      (effectiveStatus === "registered" || effectiveStatus === "14DaysOngoing" || effectiveStatus === "14daysongoing"));
+    (is21DayBatch && isOngoingFreeStatus) ||
+    (isNewFourteenDayBatch && isOngoingFreeStatus && newBatchHasStarted);
 
   // Not eligible for journey tab → render the Live Sessions component standalone (it owns its own layout)
   if (!isEligibleForJourneyTab) {
     return <LiveSessions initialStudentData={effectiveStudentData} />;
   }
+
+  // For the new 14-day-v2 batch's ongoing week, derive which week (1 or 2) the student is
+  // in — mirrors the day-math IndexFourteenDaysV2/IndexFourteenDays already do internally —
+  // so the Week-2 countdown banner can render above the tab bar, matching Figma's layout.
+  const newBatchWeek = (() => {
+    if (!isNewFourteenDayBatch || !studentData?.free_batch_start_date) return null;
+    const batchStart = new Date(studentData.free_batch_start_date);
+    batchStart.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const diffDays = Math.floor((today.getTime() - batchStart.getTime()) / 86400000);
+    const currentDay = forceDayParam !== null ? parseInt(forceDayParam, 10) : diffDays + 1;
+    if (currentDay < 1 || currentDay > 14) return null;
+    return { currentDay, week: currentDay <= 7 ? 1 : (2 as 1 | 2) };
+  })();
 
   // forceDay previews a specific batch day everywhere else (Live Sessions tab,
   // Journey tab) — the banner's "days left" countdown needs to follow it too,
@@ -116,26 +160,97 @@ const Dashboard = () => {
     return Math.max(0, Math.ceil((batchEnd.getTime() - simulatedToday.getTime()) / 86400000));
   })();
 
-  // June-21-2026 free batch student → show the tab experience
+  // 21-day cohort: existing orange countdown-banner tab bar (HeroBannerWithTabs), unchanged.
+  if (is21DayBatch) {
+    return (
+      <div className="hd-page" style={{ fontFamily: "Outfit, sans-serif" }}>
+        <header className="hd-header bg-white">
+          <img src={logo} alt="Healthyday" className="h-7" />
+        </header>
+
+        <HeroBannerWithTabs
+          batchEndDate={studentData?.free_batch_end_date}
+          daysLeftOverride={daysLeftOverride}
+          activeTab={activeTab}
+          onTabChange={handleTabChange}
+        />
+
+        <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
+          <LiveSessions initialStudentData={effectiveStudentData} onSwitchToJourney={() => handleTabChange("journey")} />
+        </div>
+        {journeyMounted && (
+          <div style={{ display: activeTab === "journey" ? "block" : "none" }}>
+            <TwentyOneDaysProgram initialStudentData={effectiveStudentData} />
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  // New-format 14-day-v2 batch: plain pill tab bar, with the Week-2 countdown banner above
+  // it when applicable.
+  //
+  // Week-1 (no countdown banner): tabs + content share one background wrapper, matching
+  // Figma's ongoing-journey frame — its decorative image is tall enough (498px) to
+  // intentionally bleed from behind the tabs into the margins around the badge card below,
+  // and being a background-image (not a gradient) it naturally stops there instead of
+  // stretching to cover the rest of the (much taller) page.
+  //
+  // Week-2: Figma's own "BG" layer for this state is a fixed 210px tall — it covers only
+  // the countdown banner + tab bar, stopping right at the tab bar's bottom edge; the content
+  // below has its own unrelated background. A CSS gradient (used for the Live tab) has no
+  // natural height and WOULD stretch to cover an entire tabs+content wrapper, so Week-2 gets
+  // its own dedicated, correctly-bounded wrapper containing only the banner + tab bar.
+  const isJourneyTabActive = activeTab === "journey";
+  const isWeek2 = newBatchWeek?.week === 2;
+
+  const tabBar = (
+    <FourteenDaysV2TabBar
+      activeTab={activeTab === "dashboard" ? "live" : "journey"}
+      onChange={(tab) => handleTabChange(tab === "live" ? "dashboard" : "journey")}
+      blendWithParentBackground={isWeek2}
+    />
+  );
+
+  const content = (
+    <>
+      <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
+        <LiveSessions initialStudentData={effectiveStudentData} onSwitchToJourney={() => handleTabChange("journey")} />
+      </div>
+      {journeyMounted && (
+        <div style={{ display: activeTab === "journey" ? "block" : "none" }}>
+          <FourteenDaysV2Program initialStudentData={effectiveStudentData} />
+        </div>
+      )}
+    </>
+  );
+
   return (
     <div className="hd-page" style={{ fontFamily: "Outfit, sans-serif" }}>
       <header className="hd-header bg-white">
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
 
-      <HeroBannerWithTabs
-        batchEndDate={studentData?.free_batch_end_date}
-        daysLeftOverride={daysLeftOverride}
-        activeTab={activeTab}
-        onTabChange={handleTabChange}
-      />
-
-      <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
-        <LiveSessions initialStudentData={effectiveStudentData} onSwitchToJourney={() => handleTabChange("journey")} />
-      </div>
-      {journeyMounted && (
-        <div style={{ display: activeTab === "journey" ? "block" : "none" }}>
-          <TwentyOneDaysProgram initialStudentData={effectiveStudentData} />
+      {isWeek2 ? (
+        <>
+          <div style={{
+            position: "relative",
+            ...(isJourneyTabActive
+              ? { backgroundImage: `url(${week2JourneyBg})`, backgroundSize: "100% auto", backgroundPosition: "top center", backgroundRepeat: "no-repeat" }
+              : { background: "linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(255, 226, 192) 25.005%, rgb(255, 226, 192) 50.01%, rgb(255, 148, 22) 100%)" }),
+          }}>
+            <WeekTwoCountdownBanner daysLeft={Math.max(0, 15 - newBatchWeek.currentDay)} showBackground={false} />
+            {tabBar}
+          </div>
+          {content}
+        </>
+      ) : (
+        <div style={{
+          position: "relative",
+          ...(isJourneyTabActive ? { backgroundImage: `url(${week1JourneyBg})`, backgroundSize: "100% auto", backgroundPosition: "top center", backgroundRepeat: "no-repeat" } : {}),
+        }}>
+          {tabBar}
+          {content}
         </div>
       )}
     </div>

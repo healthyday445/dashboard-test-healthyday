@@ -3,10 +3,15 @@ import { formatBatchStartLabel, getNextMonday } from "@/lib/utils";
 
 interface WeekTwoCountdownBannerProps {
   daysLeft: number;
+  // When false, the banner paints no background of its own (the parent supplies one instead)
+  // — used by the 14-day-v2 tab experience so the banner blends into the shared Journey-tab
+  // background instead of covering it with its own orange gradient. Defaults to true so the
+  // original 14-day flow (no tab concept) is unaffected.
+  showBackground?: boolean;
 }
 
 /** Week-2 upsell banner — replaces the plain "X Days Left" text block with a countdown + single CTA to /pricing. */
-export const WeekTwoCountdownBanner: React.FC<WeekTwoCountdownBannerProps> = ({ daysLeft }) => {
+export const WeekTwoCountdownBanner: React.FC<WeekTwoCountdownBannerProps> = ({ daysLeft, showBackground = true }) => {
   const navigate = useNavigate();
   const nextBatchLabel = formatBatchStartLabel(getNextMonday());
 
@@ -14,11 +19,11 @@ export const WeekTwoCountdownBanner: React.FC<WeekTwoCountdownBannerProps> = ({ 
     <div
       style={{
         width: "100%",
-        padding: "24px 20px 48px",
+        padding: "24px 20px 28px",
         marginBottom: "-34px",
         boxSizing: "border-box",
         textAlign: "center",
-        background: "linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(255, 226, 192) 25.005%, rgb(255, 226, 192) 50.01%, rgb(255, 148, 22) 100%)",
+        ...(showBackground ? { background: "linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(255, 226, 192) 25.005%, rgb(255, 226, 192) 50.01%, rgb(255, 148, 22) 100%)" } : {}),
       }}
     >
       <p style={{
@@ -26,7 +31,7 @@ export const WeekTwoCountdownBanner: React.FC<WeekTwoCountdownBannerProps> = ({ 
         color: "#002B5E",
         fontFamily: "Poppins, Outfit, sans-serif",
         fontWeight: 800,
-        fontSize: "35px",
+        fontSize: "28px",
         lineHeight: "normal",
         textAlign: "center",
         textTransform: "uppercase",
