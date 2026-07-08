@@ -80,7 +80,6 @@ export async function handler(event) {
       const cleanMobile = (body.mobile || "").replace(/[^0-9]/g, "") || "anonymous";
 
       const docRef = db.collection('certificate logs').doc(cleanMobile);
-      const mirrorRef = db.collection('certificate_logs').doc(cleanMobile);
 
       const docSnap = await docRef.get();
       const existing = docSnap.exists ? docSnap.data() : {};
@@ -136,10 +135,7 @@ export async function handler(event) {
         updatePayload.firstGeneratedAt = nowIST;
       }
 
-      await Promise.all([
-        docRef.set(updatePayload, { merge: true }),
-        mirrorRef.set(updatePayload, { merge: true }),
-      ]);
+      await docRef.set(updatePayload, { merge: true });
 
       return {
         statusCode: 200,
