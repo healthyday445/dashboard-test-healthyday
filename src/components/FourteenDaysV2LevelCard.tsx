@@ -127,16 +127,16 @@ export function FourteenDaysV2LevelCard({
         </>
       ) : (
         <>
-          <p style={{ position: "absolute", left: 18, right: 90, top: 13, margin: 0, fontSize: "clamp(13px, 3.9vw, 16px)", fontWeight: 700, color: "#202020", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", lineHeight: "normal" }}>
+          <p style={{ position: "absolute", left: 18, right: 90, top: 13, margin: 0, fontSize: "min(18px, 4.2vw)", fontWeight: 700, color: "#202020", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", lineHeight: "normal" }}>
             You are currently at Level {level} !
           </p>
-          <p style={{ position: "absolute", left: 20, top: 50, margin: 0, fontSize: safeDay === 0 ? "clamp(8px, 2.4vw, 10px)" : "clamp(10px, 2.9vw, 12px)", fontWeight: 400, color: "#0a386f", width: `min(${reward.subtitleWidth}px, 32vw)`, lineHeight: "normal" }}>
+          <p style={{ position: "absolute", left: 20, top: 50, margin: 0, fontSize: safeDay === 0 ? "min(12px, 2.9vw)" : "min(14px, 3.4vw)", fontWeight: 400, color: "#0a386f", width: `min(${reward.subtitleWidth}px, 32vw)`, lineHeight: "normal" }}>
             {safeDay === 0
               ? `Attend 3 classes to complete Level 1 & get`
               : <>Attend {classesNeeded} more class{classesNeeded !== 1 ? "es" : ""} to{" "}{reward.completesAll ? "complete all levels" : `complete Level ${level}`} &amp; get</>
             }
           </p>
-          <div style={{ position: "absolute", left: 20, top: 91, width: `min(${reward.rewardWidth}px, 34vw)`, fontSize: "clamp(12px, 3.6vw, 15px)", fontWeight: 700, color: "#0a386f", lineHeight: "normal" }}>
+          <div style={{ position: "absolute", left: 20, top: 91, width: `min(${reward.rewardWidth}px, 34vw)`, fontSize: "min(17px, 4.1vw)", fontWeight: 700, color: "#0a386f", lineHeight: "normal" }}>
             <p style={{ margin: 0 }}>{reward.line1}</p>
             <p style={{ margin: 0 }}>{reward.line2}</p>
           </div>

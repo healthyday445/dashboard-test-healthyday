@@ -20,7 +20,15 @@ export const WeekTwoCountdownBanner: React.FC<WeekTwoCountdownBannerProps> = ({ 
       style={{
         width: "100%",
         padding: "24px 20px 28px",
-        marginBottom: "-34px",
+        // The -34px pull-up is only meaningful for the original (showBackground=true) call
+        // site, where it overlaps this banner's own fading-to-orange bottom edge with the
+        // plain white session card that follows it in IndexFourteenDays.tsx. The 14-day-v2
+        // tab experience (showBackground=false) instead shares ONE continuous background
+        // across the banner + tab bar (painted by the parent wrapper), so there's no seam to
+        // hide in the first place — a fixed-pixel overlap here would just cut into this
+        // banner's own text/button by an amount that doesn't track its actual (text-wrap-
+        // dependent, viewport-dependent) height, which is exactly the bug at narrow widths.
+        marginBottom: showBackground ? "-34px" : 0,
         boxSizing: "border-box",
         textAlign: "center",
         ...(showBackground ? { background: "linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(255, 226, 192) 25.005%, rgb(255, 226, 192) 50.01%, rgb(255, 148, 22) 100%)" } : {}),

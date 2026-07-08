@@ -178,9 +178,9 @@ export const FourteenDayBonusSessionCard: React.FC<FourteenDayBonusSessionCardPr
             borderRadius: "0 0 12px 12px",
             border: "1.5px solid #E9E9E9", background: "#FFF",
             boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
-            display: "flex", alignItems: "center", paddingLeft: "16px", boxSizing: "border-box",
+            display: "flex", alignItems: "center", justifyContent: "center", boxSizing: "border-box",
           }}>
-            <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>
+            <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px", textAlign: "center" }}>
               {bonusSession.fullName}
             </span>
           </div>

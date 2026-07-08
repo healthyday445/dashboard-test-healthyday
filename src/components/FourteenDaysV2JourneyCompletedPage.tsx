@@ -72,7 +72,25 @@ export const FourteenDaysV2JourneyCompletedPage: React.FC<FourteenDaysV2JourneyC
               <div key={level}>
                 <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 14px" }}>
                   <img src={REWARD_THUMBS_V2[idx]} alt="" style={{ width: "64px", height: "35px", borderRadius: "5px", objectFit: "cover", border: "1px solid #FF8A00", flexShrink: 0 }} />
-                  <p style={{ flex: 1, margin: 0, color: "#004394", fontFamily: "Outfit", fontSize: "13px", fontWeight: 700 }}>{reward.full}</p>
+                  <p
+                    style={{
+                      flex: 1,
+                      minWidth: 0,
+                      margin: 0,
+                      color: "#004394",
+                      fontFamily: "Outfit",
+                      fontSize: "clamp(11px, 3.1vw, 13px)",
+                      fontWeight: 700,
+                      lineHeight: "1.3",
+                      overflowWrap: "break-word",
+                      display: "-webkit-box",
+                      WebkitLineClamp: 2,
+                      WebkitBoxOrient: "vertical",
+                      overflow: "hidden",
+                    }}
+                  >
+                    {reward.full}
+                  </p>
                   <a
                     href={link}
                     target="_blank"

@@ -150,8 +150,8 @@ function RewardCard({
           </p>
         </div>
 
-        <div className="flex-shrink-0 flex flex-col pt-[13px]" style={{ width: 130 }}>
-          <div className="relative rounded-[5px] overflow-hidden" style={{ width: 130, height: 71, border: isUnlocked ? "0.75px solid #94A0AF" : "1px solid white" }}>
+        <div className="flex-shrink-0 flex flex-col pt-[13px]" style={{ width: "clamp(72px, 44%, 130px)" }}>
+          <div className="relative rounded-[5px] overflow-hidden" style={{ width: "100%", height: 71, border: isUnlocked ? "0.75px solid #94A0AF" : "1px solid white" }}>
             <img src={levelData.rewardImg} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ filter: isUnlocked ? "none" : "grayscale(1) blur(2px)" }} />
             {!isUnlocked && (
               <div className="absolute inset-0 rounded-[5px] flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.32)" }}>
@@ -164,7 +164,7 @@ function RewardCard({
             onClick={handleRewardClick}
             className="flex items-center justify-center gap-1 mt-[4px]"
             style={{
-              width: 130, height: 17, borderRadius: 5,
+              width: "100%", height: 17, borderRadius: 5,
               background: isUnlocked ? "linear-gradient(to bottom, #237ae2, #1858a5, #0b3f7d)" : "#808284",
               border: `0.25px solid ${isUnlocked ? "#ffe1be" : "white"}`,
               boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)",
@@ -488,7 +488,7 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
         <div className="absolute" style={{ top: 21, left: 26, right: 26, height: 138 }}>
           <div className="relative w-full h-full rounded-[20px] overflow-hidden" style={{ border: "1px solid #b8b8b8", boxShadow: "0px -1px 8px 0px rgba(0,0,0,0.05), 0px 1px 8px 0px rgba(0,0,0,0.05)", background: zoneConfig.gradient }}>
             <div className="absolute flex flex-col gap-1" style={{ top: zoneConfig.titleCaps ? 14 : 11, bottom: zoneConfig.titleCaps ? 14 : 12, left: 23, right: zoneConfig.textRight, justifyContent: zoneConfig.titleCaps ? "center" : "flex-start", zIndex: 1 }}>
-              <p className="font-medium text-[12px] leading-none" style={{ color: "#0a386f", fontFamily: "Outfit, sans-serif", marginBottom: zoneConfig.titleCaps ? 6 : 9 }}>
+              <p className="font-medium text-[12px] leading-none text-nowrap" style={{ color: "#0a386f", fontFamily: "Outfit, sans-serif", marginBottom: zoneConfig.titleCaps ? 6 : 9 }}>
                 {studentData?.name ? `Namaste ${studentData.name.split(" ")[0]} Ji,` : "Namaste Ji,"}
               </p>
               <p className="font-bold leading-none" style={{ color: "#0a386f", fontFamily: "Outfit, sans-serif", fontSize: badgeTitleSize, marginBottom: 8, whiteSpace: "nowrap" }}>

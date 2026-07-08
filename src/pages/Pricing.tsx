@@ -36,7 +36,7 @@ const Pricing = () => {
       </div>
 
       <div style={{ padding: "20px 20px 0", textAlign: "center" }}>
-        <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, color: "#0D468B", lineHeight: "normal" }}>
+        <p style={{ margin: 0, fontFamily: "Outfit", fontSize: "clamp(14px, 4.8vw, 20px)", fontWeight: 700, color: "#0D468B", lineHeight: "normal", whiteSpace: "nowrap" }}>
           Most affordable Subscription Plans
         </p>
         <p style={{ margin: "4px 0 0", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, color: "#0D468B", lineHeight: "normal" }}>

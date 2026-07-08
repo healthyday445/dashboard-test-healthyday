@@ -174,7 +174,7 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin, isFreeBatch }
             <path d="M7.56167 8.38188H8.38188V11.6627H9.20209" fill="#9D9D9D" />
             <path d="M8.38188 5.92126H8.39009M7.56167 8.38188H8.38188V11.6627H9.20209M1 8.38188C1 9.35129 1.19094 10.3112 1.56191 11.2068C1.93289 12.1024 2.47663 12.9162 3.1621 13.6017C3.84757 14.2871 4.66135 14.8309 5.55696 15.2019C6.45257 15.5728 7.41248 15.7638 8.38188 15.7638C9.35129 15.7638 10.3112 15.5728 11.2068 15.2019C12.1024 14.8309 12.9162 14.2871 13.6017 13.6017C14.2871 12.9162 14.8309 12.1024 15.2019 11.2068C15.5728 10.3112 15.7638 9.35129 15.7638 8.38188C15.7638 6.42409 14.986 4.54647 13.6017 3.1621C12.2173 1.77773 10.3397 1 8.38188 1C6.42409 1 4.54647 1.77773 3.1621 3.1621C1.77773 4.54647 1 6.42409 1 8.38188Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
           </svg>
-          <span style={{ color: "#747474", fontFamily: "Outfit", fontSize: "14px", fontWeight: 400, lineHeight: "20px", textAlign: "center" }}>
+          <span style={{ color: "#747474", fontFamily: "Outfit", fontSize: "14px", fontWeight: 400, lineHeight: "20px", textAlign: "left" }}>
             Note: No recordings are available for FREE batch
           </span>
         </div>
