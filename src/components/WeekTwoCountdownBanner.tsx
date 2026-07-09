@@ -19,7 +19,7 @@ export const WeekTwoCountdownBanner: React.FC<WeekTwoCountdownBannerProps> = ({ 
     <div
       style={{
         width: "100%",
-        padding: "24px 20px 28px",
+        padding: "24px 20px 2px",
         // The -34px pull-up is only meaningful for the original (showBackground=true) call
         // site, where it overlaps this banner's own fading-to-orange bottom edge with the
         // plain white session card that follows it in IndexFourteenDays.tsx. The 14-day-v2

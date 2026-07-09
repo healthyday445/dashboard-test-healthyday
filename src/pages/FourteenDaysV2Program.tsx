@@ -23,9 +23,9 @@ import giftIconUnlocked from "@/assets/21daysprogram/gift_icon_unlocked.png";
 import badgeCardL0 from "@/assets/21daysprogram/badge_card_l0.webp";
 import badgeCardL1 from "@/assets/21daysprogram/badge_card_l1.webp";
 import badgeCardL2 from "@/assets/21daysprogram/badge_card_l2.webp";
+import badgeCardL3 from "@/assets/21daysprogram/badge_card_l3.webp";
 import badgeCardL4 from "@/assets/21daysprogram/badge_card_l4.webp";
-import badgeCardL6 from "@/assets/21daysprogram/badge_card_l6.webp";
-import badgeCardL7 from "@/assets/21daysprogram/badge_card_l7.webp";
+import badgeCardL5 from "@/assets/21daysprogram/badge_card_l5.webp";
 import badgeCardShareIcon from "@/assets/21daysprogram/badge_card_share_icon.png";
 import { LEVEL_UNLOCK_DAYS_V2, getLevelRewardLinkV2 } from "@/components/FourteenDaysV2LevelCard";
 
@@ -41,28 +41,61 @@ const LEVEL_DATA = [
 
 // One zone config per completed-reward count (0-5), reusing the exact gradients/character
 // art from the 21-day journey's matching reward identity (Detox/Breakfast/Lunch/Dinner/Certificate).
+// imgWidth/textRight are % of the card's own width (not viewport) so the character art and
+// the text column it makes room for shrink together — keeps their original ratio (tuned at
+// the 412px-wide reference card) instead of the fixed-px image eating into the text on narrower phones.
 const ZONE_CONFIG = [
-  { gradient: "radial-gradient(circle at 85% 0%, rgba(128,164,221,1) 0%, rgba(191,210,238,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL0, imgTop: 8, imgRight: 0, imgWidth: 198, imgHeight: 122, textRight: 176, titleCaps: true },
-  { gradient: "radial-gradient(circle at 83% 0%, rgba(255,237,195,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL1, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 128, titleCaps: false },
-  { gradient: "radial-gradient(circle at 87% 0%, rgba(212,220,145,1) 0%, rgba(234,238,200,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL2, imgTop: 0, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 128, titleCaps: false },
-  { gradient: "radial-gradient(circle at 85% 0%, rgba(171,226,232,1) 0%, rgba(213,241,243,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL4, imgTop: -8, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 128, titleCaps: false },
-  { gradient: "radial-gradient(circle at 85% 0%, rgba(255,189,189,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL6, imgTop: -6, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 128, titleCaps: false },
-  { gradient: "radial-gradient(circle at 84% 0%, rgba(175,210,255,1) 0%, rgba(215,233,255,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL7, imgTop: -6, imgRight: 0, imgWidth: 145, imgHeight: 138, textRight: 128, titleCaps: false },
+  { gradient: "radial-gradient(circle at 85% 0%, rgba(128,164,221,1) 0%, rgba(191,210,238,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL0, imgTop: 8, imgRight: 0, imgWidth: "55%", imgHeight: 122, textRight: "48.9%", titleCaps: true },
+  { gradient: "radial-gradient(circle at 83% 0%, rgba(255,237,195,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL1, imgTop: 0, imgRight: 0, imgWidth: "40.3%", imgHeight: 138, textRight: "35.6%", titleCaps: false },
+  { gradient: "radial-gradient(circle at 87% 0%, rgba(212,220,145,1) 0%, rgba(234,238,200,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL2, imgTop: 0, imgRight: 0, imgWidth: "40.3%", imgHeight: 138, textRight: "35.6%", titleCaps: false },
+  { gradient: "radial-gradient(circle at 89% 0%, rgba(246,219,255,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL3, imgTop: -8, imgRight: 0, imgWidth: "40.3%", imgHeight: 138, textRight: "35.6%", titleCaps: false },
+  { gradient: "radial-gradient(circle at 85% 0%, rgba(171,226,232,1) 0%, rgba(213,241,243,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL4, imgTop: -6, imgRight: 0, imgWidth: "40.3%", imgHeight: 138, textRight: "35.6%", titleCaps: false },
+  { gradient: "radial-gradient(circle at 86% 0%, rgba(249,191,117,1) 0%, rgba(251,207,152,1) 25%, rgba(252,223,186,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL5, imgTop: -6, imgRight: 0, imgWidth: "40.3%", imgHeight: 138, textRight: "35.6%", titleCaps: false },
 ];
 
-// Indexed by completed-reward count (1-4) — the reward just unlocked at that milestone.
-const BADGE_SUBTEXT_COMPLETED = ["", "3-Days Detox Programme", "3-Days Breakfast Diet", "3-Days Lunch Diet", "3-Days Dinner Diet"];
-
-// Indexed by completed-reward count (0-4) — what's still needed, and the badge-card "Level"
-// number for it. The top badge card counts one higher than the reward cards below it
-// (Figma's own copy for day 2 reads "unlock Level 2 & 3-Days Detox Programme", i.e. the
-// Detox reward — Level 1 on the reward-card timeline — is "Level 2" on the badge card).
-const BADGE_SUBTEXT_INPROGRESS = [
-  { verb: "unlock", badgeLevelNum: 2, reward: "3-Days Detox Programme" },
-  { verb: "complete", badgeLevelNum: 3, reward: "Breakfast Diet" },
-  { verb: "complete", badgeLevelNum: 4, reward: "Lunch Diet" },
-  { verb: "complete", badgeLevelNum: 5, reward: "Dinner Diet" },
-  { verb: "complete", badgeLevelNum: 6, reward: "a Certificate" },
+// Badge-card copy, one entry per completed-reward count (0-5) — same index as ZONE_CONFIG.
+// - title / subtext: shown while working toward this zone's next reward (not a milestone day).
+// - milestoneSubtext: shown once on the day this zone's reward is unlocked (title is always
+//   "CONGRATULATIONS!" on that day, set separately below — it doesn't vary by zone).
+// classesNeeded is filled in at render time; edit the surrounding copy freely.
+const BADGE_TEXT = [
+  {
+    title: "YOU ARE AT LEVEL 1!",
+    subtext: (daysAttended: number, classesNeeded: number) =>
+      daysAttended === 0
+        ? "Attend 3 classes to unlock Level 2."
+        : `Attend ${classesNeeded} more class${classesNeeded > 1 ? "es" : ""} to unlock Level 2 & 3-Days Detox Programme`,
+    milestoneSubtext: null as string | null,
+  },
+  {
+    title: "You completed Level 1!",
+    subtext: (_daysAttended: number, classesNeeded: number) =>
+      `Attend ${classesNeeded} more class${classesNeeded > 1 ? "es" : ""} to complete <br/> Level 2 & get Breakfast Diet`,
+    milestoneSubtext: "You have completed Level 1 & unlocked the 3-Days Detox Programme!",
+  },
+  {
+    title: "You completed Level 2!",
+    subtext: (_daysAttended: number, classesNeeded: number) =>
+      `Attend ${classesNeeded} more class${classesNeeded > 1 ? "es" : ""} to complete <br/> Level 3 & get Lunch Diet`,
+    milestoneSubtext: "You have completed Level 2 & unlocked the 3-Days Breakfast Diet!",
+  },
+  {
+    title: "You completed Level 3!",
+    subtext: (_daysAttended: number, classesNeeded: number) =>
+      `Attend ${classesNeeded} more class${classesNeeded > 1 ? "es" : ""} to complete <br/> Level 4 & get Dinner Diet`,
+    milestoneSubtext: "You have completed Level 3 & unlocked the 3-Days Lunch Diet!",
+  },
+  {
+    title: "You completed Level 4!",
+    subtext: (_daysAttended: number, classesNeeded: number) =>
+      `Attend ${classesNeeded} more class${classesNeeded > 1 ? "es" : ""} to complete <br/> Level 5 & get a Certificate`,
+    milestoneSubtext: "You have completed Level 4 & unlocked the 3-Days Dinner Diet!",
+  },
+  {
+    title: "",
+    subtext: () => "",
+    milestoneSubtext: "You have completed all the Levels & earned the 14-Days Yoga Certificate",
+  },
 ];
 
 type DayStatus = "completed" | "next" | "locked";
@@ -357,15 +390,8 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
   // and, for milestone days, to know which reward was *just* unlocked.
   const completedCount = LEVEL_UNLOCK_DAYS_V2.filter((d) => d <= daysAttended).length;
   const zoneConfig = ZONE_CONFIG[completedCount];
-  // Badge-card "Level" text is one higher than the reward-card Level it's building toward
-  // (Figma's own day-2 copy: "unlock Level 2 & 3-Days Detox Programme", where Detox is
-  // reward-card Level 1) — see BADGE_SUBTEXT_INPROGRESS comment.
-  const badgeLevelZone = completedCount + 1;
-  const badgeTitle = isMilestoneDay
-    ? "CONGRATULATIONS!"
-    : zoneConfig.titleCaps
-      ? `YOU ARE AT LEVEL ${badgeLevelZone}!`
-      : `You completed Level ${completedCount + 1}!`;
+  const zoneText = BADGE_TEXT[completedCount];
+  const badgeTitle = isMilestoneDay ? "CONGRATULATIONS!" : zoneText.title;
   const badgeTitleSize = isMilestoneDay || zoneConfig.titleCaps ? 18 : 16;
 
   const rawShareText =
@@ -392,16 +418,10 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
   };
 
   const badgeSubText = (() => {
-    if (daysAttended === 0) return "Attend 3 classes to unlock Level 2.";
-    if (daysAttended === 14) return "You have completed all the Levels & earned the 14-Days Yoga Certificate";
-    if (isMilestoneDay) {
-      return `You have completed Level ${completedCount + 1} & unlocked the ${BADGE_SUBTEXT_COMPLETED[completedCount]}!`;
-    }
+    if (isMilestoneDay) return zoneText.milestoneSubtext;
     const nextUnlockDay = LEVEL_UNLOCK_DAYS_V2[completedCount] ?? 14;
     const classesNeeded = nextUnlockDay - daysAttended;
-    const { verb, badgeLevelNum, reward } = BADGE_SUBTEXT_INPROGRESS[completedCount];
-    const suffix = verb === "unlock" ? reward : `get ${reward}`;
-    return `Attend ${classesNeeded} more class${classesNeeded > 1 ? "es" : ""} to ${verb} Level ${badgeLevelNum} & ${suffix}`;
+    return zoneText.subtext(daysAttended, classesNeeded);
   })();
 
   useLayoutEffect(() => {
@@ -488,24 +508,43 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
         <div className="absolute" style={{ top: 21, left: 26, right: 26, height: 138 }}>
           <div className="relative w-full h-full rounded-[20px] overflow-hidden" style={{ border: "1px solid #b8b8b8", boxShadow: "0px -1px 8px 0px rgba(0,0,0,0.05), 0px 1px 8px 0px rgba(0,0,0,0.05)", background: zoneConfig.gradient }}>
             <div className="absolute flex flex-col gap-1" style={{ top: zoneConfig.titleCaps ? 14 : 11, bottom: zoneConfig.titleCaps ? 14 : 12, left: 23, right: zoneConfig.textRight, justifyContent: zoneConfig.titleCaps ? "center" : "flex-start", zIndex: 1 }}>
-              <p className="font-medium text-[12px] leading-none text-nowrap" style={{ color: "#0a386f", fontFamily: "Outfit, sans-serif", marginBottom: zoneConfig.titleCaps ? 6 : 9 }}>
+              <p className="font-medium leading-none text-nowrap" style={{ color: "#0a386f", fontFamily: "Outfit, sans-serif", fontSize: "min(12px, 2.9vw)", marginBottom: zoneConfig.titleCaps ? 6 : 9 }}>
                 {studentData?.name ? `Namaste ${studentData.name.split(" ")[0]} Ji,` : "Namaste Ji,"}
               </p>
-              <p className="font-bold leading-none" style={{ color: "#0a386f", fontFamily: "Outfit, sans-serif", fontSize: badgeTitleSize, marginBottom: 8, whiteSpace: "nowrap" }}>
+              <p className="font-bold leading-none" style={{ color: "#0a386f", fontFamily: "Outfit, sans-serif", fontSize: `min(${badgeTitleSize}px, ${(badgeTitleSize / 4.12).toFixed(1)}vw)`, marginBottom: 8, whiteSpace: "nowrap" }}>
                 {badgeTitle}
               </p>
-              <p className="font-medium text-[12px] leading-snug" style={{ color: "#000000", fontFamily: "Outfit, sans-serif", flex: zoneConfig.titleCaps ? undefined : 1 }}>
-                {badgeSubText}
+              <p
+                className="font-medium leading-snug"
+                style={{
+                  color: "#000000",
+                  fontFamily: "Outfit, sans-serif",
+                  fontSize: isMilestoneDay && completedCount === 1 ? "min(10px, 2.4vw)" : "min(12px, 2.9vw)",
+                  flex: zoneConfig.titleCaps ? undefined : 1,
+                  ...(isMilestoneDay && completedCount === 1 && {
+                    display: "-webkit-box",
+                    WebkitLineClamp: 2,
+                    WebkitBoxOrient: "vertical",
+                    overflow: "hidden",
+                  }),
+                }}
+              >
+                {(badgeSubText ?? "").split("<br/>").map((line, i) => (
+                  <span key={i}>
+                    {i > 0 && <br />}
+                    {line.trim()}
+                  </span>
+                ))}
               </p>
               {!zoneConfig.titleCaps && (
                 <a
                   href="#"
                   onClick={handleShareClick}
                   className="flex items-center justify-center gap-[5px]"
-                  style={{ width: 179, height: 22, backgroundColor: "#feab27", borderRadius: 5, boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)", textDecoration: "none", flexShrink: 0 }}
+                  style={{ width: "100%", maxWidth: 179, height: 22, backgroundColor: "#feab27", borderRadius: 5, boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)", textDecoration: "none", flexShrink: 0 }}
                 >
                   <img src={badgeCardShareIcon} alt="" style={{ width: 15, height: 15 }} />
-                  <span style={{ color: "white", fontSize: 12, fontWeight: 700, fontFamily: "Outfit, sans-serif" }}>Share on WhatsApp Status</span>
+                  <span style={{ color: "white", fontSize: "min(12px, 2.9vw)", fontWeight: 700, fontFamily: "Outfit, sans-serif", whiteSpace: "nowrap" }}>Share on WhatsApp Status</span>
                 </a>
               )}
             </div>
