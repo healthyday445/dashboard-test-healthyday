@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { LevelCard } from "@/components/LevelCard";
+import { CertificateModal } from "@/components/CertificateModal";
 import { trackVisit } from "@/lib/trackVisit";
 import { trackSessionClick } from "@/lib/trackSessionClick";
 import logo from "@/assets/Primary_logo.svg";
@@ -321,6 +322,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
   const [loading, setLoading] = useState(!effectiveInitialData);
   const [error, setError] = useState<string | null>(null);
   const [studentData, setStudentData] = useState<any>(effectiveInitialData ?? null);
+  const [showCertificateModal, setShowCertificateModal] = useState(false);
   const [showComingSoon, setShowComingSoon] = useState(
     effectiveInitialData
       ? !(effectiveInitialData.language === "Telugu" || effectiveInitialData.language === "English")
@@ -864,18 +866,17 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
               </div>
             </div>
 
-            {/* Level Card — 21-day journey progress, legacy June-21-2026 batch only */}
-            {isLegacyTwentyOneDayBatch && (
-              <div style={{ padding: "18px 20px 0" }}>
-                <LevelCard
-                  freeDaysAttended={freeDaysAttended}
-                  studentName={studentData?.name}
-                  joinLink={sessionJoinLink || ""}
-                  language={studentData?.language}
-                  onViewMore={onSwitchToJourney}
-                />
-              </div>
-            )}
+            {/* Level Card — 21-day journey progress */}
+            <div style={{ padding: "18px 20px 0" }}>
+              <LevelCard
+                freeDaysAttended={freeDaysAttended}
+                studentName={studentData?.name}
+                joinLink={sessionJoinLink || ""}
+                language={studentData?.language}
+                onViewMore={onSwitchToJourney}
+                onCertificateClick={() => setShowCertificateModal(true)}
+              />
+            </div>
 
             {/* Refer & Win card */}
             <div style={{ padding: "18px 20px 0" }}>
@@ -997,6 +998,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
     }
 
     return (
+      <>
       <div>
         {activeRecurringBonusCard && (() => {
           const rTotalMin = (() => { const _t = new URLSearchParams(location.search).get("time"); if (_t) { const isPM = _t.toLowerCase().endsWith("pm"); const s = _t.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
@@ -1269,18 +1271,17 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
           );
         })()}
 
-        {/* Level Card — 21-day journey progress, legacy June-21-2026 batch only */}
-        {isLegacyTwentyOneDayBatch && (
-          <div style={{ padding: "18px 20px 0" }}>
-            <LevelCard
-              freeDaysAttended={freeDaysAttended}
-              studentName={studentData?.name}
-              joinLink={sessionJoinLink || ""}
-              language={studentData?.language}
-              onViewMore={onSwitchToJourney}
-            />
-          </div>
-        )}
+        {/* Level Card — 21-day journey progress */}
+        <div style={{ padding: "18px 20px 0" }}>
+          <LevelCard
+            freeDaysAttended={freeDaysAttended}
+            studentName={studentData?.name}
+            joinLink={sessionJoinLink || ""}
+            language={studentData?.language}
+            onViewMore={onSwitchToJourney}
+            onCertificateClick={() => setShowCertificateModal(true)}
+          />
+        </div>
 
         {/* Refer & Win card */}
         <div style={{ padding: "18px 20px 0" }}>
@@ -1341,6 +1342,14 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
         ) */}
 
       </div>
+      <CertificateModal
+        isOpen={showCertificateModal}
+        onClose={() => setShowCertificateModal(false)}
+        initialName={studentData?.name}
+        mobile={mobile || studentData?.mobile}
+        daysAttended={freeDaysAttended}
+      />
+      </>
     );
   }
 
@@ -1926,7 +1935,13 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
           </>
         )}
 
-
+        <CertificateModal
+          isOpen={showCertificateModal}
+          onClose={() => setShowCertificateModal(false)}
+          initialName={studentData?.name}
+          mobile={mobile || studentData?.mobile}
+          daysAttended={21}
+        />
       </div>
     );
   }
@@ -2095,7 +2110,8 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
     })();
 
     return (
-      <div className="hd-page bg-background" style={{ fontFamily: 'Outfit, sans-serif' }}>
+      <>
+        <div className="hd-page bg-background" style={{ fontFamily: 'Outfit, sans-serif' }}>
         {/* Header */}
         <header className="hd-header bg-background">
           <img src={logo} alt="Healthyday" className="h-7" />
@@ -2115,7 +2131,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
 
           <div style={{ paddingTop: "68px" }}>
             {completedTab === "journey" ? (
-              <YogaJourneyCompletedPage studentName={studentData?.name} language={studentData?.language} joinLink={sessionJoinLink || ""} />
+              <YogaJourneyCompletedPage studentName={studentData?.name} language={studentData?.language} joinLink={sessionJoinLink || ""} onCertificateClick={() => setShowCertificateModal(true)} />
             ) : (
               <>
                 {/* 21-Days Completed Banner */}
@@ -2169,8 +2185,16 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
           </div>
         </div>
       </div>
-    );
-  }
+      <CertificateModal
+        isOpen={showCertificateModal}
+        onClose={() => setShowCertificateModal(false)}
+        initialName={studentData?.name}
+        mobile={mobile || studentData?.mobile}
+        daysAttended={21}
+      />
+    </>
+  );
+}
 
   // --- Onboarding Section: status="registered", batch not yet active or join link not set ---
   if (!authenticated) return null;
@@ -2393,6 +2417,14 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
       </div>
 
       <div style={{ height: "48px" }} />
+
+      <CertificateModal
+        isOpen={showCertificateModal}
+        onClose={() => setShowCertificateModal(false)}
+        initialName={studentData?.name}
+        mobile={mobile || studentData?.mobile}
+        daysAttended={21}
+      />
     </div>
   );
 };

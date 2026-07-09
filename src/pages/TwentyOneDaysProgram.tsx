@@ -1,5 +1,6 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { CertificateModal } from "@/components/CertificateModal";
 import logo from "@/assets/Primary_logo.svg";
 import heroBg from "@/assets/21daysprogram/hero-bg.webp";
 import lockIcon from "@/assets/21daysprogram/lock_icon.png";
@@ -133,14 +134,17 @@ function RewardCard({
   levelData,
   isUnlocked,
   lang,
+  onCertificateClick,
 }: {
   levelData: (typeof LEVEL_DATA)[number];
   isUnlocked: boolean;
   lang?: string;
+  onCertificateClick?: () => void;
 }) {
   const isCertificate = levelData.level === 7;
 
-  const handleRewardClick = () => {
+  const handleRewardClick = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     if (!isUnlocked) return;
     if (levelData.level === 1) {
       if (lang === "English") {
@@ -179,19 +183,28 @@ function RewardCard({
         window.open("https://www.youtube.com/live/6CcEvvn6shU", "_blank");
       }
     } else if (levelData.level === 7) {
-      const urlParams = new URLSearchParams(window.location.search);
-      const mobileParam = urlParams.get("mobile") || "";
-      const pathParts = window.location.pathname.split("/");
-      const maybeMobile = pathParts[1] && /^\+?\d+$/.test(pathParts[1]) ? pathParts[1] : mobileParam;
-      const targetUrl = maybeMobile ? `/${maybeMobile}/certificate` : "/certificate";
-      window.open(targetUrl, "_blank");
+      if (onCertificateClick) {
+        onCertificateClick();
+      } else {
+        const urlParams = new URLSearchParams(window.location.search);
+        const mobileParam = urlParams.get("mobile") || "";
+        const pathParts = window.location.pathname.split("/");
+        const maybeMobile = pathParts[1] && /^\+?\d+$/.test(pathParts[1]) ? pathParts[1] : mobileParam;
+        const targetUrl = maybeMobile ? `/${maybeMobile}/certificate` : "/certificate";
+        window.open(targetUrl, "_blank");
+      }
     }
   };
 
   return (
     <div
+      onClick={handleRewardClick}
       className="relative rounded-[8px] overflow-hidden"
-      style={{ height: 119, border: isUnlocked ? "0.75px solid #FEAB27" : "0.75px solid #c8c8c8" }}
+      style={{
+        height: 119,
+        border: isUnlocked ? "0.75px solid #FEAB27" : "0.75px solid #c8c8c8",
+        cursor: isUnlocked ? "pointer" : "default",
+      }}
     >
       <img
         src={rewardCardBgUnlocked}
@@ -375,6 +388,7 @@ function DayRow({
   rowRef,
   cardRef,
   lang,
+  onCertificateClick,
 }: {
   day: number;
   status: DayStatus;
@@ -383,6 +397,7 @@ function DayRow({
   rowRef?: React.RefObject<HTMLDivElement>;
   cardRef?: React.RefObject<HTMLDivElement>;
   lang?: string;
+  onCertificateClick?: () => void;
 }) {
   const isMilestone = !!levelData;
   const isUnlocked = isMilestone && daysAttended >= (levelData?.unlockDay ?? 0);
@@ -466,7 +481,7 @@ function DayRow({
       {/* Reward card below milestone day */}
       {isMilestone && (
         <div ref={cardRef} style={{ marginLeft: DOT_COL_WIDTH + 19, marginBottom: 14 }}>
-          <RewardCard levelData={levelData!} isUnlocked={isUnlocked} lang={lang} />
+          <RewardCard levelData={levelData!} isUnlocked={isUnlocked} lang={lang} onCertificateClick={onCertificateClick} />
         </div>
       )}
     </div>
@@ -483,6 +498,7 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
   const [studentData, setStudentData] = useState<any>(initialStudentData ?? null);
   const [loading, setLoading] = useState(!initialStudentData);
   const [error, setError] = useState<string | null>(null);
+  const [showCertificateModal, setShowCertificateModal] = useState(false);
 
   const timelineContainerRef = useRef<HTMLDivElement>(null);
   const nextDayRowRef = useRef<HTMLDivElement>(null);
@@ -498,7 +514,7 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
   useEffect(() => {
     if (initialStudentData) return; // data already provided by parent
     const previewParams = new URLSearchParams(window.location.search);
-    if (previewParams.get("preview_levels") !== null) {
+    if (previewParams.get("preview_levels") !== null || previewParams.get("forceDay") !== null) {
       setLoading(false);
       return;
     }
@@ -548,12 +564,10 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
   }, [mobile, navigate]);
 
   // Derive days attended from free_batches attendance_tracker, capped at 21.
-  // preview_levels is the only override here — forceDay/time are reserved for
-  // the Live Sessions tab (Index.tsx / IndexTwentyOneDay.tsx) and must not leak
-  // into this tab, since both tabs read the same URL simultaneously.
+  // preview_levels or forceDay override daysAttended when simulating days.
   const daysAttended: number = (() => {
     const params = new URLSearchParams(window.location.search);
-    const previewParam = params.get("preview_levels");
+    const previewParam = params.get("preview_levels") ?? params.get("forceDay");
     if (previewParam !== null) {
       return Math.min(21, Math.max(0, parseInt(previewParam, 10)));
     }
@@ -577,7 +591,7 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
       ? `YOU ARE AT LEVEL ${levelZone}!`
       : `You completed Level ${badgeCardLevel}!`;
   const badgeTitleSize = isMilestone || badgeCardConfig.titleCaps ? 18 : 16;
-  const rawShareText = 
+  const rawShareText =
     (daysAttended === 21
       ? "🌿 I Just Completed all 21 Days of the Yoga Challenge with Healthyday! 🎉🏅\n"
       : `🌿 I Just Completed LEVEL ${badgeCardLevel} of the 21 Days Yoga Challenge with Healthyday!🧘🏻‍♀️✨\n`) +
@@ -932,6 +946,7 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
                                   undefined
                         }
                         cardRef={isMilestone && isIconLevel ? iconCardRef : undefined}
+                        onCertificateClick={() => setShowCertificateModal(true)}
                       />
                     );
                   })}
@@ -948,6 +963,13 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
         </div>
       </div>
 
+      <CertificateModal
+        isOpen={showCertificateModal}
+        onClose={() => setShowCertificateModal(false)}
+        mobile={mobile || ""}
+        initialName={studentData?.name}
+        daysAttended={daysAttended}
+      />
     </>
   );
 }

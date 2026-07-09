@@ -28,6 +28,7 @@ import badgeCardL4 from "@/assets/21daysprogram/badge_card_l4.webp";
 import badgeCardL5 from "@/assets/21daysprogram/badge_card_l5.webp";
 import badgeCardShareIcon from "@/assets/21daysprogram/badge_card_share_icon.png";
 import { LEVEL_UNLOCK_DAYS_V2, getLevelRewardLinkV2 } from "@/components/FourteenDaysV2LevelCard";
+import { CertificateModal } from "@/components/CertificateModal";
 
 // 14-day journey: 5 levels (Detox/Breakfast/Lunch/Dinner/Certificate), unlocking every
 // 3 days except the last (day 14, only 2 days after level 4) — see LEVEL_UNLOCK_DAYS_V2.
@@ -116,18 +117,25 @@ function RewardCard({
   lang,
   studentName,
   joinLink,
+  onCertificateClick,
 }: {
   levelData: (typeof LEVEL_DATA)[number];
   isUnlocked: boolean;
   lang?: string;
   studentName?: string;
   joinLink: string;
+  onCertificateClick?: () => void;
 }) {
   const isCertificate = levelData.level === 5;
 
-  const handleRewardClick = () => {
+  const handleRewardClick = (e?: React.MouseEvent) => {
+    e?.stopPropagation();
     if (!isUnlocked) return;
     if (isCertificate) {
+      if (onCertificateClick) {
+        onCertificateClick();
+        return;
+      }
       const urlParams = new URLSearchParams(window.location.search);
       const mobileParam = urlParams.get("mobile") || "";
       const pathParts = window.location.pathname.split("/");
@@ -141,8 +149,9 @@ function RewardCard({
 
   return (
     <div
+      onClick={handleRewardClick}
       className="relative rounded-[8px] overflow-hidden"
-      style={{ height: 119, border: isUnlocked ? "0.75px solid #FEAB27" : "0.75px solid #c8c8c8" }}
+      style={{ height: 119, border: isUnlocked ? "0.75px solid #FEAB27" : "0.75px solid #c8c8c8", cursor: isUnlocked ? "pointer" : "default" }}
     >
       <img
         src={rewardCardBgUnlocked}
@@ -234,6 +243,7 @@ function DayRow({
   lang,
   studentName,
   joinLink,
+  onCertificateClick,
 }: {
   day: number;
   status: DayStatus;
@@ -244,6 +254,7 @@ function DayRow({
   lang?: string;
   studentName?: string;
   joinLink: string;
+  onCertificateClick?: () => void;
 }) {
   const isMilestone = !!levelData;
   const isUnlocked = isMilestone && daysAttended >= (levelData?.unlockDay ?? 0);
@@ -289,7 +300,7 @@ function DayRow({
 
       {isMilestone && (
         <div ref={cardRef} style={{ marginLeft: DOT_COL_WIDTH + 19, marginBottom: 14 }}>
-          <RewardCard levelData={levelData!} isUnlocked={isUnlocked} lang={lang} studentName={studentName} joinLink={joinLink} />
+          <RewardCard levelData={levelData!} isUnlocked={isUnlocked} lang={lang} studentName={studentName} joinLink={joinLink} onCertificateClick={onCertificateClick} />
         </div>
       )}
     </div>
@@ -306,6 +317,7 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
   const [studentData, setStudentData] = useState<any>(initialStudentData ?? null);
   const [loading, setLoading] = useState(!initialStudentData);
   const [error, setError] = useState<string | null>(null);
+  const [showCertificateModal, setShowCertificateModal] = useState(false);
 
   const timelineContainerRef = useRef<HTMLDivElement>(null);
   const nextDayRowRef = useRef<HTMLDivElement>(null);
@@ -617,6 +629,7 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
                           undefined
                 }
                 cardRef={isIconLevel ? iconCardRef : undefined}
+                onCertificateClick={() => setShowCertificateModal(true)}
               />
             );
           })}
@@ -624,6 +637,14 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
 
         <div className="mt-4 mx-2" style={{ height: 1, backgroundColor: "#e5e5e5" }} />
       </div>
+
+      <CertificateModal
+        isOpen={showCertificateModal}
+        onClose={() => setShowCertificateModal(false)}
+        initialName={studentData?.name}
+        mobile={mobile || studentData?.mobile}
+        daysAttended={14}
+      />
     </div>
   );
 }

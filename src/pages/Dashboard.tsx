@@ -88,10 +88,14 @@ const Dashboard = () => {
   // component this student gets. The 21-day/22-day June-21-2026 cohort uses the dedicated
   // IndexTwentyOneDay copy; the one-off July-6-2026 batch keeps the original IndexFourteenDays
   // (no tabs); every other batch (July-13-2026 onward) gets the new tabbed IndexFourteenDaysV2.
-  const is21DayBatch = previewProgramme === "21day" || studentData?.free_batch_start_date === FREE_BATCH_DATE;
+  const is21DayBatch =
+    previewProgramme === "21day" ||
+    studentData?.free_batch_start_date === FREE_BATCH_DATE ||
+    (forceDayParam !== null && parseInt(forceDayParam, 10) > 14);
   const isLegacyFourteenDayBatch = previewProgramme === "legacy14day" || studentData?.free_batch_start_date === FREE_BATCH_DATE_OLD_14DAY;
   const isNewFourteenDayBatch = !is21DayBatch && !isLegacyFourteenDayBatch;
   const LiveSessions = is21DayBatch ? IndexTwentyOneDay : isLegacyFourteenDayBatch ? IndexFourteenDays : IndexFourteenDaysV2;
+  const JourneyProgram = is21DayBatch ? TwentyOneDaysProgram : FourteenDaysV2Program;
 
   // The backend can report status:"paid" before the purchased plan actually starts
   // (e.g. a referral-reward/renewal subscription scheduled for later) while the student
@@ -219,7 +223,7 @@ const Dashboard = () => {
       </div>
       {journeyMounted && (
         <div style={{ display: activeTab === "journey" ? "block" : "none" }}>
-          <FourteenDaysV2Program initialStudentData={effectiveStudentData} />
+          <JourneyProgram initialStudentData={effectiveStudentData} />
         </div>
       )}
     </>

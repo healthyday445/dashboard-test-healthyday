@@ -450,7 +450,7 @@ export default function Certificate() {
           Your Official Completion Certificate
         </h1>
         <p className="text-[#5A6577] text-base md:text-lg mt-2 max-w-xl mx-auto">
-          Celebrate your consistency and devotion! Verify your name and generate your high-resolution certificate.
+          Celebrate your consistency and devotion! Verify your name and generate your official completion certificate.
         </p>
       </div>
 
@@ -546,12 +546,9 @@ export default function Certificate() {
           <div className="bg-white rounded-[24px] p-6 md:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-[#FCE8CD] relative overflow-hidden animate-fade-in">
             <div className="absolute top-0 right-0 w-32 h-32 bg-gradient-to-br from-[#FEAB27]/10 to-transparent rounded-bl-full pointer-events-none" />
 
-            <h2 className="text-xl md:text-2xl font-bold text-[#202020] mb-2">
+            <h2 className="text-xl md:text-2xl font-bold text-[#202020] mb-6">
               Enter Your Name for the Certificate
             </h2>
-            <p className="text-sm text-[#798089] mb-6">
-              We showed the name already present in our system. If you want to edit or change how it appears, you can customize it right here.
-            </p>
 
             <div className="space-y-6">
               {/* Name Input */}
@@ -608,19 +605,9 @@ export default function Certificate() {
           >
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#F5EADC]">
               <div>
-                <div className="flex items-center gap-2 mb-1">
-                  <h2 className="text-xl md:text-2xl font-bold text-[#202020]">
-                    Your Official Certificate Preview
-                  </h2>
-                  {isRateLimited && (
-                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#E8F8F0] border border-[#A9DFBF] text-[#145A32] text-xs font-bold">
-                      ✓ Issued (Limit 1/1)
-                    </span>
-                  )}
-                </div>
-                <p className="text-xs text-[#798089]">
-                  High-definition completion certificate ready for unlimited download and sharing.
-                </p>
+                <h2 className="text-xl md:text-2xl font-bold text-[#202020]">
+                  Your 21-Days Completion Certificate
+                </h2>
               </div>
               {!isRateLimited && (
                 <button
@@ -693,38 +680,6 @@ export default function Certificate() {
                   </svg>
                   Share Certificate
                 </button>
-              </div>
-
-              {/* Dedicated WhatsApp Mobile & Status Buttons */}
-              <div className="pt-3 border-t border-[#F5EADC]">
-                <p className="text-xs text-center text-[#798089] mb-3">
-                  📱 <span className="font-semibold text-[#202020]">Mobile Tip:</span> Click below to open WhatsApp directly with your certificate image ready for your friends or WhatsApp Status!
-                </p>
-                <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-                  {/* Share on WhatsApp Mobile */}
-                  <button
-                    type="button"
-                    onClick={() => handleNativeShare("whatsapp")}
-                    className="w-full py-3 px-4 bg-[#E8FBF0] hover:bg-[#D2F7E2] text-[#128C7E] border border-[#A5EAC6] font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer btn-vibrate btn-shimmer"
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12.031 6.172C8.814 6.172 6.195 8.791 6.195 12.008C6.195 13.044 6.467 14.041 6.974 14.912L6.147 17.935L9.231 17.126C10.069 17.587 11.037 17.842 12.031 17.842C15.248 17.842 17.867 15.223 17.867 12.006C17.867 8.789 15.248 6.172 12.031 6.172ZM12.031 4C16.447 4 20.039 7.592 20.039 12.008C20.039 16.424 16.447 20.016 12.031 20.016C10.627 20.016 9.309 19.652 8.161 19.014L4 20.108L5.115 16.038C4.417 14.838 4.023 13.461 4.023 12.008C4.023 7.592 7.615 4 12.031 4ZM16.068 14.184C15.847 14.847 14.779 15.4 14.227 15.474C13.784 15.534 13.232 15.57 11.428 14.871C9.122 13.978 7.63 11.644 7.513 11.488C7.403 11.332 6.576 10.229 6.576 9.088C6.576 7.947 7.165 7.395 7.403 7.156C7.587 6.972 7.881 6.898 8.157 6.898C8.249 6.898 8.332 6.903 8.405 6.907C8.626 6.917 8.736 6.935 8.883 7.284C9.067 7.726 9.518 8.83 9.573 8.94C9.628 9.051 9.683 9.216 9.61 9.363C9.536 9.51 9.472 9.584 9.362 9.713C9.252 9.842 9.141 9.934 9.031 10.072C8.93 10.191 8.81 10.32 8.939 10.54C9.067 10.761 9.513 11.488 10.166 12.068C11.008 12.815 11.725 13.054 11.964 13.155C12.148 13.238 12.35 13.219 12.479 13.082C12.645 12.907 12.847 12.604 13.049 12.301C13.197 12.08 13.381 12.052 13.583 12.126C13.785 12.2 14.87 12.734 15.091 12.844C15.312 12.955 15.459 13.01 15.514 13.102C15.569 13.194 15.569 13.636 15.348 14.299" />
-                    </svg>
-                    Share on WhatsApp Mobile
-                  </button>
-
-                  {/* Add to WhatsApp Status */}
-                  <button
-                    type="button"
-                    onClick={() => handleNativeShare("status")}
-                    className="w-full py-3 px-4 bg-[#FFF9E6] hover:bg-[#FFF2CD] text-[#B37D00] border border-[#FFE18E] font-bold text-sm rounded-xl transition-all flex items-center justify-center gap-2 cursor-pointer"
-                  >
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
-                      <path d="M12 2C6.48 2 2 6.48 2 12C2 17.52 6.48 22 12 22C17.52 22 22 17.52 22 12C22 6.48 17.52 2 12 2ZM12 20C7.59 20 4 16.41 4 12C4 7.59 7.59 4 12 4C16.41 4 20 7.59 20 12C20 16.41 16.41 20 12 20ZM12 6C8.69 6 6 8.69 6 12C6 15.31 8.69 18 12 18C15.31 18 18 15.31 18 12C18 8.69 15.31 6 12 6ZM12 16C9.79 16 8 14.21 8 12C8 9.79 9.79 8 12 8C14.21 8 16 9.79 16 12C16 14.21 14.21 16 12 16Z" />
-                    </svg>
-                    Add to WhatsApp Status ✨
-                  </button>
-                </div>
               </div>
             </div>
           </div>

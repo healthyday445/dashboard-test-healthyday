@@ -18,13 +18,13 @@ import circledPlayButton from "@/assets/21daysprogram/circled_play_button.png";
 // Reward info indexed by level (index 0 = Level 1)
 // subtitleWidth / rewardWidth from Figma text bounding boxes
 const LEVEL_REWARDS = [
-  { line1: "3-Days",       line2: "Detox Program",  full: "3-Days Detox Program",         subtitleWidth: 134, rewardWidth: 128, completesAll: false },
-  { line1: "3-Days",       line2: "Breakfast Diet", full: "3-Days Breakfast Diet",         subtitleWidth: 133, rewardWidth: 128, completesAll: false },
-  { line1: "3-Days Sleep", line2: "Masterclass",    full: "3-Days Sleep Masterclass",      subtitleWidth: 134, rewardWidth: 128, completesAll: false },
-  { line1: "3-Days",       line2: "Lunch Diet",     full: "3-Days Lunch Diet",             subtitleWidth: 135, rewardWidth: 128, completesAll: false },
-  { line1: "Post Meal",    line2: "Body Movement",  full: "Post Meal Body Movement",       subtitleWidth: 137, rewardWidth: 137, completesAll: false },
-  { line1: "3-Days",       line2: "Dinner Diet",    full: "3-Days Dinner Diet",            subtitleWidth: 137, rewardWidth: 137, completesAll: false },
-  { line1: "21-Days Yoga", line2: "Certificate",    full: "21-Days Yoga Certificate",      subtitleWidth: 142, rewardWidth: 147, completesAll: true  },
+  { line1: "3-Days", line2: "Detox Program", full: "3-Days Detox Program", subtitleWidth: 134, rewardWidth: 128, completesAll: false },
+  { line1: "3-Days", line2: "Breakfast Diet", full: "3-Days Breakfast Diet", subtitleWidth: 133, rewardWidth: 128, completesAll: false },
+  { line1: "3-Days Sleep", line2: "Masterclass", full: "3-Days Sleep Masterclass", subtitleWidth: 134, rewardWidth: 128, completesAll: false },
+  { line1: "3-Days", line2: "Lunch Diet", full: "3-Days Lunch Diet", subtitleWidth: 135, rewardWidth: 128, completesAll: false },
+  { line1: "Post Meal", line2: "Body Movement", full: "Post Meal Body Movement", subtitleWidth: 137, rewardWidth: 137, completesAll: false },
+  { line1: "3-Days", line2: "Dinner Diet", full: "3-Days Dinner Diet", subtitleWidth: 137, rewardWidth: 137, completesAll: false },
+  { line1: "21-Days Yoga", line2: "Certificate", full: "21-Days Yoga Certificate", subtitleWidth: 142, rewardWidth: 147, completesAll: true },
 ];
 
 // One entry per attended-day count (0–21), indexed directly by freeDaysAttended
@@ -32,25 +32,25 @@ const LEVEL_CARD_DATA = [
   { img: lvl1Inprogress, isUnlocked: false }, // Day 0
   { img: lvl1Inprogress, isUnlocked: false }, // Day 1
   { img: lvl1Inprogress, isUnlocked: false }, // Day 2
-  { img: lvl1Unlocked,   isUnlocked: true  }, // Day 3  — Level 1 unlocked
+  { img: lvl1Unlocked, isUnlocked: true }, // Day 3  — Level 1 unlocked
   { img: lvl2Inprogress, isUnlocked: false }, // Day 4
   { img: lvl2Inprogress, isUnlocked: false }, // Day 5
-  { img: lvl2Unlocked,   isUnlocked: true  }, // Day 6  — Level 2 unlocked
+  { img: lvl2Unlocked, isUnlocked: true }, // Day 6  — Level 2 unlocked
   { img: lvl3Inprogress, isUnlocked: false }, // Day 7
   { img: lvl3Inprogress, isUnlocked: false }, // Day 8
-  { img: lvl3Unlocked,   isUnlocked: true  }, // Day 9  — Level 3 unlocked
+  { img: lvl3Unlocked, isUnlocked: true }, // Day 9  — Level 3 unlocked
   { img: lvl4Inprogress, isUnlocked: false }, // Day 10
   { img: lvl4Inprogress, isUnlocked: false }, // Day 11
-  { img: lvl4Unlocked,   isUnlocked: true  }, // Day 12 — Level 4 unlocked
+  { img: lvl4Unlocked, isUnlocked: true }, // Day 12 — Level 4 unlocked
   { img: lvl5Inprogress, isUnlocked: false }, // Day 13
   { img: lvl5Inprogress, isUnlocked: false }, // Day 14
-  { img: lvl5Unlocked,   isUnlocked: true  }, // Day 15 — Level 5 unlocked
+  { img: lvl5Unlocked, isUnlocked: true }, // Day 15 — Level 5 unlocked
   { img: lvl6Inprogress, isUnlocked: false }, // Day 16
   { img: lvl6Inprogress, isUnlocked: false }, // Day 17
-  { img: lvl6Unlocked,   isUnlocked: true  }, // Day 18 — Level 6 unlocked
+  { img: lvl6Unlocked, isUnlocked: true }, // Day 18 — Level 6 unlocked
   { img: lvl7Inprogress, isUnlocked: false }, // Day 19
   { img: lvl7Inprogress, isUnlocked: false }, // Day 20
-  { img: lvl7Unlocked,   isUnlocked: true  }, // Day 21 — Level 7 unlocked
+  { img: lvl7Unlocked, isUnlocked: true }, // Day 21 — Level 7 unlocked
 ];
 
 /** Resolves the join/watch/download link for a given level's reward — shared between the in-progress LevelCard and the all-completed Yoga Journey rewards list. */
@@ -73,12 +73,14 @@ export function LevelCard({
   joinLink,
   language,
   onViewMore,
+  onCertificateClick,
 }: {
   freeDaysAttended: number;
   studentName?: string;
   joinLink: string;
   language?: string;
   onViewMore?: () => void;
+  onCertificateClick?: () => void;
 }) {
   const safeDay = Math.min(Math.max(0, freeDaysAttended), LEVEL_CARD_DATA.length - 1);
   const config = LEVEL_CARD_DATA[safeDay];
@@ -95,6 +97,11 @@ export function LevelCard({
 
   return (
     <div
+      onClick={() => {
+        if (level === 7 && onCertificateClick) {
+          onCertificateClick();
+        }
+      }}
       style={{
         position: "relative",
         background: "white",
@@ -104,6 +111,7 @@ export function LevelCard({
         height: 156,
         overflow: "hidden",
         fontFamily: "Outfit, sans-serif",
+        cursor: level === 7 && onCertificateClick ? "pointer" : "default",
       }}
     >
       {/* Reward image */}
@@ -131,7 +139,10 @@ export function LevelCard({
           alignItems: "center",
           cursor: "pointer",
         }}
-        onClick={() => onViewMore?.()}
+        onClick={(e) => {
+          e.stopPropagation();
+          onViewMore?.();
+        }}
       >
         <span style={{ color: "#feab27", fontSize: 14, fontWeight: 600 }}>View more</span>
         <img
@@ -201,8 +212,16 @@ export function LevelCard({
               justifyContent: "center",
               gap: 4,
               cursor: "pointer",
+              zIndex: 50,
             }}
-            onClick={() => window.open(getLevelRewardLink(level, language, studentName, joinLink), "_blank")}
+            onClick={(e) => {
+              e.stopPropagation();
+              if (level === 7 && onCertificateClick) {
+                onCertificateClick();
+              } else {
+                window.open(getLevelRewardLink(level, language, studentName, joinLink), "_blank");
+              }
+            }}
           >
             <img src={circledPlayButton} alt="" style={{ width: 12, height: 12 }} />
             <span style={{ color: "white", fontSize: 12, fontWeight: 700 }}>{level === 7 ? "Get Cert" : "Join now"}</span>
