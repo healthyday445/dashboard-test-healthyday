@@ -69,6 +69,10 @@ export const TEST_ACCOUNTS: TestAccount[] = [
   },
 ];
 
-export function findAccount(program: TestAccount["program"], language: TestAccount["language"]) {
-  return TEST_ACCOUNTS.find((a) => a.program === program && a.language === language);
+// batchStartDate disambiguates when multiple accounts share a program+language (e.g. two 14day
+// Telugu cohorts at different start dates) — omit it to get the first match.
+export function findAccount(program: TestAccount["program"], language: TestAccount["language"], batchStartDate?: string) {
+  return TEST_ACCOUNTS.find(
+    (a) => a.program === program && a.language === language && (batchStartDate === undefined || a.batchStartDate === batchStartDate)
+  );
 }

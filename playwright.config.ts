@@ -15,27 +15,39 @@ const galaxyS8Plus = {
 
 // All generated reports/artifacts live under one gitignored directory (matches the repo's
 // existing *.local convention — see .gitignore) instead of scattering playwright-report/ and
-// test-results/ at the repo root.
-const RESULTS_DIR = "./e2e-results.local";
+// test-results/ at the repo root. local/prod/testprod runs write to separate subfolders so one
+// target's run never overwrites another's report.
+const REMOTE_URLS = {
+  prod: "https://class.healthyday.co.in",
+  testprod: "https://test-portal-healthyday.netlify.app",
+};
+const target = process.env.E2E_TARGET as keyof typeof REMOTE_URLS | undefined;
+const isRemote = target !== undefined;
+const RESULTS_DIR = `./e2e-results.local/${target ?? "local"}`;
 
 export default defineConfig({
   testDir: "./e2e",
   fullyParallel: true,
-  retries: process.env.CI ? 2 : 0,
+  // Remote deployments (prod/testprod) — allow a retry there to absorb network blips that
+  // wouldn't count as an app bug. Local dev server has no such excuse.
+  retries: process.env.CI || isRemote ? 2 : 0,
   outputDir: `${RESULTS_DIR}/test-results`,
   reporter: process.env.CI
     ? [["github"], ["html", { outputFolder: `${RESULTS_DIR}/html-report`, open: "never" }]]
     : [["html", { outputFolder: `${RESULTS_DIR}/html-report`, open: "never" }]],
   use: {
-    baseURL: "http://localhost:8080",
+    baseURL: target ? REMOTE_URLS[target] : "http://localhost:8080",
     trace: "on-first-retry",
     screenshot: { mode: "on", fullPage: true },
   },
-  webServer: {
-    command: "npm run dev",
-    url: "http://localhost:8080",
-    reuseExistingServer: !process.env.CI,
-  },
+  // Only boot the local dev server when actually testing against it — prod/testprod are already live.
+  webServer: isRemote
+    ? undefined
+    : {
+        command: "npm run dev",
+        url: "http://localhost:8080",
+        reuseExistingServer: !process.env.CI,
+      },
   projects: [
     { name: "mobile", use: { ...galaxyS8Plus } },
     { name: "desktop", use: { ...devices["Desktop Chrome"] } },

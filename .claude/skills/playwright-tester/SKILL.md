@@ -44,6 +44,25 @@ in parallel via Playwright's native worker system.
   (`/:mobile` routes), so new specs should pass on `mobile` at minimum. Use `--project=mobile` or
   `--project=desktop` to isolate one dimension while iterating.
 - npm scripts: `npm run test:e2e`, `test:e2e:ui`, `test:e2e:report`, `test:e2e:update-snapshots`.
+- **Local vs prod vs testprod target:** the same specs run against any of three targets from one
+  config, switched by the `E2E_TARGET` env var — no separate config file per target.
+  | Command | E2E_TARGET | baseURL | local dev server started? |
+  |---|---|---|---|
+  | `npm run test:e2e` | (unset) | `http://localhost:8080` | yes, auto-booted |
+  | `npm run test:e2e:prod` | `prod` | `https://class.healthyday.co.in` | no |
+  | `npm run test:e2e:testprod` | `testprod` | `https://test-portal-healthyday.netlify.app` | no |
+
+  Reports/artifacts land in separate folders per target so one run never overwrites another's:
+  `e2e-results.local/local/`, `e2e-results.local/prod/`, `e2e-results.local/testprod/` — open with
+  `test:e2e:report`, `test:e2e:prod:report`, `test:e2e:testprod:report` respectively. Both remote
+  targets get 1 retry by default (real network blips there shouldn't read as a failure the way they
+  would against local dev).
+- **Prod and testprod are real, live, shared deployments — be deliberate about what a spec actually
+  does there.** Everything written so far only navigates and asserts visibility (read-only GETs) —
+  safe to run against either freely. Before adding a spec that *clicks* something (join-session
+  links, referral share buttons, PDF downloads, anything that calls `trackSessionClick`-style
+  analytics), stop and flag it — that action would really happen against the live account when the
+  prod/testprod command runs, not just in a local sandbox.
 - Tests live in `e2e/*.spec.ts` (not `tests/e2e/`).
 
 Only touch `playwright.config.ts` if a new requirement genuinely needs it (e.g. adding `webkit` for a
