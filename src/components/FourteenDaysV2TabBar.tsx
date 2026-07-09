@@ -20,7 +20,7 @@ const TabButton = ({ icon, label, labelColor, left, width, onClick }: { icon: st
     onClick={onClick}
     style={{
       position: "absolute",
-      top: 6,
+      top: -1,
       left,
       width,
       height: "100%",
@@ -69,7 +69,7 @@ export const FourteenDaysV2TabBar: React.FC<FourteenDaysV2TabBarProps> = ({ acti
       style={{
         position: "relative",
         width: "100%",
-        height: "68px",
+        height: "38px",
         ...(blendWithParentBackground
           ? { background: "rgba(255,255,255,0.01)", boxShadow: "inset 0px -1px 1px 0px rgba(0,0,0,0.2)" }
           : { background: isLive ? "#E2EFFF" : "transparent" }),
