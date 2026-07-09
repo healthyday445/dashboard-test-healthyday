@@ -61,12 +61,14 @@ export function FourteenDaysV2LevelCard({
   joinLink,
   language,
   onViewMore,
+  onCertificateClick,
 }: {
   freeDaysAttended: number;
   studentName?: string;
   joinLink: string;
   language?: string;
   onViewMore?: () => void;
+  onCertificateClick?: () => void;
 }) {
   const { safeDay, isUnlocked, level, classesNeeded } = getLevelState(freeDaysAttended);
   const reward = LEVEL_REWARDS_V2[level - 1];
@@ -119,7 +121,13 @@ export function FourteenDaysV2LevelCard({
           </div>
           <div
             style={{ position: "absolute", left: 20, top: 110, width: 93, height: 28, borderRadius: 5, background: "linear-gradient(to bottom, #237ae2, #1858a5, #0b3f7d)", border: "0.25px solid #ffe1be", boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)", display: "flex", alignItems: "center", justifyContent: "center", gap: 4, cursor: "pointer" }}
-            onClick={() => window.open(getLevelRewardLinkV2(level, language, studentName, joinLink), "_blank")}
+            onClick={() => {
+              if (level === 5 && onCertificateClick) {
+                onCertificateClick();
+              } else {
+                window.open(getLevelRewardLinkV2(level, language, studentName, joinLink), "_blank");
+              }
+            }}
           >
             <img src={circledPlayButton} alt="" style={{ width: 12, height: 12 }} />
             <span style={{ color: "white", fontSize: 12, fontWeight: 700 }}>{level === 5 ? "Get Cert" : "Join now"}</span>

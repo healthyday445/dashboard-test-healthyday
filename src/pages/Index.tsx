@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { LevelCard } from "@/components/LevelCard";
+import { CertificateModal } from "@/components/CertificateModal";
 import { trackVisit } from "@/lib/trackVisit";
 import { trackSessionClick } from "@/lib/trackSessionClick";
 import logo from "@/assets/Primary_logo.svg";
@@ -227,6 +228,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
   const [loading, setLoading] = useState(!initialStudentData);
   const [error, setError] = useState<string | null>(null);
+  const [showCertificateModal, setShowCertificateModal] = useState(false);
   const [studentData, setStudentData] = useState<any>(initialStudentData ?? null);
   const [showComingSoon, setShowComingSoon] = useState(
     initialStudentData
@@ -512,8 +514,8 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
       bs.setHours(0, 0, 0, 0);
       const be = new Date(bs);
       be.setDate(bs.getDate() + 13);
-      const DN = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-      const MN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
+      const DN = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+      const MN = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       const fmt = (d: Date) => `${DN[d.getDay()]}, ${MN[d.getMonth()]} ${d.getDate()}`;
       return { isActive: true as const, currentDay: fd, week: fd <= 7 ? 1 : 2, dateRangeLabel: `${fmt(bs)} — ${fmt(be)}` };
     }
@@ -671,7 +673,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
       const bonusSession = getBonusInfo(currentDay, lang);
       const bonusSessionCode = `free_bonus_${bonusSession.name.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`;
       const _timeParam = new URLSearchParams(location.search).get("time");
-      const totalMin = (() => { if (_timeParam) { const isPM = _timeParam.toLowerCase().endsWith("pm"); const s = _timeParam.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
+      const totalMin = (() => { if (_timeParam) { const isPM = _timeParam.toLowerCase().endsWith("pm"); const s = _timeParam.toLowerCase().replace("am", "").replace("pm", ""); const [hStr, mStr] = s.split("."); let h = parseInt(hStr, 10); const m = parseInt(mStr ?? "0", 10); if (isPM && h !== 12) h += 12; if (!isPM && h === 12) h = 0; return h * 60 + m; } const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000); return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes(); })();
       const showBonus = isOngoingStatus && totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
       if (showBonus) {
         const isLive = totalMin >= bonusSession.startMin && totalMin < bonusSession.startMin + (bonusSession.liveDuration ?? 30);
@@ -782,6 +784,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
                   joinLink={sessionJoinLink || ""}
                   language={studentData?.language}
                   onViewMore={onSwitchToJourney}
+                  onCertificateClick={() => setShowCertificateModal(true)}
                 />
               </div>
             )}
@@ -864,7 +867,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
       const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
       const _forceTime = new URLSearchParams(location.search).get("time");
       const _forceDay = new URLSearchParams(location.search).get("forceDay");
-      const totalMin = (() => { if (_forceTime) { const isPM = _forceTime.toLowerCase().endsWith("pm"); const s = _forceTime.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
+      const totalMin = (() => { if (_forceTime) { const isPM = _forceTime.toLowerCase().endsWith("pm"); const s = _forceTime.toLowerCase().replace("am", "").replace("pm", ""); const [hStr, mStr] = s.split("."); let h = parseInt(hStr, 10); const m = parseInt(mStr ?? "0", 10); if (isPM && h !== 12) h += 12; if (!isPM && h === 12) h = 0; return h * 60 + m; } return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes(); })();
       const currentDow = _forceDay !== null ? parseInt(_forceDay, 10) : nowIST.getUTCDay();
 
       const activeSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "active" || s.subscription_status === "ongoing") || studentData?.subscriptions?.[0];
@@ -882,7 +885,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
       const eligibleBonusSessions: any[] = [];
       const getApiBonusLink = (code: string, fallback: string) => { const match = sessionLinks.find((s: any) => s.session_code === code && s.language === langKey); return match?.link || fallback; };
       const getDynamicThumbnail = (link: string, fallbackId: string) => { if (!link) return ytThumb(fallbackId); const match = link.match(/(?:v=|youtu\.be\/|\/live\/|\/shorts\/|\/embed\/)([a-zA-Z0-9_-]{11})/); return ytThumb(match ? match[1] : fallbackId); };
-      
+
       if (is12Month && currentDow === 0) {
         if (paidLang === "Telugu" && isTeluguFaceYogaWeek) {
           const link = getApiBonusLink("face_yoga", "https://join.healthyday.co.in/healthyface");
@@ -911,7 +914,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
         </header>
 
         {activeRecurringBonusCard && (() => {
-          const rTotalMin = (() => { const _t = new URLSearchParams(location.search).get("time"); if (_t) { const isPM = _t.toLowerCase().endsWith("pm"); const s = _t.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
+          const rTotalMin = (() => { const _t = new URLSearchParams(location.search).get("time"); if (_t) { const isPM = _t.toLowerCase().endsWith("pm"); const s = _t.toLowerCase().replace("am", "").replace("pm", ""); const [hStr, mStr] = s.split("."); let h = parseInt(hStr, 10); const m = parseInt(mStr ?? "0", 10); if (isPM && h !== 12) h += 12; if (!isPM && h === 12) h = 0; return h * 60 + m; } const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000); return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes(); })();
           const bonusIsLive = rTotalMin >= activeRecurringBonusCard.startMin && rTotalMin < activeRecurringBonusCard.startMin + 30;
           const bonusTimeLabel = activeRecurringBonusCard.fullName.replace(/^.*at\s+/, '');
           return (
@@ -950,7 +953,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
         {/* Your Yoga Session — live/not-live */}
         {(() => {
           const _timeParam2 = new URLSearchParams(location.search).get("time");
-          const totalMin = (() => { if (_timeParam2) { const isPM = _timeParam2.toLowerCase().endsWith("pm"); const s = _timeParam2.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
+          const totalMin = (() => { if (_timeParam2) { const isPM = _timeParam2.toLowerCase().endsWith("pm"); const s = _timeParam2.toLowerCase().replace("am", "").replace("pm", ""); const [hStr, mStr] = s.split("."); let h = parseInt(hStr, 10); const m = parseInt(mStr ?? "0", 10); if (isPM && h !== 12) h += 12; if (!isPM && h === 12) h = 0; return h * 60 + m; } const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000); return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes(); })();
 
           // Bonus session detection for regular session card
           const BONUS_DAYS = [3, 5, 7, 10, 14];
@@ -1173,6 +1176,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
               joinLink={sessionJoinLink || ""}
               language={studentData?.language}
               onViewMore={onSwitchToJourney}
+              onCertificateClick={() => setShowCertificateModal(true)}
             />
           </div>
         )}
@@ -2134,7 +2138,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
         }
 
         const liveStart = 630; // 10:30 AM IST
-        const liveEnd   = 720; // 12:00 PM IST
+        const liveEnd = 720; // 12:00 PM IST
 
         // Before 10:30 AM or after 12:00 PM: hide entirely
         if (_totalMin < liveStart || _totalMin >= liveEnd) return null;
@@ -2238,6 +2242,14 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
       </div>
 
       <div style={{ height: "48px" }} />
+
+      <CertificateModal
+        isOpen={showCertificateModal}
+        onClose={() => setShowCertificateModal(false)}
+        mobile={mobile || ""}
+        initialName={studentData?.name}
+        daysAttended={freeDaysAttended}
+      />
     </div>
   );
 };

@@ -21,10 +21,11 @@ interface YogaJourneyCompletedPageProps {
   studentName?: string;
   language?: string;
   joinLink: string;
+  onCertificateClick?: () => void;
 }
 
 /** "Jagan's Yoga Journey" tab — shown once a student has completed all 21 days; lists every reward, all unlocked. */
-export const YogaJourneyCompletedPage: React.FC<YogaJourneyCompletedPageProps> = ({ studentName, language, joinLink }) => {
+export const YogaJourneyCompletedPage: React.FC<YogaJourneyCompletedPageProps> = ({ studentName, language, joinLink, onCertificateClick }) => {
   const firstName = studentName?.split(" ")[0];
 
   return (
@@ -77,26 +78,49 @@ export const YogaJourneyCompletedPage: React.FC<YogaJourneyCompletedPageProps> =
                 <div style={{ display: "flex", alignItems: "center", gap: "12px", padding: "12px 14px" }}>
                   <img src={REWARD_THUMBS[idx]} alt="" style={{ width: "64px", height: "35px", borderRadius: "5px", objectFit: "cover", border: "1px solid #FF8A00", flexShrink: 0 }} />
                   <p style={{ flex: 1, margin: 0, color: "#004394", fontFamily: "Outfit", fontSize: "13px", fontWeight: 700 }}>{reward.full}</p>
-                  <a
-                    href={link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      flexShrink: 0,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "4px",
-                      height: "22px",
-                      padding: "0 10px",
-                      borderRadius: "5px",
-                      background: "#FE961B",
-                      boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)",
-                      textDecoration: "none",
-                    }}
-                  >
-                    <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: isLast ? "10px" : "11px", fontWeight: 700 }}>{isLast ? "Download" : "Join now"}</span>
-                    <img src={isLast ? downloadIcon : circledPlayButton} alt="" style={{ width: isLast ? "12px" : "11px", height: isLast ? "12px" : "11px" }} />
-                  </a>
+                  {isLast && onCertificateClick ? (
+                    <button
+                      type="button"
+                      onClick={onCertificateClick}
+                      style={{
+                        flexShrink: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px",
+                        height: "22px",
+                        padding: "0 10px",
+                        borderRadius: "5px",
+                        background: "#FE961B",
+                        border: "none",
+                        cursor: "pointer",
+                        boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)",
+                      }}
+                    >
+                      <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 700 }}>Download</span>
+                      <img src={downloadIcon} alt="" style={{ width: "12px", height: "12px" }} />
+                    </button>
+                  ) : (
+                    <a
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        flexShrink: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px",
+                        height: "22px",
+                        padding: "0 10px",
+                        borderRadius: "5px",
+                        background: "#FE961B",
+                        boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)",
+                        textDecoration: "none",
+                      }}
+                    >
+                      <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: isLast ? "10px" : "11px", fontWeight: 700 }}>{isLast ? "Download" : "Join now"}</span>
+                      <img src={isLast ? downloadIcon : circledPlayButton} alt="" style={{ width: isLast ? "12px" : "11px", height: isLast ? "12px" : "11px" }} />
+                    </a>
+                  )}
                 </div>
                 {!isLast && <div style={{ height: "1px", background: "#F1DDBF", margin: "0 14px" }} />}
               </div>

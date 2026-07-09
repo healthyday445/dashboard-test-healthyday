@@ -11,6 +11,7 @@ import { FourteenDaysV2JourneyCompletedPage } from "@/components/FourteenDaysV2J
 import { FourteenDaysV2TabBar, type FourteenDaysV2Tab } from "@/components/FourteenDaysV2TabBar";
 import completedJourneyHeroBg from "@/assets/21daysprogram/completed_journey_hero_bg.webp";
 import IndexPaid from "@/pages/IndexPaid";
+import { CertificateModal } from "@/components/CertificateModal";
 
 import thumbFaceYogaTel from "@/assets/bonus/faceyoga_tel.jpg";
 import thumbFaceYogaEng from "@/assets/bonus/faceyoga_eng.jpg";
@@ -222,6 +223,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
   const { mobile: pathMobile } = useParams<{ mobile: string }>();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
+  const [showCertificateModal, setShowCertificateModal] = useState(false);
 
   const queryMobile = searchParams.get("mobile");
   const mobile = pathMobile || queryMobile || undefined;
@@ -547,6 +549,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
             joinLink={sessionJoinLink || ""}
             language={studentData?.language}
             onViewMore={onSwitchToJourney}
+            onCertificateClick={() => setShowCertificateModal(true)}
           />
         </div>
 
@@ -555,6 +558,13 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
         <div style={{ padding: "18px 20px 32px" }}>
           <ReferWinCard showTitle={true} shareLink={mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : (studentData?.referral_link ?? "")} referralsUrl={`/${mobile || ""}/referrals`} />
         </div>
+        <CertificateModal
+          isOpen={showCertificateModal}
+          onClose={() => setShowCertificateModal(false)}
+          initialName={studentData?.name}
+          mobile={mobile || studentData?.mobile}
+          daysAttended={14}
+        />
       </div>
     );
   }
