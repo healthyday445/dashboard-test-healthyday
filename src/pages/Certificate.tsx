@@ -64,12 +64,9 @@ export default function Certificate() {
   const [yPercent, setYPercent] = useState<number>(42); // Vertical positioning (~48% moves name slightly higher as requested)
   const [textColor, setTextColor] = useState<string>("#0F5132"); // Dark green default as requested
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
-  const [isRateLimited, setIsRateLimited] = useState<boolean>(() => {
-    return getCertificateCookie(mobile).generated;
-  });
-  const [hasGenerated, setHasGenerated] = useState<boolean>(() => {
-    return getCertificateCookie(mobile).generated;
-  });
+  const [isRateLimited, setIsRateLimited] = useState<boolean>(false);
+  const [hasGenerated, setHasGenerated] = useState<boolean>(false);
+  const [certificateUrl, setCertificateUrl] = useState<string | null>(null);
   const [shareFeedback, setShareFeedback] = useState<string>("");
   const [templateImg, setTemplateImg] = useState<HTMLImageElement | null>(null);
 
@@ -150,7 +147,7 @@ export default function Certificate() {
       .finally(() => setLoadingStudent(false));
   }, [mobile]);
 
-  // Check server-side generation status to sync across devices / cleared cookies
+  // Check server-side generation status to sync from Firestore & Firebase Storage
   useEffect(() => {
     if (!mobile) return;
     checkServerCertificateStatus(mobile).then((status) => {
@@ -159,6 +156,9 @@ export default function Certificate() {
         setHasGenerated(true);
         if (status.name) {
           setName(status.name);
+        }
+        if (status.certificateUrl) {
+          setCertificateUrl(status.certificateUrl);
         }
       }
     });
@@ -248,7 +248,7 @@ export default function Certificate() {
     }
   };
 
-  const handleGenerate = () => {
+  const handleGenerate = async () => {
     if (isRateLimited) {
       alert("You have already generated your certificate (Rate limit: 1). You can download or share your existing certificate as many times as you like below.");
       setHasGenerated(true);
@@ -261,25 +261,39 @@ export default function Certificate() {
     const finalName = name.trim();
     safeLocalStorage.setItem("user_name", finalName);
     setIsGenerating(true);
+
+    // Pre-render canvas so we can export high-res image base64 for Firebase Storage & Firestore
+    if (templateImg) {
+      renderCertificate(templateImg);
+    }
+
+    let imageBase64: string | undefined;
+    if (canvasRef.current) {
+      imageBase64 = canvasRef.current.toDataURL("image/jpeg", 0.88);
+    }
+
+    // Log certificate generation to Firestore collection 'certificate logs' & upload image to Cloud Storage
+    const res = await trackCertificateActivity({
+      mobile,
+      name: finalName,
+      activity: "generated",
+      daysAttended,
+      imageBase64,
+    });
+
+    if (res && res.updated && res.updated.certificateUrl) {
+      setCertificateUrl(res.updated.certificateUrl);
+    }
+
+    setIsGenerating(false);
+    setCertificateCookie(mobile, finalName);
+    setIsRateLimited(true);
+    setHasGenerated(true);
+
     setTimeout(() => {
-      setIsGenerating(false);
-      setCertificateCookie(mobile, finalName);
-      setIsRateLimited(true);
-      setHasGenerated(true); // This hides the name entry window and reveals the certificate + download/share buttons!
-
-      // Log certificate generation to Firestore collection 'certificate logs'
-      trackCertificateActivity({
-        mobile,
-        name: finalName,
-        activity: "generated",
-        daysAttended,
-      });
-
-      setTimeout(() => {
-        renderCertificate();
-        window.scrollTo({ top: 0, behavior: "smooth" });
-      }, 50);
-    }, 350);
+      if (templateImg) renderCertificate(templateImg);
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }, 50);
   };
 
 

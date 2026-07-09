@@ -9,14 +9,20 @@
 
 import admin from 'firebase-admin';
 import { getFirestore } from 'firebase-admin/firestore';
+import { getStorage } from 'firebase-admin/storage';
 
 const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
   ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
   : null;
 
+const storageBucket =
+  process.env.FIREBASE_STORAGE_BUCKET ||
+  (serviceAccount ? `${serviceAccount.project_id}.appspot.com` : undefined);
+
 if (!admin.apps.length && serviceAccount) {
   admin.initializeApp({
-    credential: admin.credential.cert(serviceAccount)
+    credential: admin.credential.cert(serviceAccount),
+    storageBucket,
   });
 }
 
@@ -67,6 +73,7 @@ export async function handler(event) {
           exists: true,
           hasGenerated: !!data.hasGenerated,
           name: data.name || data.userName || "",
+          certificateUrl: data.certificateUrl || null,
           generatedCount: data.generatedCount || 0,
           downloadedCount: data.downloadedCount || 0,
           sharedCount: data.sharedCount || 0,
@@ -107,6 +114,35 @@ export async function handler(event) {
       const prevHistory = Array.isArray(existing.activityHistory) ? existing.activityHistory : [];
       const activityHistory = [historyItem, ...prevHistory].slice(0, 25);
 
+      let certificateUrl = existing.certificateUrl || null;
+
+      if (body.imageBase64 && admin.apps.length) {
+        try {
+          const bucket = getStorage().bucket(storageBucket);
+          const fileName = `certificates/${cleanMobile}.jpg`;
+          const file = bucket.file(fileName);
+          const base64Data = body.imageBase64.replace(/^data:image\/\w+;base64,/, "");
+          const buffer = Buffer.from(base64Data, "base64");
+
+          await file.save(buffer, {
+            metadata: {
+              contentType: "image/jpeg",
+              cacheControl: "public, max-age=31536000",
+            },
+          });
+
+          try {
+            await file.makePublic();
+          } catch (pubErr) {
+            // Uniform bucket-level access might be enabled
+          }
+
+          certificateUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+        } catch (storageErr) {
+          console.error("Firebase Storage upload error:", storageErr);
+        }
+      }
+
       const updatePayload = {
         mobile: cleanMobile,
         number: cleanMobile,
@@ -120,6 +156,7 @@ export async function handler(event) {
         hasGenerated: isGenerated,
         hasDownloaded: isDownloaded,
         hasShared: isShared,
+        certificateUrl: certificateUrl || existing.certificateUrl || null,
 
         generatedCount,
         downloadedCount,

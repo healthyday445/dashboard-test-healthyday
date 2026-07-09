@@ -3,6 +3,7 @@ import { safeLocalStorage } from "./storage";
 export interface CertificateStatus {
   generated: boolean;
   name: string;
+  certificateUrl?: string | null;
 }
 
 const getCookieKey = (mobile: string) => {
@@ -86,38 +87,47 @@ export async function checkServerCertificateStatus(mobile: string): Promise<Cert
       return {
         generated: !!data.hasGenerated,
         name: data.name || "",
+        certificateUrl: data.certificateUrl || null,
       };
     }
   } catch {
-    // Silently fallback to client-side cookie/storage
+    // Silently fallback if network error occurs
   }
   return null;
 }
 
 /**
- * Logs user certificate activity (generated, downloaded, shared) to Firestore.
+ * Logs user certificate activity (generated, downloaded, shared) and uploads generated image to Firestore & Cloud Storage.
  */
-export function trackCertificateActivity(params: {
+export async function trackCertificateActivity(params: {
   mobile: string;
   name: string;
   activity: "generated" | "downloaded" | "shared";
   shareType?: "general" | "whatsapp" | "status";
   daysAttended?: number | null;
-}): void {
+  imageBase64?: string;
+}): Promise<any> {
   const payload = {
     mobile: params.mobile,
     name: params.name,
     activity: params.activity,
     shareType: params.shareType || null,
     daysAttended: params.daysAttended ?? null,
+    imageBase64: params.imageBase64 || null,
     clientTime: new Date().toISOString(),
   };
 
-  fetch("/.netlify/functions/certificate-logs", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(payload),
-  }).catch(() => {
+  try {
+    const res = await fetch("/.netlify/functions/certificate-logs", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(payload),
+    });
+    if (res.ok) {
+      return await res.json();
+    }
+  } catch {
     // Silently swallow error so analytics never interrupt user flow
-  });
+  }
+  return null;
 }
