@@ -262,14 +262,30 @@ export default function Certificate() {
     safeLocalStorage.setItem("user_name", finalName);
     setIsGenerating(true);
 
-    // Pre-render canvas so we can export high-res image base64 for Firebase Storage & Firestore
-    if (templateImg) {
-      renderCertificate(templateImg);
-    }
-
+    // Use offscreen canvas so high-res image base64 is guaranteed even before canvasRef is mounted
     let imageBase64: string | undefined;
-    if (canvasRef.current) {
-      imageBase64 = canvasRef.current.toDataURL("image/jpeg", 0.88);
+    if (templateImg && templateImg.complete && templateImg.naturalWidth > 0) {
+      const offscreen = document.createElement("canvas");
+      const width = templateImg.naturalWidth || 1414;
+      const height = templateImg.naturalHeight || 2000;
+      offscreen.width = width;
+      offscreen.height = height;
+      const ctx = offscreen.getContext("2d");
+      if (ctx) {
+        ctx.drawImage(templateImg, 0, 0, width, height);
+        const displayName = (finalName || "Your Name Here").trim();
+        const scaledFontSize = Math.round(fontSize * (width / 500));
+        ctx.font = `normal ${scaledFontSize}px "Times New Roman", serif`;
+        ctx.fillStyle = textColor;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 2;
+        ctx.fillText(displayName, width / 2, Math.round(height * (yPercent / 100)));
+        imageBase64 = offscreen.toDataURL("image/jpeg", 0.88);
+      }
     }
 
     // Log certificate generation to Firestore collection 'certificate logs' & upload image to Cloud Storage

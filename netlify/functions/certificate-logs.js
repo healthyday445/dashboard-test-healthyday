@@ -118,7 +118,12 @@ export async function handler(event) {
 
       if (body.imageBase64 && admin.apps.length) {
         try {
-          const bucket = getStorage().bucket(storageBucket);
+          let bucket;
+          try {
+            bucket = storageBucket ? getStorage().bucket(storageBucket) : getStorage().bucket();
+          } catch (bErr) {
+            bucket = getStorage().bucket();
+          }
           const fileName = `certificates/${cleanMobile}.jpg`;
           const file = bucket.file(fileName);
           const base64Data = body.imageBase64.replace(/^data:image\/\w+;base64,/, "");
@@ -138,6 +143,7 @@ export async function handler(event) {
           }
 
           certificateUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
+          console.log("Uploaded certificate image successfully:", certificateUrl);
         } catch (storageErr) {
           console.error("Firebase Storage upload error:", storageErr);
         }
