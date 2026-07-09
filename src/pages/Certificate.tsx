@@ -1,6 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { safeLocalStorage } from "@/lib/storage";
+import {
+  getCertificateCookie,
+  setCertificateCookie,
+  checkServerCertificateStatus,
+  trackCertificateActivity,
+} from "@/lib/trackCertificateActivity";
 import logo from "@/assets/Primary_logo.svg";
 
 const CERTIFICATE_IMG_URL = "/FINAL.jpg";
@@ -58,8 +64,14 @@ export default function Certificate() {
   const [yPercent, setYPercent] = useState<number>(42); // Vertical positioning (~48% moves name slightly higher as requested)
   const [textColor, setTextColor] = useState<string>("#0F5132"); // Dark green default as requested
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
-  const [hasGenerated, setHasGenerated] = useState<boolean>(false);
+  const [isRateLimited, setIsRateLimited] = useState<boolean>(() => {
+    return getCertificateCookie(mobile).generated;
+  });
+  const [hasGenerated, setHasGenerated] = useState<boolean>(() => {
+    return getCertificateCookie(mobile).generated;
+  });
   const [shareFeedback, setShareFeedback] = useState<string>("");
+  const [templateImg, setTemplateImg] = useState<HTMLImageElement | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -138,86 +150,131 @@ export default function Certificate() {
       .finally(() => setLoadingStudent(false));
   }, [mobile]);
 
-  // Load the template image once
+  // Check server-side generation status to sync across devices / cleared cookies
+  useEffect(() => {
+    if (!mobile) return;
+    checkServerCertificateStatus(mobile).then((status) => {
+      if (status && status.generated) {
+        setIsRateLimited(true);
+        setHasGenerated(true);
+        if (status.name) {
+          setName(status.name);
+        }
+      }
+    });
+  }, [mobile]);
+
+  // Load the template image once and store in React state
   useEffect(() => {
     const img = new Image();
-    img.crossOrigin = "anonymous";
     img.src = CERTIFICATE_IMG_URL;
-    img.onload = () => {
+    const onImgReady = () => {
       imgRef.current = img;
-      renderCertificate();
+      setTemplateImg(img);
     };
+    img.onload = onImgReady;
+    if (img.complete && img.naturalWidth > 0) {
+      onImgReady();
+    }
     img.onerror = () => {
       console.error("Failed to load certificate template FINAL.jpg");
     };
   }, []);
 
-  // Redraw certificate whenever parameters change or view transitions
+  // Synchronously draw canvas whenever templateImg loads, hasGenerated changes, or parameters change
   useEffect(() => {
-    if (imgRef.current) {
-      renderCertificate();
-    }
-  }, [name, fontSize, yPercent, textColor, hasGenerated]);
+    if (!hasGenerated || !templateImg) return;
+    renderCertificate(templateImg);
+    const id1 = setTimeout(() => renderCertificate(templateImg), 60);
+    const id2 = setTimeout(() => renderCertificate(templateImg), 250);
+    return () => {
+      clearTimeout(id1);
+      clearTimeout(id2);
+    };
+  }, [hasGenerated, templateImg, name, fontSize, yPercent, textColor]);
 
-  const renderCertificate = async () => {
+  const renderCertificate = (img: HTMLImageElement) => {
     const canvas = canvasRef.current;
-    const img = imgRef.current;
-    if (!canvas || !img) return;
+    if (!canvas || !img || !img.complete || img.naturalWidth === 0) return;
 
     const ctx = canvas.getContext("2d");
     if (!ctx) return;
 
-    // Set native high-res dimensions (1414x2000)
-    canvas.width = img.width || 1414;
-    canvas.height = img.height || 2000;
+    // Set native high-res dimensions
+    const width = img.naturalWidth || img.width || 1414;
+    const height = img.naturalHeight || img.height || 2000;
+    canvas.width = width;
+    canvas.height = height;
 
-    // Draw base template
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    // 1. Immediately draw background template synchronously so canvas is NEVER blank white
+    ctx.clearRect(0, 0, width, height);
+    ctx.drawImage(img, 0, 0, width, height);
 
     const displayName = (name || "Your Name Here").trim();
-
-    // Ensure Times New Roman font is loaded before drawing
-    const scaledFontSize = Math.round(fontSize * (canvas.width / 500));
+    const scaledFontSize = Math.round(fontSize * (width / 500));
     const fontSpec = `normal ${scaledFontSize}px "Times New Roman", serif`;
 
-    try {
-      if (document.fonts && document.fonts.load) {
-        await document.fonts.load(fontSpec, displayName);
-      }
-    } catch (e) {
-      console.warn("Font loading wait failed, drawing with fallback", e);
+    const drawTextOverlay = () => {
+      ctx.save();
+      ctx.font = fontSpec;
+      ctx.fillStyle = textColor;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "middle";
+
+      ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
+      ctx.shadowBlur = 4;
+      ctx.shadowOffsetX = 1;
+      ctx.shadowOffsetY = 2;
+
+      const x = width / 2;
+      const y = Math.round(height * (yPercent / 100));
+
+      ctx.fillText(displayName, x, y);
+      ctx.restore();
+    };
+
+    // 2. Overlay student name after ensuring font is loaded
+    if (document.fonts && document.fonts.load) {
+      document.fonts.load(fontSpec, displayName).then(() => {
+        // Redraw base + text when font resolves
+        ctx.clearRect(0, 0, width, height);
+        ctx.drawImage(img, 0, 0, width, height);
+        drawTextOverlay();
+      }).catch(() => {
+        drawTextOverlay();
+      });
+    } else {
+      drawTextOverlay();
     }
-
-    ctx.save();
-    ctx.font = fontSpec;
-    ctx.fillStyle = textColor;
-    ctx.textAlign = "center";
-    ctx.textBaseline = "middle";
-
-    // Add subtle shadow for depth and readability
-    ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
-    ctx.shadowBlur = 4;
-    ctx.shadowOffsetX = 1;
-    ctx.shadowOffsetY = 2;
-
-    const x = canvas.width / 2;
-    const y = Math.round(canvas.height * (yPercent / 100));
-
-    ctx.fillText(displayName, x, y);
-    ctx.restore();
   };
 
   const handleGenerate = () => {
+    if (isRateLimited) {
+      alert("You have already generated your certificate (Rate limit: 1). You can download or share your existing certificate as many times as you like below.");
+      setHasGenerated(true);
+      return;
+    }
     if (!name.trim()) {
       alert("Please enter your name for the certificate.");
       return;
     }
-    safeLocalStorage.setItem("user_name", name.trim());
+    const finalName = name.trim();
+    safeLocalStorage.setItem("user_name", finalName);
     setIsGenerating(true);
     setTimeout(() => {
       setIsGenerating(false);
+      setCertificateCookie(mobile, finalName);
+      setIsRateLimited(true);
       setHasGenerated(true); // This hides the name entry window and reveals the certificate + download/share buttons!
+
+      // Log certificate generation to Firestore collection 'certificate logs'
+      trackCertificateActivity({
+        mobile,
+        name: finalName,
+        activity: "generated",
+        daysAttended,
+      });
+
       setTimeout(() => {
         renderCertificate();
         window.scrollTo({ top: 0, behavior: "smooth" });
@@ -252,6 +309,15 @@ export default function Certificate() {
     a.click();
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
+
+    // Log download activity to Firestore collection 'certificate logs'
+    trackCertificateActivity({
+      mobile,
+      name: name.trim(),
+      activity: "downloaded",
+      daysAttended,
+    });
+
     showFeedback("Certificate downloaded successfully! 🎉");
   };
 
@@ -266,6 +332,15 @@ export default function Certificate() {
 
     const shareText =
       "🌿 I just completed the 21-Days Yoga Challenge with Healthyday and earned my official certificate! 🧘‍♀️✨\n\nConsistency and dedication truly transform life. If I can build this healthy habit, you can do it too! 💚\n\n👇 Register for the next FREE Yoga Challenge here:\nhttps://yoga.healthyday.co.in";
+
+    // Log share activity to Firestore collection 'certificate logs'
+    trackCertificateActivity({
+      mobile,
+      name: name.trim(),
+      activity: "shared",
+      shareType,
+      daysAttended,
+    });
 
     // Check if browser supports sharing files via Web Share API
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
@@ -503,20 +578,29 @@ export default function Certificate() {
           >
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#F5EADC]">
               <div>
-                <h2 className="text-xl md:text-2xl font-bold text-[#202020]">
-                  Your Official Certificate Preview
-                </h2>
-                <p className="text-xs text-[#798089] mt-0.5">
-                  High-definition completion certificate ready for download and sharing.
+                <div className="flex items-center gap-2 mb-1">
+                  <h2 className="text-xl md:text-2xl font-bold text-[#202020]">
+                    Your Official Certificate Preview
+                  </h2>
+                  {isRateLimited && (
+                    <span className="inline-flex items-center gap-1 px-2.5 py-0.5 rounded-full bg-[#E8F8F0] border border-[#A9DFBF] text-[#145A32] text-xs font-bold">
+                      ✓ Issued (Limit 1/1)
+                    </span>
+                  )}
+                </div>
+                <p className="text-xs text-[#798089]">
+                  High-definition completion certificate ready for unlimited download and sharing.
                 </p>
               </div>
-              <button
-                type="button"
-                onClick={() => setHasGenerated(false)}
-                className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0D468B] hover:text-[#FEAB27] bg-[#F4F8FF] hover:bg-[#E8F1FF] px-3.5 py-2 rounded-full border border-[#D5E5FF] transition-all self-start md:self-center cursor-pointer"
-              >
-                ← Edit Name
-              </button>
+              {!isRateLimited && (
+                <button
+                  type="button"
+                  onClick={() => setHasGenerated(false)}
+                  className="inline-flex items-center gap-1.5 text-xs font-bold text-[#0D468B] hover:text-[#FEAB27] bg-[#F4F8FF] hover:bg-[#E8F1FF] px-3.5 py-2 rounded-full border border-[#D5E5FF] transition-all self-start md:self-center cursor-pointer"
+                >
+                  ← Edit Name
+                </button>
+              )}
             </div>
 
             {/* Feedback Toast */}
