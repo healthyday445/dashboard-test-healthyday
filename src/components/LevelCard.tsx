@@ -4,7 +4,7 @@ import lvl3Inprogress from "@/assets/dashboard-level-card/lvl3_inprogress.webp";
 import lvl4Inprogress from "@/assets/dashboard-level-card/lvl4_inprogress.webp";
 import lvl5Inprogress from "@/assets/dashboard-level-card/lvl5_inprogress.webp";
 import lvl6Inprogress from "@/assets/dashboard-level-card/lvl6_inprogress.webp";
-import lvl7Inprogress from "@/assets/dashboard-level-card/lvl7_inprogress.webp";
+import lvl7Inprogress from "@/assets/dashboard-level-card/d281f4940dd82c9a590624229b414057020e91f5-removebg-preview.png";
 import lvl1Unlocked from "@/assets/dashboard-level-card/lvl1_unlocked.webp";
 import lvl2Unlocked from "@/assets/dashboard-level-card/lvl2_unlocked.webp";
 import lvl3Unlocked from "@/assets/dashboard-level-card/lvl3_unlocked.webp";
@@ -24,7 +24,7 @@ const LEVEL_REWARDS = [
   { line1: "3-Days", line2: "Lunch Diet", full: "3-Days Lunch Diet", subtitleWidth: 135, rewardWidth: 128, completesAll: false },
   { line1: "Post Meal", line2: "Body Movement", full: "Post Meal Body Movement", subtitleWidth: 137, rewardWidth: 137, completesAll: false },
   { line1: "3-Days", line2: "Dinner Diet", full: "3-Days Dinner Diet", subtitleWidth: 137, rewardWidth: 137, completesAll: false },
-  { line1: "21-Days Yoga", line2: "Certificate", full: "21-Days Yoga Certificate", subtitleWidth: 142, rewardWidth: 147, completesAll: true },
+  { line1: "21-Days Yoga", line2: "Challenge Certificate", full: "21-Days Yoga Challenge Certificate", subtitleWidth: 155, rewardWidth: 160, completesAll: true },
 ];
 
 // One entry per attended-day count (0–21), indexed directly by freeDaysAttended
@@ -98,7 +98,7 @@ export function LevelCard({
   return (
     <div
       onClick={() => {
-        if (level === 7 && onCertificateClick) {
+        if (isUnlocked && level === 7 && onCertificateClick) {
           onCertificateClick();
         }
       }}
@@ -111,7 +111,7 @@ export function LevelCard({
         height: 156,
         overflow: "hidden",
         fontFamily: "Outfit, sans-serif",
-        cursor: level === 7 && onCertificateClick ? "pointer" : "default",
+        cursor: isUnlocked && level === 7 && onCertificateClick ? "pointer" : "default",
       }}
     >
       {/* Reward image */}
@@ -223,8 +223,21 @@ export function LevelCard({
               }
             }}
           >
-            <img src={circledPlayButton} alt="" style={{ width: 12, height: 12 }} />
-            <span style={{ color: "white", fontSize: 12, fontWeight: 700 }}>{level === 7 ? "Get Cert" : "Join now"}</span>
+            {level === 7 ? (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "white" }}>
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span style={{ color: "white", fontSize: 12, fontWeight: 700 }}>Download</span>
+              </>
+            ) : (
+              <>
+                <img src={circledPlayButton} alt="" style={{ width: 12, height: 12 }} />
+                <span style={{ color: "white", fontSize: 12, fontWeight: 700 }}>Join now</span>
+              </>
+            )}
           </div>
         </>
       ) : (
@@ -266,7 +279,9 @@ export function LevelCard({
           >
             {safeDay === 0
               ? `Attend 3 classes to complete Level 1 & join`
-              : <>Attend {classesNeeded} more class{classesNeeded !== 1 ? "es" : ""} to{" "}{reward.completesAll ? "complete all levels" : `complete Level ${level}`} &amp; get</>
+              : reward.completesAll
+                ? <>You have completed Level 6<br style={{ marginBottom: 4 }} />Attend tomorrow's session to get the</>
+                : <>Attend {classesNeeded} more class{classesNeeded !== 1 ? "es" : ""} to{" "}{`complete Level ${level}`} &amp; get</>
             }
           </p>
 
@@ -275,7 +290,7 @@ export function LevelCard({
             style={{
               position: "absolute",
               left: 20,
-              top: 91,
+              top: reward.completesAll ? 105 : 91,
               width: `min(${reward.rewardWidth}px, 34vw)`,
               fontSize: "clamp(12px, 3.6vw, 15px)",
               fontWeight: 700,
