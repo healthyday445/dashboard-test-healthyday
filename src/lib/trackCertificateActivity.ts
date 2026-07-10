@@ -16,12 +16,18 @@ const getNameKey = (mobile: string) => {
   return cleaned ? `hd_cert_name_${cleaned}` : "hd_cert_name_anon";
 };
 
+const getUrlKey = (mobile: string) => {
+  const cleaned = (mobile || "").replace(/[^0-9]/g, "");
+  return cleaned ? `hd_cert_url_${cleaned}` : "hd_cert_url_anon";
+};
+
 /**
  * Reads certificate generation status from Browser Cookie + LocalStorage.
  */
 export function getCertificateCookie(mobile: string): CertificateStatus {
   const genKey = getCookieKey(mobile);
   const nameKey = getNameKey(mobile);
+  const urlKey = getUrlKey(mobile);
 
   let generated = false;
   let name = "";
@@ -50,16 +56,18 @@ export function getCertificateCookie(mobile: string): CertificateStatus {
   if (!name) {
     name = safeLocalStorage.getItem(nameKey) || "";
   }
+  const certificateUrl = safeLocalStorage.getItem(urlKey) || null;
 
-  return { generated, name };
+  return { generated, name, certificateUrl };
 }
 
 /**
  * Sets certificate generation status in Browser Cookie (1 year expiration) + LocalStorage.
  */
-export function setCertificateCookie(mobile: string, name: string): void {
+export function setCertificateCookie(mobile: string, name: string, certificateUrl?: string | null): void {
   const genKey = getCookieKey(mobile);
   const nameKey = getNameKey(mobile);
+  const urlKey = getUrlKey(mobile);
   const maxAge = 60 * 60 * 24 * 365; // 1 year
 
   if (typeof document !== "undefined") {
@@ -69,6 +77,9 @@ export function setCertificateCookie(mobile: string, name: string): void {
 
   safeLocalStorage.setItem(genKey, "true");
   safeLocalStorage.setItem(nameKey, name);
+  if (certificateUrl) {
+    safeLocalStorage.setItem(urlKey, certificateUrl);
+  }
 }
 
 /**
