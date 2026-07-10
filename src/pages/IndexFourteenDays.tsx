@@ -628,7 +628,7 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
           <img src={logo} alt="Healthyday" className="h-7" />
         </header>
 
-        {week === 2 && <WeekTwoCountdownBanner daysLeft={Math.max(0, 15 - currentDay)} />}
+        {week === 2 && <WeekTwoCountdownBanner daysLeft={Math.max(0, 14 - currentDay)} />}
 
         {showBonus && bonusInfo ? (
           <FourteenDayBonusSessionCard bonusSession={bonusInfo} isLive={bonusIsLive} mobile={mobile} />
