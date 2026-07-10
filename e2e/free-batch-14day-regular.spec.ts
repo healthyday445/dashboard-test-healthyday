@@ -12,26 +12,31 @@ if (!telugu || !english) {
 }
 
 test.describe(`14-day free batch — regular/default flow (2026-07-13 cohort)`, () => {
-  test("day 1, before any session slot opens, shows the pre-batch hero", async ({ page }) => {
-    await page.goto(`/${telugu.mobile}?forceDay=1&time=2.00am`);
-    await expect(page.getByText("14-DAYS ONLINE FREE YOGA")).toBeVisible();
-  });
+  // Grouped to mirror free-batch-14day-jul6-special.spec.ts's tree shape ("Live sessions" /
+  // "Special bonus sessions" / "Week-2 countdown banner") so the two cohorts sit side by side and
+  // diff easily in the Playwright HTML report's test tree.
+  test.describe("Live sessions (day-by-day)", () => {
+    test("day 1, before any session slot opens, shows the pre-batch hero", async ({ page }) => {
+      await page.goto(`/${telugu.mobile}?forceDay=1&time=2.00am`);
+      await expect(page.getByText("14-DAYS ONLINE FREE YOGA")).toBeVisible();
+    });
 
-  test("day 2, live in the 5:30 AM slot, shows Your Yoga Session as ongoing", async ({ page }) => {
-    await page.goto(`/${english.mobile}?forceDay=2&time=5.00am`);
-    await expect(page.getByRole("heading", { name: "Your Yoga Session" })).toBeVisible();
-    await expect(page.getByText("Ongoing now")).toBeVisible();
-  });
+    test("day 2, live in the 5:30 AM slot, shows Your Yoga Session as ongoing", async ({ page }) => {
+      await page.goto(`/${english.mobile}?forceDay=2&time=5.00am`);
+      await expect(page.getByRole("heading", { name: "Your Yoga Session" })).toBeVisible();
+      await expect(page.getByText("Ongoing now")).toBeVisible();
+    });
 
-  test("day 2, no session live mid-morning, shows the free-batch NoSessionsCard note", async ({ page }) => {
-    await page.goto(`/${telugu.mobile}?forceDay=2&time=10.00am`);
-    await expect(page.getByText("Note: No recordings are available for FREE batch")).toBeVisible();
-  });
+    test("day 2, no session live mid-morning, shows the free-batch NoSessionsCard note", async ({ page }) => {
+      await page.goto(`/${telugu.mobile}?forceDay=2&time=10.00am`);
+      await expect(page.getByText("Note: No recordings are available for FREE batch")).toBeVisible();
+    });
 
-  test("day 5, live in the 4:30 PM slot, shows Your Yoga Session as ongoing", async ({ page }) => {
-    await page.goto(`/${english.mobile}?forceDay=5&time=4.45pm`);
-    await expect(page.getByRole("heading", { name: "Your Yoga Session" })).toBeVisible();
-    await expect(page.getByText("Ongoing now")).toBeVisible();
+    test("day 5, live in the 4:30 PM slot, shows Your Yoga Session as ongoing", async ({ page }) => {
+      await page.goto(`/${english.mobile}?forceDay=5&time=4.45pm`);
+      await expect(page.getByRole("heading", { name: "Your Yoga Session" })).toBeVisible();
+      await expect(page.getByText("Ongoing now")).toBeVisible();
+    });
   });
 
   // Confirmed by reading source (src/pages/IndexFourteenDaysV2.tsx): this batch renders via
@@ -44,7 +49,7 @@ test.describe(`14-day free batch — regular/default flow (2026-07-13 cohort)`, 
   // and calls Day 14 "Sleep Masterclass" — neither matches current code (Day 10's actual live start
   // is 9:00 PM, 8:30 PM is only when the waiting screen opens; Day 14's rendered name is "Sleep
   // Session"). Same discrepancy as the July-6 file — see free-batch-14day-jul6-special.spec.ts.
-  test.describe("Special Live bonus schedule (same shared component as the July 6 batch)", () => {
+  test.describe("Special bonus sessions (same shared component as the July 6 batch)", () => {
     test("Day 3 Face Yoga — live at 8:45 PM (Telugu)", async ({ page }) => {
       await page.goto(`/${telugu.mobile}?forceDay=3&time=8.45pm`);
       await expect(page.getByText("Face Yoga Session")).toBeVisible();
@@ -88,7 +93,7 @@ test.describe(`14-day free batch — regular/default flow (2026-07-13 cohort)`, 
   // Sessions tab itself (below the session/bonus card) — it reads real attendance_tracker data
   // only and has no preview override, so its exact state can't be pinned deterministically with
   // a real account. Flagging as a gap rather than asserting on data that could change.
-  test.describe("Level Bonus schedule (Journey tab via ?preview_levels)", () => {
+  test.describe("Journey — Level bonus schedule (via ?preview_levels)", () => {
     test("in progress toward Level 1 (1 day attended)", async ({ page }) => {
       await page.goto(`/${telugu.mobile}?preview_levels=1`);
       await expect(page.getByText("Attend 2 more classes to unlock Level 2 & 3-Days Detox Programme")).toBeVisible();
@@ -118,6 +123,38 @@ test.describe(`14-day free batch — regular/default flow (2026-07-13 cohort)`, 
     test("Day 14 milestone — all levels complete, Certificate earned", async ({ page }) => {
       await page.goto(`/${telugu.mobile}?preview_levels=14`);
       await expect(page.getByText("You have completed all the Levels & earned the 14-Days Yoga Certificate")).toBeVisible();
+    });
+  });
+
+  // WeekTwoCountdownBanner (src/components/WeekTwoCountdownBanner.tsx), rendered above the tab
+  // bar by Dashboard.tsx's tabbed shell for this cohort (newBatchWeek.week === 2). Formula:
+  // daysLeft = Math.max(0, 14 - currentDay) — day 14 is the last day of the free batch, so it
+  // reads 0 ("Ends Today") rather than counting itself as "1 day left".
+  test.describe("Week-2 countdown banner (Dashboard.tsx tabbed shell)", () => {
+    test("Day 7 (still week 1) — no countdown banner shown", async ({ page }) => {
+      await page.goto(`/${telugu.mobile}?forceDay=7&time=2.00am`);
+      await expect(page.getByText(/Days Left|Day Left|Ends Today/)).not.toBeVisible();
+    });
+
+    test("Day 8 (first day of week 2) — \"Only 6 Days Left!\"", async ({ page }) => {
+      await page.goto(`/${telugu.mobile}?forceDay=8&time=2.00am`);
+      await expect(page.getByText("Only 6 Days Left!")).toBeVisible();
+    });
+
+    test("Day 12 — \"Only 2 Days Left!\" (plural)", async ({ page }) => {
+      await page.goto(`/${english.mobile}?forceDay=12&time=2.00am`);
+      await expect(page.getByText("Only 2 Days Left!")).toBeVisible();
+    });
+
+    test("Day 13 — \"Only 1 Day Left!\" (singular)", async ({ page }) => {
+      await page.goto(`/${telugu.mobile}?forceDay=13&time=2.00am`);
+      await expect(page.getByText("Only 1 Day Left!")).toBeVisible();
+    });
+
+    test("Day 14 (last day) — \"Free Yoga Ends Today!\", not \"Only 1 Day Left!\"", async ({ page }) => {
+      await page.goto(`/${english.mobile}?forceDay=14&time=2.00am`);
+      await expect(page.getByText("Free Yoga Ends Today!")).toBeVisible();
+      await expect(page.getByText(/Day.*Left/)).not.toBeVisible();
     });
   });
 });

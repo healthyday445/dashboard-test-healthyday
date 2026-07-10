@@ -34,6 +34,9 @@ export default defineConfig({
   outputDir: `${RESULTS_DIR}/test-results`,
   reporter: [
     ...(process.env.CI ? [["github"] as const] : []),
+    // Terminal progress while the suite runs — otherwise the only output is silence until the
+    // full run finishes and the html/matrix reporters write their files.
+    ["list"],
     ["html", { outputFolder: `${RESULTS_DIR}/html-report`, open: "never" }],
     // One row per test case, mobile/desktop side by side — see e2e/reporters/matrix-reporter.ts.
     ["./e2e/reporters/matrix-reporter.ts", { outputFile: `${RESULTS_DIR}/matrix-report.html`, title: `Test Matrix — ${target ?? "local"}` }],
