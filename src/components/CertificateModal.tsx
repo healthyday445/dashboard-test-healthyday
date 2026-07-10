@@ -298,11 +298,10 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         style={{
           position: "relative",
           width: "100%",
-          maxWidth: "512px",
+          maxWidth: "385px",
           backgroundColor: "#ffffff",
           borderRadius: "16px",
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-          padding: "24px",
           maxHeight: "90vh",
           overflowY: "auto",
           fontFamily: "Outfit, sans-serif",
@@ -310,22 +309,67 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         }}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Header banner */}
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "91px",
+            borderRadius: "16px 16px 0 0",
+            background: "linear-gradient(180deg, #022651 0%, #013A7D 37.5%, #024AA0 71.63%, #0057BF 100%)",
+            boxShadow: "0 1px 8px 0 rgba(0, 0, 0, 0.30)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
+          }}
+        >
+          <p
+            style={{
+              width: "267px",
+              margin: 0,
+              color: "#FFF",
+              textAlign: "center",
+              fontFamily: "Playball, cursive",
+              fontSize: "40px",
+              fontWeight: 400,
+              lineHeight: "normal",
+            }}
+          >
+            Congratulations!
+          </p>
+          <p
+            style={{
+              margin: 0,
+              color: "#FD5",
+              textAlign: "center",
+              fontFamily: "Outfit, sans-serif",
+              fontSize: "14px",
+              fontWeight: 500,
+              lineHeight: "normal",
+            }}
+          >
+            You have completed the 21-Days Yoga Program
+          </p>
+        </div>
+
         {/* Close Button */}
         <button
           onClick={onClose}
           style={{
             position: "absolute",
-            top: "16px",
-            right: "16px",
-            width: "36px",
-            height: "36px",
+            top: "12px",
+            right: "12px",
+            width: "32px",
+            height: "32px",
             borderRadius: "50%",
-            backgroundColor: "#f3f4f6",
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
             border: "none",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "#4b5563",
+            color: "#ffffff",
             fontWeight: 700,
             cursor: "pointer",
             fontSize: "16px",
@@ -335,57 +379,101 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           ✕
         </button>
 
+        <div style={{ padding: "24px 21px" }}>
         {!hasGenerated ? (
           /* Step 1: Name Entry Form */
           <div>
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-[#0F5132] mb-2">
-                Enter Your Name for the Certificate
-              </h2>
-              <p className="text-sm text-gray-600">
-                Please enter your full name as you want it to appear on your official completion certificate.
-              </p>
-            </div>
+            <p
+              style={{
+                margin: "0 0 20px",
+                color: "#000",
+                textAlign: "center",
+                fontFamily: "Outfit, sans-serif",
+                fontSize: "18px",
+                fontWeight: 700,
+                lineHeight: "normal",
+              }}
+            >
+              Enter your name for the certificate
+            </p>
 
-            <form onSubmit={handleGenerate} className="space-y-5">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Koyyana Sujatha"
-                  required
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0F5132] text-gray-900 font-medium text-base"
-                />
-              </div>
+            <form onSubmit={handleGenerate}>
+              <label
+                style={{
+                  display: "block",
+                  margin: "0 0 8px",
+                  color: "#757373",
+                  fontFamily: "Outfit, sans-serif",
+                  fontSize: "10px",
+                  fontWeight: 700,
+                  lineHeight: "normal",
+                  textTransform: "uppercase",
+                }}
+              >
+                Full Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. Koyyana Sujatha"
+                required
+                style={{
+                  width: "100%",
+                  maxWidth: "343px",
+                  height: "44px",
+                  boxSizing: "border-box",
+                  borderRadius: "9px",
+                  border: "1px solid #D9E8FF",
+                  background: "#FAFBFF",
+                  boxShadow: "-1px -1px 4px 0 rgba(0, 0, 0, 0.15) inset, 1px 1px 4px 0 rgba(0, 0, 0, 0.15) inset",
+                  padding: "0 14px",
+                  color: "#202020",
+                  fontFamily: "Outfit, sans-serif",
+                  fontSize: "16px",
+                  fontWeight: 500,
+                  outline: "none",
+                  display: "block",
+                  margin: "0 0 20px",
+                }}
+              />
 
               <button
                 type="submit"
                 disabled={isGenerating || !name.trim()}
-                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#0F5132] to-[#198754] text-white font-bold text-base shadow-lg hover:shadow-xl hover:opacity-95 transition-all disabled:opacity-50"
+                style={{
+                  width: "100%",
+                  maxWidth: "343px",
+                  height: "40px",
+                  borderRadius: "30px",
+                  border: "none",
+                  background: "#FEAB27",
+                  cursor: "pointer",
+                  display: "block",
+                  opacity: isGenerating || !name.trim() ? 0.5 : 1,
+                }}
               >
-                {isGenerating ? "Generating..." : "GENERATE MY CERTIFICATE"}
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: "270.242px",
+                    color: "#202020",
+                    textAlign: "center",
+                    fontFamily: "Outfit, sans-serif",
+                    fontSize: "16px",
+                    fontWeight: 700,
+                    lineHeight: "normal",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {isGenerating ? "Generating..." : "Generate certificate"}
+                </span>
               </button>
             </form>
           </div>
         ) : (
           /* Step 2: Certificate Preview & Actions */
           <div>
-            <div className="flex items-center justify-between mb-4">
-              <button
-                onClick={() => setHasGenerated(false)}
-                className="text-sm font-semibold text-gray-600 hover:text-gray-900 flex items-center gap-1"
-              >
-                ← Edit Name
-              </button>
-              <span className="text-sm font-bold text-[#0F5132]">
-                Your Official Completion Certificate
-              </span>
-            </div>
-
             {/* Certificate Canvas Preview */}
             <div className="w-full bg-gray-50 border border-gray-200 rounded-xl overflow-hidden shadow-inner mb-5 flex items-center justify-center">
               <canvas
@@ -430,6 +518,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
             </div>
           </div>
         )}
+        </div>
       </div>
     </div>
   );
