@@ -276,6 +276,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
       : false
   );
   const [sessionLinks, setSessionLinks] = useState<any[]>([]);
+  const [verifiedReferralCount, setVerifiedReferralCount] = useState<number | null>(null);
   // Completed-batch page tab — defaults to "live", or override via ?tab=journey for direct preview
   const [completedTab, setCompletedTab] = useState<FourteenDaysV2Tab>(
     searchParams.get("tab") === "journey" ? "journey" : "live"
@@ -347,6 +348,20 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
     };
 
     fetchStudentData();
+  }, [mobile]);
+
+  // Verified referral count (from /referrals, distinct from studentData.total_referral_count)
+  // — fetched independently of the effect above, since that one no-ops when a parent
+  // (Dashboard.tsx) already supplied initialStudentData.
+  useEffect(() => {
+    if (!mobile) return;
+    const cleanedMobile = mobile.replace(/[\s()+-]/g, "");
+    if (!/^\d{7,15}$/.test(cleanedMobile)) return;
+    const encodedMobile = encodeURIComponent(`+${cleanedMobile}`);
+    fetch(`/.netlify/functions/referrals?mobile=${encodedMobile}&include_contest=false`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((refData) => setVerifiedReferralCount(refData?.verified_referrals ?? null))
+      .catch(() => {});
   }, [mobile]);
 
   const joinStorageKey = `hd_joined_${mobile}_${studentData?.free_batch_start_date}`;
@@ -578,6 +593,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
         mobile={mobile}
         selectedPlanIdx={selectedPlanIdx}
         setSelectedPlanIdx={setSelectedPlanIdx}
+        verifiedReferralCount={verifiedReferralCount  ?? 0}
       />
     );
   }

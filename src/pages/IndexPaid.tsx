@@ -21,10 +21,11 @@ interface IndexPaidProps {
   mobile?: string;
   selectedPlanIdx: number;
   setSelectedPlanIdx: (idx: number) => void;
+  verifiedReferralCount: number;
 }
 
 /** Paid member dashboard — subscription-gated live sessions, bonus sessions, weekly attendance, plan renewal upsell. */
-const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, mobile, selectedPlanIdx, setSelectedPlanIdx }) => {
+const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, mobile, selectedPlanIdx, setSelectedPlanIdx, verifiedReferralCount }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -134,7 +135,7 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, mobile
           <h3 style={{ margin: 0, fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, color: "#202020" }}>Your Referral Rewards</h3>
           <a href={referralsUrl} style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#FEAB27", textDecoration: "none" }}>View More</a>
         </div>
-        <ReferralRewardsCard verifiedRefs={studentData?.total_referral_count ?? 0} language={studentData?.language} />
+        <ReferralRewardsCard verifiedRefs={verifiedReferralCount} language={studentData?.language} />
       </div>
 
       <div style={{ padding: "18px 22px 0" }}>
