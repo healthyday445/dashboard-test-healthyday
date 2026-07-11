@@ -7,6 +7,7 @@ export type TestAccount = {
   program: "21day" | "14day" | "paid";
   language: "Telugu" | "English";
   batchStartDate: string; // ISO date the batch/cohort started (or starts, if future)
+  variant?: string; // disambiguates accounts that would otherwise collide on program+language+batchStartDate
   note: string;
 };
 
@@ -24,6 +25,14 @@ export const TEST_ACCOUNTS: TestAccount[] = [
     language: "English",
     batchStartDate: "2026-06-21",
     note: "21-day program cohort, ongoing",
+  },
+  {
+    mobile: "917678140328",
+    program: "21day",
+    language: "English",
+    batchStartDate: "2026-06-21",
+    variant: "paid-pending-start",
+    note: "21-day cohort, already PAID in advance (sub_start_date 2026-07-13, the day after free_batch_end_date 2026-07-12) — getEffectiveStatus resolves this to \"14DaysOngoing\" while the free batch is still on, then \"paidPendingStart\" once it's over (7:30 PM IST on the last day)",
   },
   {
     mobile: "911234567891",
@@ -70,9 +79,20 @@ export const TEST_ACCOUNTS: TestAccount[] = [
 ];
 
 // batchStartDate disambiguates when multiple accounts share a program+language (e.g. two 14day
-// Telugu cohorts at different start dates) — omit it to get the first match.
-export function findAccount(program: TestAccount["program"], language: TestAccount["language"], batchStartDate?: string) {
+// Telugu cohorts at different start dates); variant disambiguates further when even that collides
+// (e.g. the 21-day English cohort has both a plain ongoing account and a paid-pending-start one at
+// the same batchStartDate) — omit either to get the first match.
+export function findAccount(
+  program: TestAccount["program"],
+  language: TestAccount["language"],
+  batchStartDate?: string,
+  variant?: string
+) {
   return TEST_ACCOUNTS.find(
-    (a) => a.program === program && a.language === language && (batchStartDate === undefined || a.batchStartDate === batchStartDate)
+    (a) =>
+      a.program === program &&
+      a.language === language &&
+      (batchStartDate === undefined || a.batchStartDate === batchStartDate) &&
+      (variant === undefined || a.variant === variant)
   );
 }
