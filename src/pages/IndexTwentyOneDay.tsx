@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
+import { isFreeBatchOver, getSimulatedBatchDate } from "@/lib/utils";
 import { LevelCard } from "@/components/LevelCard";
 import { CertificateModal } from "@/components/CertificateModal";
 import { trackVisit } from "@/lib/trackVisit";
@@ -577,7 +578,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
 
   // --- Active Batch: helper ---
   // This programme runs 22 days (June 21 – July 12), not 14 — see BONUS_SESSIONS_ALL.md.
-  const getActiveBatchInfo = (batchDateStr: string | null | undefined) => {
+  const getActiveBatchInfo = (batchDateStr: string | null | undefined, batchEndDateStr: string | null | undefined) => {
     if (!batchDateStr) return { isActive: false as const };
     const batchStart = new Date(batchDateStr);
     batchStart.setHours(0, 0, 0, 0);
@@ -585,6 +586,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
     today.setHours(0, 0, 0, 0);
     const diffDays = Math.floor((today.getTime() - batchStart.getTime()) / 86400000);
     if (diffDays < 0 || diffDays >= 22) return { isActive: false as const };
+    if (isFreeBatchOver(batchEndDateStr)) return { isActive: false as const };
     const currentDay = diffDays + 1; // 1-indexed
     const week = currentDay <= 7 ? 1 : 2;
     const batchEnd = new Date(batchStart);
@@ -601,8 +603,17 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
   };
 
   const _globalForceDayParam = new URLSearchParams(location.search).get("forceDay");
+  const _globalTimeParam = new URLSearchParams(location.search).get("time");
+  // Whether the batch is "over" right now — driven by the real clock, or by the
+  // ?forceDay=/?time= QA preview overrides when present (simulates that day's date).
+  const batchOverNow = _globalForceDayParam !== null && studentData?.free_batch_start_date
+    ? isFreeBatchOver(studentData.free_batch_end_date, {
+        today: getSimulatedBatchDate(studentData.free_batch_start_date, parseInt(_globalForceDayParam, 10)),
+        timeOverride: _globalTimeParam,
+      })
+    : isFreeBatchOver(studentData?.free_batch_end_date);
   const batchInfo = (() => {
-    const real = getActiveBatchInfo(studentData?.free_batch_start_date);
+    const real = getActiveBatchInfo(studentData?.free_batch_start_date, studentData?.free_batch_end_date);
     if (_globalForceDayParam !== null && studentData?.free_batch_start_date) {
       const fd = parseInt(_globalForceDayParam, 10);
       const bs = new Date(studentData.free_batch_start_date);
@@ -612,7 +623,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
       const DN = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
       const MN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
       const fmt = (d: Date) => `${DN[d.getDay()]}, ${MN[d.getMonth()]} ${d.getDate()}`;
-      return { isActive: true as const, currentDay: fd, week: fd <= 7 ? 1 : 2, dateRangeLabel: `${fmt(bs)} — ${fmt(be)}` };
+      return { isActive: !batchOverNow, currentDay: fd, week: fd <= 7 ? 1 : 2, dateRangeLabel: `${fmt(bs)} — ${fmt(be)}` };
     }
     return real;
   })();
@@ -2056,15 +2067,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
   }
 
   // --- Detect ongoing users whose 22-day programme has elapsed ---
-  const batchElapsed = (() => {
-    if (!studentData?.free_batch_start_date) return false;
-    const batchStart = new Date(studentData?.free_batch_start_date);
-    batchStart.setHours(0, 0, 0, 0);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const diffDays = Math.floor((today.getTime() - batchStart.getTime()) / 86400000);
-    return diffDays >= 22;
-  })();
+  const batchElapsed = batchOverNow;
   const show14DayCompleted = (studentData?.status === "14 day completed" || studentData?.status === "14DaysCompleted") || (isOngoingStatus && batchElapsed);
 
   // --- 14 Days Completed Page ---
@@ -2212,12 +2215,25 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
 
       {/* Hero Text */}
       <div style={{ paddingTop: "16px", textAlign: "center" }}>
-        <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#0A386F" }}>
-          14-DAYS ONLINE FREE YOGA
-        </p>
-        <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
-          STARTING <StartDateLabel date={getNextMonday()} />
-        </p>
+        {studentStatus === "paidPendingStart" ? (
+          <>
+            <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#0A386F" }}>
+              YOUR DAILY YOGA CLASSES
+            </p>
+            <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
+              Starts from TOMORROW
+            </p>
+          </>
+        ) : (
+          <>
+            <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#0A386F" }}>
+              14-DAYS ONLINE FREE YOGA
+            </p>
+            <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
+              STARTING <StartDateLabel date={getNextMonday()} />
+            </p>
+          </>
+        )}
       </div>
 
       {/* Onboarding Card */}

@@ -24,6 +24,31 @@ export function getCurrentMinutesIST(timeOverride?: string | null): number {
   return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
 }
 
+/** True once free_batch_end_date's last evening session (7:30 PM IST) has ended.
+ *  Pass `overrides.today` (e.g. from getSimulatedBatchDate) to simulate a specific day
+ *  instead of the real clock, for ?forceDay=/?time= QA previews. */
+export function isFreeBatchOver(
+  freeBatchEndDateStr?: string | null,
+  overrides?: { today?: Date; timeOverride?: string | null }
+): boolean {
+  if (!freeBatchEndDateStr) return false;
+  const end = new Date(freeBatchEndDateStr);
+  end.setHours(0, 0, 0, 0);
+  const today = overrides?.today ? new Date(overrides.today) : new Date();
+  today.setHours(0, 0, 0, 0);
+  if (today.getTime() > end.getTime()) return true;
+  if (today.getTime() < end.getTime()) return false;
+  return getCurrentMinutesIST(overrides?.timeOverride) >= 1170; // 7:30 PM IST
+}
+
+/** Simulates "today" as batchStart + (forceDay - 1) days, for ?forceDay= QA previews. */
+export function getSimulatedBatchDate(batchStartDateStr: string, forceDay: number): Date {
+  const d = new Date(batchStartDateStr);
+  d.setHours(0, 0, 0, 0);
+  d.setDate(d.getDate() + (forceDay - 1));
+  return d;
+}
+
 export const START_DATE_MONTHS = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
 export const getOrdinalSuffix = (day: number) => (day >= 11 && day <= 13 ? "TH" : ({ 1: "ST", 2: "ND", 3: "RD" } as Record<number, string>)[day % 10] ?? "TH");
 

@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { trackVisit } from "@/lib/trackVisit";
+import { isFreeBatchOver, getSimulatedBatchDate } from "@/lib/utils";
 import logo from "@/assets/Primary_logo.svg";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 import ReferWinCard from "@/components/ReferWinCard";
@@ -424,7 +425,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
     );
   }
 
-  const getActiveBatchInfo = (batchDateStr: string | null | undefined) => {
+  const getActiveBatchInfo = (batchDateStr: string | null | undefined, batchEndDateStr: string | null | undefined) => {
     if (!batchDateStr) return { isActive: false as const };
     const batchStart = new Date(batchDateStr);
     batchStart.setHours(0, 0, 0, 0);
@@ -432,6 +433,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
     today.setHours(0, 0, 0, 0);
     const diffDays = Math.floor((today.getTime() - batchStart.getTime()) / 86400000);
     if (diffDays < 0 || diffDays >= 14) return { isActive: false as const };
+    if (isFreeBatchOver(batchEndDateStr)) return { isActive: false as const };
     const currentDay = diffDays + 1;
     const week = currentDay <= 7 ? 1 : 2;
     const batchEnd = new Date(batchStart);
@@ -448,9 +450,18 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
   };
 
   const _globalForceDayParam = new URLSearchParams(location.search).get("forceDay");
+  const _globalTimeParam = new URLSearchParams(location.search).get("time");
   const isForceOnboardingPreview = _globalForceDayParam === "0";
+  // Whether the batch is "over" right now — driven by the real clock, or by the
+  // ?forceDay=/?time= QA preview overrides when present (simulates that day's date).
+  const batchOverNow = _globalForceDayParam !== null && studentData?.free_batch_start_date
+    ? isFreeBatchOver(studentData.free_batch_end_date, {
+        today: getSimulatedBatchDate(studentData.free_batch_start_date, parseInt(_globalForceDayParam, 10)),
+        timeOverride: _globalTimeParam,
+      })
+    : isFreeBatchOver(studentData?.free_batch_end_date);
   const batchInfo = (() => {
-    const real = getActiveBatchInfo(studentData?.free_batch_start_date);
+    const real = getActiveBatchInfo(studentData?.free_batch_start_date, studentData?.free_batch_end_date);
     if (_globalForceDayParam !== null && studentData?.free_batch_start_date) {
       const fd = parseInt(_globalForceDayParam, 10);
       const bs = new Date(studentData.free_batch_start_date);
@@ -460,7 +471,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
       const DN = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
       const MN = ["Jan","Feb","Mar","Apr","May","Jun","Jul","Aug","Sep","Oct","Nov","Dec"];
       const fmt = (d: Date) => `${DN[d.getDay()]}, ${MN[d.getMonth()]} ${d.getDate()}`;
-      return { isActive: true as const, currentDay: fd, week: fd <= 7 ? 1 : 2, dateRangeLabel: `${fmt(bs)} — ${fmt(be)}` };
+      return { isActive: !batchOverNow, currentDay: fd, week: fd <= 7 ? 1 : 2, dateRangeLabel: `${fmt(bs)} — ${fmt(be)}` };
     }
     return real;
   })();
@@ -648,15 +659,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
   }
 
   // --- Detect ongoing users whose 14-day batch has elapsed ---
-  const batchElapsed = (() => {
-    if (!studentData?.free_batch_start_date) return false;
-    const batchStart = new Date(studentData?.free_batch_start_date);
-    batchStart.setHours(0, 0, 0, 0);
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const diffDays = Math.floor((today.getTime() - batchStart.getTime()) / 86400000);
-    return diffDays >= 14;
-  })();
+  const batchElapsed = batchOverNow;
   const show14DayCompleted = (studentData?.status === "14 day completed" || studentData?.status === "14DaysCompleted") || (isOngoingStatus && batchElapsed);
 
   // --- 14 Days Completed — self-contained with its own header + tab switcher, since the
@@ -737,10 +740,23 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
       </header>
 
       <div style={{ paddingTop: "16px", textAlign: "center" }}>
-        <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#0A386F" }}>14-DAYS ONLINE FREE YOGA</p>
-        <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
-          STARTING <StartDateLabel date={onboardingStartDate} />
-        </p>
+        {studentStatus === "paidPendingStart" ? (
+          <>
+            <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#0A386F" }}>
+              YOUR DAILY YOGA CLASSES
+            </p>
+            <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
+              Starts From Tomorrow
+            </p>
+          </>
+        ) : (
+          <>
+            <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#0A386F" }}>14-DAYS ONLINE FREE YOGA</p>
+            <p style={{ margin: 0, fontFamily: "Outfit", fontWeight: 800, fontSize: "1.375rem", lineHeight: "28px", color: "#FE961B" }}>
+              STARTING <StartDateLabel date={onboardingStartDate} />
+            </p>
+          </>
+        )}
       </div>
 
       <div className="flex flex-col items-center m-3">

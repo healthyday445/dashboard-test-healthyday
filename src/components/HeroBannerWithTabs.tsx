@@ -28,13 +28,16 @@ interface HeroBannerWithTabsProps {
   daysLeftOverride?: number;
   activeTab: "dashboard" | "journey";
   onTabChange: (tab: "dashboard" | "journey") => void;
+  // True for students who've already purchased a plan (even if it hasn't started yet) —
+  // hides the "convert to paid" promo content, since it doesn't apply to them.
+  alreadyPaid?: boolean;
 }
 
 // Banner + tab row share one background (orange gradient for Live Sessions,
 // blue/peach illustration for Your Yoga Journey) so the active tab can "pop"
 // as a white pill that visually connects to its white content view below —
 // the inactive tab has no box, it just sits on the shared background.
-const HeroBannerWithTabs = ({ batchEndDate, daysLeftOverride, activeTab, onTabChange }: HeroBannerWithTabsProps) => {
+const HeroBannerWithTabs = ({ batchEndDate, daysLeftOverride, activeTab, onTabChange, alreadyPaid }: HeroBannerWithTabsProps) => {
   const navigate = useNavigate();
   if (!batchEndDate) return null;
 
@@ -81,6 +84,7 @@ const HeroBannerWithTabs = ({ batchEndDate, daysLeftOverride, activeTab, onTabCh
 
   return (
     <div style={backgroundStyle}>
+      {!alreadyPaid && (
       <div style={{ padding: "20px 20px 16px", textAlign: "center" }}>
         <p
           style={{
@@ -130,6 +134,7 @@ const HeroBannerWithTabs = ({ batchEndDate, daysLeftOverride, activeTab, onTabCh
           Join Daily Yoga Classes
         </button>
       </div>
+      )}
 
       <div style={{ position: "relative", height: "3.25rem" }}>
         {/* Bottom inset shadow only on the side opposite the active pill — the

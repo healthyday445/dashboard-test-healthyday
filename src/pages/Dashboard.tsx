@@ -32,6 +32,7 @@ const Dashboard = () => {
   // read free_batch_start_date from) — preview_programme=21day forces IndexTwentyOneDay.
   const previewProgramme = searchParams.get("preview_programme");
   const forceDayParam = searchParams.get("forceDay");
+  const timeParam = searchParams.get("time");
 
   const [studentData, setStudentData] = useState<any>(null);
   const [loading, setLoading] = useState(!previewDashboard && previewLevels === null);
@@ -100,10 +101,14 @@ const Dashboard = () => {
   // The backend can report status:"paid" before the purchased plan actually starts
   // (e.g. a referral-reward/renewal subscription scheduled for later) while the student
   // is still inside their free-batch window — treat them as ongoing-free until then.
-  const effectiveStatus = getEffectiveStatus(studentData);
+  const effectiveStatus = getEffectiveStatus(studentData, { forceDay: forceDayParam, timeOverride: timeParam });
   const effectiveStudentData = studentData && effectiveStatus !== studentData?.status
     ? { ...studentData, status: effectiveStatus }
     : studentData;
+
+  // Raw backend status (before the ongoing-free UI override above) — true only for
+  // students who have genuinely already purchased a plan, even if it hasn't started yet.
+  const alreadyPaid = studentData?.status === "paid";
 
   // Whether a new-format 14-day batch has actually started yet — a "registered" student
   // whose batch start date is still in the future should see the plain not-started
@@ -177,6 +182,7 @@ const Dashboard = () => {
           daysLeftOverride={daysLeftOverride}
           activeTab={activeTab}
           onTabChange={handleTabChange}
+          alreadyPaid={alreadyPaid}
         />
 
         <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
