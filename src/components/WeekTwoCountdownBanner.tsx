@@ -45,7 +45,7 @@ export const WeekTwoCountdownBanner: React.FC<WeekTwoCountdownBannerProps> = ({ 
         textTransform: "uppercase",
         textShadow: "0px 2px 4px rgba(0,0,0,0.25)",
       }}>
-        Only {daysLeft} Days Left!
+        {daysLeft <= 0 ? "Free Yoga Ends Today!" : `Only ${daysLeft} ${daysLeft === 1 ? "Day" : "Days"} Left!`}
       </p>
       <p style={{ margin: "8px 0 16px", color: "#171717", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500 }}>
         Daily Yoga Batch starts on{" "}

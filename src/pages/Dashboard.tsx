@@ -243,8 +243,10 @@ const Dashboard = () => {
               ? { backgroundImage: `url(${week2JourneyBg})`, backgroundSize: "100% 100%", backgroundPosition: "top center", backgroundRepeat: "no-repeat" }
               : { background: "linear-gradient(0deg, rgb(255, 255, 255) 0%, rgb(255, 226, 192) 25.005%, rgb(255, 226, 192) 50.01%, rgb(255, 148, 22) 100%)" }),
           }}>
-            <WeekTwoCountdownBanner daysLeft={Math.max(0, 15 - newBatchWeek.currentDay)} showBackground={false} />
-            {tabBar}
+            <WeekTwoCountdownBanner daysLeft={Math.max(0, 14 - newBatchWeek.currentDay)} showBackground={false} />
+            <div style={{ marginTop: "-30px" }}>
+              {tabBar}
+            </div>
           </div>
           {content}
         </>

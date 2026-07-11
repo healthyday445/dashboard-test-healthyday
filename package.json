@@ -14,12 +14,12 @@
     "test:watch": "vitest",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "test:e2e:report": "playwright show-report e2e-results.local/local/html-report",
+    "test:e2e:report": "playwright show-report --host 0.0.0.0 e2e-results.local/local/html-report",
     "test:e2e:update-snapshots": "playwright test --update-snapshots",
     "test:e2e:prod": "E2E_TARGET=prod playwright test",
-    "test:e2e:prod:report": "playwright show-report e2e-results.local/prod/html-report",
+    "test:e2e:prod:report": "playwright show-report --host 0.0.0.0 e2e-results.local/prod/html-report",
     "test:e2e:testprod": "E2E_TARGET=testprod playwright test",
-    "test:e2e:testprod:report": "playwright show-report e2e-results.local/testprod/html-report"
+    "test:e2e:testprod:report": "playwright show-report --host 0.0.0.0 e2e-results.local/testprod/html-report"
   },
   "dependencies": {
     "@fontsource/outfit": "^5.2.8",

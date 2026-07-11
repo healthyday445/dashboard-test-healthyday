@@ -237,6 +237,7 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
       : false
   );
   const [sessionLinks, setSessionLinks] = useState<any[]>([]);
+  const [verifiedReferralCount, setVerifiedReferralCount] = useState<number | null>(null);
   const [joinedDays, setJoinedDays] = useState<number[]>(() => {
     try {
       const keys = safeLocalStorage.keys().filter(k => k.startsWith("hd_joined_"));
@@ -318,6 +319,20 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
     };
 
     fetchStudentData();
+  }, [mobile]);
+
+  // Verified referral count (from /referrals, distinct from studentData.total_referral_count)
+  // — fetched independently of the effect above, since that one no-ops when a parent
+  // (Dashboard.tsx) already supplied initialStudentData.
+  useEffect(() => {
+    if (!mobile) return;
+    const cleanedMobile = mobile.replace(/[\s()+-]/g, "");
+    if (!/^\d{7,15}$/.test(cleanedMobile)) return;
+    const encodedMobile = encodeURIComponent(`+${cleanedMobile}`);
+    fetch(`/.netlify/functions/referrals?mobile=${encodedMobile}&include_contest=false`)
+      .then((r) => (r.ok ? r.json() : null))
+      .then((refData) => setVerifiedReferralCount(refData?.verified_referrals ?? null))
+      .catch(() => {});
   }, [mobile]);
 
   // --- Join tracking via localStorage (must be before any conditional returns) ---
@@ -613,7 +628,7 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
           <img src={logo} alt="Healthyday" className="h-7" />
         </header>
 
-        {week === 2 && <WeekTwoCountdownBanner daysLeft={Math.max(0, 15 - currentDay)} />}
+        {week === 2 && <WeekTwoCountdownBanner daysLeft={Math.max(0, 14 - currentDay)} />}
 
         {showBonus && bonusInfo ? (
           <FourteenDayBonusSessionCard bonusSession={bonusInfo} isLive={bonusIsLive} mobile={mobile} />
@@ -634,7 +649,7 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
           dayStatus={dayStatus}
           dateRangeLabel={dateRangeLabel}
           week={week as 1 | 2}
-          totalReferralCount={studentData?.total_referral_count ?? 0}
+          verifiedReferralCount={verifiedReferralCount ?? studentData?.total_referral_count ?? 0}
           language={studentData?.language}
           shareLink={shareLink}
           referralsUrl={`/${mobile || ""}/referrals`}
@@ -652,6 +667,7 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
         mobile={mobile}
         selectedPlanIdx={selectedPlanIdx}
         setSelectedPlanIdx={setSelectedPlanIdx}
+        verifiedReferralCount={verifiedReferralCount ?? studentData?.total_referral_count ?? 0}
       />
     );
   }

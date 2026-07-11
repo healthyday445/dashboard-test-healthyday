@@ -7,7 +7,7 @@ interface BatchProgressSectionProps {
   dayStatus: DayStatus[];
   dateRangeLabel: string;
   week: 1 | 2;
-  totalReferralCount: number;
+  verifiedReferralCount: number;
   language?: string;
   shareLink: string;
   referralsUrl: string;
@@ -22,7 +22,7 @@ export const BatchProgressSection: React.FC<BatchProgressSectionProps> = ({
   dayStatus,
   dateRangeLabel,
   week,
-  totalReferralCount,
+  verifiedReferralCount,
   language,
   shareLink,
   referralsUrl,
@@ -37,7 +37,7 @@ export const BatchProgressSection: React.FC<BatchProgressSectionProps> = ({
             <h3 style={{ margin: 0, fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, color: "#202020" }}>Your Referral Rewards</h3>
             <a href={referralsUrl} style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#FEAB27", textDecoration: "none" }}>View More</a>
           </div>
-          <ReferralRewardsCard verifiedRefs={totalReferralCount} language={language} />
+          <ReferralRewardsCard verifiedRefs={verifiedReferralCount} language={language} />
         </div>
         <ReferAndWinTeaser referralsUrl={referralsUrl} />
       </>

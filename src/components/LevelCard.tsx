@@ -5,6 +5,7 @@ import lvl4Inprogress from "@/assets/dashboard-level-card/lvl4_inprogress.webp";
 import lvl5Inprogress from "@/assets/dashboard-level-card/lvl5_inprogress.webp";
 import lvl6Inprogress from "@/assets/dashboard-level-card/lvl6_inprogress.webp";
 import lvl7Inprogress from "@/assets/dashboard-level-card/d281f4940dd82c9a590624229b414057020e91f5-removebg-preview.png";
+import lvl7Locked from "@/assets/dashboard-level-card/lvl7_locked.webp";
 import lvl1Unlocked from "@/assets/dashboard-level-card/lvl1_unlocked.webp";
 import lvl2Unlocked from "@/assets/dashboard-level-card/lvl2_unlocked.webp";
 import lvl3Unlocked from "@/assets/dashboard-level-card/lvl3_unlocked.webp";
@@ -51,8 +52,8 @@ const LEVEL_CARD_DATA = [
   { img: lvl6Inprogress, isUnlocked: false, level: 6, classesNeeded: 2 }, // Day 16
   { img: lvl6Inprogress, isUnlocked: false, level: 6, classesNeeded: 1 }, // Day 17
   { img: lvl6Unlocked, isUnlocked: true, level: 6, classesNeeded: 0 }, // Day 18 — Level 6 unlocked
-  { img: lvl7Inprogress, isUnlocked: false, level: 7, classesNeeded: 3 }, // Day 19
-  { img: lvl7Inprogress, isUnlocked: false, level: 7, classesNeeded: 2 }, // Day 20
+  { img: lvl7Locked, isUnlocked: false, level: 7, classesNeeded: 3 }, // Day 19
+  { img: lvl7Locked, isUnlocked: false, level: 7, classesNeeded: 2 }, // Day 20
   { img: lvl7Inprogress, isUnlocked: false, level: 7, classesNeeded: 1 }, // Day 21
   { img: lvl7Unlocked, isUnlocked: true, level: 7, classesNeeded: 0 }, // Day 22 — Level 7 unlocked (certificate)
 ];
@@ -92,6 +93,9 @@ export function LevelCard({
 
   const rewardIdx = Math.min(level - 1, LEVEL_REWARDS.length - 1);
   const reward = LEVEL_REWARDS[rewardIdx];
+
+  // Day 21: one class away from the certificate — shown as a "Congratulations" near-win state instead of the usual in-progress copy.
+  const isAlmostCertified = !isUnlocked && level === 7 && classesNeeded === 1;
 
   // Figma absolute positions relative to card top-left (card starts at page x=26, y=418)
   // In-progress: title top=13, subtitle top=50, reward top=91, img left=146 top=33
@@ -253,7 +257,7 @@ export function LevelCard({
               right: 90,
               top: 13,
               margin: 0,
-              fontSize: "clamp(13px, 3.9vw, 16px)",
+              fontSize: isAlmostCertified ? "clamp(14px, 4.4vw, 18px)" : "clamp(13px, 3.9vw, 16px)",
               fontWeight: 700,
               color: "#202020",
               whiteSpace: "nowrap",
@@ -262,7 +266,9 @@ export function LevelCard({
               lineHeight: "normal",
             }}
           >
-            You are currently at Level {level} !
+            {isAlmostCertified
+              ? `Congratulations${studentName ? ` ${studentName.split(" ")[0]}!` : "!"}`
+              : `You are currently at Level ${level} !`}
           </p>
 
           {/* Subtitle — top=50, per-level width */}
@@ -281,9 +287,11 @@ export function LevelCard({
           >
             {safeDay === 0
               ? `Attend 3 classes to complete Level 1 & join`
-              : reward.completesAll
-                ? <>You have completed Level 6<br style={{ marginBottom: 4 }} />Attend tomorrow's session to get the</>
-                : <>Attend {classesNeeded} more class{classesNeeded !== 1 ? "es" : ""} to{" "}{`complete Level ${level}`} &amp; get</>
+              : isAlmostCertified
+                ? <>You have completed Level 7<br style={{ marginBottom: 4 }} />Attend tomorrow's session to get the</>
+                : reward.completesAll
+                  ? <>Attend {classesNeeded - 1} more class{classesNeeded - 1 !== 1 ? "es" : ""} to complete all levels &amp; get</>
+                  : <>Attend {classesNeeded} more class{classesNeeded !== 1 ? "es" : ""} to{" "}{`complete Level ${level}`} &amp; get</>
             }
           </p>
 

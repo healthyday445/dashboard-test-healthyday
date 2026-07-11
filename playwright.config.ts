@@ -32,9 +32,15 @@ export default defineConfig({
   // wouldn't count as an app bug. Local dev server has no such excuse.
   retries: process.env.CI || isRemote ? 2 : 0,
   outputDir: `${RESULTS_DIR}/test-results`,
-  reporter: process.env.CI
-    ? [["github"], ["html", { outputFolder: `${RESULTS_DIR}/html-report`, open: "never" }]]
-    : [["html", { outputFolder: `${RESULTS_DIR}/html-report`, open: "never" }]],
+  reporter: [
+    ...(process.env.CI ? [["github"] as const] : []),
+    // Terminal progress while the suite runs — otherwise the only output is silence until the
+    // full run finishes and the html/matrix reporters write their files.
+    ["list"],
+    ["html", { outputFolder: `${RESULTS_DIR}/html-report`, open: "never" }],
+    // One row per test case, mobile/desktop side by side — see e2e/reporters/matrix-reporter.ts.
+    ["./e2e/reporters/matrix-reporter.ts", { outputFile: `${RESULTS_DIR}/matrix-report.html`, title: `Test Matrix — ${target ?? "local"}` }],
+  ],
   use: {
     baseURL: target ? REMOTE_URLS[target] : "http://localhost:8080",
     trace: "on-first-retry",
