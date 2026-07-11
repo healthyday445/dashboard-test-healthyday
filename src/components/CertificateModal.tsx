@@ -6,6 +6,7 @@ import {
   checkServerCertificateStatus,
 } from "@/lib/trackCertificateActivity";
 import { safeLocalStorage } from "@/lib/storage";
+import { fitFontSizeToWidth } from "@/lib/canvasText";
 
 interface CertificateModalProps {
   isOpen: boolean;
@@ -116,8 +117,10 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     ctx.drawImage(img, 0, 0, width, height);
 
     const displayName = (name || "Your Name Here").trim();
-    const scaledFontSize = Math.round(fontSize * (width / 500));
-    const fontSpec = `normal ${scaledFontSize}px "Times New Roman", serif`;
+    const baseFontSize = Math.round(fontSize * (width / 500));
+    const maxTextWidth = width * 0.72; // leaves margin for the certificate's decorative border
+    const fittedFontSize = fitFontSizeToWidth(ctx, displayName, maxTextWidth, baseFontSize);
+    const fontSpec = `normal ${fittedFontSize}px "Times New Roman", serif`;
 
     const drawTextOverlay = () => {
       ctx.save();
@@ -194,8 +197,9 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         const offCtx = offscreenCanvas.getContext("2d");
         if (offCtx) {
           offCtx.drawImage(templateImg, 0, 0, w, h);
-          const scaledFS = Math.round(fontSize * (w / 500));
-          offCtx.font = `normal ${scaledFS}px "Times New Roman", serif`;
+          const baseFS = Math.round(fontSize * (w / 500));
+          const fittedFS = fitFontSizeToWidth(offCtx, name.trim(), w * 0.72, baseFS);
+          offCtx.font = `normal ${fittedFS}px "Times New Roman", serif`;
           offCtx.fillStyle = textColor;
           offCtx.textAlign = "center";
           offCtx.textBaseline = "middle";
