@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { safeLocalStorage } from "@/lib/storage";
+import { fitFontSizeToWidth } from "@/lib/canvasText";
 import {
   getCertificateCookie,
   setCertificateCookie,
@@ -211,8 +212,10 @@ export default function Certificate() {
     ctx.drawImage(img, 0, 0, width, height);
 
     const displayName = (name || "Your Name Here").trim();
-    const scaledFontSize = Math.round(fontSize * (width / 500));
-    const fontSpec = `normal ${scaledFontSize}px "Times New Roman", serif`;
+    const baseFontSize = Math.round(fontSize * (width / 500));
+    const maxTextWidth = width * 0.72; // leaves margin for the certificate's decorative border
+    const fittedFontSize = fitFontSizeToWidth(ctx, displayName, maxTextWidth, baseFontSize);
+    const fontSpec = `normal ${fittedFontSize}px "Times New Roman", serif`;
 
     const drawTextOverlay = () => {
       ctx.save();
@@ -274,8 +277,9 @@ export default function Certificate() {
       if (ctx) {
         ctx.drawImage(templateImg, 0, 0, width, height);
         const displayName = (finalName || "Your Name Here").trim();
-        const scaledFontSize = Math.round(fontSize * (width / 500));
-        ctx.font = `normal ${scaledFontSize}px "Times New Roman", serif`;
+        const baseFontSize = Math.round(fontSize * (width / 500));
+        const fittedFontSize = fitFontSizeToWidth(ctx, displayName, width * 0.72, baseFontSize);
+        ctx.font = `normal ${fittedFontSize}px "Times New Roman", serif`;
         ctx.fillStyle = textColor;
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
