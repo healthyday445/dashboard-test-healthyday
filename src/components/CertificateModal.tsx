@@ -28,6 +28,8 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   const [templateImg, setTemplateImg] = useState<HTMLImageElement | null>(null);
   const [feedback, setFeedback] = useState<string>("");
   const [checkedPrior, setCheckedPrior] = useState<boolean>(false);
+  const [canvasReady, setCanvasReady] = useState<boolean>(false);
+  const [storedCertUrl, setStoredCertUrl] = useState<string | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -60,6 +62,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     const localStatus = getCertificateCookie(cleanMobile);
     if (localStatus.generated && localStatus.name) {
       setName(localStatus.name);
+      setStoredCertUrl(localStatus.certificateUrl || null);
       setHasGenerated(true);
       return;
     }
@@ -69,9 +72,10 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
       checkServerCertificateStatus(cleanMobile).then((serverStatus) => {
         if (serverStatus && serverStatus.generated && serverStatus.name) {
           setName(serverStatus.name);
+          setStoredCertUrl(serverStatus.certificateUrl || null);
           setHasGenerated(true);
           // Also persist locally so next time it's instant
-          setCertificateCookie(cleanMobile, serverStatus.name);
+          setCertificateCookie(cleanMobile, serverStatus.name, serverStatus.certificateUrl);
         }
       });
     }
@@ -138,25 +142,58 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           ctx.clearRect(0, 0, width, height);
           ctx.drawImage(img, 0, 0, width, height);
           drawTextOverlay();
+          setCanvasReady(true);
         })
         .catch(() => {
           drawTextOverlay();
+          setCanvasReady(true);
         });
     } else {
       drawTextOverlay();
+      setCanvasReady(true);
     }
   };
 
+  // If a previously-generated certificate is on file (Firebase Storage), load and draw that
+  // exact stored image instead of re-rendering the name onto the template client-side.
   useEffect(() => {
-    if (!hasGenerated || !templateImg) return;
-    renderCertificate(templateImg);
-    const id1 = setTimeout(() => renderCertificate(templateImg), 60);
-    const id2 = setTimeout(() => renderCertificate(templateImg), 250);
-    return () => {
-      clearTimeout(id1);
-      clearTimeout(id2);
+    if (!hasGenerated || !storedCertUrl) return;
+    setCanvasReady(false);
+
+    const img = new Image();
+    img.crossOrigin = "anonymous";
+    img.onload = () => {
+      const canvas = canvasRef.current;
+      const ctx = canvas?.getContext("2d");
+      if (!canvas || !ctx) return;
+
+      const w = img.naturalWidth || img.width;
+      const h = img.naturalHeight || img.height;
+      canvas.width = w;
+      canvas.height = h;
+      ctx.clearRect(0, 0, w, h);
+      ctx.drawImage(img, 0, 0, w, h);
+
+      try {
+        // Confirms the canvas isn't CORS-tainted before relying on it for download/share.
+        canvas.toDataURL();
+        setCanvasReady(true);
+      } catch {
+        setStoredCertUrl(null); // fall back to client-side regeneration below
+      }
     };
-  }, [hasGenerated, templateImg, name]);
+    img.onerror = () => {
+      setStoredCertUrl(null); // stored image unreachable — fall back to client-side regeneration
+    };
+    img.src = storedCertUrl;
+  }, [hasGenerated, storedCertUrl]);
+
+  // Otherwise (first generation, or the stored image failed to load), render it client-side.
+  useEffect(() => {
+    if (!hasGenerated || !templateImg || storedCertUrl) return;
+    setCanvasReady(false);
+    renderCertificate(templateImg);
+  }, [hasGenerated, templateImg, name, storedCertUrl]);
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -193,13 +230,20 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         }
       }
 
-      await trackCertificateActivity({
+      const result = await trackCertificateActivity({
         mobile,
         name: name.trim(),
         activity: "generated",
         daysAttended: daysAttended ?? undefined,
         imageBase64,
       });
+
+      // Persist the uploaded certificate's URL so the next visit can load this exact
+      // image from Firebase Storage instead of re-rendering it client-side.
+      const uploadedUrl = result?.updated?.certificateUrl;
+      if (uploadedUrl) {
+        setCertificateCookie(mobile || "", name.trim(), uploadedUrl);
+      }
     } catch (err) {
       console.error("Error logging certificate generation:", err);
     } finally {
@@ -220,6 +264,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   };
 
   const handleDownload = async () => {
+    if (!canvasReady) return;
     const blob = await getCanvasBlob();
     if (!blob) return;
     const url = URL.createObjectURL(blob);
@@ -244,6 +289,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   };
 
   const handleShare = async () => {
+    if (!canvasReady) return;
     const blob = await getCanvasBlob();
     if (!blob) return;
 
@@ -298,11 +344,10 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         style={{
           position: "relative",
           width: "100%",
-          maxWidth: "512px",
+          maxWidth: "385px",
           backgroundColor: "#ffffff",
           borderRadius: "16px",
           boxShadow: "0 25px 50px -12px rgba(0, 0, 0, 0.25)",
-          padding: "24px",
           maxHeight: "90vh",
           overflowY: "auto",
           fontFamily: "Outfit, sans-serif",
@@ -310,22 +355,67 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         }}
         onClick={(e) => e.stopPropagation()}
       >
+        {/* Header banner */}
+        <div
+          style={{
+            position: "relative",
+            width: "100%",
+            height: "91px",
+            borderRadius: "16px 16px 0 0",
+            background: "linear-gradient(180deg, #022651 0%, #013A7D 37.5%, #024AA0 71.63%, #0057BF 100%)",
+            boxShadow: "0 1px 8px 0 rgba(0, 0, 0, 0.30)",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            justifyContent: "center",
+            overflow: "hidden",
+          }}
+        >
+          <p
+            style={{
+              width: "267px",
+              margin: 0,
+              color: "#FFF",
+              textAlign: "center",
+              fontFamily: "Playball, cursive",
+              fontSize: "40px",
+              fontWeight: 400,
+              lineHeight: "normal",
+            }}
+          >
+            Congratulations!
+          </p>
+          <p
+            style={{
+              margin: 0,
+              color: "#FD5",
+              textAlign: "center",
+              fontFamily: "Outfit, sans-serif",
+              fontSize: "14px",
+              fontWeight: 500,
+              lineHeight: "normal",
+            }}
+          >
+            You have completed the 21-Days Yoga Program
+          </p>
+        </div>
+
         {/* Close Button */}
         <button
           onClick={onClose}
           style={{
             position: "absolute",
-            top: "16px",
-            right: "16px",
-            width: "36px",
-            height: "36px",
+            top: "12px",
+            right: "12px",
+            width: "32px",
+            height: "32px",
             borderRadius: "50%",
-            backgroundColor: "#f3f4f6",
+            backgroundColor: "rgba(255, 255, 255, 0.2)",
             border: "none",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
-            color: "#4b5563",
+            color: "#ffffff",
             fontWeight: 700,
             cursor: "pointer",
             fontSize: "16px",
@@ -335,64 +425,114 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           ✕
         </button>
 
+        <div style={{ padding: "24px 21px" }}>
         {!hasGenerated ? (
           /* Step 1: Name Entry Form */
           <div>
-            <div className="text-center mb-6">
-              <h2 className="text-2xl font-bold text-[#0F5132] mb-2">
-                Enter Your Name for the Certificate
-              </h2>
-              <p className="text-sm text-gray-600">
-                Please enter your full name as you want it to appear on your official completion certificate.
-              </p>
-            </div>
+            <p
+              style={{
+                margin: "0 0 20px",
+                color: "#000",
+                textAlign: "center",
+                fontFamily: "Outfit, sans-serif",
+                fontSize: "18px",
+                fontWeight: 700,
+                lineHeight: "normal",
+              }}
+            >
+              Enter your name for the certificate
+            </p>
 
-            <form onSubmit={handleGenerate} className="space-y-5">
-              <div>
-                <label className="block text-sm font-semibold text-gray-700 mb-1">
-                  Full Name
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="e.g. Koyyana Sujatha"
-                  required
-                  className="w-full px-4 py-3 rounded-xl border border-gray-300 focus:outline-none focus:ring-2 focus:ring-[#0F5132] text-gray-900 font-medium text-base"
-                />
-              </div>
+            <form onSubmit={handleGenerate}>
+              <label
+                style={{
+                  display: "block",
+                  margin: "0 0 8px",
+                  color: "#757373",
+                  fontFamily: "Outfit, sans-serif",
+                  fontSize: "10px",
+                  fontWeight: 700,
+                  lineHeight: "normal",
+                  textTransform: "uppercase",
+                }}
+              >
+                Full Name
+              </label>
+              <input
+                type="text"
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder="e.g. Koyyana Sujatha"
+                required
+                style={{
+                  width: "100%",
+                  maxWidth: "343px",
+                  height: "44px",
+                  boxSizing: "border-box",
+                  borderRadius: "9px",
+                  border: "1px solid #D9E8FF",
+                  background: "#FAFBFF",
+                  boxShadow: "-1px -1px 4px 0 rgba(0, 0, 0, 0.15) inset, 1px 1px 4px 0 rgba(0, 0, 0, 0.15) inset",
+                  padding: "0 14px",
+                  color: "#202020",
+                  fontFamily: "Outfit, sans-serif",
+                  fontSize: "16px",
+                  fontWeight: 500,
+                  outline: "none",
+                  display: "block",
+                  margin: "0 0 20px",
+                }}
+              />
 
               <button
                 type="submit"
                 disabled={isGenerating || !name.trim()}
-                className="w-full py-3.5 px-6 rounded-xl bg-gradient-to-r from-[#0F5132] to-[#198754] text-white font-bold text-base shadow-lg hover:shadow-xl hover:opacity-95 transition-all disabled:opacity-50"
+                style={{
+                  width: "100%",
+                  maxWidth: "343px",
+                  height: "40px",
+                  borderRadius: "30px",
+                  border: "none",
+                  background: "#FEAB27",
+                  cursor: "pointer",
+                  display: "block",
+                  opacity: isGenerating || !name.trim() ? 0.5 : 1,
+                }}
               >
-                {isGenerating ? "Generating..." : "GENERATE MY CERTIFICATE"}
+                <span
+                  style={{
+                    display: "inline-block",
+                    width: "270.242px",
+                    color: "#202020",
+                    textAlign: "center",
+                    fontFamily: "Outfit, sans-serif",
+                    fontSize: "16px",
+                    fontWeight: 700,
+                    lineHeight: "normal",
+                    textTransform: "uppercase",
+                  }}
+                >
+                  {isGenerating ? "Generating..." : "Generate certificate"}
+                </span>
               </button>
             </form>
           </div>
         ) : (
           /* Step 2: Certificate Preview & Actions */
           <div>
-            <div className="flex items-center justify-between mb-4">
-              <button
-                onClick={() => setHasGenerated(false)}
-                className="text-sm font-semibold text-gray-600 hover:text-gray-900 flex items-center gap-1"
-              >
-                ← Edit Name
-              </button>
-              <span className="text-sm font-bold text-[#0F5132]">
-                Your Official Completion Certificate
-              </span>
-            </div>
-
             {/* Certificate Canvas Preview */}
-            <div className="w-full bg-gray-50 border border-gray-200 rounded-xl overflow-hidden shadow-inner mb-5 flex items-center justify-center">
+            <div className="relative w-full bg-gray-50 border border-gray-200 rounded-xl overflow-hidden shadow-inner mb-5 flex items-center justify-center">
               <canvas
                 ref={canvasRef}
                 className="w-full h-auto block"
-                style={{ maxHeight: "400px", objectFit: "contain" }}
+                style={{ maxHeight: "400px", objectFit: "contain", visibility: canvasReady ? "visible" : "hidden" }}
               />
+              {!canvasReady && (
+                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-gray-500 text-sm font-medium" style={{ minHeight: "160px" }}>
+                  <div className="w-6 h-6 border-2 border-gray-300 border-t-[#0D468B] rounded-full animate-spin" />
+                  Preparing your certificate...
+                </div>
+              )}
             </div>
 
             {feedback && (
@@ -406,7 +546,8 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
               {/* Download Button */}
               <button
                 onClick={handleDownload}
-                className="w-full py-3.5 px-4 bg-[#0D468B] hover:bg-[#083060] text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer"
+                disabled={!canvasReady}
+                className="w-full py-3.5 px-4 bg-[#0D468B] hover:bg-[#083060] text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#0D468B] disabled:hover:shadow-md"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
@@ -417,7 +558,8 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
               {/* Share Button */}
               <button
                 onClick={handleShare}
-                className="w-full py-3.5 px-4 bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#1EBD5A] hover:to-[#0E7064] text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer btn-vibrate btn-shimmer"
+                disabled={!canvasReady}
+                className="w-full py-3.5 px-4 bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#1EBD5A] hover:to-[#0E7064] text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer btn-vibrate btn-shimmer disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
@@ -430,6 +572,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
             </div>
           </div>
         )}
+        </div>
       </div>
     </div>
   );

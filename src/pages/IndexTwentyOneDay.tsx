@@ -636,9 +636,9 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
     const attendedDates = new Set<string>(batchesToCheck.flatMap((b) => b.attendance_tracker ?? []));
     const freeDaysAttended = (() => {
       if (_globalForceDayParam !== null) {
-        return Math.min(21, Math.max(0, parseInt(_globalForceDayParam, 10)));
+        return Math.min(22, Math.max(0, parseInt(_globalForceDayParam, 10)));
       }
-      return Math.min(attendedDates.size, 21);
+      return Math.min(attendedDates.size, 22);
     })();
     const batchOrigin = new Date(studentData?.free_batch_start_date!);
     batchOrigin.setHours(0, 0, 0, 0);

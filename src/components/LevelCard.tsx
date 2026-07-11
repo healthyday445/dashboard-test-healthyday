@@ -4,7 +4,8 @@ import lvl3Inprogress from "@/assets/dashboard-level-card/lvl3_inprogress.webp";
 import lvl4Inprogress from "@/assets/dashboard-level-card/lvl4_inprogress.webp";
 import lvl5Inprogress from "@/assets/dashboard-level-card/lvl5_inprogress.webp";
 import lvl6Inprogress from "@/assets/dashboard-level-card/lvl6_inprogress.webp";
-import lvl7Inprogress from "@/assets/dashboard-level-card/lvl7_inprogress.webp";
+import lvl7Inprogress from "@/assets/dashboard-level-card/d281f4940dd82c9a590624229b414057020e91f5-removebg-preview.png";
+import lvl7Locked from "@/assets/dashboard-level-card/lvl7_locked.webp";
 import lvl1Unlocked from "@/assets/dashboard-level-card/lvl1_unlocked.webp";
 import lvl2Unlocked from "@/assets/dashboard-level-card/lvl2_unlocked.webp";
 import lvl3Unlocked from "@/assets/dashboard-level-card/lvl3_unlocked.webp";
@@ -24,33 +25,37 @@ const LEVEL_REWARDS = [
   { line1: "3-Days", line2: "Lunch Diet", full: "3-Days Lunch Diet", subtitleWidth: 135, rewardWidth: 128, completesAll: false },
   { line1: "Post Meal", line2: "Body Movement", full: "Post Meal Body Movement", subtitleWidth: 137, rewardWidth: 137, completesAll: false },
   { line1: "3-Days", line2: "Dinner Diet", full: "3-Days Dinner Diet", subtitleWidth: 137, rewardWidth: 137, completesAll: false },
-  { line1: "21-Days Yoga", line2: "Certificate", full: "21-Days Yoga Certificate", subtitleWidth: 142, rewardWidth: 147, completesAll: true },
+  { line1: "21-Days Yoga", line2: "Challenge Certificate", full: "21-Days Yoga Challenge Certificate", subtitleWidth: 155, rewardWidth: 160, completesAll: true },
 ];
 
-// One entry per attended-day count (0–21), indexed directly by freeDaysAttended
+// One entry per attended-day count (0–22), indexed directly by freeDaysAttended.
+// Levels 1–6 unlock every 3 days; Level 7 (certificate) unlocks on day 22 instead of
+// the day-21 that the every-3-days pattern would predict, so level/classesNeeded are
+// stored explicitly here rather than derived from safeDay.
 const LEVEL_CARD_DATA = [
-  { img: lvl1Inprogress, isUnlocked: false }, // Day 0
-  { img: lvl1Inprogress, isUnlocked: false }, // Day 1
-  { img: lvl1Inprogress, isUnlocked: false }, // Day 2
-  { img: lvl1Unlocked, isUnlocked: true }, // Day 3  — Level 1 unlocked
-  { img: lvl2Inprogress, isUnlocked: false }, // Day 4
-  { img: lvl2Inprogress, isUnlocked: false }, // Day 5
-  { img: lvl2Unlocked, isUnlocked: true }, // Day 6  — Level 2 unlocked
-  { img: lvl3Inprogress, isUnlocked: false }, // Day 7
-  { img: lvl3Inprogress, isUnlocked: false }, // Day 8
-  { img: lvl3Unlocked, isUnlocked: true }, // Day 9  — Level 3 unlocked
-  { img: lvl4Inprogress, isUnlocked: false }, // Day 10
-  { img: lvl4Inprogress, isUnlocked: false }, // Day 11
-  { img: lvl4Unlocked, isUnlocked: true }, // Day 12 — Level 4 unlocked
-  { img: lvl5Inprogress, isUnlocked: false }, // Day 13
-  { img: lvl5Inprogress, isUnlocked: false }, // Day 14
-  { img: lvl5Unlocked, isUnlocked: true }, // Day 15 — Level 5 unlocked
-  { img: lvl6Inprogress, isUnlocked: false }, // Day 16
-  { img: lvl6Inprogress, isUnlocked: false }, // Day 17
-  { img: lvl6Unlocked, isUnlocked: true }, // Day 18 — Level 6 unlocked
-  { img: lvl7Inprogress, isUnlocked: false }, // Day 19
-  { img: lvl7Inprogress, isUnlocked: false }, // Day 20
-  { img: lvl7Unlocked, isUnlocked: true }, // Day 21 — Level 7 unlocked
+  { img: lvl1Inprogress, isUnlocked: false, level: 1, classesNeeded: 3 }, // Day 0
+  { img: lvl1Inprogress, isUnlocked: false, level: 1, classesNeeded: 2 }, // Day 1
+  { img: lvl1Inprogress, isUnlocked: false, level: 1, classesNeeded: 1 }, // Day 2
+  { img: lvl1Unlocked, isUnlocked: true, level: 1, classesNeeded: 0 }, // Day 3  — Level 1 unlocked
+  { img: lvl2Inprogress, isUnlocked: false, level: 2, classesNeeded: 2 }, // Day 4
+  { img: lvl2Inprogress, isUnlocked: false, level: 2, classesNeeded: 1 }, // Day 5
+  { img: lvl2Unlocked, isUnlocked: true, level: 2, classesNeeded: 0 }, // Day 6  — Level 2 unlocked
+  { img: lvl3Inprogress, isUnlocked: false, level: 3, classesNeeded: 2 }, // Day 7
+  { img: lvl3Inprogress, isUnlocked: false, level: 3, classesNeeded: 1 }, // Day 8
+  { img: lvl3Unlocked, isUnlocked: true, level: 3, classesNeeded: 0 }, // Day 9  — Level 3 unlocked
+  { img: lvl4Inprogress, isUnlocked: false, level: 4, classesNeeded: 2 }, // Day 10
+  { img: lvl4Inprogress, isUnlocked: false, level: 4, classesNeeded: 1 }, // Day 11
+  { img: lvl4Unlocked, isUnlocked: true, level: 4, classesNeeded: 0 }, // Day 12 — Level 4 unlocked
+  { img: lvl5Inprogress, isUnlocked: false, level: 5, classesNeeded: 2 }, // Day 13
+  { img: lvl5Inprogress, isUnlocked: false, level: 5, classesNeeded: 1 }, // Day 14
+  { img: lvl5Unlocked, isUnlocked: true, level: 5, classesNeeded: 0 }, // Day 15 — Level 5 unlocked
+  { img: lvl6Inprogress, isUnlocked: false, level: 6, classesNeeded: 2 }, // Day 16
+  { img: lvl6Inprogress, isUnlocked: false, level: 6, classesNeeded: 1 }, // Day 17
+  { img: lvl6Unlocked, isUnlocked: true, level: 6, classesNeeded: 0 }, // Day 18 — Level 6 unlocked
+  { img: lvl7Locked, isUnlocked: false, level: 7, classesNeeded: 3 }, // Day 19
+  { img: lvl7Locked, isUnlocked: false, level: 7, classesNeeded: 2 }, // Day 20
+  { img: lvl7Inprogress, isUnlocked: false, level: 7, classesNeeded: 1 }, // Day 21
+  { img: lvl7Unlocked, isUnlocked: true, level: 7, classesNeeded: 0 }, // Day 22 — Level 7 unlocked (certificate)
 ];
 
 /** Resolves the join/watch/download link for a given level's reward — shared between the in-progress LevelCard and the all-completed Yoga Journey rewards list. */
@@ -84,12 +89,13 @@ export function LevelCard({
 }) {
   const safeDay = Math.min(Math.max(0, freeDaysAttended), LEVEL_CARD_DATA.length - 1);
   const config = LEVEL_CARD_DATA[safeDay];
-  const { isUnlocked } = config;
+  const { isUnlocked, level, classesNeeded } = config;
 
-  const level = isUnlocked ? safeDay / 3 : Math.floor(safeDay / 3) + 1;
   const rewardIdx = Math.min(level - 1, LEVEL_REWARDS.length - 1);
   const reward = LEVEL_REWARDS[rewardIdx];
-  const classesNeeded = 3 - (safeDay % 3);
+
+  // Day 21: one class away from the certificate — shown as a "Congratulations" near-win state instead of the usual in-progress copy.
+  const isAlmostCertified = !isUnlocked && level === 7 && classesNeeded === 1;
 
   // Figma absolute positions relative to card top-left (card starts at page x=26, y=418)
   // In-progress: title top=13, subtitle top=50, reward top=91, img left=146 top=33
@@ -98,7 +104,7 @@ export function LevelCard({
   return (
     <div
       onClick={() => {
-        if (level === 7 && onCertificateClick) {
+        if (isUnlocked && level === 7 && onCertificateClick) {
           onCertificateClick();
         }
       }}
@@ -111,7 +117,7 @@ export function LevelCard({
         height: 156,
         overflow: "hidden",
         fontFamily: "Outfit, sans-serif",
-        cursor: level === 7 && onCertificateClick ? "pointer" : "default",
+        cursor: isUnlocked && level === 7 && onCertificateClick ? "pointer" : "default",
       }}
     >
       {/* Reward image */}
@@ -223,8 +229,21 @@ export function LevelCard({
               }
             }}
           >
-            <img src={circledPlayButton} alt="" style={{ width: 12, height: 12 }} />
-            <span style={{ color: "white", fontSize: 12, fontWeight: 700 }}>{level === 7 ? "Get Cert" : "Join now"}</span>
+            {level === 7 ? (
+              <>
+                <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" style={{ color: "white" }}>
+                  <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                  <polyline points="7 10 12 15 17 10"></polyline>
+                  <line x1="12" y1="15" x2="12" y2="3"></line>
+                </svg>
+                <span style={{ color: "white", fontSize: 12, fontWeight: 700 }}>Download</span>
+              </>
+            ) : (
+              <>
+                <img src={circledPlayButton} alt="" style={{ width: 12, height: 12 }} />
+                <span style={{ color: "white", fontSize: 12, fontWeight: 700 }}>Join now</span>
+              </>
+            )}
           </div>
         </>
       ) : (
@@ -238,7 +257,7 @@ export function LevelCard({
               right: 90,
               top: 13,
               margin: 0,
-              fontSize: "clamp(13px, 3.9vw, 16px)",
+              fontSize: isAlmostCertified ? "clamp(14px, 4.4vw, 18px)" : "clamp(13px, 3.9vw, 16px)",
               fontWeight: 700,
               color: "#202020",
               whiteSpace: "nowrap",
@@ -247,7 +266,9 @@ export function LevelCard({
               lineHeight: "normal",
             }}
           >
-            You are currently at Level {level} !
+            {isAlmostCertified
+              ? `Congratulations${studentName ? ` ${studentName.split(" ")[0]}!` : "!"}`
+              : `You are currently at Level ${level} !`}
           </p>
 
           {/* Subtitle — top=50, per-level width */}
@@ -266,7 +287,11 @@ export function LevelCard({
           >
             {safeDay === 0
               ? `Attend 3 classes to complete Level 1 & join`
-              : <>Attend {classesNeeded} more class{classesNeeded !== 1 ? "es" : ""} to{" "}{reward.completesAll ? "complete all levels" : `complete Level ${level}`} &amp; get</>
+              : isAlmostCertified
+                ? <>You have completed Level 7<br style={{ marginBottom: 4 }} />Attend tomorrow's session to get the</>
+                : reward.completesAll
+                  ? <>Attend {classesNeeded - 1} more class{classesNeeded - 1 !== 1 ? "es" : ""} to complete all levels &amp; get</>
+                  : <>Attend {classesNeeded} more class{classesNeeded !== 1 ? "es" : ""} to{" "}{`complete Level ${level}`} &amp; get</>
             }
           </p>
 
@@ -275,7 +300,7 @@ export function LevelCard({
             style={{
               position: "absolute",
               left: 20,
-              top: 91,
+              top: reward.completesAll ? 105 : 91,
               width: `min(${reward.rewardWidth}px, 34vw)`,
               fontSize: "clamp(12px, 3.6vw, 15px)",
               fontWeight: 700,
