@@ -494,19 +494,21 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         ) : (
           /* Step 2: Certificate Preview & Actions */
           <div>
-            {/* Certificate Canvas Preview */}
-            <div className="relative w-full bg-gray-50 border border-gray-200 rounded-xl overflow-hidden shadow-inner mb-5 flex items-center justify-center">
-              <canvas
-                ref={canvasRef}
-                className="w-full h-auto block"
-                style={{ maxHeight: "400px", objectFit: "contain", visibility: canvasReady ? "visible" : "hidden" }}
-              />
-              {!canvasReady && (
-                <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-gray-500 text-sm font-medium" style={{ minHeight: "160px" }}>
-                  <div className="w-6 h-6 border-2 border-gray-300 border-t-[#0D468B] rounded-full animate-spin" />
-                  Preparing your certificate...
-                </div>
-              )}
+            {/* Certificate Canvas Preview — cream/gold frame matching Certificate.tsx */}
+            <div className="w-full bg-gradient-to-b from-[#FFFDF9] via-[#FFF3D8]/60 to-[#FFFDF9] p-4 rounded-2xl border-2 border-[#FEE3A2] shadow-sm overflow-hidden mb-5">
+              <div className="relative rounded-xl shadow-2xl bg-white border border-[#F5EADC] overflow-hidden flex items-center justify-center">
+                <canvas
+                  ref={canvasRef}
+                  className="w-full h-auto block"
+                  style={{ maxHeight: "400px", objectFit: "contain", visibility: canvasReady ? "visible" : "hidden" }}
+                />
+                {!canvasReady && (
+                  <div className="absolute inset-0 flex flex-col items-center justify-center gap-2 text-gray-500 text-sm font-medium" style={{ minHeight: "160px" }}>
+                    <div className="w-6 h-6 border-2 border-gray-300 border-t-[#0D468B] rounded-full animate-spin" />
+                    Preparing your certificate...
+                  </div>
+                )}
+              </div>
             </div>
 
             {feedback && (
@@ -521,27 +523,27 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
               <button
                 onClick={handleDownload}
                 disabled={!canvasReady}
-                className="w-full py-3.5 px-4 bg-[#0D468B] hover:bg-[#083060] text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#0D468B] disabled:hover:shadow-md"
+                className="w-full py-3 px-2 bg-gradient-to-r from-[#0156BB] to-[#01408A] hover:brightness-95 text-white font-bold rounded-xl shadow-[0_0_8px_1px_rgba(0,0,0,0.05)] transition-all flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:brightness-100"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
                   <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                Download Certificate
+                <span style={{ fontSize: "clamp(9px, 3vw, 13px)" }}>Download Certificate</span>
               </button>
 
               {/* Share Button */}
               <button
                 onClick={handleShare}
                 disabled={!canvasReady}
-                className="w-full py-3.5 px-4 bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#1EBD5A] hover:to-[#0E7064] text-white font-bold text-sm rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-2 cursor-pointer btn-vibrate btn-shimmer disabled:opacity-50 disabled:cursor-not-allowed"
+                className="w-full py-3 px-2 bg-gradient-to-r from-[#25D366] to-[#128C7E] hover:from-[#1EBD5A] hover:to-[#0E7064] text-white font-bold rounded-xl shadow-md hover:shadow-lg transition-all flex items-center justify-center gap-1 cursor-pointer whitespace-nowrap btn-vibrate btn-shimmer disabled:opacity-50 disabled:cursor-not-allowed"
               >
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
                   <path d="M18 8C19.6569 8 21 6.65685 21 5C21 3.34315 19.6569 2 18 2C16.3431 2 15 3.34315 15 5C15 6.65685 16.3431 8 18 8Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   <path d="M6 15C7.65685 15 9 13.6569 9 12C9 10.3431 7.65685 9 6 9C4.34315 9 3 10.3431 3 12C3 13.6569 4.34315 15 6 15Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   <path d="M18 22C19.6569 22 21 20.6569 21 19C21 17.3431 19.6569 16 18 16C16.3431 16 15 17.3431 15 19C15 20.6569 16.3431 22 18 22Z" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                   <path d="M8.59 13.51L15.42 17.49M15.41 6.51L8.59 10.49" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
                 </svg>
-                Share Certificate
+                <span style={{ fontSize: "clamp(9px, 3vw, 13px)" }}>Share Certificate</span>
               </button>
             </div>
           </div>
