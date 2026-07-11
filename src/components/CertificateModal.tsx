@@ -29,7 +29,9 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   const [feedback, setFeedback] = useState<string>("");
   const [checkedPrior, setCheckedPrior] = useState<boolean>(false);
   const [canvasReady, setCanvasReady] = useState<boolean>(false);
-  const [storedCertUrl, setStoredCertUrl] = useState<string | null>(null);
+  // Metadata only (not used for rendering) — tells us a certificate already exists so we can
+  // skip straight to the preview step instead of showing the name form again.
+  const [, setStoredCertUrl] = useState<string | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -154,46 +156,18 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     }
   };
 
-  // If a previously-generated certificate is on file (Firebase Storage), load and draw that
-  // exact stored image instead of re-rendering the name onto the template client-side.
+  // Always render the certificate client-side from the local template + name — the Firebase
+  // Storage bucket has no CORS config, so loading the stored image cross-origin into the canvas
+  // was non-deterministic (worked once, then blank on later opens). Re-runs on every reopen
+  // (isOpen dependency) since closing the modal unmounts the <canvas> DOM node (see the
+  // `if (!isOpen) return null` below) — without `isOpen` here, a reopen with otherwise-unchanged
+  // hasGenerated/templateImg/name would skip this effect and leave the freshly remounted canvas
+  // blank until a full page refresh forced everything to re-run from scratch.
   useEffect(() => {
-    if (!hasGenerated || !storedCertUrl) return;
-    setCanvasReady(false);
-
-    const img = new Image();
-    img.crossOrigin = "anonymous";
-    img.onload = () => {
-      const canvas = canvasRef.current;
-      const ctx = canvas?.getContext("2d");
-      if (!canvas || !ctx) return;
-
-      const w = img.naturalWidth || img.width;
-      const h = img.naturalHeight || img.height;
-      canvas.width = w;
-      canvas.height = h;
-      ctx.clearRect(0, 0, w, h);
-      ctx.drawImage(img, 0, 0, w, h);
-
-      try {
-        // Confirms the canvas isn't CORS-tainted before relying on it for download/share.
-        canvas.toDataURL();
-        setCanvasReady(true);
-      } catch {
-        setStoredCertUrl(null); // fall back to client-side regeneration below
-      }
-    };
-    img.onerror = () => {
-      setStoredCertUrl(null); // stored image unreachable — fall back to client-side regeneration
-    };
-    img.src = storedCertUrl;
-  }, [hasGenerated, storedCertUrl]);
-
-  // Otherwise (first generation, or the stored image failed to load), render it client-side.
-  useEffect(() => {
-    if (!hasGenerated || !templateImg || storedCertUrl) return;
+    if (!isOpen || !hasGenerated || !templateImg) return;
     setCanvasReady(false);
     renderCertificate(templateImg);
-  }, [hasGenerated, templateImg, name, storedCertUrl]);
+  }, [isOpen, hasGenerated, templateImg, name]);
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -238,8 +212,8 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         imageBase64,
       });
 
-      // Persist the uploaded certificate's URL so the next visit can load this exact
-      // image from Firebase Storage instead of re-rendering it client-side.
+      // Cache the uploaded URL as metadata only (not used for rendering — see the render
+      // effect above for why we always regenerate client-side instead).
       const uploadedUrl = result?.updated?.certificateUrl;
       if (uploadedUrl) {
         setCertificateCookie(mobile || "", name.trim(), uploadedUrl);
