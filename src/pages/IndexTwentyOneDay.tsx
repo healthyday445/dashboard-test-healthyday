@@ -737,7 +737,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
 
     // --- Bonus Special Sessions ---
     const lang = studentData?.language === "English" ? "English" : "Telugu";
-    const BONUS_DAYS = lang === "English" ? [5, 8, 12, 15, 19, 22] : [4, 8, 11, 15, 18, 22];
+    const BONUS_DAYS = lang === "English" ? [5, 8, 12, 15, 19] : [4, 8, 11, 15, 18];
 
     if (BONUS_DAYS.includes(currentDay)) {
       type BonusInfo = { name: string; fullName: string; startMin: number; videoId: string; sessionLink: string; thumbnail: string; liveDuration?: number; activeEndOffset?: number };
@@ -749,7 +749,6 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
             case 11: return { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "cXaVIxH3RKA", sessionLink: "https://www.youtube.com/watch?v=cXaVIxH3RKA", thumbnail: ytThumb("cXaVIxH3RKA") };
             case 15: return { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/breathwork", thumbnail: thumbBreathWorkTel, liveDuration: 30, activeEndOffset: 60 };
             case 18: return { name: "Live Q&A", fullName: "Live Q&A Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/liveqa", thumbnail: thumbLiveQA, liveDuration: 60, activeEndOffset: 60 };
-            case 22: return { name: "Graduation Session", fullName: "Graduation Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/graduation", thumbnail: ytThumb("SyjnCjDtNS8") };
             default: return {} as BonusInfo;
           }
         } else {
@@ -759,7 +758,6 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
             case 12: return { name: "Meditation Session", fullName: "Meditation Session at 8:00 PM", startMin: 20 * 60, videoId: "u1Hom0s7ibU", sessionLink: "https://start.dailyyogawithjagan.com/meditation_eng", thumbnail: thumbMeditationEng };
             case 15: return { name: "Breath Work Session", fullName: "Breath Work Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/bw_eng", thumbnail: thumbBreathWorkEng, liveDuration: 30, activeEndOffset: 60 };
             case 19: return { name: "Live Q&A", fullName: "Live Q&A Session at 8:30 PM", startMin: 20 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/liveqa_eng", thumbnail: thumbLiveQA, liveDuration: 60, activeEndOffset: 60 };
-            case 22: return { name: "Graduation Session", fullName: "Graduation Session at 10:30 AM", startMin: 10 * 60 + 30, videoId: "SyjnCjDtNS8", sessionLink: "https://start.dailyyogawithjagan.com/graduation_eng", thumbnail: ytThumb("SyjnCjDtNS8") };
             default: return {} as BonusInfo;
           }
         }
