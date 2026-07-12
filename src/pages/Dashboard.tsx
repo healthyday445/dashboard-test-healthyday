@@ -33,11 +33,13 @@ const Dashboard = () => {
   const previewProgramme = searchParams.get("preview_programme");
   const forceDayParam = searchParams.get("forceDay");
   const timeParam = searchParams.get("time");
+  const tabParam = searchParams.get("tab");
+  const startOnJourney = previewLevels !== null || tabParam === "journey";
 
   const [studentData, setStudentData] = useState<any>(null);
   const [loading, setLoading] = useState(!previewDashboard && previewLevels === null);
-  const [activeTab, setActiveTab] = useState<"dashboard" | "journey">(previewLevels !== null ? "journey" : "dashboard");
-  const [journeyMounted, setJourneyMounted] = useState(previewLevels !== null);
+  const [activeTab, setActiveTab] = useState<"dashboard" | "journey">(startOnJourney ? "journey" : "dashboard");
+  const [journeyMounted, setJourneyMounted] = useState(startOnJourney);
 
   useEffect(() => {
     // A preview param means we want canned data, not whatever real account
