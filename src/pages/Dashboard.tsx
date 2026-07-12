@@ -37,7 +37,7 @@ const Dashboard = () => {
   const forceDayParam = searchParams.get("forceDay");
   const timeParam = searchParams.get("time");
   const tabParam = searchParams.get("tab");
-  const startOnJourney = previewLevels !== null || tabParam === "journey";
+  const startOnJourney = previewLevels !== null || tabParam === "journey" || location.hash === "#journey";
 
   const [studentData, setStudentData] = useState<any>(null);
   const [loading, setLoading] = useState(!previewDashboard && previewLevels === null);
