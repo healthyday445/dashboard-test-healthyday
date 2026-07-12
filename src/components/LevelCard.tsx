@@ -136,27 +136,29 @@ export function LevelCard({
       />
 
       {/* View more — top right */}
-      <div
-        style={{
-          position: "absolute",
-          top: 9,
-          right: 7,
-          display: "flex",
-          alignItems: "center",
-          cursor: "pointer",
-        }}
-        onClick={(e) => {
-          e.stopPropagation();
-          onViewMore?.();
-        }}
-      >
-        <span style={{ color: "#feab27", fontSize: 14, fontWeight: 600 }}>View more</span>
-        <img
-          src={downArrow}
-          alt=""
-          style={{ width: 25, height: 25, objectFit: "contain", transform: "rotate(-90deg)" }}
-        />
-      </div>
+      {onViewMore && (
+        <div
+          style={{
+            position: "absolute",
+            top: 9,
+            right: 7,
+            display: "flex",
+            alignItems: "center",
+            cursor: "pointer",
+          }}
+          onClick={(e) => {
+            e.stopPropagation();
+            onViewMore();
+          }}
+        >
+          <span style={{ color: "#feab27", fontSize: 14, fontWeight: 600 }}>View more</span>
+          <img
+            src={downArrow}
+            alt=""
+            style={{ width: 25, height: 25, objectFit: "contain", transform: "rotate(-90deg)" }}
+          />
+        </div>
+      )}
 
       {isUnlocked ? (
         /* ── Unlocked / Congratulations state ── */

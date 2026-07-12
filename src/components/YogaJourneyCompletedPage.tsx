@@ -1,6 +1,4 @@
-import { LEVEL_REWARDS, getLevelRewardLink } from "@/components/LevelCard";
-import journeyGift from "@/assets/21daysprogram/journey_gift.png";
-import journeyStar from "@/assets/21daysprogram/journey_star.png";
+import { LEVEL_REWARDS, getLevelRewardLink, LevelCard } from "@/components/LevelCard";
 import circledPlayButton from "@/assets/21daysprogram/circled_play_button.png";
 import downloadIcon from "@/assets/21daysprogram/download_icon.png";
 import rewardLvl1 from "@/assets/21daysprogram/reward_lvl1.webp";
@@ -13,10 +11,6 @@ import rewardLvl7 from "@/assets/21daysprogram/reward_lvl7.webp";
 
 const REWARD_THUMBS = [rewardLvl1, rewardLvl2, rewardLvl3, rewardLvl4, rewardLvl5, rewardLvl6, rewardLvl7];
 
-const Star = ({ top, left, size, rotate }: { top: string; left: string; size: number; rotate: number }) => (
-  <img src={journeyStar} alt="" style={{ position: "absolute", top, left, width: `${size}px`, height: `${size}px`, transform: `rotate(${rotate}deg)`, pointerEvents: "none" }} />
-);
-
 interface YogaJourneyCompletedPageProps {
   studentName?: string;
   language?: string;
@@ -26,40 +20,17 @@ interface YogaJourneyCompletedPageProps {
 
 /** "Jagan's Yoga Journey" tab — shown once a student has completed all 21 days; lists every reward, all unlocked. */
 export const YogaJourneyCompletedPage: React.FC<YogaJourneyCompletedPageProps> = ({ studentName, language, joinLink, onCertificateClick }) => {
-  const firstName = studentName?.split(" ")[0];
-
   return (
     <div>
-      {/* Congratulations badge card — sits over the hero background the parent page renders behind the tabs */}
+      {/* Level card — pinned to the fully-unlocked (day 22) state now that all levels are completed */}
       <div style={{ padding: "24px 20px 32px" }}>
-        <div style={{
-          position: "relative",
-          borderRadius: "20px",
-          border: "1px solid #B8B8B8",
-          boxShadow: "0px -1px 8px 0px rgba(0,0,0,0.05), 0px 1px 8px 0px rgba(0,0,0,0.05)",
-          background: "radial-gradient(130% 130% at 88% 20%, #AFD2FF 0%, #D7E9FF 45%, #FFFFFF 100%)",
-          padding: "17px 20px",
-          overflow: "hidden",
-        }}>
-          <p style={{ margin: "0 0 2px", color: "#0A386F", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500 }}>
-            Hello {firstName || "there"},
-          </p>
-          <p style={{ margin: "0 0 8px", color: "#0A386F", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700 }}>
-            CONGRATULATIONS!
-          </p>
-          <div style={{ maxWidth: "203px", color: "#000", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, lineHeight: "normal" }}>
-            <p style={{ margin: 0 }}>You have completed all the levels in the 21-Days Yoga Program.</p>
-            <p style={{ margin: 0 }}>Claim your rewards...</p>
-          </div>
-
-          <div style={{ position: "absolute", top: "10px", right: "8px", width: "110px", height: "90px" }}>
-            <Star top="0px" left="30px" size={14} rotate={0} />
-            <Star top="6px" left="55px" size={14} rotate={-15} />
-            <Star top="22px" left="8px" size={14} rotate={20} />
-            <Star top="22px" left="75px" size={27} rotate={18} />
-            <img src={journeyGift} alt="Gift" style={{ position: "absolute", top: "38px", left: "18px", width: "72px", height: "72px", objectFit: "contain" }} />
-          </div>
-        </div>
+        <LevelCard
+          freeDaysAttended={22}
+          studentName={studentName}
+          joinLink={joinLink}
+          language={language}
+          onCertificateClick={onCertificateClick}
+        />
       </div>
 
       {/* Your Rewards */}
