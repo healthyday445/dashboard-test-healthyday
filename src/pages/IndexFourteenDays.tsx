@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { trackVisit } from "@/lib/trackVisit";
-import { isFreeBatchOver, getSimulatedBatchDate } from "@/lib/utils";
+import { isFreeBatchOver, getSimulatedBatchDate, getBonusWindowStart } from "@/lib/utils";
 import logo from "@/assets/Primary_logo.svg";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 import ReferWinCard from "@/components/ReferWinCard";
@@ -630,7 +630,7 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
           sleepEng: thumbSleepEng,
         })
       : null;
-    const showBonus = !!bonusInfo && totalMinCalc >= bonusInfo.startMin - 30 && totalMinCalc < bonusInfo.startMin + (bonusInfo.activeEndOffset ?? 30);
+    const showBonus = !!bonusInfo && totalMinCalc >= getBonusWindowStart(bonusInfo.startMin) && totalMinCalc < bonusInfo.startMin + (bonusInfo.activeEndOffset ?? 30);
     const bonusIsLive = !!bonusInfo && totalMinCalc >= bonusInfo.startMin && totalMinCalc < bonusInfo.startMin + (bonusInfo.liveDuration ?? 30);
 
     return (

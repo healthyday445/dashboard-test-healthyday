@@ -24,6 +24,20 @@ export function getCurrentMinutesIST(timeOverride?: string | null): number {
   return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
 }
 
+/** Regular-session block end times (IST minutes-since-midnight), same across all tracks. */
+const MORNING_SESSION_END_MIN = 9 * 60 + 30; // 9:30 AM
+const EVENING_SESSION_END_MIN = 19 * 60 + 30; // 7:30 PM
+
+/** When a bonus session's card should start showing.
+ *  If the bonus falls after today's morning or evening regular-session block has ended,
+ *  the card opens right when that block ends (no gap where "next session" text shows
+ *  instead) — otherwise it keeps the standard 30-minutes-before-start lead-in. */
+export function getBonusWindowStart(bonusStartMin: number): number {
+  if (bonusStartMin >= EVENING_SESSION_END_MIN) return EVENING_SESSION_END_MIN;
+  if (bonusStartMin >= MORNING_SESSION_END_MIN) return MORNING_SESSION_END_MIN;
+  return bonusStartMin - 30;
+}
+
 /** True once free_batch_end_date's last evening session (7:30 PM IST) has ended.
  *  Pass `overrides.today` (e.g. from getSimulatedBatchDate) to simulate a specific day
  *  instead of the real clock, for ?forceDay=/?time= QA previews. */

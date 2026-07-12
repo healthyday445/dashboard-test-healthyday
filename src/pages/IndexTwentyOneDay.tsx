@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { isFreeBatchOver, getSimulatedBatchDate } from "@/lib/utils";
+import { isFreeBatchOver, getSimulatedBatchDate, getBonusWindowStart } from "@/lib/utils";
 import { LevelCard } from "@/components/LevelCard";
 import { CertificateModal } from "@/components/CertificateModal";
 import { trackVisit } from "@/lib/trackVisit";
@@ -778,7 +778,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
       const bonusSessionCode = `free_bonus_${bonusSession.name.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`;
       const _timeParam = new URLSearchParams(location.search).get("time");
       const totalMin = (() => { if (_timeParam) { const isPM = _timeParam.toLowerCase().endsWith("pm"); const s = _timeParam.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
-      const showBonus = isOngoingStatus && totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
+      const showBonus = isOngoingStatus && totalMin >= getBonusWindowStart(bonusSession.startMin) && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
       if (showBonus) {
         const isLive = totalMin >= bonusSession.startMin && totalMin < bonusSession.startMin + (bonusSession.liveDuration ?? 30);
         const isAMSession = bonusSession.startMin < 12 * 60;
@@ -1003,7 +1003,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
         eligibleBonusSessions.push({ name: "Breath to Heal Session", fullName: "Breath to Heal Session at 9:00 PM", startMin: 1260, sessionLink: link, thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8") });
       }
 
-      activeRecurringBonusCard = eligibleBonusSessions.find(s => totalMin >= s.startMin - 30 && totalMin < s.startMin + 45) || null;
+      activeRecurringBonusCard = eligibleBonusSessions.find(s => totalMin >= getBonusWindowStart(s.startMin) && totalMin < s.startMin + 45) || null;
     }
 
     return (
@@ -1069,7 +1069,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
           const bonusLang = studentData?.language === "English" ? "English" : "Telugu";
           const isBonusDay = BONUS_DAYS.includes(currentDay);
           const bonusSessionData = isBonusDay ? bonusByDayMap[currentDay][bonusLang] : null;
-          const showBonus = isPaid && isBonusDay && bonusSessionData !== null && totalMin >= bonusSessionData.startMin - 30 && totalMin < bonusSessionData.startMin + (bonusSessionData.activeEndOffset ?? 30);
+          const showBonus = isPaid && isBonusDay && bonusSessionData !== null && totalMin >= getBonusWindowStart(bonusSessionData.startMin) && totalMin < bonusSessionData.startMin + (bonusSessionData.activeEndOffset ?? 30);
 
           const MORNING_SLOTS = [
             { start: 4 * 60 + 30, end: 6 * 60 + 30, label: "5:30 AM" }, // Starts at 4:45 AM
@@ -1483,9 +1483,9 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
     }
 
     // Pick the session whose active window matches current time (startMin-30 to startMin+45)
-    const activeBonusCard = eligibleBonusSessions.find(s => totalMin >= s.startMin - 30 && totalMin < s.startMin + 45) || null;
+    const activeBonusCard = eligibleBonusSessions.find(s => totalMin >= getBonusWindowStart(s.startMin) && totalMin < s.startMin + 45) || null;
     // For upcoming session display (outside any active window), pick the next upcoming one
-    const todayBonusCard = activeBonusCard || eligibleBonusSessions.find(s => totalMin < s.startMin - 30) || null;
+    const todayBonusCard = activeBonusCard || eligibleBonusSessions.find(s => totalMin < getBonusWindowStart(s.startMin)) || null;
     const isLive = [
       [285, 570], // Morning: 4:45 AM - 9:30 AM
       [945, 1170], // Evening: 3:45 PM - 7:30 PM

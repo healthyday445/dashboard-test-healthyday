@@ -81,6 +81,42 @@ test.describe(`14-day free batch — regular/default flow (2026-07-13 cohort)`, 
     });
   });
 
+  // Regression coverage for getBonusWindowStart (src/lib/utils.ts): the bonus waiting-screen
+  // window used to open at a fixed 30 min before the bonus start, leaving a gap right after the
+  // preceding regular session block ended (7:30 PM evening / 9:30 AM morning) where the UI fell
+  // back to "Next Session is Tomorrow" or the plain "next session" card instead of the upcoming
+  // bonus session. Same fix and same bonus schedule as the July-6 cohort (shared component), so
+  // mirrored here for the regular/default flow.
+  test.describe("Bonus window opens right when the prior regular session block ends", () => {
+    test("Day 3 Face Yoga — waiting at 7:35 PM, not \"Tomorrow\"", async ({ page }) => {
+      await page.goto(`/${telugu.mobile}?forceDay=3&time=7.35pm`);
+      await expect(page.getByText("Face Yoga Session at 8:30 PM")).toBeVisible();
+      await expect(page.getByText("Next Yoga session is Tomorrow at 5:30AM")).not.toBeVisible();
+    });
+
+    test("Day 7 Weight Loss — waiting at 9:35 AM (English)", async ({ page }) => {
+      await page.goto(`/${english.mobile}?forceDay=7&time=9.35am`);
+      await expect(page.getByText("Weight Loss Orientation at 11:00 AM")).toBeVisible();
+    });
+
+    test("Day 10 Breath Work — waiting at 7:35 PM, not \"Tomorrow\"", async ({ page }) => {
+      await page.goto(`/${telugu.mobile}?forceDay=10&time=7.35pm`);
+      await expect(page.getByText("Breath Work Session at 9:00 PM")).toBeVisible();
+      await expect(page.getByText("Next Yoga session is Tomorrow at 5:30AM")).not.toBeVisible();
+    });
+
+    test("Day 12 Meditation — waiting at 7:35 PM, not \"Tomorrow\"", async ({ page }) => {
+      await page.goto(`/${english.mobile}?forceDay=12&time=7.35pm`);
+      await expect(page.getByText("Meditation Session at 8:30 PM")).toBeVisible();
+      await expect(page.getByText("Next Yoga session is Tomorrow at 5:30AM")).not.toBeVisible();
+    });
+
+    test("Day 14 Sleep — waiting at 9:35 AM (Telugu)", async ({ page }) => {
+      await page.goto(`/${telugu.mobile}?forceDay=14&time=9.35am`);
+      await expect(page.getByText("Sleep Session at 11:00 AM")).toBeVisible();
+    });
+  });
+
   // Level Bonus schedule (new — only exists for this V2 flow, not the July-6 special batch).
   // Implemented in src/components/FourteenDaysV2LevelCard.tsx / src/pages/FourteenDaysV2Program.tsx:
   // LEVEL_UNLOCK_DAYS_V2 = [3, 6, 9, 12, 14] → Detox / Breakfast / Lunch / Dinner / Certificate.

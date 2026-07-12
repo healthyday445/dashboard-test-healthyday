@@ -45,6 +45,18 @@ test.describe(`14-day free batch (2026-07-06 cohort)`, () => {
 
   test.describe("Special bonus sessions (FourteenDayBonusSessionCard)", () => {
     test.describe("Day 3 — Face Yoga", () => {
+      // Regression: the bonus waiting-screen window used to open at a fixed 30 min before start
+      // (8:00 PM), leaving a gap from 7:30 PM (evening regular session end) to 8:00 PM where the
+      // UI fell back to "Next Session is Tomorrow" even though a bonus session was scheduled later
+      // that same evening. getBonusWindowStart (src/lib/utils.ts) now opens the window right when
+      // the evening block ends instead.
+      test("waiting immediately after evening session ends at 7:35 PM, not \"Tomorrow\"", async ({ page }) => {
+        await page.goto(`/${telugu.mobile}?forceDay=3&time=7.35pm`);
+        await expect(page.getByRole("heading", { name: "Special Bonus Session" })).toBeVisible();
+        await expect(page.getByText("Face Yoga Session at 8:30 PM")).toBeVisible();
+        await expect(page.getByText("Next Yoga session is Tomorrow at 5:30AM")).not.toBeVisible();
+      });
+
       test("waiting at 8:15 PM (Telugu)", async ({ page }) => {
         await page.goto(`/${telugu.mobile}?forceDay=3&time=8.15pm`);
         await expect(page.getByRole("heading", { name: "Special Bonus Session" })).toBeVisible();
@@ -71,6 +83,14 @@ test.describe(`14-day free batch (2026-07-06 cohort)`, () => {
     });
 
     test.describe("Day 7 — Weight Loss", () => {
+      // Regression: same gap as Day 3 but at the morning boundary (9:30 AM session end -> old
+      // fixed window opened at 10:30 AM). Midday gap fell back to the regular "next session at
+      // 4:30 PM" card instead of the upcoming bonus session.
+      test("waiting immediately after morning session ends at 9:35 AM (English)", async ({ page }) => {
+        await page.goto(`/${english.mobile}?forceDay=7&time=9.35am`);
+        await expect(page.getByText("Weight Loss Orientation at 11:00 AM")).toBeVisible();
+      });
+
       test("waiting at 10:45 AM (English — \"Weight Loss Orientation\")", async ({ page }) => {
         await page.goto(`/${english.mobile}?forceDay=7&time=10.45am`);
         await expect(page.getByText("Weight Loss Orientation at 11:00 AM")).toBeVisible();
@@ -90,6 +110,15 @@ test.describe(`14-day free batch (2026-07-06 cohort)`, () => {
     });
 
     test.describe("Day 10 — Breath Work", () => {
+      // Regression: Day 10's bonus starts at 9:00 PM, so the old fixed 30-min window opened at
+      // 8:30 PM — a full hour after the 7:30 PM evening session end, the widest gap of the five
+      // bonus days.
+      test("waiting immediately after evening session ends at 7:35 PM, not \"Tomorrow\"", async ({ page }) => {
+        await page.goto(`/${telugu.mobile}?forceDay=10&time=7.35pm`);
+        await expect(page.getByText("Breath Work Session at 9:00 PM")).toBeVisible();
+        await expect(page.getByText("Next Yoga session is Tomorrow at 5:30AM")).not.toBeVisible();
+      });
+
       test("waiting at 8:45 PM (Telugu)", async ({ page }) => {
         await page.goto(`/${telugu.mobile}?forceDay=10&time=8.45pm`);
         await expect(page.getByText("Breath Work Session at 9:00 PM")).toBeVisible();
@@ -109,6 +138,12 @@ test.describe(`14-day free batch (2026-07-06 cohort)`, () => {
     });
 
     test.describe("Day 12 — Meditation", () => {
+      test("waiting immediately after evening session ends at 7:35 PM, not \"Tomorrow\"", async ({ page }) => {
+        await page.goto(`/${english.mobile}?forceDay=12&time=7.35pm`);
+        await expect(page.getByText("Meditation Session at 8:30 PM")).toBeVisible();
+        await expect(page.getByText("Next Yoga session is Tomorrow at 5:30AM")).not.toBeVisible();
+      });
+
       test("waiting at 8:15 PM (English)", async ({ page }) => {
         await page.goto(`/${english.mobile}?forceDay=12&time=8.15pm`);
         await expect(page.getByText("Meditation Session at 8:30 PM")).toBeVisible();
@@ -128,6 +163,11 @@ test.describe(`14-day free batch (2026-07-06 cohort)`, () => {
     });
 
     test.describe("Day 14 — Sleep", () => {
+      test("waiting immediately after morning session ends at 9:35 AM (Telugu)", async ({ page }) => {
+        await page.goto(`/${telugu.mobile}?forceDay=14&time=9.35am`);
+        await expect(page.getByText("Sleep Session at 11:00 AM")).toBeVisible();
+      });
+
       test("waiting at 10:45 AM (Telugu)", async ({ page }) => {
         await page.goto(`/${telugu.mobile}?forceDay=14&time=10.45am`);
         await expect(page.getByText("Sleep Session at 11:00 AM")).toBeVisible();

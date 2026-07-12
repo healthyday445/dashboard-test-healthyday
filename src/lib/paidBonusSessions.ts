@@ -1,3 +1,5 @@
+import { getBonusWindowStart } from "@/lib/utils";
+
 const ytThumb = (id: string) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 
 export interface PaidBonusCard {
@@ -32,8 +34,8 @@ const getDynamicThumbnail = (link: string, fallbackId: string) => {
 
 /**
  * Builds the list of bonus sessions a paid student is eligible for today (Face Yoga,
- * Diet, Breath to Heal), then picks whichever one's active window (startMin-30 to
- * startMin+45) matches the current time — or null if none are active right now.
+ * Diet, Breath to Heal), then picks whichever one's active window (getBonusWindowStart(startMin)
+ * to startMin+45) matches the current time — or null if none are active right now.
  */
 export function getActivePaidBonusSession({
   is6Month,
@@ -70,7 +72,7 @@ export function getActivePaidBonusSession({
     eligible.push({ name: "Breath to Heal Session", fullName: "Breath to Heal Session at 9:00 PM", startMin: 1260, sessionLink: link, thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8"), code: "b2h" });
   }
 
-  return eligible.find(s => totalMin >= s.startMin - 30 && totalMin < s.startMin + 45) || null;
+  return eligible.find(s => totalMin >= getBonusWindowStart(s.startMin) && totalMin < s.startMin + 45) || null;
 }
 
 /** Regular (non-bonus) daily session live windows, in IST minutes-since-midnight. */
