@@ -6,12 +6,15 @@ import week2JourneyBg from "@/assets/21daysprogram/journey_hero_bg.webp";
 import HeroBannerWithTabs from "@/components/HeroBannerWithTabs";
 import { FourteenDaysV2TabBar } from "@/components/FourteenDaysV2TabBar";
 import { WeekTwoCountdownBanner } from "@/components/WeekTwoCountdownBanner";
+import { YogaJourneyCompletedPage } from "@/components/YogaJourneyCompletedPage";
+import { CertificateModal } from "@/components/CertificateModal";
 import IndexFourteenDays from "@/pages/IndexFourteenDays";
 import IndexFourteenDaysV2 from "@/pages/IndexFourteenDaysV2";
 import IndexTwentyOneDay from "@/pages/IndexTwentyOneDay";
 import TwentyOneDaysProgram from "@/pages/TwentyOneDaysProgram";
 import FourteenDaysV2Program from "@/pages/FourteenDaysV2Program";
 import { getEffectiveStatus } from "@/lib/studentStatus";
+import { isFreeBatchOver, getSimulatedBatchDate } from "@/lib/utils";
 
 // The one-off June-21-2026 cohort runs the special 21-day (22-day) programme;
 // the one-off July-6-2026 cohort keeps the original 14-day (no-tabs) experience;
@@ -40,6 +43,7 @@ const Dashboard = () => {
   const [loading, setLoading] = useState(!previewDashboard && previewLevels === null);
   const [activeTab, setActiveTab] = useState<"dashboard" | "journey">(startOnJourney ? "journey" : "dashboard");
   const [journeyMounted, setJourneyMounted] = useState(startOnJourney);
+  const [showCertificateModal, setShowCertificateModal] = useState(false);
 
   useEffect(() => {
     // A preview param means we want canned data, not whatever real account
@@ -173,6 +177,18 @@ const Dashboard = () => {
 
   // 21-day cohort: existing orange countdown-banner tab bar (HeroBannerWithTabs), unchanged.
   if (is21DayBatch) {
+    // Once the batch is calendar-over (from 7:30 PM IST on day 21, or any time day 22+ —
+    // same rule IndexTwentyOneDay's own Live Sessions tab already uses), the journey tab
+    // shows the same completed-state view as the 14DaysCompleted status, even if the
+    // backend status field hasn't flipped over yet.
+    const batchOverNow = forceDayParam !== null && studentData?.free_batch_start_date
+      ? isFreeBatchOver(studentData.free_batch_end_date, {
+          today: getSimulatedBatchDate(studentData.free_batch_start_date, parseInt(forceDayParam, 10)),
+          timeOverride: timeParam,
+        })
+      : isFreeBatchOver(studentData?.free_batch_end_date);
+    const sessionJoinLink = studentData?.free_classes_joining_link || studentData?.free_class_join_link;
+
     return (
       <div className="hd-page" style={{ fontFamily: "Outfit, sans-serif" }}>
         <header className="hd-header bg-white">
@@ -191,10 +207,25 @@ const Dashboard = () => {
           <LiveSessions initialStudentData={effectiveStudentData} onSwitchToJourney={() => handleTabChange("journey")} />
         </div>
         {journeyMounted && (
-          <div style={{ display: activeTab === "journey" ? "block" : "none" }}>
-            <TwentyOneDaysProgram initialStudentData={effectiveStudentData} />
+          <div style={{
+            display: activeTab === "journey" ? "block" : "none",
+            ...(batchOverNow ? { backgroundImage: `url(${week1JourneyBg})`, backgroundSize: "100% auto", backgroundPosition: "top center", backgroundRepeat: "no-repeat" } : {}),
+          }}>
+            <YogaJourneyCompletedPage
+              studentName={studentData?.name}
+              language={studentData?.language}
+              joinLink={sessionJoinLink || ""}
+              onCertificateClick={() => setShowCertificateModal(true)}
+            />
           </div>
         )}
+        <CertificateModal
+          isOpen={showCertificateModal}
+          onClose={() => setShowCertificateModal(false)}
+          initialName={studentData?.name}
+          mobile={mobile || studentData?.mobile}
+          daysAttended={21}
+        />
       </div>
     );
   }

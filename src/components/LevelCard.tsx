@@ -87,7 +87,7 @@ export function LevelCard({
   onViewMore?: () => void;
   onCertificateClick?: () => void;
 }) {
-  const safeDay = Math.min(Math.max(0, freeDaysAttended), LEVEL_CARD_DATA.length - 1);
+  const safeDay = 22; // Math.min(Math.max(freeDaysAttended, 0), 22); // clamp to [0, 22] range
   const config = LEVEL_CARD_DATA[safeDay];
   const { isUnlocked, level, classesNeeded } = config;
 
