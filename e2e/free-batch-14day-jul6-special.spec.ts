@@ -57,10 +57,18 @@ test.describe(`14-day free batch (2026-07-06 cohort)`, () => {
         await expect(page.getByText("Next Yoga session is Tomorrow at 5:30AM")).not.toBeVisible();
       });
 
-      test("waiting at 8:15 PM (Telugu)", async ({ page }) => {
-        await page.goto(`/${telugu.mobile}?forceDay=3&time=8.15pm`);
+      test("waiting at 7:45 PM (Telugu)", async ({ page }) => {
+        await page.goto(`/${telugu.mobile}?forceDay=3&time=7.45pm`);
         await expect(page.getByRole("heading", { name: "Special Bonus Session" })).toBeVisible();
         await expect(page.getByText("Face Yoga Session at 8:30 PM")).toBeVisible();
+      });
+
+      // JOIN NOW/live opens 30 min before the actual 8:30 PM start (src/pages/IndexFourteenDays.tsx
+      // bonusIsLive), not at the actual start time.
+      test("JOIN NOW visible 30 min early, at 8:05 PM (Telugu)", async ({ page }) => {
+        await page.goto(`/${telugu.mobile}?forceDay=3&time=8.05pm`);
+        await expect(page.getByText("Face Yoga Session")).toBeVisible();
+        await expect(page.getByText("JOIN NOW")).toBeVisible();
       });
 
       test("live at 8:45 PM (Telugu)", async ({ page }) => {
@@ -91,9 +99,16 @@ test.describe(`14-day free batch (2026-07-06 cohort)`, () => {
         await expect(page.getByText("Weight Loss Orientation at 11:00 AM")).toBeVisible();
       });
 
-      test("waiting at 10:45 AM (English — \"Weight Loss Orientation\")", async ({ page }) => {
-        await page.goto(`/${english.mobile}?forceDay=7&time=10.45am`);
+      test("waiting at 10:15 AM (English — \"Weight Loss Orientation\")", async ({ page }) => {
+        await page.goto(`/${english.mobile}?forceDay=7&time=10.15am`);
         await expect(page.getByText("Weight Loss Orientation at 11:00 AM")).toBeVisible();
+      });
+
+      // JOIN NOW/live opens 30 min before the actual 11:00 AM start.
+      test("JOIN NOW visible 30 min early, at 10:35 AM (English)", async ({ page }) => {
+        await page.goto(`/${english.mobile}?forceDay=7&time=10.35am`);
+        await expect(page.getByText("Weight Loss Orientation")).toBeVisible();
+        await expect(page.getByText("JOIN NOW")).toBeVisible();
       });
 
       test("live at 11:20 AM (English)", async ({ page }) => {
@@ -119,9 +134,16 @@ test.describe(`14-day free batch (2026-07-06 cohort)`, () => {
         await expect(page.getByText("Next Yoga session is Tomorrow at 5:30AM")).not.toBeVisible();
       });
 
-      test("waiting at 8:45 PM (Telugu)", async ({ page }) => {
-        await page.goto(`/${telugu.mobile}?forceDay=10&time=8.45pm`);
+      test("waiting at 8:15 PM (Telugu)", async ({ page }) => {
+        await page.goto(`/${telugu.mobile}?forceDay=10&time=8.15pm`);
         await expect(page.getByText("Breath Work Session at 9:00 PM")).toBeVisible();
+      });
+
+      // JOIN NOW/live opens 30 min before the actual 9:00 PM start.
+      test("JOIN NOW visible 30 min early, at 8:35 PM (Telugu)", async ({ page }) => {
+        await page.goto(`/${telugu.mobile}?forceDay=10&time=8.35pm`);
+        await expect(page.getByText("Breath Work Session")).toBeVisible();
+        await expect(page.getByText("JOIN NOW")).toBeVisible();
       });
 
       test("live at 9:20 PM (Telugu)", async ({ page }) => {
@@ -144,9 +166,16 @@ test.describe(`14-day free batch (2026-07-06 cohort)`, () => {
         await expect(page.getByText("Next Yoga session is Tomorrow at 5:30AM")).not.toBeVisible();
       });
 
-      test("waiting at 8:15 PM (English)", async ({ page }) => {
-        await page.goto(`/${english.mobile}?forceDay=12&time=8.15pm`);
+      test("waiting at 7:45 PM (English)", async ({ page }) => {
+        await page.goto(`/${english.mobile}?forceDay=12&time=7.45pm`);
         await expect(page.getByText("Meditation Session at 8:30 PM")).toBeVisible();
+      });
+
+      // JOIN NOW/live opens 30 min before the actual 8:30 PM start.
+      test("JOIN NOW visible 30 min early, at 8:05 PM (English)", async ({ page }) => {
+        await page.goto(`/${english.mobile}?forceDay=12&time=8.05pm`);
+        await expect(page.getByText("Meditation Session")).toBeVisible();
+        await expect(page.getByText("JOIN NOW")).toBeVisible();
       });
 
       test("live at 8:50 PM (English)", async ({ page }) => {
@@ -168,9 +197,16 @@ test.describe(`14-day free batch (2026-07-06 cohort)`, () => {
         await expect(page.getByText("Sleep Session at 11:00 AM")).toBeVisible();
       });
 
-      test("waiting at 10:45 AM (Telugu)", async ({ page }) => {
-        await page.goto(`/${telugu.mobile}?forceDay=14&time=10.45am`);
+      test("waiting at 10:15 AM (Telugu)", async ({ page }) => {
+        await page.goto(`/${telugu.mobile}?forceDay=14&time=10.15am`);
         await expect(page.getByText("Sleep Session at 11:00 AM")).toBeVisible();
+      });
+
+      // JOIN NOW/live opens 30 min before the actual 11:00 AM start.
+      test("JOIN NOW visible 30 min early, at 10:35 AM (Telugu)", async ({ page }) => {
+        await page.goto(`/${telugu.mobile}?forceDay=14&time=10.35am`);
+        await expect(page.getByText("Sleep Session")).toBeVisible();
+        await expect(page.getByText("JOIN NOW")).toBeVisible();
       });
 
       test("live at 11:20 AM (Telugu)", async ({ page }) => {

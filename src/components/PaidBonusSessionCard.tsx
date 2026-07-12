@@ -16,10 +16,11 @@ interface PaidBonusSessionCardProps {
 
 /** "Face Yoga" / "Diet" / "Breath to Heal" bonus card shown to eligible paid plans near the session's start time. */
 export const PaidBonusSessionCard: React.FC<PaidBonusSessionCardProps> = ({ bonusCard, totalMin, mobile }) => {
-  // Extended from 30 to 45 min so "live" runs through the full eligibility window
-  // (startMin-30 to startMin+45) — otherwise the last 15 min fell back to the
-  // non-live "Session Starts at X" copy, showing an already-past start time.
-  const isLive = totalMin >= bonusCard.startMin && totalMin < bonusCard.startMin + 45;
+  // JOIN NOW shows from 30 min before the session's actual start through 45 min after,
+  // matching the card's full eligibility window (getActivePaidBonusSession's startMin-30
+  // to startMin+45) — otherwise the last 15 min fell back to the non-live "Session Starts
+  // at X" copy, showing an already-past start time.
+  const isLive = totalMin >= bonusCard.startMin - 30 && totalMin < bonusCard.startMin + 45;
   const timeLabel = bonusCard.fullName.replace(/^.*at\s+/, "");
   const handleClick = () => trackSessionClick(mobile, bonusCard.code);
 

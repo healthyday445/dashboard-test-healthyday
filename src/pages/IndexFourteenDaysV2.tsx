@@ -549,7 +549,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
         })
       : null;
     const showBonus = !!bonusInfo && totalMinCalc >= getBonusWindowStart(bonusInfo.startMin) && totalMinCalc < bonusInfo.startMin + (bonusInfo.activeEndOffset ?? 30);
-    const bonusIsLive = !!bonusInfo && totalMinCalc >= bonusInfo.startMin && totalMinCalc < bonusInfo.startMin + (bonusInfo.liveDuration ?? 30);
+    const bonusIsLive = !!bonusInfo && totalMinCalc >= bonusInfo.startMin - 30 && totalMinCalc < bonusInfo.startMin + (bonusInfo.liveDuration ?? 30);
 
     return (
       <div style={{ fontFamily: "Outfit, sans-serif" }}>

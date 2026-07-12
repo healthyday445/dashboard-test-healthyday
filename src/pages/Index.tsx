@@ -675,7 +675,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
       const totalMin = (() => { if (_timeParam) { const isPM = _timeParam.toLowerCase().endsWith("pm"); const s = _timeParam.toLowerCase().replace("am", "").replace("pm", ""); const [hStr, mStr] = s.split("."); let h = parseInt(hStr, 10); const m = parseInt(mStr ?? "0", 10); if (isPM && h !== 12) h += 12; if (!isPM && h === 12) h = 0; return h * 60 + m; } const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000); return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes(); })();
       const showBonus = isOngoingStatus && totalMin >= getBonusWindowStart(bonusSession.startMin) && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
       if (showBonus) {
-        const isLive = totalMin >= bonusSession.startMin && totalMin < bonusSession.startMin + (bonusSession.liveDuration ?? 30);
+        const isLive = totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + (bonusSession.liveDuration ?? 30);
         const isAMSession = bonusSession.startMin < 12 * 60;
         const nextSlots = isAMSession ? ["4:00 PM", "5:30 PM", "6:30 PM"] : ["5:00 AM", "6:30 AM", "7:30 AM", "8:30 AM"];
         const nextWhen = isAMSession ? "at 4:00 PM" : "tomorrow at 5:00 AM";
@@ -914,7 +914,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
 
         {activeRecurringBonusCard && (() => {
           const rTotalMin = (() => { const _t = new URLSearchParams(location.search).get("time"); if (_t) { const isPM = _t.toLowerCase().endsWith("pm"); const s = _t.toLowerCase().replace("am", "").replace("pm", ""); const [hStr, mStr] = s.split("."); let h = parseInt(hStr, 10); const m = parseInt(mStr ?? "0", 10); if (isPM && h !== 12) h += 12; if (!isPM && h === 12) h = 0; return h * 60 + m; } const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000); return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes(); })();
-          const bonusIsLive = rTotalMin >= activeRecurringBonusCard.startMin && rTotalMin < activeRecurringBonusCard.startMin + 30;
+          const bonusIsLive = rTotalMin >= activeRecurringBonusCard.startMin - 30 && rTotalMin < activeRecurringBonusCard.startMin + 30;
           const bonusTimeLabel = activeRecurringBonusCard.fullName.replace(/^.*at\s+/, '');
           return (
             <div style={{ padding: "24px 20px 0" }}>
@@ -1469,7 +1469,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
 
         {/* Bonus Special Session (Paid) */}
         {activeBonusCard && (() => {
-          const bonusIsLive = totalMin >= activeBonusCard.startMin && totalMin < activeBonusCard.startMin + 30;
+          const bonusIsLive = totalMin >= activeBonusCard.startMin - 30 && totalMin < activeBonusCard.startMin + 30;
           const bonusTimeLabel = activeBonusCard.fullName.replace(/^.*at\s+/, '');
           return (
             <div style={{ padding: "24px 20px 0" }}>

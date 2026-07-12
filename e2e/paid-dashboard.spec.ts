@@ -26,10 +26,14 @@ test.describe(`Paid dashboard — English account (${account.mobile})`, () => {
 
   test.describe("Bonus session cards", () => {
     test.describe("Diet Session bonus card", () => {
-      test("upcoming at 7:40 PM", async ({ page }) => {
-        await page.goto(`/${account.mobile}?time=7.40pm`);
-        await expect(page.getByRole("heading", { name: "Next Session - Diet Session" })).toBeVisible();
-        await expect(page.getByText("Session Starts at 8:00 PM")).toBeVisible();
+      // Diet starts at 8:00 PM, 30 min after the 7:30 PM evening-session-end (which is also when
+      // this card's eligibility window opens, per getActivePaidBonusSession/getBonusWindowStart).
+      // Live now opens 30 min before the actual start too (PaidBonusSessionCard's isLive), so both
+      // land on the same 7:30 PM instant — there's no separate "upcoming" state left for this one,
+      // it goes straight from not-shown to "Live Now" the moment it becomes eligible.
+      test("live immediately at 7:35 PM (30 min before the actual 8:00 PM start)", async ({ page }) => {
+        await page.goto(`/${account.mobile}?time=7.35pm`);
+        await expect(page.getByRole("heading", { name: "Diet Session - Live Now" })).toBeVisible();
       });
 
       test("live at 8:40 PM", async ({ page }) => {
@@ -41,10 +45,19 @@ test.describe(`Paid dashboard — English account (${account.mobile})`, () => {
     test.describe("Breath to Heal bonus card", () => {
       // forcePaidDay=1 (Monday) — B2H is explicitly excluded for English on Sundays, so pin a
       // non-Sunday day to keep this deterministic regardless of which real day tests run on.
-      test("upcoming at 8:45 PM", async ({ page }) => {
+      //
+      // Diet (8:00 PM) and B2H (9:00 PM) eligibility windows overlap (both open at 7:30 PM per
+      // getBonusWindowStart/getActivePaidBonusSession), and getActivePaidBonusSession's .find()
+      // returns Diet first since it's pushed into the eligible array before B2H — so B2H is only
+      // ever the *selected* card from 8:45 PM onward (once Diet's own window, which now also
+      // extends to +45 min, has closed). B2H's own Live Now window now starts at 8:30 PM (30 min
+      // before its 9:00 PM start) per PaidBonusSessionCard's isLive shift, which is entirely inside
+      // that Diet-masked period — so there's no longer an observable "upcoming" (non-live) state
+      // for B2H at all: the first moment it can appear (8:45 PM) it's already live. This masking is
+      // a pre-existing quirk of the fixed eligible-array ordering, not something this fix changed.
+      test("takes over from Diet at 8:45 PM, already Live Now", async ({ page }) => {
         await page.goto(`/${account.mobile}?forcePaidDay=1&time=8.45pm`);
-        await expect(page.getByRole("heading", { name: "Next Session - Breath to Heal Session" })).toBeVisible();
-        await expect(page.getByText("Session Starts at 9:00 PM")).toBeVisible();
+        await expect(page.getByRole("heading", { name: "Breath to Heal Session - Live Now" })).toBeVisible();
       });
 
       test("live at 9:30 PM", async ({ page }) => {
@@ -54,11 +67,18 @@ test.describe(`Paid dashboard — English account (${account.mobile})`, () => {
     });
 
     test.describe("Face Yoga bonus card (English weeks only, forced Sunday)", () => {
-      test("upcoming at 11:20 AM", async ({ page }) => {
+      test("upcoming at 10:45 AM", async ({ page }) => {
         test.skip(!isEnglishFaceYogaWeek, "Real calendar is on the Telugu Face Yoga week right now — not forceable for this English account");
-        await page.goto(`/${account.mobile}?forcePaidDay=0&time=11.20am`);
+        await page.goto(`/${account.mobile}?forcePaidDay=0&time=10.45am`);
         await expect(page.getByRole("heading", { name: "Next Session - Face Yoga Session" })).toBeVisible();
         await expect(page.getByText("Session Starts at 11:30 AM")).toBeVisible();
+      });
+
+      // Live Now opens 30 min before the actual 11:30 AM start.
+      test("live at 11:05 AM (30 min before the actual 11:30 AM start)", async ({ page }) => {
+        test.skip(!isEnglishFaceYogaWeek, "Real calendar is on the Telugu Face Yoga week right now — not forceable for this English account");
+        await page.goto(`/${account.mobile}?forcePaidDay=0&time=11.05am`);
+        await expect(page.getByRole("heading", { name: "Face Yoga Session - Live Now" })).toBeVisible();
       });
 
       test("live at 11:45 AM", async ({ page }) => {
