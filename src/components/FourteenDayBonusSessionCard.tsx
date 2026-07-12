@@ -127,19 +127,26 @@ export const FourteenDayBonusSessionCard: React.FC<FourteenDayBonusSessionCardPr
       </div>
 
       {isLive ? (
-        <>
-          <a href={bonusSession.sessionLink} target="_blank" rel="noopener noreferrer" onClick={handleClick} style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px", overflow: "hidden", background: "#000", position: "relative", marginBottom: "12px" }}>
+        <div style={{ marginBottom: "16px" }}>
+          <a href={bonusSession.sessionLink} target="_blank" rel="noopener noreferrer" onClick={handleClick} style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
             <img
               src={bonusSession.thumbnail}
               alt={bonusSession.name}
-              style={{ width: "100%", height: "auto", aspectRatio: "372/204", objectFit: "cover", opacity: 0.85, display: "block" }}
+              style={{ width: "100%", height: "auto", aspectRatio: "360/197", objectFit: "cover", opacity: 0.85, display: "block" }}
             />
             <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
               <PlayButton />
             </div>
           </a>
-          <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
-            <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>
+          <div style={{
+            width: "100%", height: "58px",
+            borderRadius: "0 0 12px 12px",
+            border: "1.5px solid #E9E9E9", background: "#FFF",
+            boxShadow: "0 2px 4px 0 rgba(0,0,0,0.25)",
+            display: "flex", alignItems: "center", justifyContent: "space-between", boxSizing: "border-box",
+            padding: "0 16px",
+          }}>
+            <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>
               {bonusSession.name}
             </span>
             <a
@@ -148,19 +155,19 @@ export const FourteenDayBonusSessionCard: React.FC<FourteenDayBonusSessionCardPr
               rel="noopener noreferrer"
               onClick={handleClick}
               style={{
-                display: "flex", alignItems: "center", gap: "8px",
-                height: "38px", padding: "0 18px", borderRadius: "8px",
-                background: "#FEAB27", textDecoration: "none",
-                boxShadow: "0 2px 8px rgba(254,171,39,0.35)",
+                width: "138px", height: "29px", flexShrink: 0, borderRadius: "8px", background: "#FEAB27",
+                display: "flex", alignItems: "center", justifyContent: "center", gap: "6px", textDecoration: "none",
               }}
             >
-              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="white">
-                <path d="M8 5v14l11-7z" />
+              <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 20 20" fill="none">
+                <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
               </svg>
-              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700 }}>JOIN NOW</span>
+              <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "15px", fontWeight: 700, lineHeight: "normal" }}>JOIN NOW</span>
             </a>
           </div>
-        </>
+        </div>
       ) : (
         <div style={{ marginBottom: "16px" }}>
           <a href={bonusSession.sessionLink} target="_blank" rel="noopener noreferrer" style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
