@@ -23,7 +23,9 @@
       "mcp__chrome-devtools__wait_for",
       "mcp__chrome-devtools__click",
       "mcp__chrome-devtools__take_snapshot",
-      "Bash(npx chrome-devtools-mcp@latest --help)"
+      "Bash(npx chrome-devtools-mcp@latest --help)",
+      "mcp__claude_ai_Google_Drive__read_file_content",
+      "mcp__claude_ai_Google_Drive__download_file_content"
     ],
     "defaultMode": "bypassPermissions",
     "additionalDirectories": [
