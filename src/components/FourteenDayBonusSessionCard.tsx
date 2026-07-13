@@ -23,29 +23,31 @@ interface BonusThumbnails {
 }
 
 // Day → bonus session info — same 5 days for both languages. startMin is the actual
-// session start (not the waiting screen); the card starts showing 30 min before that,
-// and "live"/JOIN runs for the session's real duration below. Days beyond 14 belong to
-// the 21/22-day cohort and are never reached here since this page caps at day 14.
+// session start (not the waiting screen); the card starts showing 30 min before that
+// (clipped to the regular-session block boundary via getBonusWindowStart when the bonus
+// falls right after one ends), and "live"/JOIN runs from 30 min before start through
+// 1 hour after start for every session. Days beyond 14 belong to the 21/22-day cohort
+// and are never reached here since this page caps at day 14.
 //
-// Day  Session       Card shows from   Actual session time
-// 3    Face Yoga     8:00 PM           8:30 – 9:00 PM  (30 min)
-// 7    Weight Loss   10:30 AM          11:00 AM – 12:00 Noon (60 min)
-// 10   Breath Work   8:30 PM           9:00 – 9:30 PM  (30 min)
-// 12   Meditation    8:00 PM           8:30 – 9:00 PM  (30 min)
-// 14   Sleep         10:30 AM          11:00 – 11:45 AM (45 min)
+// Day  Session       Actual session time   Join window (30 min before – 1 hr after)
+// 3    Face Yoga     9:00 PM                8:30 – 10:00 PM
+// 7    Weight Loss   11:00 AM               10:30 AM – 12:00 PM
+// 10   Breath Work   9:00 PM                8:30 – 10:00 PM
+// 12   Meditation    8:30 PM                8:00 – 9:30 PM
+// 14   Sleep         11:00 AM               10:30 AM – 12:00 PM
 export const getBonusInfo = (day: number, lang: string, thumbnails: BonusThumbnails): BonusInfo | null => {
   const isEnglish = lang === "English";
   switch (day) {
     case 3:
       return {
         name: "Face Yoga Session",
-        fullName: "Face Yoga Session at 8:30 PM",
-        startMin: 20 * 60 + 30,
+        fullName: "Face Yoga Session at 9:00 PM",
+        startMin: 21 * 60,
         videoId: "SyjnCjDtNS8",
         sessionLink: isEnglish ? "https://start.dailyyogawithjagan.com/faceyoga_eng" : "https://start.dailyyogawithjagan.com/faceyoga",
         thumbnail: isEnglish ? thumbnails.faceYogaEng : thumbnails.faceYogaTel,
-        liveDuration: 30,
-        activeEndOffset: 30,
+        liveDuration: 60,
+        activeEndOffset: 60,
       };
     case 7: {
       const name = isEnglish ? "Weight Loss Orientation" : "Weight Loss Session";
@@ -68,8 +70,8 @@ export const getBonusInfo = (day: number, lang: string, thumbnails: BonusThumbna
         videoId: "SyjnCjDtNS8",
         sessionLink: isEnglish ? "https://start.dailyyogawithjagan.com/bw_eng" : "https://start.dailyyogawithjagan.com/breathwork",
         thumbnail: isEnglish ? thumbnails.breathWorkEng : thumbnails.breathWorkTel,
-        liveDuration: 30,
-        activeEndOffset: 30,
+        liveDuration: 60,
+        activeEndOffset: 60,
       };
     case 12:
       return {
@@ -79,8 +81,8 @@ export const getBonusInfo = (day: number, lang: string, thumbnails: BonusThumbna
         videoId: isEnglish ? "u1Hom0s7ibU" : "cXaVIxH3RKA",
         sessionLink: isEnglish ? "https://start.dailyyogawithjagan.com/meditation_eng" : "https://www.youtube.com/watch?v=cXaVIxH3RKA",
         thumbnail: isEnglish ? thumbnails.meditationEng : thumbnails.meditationTel,
-        liveDuration: 30,
-        activeEndOffset: 30,
+        liveDuration: 60,
+        activeEndOffset: 60,
       };
     case 14:
       return {
@@ -90,8 +92,8 @@ export const getBonusInfo = (day: number, lang: string, thumbnails: BonusThumbna
         videoId: "SyjnCjDtNS8",
         sessionLink: isEnglish ? "https://start.dailyyogawithjagan.com/sleepsession_eng" : "https://start.dailyyogawithjagan.com/sleepsession",
         thumbnail: isEnglish ? thumbnails.sleepEng : thumbnails.sleepTel,
-        liveDuration: 45,
-        activeEndOffset: 45,
+        liveDuration: 60,
+        activeEndOffset: 60,
       };
     default:
       return null;
