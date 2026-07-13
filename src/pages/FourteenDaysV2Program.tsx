@@ -29,6 +29,7 @@ import badgeCardL5 from "@/assets/21daysprogram/badge_card_l5.webp";
 import badgeCardShareIcon from "@/assets/21daysprogram/badge_card_share_icon.png";
 import { LEVEL_UNLOCK_DAYS_V2, getLevelRewardLinkV2 } from "@/components/FourteenDaysV2LevelCard";
 import { CertificateModal } from "@/components/CertificateModal";
+import { BadgeModal } from "@/components/BadgeModal";
 
 // 14-day journey: 5 levels (Detox/Breakfast/Lunch/Dinner/Certificate), unlocking every
 // 3 days except the last (day 14, only 2 days after level 4) — see LEVEL_UNLOCK_DAYS_V2.
@@ -318,6 +319,7 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
   const [loading, setLoading] = useState(!initialStudentData);
   const [error, setError] = useState<string | null>(null);
   const [showCertificateModal, setShowCertificateModal] = useState(false);
+  const [showBadgeModal, setShowBadgeModal] = useState(false);
 
   const timelineContainerRef = useRef<HTMLDivElement>(null);
   const nextDayRowRef = useRef<HTMLDivElement>(null);
@@ -392,6 +394,35 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
     const activeBatches = freeBatches.filter((b) => b.batch_start_date === studentData?.free_batch_start_date);
     const batchesToCheck = activeBatches.length > 0 ? activeBatches : freeBatches;
     const allDates = new Set<string>(batchesToCheck.flatMap((b) => b.attendance_tracker ?? []));
+    
+    // Include locally joined days that might not have synced to the backend yet
+    let joinedDays: number[] = [];
+    try {
+      const { safeLocalStorage } = require("@/lib/storage");
+      const keys = safeLocalStorage.keys().filter((k: string) => k.startsWith("hd_joined_"));
+      for (const k of keys) {
+        const stored = safeLocalStorage.getItem(k);
+        if (stored) {
+          joinedDays = JSON.parse(stored);
+          break;
+        }
+      }
+    } catch (e) {
+      // Ignore
+    }
+
+    if (studentData?.free_batch_start_date) {
+      const batchOrigin = new Date(studentData.free_batch_start_date);
+      batchOrigin.setHours(0, 0, 0, 0);
+      const joinedDatesNotInData = joinedDays.filter((dayNum) => {
+        const d = new Date(batchOrigin);
+        d.setDate(batchOrigin.getDate() + (dayNum - 1));
+        const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+        return !allDates.has(dateStr);
+      });
+      return Math.min(allDates.size + joinedDatesNotInData.length, 14);
+    }
+
     return Math.min(allDates.size, 14);
   })();
 
@@ -549,15 +580,14 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
                 ))}
               </p>
               {!zoneConfig.titleCaps && (
-                <a
-                  href="#"
-                  onClick={handleShareClick}
-                  className="flex items-center justify-center gap-[5px]"
-                  style={{ width: "100%", maxWidth: 179, height: 22, backgroundColor: "#feab27", borderRadius: 5, boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)", textDecoration: "none", flexShrink: 0 }}
+                <button
+                  onClick={() => setShowBadgeModal(true)}
+                  className="flex items-center justify-center gap-[5px] cursor-pointer border-none"
+                  style={{ width: "100%", maxWidth: 179, height: 22, backgroundColor: "#feab27", borderRadius: 5, boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)", flexShrink: 0 }}
                 >
-                  <img src={badgeCardShareIcon} alt="" style={{ width: 15, height: 15 }} />
-                  <span style={{ color: "white", fontSize: "min(12px, 2.9vw)", fontWeight: 700, fontFamily: "Outfit, sans-serif", whiteSpace: "nowrap" }}>Share on WhatsApp Status</span>
-                </a>
+                  <img src={downloadIcon} alt="" style={{ width: 12, height: 12 }} />
+                  <span style={{ color: "white", fontSize: "min(12px, 2.9vw)", fontWeight: 700, fontFamily: "Outfit, sans-serif", whiteSpace: "nowrap" }}>Download your badge</span>
+                </button>
               )}
             </div>
 
@@ -644,6 +674,13 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
         initialName={studentData?.name}
         mobile={mobile || studentData?.mobile}
         daysAttended={14}
+      />
+      <BadgeModal
+        isOpen={showBadgeModal}
+        onClose={() => setShowBadgeModal(false)}
+        initialName={studentData?.name}
+        mobile={mobile || studentData?.mobile}
+        badgeLevel={completedCount}
       />
     </div>
   );
