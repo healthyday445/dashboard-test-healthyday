@@ -499,11 +499,11 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           /* Step 2: Certificate Preview & Actions */
           <div>
             {/* Certificate Canvas Preview — cream/gold frame matching Certificate.tsx */}
-            <div className="w-full bg-gradient-to-b from-[#FFFDF9] via-[#FFF3D8]/60 to-[#FFFDF9] p-4 rounded-2xl border-2 border-[#FEE3A2] shadow-sm overflow-hidden mb-5">
-              <div className="relative rounded-xl shadow-2xl bg-white border border-[#F5EADC] overflow-hidden flex items-center justify-center">
+            <div className="w-full bg-gradient-to-b from-[#FFFDF9] via-[#FFF3D8]/60 to-[#FFFDF9] p-4 rounded-2xl border-2 border-[#FEE3A2] shadow-sm overflow-hidden mb-5 flex justify-center">
+              <div className="relative rounded-xl shadow-2xl bg-white border border-[#F5EADC] overflow-hidden flex items-center justify-center w-fit">
                 <canvas
                   ref={canvasRef}
-                  className="w-full h-auto block"
+                  className="max-w-full h-auto block"
                   style={{ maxHeight: "400px", objectFit: "contain", visibility: canvasReady ? "visible" : "hidden" }}
                 />
                 {!canvasReady && (

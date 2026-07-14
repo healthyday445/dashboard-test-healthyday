@@ -493,7 +493,14 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
     const attendedDates = new Set<string>(batchesToCheck.flatMap((b) => b.attendance_tracker ?? []));
     const batchOrigin = new Date(studentData?.free_batch_start_date!);
     batchOrigin.setHours(0, 0, 0, 0);
-    const freeDaysAttended = Math.min(attendedDates.size, 14);
+
+    const joinedDatesNotInData = joinedDays.filter((dayNum) => {
+      const d = new Date(batchOrigin);
+      d.setDate(batchOrigin.getDate() + (dayNum - 1));
+      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+      return !attendedDates.has(dateStr);
+    });
+    const freeDaysAttended = Math.min(attendedDates.size + joinedDatesNotInData.length, 14);
 
     const markTodayJoined = () => {
       if (!joinedDays.includes(currentDay)) {
