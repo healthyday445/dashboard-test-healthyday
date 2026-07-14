@@ -3,7 +3,8 @@ import { useLocation, useParams } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import imgTshirt from "@/assets/referral/tshirt-reward.webp";
 import imgDietPdf from "@/assets/referral/diet-pdf.webp";
-import { ReferralRewardsCard, DIET_PDF_REFS, TSHIRT_REFS } from "@/components/ReferralRewardsCard";
+import imgTenClasses from "@/assets/referral/ten-classes-reward.webp";
+import { ReferralRewardsCard, ReferralRewardsCardSkeleton, DIET_PDF_REFS, TSHIRT_REFS, PAID_FREE_CLASSES_REFS } from "@/components/ReferralRewardsCard";
 import { safeSessionStorage } from "@/lib/storage";
 
 // ── Types ─────────────────────────────────────────────────────────────────────
@@ -141,12 +142,21 @@ const ReferralRow: React.FC<{ referral: ApiReferral; language?: string; isLast?:
 
 // ── Rewards section cards ─────────────────────────────────────────────────────
 
-const REWARDS = [
-  { key: "pdf",    label: "Free Diet PDF",      refs: DIET_PDF_REFS, img: imgDietPdf  },
-  { key: "tshirt", label: "Healthyday T-shirt", refs: TSHIRT_REFS,   img: imgTshirt  },
-] as const;
+// Free-batch students unlock a Free Diet PDF (downloadable) at 1 referral; paid students instead
+// unlock 10 FREE Classes (credited to their account, so it's "Claimed" rather than downloaded).
+// The Healthyday T-shirt milestone at 20 referrals is the same for both.
+const getRewards = (isPaid: boolean) => (isPaid
+  ? [
+      { key: "classes", label: "10 FREE Classes",   refs: PAID_FREE_CLASSES_REFS, img: imgTenClasses, claimable: true },
+      { key: "tshirt",  label: "Healthyday T-shirt", refs: TSHIRT_REFS,            img: imgTshirt,     claimable: true },
+    ]
+  : [
+      { key: "pdf",     label: "Free Diet PDF",      refs: DIET_PDF_REFS, img: imgDietPdf, claimable: false },
+      { key: "tshirt",  label: "Healthyday T-shirt", refs: TSHIRT_REFS,   img: imgTshirt,  claimable: false },
+    ]
+) as const;
 
-const RewardCard: React.FC<{ reward: (typeof REWARDS)[number]; verifiedRefs: number }> = ({ reward, verifiedRefs }) => {
+const RewardCard: React.FC<{ reward: ReturnType<typeof getRewards>[number]; verifiedRefs: number }> = ({ reward, verifiedRefs }) => {
   const unlocked = verifiedRefs >= reward.refs;
   const progress = Math.min(100, (verifiedRefs / reward.refs) * 100);
 
@@ -186,6 +196,13 @@ const RewardCard: React.FC<{ reward: (typeof REWARDS)[number]; verifiedRefs: num
         {reward.refs} {reward.refs === 1 ? "Referral" : "Referrals"}
       </span>
 
+      {/* Claimed pill for unlocked claimable rewards (paid milestones) */}
+      {unlocked && reward.claimable && (
+        <div style={{ marginTop: "8px", height: "34px", borderRadius: "8px", border: "1px solid #FEAB27", display: "flex", alignItems: "center", justifyContent: "center" }}>
+          <span style={{ fontFamily: "Outfit", fontSize: "12px", fontWeight: 600, color: "#FEAB27" }}>Claimed</span>
+        </div>
+      )}
+
       {/* Progress bar for locked items */}
       {!unlocked && (
         <div style={{ marginTop: "8px" }}>
@@ -201,6 +218,21 @@ const RewardCard: React.FC<{ reward: (typeof REWARDS)[number]; verifiedRefs: num
     </div>
   );
 };
+
+// Placeholder for a RewardCard while verifiedRefs/isPaid are loading, so the grid doesn't
+// flash a default reward (image/label) before switching to the real one.
+const RewardCardSkeleton: React.FC = () => (
+  <div style={{ flex: 1 }}>
+    <div className="referral-rewards-skeleton" style={{ borderRadius: "12px", height: "154px" }} />
+    <div className="referral-rewards-skeleton" style={{ width: "70%", height: "14px", borderRadius: "6px", marginTop: "8px", animationDelay: "80ms" }} />
+    <div className="referral-rewards-skeleton" style={{ width: "45%", height: "13px", borderRadius: "6px", marginTop: "6px", animationDelay: "160ms" }} />
+    <div className="referral-rewards-skeleton" style={{ height: "34px", borderRadius: "8px", marginTop: "8px", animationDelay: "240ms" }} />
+    <style>{`
+      @keyframes referral-rewards-shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+      .referral-rewards-skeleton { background: linear-gradient(90deg, #EFEFEF 25%, #F7F7F7 50%, #EFEFEF 75%); background-size: 800px 100%; animation: referral-rewards-shimmer 1.4s ease-in-out infinite; }
+    `}</style>
+  </div>
+);
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 
@@ -221,10 +253,13 @@ const ReferralStatus = () => {
   const previewParam = searchParams.get("preview_referrals");
   const previewCount =
     previewParam !== null && /^\d+$/.test(previewParam) ? Number(previewParam) : null;
+  const previewPaidParam = searchParams.get("preview_paid");
 
   const [apiData, setApiData] = useState<ReferralsApiData | null>(null);
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState<string | null>(null);
+  const [isPaid, setIsPaid] = useState(false);
+  const [statusLoading, setStatusLoading] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerClosing, setDrawerClosing] = useState(false);
 
@@ -251,6 +286,30 @@ const ReferralStatus = () => {
       .catch((err) => setApiError(String(err)))
       .finally(() => setLoading(false));
   }, [mobile, previewCount]);
+
+  // Paid/free status is always resolved from the real student record for a given mobile —
+  // independent of `preview_referrals`, so testers can preview an arbitrary referral count
+  // while still seeing the correct milestone variant for that student. `preview_paid` is an
+  // explicit override for previewing a variant without a matching real account.
+  useEffect(() => {
+    if (previewPaidParam !== null) {
+      setIsPaid(previewPaidParam === "1" || previewPaidParam === "true");
+      setStatusLoading(false);
+      return;
+    }
+    if (!mobile) { setIsPaid(false); setStatusLoading(false); return; }
+    const apiMobile = `+${mobile.replace(/\D/g, "")}`;
+    fetch(`/.netlify/functions/student?mobile=${encodeURIComponent(apiMobile)}`)
+      .then((r) => r.json())
+      .then((data: { status?: string }) => setIsPaid(data?.status === "paid"))
+      .catch(() => setIsPaid(false))
+      .finally(() => setStatusLoading(false));
+  }, [mobile, previewPaidParam]);
+
+  // Referral rewards (both the milestone tracker and the static Rewards grid) depend on both
+  // verifiedRefs and isPaid — show a skeleton until both have resolved instead of flashing a
+  // default free/zero-referral state.
+  const rewardsLoading = loading || statusLoading;
 
   // Use verified_referrals for all gift progress; fall back to 0 while loading
   const verifiedRefs = loading ? 0 : (apiData?.verified_referrals ?? 0);
@@ -310,7 +369,7 @@ const ReferralStatus = () => {
         <h3 style={{ margin: "0 0 16px", fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, color: "#202020" }}>
           Your Referral Rewards
         </h3>
-        <ReferralRewardsCard verifiedRefs={verifiedRefs} language={language} />
+        {rewardsLoading ? <ReferralRewardsCardSkeleton /> : <ReferralRewardsCard verifiedRefs={verifiedRefs} language={language} isPaid={isPaid} />}
       </div>
 
       {/* ── Your Recent Referrals ── */}
@@ -386,9 +445,16 @@ const ReferralStatus = () => {
           Rewards
         </h3>
         <div style={{ display: "flex", gap: "12px" }}>
-          {REWARDS.map((reward) => (
-            <RewardCard key={reward.key} reward={reward} verifiedRefs={verifiedRefs} />
-          ))}
+          {rewardsLoading ? (
+            <>
+              <RewardCardSkeleton />
+              <RewardCardSkeleton />
+            </>
+          ) : (
+            getRewards(isPaid).map((reward) => (
+              <RewardCard key={reward.key} reward={reward} verifiedRefs={verifiedRefs} />
+            ))
+          )}
         </div>
       </div>
 

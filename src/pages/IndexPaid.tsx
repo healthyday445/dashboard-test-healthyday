@@ -135,7 +135,7 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, mobile
           <h3 style={{ margin: 0, fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, color: "#202020" }}>Your Referral Rewards</h3>
           <a href={referralsUrl} style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#FEAB27", textDecoration: "none" }}>View More</a>
         </div>
-        <ReferralRewardsCard verifiedRefs={verifiedReferralCount} language={studentData?.language} />
+        <ReferralRewardsCard verifiedRefs={verifiedReferralCount} language={studentData?.language} isPaid />
       </div>
 
       <div style={{ padding: "18px 22px 0" }}>

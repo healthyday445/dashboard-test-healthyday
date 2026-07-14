@@ -6,6 +6,7 @@ import imgMsTshirtMilestone from "@/assets/referral/ms-tshirt-milestone.webp";
 
 export const DIET_PDF_REFS = 1;
 export const TSHIRT_REFS = 20;
+export const PAID_FREE_CLASSES_REFS = 5;
 
 const DIET_PDF_URL = {
   Telugu: "https://d3jt6ku4g6z5l8.cloudfront.net/FILE/6795ce3db71ab6291dfa64b7/5894347_RECIPE%20HANBOOKTELUGU%203compressed.pdf",
@@ -115,15 +116,26 @@ const DownloadButton: React.FC<{ language?: string }> = ({ language }) => (
 );
 
 /**
- * "Your Referral Rewards" milestone card — 3 states:
- *   0 refs       → you-are-here(top) → dashed → PDF(locked gray) → dashed → T-shirt(locked gray)
- *   1–19 refs    → PDF(unlocked+Download) → solid → you-are-here → dashed → T-shirt(locked yellow)
- *   20+ refs     → PDF(unlocked+Download) → solid → T-shirt(unlocked)
+ * "Your Referral Rewards" milestone card — 4 states:
+ *   0 refs                        → you-are-here(top, red) → dashed → 1st milestone(locked gray) → dashed → T-shirt(locked gray)
+ *   1 to firstMilestoneRefs-1     → you-are-here(top, orange) → dashed → 1st milestone(locked orange) → dashed → T-shirt(locked orange)
+ *   firstMilestoneRefs–19         → 1st milestone(unlocked) → solid → you-are-here → dashed → T-shirt(locked orange)
+ *   20+ refs                      → 1st milestone(unlocked) → solid → T-shirt(unlocked)
  *
- * Shared by the Referrals page and the 14-day dashboard's week-1 progress section.
+ * The second state above only occurs for paid students, since free's first milestone is 1 referral
+ * (verifiedRefs > 0 always unlocks it there).
+ *
+ * Free-batch students get "Free Diet PDF" at 1 referral (with a Download button once unlocked).
+ * Paid students get "10 FREE Classes" at 5 referrals instead (no download — it's credited, not downloaded).
+ * The T-shirt milestone at 20 referrals is unchanged for both.
+ *
+ * Shared by the Referrals page, the 14-day dashboard's week-1 progress section (free students),
+ * and the paid dashboard (isPaid).
  */
-export const ReferralRewardsCard: React.FC<{ verifiedRefs: number; language?: string }> = ({ verifiedRefs, language }) => {
-  const pdfUnlocked = verifiedRefs >= DIET_PDF_REFS;
+export const ReferralRewardsCard: React.FC<{ verifiedRefs: number; language?: string; isPaid?: boolean }> = ({ verifiedRefs, language, isPaid = false }) => {
+  const firstMilestoneRefs = isPaid ? PAID_FREE_CLASSES_REFS : DIET_PDF_REFS;
+  const firstMilestoneLabel = isPaid ? "10 FREE Classes" : "Free Diet PDF";
+  const pdfUnlocked = verifiedRefs >= firstMilestoneRefs;
   const tshirtUnlocked = verifiedRefs >= TSHIRT_REFS;
   const isZero = verifiedRefs === 0;
 
@@ -139,17 +151,29 @@ export const ReferralRewardsCard: React.FC<{ verifiedRefs: number; language?: st
           </>
         )}
 
-        {/* Free Diet PDF */}
+        {/* 1 to (firstMilestoneRefs - 1) refs: "You are here" at top, ahead of the still-locked
+            first milestone. Only reachable for paid students, since free's first milestone is 1 ref
+            (so verifiedRefs > 0 always unlocks it there). */}
+        {!isZero && !pdfUnlocked && (
+          <>
+            <YouAreHereRow count={verifiedRefs} />
+            <MilestoneLine dashed />
+          </>
+        )}
+
+        {/* Free Diet PDF (free students) / 10 FREE Classes (paid students) */}
         <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
           {pdfUnlocked ? <UnlockedMilestoneIcon /> : <LockedMilestoneIcon gray={isZero} />}
           <div style={{ flex: 1 }}>
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between" }}>
               <span style={{ fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, color: pdfUnlocked ? "#377456" : isZero ? "#9A9797" : "#FEAB27" }}>
-                Free Diet PDF
+                {firstMilestoneLabel}
               </span>
-              {pdfUnlocked && <DownloadButton language={language} />}
+              {pdfUnlocked && !isPaid && <DownloadButton language={language} />}
             </div>
-            <span style={{ fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, color: "#9C9C9C" }}>1 Referral</span>
+            <span style={{ fontFamily: "Outfit", fontSize: "12px", fontWeight: 500, color: "#9C9C9C" }}>
+              {firstMilestoneRefs} {firstMilestoneRefs === 1 ? "Referral" : "Referrals"}
+            </span>
           </div>
         </div>
 
@@ -162,7 +186,7 @@ export const ReferralRewardsCard: React.FC<{ verifiedRefs: number; language?: st
           </>
         )}
 
-        {/* 0 refs: dashed line between two locked items */}
+        {/* First milestone not yet reached: dashed line between the two locked items */}
         {!pdfUnlocked && <MilestoneLine dashed />}
 
         {/* 20+ refs: solid line between two unlocked items */}
@@ -192,3 +216,37 @@ export const ReferralRewardsCard: React.FC<{ verifiedRefs: number; language?: st
     </div>
   );
 };
+
+const SkeletonBlock: React.FC<{ width: string | number; height: number; borderRadius?: string | number; delay?: number }> = ({ width, height, borderRadius = "6px", delay = 0 }) => (
+  <div className="referral-rewards-skeleton" style={{ width, height, borderRadius, animationDelay: `${delay}ms` }} />
+);
+
+// Placeholder shown in place of ReferralRewardsCard while its data (verifiedRefs/isPaid) is loading,
+// so the card doesn't render (and then flash-correct from) a default free/zero-referral state.
+export const ReferralRewardsCardSkeleton: React.FC = () => (
+  <div style={{ background: "#FFF", borderRadius: "16px", boxShadow: "0px 0px 10px 0px rgba(0,0,0,0.25)", position: "relative", overflow: "hidden" }}>
+    <div style={{ padding: "16px 16px 20px" }}>
+      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <SkeletonBlock width={33} height={33} borderRadius="50%" />
+        <div style={{ flex: 1 }}>
+          <SkeletonBlock width="55%" height={14} delay={80} />
+          <div style={{ height: "6px" }} />
+          <SkeletonBlock width="30%" height={10} delay={160} />
+        </div>
+      </div>
+      <MilestoneLine dashed />
+      <div style={{ display: "flex", alignItems: "center", gap: "12px" }}>
+        <SkeletonBlock width={33} height={33} borderRadius="50%" delay={240} />
+        <div style={{ flex: 1 }}>
+          <SkeletonBlock width="60%" height={14} delay={320} />
+          <div style={{ height: "6px" }} />
+          <SkeletonBlock width="35%" height={10} delay={400} />
+        </div>
+      </div>
+    </div>
+    <style>{`
+      @keyframes referral-rewards-shimmer { 0% { background-position: -400px 0; } 100% { background-position: 400px 0; } }
+      .referral-rewards-skeleton { background: linear-gradient(90deg, #EFEFEF 25%, #F7F7F7 50%, #EFEFEF 75%); background-size: 800px 100%; animation: referral-rewards-shimmer 1.4s ease-in-out infinite; }
+    `}</style>
+  </div>
+);
