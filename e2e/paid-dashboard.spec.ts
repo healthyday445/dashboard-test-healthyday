@@ -90,12 +90,14 @@ test.describe(`Paid dashboard — English account (${account.mobile})`, () => {
   });
 
   test.describe("Referrals", () => {
-    test("referral milestone card renders", async ({ page }) => {
+    test("referral milestone card renders the paid variant", async ({ page }) => {
       // verifiedRefs comes from real, mutable account data — assert structure (always-rendered
       // labels), not a specific referral count, so this doesn't false-alarm when the real count changes.
+      // Paid students see "10 FREE Classes" (5 referrals) instead of free students' "Free Diet PDF"
+      // (1 referral) — see e2e/referrals.spec.ts for the full free/paid milestone state matrix.
       await page.goto(`/${account.mobile}`);
       await expect(page.getByRole("heading", { name: "Your Referral Rewards" })).toBeVisible();
-      await expect(page.getByText("Free Diet PDF")).toBeVisible();
+      await expect(page.getByText("10 FREE Classes")).toBeVisible();
       await expect(page.getByText("Healthyday T-shirt")).toBeVisible();
     });
   });

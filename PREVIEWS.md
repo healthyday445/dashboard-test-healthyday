@@ -117,9 +117,15 @@ Example: `/9999999999?preview_levels=9`
 
 ### `?preview_referrals=<count>`
 
-Generates `<count>` mock verified referrals, so the milestone card (Free Diet PDF at 1, Healthyday T-shirt at 20) and referral list can be checked at any count without a real referrer.
+Generates `<count>` mock verified referrals, so the milestone card and referral list can be checked at any count without a real referrer. Free students unlock Free Diet PDF at 1 referral and Healthyday T-shirt at 20; paid students see 10 FREE Classes at 5 referrals instead of the PDF (T-shirt at 20 is the same for both) — see `preview_paid` below for forcing which variant renders.
 
 Example: `/9999999999/referrals?preview_referrals=25`
+
+### `?preview_paid=1|0`
+
+Overrides whether the milestone card and Rewards grid render the paid or free variant. Without this param, paid/free status is looked up for real via `/.netlify/functions/student` for whatever mobile number is in the URL — this override exists for previewing either variant deterministically, without needing a matching real account.
+
+Example: `/9999999999/referrals?preview_referrals=3&preview_paid=1` (paid variant, 3 referrals — the "You are here" pending state ahead of the 5-referral first milestone)
 
 ## Attendance page (`/:mobile/attendance`, `/attendance-page`)
 
