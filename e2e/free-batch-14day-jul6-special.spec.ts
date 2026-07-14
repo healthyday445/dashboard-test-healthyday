@@ -9,17 +9,18 @@ if (!telugu || !english) {
 }
 
 // Day → bonus session mapping, from src/components/FourteenDayBonusSessionCard.tsx's getBonusInfo
-// (same 5 days for both languages; names differ by language only for day 7):
-//   Day 3  Face Yoga             — waiting from 8:00 PM, live 8:30–8:59 PM
-//   Day 7  Weight Loss           — waiting from 10:30 AM, live 11:00–11:59 AM (English: "Weight Loss Orientation")
-//   Day 10 Breath Work           — waiting from 8:30 PM, live 9:00–9:29 PM
-//   Day 12 Meditation            — waiting from 8:00 PM, live 8:30–8:59 PM
-//   Day 14 Sleep                 — waiting from 10:30 AM, live 11:00–11:44 AM
+// (same 5 days for both languages; names differ by language only for day 7). The card starts
+// showing (waiting state) right when the preceding regular-session block ends (7:30 PM evening /
+// 9:30 AM morning, via getBonusWindowStart), and goes live 30 min before the actual start through
+// 1 hour after:
+//   Day 3  Face Yoga             — actual 9:00 PM, waiting from 7:30 PM, live 8:30–9:59 PM
+//   Day 7  Weight Loss           — actual 11:00 AM, waiting from 9:30 AM, live 10:30–11:59 AM (English: "Weight Loss Orientation")
+//   Day 10 Breath Work           — actual 9:00 PM, waiting from 7:30 PM, live 8:30–9:59 PM
+//   Day 12 Meditation            — actual 8:30 PM, waiting from 7:30 PM, live 8:00–9:29 PM
+//   Day 14 Sleep                 — actual 11:00 AM, waiting from 9:30 AM, live 10:30–11:59 AM
 //
-// NOTE on the reference schedule this was written against: it lists Day 10 "Breathwork @ 8:30 PM"
-// and calls Day 14 "Sleep Masterclass" — neither matches current code (Day 10's actual live start
-// is 9:00 PM, 8:30 PM is only when the waiting screen opens; Day 14's rendered name is "Sleep
-// Session"). Tests below assert what the app actually does today, per getBonusInfo.
+// Face Yoga moved from 8:30 PM to 9:00 PM (now matching Breath Work's existing 9:00 PM slot) —
+// both share an identical schedule/window today.
 
 test.describe(`14-day free batch (2026-07-06 cohort)`, () => {
   // Grouped to mirror free-batch-14day-regular.spec.ts's tree shape ("Live sessions" / "Special
@@ -53,32 +54,32 @@ test.describe(`14-day free batch (2026-07-06 cohort)`, () => {
       test("waiting immediately after evening session ends at 7:35 PM, not \"Tomorrow\"", async ({ page }) => {
         await page.goto(`/${telugu.mobile}?forceDay=3&time=7.35pm`);
         await expect(page.getByRole("heading", { name: "Special Bonus Session" })).toBeVisible();
-        await expect(page.getByText("Face Yoga Session at 8:30 PM")).toBeVisible();
+        await expect(page.getByText("Face Yoga Session at 9:00 PM")).toBeVisible();
         await expect(page.getByText("Next Yoga session is Tomorrow at 5:30AM")).not.toBeVisible();
       });
 
       test("waiting at 7:45 PM (Telugu)", async ({ page }) => {
         await page.goto(`/${telugu.mobile}?forceDay=3&time=7.45pm`);
         await expect(page.getByRole("heading", { name: "Special Bonus Session" })).toBeVisible();
-        await expect(page.getByText("Face Yoga Session at 8:30 PM")).toBeVisible();
+        await expect(page.getByText("Face Yoga Session at 9:00 PM")).toBeVisible();
       });
 
-      // JOIN NOW/live opens 30 min before the actual 8:30 PM start (src/pages/IndexFourteenDays.tsx
+      // JOIN NOW/live opens 30 min before the actual 9:00 PM start (src/pages/IndexFourteenDays.tsx
       // bonusIsLive), not at the actual start time.
-      test("JOIN NOW visible 30 min early, at 8:05 PM (Telugu)", async ({ page }) => {
-        await page.goto(`/${telugu.mobile}?forceDay=3&time=8.05pm`);
+      test("JOIN NOW visible 30 min early, at 8:35 PM (Telugu)", async ({ page }) => {
+        await page.goto(`/${telugu.mobile}?forceDay=3&time=8.35pm`);
         await expect(page.getByText("Face Yoga Session")).toBeVisible();
         await expect(page.getByText("JOIN NOW")).toBeVisible();
       });
 
-      test("live at 8:45 PM (Telugu)", async ({ page }) => {
-        await page.goto(`/${telugu.mobile}?forceDay=3&time=8.45pm`);
+      test("live at 9:20 PM (Telugu)", async ({ page }) => {
+        await page.goto(`/${telugu.mobile}?forceDay=3&time=9.20pm`);
         await expect(page.getByText("Face Yoga Session")).toBeVisible();
         await expect(page.getByText("JOIN NOW")).toBeVisible();
       });
 
-      test("live at 8:45 PM (English, cross-language check)", async ({ page }) => {
-        await page.goto(`/${english.mobile}?forceDay=3&time=8.45pm`);
+      test("live at 9:20 PM (English, cross-language check)", async ({ page }) => {
+        await page.goto(`/${english.mobile}?forceDay=3&time=9.20pm`);
         await expect(page.getByText("Face Yoga Session")).toBeVisible();
         await expect(page.getByText("JOIN NOW")).toBeVisible();
       });

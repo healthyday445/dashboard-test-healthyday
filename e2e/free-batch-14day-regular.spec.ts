@@ -45,13 +45,11 @@ test.describe(`14-day free batch — regular/default flow (2026-07-13 cohort)`, 
   // (Face Yoga/Weight Loss/Breath Work/Meditation/Sleep) is a plain day-of-batch rule with no
   // per-cohort condition, so it applies here too, not just July 6.
   //
-  // NOTE on the reference schedule this was written against: it lists Day 10 "Breathwork @ 8:30 PM"
-  // and calls Day 14 "Sleep Masterclass" — neither matches current code (Day 10's actual live start
-  // is 9:00 PM, 8:30 PM is only when the waiting screen opens; Day 14's rendered name is "Sleep
-  // Session"). Same discrepancy as the July-6 file — see free-batch-14day-jul6-special.spec.ts.
+  // Face Yoga moved from 8:30 PM to 9:00 PM (now matching Breath Work's existing 9:00 PM slot) —
+  // both share an identical schedule/window today: waiting from 7:30 PM, live 8:30-9:59 PM.
   test.describe("Special bonus sessions (same shared component as the July 6 batch)", () => {
-    test("Day 3 Face Yoga — live at 8:45 PM (Telugu)", async ({ page }) => {
-      await page.goto(`/${telugu.mobile}?forceDay=3&time=8.45pm`);
+    test("Day 3 Face Yoga — live at 9:20 PM (Telugu)", async ({ page }) => {
+      await page.goto(`/${telugu.mobile}?forceDay=3&time=9.20pm`);
       await expect(page.getByText("Face Yoga Session")).toBeVisible();
       await expect(page.getByText("JOIN NOW")).toBeVisible();
     });
@@ -90,7 +88,7 @@ test.describe(`14-day free batch — regular/default flow (2026-07-13 cohort)`, 
   test.describe("Bonus window opens right when the prior regular session block ends", () => {
     test("Day 3 Face Yoga — waiting at 7:35 PM, not \"Tomorrow\"", async ({ page }) => {
       await page.goto(`/${telugu.mobile}?forceDay=3&time=7.35pm`);
-      await expect(page.getByText("Face Yoga Session at 8:30 PM")).toBeVisible();
+      await expect(page.getByText("Face Yoga Session at 9:00 PM")).toBeVisible();
       await expect(page.getByText("Next Yoga session is Tomorrow at 5:30AM")).not.toBeVisible();
     });
 
