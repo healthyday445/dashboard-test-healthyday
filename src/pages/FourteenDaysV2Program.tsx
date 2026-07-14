@@ -26,6 +26,7 @@ import badgeCardL2 from "@/assets/21daysprogram/badge_card_l2.webp";
 import badgeCardL3 from "@/assets/21daysprogram/badge_card_l3.webp";
 import badgeCardL4 from "@/assets/21daysprogram/badge_card_l4.webp";
 import badgeCardL5 from "@/assets/21daysprogram/badge_card_l5.webp";
+import finalCertificate from "@/assets/badges/FINAL (1).jpg";
 import badgeCardShareIcon from "@/assets/21daysprogram/badge_card_share_icon.png";
 import { LEVEL_UNLOCK_DAYS_V2, getLevelRewardLinkV2 } from "@/components/FourteenDaysV2LevelCard";
 import { CertificateModal } from "@/components/CertificateModal";
@@ -52,7 +53,7 @@ const ZONE_CONFIG = [
   { gradient: "radial-gradient(circle at 87% 0%, rgba(212,220,145,1) 0%, rgba(234,238,200,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL2, imgTop: 0, imgRight: 0, imgWidth: "40.3%", imgHeight: 138, textRight: "35.6%", titleCaps: false },
   { gradient: "radial-gradient(circle at 89% 0%, rgba(246,219,255,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL3, imgTop: -8, imgRight: 0, imgWidth: "40.3%", imgHeight: 138, textRight: "35.6%", titleCaps: false },
   { gradient: "radial-gradient(circle at 85% 0%, rgba(171,226,232,1) 0%, rgba(213,241,243,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL4, imgTop: -6, imgRight: 0, imgWidth: "40.3%", imgHeight: 138, textRight: "35.6%", titleCaps: false },
-  { gradient: "radial-gradient(circle at 86% 0%, rgba(249,191,117,1) 0%, rgba(251,207,152,1) 25%, rgba(252,223,186,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL5, imgTop: -6, imgRight: 0, imgWidth: "40.3%", imgHeight: 138, textRight: "35.6%", titleCaps: false },
+  { gradient: "radial-gradient(circle at 86% 0%, rgba(249,191,117,1) 0%, rgba(251,207,152,1) 25%, rgba(252,223,186,1) 50%, rgba(255,255,255,1) 100%)", img: finalCertificate, imgTop: 12, imgRight: 14, imgWidth: "32%", imgHeight: 114, textRight: "35.6%", titleCaps: false, objectFit: "contain" },
 ];
 
 // Badge-card copy, one entry per completed-reward count (0-5) — same index as ZONE_CONFIG.
@@ -583,7 +584,7 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
                 <button
                   onClick={() => setShowBadgeModal(true)}
                   className="flex items-center justify-center gap-[5px] cursor-pointer border-none"
-                  style={{ width: "100%", maxWidth: 179, height: 22, backgroundColor: "#feab27", borderRadius: 5, boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)", flexShrink: 0 }}
+                  style={{ width: "fit-content", padding: "0 10px", height: 22, backgroundColor: "#feab27", borderRadius: 5, boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)", flexShrink: 0 }}
                 >
                   <img src={downloadIcon} alt="" style={{ width: 12, height: 12 }} />
                   <span style={{ color: "white", fontSize: "min(12px, 2.9vw)", fontWeight: 700, fontFamily: "Outfit, sans-serif", whiteSpace: "nowrap" }}>
@@ -596,8 +597,15 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
             <img
               src={zoneConfig.img}
               alt=""
-              className="absolute object-cover pointer-events-none"
-              style={{ top: zoneConfig.imgTop, right: zoneConfig.imgRight, width: zoneConfig.imgWidth, height: zoneConfig.imgHeight, zIndex: 0 }}
+              className="absolute pointer-events-none"
+              style={{
+                top: zoneConfig.imgTop,
+                right: zoneConfig.imgRight,
+                width: zoneConfig.imgWidth,
+                height: zoneConfig.imgHeight,
+                zIndex: 0,
+                objectFit: (zoneConfig as any).objectFit || "cover",
+              }}
             />
           </div>
         </div>
