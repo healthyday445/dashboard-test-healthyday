@@ -32,12 +32,13 @@ import { CertificateModal } from "@/components/CertificateModal";
 
 // 14-day journey: 5 levels (Detox/Breakfast/Lunch/Dinner/Certificate), unlocking every
 // 3 days except the last (day 14, only 2 days after level 4) — see LEVEL_UNLOCK_DAYS_V2.
+// pdfLink is a placeholder until the real per-level PDF URLs are provided.
 const LEVEL_DATA = [
-  { level: 1, unlockDay: 3, rewardLine1: "3-Days Detox", rewardLine2: "Programme", badge: levelIcon1, rewardImg: rewardLvl1 },
-  { level: 2, unlockDay: 6, rewardLine1: "3-Days", rewardLine2: "Breakfast Diet", badge: levelIcon2, rewardImg: rewardLvl2 },
-  { level: 3, unlockDay: 9, rewardLine1: "3-Days", rewardLine2: "Lunch Diet", badge: levelIcon3, rewardImg: rewardLvl4 },
-  { level: 4, unlockDay: 12, rewardLine1: "3-Days", rewardLine2: "Dinner Diet", badge: levelIcon4, rewardImg: rewardLvl6 },
-  { level: 5, unlockDay: 14, rewardLine1: "14-Days Yoga", rewardLine2: "Certificate", badge: levelIcon5, rewardImg: rewardLvl7 },
+  { level: 1, unlockDay: 3, rewardLine1: "3-Days Detox", rewardLine2: "Programme", badge: levelIcon1, rewardImg: rewardLvl1, pdfLink: "https://storage.googleapis.com/healthyday_pdfs/3_Day_Detox_Programme_Handbook.pdf" },
+  { level: 2, unlockDay: 6, rewardLine1: "3-Days", rewardLine2: "Breakfast Diet", badge: levelIcon2, rewardImg: rewardLvl2, pdfLink: "https://storage.googleapis.com/healthyday_pdfs/3_Day_Breakfast_Challenge_Handbook.pdf" },
+  { level: 3, unlockDay: 9, rewardLine1: "3-Days", rewardLine2: "Lunch Diet", badge: levelIcon3, rewardImg: rewardLvl4, pdfLink: "https://storage.googleapis.com/healthyday_pdfs/3_Day_Lunch_Challenge_Handbook.pdf" },
+  { level: 4, unlockDay: 12, rewardLine1: "3-Days", rewardLine2: "Dinner Diet", badge: levelIcon4, rewardImg: rewardLvl6, pdfLink: "https://storage.googleapis.com/healthyday_pdfs/3_Day_Dinner_Challenge_Handbook.pdf" },
+  { level: 5, unlockDay: 14, rewardLine1: "14-Days Yoga", rewardLine2: "Certificate", badge: levelIcon5, rewardImg: rewardLvl7, pdfLink: "" },
 ];
 
 // One zone config per completed-reward count (0-5), reusing the exact gradients/character
@@ -128,6 +129,12 @@ function RewardCard({
 }) {
   const isCertificate = levelData.level === 5;
 
+  const handleDownloadPdfClick = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    if (!isUnlocked || !levelData.pdfLink) return;
+    window.open(levelData.pdfLink, "_blank");
+  };
+
   const handleRewardClick = (e?: React.MouseEvent) => {
     e?.stopPropagation();
     if (!isUnlocked) return;
@@ -151,7 +158,7 @@ function RewardCard({
     <div
       onClick={handleRewardClick}
       className="relative rounded-[8px] overflow-hidden"
-      style={{ height: 119, border: isUnlocked ? "0.75px solid #FEAB27" : "0.75px solid #c8c8c8", cursor: isUnlocked ? "pointer" : "default" }}
+      style={{ height: isCertificate ? 119 : 136, border: isUnlocked ? "0.75px solid #FEAB27" : "0.75px solid #c8c8c8", cursor: isUnlocked ? "pointer" : "default" }}
     >
       <img
         src={rewardCardBgUnlocked}
@@ -165,8 +172,8 @@ function RewardCard({
           className="absolute flex items-center gap-[3px]"
           style={{ top: 8, left: 8, backgroundColor: "white", border: "0.2px solid #feab27", borderRadius: 3, paddingTop: 2, paddingBottom: 2, paddingLeft: 4, paddingRight: 4, zIndex: 2 }}
         >
-          <img src={padlockIcon} alt="" style={{ width: 6, height: 6 }} />
-          <span style={{ color: "#feab27", fontSize: 7, fontWeight: 700, fontFamily: "Outfit, sans-serif" }}>UNLOCKED</span>
+          {!isCertificate && <img src={padlockIcon} alt="" style={{ width: 6, height: 6 }} />}
+          <span style={{ color: "#feab27", fontSize: 7, fontWeight: 700, fontFamily: "Outfit, sans-serif" }}>{isCertificate ? "COMPLETED" : "UNLOCKED"}</span>
         </div>
       )}
 
@@ -190,10 +197,35 @@ function RewardCard({
           <p className="font-semibold text-[19px] leading-[20px] m-0" style={{ color: isUnlocked ? "#ff8a00" : "#807d79", fontFamily: "Outfit, sans-serif" }}>
             {levelData.rewardLine2}
           </p>
+
+          {!isCertificate && (
+            <div
+              onClick={handleDownloadPdfClick}
+              className="flex items-center justify-center gap-1"
+              style={{
+                marginBlock: "auto",
+                width: "fit-content",
+                height: 17,
+                borderRadius: 2,
+                paddingLeft: 8,
+                paddingRight: 8,
+                backgroundColor: isUnlocked ? "#fff9f2" : "#eeeeee",
+                border: `0.5px solid ${isUnlocked ? "#ffc47f" : "#c8c8c8"}`,
+                cursor: isUnlocked ? "pointer" : "default",
+              }}
+            >
+              <span className="font-bold text-[8px] whitespace-nowrap" style={{ color: isUnlocked ? "#ff9d00" : "#807d79", fontFamily: "Outfit, sans-serif" }}>
+                Download PDF
+              </span>
+              <svg width="8.5" height="8.5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0" style={{ color: isUnlocked ? "#ff9d00" : "#807d79" }}>
+                <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
+              </svg>
+            </div>
+          )}
         </div>
 
-        <div className="flex-shrink-0 flex flex-col pt-[13px]" style={{ width: "clamp(72px, 44%, 130px)" }}>
-          <div className="relative rounded-[5px] overflow-hidden" style={{ width: "100%", height: 71, border: isUnlocked ? "0.75px solid #94A0AF" : "1px solid white" }}>
+        <div className="flex-shrink-0 flex flex-col justify-center" style={{ width: "clamp(72px, 44%, 130px)" }}>
+          <div className="relative rounded-[5px] overflow-hidden" style={{ width: "100%", height: 71, border: isUnlocked ? "0.75px solid #94A0AF" : "1px solid white",  marginTop: isUnlocked ? "6px" : ""  }}>
             <img src={levelData.rewardImg} alt="" className="absolute inset-0 w-full h-full object-cover" style={{ filter: isUnlocked ? "none" : "grayscale(1) blur(2px)" }} />
             {!isUnlocked && (
               <div className="absolute inset-0 rounded-[5px] flex items-center justify-center" style={{ backgroundColor: "rgba(0,0,0,0.32)" }}>
@@ -204,8 +236,9 @@ function RewardCard({
 
           <div
             onClick={handleRewardClick}
-            className="flex items-center justify-center gap-1 mt-[4px]"
+            className="flex items-center justify-center gap-1 mt-[6px]"
             style={{
+              // marginTop: isCertificate ? 4 : "auto",
               width: "100%", height: 17, borderRadius: 5,
               background: isUnlocked ? "linear-gradient(to bottom, #237ae2, #1858a5, #0b3f7d)" : "#808284",
               border: `0.25px solid ${isUnlocked ? "#ffe1be" : "white"}`,
