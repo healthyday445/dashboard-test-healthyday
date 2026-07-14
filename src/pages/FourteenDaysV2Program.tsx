@@ -586,7 +586,9 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
                   style={{ width: "100%", maxWidth: 179, height: 22, backgroundColor: "#feab27", borderRadius: 5, boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)", flexShrink: 0 }}
                 >
                   <img src={downloadIcon} alt="" style={{ width: 12, height: 12 }} />
-                  <span style={{ color: "white", fontSize: "min(12px, 2.9vw)", fontWeight: 700, fontFamily: "Outfit, sans-serif", whiteSpace: "nowrap" }}>Download your badge</span>
+                  <span style={{ color: "white", fontSize: "min(12px, 2.9vw)", fontWeight: 700, fontFamily: "Outfit, sans-serif", whiteSpace: "nowrap" }}>
+                    {completedCount === 5 ? "Download certificate" : "Download your badge"}
+                  </span>
                 </button>
               )}
             </div>

@@ -12,7 +12,7 @@ import badge1 from "@/assets/badges/1.jpg";
 import badge2 from "@/assets/badges/2.jpg";
 import badge3 from "@/assets/badges/3.jpg";
 import badge4 from "@/assets/badges/4.jpg";
-import badge5 from "@/assets/badges/5.jpg";
+import badge5 from "@/assets/badges/FINAL (1).jpg";
 
 const BADGES: Record<number, string> = {
   1: badge1,
@@ -106,9 +106,10 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
     };
   }, [badgeLevel]);
 
+  const isCertificate = badgeLevel === 5;
   const fontSize = 37;
-  const yPercent = 83; // Moved lower on the badge per user request
-  const textColor = "#0F5132";
+  const yPercent = isCertificate ? 42 : 83; // Moved lower on the badge per user request
+  const textColor = isCertificate ? "#0F5132" : "black";
 
   const renderBadge = (img: HTMLImageElement) => {
     const canvas = canvasRef.current;
@@ -129,7 +130,9 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
     const baseFontSize = Math.round(fontSize * (width / 500));
     const maxTextWidth = width * 0.72;
     const fittedFontSize = fitFontSizeToWidth(ctx, displayName, maxTextWidth, baseFontSize);
-    const fontSpec = `bold ${fittedFontSize}px "Outfit", sans-serif`;
+    const fontSpec = isCertificate
+      ? `normal ${fittedFontSize}px "Times New Roman", serif`
+      : `bold ${fittedFontSize}px "Times New Roman", serif`;
 
     const drawTextOverlay = () => {
       ctx.save();
@@ -138,10 +141,32 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
 
+      if (isCertificate) {
+        ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
+        ctx.shadowBlur = 4;
+        ctx.shadowOffsetX = 1;
+        ctx.shadowOffsetY = 2;
+      }
+
       const x = width / 2;
       const y = Math.round(height * (yPercent / 100));
 
       ctx.fillText(displayName, x, y);
+
+      if (isCertificate) {
+        const today = new Date();
+        const dd = String(today.getDate()).padStart(2, '0');
+        const mm = String(today.getMonth() + 1).padStart(2, '0');
+        const yyyy = today.getFullYear();
+        const dateStr = `${dd}-${mm}-${yyyy}`;
+
+        const dateFontSize = Math.round(baseFontSize * 0.35);
+        ctx.font = `bold ${dateFontSize}px "Poppins", sans-serif`;
+        ctx.fillStyle = "#0F5132"; // Dark green
+        // Shifting a bit to the left
+        ctx.fillText(dateStr, x - (width * 0.24), y + (height * 0.42));
+      }
+
       ctx.restore();
     };
 
@@ -457,11 +482,11 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
             </div>
           ) : (
             <div>
-              <div className="w-full bg-gradient-to-b from-[#FFFDF9] via-[#FFF3D8]/60 to-[#FFFDF9] p-4 rounded-2xl border-2 border-[#FEE3A2] shadow-sm overflow-hidden mb-5">
-                <div className="relative rounded-xl shadow-2xl bg-white border border-[#F5EADC] overflow-hidden flex items-center justify-center">
+              <div className="w-full bg-gradient-to-b from-[#FFFDF9] via-[#FFF3D8]/60 to-[#FFFDF9] p-4 rounded-2xl border-2 border-[#FEE3A2] shadow-sm overflow-hidden mb-5 flex justify-center">
+                <div className="relative rounded-xl shadow-2xl bg-white border border-[#F5EADC] overflow-hidden flex items-center justify-center w-fit">
                   <canvas
                     ref={canvasRef}
-                    className="w-full h-auto block"
+                    className="max-w-full h-auto block"
                     style={{ maxHeight: "400px", objectFit: "contain", visibility: canvasReady ? "visible" : "hidden" }}
                   />
                   {!canvasReady && (
@@ -488,7 +513,9 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" className="shrink-0">
                     <path d="M21 15V19C21 19.5304 20.7893 20.0391 20.4142 20.4142C20.0391 20.7893 19.5304 21 19 21H5C4.46957 21 3.96086 20.7893 3.58579 20.4142C3.21071 20.0391 3 19.5304 3 19V15M7 10L12 15M12 15L17 10M12 15V3" stroke="currentColor" strokeWidth="2.2" strokeLinecap="round" strokeLinejoin="round" />
                   </svg>
-                  <span style={{ fontSize: "clamp(9px, 3vw, 13px)" }}>Download Badge</span>
+                  <span style={{ fontSize: "clamp(9px, 3vw, 13px)" }}>
+                    {badgeLevel === 5 ? "Download certificate" : "Download Badge"}
+                  </span>
                 </button>
 
                 <button
