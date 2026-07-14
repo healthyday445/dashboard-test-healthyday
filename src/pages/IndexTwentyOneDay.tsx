@@ -2087,6 +2087,9 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
     const completedFreeBatches: any[] = studentData?.free_batches ?? [];
     const completedBatchEntry = completedFreeBatches.find(b => b.start_date === studentData?.free_batch_start_date) ?? completedFreeBatches[completedFreeBatches.length - 1];
     const completedAttendedDates = new Set<string>(completedBatchEntry?.attendance_tracker ?? []);
+    const completedDaysAttended = _globalForceDayParam !== null
+      ? Math.min(22, Math.max(0, parseInt(_globalForceDayParam, 10)))
+      : completedAttendedDates.size;
     const completedBatchOrigin = new Date(studentData?.free_batch_start_date!);
     completedBatchOrigin.setHours(0, 0, 0, 0);
     const completedDayStatus = Array.from({ length: 14 }, (_, i) => {
@@ -2132,7 +2135,13 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
 
           <div style={{ paddingTop: "68px" }}>
             {completedTab === "journey" ? (
-              <YogaJourneyCompletedPage studentName={studentData?.name} language={studentData?.language} joinLink={sessionJoinLink || ""} onCertificateClick={() => setShowCertificateModal(true)} />
+              <YogaJourneyCompletedPage studentName={studentData?.name} language={studentData?.language} joinLink={sessionJoinLink || ""} onCertificateClick={() => {
+                if (completedDaysAttended < 7) {
+                  navigate(`${mobile ? `/${mobile}` : ""}/certificate${studentData?.name ? `?name=${encodeURIComponent(studentData.name)}` : ""}`);
+                } else {
+                  setShowCertificateModal(true);
+                }
+              }} />
             ) : (
               <>
                 {/* 21-Days Completed Banner */}
