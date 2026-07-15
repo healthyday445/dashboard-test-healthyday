@@ -115,9 +115,9 @@ export function FourteenDaysV2LevelCard({
             Congratulations{studentName ? ` ${studentName.split(" ")[0]}!` : "!"}
           </p>
           <div style={{ position: "absolute", left: 20, top: 53, width: 143, color: "#0a386f", lineHeight: "normal" }}>
-            <p style={{ margin: 0, fontSize: "clamp(8px, 2.4vw, 10px)", fontWeight: 400 }}>You have completed Level {level}</p>
-            <p style={{ margin: 0, fontSize: "clamp(8px, 2.4vw, 10px)", fontWeight: 400 }}>Here's your reward...</p>
-            <p style={{ margin: 0, fontSize: "clamp(10px, 2.9vw, 12px)", fontWeight: 700 }}>{reward.full}</p>
+            <p style={{ margin: 0, fontSize: "clamp(10px, 2.4vw, 10px)", fontWeight: 400 }}>You have completed Level {level}</p>
+            <p style={{ margin: 0, fontSize: "clamp(10px, 2.4vw, 10px)", fontWeight: 400 }}>Here's your reward...</p>
+            <p style={{ margin: 0, fontSize: "clamp(12px, 2.9vw, 12px)", fontWeight: 700 }}>{reward.full}</p>
           </div>
           <div
             style={{ position: "absolute", left: 20, top: 110, width: 93, height: 28, borderRadius: 5, background: "linear-gradient(to bottom, #237ae2, #1858a5, #0b3f7d)", border: "0.25px solid #ffe1be", boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)", display: "flex", alignItems: "center", justifyContent: "center", gap: 4, cursor: "pointer" }}
@@ -151,7 +151,7 @@ export function FourteenDaysV2LevelCard({
           <p style={{ position: "absolute", left: 18, right: 90, top: 13, margin: 0, fontSize: "min(18px, 4.2vw)", fontWeight: 700, color: "#202020", whiteSpace: "nowrap", overflow: "hidden", textOverflow: "ellipsis", lineHeight: "normal" }}>
             You are currently at Level {level} !
           </p>
-          <p style={{ position: "absolute", left: 20, top: 50, margin: 0, fontSize: safeDay === 0 ? "min(12px, 2.9vw)" : "min(14px, 3.4vw)", fontWeight: 400, color: "#0a386f", width: `min(${reward.subtitleWidth}px, 32vw)`, lineHeight: "normal" }}>
+          <p style={{ position: "absolute", left: 20, top: 45, margin: 0, fontSize: safeDay === 0 ? "min(12px, 2.9vw)" : "min(12px, 3.4vw)", fontWeight: 400, color: "#0a386f", width: `min(${reward.subtitleWidth}px, 32vw)`, lineHeight: "normal" }}>
             {safeDay === 0
               ? `Attend 3 classes to complete Level 1 & get`
               : <>Attend {classesNeeded} more class{classesNeeded !== 1 ? "es" : ""} to{" "}{reward.completesAll ? "complete all levels" : `complete Level ${level}`} &amp; get</>

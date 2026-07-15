@@ -123,7 +123,7 @@ const VideoCard = ({ video }: { video: (typeof teluguVideos)[0] }) => {
   );
 };
 
-import { safeSessionStorage, safeLocalStorage } from "@/lib/storage";
+import { safeSessionStorage } from "@/lib/storage";
 
 // ?preview_dashboard=<key> seeds mock studentData so each render state of the
 // Live Sessions tab can be checked without real API data — mirrors the equivalent
@@ -282,16 +282,6 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
   const [completedTab, setCompletedTab] = useState<FourteenDaysV2Tab>(
     searchParams.get("tab") === "journey" ? "journey" : "live"
   );
-  const [joinedDays, setJoinedDays] = useState<number[]>(() => {
-    try {
-      const keys = safeLocalStorage.keys().filter(k => k.startsWith("hd_joined_"));
-      for (const k of keys) {
-        const stored = safeLocalStorage.getItem(k);
-        if (stored) return JSON.parse(stored);
-      }
-    } catch { }
-    return [];
-  });
 
   useEffect(() => {
     if (effectiveInitialData) return;
@@ -364,15 +354,6 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
       .then((refData) => setVerifiedReferralCount(refData?.verified_referrals ?? null))
       .catch(() => {});
   }, [mobile]);
-
-  const joinStorageKey = `hd_joined_${mobile}_${studentData?.free_batch_start_date}`;
-  useEffect(() => {
-    if (!studentData?.free_batch_start_date) return;
-    try {
-      const stored = safeLocalStorage.getItem(joinStorageKey);
-      if (stored) setJoinedDays(JSON.parse(stored));
-    } catch { }
-  }, [joinStorageKey, studentData?.free_batch_start_date]);
 
   if (loading) {
     return (
@@ -494,21 +475,12 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
     const batchOrigin = new Date(studentData?.free_batch_start_date!);
     batchOrigin.setHours(0, 0, 0, 0);
 
-    const joinedDatesNotInData = joinedDays.filter((dayNum) => {
-      const d = new Date(batchOrigin);
-      d.setDate(batchOrigin.getDate() + (dayNum - 1));
-      const dateStr = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-      return !attendedDates.has(dateStr);
-    });
-    const freeDaysAttended = Math.min(attendedDates.size + joinedDatesNotInData.length, 14);
-
-    const markTodayJoined = () => {
-      if (!joinedDays.includes(currentDay)) {
-        const updated = [...joinedDays, currentDay];
-        setJoinedDays(updated);
-        safeLocalStorage.setItem(joinStorageKey, JSON.stringify(updated));
-      }
-    };
+    // ?preview_attended=<0-14> overrides the real attendance count so the Level Card's
+    // in-progress/unlocked states can be checked without seeding attendance_tracker dates.
+    const previewAttendedParam = searchParams.get("preview_attended");
+    const freeDaysAttended = previewAttendedParam !== null
+      ? Math.min(Math.max(parseInt(previewAttendedParam, 10), 0), 14)
+      : Math.min(attendedDates.size, 14);
 
     const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
     const defaultTotalMin = nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
@@ -571,7 +543,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
             language={studentData?.language}
             mobile={mobile}
             freeSessionCode={freeSessionCode}
-            onJoin={markTodayJoined}
+            onJoin={() => {}}
           />
         )}
 
