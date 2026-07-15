@@ -27,7 +27,8 @@
       "mcp__claude_ai_Google_Drive__read_file_content",
       "mcp__claude_ai_Google_Drive__download_file_content",
       "Bash(git stash *)",
-      "Bash(npx vitest *)"
+      "Bash(npx vitest *)",
+      "mcp__netlify__netlify-project-services-reader"
     ],
     "defaultMode": "bypassPermissions",
     "additionalDirectories": [

@@ -67,7 +67,6 @@ export default function Certificate() {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [isRateLimited, setIsRateLimited] = useState<boolean>(false);
   const [hasGenerated, setHasGenerated] = useState<boolean>(false);
-  const [certificateUrl, setCertificateUrl] = useState<string | null>(null);
   const [shareFeedback, setShareFeedback] = useState<string>("");
   const [templateImg, setTemplateImg] = useState<HTMLImageElement | null>(null);
 
@@ -148,7 +147,7 @@ export default function Certificate() {
       .finally(() => setLoadingStudent(false));
   }, [mobile]);
 
-  // Check server-side generation status to sync from Firestore & Firebase Storage
+  // Check server-side generation status to sync from Firestore
   useEffect(() => {
     if (!mobile) return;
     checkServerCertificateStatus(mobile).then((status) => {
@@ -157,9 +156,6 @@ export default function Certificate() {
         setHasGenerated(true);
         if (status.name) {
           setName(status.name);
-        }
-        if (status.certificateUrl) {
-          setCertificateUrl(status.certificateUrl);
         }
       }
     });
@@ -265,45 +261,13 @@ export default function Certificate() {
     safeLocalStorage.setItem("user_name", finalName);
     setIsGenerating(true);
 
-    // Use offscreen canvas so high-res image base64 is guaranteed even before canvasRef is mounted
-    let imageBase64: string | undefined;
-    if (templateImg && templateImg.complete && templateImg.naturalWidth > 0) {
-      const offscreen = document.createElement("canvas");
-      const width = templateImg.naturalWidth || 1414;
-      const height = templateImg.naturalHeight || 2000;
-      offscreen.width = width;
-      offscreen.height = height;
-      const ctx = offscreen.getContext("2d");
-      if (ctx) {
-        ctx.drawImage(templateImg, 0, 0, width, height);
-        const displayName = (finalName || "Your Name Here").trim();
-        const baseFontSize = Math.round(fontSize * (width / 500));
-        const fittedFontSize = fitFontSizeToWidth(ctx, displayName, width * 0.72, baseFontSize);
-        ctx.font = `normal ${fittedFontSize}px "Times New Roman", serif`;
-        ctx.fillStyle = textColor;
-        ctx.textAlign = "center";
-        ctx.textBaseline = "middle";
-        ctx.shadowColor = "rgba(0, 0, 0, 0.15)";
-        ctx.shadowBlur = 4;
-        ctx.shadowOffsetX = 1;
-        ctx.shadowOffsetY = 2;
-        ctx.fillText(displayName, width / 2, Math.round(height * (yPercent / 100)));
-        imageBase64 = offscreen.toDataURL("image/jpeg", 0.88);
-      }
-    }
-
-    // Log certificate generation to Firestore collection 'certificate logs' & upload image to Cloud Storage
-    const res = await trackCertificateActivity({
+    // Log certificate generation to Firestore collection 'certificate logs' (analytics only, no image upload)
+    await trackCertificateActivity({
       mobile,
       name: finalName,
       activity: "generated",
       daysAttended,
-      imageBase64,
     });
-
-    if (res && res.updated && res.updated.certificateUrl) {
-      setCertificateUrl(res.updated.certificateUrl);
-    }
 
     setIsGenerating(false);
     setCertificateCookie(mobile, finalName);

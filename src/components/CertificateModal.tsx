@@ -30,9 +30,6 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   const [feedback, setFeedback] = useState<string>("");
   const [checkedPrior, setCheckedPrior] = useState<boolean>(false);
   const [canvasReady, setCanvasReady] = useState<boolean>(false);
-  // Metadata only (not used for rendering) — tells us a certificate already exists so we can
-  // skip straight to the preview step instead of showing the name form again.
-  const [, setStoredCertUrl] = useState<string | null>(null);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -65,7 +62,6 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     const localStatus = getCertificateCookie(cleanMobile);
     if (localStatus.generated && localStatus.name) {
       setName(localStatus.name);
-      setStoredCertUrl(localStatus.certificateUrl || null);
       setHasGenerated(true);
       return;
     }
@@ -75,10 +71,9 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
       checkServerCertificateStatus(cleanMobile).then((serverStatus) => {
         if (serverStatus && serverStatus.generated && serverStatus.name) {
           setName(serverStatus.name);
-          setStoredCertUrl(serverStatus.certificateUrl || null);
           setHasGenerated(true);
           // Also persist locally so next time it's instant
-          setCertificateCookie(cleanMobile, serverStatus.name, serverStatus.certificateUrl);
+          setCertificateCookie(cleanMobile, serverStatus.name);
         }
       });
     }
@@ -185,43 +180,14 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     // Switch to step 2 preview immediately
     setHasGenerated(true);
 
-    // Track generation & save to Firestore / Cloud Storage in background
+    // Track generation in Firestore (analytics only, no image upload)
     try {
-      let imageBase64: string | undefined;
-      if (templateImg) {
-        const offscreenCanvas = document.createElement("canvas");
-        const w = templateImg.naturalWidth || 1414;
-        const h = templateImg.naturalHeight || 2000;
-        offscreenCanvas.width = w;
-        offscreenCanvas.height = h;
-        const offCtx = offscreenCanvas.getContext("2d");
-        if (offCtx) {
-          offCtx.drawImage(templateImg, 0, 0, w, h);
-          const baseFS = Math.round(fontSize * (w / 500));
-          const fittedFS = fitFontSizeToWidth(offCtx, name.trim(), w * 0.72, baseFS);
-          offCtx.font = `normal ${fittedFS}px "Times New Roman", serif`;
-          offCtx.fillStyle = textColor;
-          offCtx.textAlign = "center";
-          offCtx.textBaseline = "middle";
-          offCtx.fillText(name.trim(), w / 2, Math.round(h * (yPercent / 100)));
-          imageBase64 = offscreenCanvas.toDataURL("image/jpeg", 0.9);
-        }
-      }
-
-      const result = await trackCertificateActivity({
+      await trackCertificateActivity({
         mobile,
         name: name.trim(),
         activity: "generated",
         daysAttended: daysAttended ?? undefined,
-        imageBase64,
       });
-
-      // Cache the uploaded URL as metadata only (not used for rendering — see the render
-      // effect above for why we always regenerate client-side instead).
-      const uploadedUrl = result?.updated?.certificateUrl;
-      if (uploadedUrl) {
-        setCertificateCookie(mobile || "", name.trim(), uploadedUrl);
-      }
     } catch (err) {
       console.error("Error logging certificate generation:", err);
     } finally {

@@ -3,7 +3,6 @@ import { safeLocalStorage } from "./storage";
 export interface CertificateStatus {
   generated: boolean;
   name: string;
-  certificateUrl?: string | null;
 }
 
 const getCookieKey = (mobile: string) => {
@@ -16,18 +15,12 @@ const getNameKey = (mobile: string) => {
   return cleaned ? `hd_cert_name_${cleaned}` : "hd_cert_name_anon";
 };
 
-const getUrlKey = (mobile: string) => {
-  const cleaned = (mobile || "").replace(/[^0-9]/g, "");
-  return cleaned ? `hd_cert_url_${cleaned}` : "hd_cert_url_anon";
-};
-
 /**
  * Reads certificate generation status from Browser Cookie + LocalStorage.
  */
 export function getCertificateCookie(mobile: string): CertificateStatus {
   const genKey = getCookieKey(mobile);
   const nameKey = getNameKey(mobile);
-  const urlKey = getUrlKey(mobile);
 
   let generated = false;
   let name = "";
@@ -56,18 +49,16 @@ export function getCertificateCookie(mobile: string): CertificateStatus {
   if (!name) {
     name = safeLocalStorage.getItem(nameKey) || "";
   }
-  const certificateUrl = safeLocalStorage.getItem(urlKey) || null;
 
-  return { generated, name, certificateUrl };
+  return { generated, name };
 }
 
 /**
  * Sets certificate generation status in Browser Cookie (1 year expiration) + LocalStorage.
  */
-export function setCertificateCookie(mobile: string, name: string, certificateUrl?: string | null): void {
+export function setCertificateCookie(mobile: string, name: string): void {
   const genKey = getCookieKey(mobile);
   const nameKey = getNameKey(mobile);
-  const urlKey = getUrlKey(mobile);
   const maxAge = 60 * 60 * 24 * 365; // 1 year
 
   if (typeof document !== "undefined") {
@@ -77,9 +68,6 @@ export function setCertificateCookie(mobile: string, name: string, certificateUr
 
   safeLocalStorage.setItem(genKey, "true");
   safeLocalStorage.setItem(nameKey, name);
-  if (certificateUrl) {
-    safeLocalStorage.setItem(urlKey, certificateUrl);
-  }
 }
 
 /**
@@ -98,7 +86,6 @@ export async function checkServerCertificateStatus(mobile: string): Promise<Cert
       return {
         generated: !!data.hasGenerated,
         name: data.name || "",
-        certificateUrl: data.certificateUrl || null,
       };
     }
   } catch {
@@ -116,7 +103,6 @@ export async function trackCertificateActivity(params: {
   activity: "generated" | "downloaded" | "shared";
   shareType?: "general" | "whatsapp" | "status";
   daysAttended?: number | null;
-  imageBase64?: string;
 }): Promise<any> {
   const payload = {
     mobile: params.mobile,
@@ -124,7 +110,6 @@ export async function trackCertificateActivity(params: {
     activity: params.activity,
     shareType: params.shareType || null,
     daysAttended: params.daysAttended ?? null,
-    imageBase64: params.imageBase64 || null,
     clientTime: new Date().toISOString(),
   };
 

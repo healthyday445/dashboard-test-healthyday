@@ -9,20 +9,14 @@
 
 import admin from 'firebase-admin';
 import { getFirestore } from 'firebase-admin/firestore';
-import { getStorage } from 'firebase-admin/storage';
 
 const serviceAccount = process.env.FIREBASE_SERVICE_ACCOUNT
   ? JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT)
   : null;
 
-const storageBucket =
-  process.env.FIREBASE_STORAGE_BUCKET ||
-  (serviceAccount ? `${serviceAccount.project_id}.appspot.com` : undefined);
-
 if (!admin.apps.length && serviceAccount) {
   admin.initializeApp({
     credential: admin.credential.cert(serviceAccount),
-    storageBucket,
   });
 }
 
@@ -73,7 +67,6 @@ export async function handler(event) {
           exists: true,
           hasGenerated: !!data.hasGenerated,
           name: data.name || data.userName || "",
-          certificateUrl: data.certificateUrl || null,
           generatedCount: data.generatedCount || 0,
           downloadedCount: data.downloadedCount || 0,
           sharedCount: data.sharedCount || 0,
@@ -88,104 +81,75 @@ export async function handler(event) {
 
       const docRef = db.collection('certificate logs').doc(cleanMobile);
 
-      const docSnap = await docRef.get();
-      const existing = docSnap.exists ? docSnap.data() : {};
-
       const nowIST = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString();
-
       const activity = body.activity || "unknown";
-      const isGenerated = activity === "generated" || existing.hasGenerated === true;
-      const isDownloaded = activity === "downloaded" || existing.hasDownloaded === true;
-      const isShared = activity === "shared" || activity.startsWith("shared") || existing.hasShared === true;
-
-      const generatedCount = activity === "generated"
-        ? (existing.generatedCount || 0) + 1
-        : (existing.generatedCount || 0);
-      const downloadedCount = activity === "downloaded"
-        ? (existing.downloadedCount || 0) + 1
-        : (existing.downloadedCount || 0);
-      const sharedCount = activity === "shared" || activity.startsWith("shared")
-        ? (existing.sharedCount || 0) + 1
-        : (existing.sharedCount || 0);
 
       const historyItem = `${nowIST.replace("T", " ").substring(0, 19)} IST | ${activity}${
         body.shareType ? ` (${body.shareType})` : ""
       }`;
-      const prevHistory = Array.isArray(existing.activityHistory) ? existing.activityHistory : [];
-      const activityHistory = [historyItem, ...prevHistory].slice(0, 25);
 
-      let certificateUrl = existing.certificateUrl || null;
-
-      if (body.imageBase64 && admin.apps.length) {
-        try {
-          let bucket;
-          try {
-            bucket = storageBucket ? getStorage().bucket(storageBucket) : getStorage().bucket();
-          } catch (bErr) {
-            bucket = getStorage().bucket();
-          }
-          const fileName = `certificates/${cleanMobile}.jpg`;
-          const file = bucket.file(fileName);
-          const base64Data = body.imageBase64.replace(/^data:image\/\w+;base64,/, "");
-          const buffer = Buffer.from(base64Data, "base64");
-
-          await file.save(buffer, {
-            metadata: {
-              contentType: "image/jpeg",
-              cacheControl: "public, max-age=31536000",
-            },
-          });
-
-          try {
-            await file.makePublic();
-          } catch (pubErr) {
-            // Uniform bucket-level access might be enabled
-          }
-
-          certificateUrl = `https://storage.googleapis.com/${bucket.name}/${fileName}`;
-          console.log("Uploaded certificate image successfully:", certificateUrl);
-        } catch (storageErr) {
-          console.error("Firebase Storage upload error:", storageErr);
-        }
-      }
-
+      // Single merge write, no upfront get(). Counters use FieldValue.increment so
+      // they stay correct without ever reading the previous value (this also fixes a
+      // lost-update race the old read-then-write had under concurrent requests).
+      // Fields are only included when *this* event actually sets them; `merge: true`
+      // leaves everything else untouched, which is equivalent to the old
+      // `body.x || existing.x` fallback without needing the read that fallback relied on.
+      // Net effect: one Firestore round trip removed per call — that round trip is
+      // fully billed Netlify function duration, so this directly cuts compute cost.
       const updatePayload = {
         mobile: cleanMobile,
         number: cleanMobile,
-        name: body.name || existing.name || existing.userName || "Student",
-        userName: body.name || existing.userName || existing.name || "Student",
-        daysAttended:
-          body.daysAttended !== undefined && body.daysAttended !== null
-            ? body.daysAttended
-            : existing.daysAttended || null,
-
-        hasGenerated: isGenerated,
-        hasDownloaded: isDownloaded,
-        hasShared: isShared,
-        certificateUrl: certificateUrl || existing.certificateUrl || null,
-
-        generatedCount,
-        downloadedCount,
-        sharedCount,
-
         lastActivity: activity,
         lastActivityAt: nowIST,
-        activityHistory,
         updatedAt: nowIST,
+        activityHistory: admin.firestore.FieldValue.arrayUnion(historyItem),
       };
 
-      if (activity === "generated" && !existing.firstGeneratedAt) {
+      if (body.name) {
+        updatePayload.name = body.name;
+        updatePayload.userName = body.name;
+      }
+      if (body.daysAttended !== undefined && body.daysAttended !== null) {
+        updatePayload.daysAttended = body.daysAttended;
+      }
+
+      if (activity === "generated") {
+        updatePayload.hasGenerated = true;
+        updatePayload.generatedCount = admin.firestore.FieldValue.increment(1);
+        // Last-write-wins now (was "first-write-wins"); this field isn't read
+        // anywhere in the app today, so the semantic change is not observable.
         updatePayload.firstGeneratedAt = nowIST;
+      } else if (activity === "downloaded") {
+        updatePayload.hasDownloaded = true;
+        updatePayload.downloadedCount = admin.firestore.FieldValue.increment(1);
+      } else if (activity === "shared" || activity.startsWith("shared")) {
+        updatePayload.hasShared = true;
+        updatePayload.sharedCount = admin.firestore.FieldValue.increment(1);
       }
 
       await docRef.set(updatePayload, { merge: true });
 
+      // activityHistory/counts aren't consumed by any caller of this endpoint —
+      // since we no longer read the previous doc, the response reports this
+      // event's own fields rather than recomputed cumulative totals.
       return {
         statusCode: 200,
         headers,
         body: JSON.stringify({
           success: true,
-          updated: updatePayload,
+          updated: {
+            mobile: cleanMobile,
+            number: cleanMobile,
+            name: body.name || undefined,
+            userName: body.name || undefined,
+            daysAttended: body.daysAttended ?? undefined,
+            hasGenerated: activity === "generated" ? true : undefined,
+            hasDownloaded: activity === "downloaded" ? true : undefined,
+            hasShared: (activity === "shared" || activity.startsWith("shared")) ? true : undefined,
+            lastActivity: activity,
+            lastActivityAt: nowIST,
+            updatedAt: nowIST,
+          },
         }),
       };
     }

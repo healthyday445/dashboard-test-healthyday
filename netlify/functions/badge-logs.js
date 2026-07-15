@@ -85,65 +85,74 @@ export async function handler(event) {
       const docId = `${cleanMobile}_level_${level}`;
       const docRef = db.collection('badge_log').doc(docId);
 
-      const docSnap = await docRef.get();
-      const existing = docSnap.exists ? docSnap.data() : {};
-
       const nowIST = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString();
-
       const activity = body.activity || "unknown";
-      const isGenerated = activity === "generated" || existing.hasGenerated === true;
-      const isDownloaded = activity === "downloaded" || existing.hasDownloaded === true;
-      const isShared = activity === "shared" || activity.startsWith("shared") || existing.hasShared === true;
-
-      const generatedCount = activity === "generated"
-        ? (existing.generatedCount || 0) + 1
-        : (existing.generatedCount || 0);
-      const downloadedCount = activity === "downloaded"
-        ? (existing.downloadedCount || 0) + 1
-        : (existing.downloadedCount || 0);
-      const sharedCount = activity === "shared" || activity.startsWith("shared")
-        ? (existing.sharedCount || 0) + 1
-        : (existing.sharedCount || 0);
 
       const historyItem = `${nowIST.replace("T", " ").substring(0, 19)} IST | ${activity}${
         body.shareType ? ` (${body.shareType})` : ""
       }`;
-      const prevHistory = Array.isArray(existing.activityHistory) ? existing.activityHistory : [];
-      const activityHistory = [historyItem, ...prevHistory].slice(0, 25);
 
+      // Single merge write, no upfront get(). Counters use FieldValue.increment so
+      // they stay correct without ever reading the previous value (this also fixes a
+      // lost-update race the old read-then-write had under concurrent requests).
+      // Fields are only included when *this* event actually sets them; `merge: true`
+      // leaves everything else untouched, which is equivalent to the old
+      // `body.x || existing.x` fallback without needing the read that fallback relied on.
+      // Net effect: one Firestore round trip removed per call — that round trip is
+      // fully billed Netlify function duration, so this directly cuts compute cost.
       const updatePayload = {
         mobile: cleanMobile,
         number: cleanMobile,
         level: level,
-        name: body.name || existing.name || existing.userName || "Student",
-        userName: body.name || existing.userName || existing.name || "Student",
-
-        hasGenerated: isGenerated,
-        hasDownloaded: isDownloaded,
-        hasShared: isShared,
-
-        generatedCount,
-        downloadedCount,
-        sharedCount,
-
         lastActivity: activity,
         lastActivityAt: nowIST,
-        activityHistory,
         updatedAt: nowIST,
+        activityHistory: admin.firestore.FieldValue.arrayUnion(historyItem),
       };
 
-      if (activity === "generated" && !existing.firstGeneratedAt) {
+      if (body.name) {
+        updatePayload.name = body.name;
+        updatePayload.userName = body.name;
+      }
+
+      if (activity === "generated") {
+        updatePayload.hasGenerated = true;
+        updatePayload.generatedCount = admin.firestore.FieldValue.increment(1);
+        // Last-write-wins now (was "first-write-wins"); this field isn't read
+        // anywhere in the app today, so the semantic change is not observable.
         updatePayload.firstGeneratedAt = nowIST;
+      } else if (activity === "downloaded") {
+        updatePayload.hasDownloaded = true;
+        updatePayload.downloadedCount = admin.firestore.FieldValue.increment(1);
+      } else if (activity === "shared" || activity.startsWith("shared")) {
+        updatePayload.hasShared = true;
+        updatePayload.sharedCount = admin.firestore.FieldValue.increment(1);
       }
 
       await docRef.set(updatePayload, { merge: true });
 
+      // activityHistory/counts aren't consumed by any caller of this endpoint
+      // (trackBadgeActivity's callers all discard the response body) — since we no
+      // longer read the previous doc, the response reports this event's own fields
+      // rather than recomputed cumulative totals.
       return {
         statusCode: 200,
         headers,
         body: JSON.stringify({
           success: true,
-          updated: updatePayload,
+          updated: {
+            mobile: cleanMobile,
+            number: cleanMobile,
+            level,
+            name: body.name || undefined,
+            userName: body.name || undefined,
+            hasGenerated: activity === "generated" ? true : undefined,
+            hasDownloaded: activity === "downloaded" ? true : undefined,
+            hasShared: (activity === "shared" || activity.startsWith("shared")) ? true : undefined,
+            lastActivity: activity,
+            lastActivityAt: nowIST,
+            updatedAt: nowIST,
+          },
         }),
       };
     }
