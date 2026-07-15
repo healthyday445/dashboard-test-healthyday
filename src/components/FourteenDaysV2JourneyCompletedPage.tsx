@@ -3,13 +3,13 @@ import journeyGift from "@/assets/21daysprogram/journey_gift.png";
 import journeyStar from "@/assets/21daysprogram/journey_star.png";
 import circledPlayButton from "@/assets/21daysprogram/circled_play_button.png";
 import downloadIcon from "@/assets/21daysprogram/download_icon.png";
-import rewardLvl1 from "@/assets/21daysprogram/reward_lvl1.webp";
-import rewardLvl2 from "@/assets/21daysprogram/reward_lvl2.webp";
-import rewardLvl4 from "@/assets/21daysprogram/reward_lvl4.webp";
-import rewardLvl6 from "@/assets/21daysprogram/reward_lvl6.webp";
-import rewardLvl7 from "@/assets/21daysprogram/reward_lvl7.webp";
+import rewardLvl1 from "@/assets/14d-v2-dashboard-level-card/reward_lvl1.jpg";
+import rewardLvl2 from "@/assets/14d-v2-dashboard-level-card/reward_lvl2.jpg";
+import rewardLvl3 from "@/assets/14d-v2-dashboard-level-card/reward_lvl3.jpg";
+import rewardLvl4 from "@/assets/14d-v2-dashboard-level-card/reward_lvl4.jpg";
+import rewardLvl5 from "@/assets/14d-v2-dashboard-level-card/reward_lvl5.jpg";
 
-const REWARD_THUMBS_V2 = [rewardLvl1, rewardLvl2, rewardLvl4, rewardLvl6, rewardLvl7];
+const REWARD_THUMBS_V2 = [rewardLvl1, rewardLvl2, rewardLvl3, rewardLvl4, rewardLvl5];
 
 const Star = ({ top, left, size, rotate }: { top: string; left: string; size: number; rotate: number }) => (
   <img src={journeyStar} alt="" style={{ position: "absolute", top, left, width: `${size}px`, height: `${size}px`, transform: `rotate(${rotate}deg)`, pointerEvents: "none" }} />

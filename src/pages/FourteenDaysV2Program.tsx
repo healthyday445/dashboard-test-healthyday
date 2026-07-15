@@ -10,11 +10,11 @@ import levelIcon3 from "@/assets/21daysprogram/level_icon_3.webp";
 import levelIcon4 from "@/assets/21daysprogram/level_icon_4.webp";
 import levelIcon5 from "@/assets/21daysprogram/level_icon_5.webp";
 import downloadIcon from "@/assets/21daysprogram/download_icon.png";
-import rewardLvl1 from "@/assets/21daysprogram/reward_lvl1.webp";
-import rewardLvl2 from "@/assets/21daysprogram/reward_lvl2.webp";
-import rewardLvl4 from "@/assets/21daysprogram/reward_lvl4.webp";
-import rewardLvl6 from "@/assets/21daysprogram/reward_lvl6.webp";
-import rewardLvl7 from "@/assets/21daysprogram/reward_lvl7.webp";
+import rewardLvl1 from "@/assets/14d-v2-dashboard-level-card/reward_lvl1.jpg";
+import rewardLvl2 from "@/assets/14d-v2-dashboard-level-card/reward_lvl2.jpg";
+import rewardLvl3 from "@/assets/14d-v2-dashboard-level-card/reward_lvl3.jpg";
+import rewardLvl4 from "@/assets/14d-v2-dashboard-level-card/reward_lvl4.jpg";
+import rewardLvl5 from "@/assets/14d-v2-dashboard-level-card/reward_lvl5.jpg";
 import rewardCardBgUnlocked from "@/assets/21daysprogram/reward_card_bg_unlocked.png";
 import circledPlayButton from "@/assets/21daysprogram/circled_play_button.png";
 import padlockIcon from "@/assets/21daysprogram/padlock_icon.png";
@@ -38,9 +38,9 @@ import { BadgeModal } from "@/components/BadgeModal";
 const LEVEL_DATA = [
   { level: 1, unlockDay: 3, rewardLine1: "3-Days Detox", rewardLine2: "Programme", badge: levelIcon1, rewardImg: rewardLvl1, pdfLink: "https://storage.googleapis.com/healthyday_pdfs/3_Day_Detox_Programme_Handbook.pdf" },
   { level: 2, unlockDay: 6, rewardLine1: "3-Days", rewardLine2: "Breakfast Diet", badge: levelIcon2, rewardImg: rewardLvl2, pdfLink: "https://storage.googleapis.com/healthyday_pdfs/3_Day_Breakfast_Challenge_Handbook.pdf" },
-  { level: 3, unlockDay: 9, rewardLine1: "3-Days", rewardLine2: "Lunch Diet", badge: levelIcon3, rewardImg: rewardLvl4, pdfLink: "https://storage.googleapis.com/healthyday_pdfs/3_Day_Lunch_Challenge_Handbook.pdf" },
-  { level: 4, unlockDay: 12, rewardLine1: "3-Days", rewardLine2: "Dinner Diet", badge: levelIcon4, rewardImg: rewardLvl6, pdfLink: "https://storage.googleapis.com/healthyday_pdfs/3_Day_Dinner_Challenge_Handbook.pdf" },
-  { level: 5, unlockDay: 14, rewardLine1: "14-Days Yoga", rewardLine2: "Certificate", badge: levelIcon5, rewardImg: rewardLvl7, pdfLink: "" },
+  { level: 3, unlockDay: 9, rewardLine1: "3-Days", rewardLine2: "Lunch Diet", badge: levelIcon3, rewardImg: rewardLvl3, pdfLink: "https://storage.googleapis.com/healthyday_pdfs/3_Day_Lunch_Challenge_Handbook.pdf" },
+  { level: 4, unlockDay: 12, rewardLine1: "3-Days", rewardLine2: "Dinner Diet", badge: levelIcon4, rewardImg: rewardLvl4, pdfLink: "https://storage.googleapis.com/healthyday_pdfs/3_Day_Dinner_Challenge_Handbook.pdf" },
+  { level: 5, unlockDay: 14, rewardLine1: "14-Days Yoga", rewardLine2: "Certificate", badge: levelIcon5, rewardImg: rewardLvl5, pdfLink: "" },
 ];
 
 // One zone config per completed-reward count (0-5), reusing the exact gradients/character

@@ -1,13 +1,13 @@
-import lvl1Inprogress from "@/assets/dashboard-level-card/lvl1_inprogress.webp";
-import lvl2Inprogress from "@/assets/dashboard-level-card/lvl2_inprogress.webp";
-import lvl4Inprogress from "@/assets/dashboard-level-card/lvl4_inprogress.webp";
-import lvl6Inprogress from "@/assets/dashboard-level-card/lvl6_inprogress.webp";
-import lvl7Inprogress from "@/assets/dashboard-level-card/lvl7_inprogress.webp";
-import lvl1Unlocked from "@/assets/dashboard-level-card/lvl1_unlocked.webp";
-import lvl2Unlocked from "@/assets/dashboard-level-card/lvl2_unlocked.webp";
-import lvl4Unlocked from "@/assets/dashboard-level-card/lvl4_unlocked.webp";
-import lvl6Unlocked from "@/assets/dashboard-level-card/lvl6_unlocked.webp";
-import lvl7Unlocked from "@/assets/dashboard-level-card/lvl7_unlocked.webp";
+import lvl1Inprogress from "@/assets/14d-v2-dashboard-level-card/lvl1_inprogress.jpg";
+import lvl1Unlocked from "@/assets/14d-v2-dashboard-level-card/lvl1_unlocked.jpg";
+import lvl2Inprogress from "@/assets/14d-v2-dashboard-level-card/lvl2_inprogress.jpg";
+import lvl2Unlocked from "@/assets/14d-v2-dashboard-level-card/lvl2_unlocked.jpg";
+import lvl3Inprogress from "@/assets/14d-v2-dashboard-level-card/lvl3_inprogress.jpg";
+import lvl3Unlocked from "@/assets/14d-v2-dashboard-level-card/lvl3_unlocked.jpg";
+import lvl4Inprogress from "@/assets/14d-v2-dashboard-level-card/lvl4_inprogress.jpg";
+import lvl4Unlocked from "@/assets/14d-v2-dashboard-level-card/lvl4_unlocked.jpg";
+import lvl5Inprogress from "@/assets/14d-v2-dashboard-level-card/lvl5_inprogress.jpg";
+import lvl5Unlocked from "@/assets/14d-v2-dashboard-level-card/lvl5_unlocked.jpg";
 import downArrow from "@/assets/dashboard-level-card/down_arrow.webp";
 import circledPlayButton from "@/assets/21daysprogram/circled_play_button.png";
 
@@ -25,12 +25,18 @@ export const LEVEL_REWARDS_V2 = [
   { line1: "14-Days Yoga", line2: "Certificate", full: "14-Days Yoga Certificate", subtitleWidth: 142, rewardWidth: 147, completesAll: true },
 ];
 
-const LEVEL_IMAGES_V2 = [
-  { unlocked: lvl1Unlocked, inprogress: lvl1Inprogress },
-  { unlocked: lvl2Unlocked, inprogress: lvl2Inprogress },
-  { unlocked: lvl4Unlocked, inprogress: lvl4Inprogress },
-  { unlocked: lvl6Unlocked, inprogress: lvl6Inprogress },
-  { unlocked: lvl7Unlocked, inprogress: lvl7Inprogress },
+// Indexed by attended-day count (0-14) — one image per in-progress/unlocked step of each level.
+const DAY_IMAGES_V2 = [
+  lvl1Inprogress, lvl1Inprogress, lvl1Inprogress,
+  lvl1Unlocked,
+  lvl2Inprogress, lvl2Inprogress,
+  lvl2Unlocked,
+  lvl3Inprogress, lvl3Inprogress,
+  lvl3Unlocked,
+  lvl4Inprogress, lvl4Inprogress,
+  lvl4Unlocked,
+  lvl5Inprogress,
+  lvl5Unlocked,
 ];
 
 /** Resolves the join/watch/download link for a given 14-day-journey level's reward. */
@@ -72,7 +78,7 @@ export function FourteenDaysV2LevelCard({
 }) {
   const { safeDay, isUnlocked, level, classesNeeded } = getLevelState(freeDaysAttended);
   const reward = LEVEL_REWARDS_V2[level - 1];
-  const img = isUnlocked ? LEVEL_IMAGES_V2[level - 1].unlocked : LEVEL_IMAGES_V2[level - 1].inprogress;
+  const img = DAY_IMAGES_V2[safeDay];
 
   return (
     <div
@@ -93,9 +99,9 @@ export function FourteenDaysV2LevelCard({
         style={{
           position: "absolute",
           right: 0,
-          top: isUnlocked ? 34 : 33,
-          width: isUnlocked ? "min(209px, 50.7vw)" : "min(212px, 51.5vw)",
-          height: isUnlocked ? "min(118px, 28.6vw)" : "min(119px, 28.9vw)",
+          top: 34,
+          width: "min(210px, 51vw)",
+          height: "min(118px, 28.7vw)",
           objectFit: "cover",
           pointerEvents: "none",
         }}
