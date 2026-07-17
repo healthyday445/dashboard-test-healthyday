@@ -1357,7 +1357,8 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
         initialName={studentData?.name}
         mobile={mobile || studentData?.mobile}
         daysAttended={freeDaysAttended}
-      />
+        programDays={21}
+        />
       </>
     );
   }
@@ -1950,7 +1951,8 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
           initialName={studentData?.name}
           mobile={mobile || studentData?.mobile}
           daysAttended={21}
-        />
+          programDays={21}
+          />
       </div>
     );
   }
@@ -2201,7 +2203,8 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
         initialName={studentData?.name}
         mobile={mobile || studentData?.mobile}
         daysAttended={21}
-      />
+        programDays={21}
+        />
     </>
   );
 }
@@ -2447,7 +2450,8 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
         initialName={studentData?.name}
         mobile={mobile || studentData?.mobile}
         daysAttended={21}
-      />
+        programDays={21}
+        />
     </div>
   );
 };

@@ -20,7 +20,7 @@ import { isFreeBatchOver, getSimulatedBatchDate } from "@/lib/utils";
 // the one-off July-6-2026 cohort keeps the original 14-day (no-tabs) experience;
 // every free batch from July-13-2026 onward (every following Monday) gets the
 // new tabbed 14-day-v2 experience.
-const FREE_BATCH_DATE = "2026-06-21";
+export const FREE_BATCH_DATE = "2026-06-21";
 const FREE_BATCH_DATE_OLD_14DAY = "2026-07-06";
 
 const Dashboard = () => {
@@ -225,7 +225,8 @@ const Dashboard = () => {
           initialName={studentData?.name}
           mobile={mobile || studentData?.mobile}
           daysAttended={21}
-        />
+          programDays={21}
+          />
       </div>
     );
   }

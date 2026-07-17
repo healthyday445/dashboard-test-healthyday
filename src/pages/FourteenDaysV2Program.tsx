@@ -26,7 +26,7 @@ import badgeCardL2 from "@/assets/21daysprogram/badge_card_l2.webp";
 import badgeCardL3 from "@/assets/21daysprogram/badge_card_l3.webp";
 import badgeCardL4 from "@/assets/21daysprogram/badge_card_l4.webp";
 import badgeCardL5 from "@/assets/21daysprogram/badge_card_l5.webp";
-import finalCertificate from "@/assets/badges/FINAL (1).jpg";
+import finalCertificate from "@/assets/badges/certificate_14days.jpg";
 import badgeCardShareIcon from "@/assets/21daysprogram/badge_card_share_icon.png";
 import { LEVEL_UNLOCK_DAYS_V2, getLevelRewardLinkV2 } from "@/components/FourteenDaysV2LevelCard";
 import { CertificateModal } from "@/components/CertificateModal";
@@ -717,7 +717,8 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
         initialName={studentData?.name}
         mobile={mobile || studentData?.mobile}
         daysAttended={14}
-      />
+        programDays={14}
+        />
       <BadgeModal
         isOpen={showBadgeModal}
         onClose={() => setShowBadgeModal(false)}

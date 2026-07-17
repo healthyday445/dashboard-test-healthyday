@@ -7,6 +7,14 @@ import {
 } from "@/lib/trackCertificateActivity";
 import { safeLocalStorage } from "@/lib/storage";
 import { fitFontSizeToWidth } from "@/lib/canvasText";
+import { Skeleton } from "@/components/ui/skeleton";
+import certificate14Days from "@/assets/badges/certificate_14days.jpg";
+import certificate21Days from "@/assets/badges/certificate_21days.jpg";
+
+const CERTIFICATE_TEMPLATES: Record<14 | 21, string> = {
+  14: certificate14Days,
+  21: certificate21Days,
+};
 
 interface CertificateModalProps {
   isOpen: boolean;
@@ -14,6 +22,7 @@ interface CertificateModalProps {
   mobile?: string;
   initialName?: string;
   daysAttended?: number | null;
+  programDays: 14 | 21;
 }
 
 export const CertificateModal: React.FC<CertificateModalProps> = ({
@@ -22,6 +31,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   mobile,
   initialName,
   daysAttended,
+  programDays,
 }) => {
   const [name, setName] = useState<string>(initialName || "");
   const [hasGenerated, setHasGenerated] = useState<boolean>(false);
@@ -30,6 +40,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   const [feedback, setFeedback] = useState<string>("");
   const [checkedPrior, setCheckedPrior] = useState<boolean>(false);
   const [canvasReady, setCanvasReady] = useState<boolean>(false);
+  const [checkingExistence, setCheckingExistence] = useState<boolean>(false);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -51,6 +62,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     if (!isOpen) {
       // Reset check flag when modal closes so it re-checks next time
       setCheckedPrior(false);
+      setCheckingExistence(false);
       return;
     }
     if (checkedPrior) return;
@@ -68,29 +80,33 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
 
     // 2. Fallback: check Firestore (async)
     if (cleanMobile) {
-      checkServerCertificateStatus(cleanMobile).then((serverStatus) => {
-        if (serverStatus && serverStatus.generated && serverStatus.name) {
-          setName(serverStatus.name);
-          setHasGenerated(true);
-          // Also persist locally so next time it's instant
-          setCertificateCookie(cleanMobile, serverStatus.name);
-        }
-      });
+      setCheckingExistence(true);
+      checkServerCertificateStatus(cleanMobile)
+        .then((serverStatus) => {
+          if (serverStatus && serverStatus.generated && serverStatus.name) {
+            setName(serverStatus.name);
+            setHasGenerated(true);
+            // Also persist locally so next time it's instant
+            setCertificateCookie(cleanMobile, serverStatus.name);
+          }
+        })
+        .finally(() => setCheckingExistence(false));
     }
   }, [isOpen, mobile, checkedPrior]);
 
   // Load template image
   useEffect(() => {
+    const templateSrc = CERTIFICATE_TEMPLATES[programDays];
     const img = new Image();
     img.crossOrigin = "anonymous";
-    img.src = "/FINAL.jpg";
+    img.src = templateSrc;
     img.onload = () => {
       setTemplateImg(img);
     };
     img.onerror = () => {
-      console.error("Failed to load certificate template /FINAL.jpg");
+      console.error(`Failed to load certificate template ${templateSrc}`);
     };
-  }, []);
+  }, [programDays]);
 
   const fontSize = 37;
   const yPercent = 42;
@@ -215,7 +231,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     const a = document.createElement("a");
     a.href = url;
     const safeName = (name || "Student").replace(/[^a-zA-Z0-9_-]/g, "_");
-    a.download = `Healthyday_21Days_Certificate_${safeName}.jpg`;
+    a.download = `Healthyday_${programDays}Days_Certificate_${safeName}.jpg`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -241,12 +257,14 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     const filename = `Healthyday_Certificate_${safeName}.jpg`;
     const file = new File([blob], filename, { type: "image/jpeg" });
 
+    const referralLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : "https://yoga.healthyday.co.in";
+
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({
           files: [file],
-          title: "My 21-Day Yoga Certificate",
-          text: `I just completed my 21-Day Yoga Program with Healthyday! Here is my official completion certificate.`,
+          title: `My ${programDays}-Day Yoga Certificate`,
+          text: `I just completed my ${programDays}-Day Yoga Program with Healthyday! Here is my official completion certificate.\n\nJoin the next FREE Yoga Challenge here: ${referralLink}`,
         });
         trackCertificateActivity({
           mobile,
@@ -263,6 +281,11 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
       await handleDownload();
     }
   };
+
+  // Defense-in-depth: callers only open this modal once a level/day is fully complete, but
+  // guard here too in case it's ever reached earlier (e.g. a direct deep link) — mirrors the
+  // same 7-day minimum used on the standalone /certificate page.
+  const isLocked = !hasGenerated && daysAttended != null && daysAttended < 7;
 
   if (!isOpen) return null;
 
@@ -340,7 +363,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
               lineHeight: "normal",
             }}
           >
-            You have completed the 21-Days Yoga Program
+            You have completed the {programDays}-Days Yoga Program
           </p>
         </div>
 
@@ -370,7 +393,42 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         </button>
 
         <div style={{ padding: "24px 21px" }}>
-        {!hasGenerated ? (
+        {checkingExistence ? (
+          <div>
+            <Skeleton className="h-[18px] w-[220px] mx-auto mb-5 rounded-md" />
+            <Skeleton className="h-[10px] w-16 mb-2 rounded-md" />
+            <Skeleton className="h-11 w-full max-w-[343px] mb-5 rounded-[9px]" />
+            <Skeleton className="h-10 w-full max-w-[343px] rounded-[30px]" />
+          </div>
+        ) : isLocked ? (
+          <div style={{ textAlign: "center", padding: "8px 0" }}>
+            <div
+              style={{
+                width: "56px",
+                height: "56px",
+                borderRadius: "50%",
+                background: "#FFF3D8",
+                color: "#B37D00",
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                margin: "0 auto 16px",
+                fontSize: "24px",
+              }}
+            >
+              🔒
+            </div>
+            <p style={{ margin: "0 0 8px", color: "#000", fontFamily: "Outfit, sans-serif", fontSize: "16px", fontWeight: 700 }}>
+              Certificate Locked
+            </p>
+            <p style={{ margin: "0 0 16px", color: "#5A6577", fontFamily: "Outfit, sans-serif", fontSize: "13px", lineHeight: "1.5" }}>
+              You need to attend at least 7 days of live yoga classes to unlock and generate your official completion certificate.
+            </p>
+            <p style={{ margin: 0, color: "#FEAB27", fontFamily: "Outfit, sans-serif", fontSize: "14px", fontWeight: 700 }}>
+              {daysAttended} / 7 Days Attended
+            </p>
+          </div>
+        ) : !hasGenerated ? (
           /* Step 1: Name Entry Form */
           <div>
             <p

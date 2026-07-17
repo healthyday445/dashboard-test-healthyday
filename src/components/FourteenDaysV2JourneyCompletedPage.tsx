@@ -19,10 +19,11 @@ interface FourteenDaysV2JourneyCompletedPageProps {
   studentName?: string;
   language?: string;
   joinLink: string;
+  onCertificateClick?: () => void;
 }
 
 /** "Jagan's Yoga Journey" tab — shown once a student has completed all 14 days; lists every reward, all unlocked. */
-export const FourteenDaysV2JourneyCompletedPage: React.FC<FourteenDaysV2JourneyCompletedPageProps> = ({ studentName, language, joinLink }) => {
+export const FourteenDaysV2JourneyCompletedPage: React.FC<FourteenDaysV2JourneyCompletedPageProps> = ({ studentName, language, joinLink, onCertificateClick }) => {
   const firstName = studentName?.split(" ")[0];
 
   return (
@@ -91,26 +92,49 @@ export const FourteenDaysV2JourneyCompletedPage: React.FC<FourteenDaysV2JourneyC
                   >
                     {reward.full}
                   </p>
-                  <a
-                    href={link}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{
-                      flexShrink: 0,
-                      display: "flex",
-                      alignItems: "center",
-                      gap: "4px",
-                      height: "22px",
-                      padding: "0 10px",
-                      borderRadius: "5px",
-                      background: "#FE961B",
-                      boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)",
-                      textDecoration: "none",
-                    }}
-                  >
-                    <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: isLast ? "10px" : "11px", fontWeight: 700 }}>{isLast ? "Download" : "Join now"}</span>
-                    <img src={isLast ? downloadIcon : circledPlayButton} alt="" style={{ width: isLast ? "12px" : "11px", height: isLast ? "12px" : "11px" }} />
-                  </a>
+                  {isLast && onCertificateClick ? (
+                    <button
+                      type="button"
+                      onClick={onCertificateClick}
+                      style={{
+                        flexShrink: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px",
+                        height: "22px",
+                        padding: "0 10px",
+                        borderRadius: "5px",
+                        background: "#FE961B",
+                        border: "none",
+                        cursor: "pointer",
+                        boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)",
+                      }}
+                    >
+                      <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "10px", fontWeight: 700 }}>Download</span>
+                      <img src={downloadIcon} alt="" style={{ width: "12px", height: "12px" }} />
+                    </button>
+                  ) : (
+                    <a
+                      href={link}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        flexShrink: 0,
+                        display: "flex",
+                        alignItems: "center",
+                        gap: "4px",
+                        height: "22px",
+                        padding: "0 10px",
+                        borderRadius: "5px",
+                        background: "#FE961B",
+                        boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)",
+                        textDecoration: "none",
+                      }}
+                    >
+                      <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: isLast ? "10px" : "11px", fontWeight: 700 }}>{isLast ? "Download" : "Join now"}</span>
+                      <img src={isLast ? downloadIcon : circledPlayButton} alt="" style={{ width: isLast ? "12px" : "11px", height: isLast ? "12px" : "11px" }} />
+                    </a>
+                  )}
                 </div>
                 {!isLast && <div style={{ height: "1px", background: "#F1DDBF", margin: "0 14px" }} />}
               </div>

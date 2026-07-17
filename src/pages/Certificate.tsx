@@ -9,8 +9,14 @@ import {
   trackCertificateActivity,
 } from "@/lib/trackCertificateActivity";
 import logo from "@/assets/Primary_logo.svg";
+import { FREE_BATCH_DATE } from "@/pages/Dashboard";
+import certificate14Days from "@/assets/badges/certificate_14days.jpg";
+import certificate21Days from "@/assets/badges/certificate_21days.jpg";
 
-const CERTIFICATE_IMG_URL = "/FINAL.jpg";
+const CERTIFICATE_TEMPLATES: Record<14 | 21, string> = {
+  14: certificate14Days,
+  21: certificate21Days,
+};
 
 const COUNTRIES = [
   { code: "91", iso: "in", name: "India" },
@@ -58,6 +64,14 @@ export default function Certificate() {
       if (!isNaN(parsed)) return parsed;
     }
     return null;
+  });
+
+  // Only the one-off June-21-2026 cohort runs the 21-day programme (see Dashboard.tsx's
+  // FREE_BATCH_DATE) — every other batch is 14-days-v2, so default to 14 and upgrade to 21
+  // once the student's actual batch_start_date comes back from the /student fetch below.
+  const [programDays, setProgramDays] = useState<14 | 21>(() => {
+    const previewProgramme = searchParams.get("preview_programme");
+    return previewProgramme === "21day" ? 21 : 14;
   });
 
   const [loadingStudent, setLoadingStudent] = useState(!!mobile && daysAttended === null);
@@ -131,18 +145,26 @@ export default function Certificate() {
               return prev;
             });
           }
+
+          // Only the one-off June-21-2026 cohort is the 21-day programme (see Dashboard.tsx's
+          // FREE_BATCH_DATE) — every other batch_start_date is a 14-days-v2 student.
+          const resolvedProgramDays = data.free_batch_start_date === FREE_BATCH_DATE ? 21 : 14;
+          if (!searchParams.get("preview_programme")) {
+            setProgramDays(resolvedProgramDays);
+          }
+
           // Check live attendance count
           if (daysAttended === null) {
             const freeBatches = (data.free_batches ?? []) as { batch_start_date: string; attendance_tracker: string[] }[];
             const activeBatches = freeBatches.filter((b) => b.batch_start_date === data.free_batch_start_date);
             const batchesToCheck = activeBatches.length > 0 ? activeBatches : freeBatches;
             const allDates = new Set<string>(batchesToCheck.flatMap((b) => b.attendance_tracker ?? []));
-            setDaysAttended(Math.min(allDates.size, 21));
+            setDaysAttended(Math.min(allDates.size, resolvedProgramDays));
           }
         }
       })
       .catch(() => {
-        if (daysAttended === null) setDaysAttended(21);
+        if (daysAttended === null) setDaysAttended(programDays);
       })
       .finally(() => setLoadingStudent(false));
   }, [mobile]);
@@ -161,10 +183,11 @@ export default function Certificate() {
     });
   }, [mobile]);
 
-  // Load the template image once and store in React state
+  // Load the template image once its program (and thus which template) is known
   useEffect(() => {
+    const templateSrc = CERTIFICATE_TEMPLATES[programDays];
     const img = new Image();
-    img.src = CERTIFICATE_IMG_URL;
+    img.src = templateSrc;
     const onImgReady = () => {
       imgRef.current = img;
       setTemplateImg(img);
@@ -174,9 +197,9 @@ export default function Certificate() {
       onImgReady();
     }
     img.onerror = () => {
-      console.error("Failed to load certificate template FINAL.jpg");
+      console.error(`Failed to load certificate template ${templateSrc}`);
     };
-  }, []);
+  }, [programDays]);
 
   // Synchronously draw canvas whenever templateImg loads, hasGenerated changes, or parameters change
   useEffect(() => {
@@ -302,7 +325,7 @@ export default function Certificate() {
     const a = document.createElement("a");
     a.href = url;
     const safeName = (name || "Student").replace(/[^a-zA-Z0-9_-]/g, "_");
-    a.download = `Healthyday_21Days_Certificate_${safeName}.jpg`;
+    a.download = `Healthyday_${programDays}Days_Certificate_${safeName}.jpg`;
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
@@ -321,15 +344,24 @@ export default function Certificate() {
 
   // Native Web Share action (for WhatsApp & WhatsApp Status)
   const handleNativeShare = async (shareType: "general" | "whatsapp" | "status" = "general") => {
+    // Open the tab synchronously, inside the click's user-gesture, so iOS Safari doesn't
+    // silently block it once we reach the fallback branch below (after the `await`s, the
+    // gesture context is gone and window.open() there gets blocked with no error thrown).
+    const fallbackTab = window.open("", "_blank");
+
     const blob = await getCanvasBlob();
-    if (!blob) return;
+    if (!blob) {
+      fallbackTab?.close();
+      return;
+    }
 
     const safeName = (name || "Student").replace(/[^a-zA-Z0-9_-]/g, "_");
     const filename = `Healthyday_Certificate_${safeName}.jpg`;
     const file = new File([blob], filename, { type: "image/jpeg" });
 
+    const referralLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : "https://yoga.healthyday.co.in";
     const shareText =
-      "🌿 I just completed the 21-Days Yoga Challenge with Healthyday and earned my official certificate! 🧘‍♀️✨\n\nConsistency and dedication truly transform life. If I can build this healthy habit, you can do it too! 💚\n\n👇 Register for the next FREE Yoga Challenge here:\nhttps://yoga.healthyday.co.in";
+      `🌿 I just completed the ${programDays}-Days Yoga Challenge with Healthyday and earned my official certificate! 🧘‍♀️✨\n\nConsistency and dedication truly transform life. If I can build this healthy habit, you can do it too! 💚\n\n👇 Register for the next FREE Yoga Challenge here:\n${referralLink}`;
 
     // Log share activity to Firestore collection 'certificate logs'
     trackCertificateActivity({
@@ -345,16 +377,19 @@ export default function Certificate() {
       try {
         await navigator.share({
           files: [file],
-          title: "My 21-Days Yoga Completion Certificate",
+          title: `My ${programDays}-Days Yoga Completion Certificate`,
           text: shareText,
         });
+        fallbackTab?.close();
         showFeedback("Shared successfully! 🌿");
         return;
       } catch (err: any) {
         if (err.name === "AbortError") {
+          fallbackTab?.close();
           return;
         }
         console.error("Native share error:", err);
+        // Fall through to the WhatsApp fallback below — fallbackTab is still open for it.
       }
     }
 
@@ -374,7 +409,11 @@ export default function Certificate() {
         ? `[Certificate Downloaded! Attach image to your WhatsApp Status]\n\n${shareText}`
         : shareText
     )}`;
-    window.open(waUrl, "_blank");
+    if (fallbackTab) {
+      fallbackTab.location.href = waUrl;
+    } else {
+      window.open(waUrl, "_blank");
+    }
     showFeedback("Image downloaded! Attach it to your WhatsApp Status or send to friends. ✨");
   };
 
@@ -412,7 +451,7 @@ export default function Certificate() {
       {/* Hero Banner */}
       <div className="w-full max-w-3xl px-4 mt-8 text-center">
         <div className="inline-flex items-center gap-2 bg-[#FFF3D8] text-[#B37D00] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3 border border-[#FEE3A2] shadow-xs">
-          <span>🎉 21-Days Yoga Completion Certificate</span>
+          <span>🎉 {programDays}-Days Yoga Completion Certificate</span>
         </div>
         <h1 className="text-3xl md:text-4xl font-extrabold text-[#0D468B] tracking-tight leading-tight">
           Your Official Completion Certificate
@@ -574,7 +613,7 @@ export default function Certificate() {
             <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-6 pb-4 border-b border-[#F5EADC]">
               <div>
                 <h2 className="text-xl md:text-2xl font-bold text-[#202020]">
-                  Your 21-Days Completion Certificate
+                  Your {programDays}-Days Completion Certificate
                 </h2>
               </div>
               {!isRateLimited && (

@@ -569,7 +569,8 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
           initialName={studentData?.name}
           mobile={mobile || studentData?.mobile}
           daysAttended={14}
-        />
+          programDays={14}
+          />
       </div>
     );
   }
@@ -663,7 +664,12 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
 
           <div style={{ paddingTop: "68px" }}>
         {completedTab === "journey" ? (
-          <FourteenDaysV2JourneyCompletedPage studentName={studentData?.name} language={studentData?.language} joinLink={sessionJoinLink || ""} />
+          <FourteenDaysV2JourneyCompletedPage
+            studentName={studentData?.name}
+            language={studentData?.language}
+            joinLink={sessionJoinLink || ""}
+            onCertificateClick={() => setShowCertificateModal(true)}
+          />
         ) : (
           <>
             <div style={{ display: "flex", flexDirection: "column", alignItems: "center", padding: "28px 20px 0", gap: "12px" }}>
@@ -693,6 +699,14 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
         )}
           </div>
         </div>
+        <CertificateModal
+          isOpen={showCertificateModal}
+          onClose={() => setShowCertificateModal(false)}
+          initialName={studentData?.name}
+          mobile={mobile || studentData?.mobile}
+          daysAttended={14}
+          programDays={14}
+          />
       </div>
     );
   }

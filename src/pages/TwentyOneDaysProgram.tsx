@@ -969,7 +969,8 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
         mobile={mobile || ""}
         initialName={studentData?.name}
         daysAttended={daysAttended}
-      />
+        programDays={21}
+        />
     </>
   );
 }

@@ -7,12 +7,13 @@ import {
 } from "@/lib/trackBadgeActivity";
 import { safeLocalStorage } from "@/lib/storage";
 import { fitFontSizeToWidth } from "@/lib/canvasText";
+import { Skeleton } from "@/components/ui/skeleton";
 
 import badge1 from "@/assets/badges/1.jpg";
 import badge2 from "@/assets/badges/2.jpg";
 import badge3 from "@/assets/badges/3.jpg";
 import badge4 from "@/assets/badges/4.jpg";
-import badge5 from "@/assets/badges/FINAL (1).jpg";
+import badge5 from "@/assets/badges/certificate_14days.jpg";
 
 const BADGES: Record<number, string> = {
   1: badge1,
@@ -44,6 +45,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
   const [feedback, setFeedback] = useState<string>("");
   const [checkedPrior, setCheckedPrior] = useState<boolean>(false);
   const [canvasReady, setCanvasReady] = useState<boolean>(false);
+  const [checkingExistence, setCheckingExistence] = useState<boolean>(false);
 
   const canvasRef = useRef<HTMLCanvasElement | null>(null);
 
@@ -63,6 +65,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
   useEffect(() => {
     if (!isOpen) {
       setCheckedPrior(false);
+      setCheckingExistence(false);
       return;
     }
     if (checkedPrior) return;
@@ -80,13 +83,16 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
 
     // 2. Fallback: check Firestore (async)
     if (cleanMobile) {
-      checkServerBadgeStatus(cleanMobile, badgeLevel).then((serverStatus) => {
-        if (serverStatus && serverStatus.generated && serverStatus.name) {
-          setName(serverStatus.name);
-          setHasGenerated(true);
-          setBadgeCookie(cleanMobile, badgeLevel, serverStatus.name);
-        }
-      });
+      setCheckingExistence(true);
+      checkServerBadgeStatus(cleanMobile, badgeLevel)
+        .then((serverStatus) => {
+          if (serverStatus && serverStatus.generated && serverStatus.name) {
+            setName(serverStatus.name);
+            setHasGenerated(true);
+            setBadgeCookie(cleanMobile, badgeLevel, serverStatus.name);
+          }
+        })
+        .finally(() => setCheckingExistence(false));
     }
   }, [isOpen, mobile, badgeLevel, checkedPrior]);
 
@@ -390,7 +396,14 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
         </button>
 
         <div style={{ padding: "24px 21px" }}>
-          {!hasGenerated ? (
+          {checkingExistence ? (
+            <div>
+              <Skeleton className="h-[18px] w-[220px] mx-auto mb-5 rounded-md" />
+              <Skeleton className="h-[10px] w-16 mb-2 rounded-md" />
+              <Skeleton className="h-11 w-full max-w-[343px] mb-5 rounded-[9px]" />
+              <Skeleton className="h-10 w-full max-w-[343px] rounded-[30px]" />
+            </div>
+          ) : !hasGenerated ? (
             <div>
               <p
                 style={{

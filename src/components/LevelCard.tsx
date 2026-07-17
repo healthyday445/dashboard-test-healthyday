@@ -25,7 +25,7 @@ const LEVEL_REWARDS = [
   { line1: "3-Days", line2: "Lunch Diet", full: "3-Days Lunch Diet", subtitleWidth: 135, rewardWidth: 128, completesAll: false },
   { line1: "Post Meal", line2: "Body Movement", full: "Post Meal Body Movement", subtitleWidth: 137, rewardWidth: 137, completesAll: false },
   { line1: "3-Days", line2: "Dinner Diet", full: "3-Days Dinner Diet", subtitleWidth: 137, rewardWidth: 137, completesAll: false },
-  { line1: "21-Days Yoga", line2: "Challenge Certificate", full: "21-Days Yoga Challenge Certificate", subtitleWidth: 155, rewardWidth: 160, completesAll: true },
+  { line1: "21-Days Yoga", line2: "Certificate", full: "21-Days Yoga Certificate", subtitleWidth: 155, rewardWidth: 160, completesAll: true },
 ];
 
 // One entry per attended-day count (0–22), indexed directly by freeDaysAttended.

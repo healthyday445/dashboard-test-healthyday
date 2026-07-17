@@ -2248,7 +2248,8 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
         mobile={mobile || ""}
         initialName={studentData?.name}
         daysAttended={freeDaysAttended}
-      />
+        programDays={14}
+        />
     </div>
   );
 };
