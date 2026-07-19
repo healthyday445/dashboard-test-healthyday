@@ -960,44 +960,19 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
         </div>
       </div>
 
-      {/* Introductory Session Card — one-off, July 5 2026, ahead of the July 6 batch start.
-          ?forceDay=0 (see isForceOnboardingPreview) + ?time=<hh.mmam/pm> lets QA preview
-          this card's live/hidden states without waiting for the real date/time. */}
+      {/* Introductory Session Card */}
       {(() => {
-        const _timeParam = new URLSearchParams(location.search).get("time");
-        const _totalMin = (() => {
-          if (_timeParam) {
-            const isPM = _timeParam.toLowerCase().endsWith("pm");
-            const s = _timeParam.toLowerCase().replace("am", "").replace("pm", "");
-            const [hStr, mStr] = s.split(".");
-            let h = parseInt(hStr, 10);
-            const m = parseInt(mStr ?? "0", 10);
-            if (isPM && h !== 12) h += 12;
-            if (!isPM && h === 12) h = 0;
-            return h * 60 + m;
-          }
-          const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
-          return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
-        })();
-
         if (!isForceOnboardingPreview) {
           const _nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
-          const _year = _nowIST.getUTCFullYear();
-          const _month = _nowIST.getUTCMonth(); // 6 = July
-          const _date = _nowIST.getUTCDate();
-          // Only active July 5, 2026
-          if (_year !== 2026 || _month !== 6 || _date !== 5) return null;
+          const _nowYMD = new Date(_nowIST.getUTCFullYear(), _nowIST.getUTCMonth(), _nowIST.getUTCDate()).getTime();
+          const _batchYMD = new Date(onboardingStartDate.getFullYear(), onboardingStartDate.getMonth(), onboardingStartDate.getDate()).getTime();
+          const oneDayMs = 24 * 60 * 60 * 1000;
+          if (_batchYMD - _nowYMD !== oneDayMs) return null;
         }
 
-        const liveStart = 630; // 10:30 AM IST
-        const liveEnd   = 720; // 12:00 PM IST
-
-        // Before 10:30 AM or after 12:00 PM: hide entirely
-        if (_totalMin < liveStart || _totalMin >= liveEnd) return null;
-
         const isTelugu = userLanguage !== "English";
+        const link = isTelugu ? "https://start.dailyyogawithjagan.com/intro" : "https://start.dailyyogawithjagan.com/intro_eng";
         const videoId = isTelugu ? "M_9PsFKNshA" : "HI3myN11FKA";
-        const link = `https://www.youtube.com/watch?v=${videoId}`;
         const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
         return (
