@@ -964,8 +964,8 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
       {(() => {
         if (!isForceOnboardingPreview) {
           const _nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
-          const _nowYMD = new Date(_nowIST.getUTCFullYear(), _nowIST.getUTCMonth(), _nowIST.getUTCDate()).getTime();
-          const _batchYMD = new Date(onboardingStartDate.getFullYear(), onboardingStartDate.getMonth(), onboardingStartDate.getDate()).getTime();
+          const _nowYMD = Date.UTC(_nowIST.getUTCFullYear(), _nowIST.getUTCMonth(), _nowIST.getUTCDate());
+          const _batchYMD = Date.UTC(onboardingStartDate.getFullYear(), onboardingStartDate.getMonth(), onboardingStartDate.getDate());
           const oneDayMs = 24 * 60 * 60 * 1000;
           if (_batchYMD - _nowYMD !== oneDayMs) return null;
         }

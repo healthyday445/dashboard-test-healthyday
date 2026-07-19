@@ -153,6 +153,16 @@ const buildPreviewDashboardData = (key: string): any | null => {
         referral_link: "healthyday.app/ref=preview",
       };
 
+    case "onboarding_eng":
+      return {
+        status: "registered",
+        language: "English",
+        name: "Preview User",
+        free_batch_start_date: null,
+        free_classes_joining_link: null,
+        referral_link: "healthyday.app/ref=preview",
+      };
+
     case "free_active": {
       // Anchored to a real new-format batch start date (not "today") so the
       // Level Card renders faithfully; use forceDay to pick a day.
@@ -160,6 +170,19 @@ const buildPreviewDashboardData = (key: string): any | null => {
       return {
         status: "14DaysOngoing",
         language: "Telugu",
+        name: "Preview User",
+        free_batch_start_date: batchStart,
+        free_classes_joining_link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        free_batches: [{ batch_start_date: batchStart, attendance_tracker: [] }],
+        total_referral_count: 3,
+      };
+    }
+
+    case "free_active_eng": {
+      const batchStart = "2026-07-13";
+      return {
+        status: "14DaysOngoing",
+        language: "English",
         name: "Preview User",
         free_batch_start_date: batchStart,
         free_classes_joining_link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -757,8 +780,8 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
       {(() => {
         if (!isForceOnboardingPreview) {
           const _nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
-          const _nowYMD = new Date(_nowIST.getUTCFullYear(), _nowIST.getUTCMonth(), _nowIST.getUTCDate()).getTime();
-          const _batchYMD = new Date(onboardingStartDate.getFullYear(), onboardingStartDate.getMonth(), onboardingStartDate.getDate()).getTime();
+          const _nowYMD = Date.UTC(_nowIST.getUTCFullYear(), _nowIST.getUTCMonth(), _nowIST.getUTCDate());
+          const _batchYMD = Date.UTC(onboardingStartDate.getFullYear(), onboardingStartDate.getMonth(), onboardingStartDate.getDate());
           const oneDayMs = 24 * 60 * 60 * 1000;
           if (_batchYMD - _nowYMD !== oneDayMs) return null;
         }
