@@ -153,6 +153,16 @@ const buildPreviewDashboardData = (key: string): any | null => {
         referral_link: "healthyday.app/ref=preview",
       };
 
+    case "onboarding_eng":
+      return {
+        status: "registered",
+        language: "English",
+        name: "Preview User",
+        free_batch_start_date: null,
+        free_classes_joining_link: null,
+        referral_link: "healthyday.app/ref=preview",
+      };
+
     case "free_active": {
       // Anchored to a real new-format batch start date (not "today") so the
       // Level Card renders faithfully; use forceDay to pick a day.
@@ -160,6 +170,19 @@ const buildPreviewDashboardData = (key: string): any | null => {
       return {
         status: "14DaysOngoing",
         language: "Telugu",
+        name: "Preview User",
+        free_batch_start_date: batchStart,
+        free_classes_joining_link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+        free_batches: [{ batch_start_date: batchStart, attendance_tracker: [] }],
+        total_referral_count: 3,
+      };
+    }
+
+    case "free_active_eng": {
+      const batchStart = "2026-07-13";
+      return {
+        status: "14DaysOngoing",
+        language: "English",
         name: "Preview User",
         free_batch_start_date: batchStart,
         free_classes_joining_link: "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
@@ -766,6 +789,62 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
           </span>
         </div>
       </div>
+
+      {/* Introductory Session Card */}
+      {(() => {
+        if (!isForceOnboardingPreview) {
+          const _nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+          const _nowYMD = Date.UTC(_nowIST.getUTCFullYear(), _nowIST.getUTCMonth(), _nowIST.getUTCDate());
+          const _batchYMD = Date.UTC(onboardingStartDate.getFullYear(), onboardingStartDate.getMonth(), onboardingStartDate.getDate());
+          const oneDayMs = 24 * 60 * 60 * 1000;
+          if (_batchYMD - _nowYMD !== oneDayMs) return null;
+        }
+
+        const isTelugu = userLanguage !== "English";
+        const link = isTelugu ? "https://start.dailyyogawithjagan.com/intro" : "https://start.dailyyogawithjagan.com/intro_eng";
+        const videoId = isTelugu ? "M_9PsFKNshA" : "HI3myN11FKA";
+        const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
+
+        return (
+          <div style={{ padding: "18px 20px 0" }}>
+            <div style={{ display: "flex", alignItems: "center", gap: "10px", marginBottom: "12px" }}>
+              <p style={{ color: "#202020", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal", margin: 0 }}>
+                Introductory Session
+              </p>
+              <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
+                <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
+                <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>LIVE</span>
+              </div>
+            </div>
+
+            <div style={{ borderRadius: "12px", overflow: "hidden", boxShadow: "1px 0 4px rgba(0,0,0,0.25), -1px -1px 4px rgba(0,0,0,0.25)" }}>
+              <a href={link} target="_blank" rel="noopener noreferrer" style={{ display: "block", position: "relative", width: "100%", aspectRatio: "342/187", textDecoration: "none" }}>
+                <img src={thumbnail} alt="Introductory Session" style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }} />
+                <div style={{ position: "absolute", inset: 0, background: "rgba(0,0,0,0.32)" }} />
+                <div style={{ position: "absolute", inset: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <PlayButton />
+                </div>
+              </a>
+
+              <div style={{ background: "#fff", border: "1.5px solid #E9E9E9", borderTop: "none", padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <a
+                  href={link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none" }}
+                >
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                    <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                  </svg>
+                  <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION NOW</span>
+                </a>
+              </div>
+            </div>
+          </div>
+        );
+      })()}
 
       <div style={{ padding: "18px 20px 0" }}>
         <ReferWinCard showTitle={true} shareLink={mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : (studentData?.referral_link ?? "")} referralsUrl={`/${mobile || ""}/referrals`} />

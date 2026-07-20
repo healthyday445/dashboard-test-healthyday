@@ -1,6 +1,7 @@
 import { getBonusWindowStart } from "@/lib/utils";
 
 const ytThumb = (id: string) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
+import faceYogaPaidThumb from "@/assets/bonus/face yoga paid.jpg";
 
 export interface PaidBonusCard {
   name: string;
@@ -26,10 +27,10 @@ const getApiLink = (sessionLinks: any[], code: string, language: string, fallbac
   return match?.link || fallback;
 };
 
-const getDynamicThumbnail = (link: string, fallbackId: string) => {
-  if (!link) return ytThumb(fallbackId);
+const getDynamicThumbnail = (link: string, fallbackUrl: string) => {
+  if (!link) return fallbackUrl;
   const match = link.match(/(?:v=|youtu\.be\/|\/live\/|\/shorts\/|\/embed\/)([a-zA-Z0-9_-]{11})/);
-  return ytThumb(match ? match[1] : fallbackId);
+  return match ? ytThumb(match[1]) : fallbackUrl;
 };
 
 /**
@@ -53,23 +54,23 @@ export function getActivePaidBonusSession({
   if (is12Month && currentDow === 0) {
     if (paidLang === "Telugu" && isTeluguFaceYogaWeek) {
       const link = getApiLink(sessionLinks, "face_yoga", langKey, "https://join.healthyday.co.in/healthyface");
-      eligible.push({ name: "Face Yoga Session", fullName: "Face Yoga Session at 11:30 AM", startMin: 690, sessionLink: link, thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8"), code: "face_yoga" });
+      eligible.push({ name: "Face Yoga Session", fullName: "Face Yoga Session at 11:30 AM", startMin: 690, sessionLink: link, thumbnail: getDynamicThumbnail(link, faceYogaPaidThumb), code: "face_yoga" });
     } else if (paidLang === "English" && !isTeluguFaceYogaWeek) {
       const link = getApiLink(sessionLinks, "face_yoga", langKey, "https://join.healthyday.co.in/healthyface_eng");
-      eligible.push({ name: "Face Yoga Session", fullName: "Face Yoga Session at 11:30 AM", startMin: 690, sessionLink: link, thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8"), code: "face_yoga" });
+      eligible.push({ name: "Face Yoga Session", fullName: "Face Yoga Session at 11:30 AM", startMin: 690, sessionLink: link, thumbnail: getDynamicThumbnail(link, faceYogaPaidThumb), code: "face_yoga" });
     }
   }
 
   // 2. Diet Session (Daily at 8:00 PM IST -> 1200 min). Eligible: 12 months only.
   if (is12Month) {
     const link = getApiLink(sessionLinks, "paid_diet", langKey, paidLang === "English" ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet");
-    eligible.push({ name: "Diet Session", fullName: "Diet Session at 8:00 PM", startMin: 1200, sessionLink: link, thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8"), code: "paid_diet" });
+    eligible.push({ name: "Diet Session", fullName: "Diet Session at 8:00 PM", startMin: 1200, sessionLink: link, thumbnail: getDynamicThumbnail(link, ytThumb("SyjnCjDtNS8")), code: "paid_diet" });
   }
 
   // 3. Breath to Heal (Daily at 9:00 PM IST -> 1260 min). Eligible: 6 & 12 months, excludes English on Sundays.
   if ((is6Month || is12Month) && !(paidLang === "English" && currentDow === 0)) {
     const link = getApiLink(sessionLinks, "b2h", langKey, paidLang === "English" ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession");
-    eligible.push({ name: "Breath to Heal Session", fullName: "Breath to Heal Session at 9:00 PM", startMin: 1260, sessionLink: link, thumbnail: getDynamicThumbnail(link, "SyjnCjDtNS8"), code: "b2h" });
+    eligible.push({ name: "Breath to Heal Session", fullName: "Breath to Heal Session at 9:00 PM", startMin: 1260, sessionLink: link, thumbnail: getDynamicThumbnail(link, ytThumb("SyjnCjDtNS8")), code: "b2h" });
   }
 
   return eligible.find(s => totalMin >= getBonusWindowStart(s.startMin) && totalMin < s.startMin + 45) || null;
