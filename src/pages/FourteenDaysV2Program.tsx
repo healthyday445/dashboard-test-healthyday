@@ -26,7 +26,7 @@ import badgeCardL2 from "@/assets/21daysprogram/badge_card_l2.webp";
 import badgeCardL3 from "@/assets/21daysprogram/badge_card_l3.webp";
 import badgeCardL4 from "@/assets/21daysprogram/badge_card_l4.webp";
 import badgeCardL5 from "@/assets/21daysprogram/badge_card_l5.webp";
-import finalCertificate from "@/assets/badges/certificate_14days.jpg";
+import journeyHeroCertificateUnlocked from "@/assets/14d-v2-dashboard-level-card/journey_hero_certificate_unlocked.webp";
 import badgeCardShareIcon from "@/assets/21daysprogram/badge_card_share_icon.png";
 import { LEVEL_UNLOCK_DAYS_V2, getLevelRewardLinkV2 } from "@/components/FourteenDaysV2LevelCard";
 import { CertificateModal } from "@/components/CertificateModal";
@@ -54,7 +54,7 @@ const ZONE_CONFIG = [
   { gradient: "radial-gradient(circle at 87% 0%, rgba(212,220,145,1) 0%, rgba(234,238,200,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL2, imgTop: 0, imgRight: 0, imgWidth: "40.3%", imgHeight: 138, textRight: "35.6%", titleCaps: false },
   { gradient: "radial-gradient(circle at 89% 0%, rgba(246,219,255,1) 0%, rgba(255,255,255,1) 100%)", img: badgeCardL3, imgTop: -8, imgRight: 0, imgWidth: "40.3%", imgHeight: 138, textRight: "35.6%", titleCaps: false },
   { gradient: "radial-gradient(circle at 85% 0%, rgba(171,226,232,1) 0%, rgba(213,241,243,1) 50%, rgba(255,255,255,1) 100%)", img: badgeCardL4, imgTop: -6, imgRight: 0, imgWidth: "40.3%", imgHeight: 138, textRight: "35.6%", titleCaps: false },
-  { gradient: "radial-gradient(circle at 86% 0%, rgba(249,191,117,1) 0%, rgba(251,207,152,1) 25%, rgba(252,223,186,1) 50%, rgba(255,255,255,1) 100%)", img: finalCertificate, imgTop: 12, imgRight: 14, imgWidth: "32%", imgHeight: 114, textRight: "35.6%", titleCaps: false, objectFit: "contain" },
+  { gradient: "radial-gradient(circle at 86% 0%, rgba(249,191,117,1) 0%, rgba(251,207,152,1) 25%, rgba(252,223,186,1) 50%, rgba(255,255,255,1) 100%)", img: journeyHeroCertificateUnlocked, imgTop: 16, imgRight: 0, imgWidth: "42%", imgHeight: 114, textRight: "35.6%", titleCaps: false, objectFit: "fill" },
 ];
 
 // Badge-card copy, one entry per completed-reward count (0-5) — same index as ZONE_CONFIG.
