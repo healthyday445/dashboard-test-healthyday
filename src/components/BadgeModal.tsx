@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import {
   trackBadgeActivity,
   getBadgeCookie,
   setBadgeCookie,
+  setBadgeChecked,
   checkServerBadgeStatus,
 } from "@/lib/trackBadgeActivity";
 import { safeLocalStorage } from "@/lib/storage";
@@ -61,8 +62,14 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
     }
   }, [initialName]);
 
-  // When modal opens, check if badge was already generated
-  useEffect(() => {
+  // When modal opens, decide whether to show the name form or jump straight to the badge
+  // preview. `useLayoutEffect` (not `useEffect`) so a cached local answer is applied before
+  // the browser paints — otherwise the name form flashes for a frame before swapping to the
+  // preview. Local storage is checked first and, once we've ever confirmed an answer from
+  // the server for this mobile+level (the `checked` flag), it's trusted forever — a
+  // "not generated yet" student would otherwise trigger a fresh Firestore read on every
+  // single open, which is the slow path this is specifically avoiding.
+  useLayoutEffect(() => {
     if (!isOpen) {
       setCheckedPrior(false);
       setCheckingExistence(false);
@@ -72,24 +79,27 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
     setCheckedPrior(true);
 
     const cleanMobile = mobile || "";
-
-    // 1. Check local cookie/localStorage first
     const localStatus = getBadgeCookie(cleanMobile, badgeLevel);
+
     if (localStatus.generated && localStatus.name) {
       setName(localStatus.name);
       setHasGenerated(true);
       return;
     }
 
-    // 2. Fallback: check Firestore (async)
+    if (localStatus.checked) return; // already asked the server once before — trust it
+
     if (cleanMobile) {
       setCheckingExistence(true);
       checkServerBadgeStatus(cleanMobile, badgeLevel)
         .then((serverStatus) => {
-          if (serverStatus && serverStatus.generated && serverStatus.name) {
+          if (!serverStatus) return; // network/parse failure — don't cache, retry next open
+          if (serverStatus.generated && serverStatus.name) {
             setName(serverStatus.name);
             setHasGenerated(true);
             setBadgeCookie(cleanMobile, badgeLevel, serverStatus.name);
+          } else {
+            setBadgeChecked(cleanMobile, badgeLevel);
           }
         })
         .finally(() => setCheckingExistence(false));

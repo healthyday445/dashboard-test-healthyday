@@ -22,6 +22,20 @@ if (!admin.apps.length && serviceAccount) {
 
 const db = getFirestore('healthyday-logstore');
 
+// Netlify Functions hard-kill at 30s with no useful error — if Firestore ever stalls
+// (seen locally under netlify dev with concurrent requests), fail fast instead so the
+// client gets a clear error well before that ceiling rather than a silent 30s hang.
+const FIRESTORE_TIMEOUT_MS = 8000;
+
+function withTimeout(promise, label) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`${label} timed out after ${FIRESTORE_TIMEOUT_MS}ms`)), FIRESTORE_TIMEOUT_MS)
+    ),
+  ]);
+}
+
 export async function handler(event) {
   const headers = {
     "Content-Type": "application/json",
@@ -51,7 +65,7 @@ export async function handler(event) {
 
       const docId = `${cleanMobile}_level_${levelParam}`;
       const docRef = db.collection('badge_log').doc(docId);
-      const docSnap = await docRef.get();
+      const docSnap = await withTimeout(docRef.get(), "badge-logs GET");
 
       if (!docSnap.exists) {
         return {
@@ -129,7 +143,7 @@ export async function handler(event) {
         updatePayload.sharedCount = admin.firestore.FieldValue.increment(1);
       }
 
-      await docRef.set(updatePayload, { merge: true });
+      await withTimeout(docRef.set(updatePayload, { merge: true }), "badge-logs POST");
 
       // activityHistory/counts aren't consumed by any caller of this endpoint
       // (trackBadgeActivity's callers all discard the response body) — since we no

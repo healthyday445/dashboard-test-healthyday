@@ -22,6 +22,20 @@ if (!admin.apps.length && serviceAccount) {
 
 const db = getFirestore('healthyday-logstore');
 
+// Netlify Functions hard-kill at 30s with no useful error — if Firestore ever stalls
+// (seen locally under netlify dev with concurrent requests), fail fast instead so the
+// client gets a clear error well before that ceiling rather than a silent 30s hang.
+const FIRESTORE_TIMEOUT_MS = 8000;
+
+function withTimeout(promise, label) {
+  return Promise.race([
+    promise,
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error(`${label} timed out after ${FIRESTORE_TIMEOUT_MS}ms`)), FIRESTORE_TIMEOUT_MS)
+    ),
+  ]);
+}
+
 export async function handler(event) {
   const headers = {
     "Content-Type": "application/json",
@@ -49,7 +63,7 @@ export async function handler(event) {
       }
 
       const docRef = db.collection('certificate logs').doc(cleanMobile);
-      const docSnap = await docRef.get();
+      const docSnap = await withTimeout(docRef.get(), "certificate-logs GET");
 
       if (!docSnap.exists) {
         return {
@@ -67,6 +81,7 @@ export async function handler(event) {
           exists: true,
           hasGenerated: !!data.hasGenerated,
           name: data.name || data.userName || "",
+          firstGeneratedAt: data.firstGeneratedAt || null,
           generatedCount: data.generatedCount || 0,
           downloadedCount: data.downloadedCount || 0,
           sharedCount: data.sharedCount || 0,
@@ -116,8 +131,9 @@ export async function handler(event) {
       if (activity === "generated") {
         updatePayload.hasGenerated = true;
         updatePayload.generatedCount = admin.firestore.FieldValue.increment(1);
-        // Last-write-wins now (was "first-write-wins"); this field isn't read
-        // anywhere in the app today, so the semantic change is not observable.
+        // Last-write-wins now (was "first-write-wins") — the client only ever sends
+        // "generated" once per certificate (the UI hides the form after), so in practice
+        // this is still the true first-generation timestamp, just without the extra read.
         updatePayload.firstGeneratedAt = nowIST;
       } else if (activity === "downloaded") {
         updatePayload.hasDownloaded = true;
@@ -127,7 +143,7 @@ export async function handler(event) {
         updatePayload.sharedCount = admin.firestore.FieldValue.increment(1);
       }
 
-      await docRef.set(updatePayload, { merge: true });
+      await withTimeout(docRef.set(updatePayload, { merge: true }), "certificate-logs POST");
 
       // activityHistory/counts aren't consumed by any caller of this endpoint —
       // since we no longer read the previous doc, the response reports this
@@ -144,6 +160,7 @@ export async function handler(event) {
             userName: body.name || undefined,
             daysAttended: body.daysAttended ?? undefined,
             hasGenerated: activity === "generated" ? true : undefined,
+            firstGeneratedAt: activity === "generated" ? nowIST : undefined,
             hasDownloaded: activity === "downloaded" ? true : undefined,
             hasShared: (activity === "shared" || activity.startsWith("shared")) ? true : undefined,
             lastActivity: activity,

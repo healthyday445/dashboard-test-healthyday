@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import {
   trackCertificateActivity,
   getCertificateCookie,
   setCertificateCookie,
+  setCertificateChecked,
   checkServerCertificateStatus,
 } from "@/lib/trackCertificateActivity";
 import { safeLocalStorage } from "@/lib/storage";
@@ -15,6 +16,24 @@ const CERTIFICATE_TEMPLATES: Record<14 | 21, string> = {
   14: certificate14Days,
   21: certificate21Days,
 };
+
+// certificate_21days.jpg has a fake sample date ("13-07-2026") baked into its artwork
+// (pre-dates this codebase's history) — drawing a real date on top of it would double up as
+// garbled overlapping text, so only the 14-day template (a genuinely blank line) gets one
+// until that asset is cleaned up.
+const CAN_RENDER_DATE: Record<14 | 21, boolean> = { 14: true, 21: false };
+
+function formatCertDate(iso: string | null | undefined): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  // `iso` is already IST-shifted then ISO-stringified (see certificate-logs.js's `nowIST`),
+  // so reading UTC getters here yields the correct IST calendar date without a second shift.
+  const dd = String(d.getUTCDate()).padStart(2, "0");
+  const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const yyyy = d.getUTCFullYear();
+  return `${dd}-${mm}-${yyyy}`;
+}
 
 interface CertificateModalProps {
   isOpen: boolean;
@@ -34,6 +53,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
   programDays,
 }) => {
   const [name, setName] = useState<string>(initialName || "");
+  const [certificateDate, setCertificateDate] = useState<string | null>(null);
   const [hasGenerated, setHasGenerated] = useState<boolean>(false);
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [templateImg, setTemplateImg] = useState<HTMLImageElement | null>(null);
@@ -56,9 +76,14 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     }
   }, [initialName]);
 
-  // When modal opens, check if certificate was already generated (local cookie → Firestore)
-  // If yes, skip the name form and go straight to the certificate preview.
-  useEffect(() => {
+  // When modal opens, decide whether to show the name form or jump straight to the
+  // certificate preview. `useLayoutEffect` (not `useEffect`) so a cached local answer is
+  // applied before the browser paints — otherwise the name form flashes for a frame before
+  // swapping to the preview. Local storage is checked first and, once we've ever confirmed
+  // an answer from the server for this mobile (the `checked` flag), it's trusted forever —
+  // a "not generated yet" student would otherwise trigger a fresh Firestore read on every
+  // single open, which is the slow path this is specifically avoiding.
+  useLayoutEffect(() => {
     if (!isOpen) {
       // Reset check flag when modal closes so it re-checks next time
       setCheckedPrior(false);
@@ -69,25 +94,29 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     setCheckedPrior(true);
 
     const cleanMobile = mobile || "";
-
-    // 1. Check local cookie/localStorage first (instant, no network)
     const localStatus = getCertificateCookie(cleanMobile);
+
     if (localStatus.generated && localStatus.name) {
       setName(localStatus.name);
+      setCertificateDate(localStatus.firstGeneratedAt ?? null);
       setHasGenerated(true);
       return;
     }
 
-    // 2. Fallback: check Firestore (async)
+    if (localStatus.checked) return; // already asked the server once before — trust it
+
     if (cleanMobile) {
       setCheckingExistence(true);
       checkServerCertificateStatus(cleanMobile)
         .then((serverStatus) => {
-          if (serverStatus && serverStatus.generated && serverStatus.name) {
+          if (!serverStatus) return; // network/parse failure — don't cache, retry next open
+          if (serverStatus.generated && serverStatus.name) {
             setName(serverStatus.name);
+            setCertificateDate(serverStatus.firstGeneratedAt ?? null);
             setHasGenerated(true);
-            // Also persist locally so next time it's instant
-            setCertificateCookie(cleanMobile, serverStatus.name);
+            setCertificateCookie(cleanMobile, serverStatus.name, serverStatus.firstGeneratedAt);
+          } else {
+            setCertificateChecked(cleanMobile);
           }
         })
         .finally(() => setCheckingExistence(false));
@@ -150,6 +179,21 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
 
       ctx.fillText(displayName, x, y);
       ctx.restore();
+
+      if (CAN_RENDER_DATE[programDays] && certificateDate) {
+        const dateStr = formatCertDate(certificateDate);
+        if (dateStr) {
+          ctx.save();
+          ctx.font = `bold ${Math.round(width * 0.024)}px "Outfit", sans-serif`;
+          ctx.fillStyle = textColor;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "alphabetic";
+          // Sits just above the template's printed "Date" underline (measured on the
+          // certificate artwork directly — both the 14/21-day templates share this layout).
+          ctx.fillText(dateStr, width * 0.259, height * 0.848);
+          ctx.restore();
+        }
+      }
     };
 
     if (document.fonts && document.fonts.load) {
@@ -181,7 +225,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     if (!isOpen || !hasGenerated || !templateImg) return;
     setCanvasReady(false);
     renderCertificate(templateImg);
-  }, [isOpen, hasGenerated, templateImg, name]);
+  }, [isOpen, hasGenerated, templateImg, name, certificateDate]);
 
   const handleGenerate = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -190,8 +234,14 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     setIsGenerating(true);
     safeLocalStorage.setItem("user_name", name.trim());
 
+    // Same IST-shift the server uses for `firstGeneratedAt` (see certificate-logs.js) — set
+    // optimistically now so the very first canvas render already shows the correct date
+    // instead of waiting on the POST round trip below.
+    const nowIST = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString();
+    setCertificateDate(nowIST);
+
     // Persist certificate status locally so next open skips the name form
-    setCertificateCookie(mobile || "", name.trim());
+    setCertificateCookie(mobile || "", name.trim(), nowIST);
 
     // Switch to step 2 preview immediately
     setHasGenerated(true);

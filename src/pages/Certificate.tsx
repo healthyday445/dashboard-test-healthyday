@@ -1,15 +1,17 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useLayoutEffect, useRef } from "react";
 import { useParams, useLocation, useNavigate } from "react-router-dom";
 import { safeLocalStorage } from "@/lib/storage";
 import { fitFontSizeToWidth } from "@/lib/canvasText";
 import {
   getCertificateCookie,
   setCertificateCookie,
+  setCertificateChecked,
   checkServerCertificateStatus,
   trackCertificateActivity,
 } from "@/lib/trackCertificateActivity";
 import logo from "@/assets/Primary_logo.svg";
 import { FREE_BATCH_DATE } from "@/pages/Dashboard";
+import { Skeleton } from "@/components/ui/skeleton";
 import certificate14Days from "@/assets/badges/certificate_14days.jpg";
 import certificate21Days from "@/assets/badges/certificate_21days.jpg";
 
@@ -17,6 +19,24 @@ const CERTIFICATE_TEMPLATES: Record<14 | 21, string> = {
   14: certificate14Days,
   21: certificate21Days,
 };
+
+// certificate_21days.jpg has a fake sample date ("13-07-2026") baked into its artwork
+// (pre-dates this codebase's history) — drawing a real date on top of it would double up as
+// garbled overlapping text, so only the 14-day template (a genuinely blank line) gets one
+// until that asset is cleaned up.
+const CAN_RENDER_DATE: Record<14 | 21, boolean> = { 14: true, 21: false };
+
+function formatCertDate(iso: string | null | undefined): string {
+  if (!iso) return "";
+  const d = new Date(iso);
+  if (isNaN(d.getTime())) return "";
+  // `iso` is already IST-shifted then ISO-stringified (see certificate-logs.js's `nowIST`),
+  // so reading UTC getters here yields the correct IST calendar date without a second shift.
+  const dd = String(d.getUTCDate()).padStart(2, "0");
+  const mm = String(d.getUTCMonth() + 1).padStart(2, "0");
+  const yyyy = d.getUTCFullYear();
+  return `${dd}-${mm}-${yyyy}`;
+}
 
 const COUNTRIES = [
   { code: "91", iso: "in", name: "India" },
@@ -81,6 +101,8 @@ export default function Certificate() {
   const [isGenerating, setIsGenerating] = useState<boolean>(false);
   const [isRateLimited, setIsRateLimited] = useState<boolean>(false);
   const [hasGenerated, setHasGenerated] = useState<boolean>(false);
+  const [certificateDate, setCertificateDate] = useState<string | null>(null);
+  const [checkingCertStatus, setCheckingCertStatus] = useState<boolean>(false);
   const [shareFeedback, setShareFeedback] = useState<string>("");
   const [templateImg, setTemplateImg] = useState<HTMLImageElement | null>(null);
 
@@ -169,18 +191,45 @@ export default function Certificate() {
       .finally(() => setLoadingStudent(false));
   }, [mobile]);
 
-  // Check server-side generation status to sync from Firestore
-  useEffect(() => {
+  // Check local storage first (instant, no network) — `useLayoutEffect` so a cached local
+  // answer is applied before the browser paints, avoiding a flash of the name form before
+  // swapping to the certificate preview. Once we've ever confirmed an answer from the server
+  // for this mobile (the `checked` flag), it's trusted forever — a "not generated yet"
+  // student would otherwise trigger a fresh Firestore read on every single page visit, which
+  // is the slow path this is specifically avoiding.
+  useLayoutEffect(() => {
     if (!mobile) return;
-    checkServerCertificateStatus(mobile).then((status) => {
-      if (status && status.generated) {
-        setIsRateLimited(true);
-        setHasGenerated(true);
-        if (status.name) {
-          setName(status.name);
-        }
+    const localStatus = getCertificateCookie(mobile);
+
+    if (localStatus.generated) {
+      setIsRateLimited(true);
+      setHasGenerated(true);
+      setCertificateDate(localStatus.firstGeneratedAt ?? null);
+      if (localStatus.name) {
+        setName(localStatus.name);
       }
-    });
+      return;
+    }
+
+    if (localStatus.checked) return; // already asked the server once before — trust it
+
+    setCheckingCertStatus(true);
+    checkServerCertificateStatus(mobile)
+      .then((serverStatus) => {
+        if (!serverStatus) return; // network/parse failure — don't cache, retry next visit
+        if (serverStatus.generated) {
+          setIsRateLimited(true);
+          setHasGenerated(true);
+          setCertificateDate(serverStatus.firstGeneratedAt ?? null);
+          if (serverStatus.name) {
+            setName(serverStatus.name);
+            setCertificateCookie(mobile, serverStatus.name, serverStatus.firstGeneratedAt);
+          }
+        } else {
+          setCertificateChecked(mobile);
+        }
+      })
+      .finally(() => setCheckingCertStatus(false));
   }, [mobile]);
 
   // Load the template image once its program (and thus which template) is known
@@ -211,7 +260,7 @@ export default function Certificate() {
       clearTimeout(id1);
       clearTimeout(id2);
     };
-  }, [hasGenerated, templateImg, name, fontSize, yPercent, textColor]);
+  }, [hasGenerated, templateImg, name, fontSize, yPercent, textColor, certificateDate]);
 
   const renderCertificate = (img: HTMLImageElement) => {
     const canvas = canvasRef.current;
@@ -253,6 +302,21 @@ export default function Certificate() {
 
       ctx.fillText(displayName, x, y);
       ctx.restore();
+
+      if (CAN_RENDER_DATE[programDays] && certificateDate) {
+        const dateStr = formatCertDate(certificateDate);
+        if (dateStr) {
+          ctx.save();
+          ctx.font = `bold ${Math.round(width * 0.024)}px "Outfit", sans-serif`;
+          ctx.fillStyle = textColor;
+          ctx.textAlign = "center";
+          ctx.textBaseline = "alphabetic";
+          // Sits just above the template's printed "Date" underline (measured on the
+          // certificate artwork directly — both the 14/21-day templates share this layout).
+          ctx.fillText(dateStr, width * 0.259, height * 0.848);
+          ctx.restore();
+        }
+      }
     };
 
     // 2. Overlay student name after ensuring font is loaded
@@ -284,6 +348,12 @@ export default function Certificate() {
     safeLocalStorage.setItem("user_name", finalName);
     setIsGenerating(true);
 
+    // Same IST-shift the server uses for `firstGeneratedAt` (see certificate-logs.js) — set
+    // optimistically now so the very first canvas render already shows the correct date
+    // instead of waiting on the POST round trip below.
+    const nowIST = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString();
+    setCertificateDate(nowIST);
+
     // Log certificate generation to Firestore collection 'certificate logs' (analytics only, no image upload)
     await trackCertificateActivity({
       mobile,
@@ -293,7 +363,7 @@ export default function Certificate() {
     });
 
     setIsGenerating(false);
-    setCertificateCookie(mobile, finalName);
+    setCertificateCookie(mobile, finalName, nowIST);
     setIsRateLimited(true);
     setHasGenerated(true);
 
@@ -519,6 +589,13 @@ export default function Certificate() {
             <div className="w-10 h-10 border-4 border-[#FEAB27] border-t-transparent rounded-full animate-spin mx-auto mb-4" />
             <p className="text-lg font-bold text-[#0D468B]">Verifying Your Attendance & Eligibility...</p>
             <p className="text-sm text-[#798089] mt-1">Please wait just a moment.</p>
+          </div>
+        ) : checkingCertStatus ? (
+          <div className="bg-white rounded-[24px] p-6 md:p-8 shadow-[0_10px_40px_rgba(0,0,0,0.06)] border border-[#FCE8CD]">
+            <Skeleton className="h-6 w-64 mx-auto mb-6 rounded-md" />
+            <Skeleton className="h-3 w-24 mb-2 rounded-md" />
+            <Skeleton className="h-14 w-full mb-6 rounded-xl" />
+            <Skeleton className="h-14 w-full rounded-full" />
           </div>
         ) : isLocked ? (
           /* Locked State: Under 7 days attended */

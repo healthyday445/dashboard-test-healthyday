@@ -615,7 +615,7 @@ export default function FourteenDaysV2Program({ initialStudentData }: FourteenDa
               </p>
               {!zoneConfig.titleCaps && (
                 <button
-                  onClick={() => setShowBadgeModal(true)}
+                  onClick={() => (completedCount === 5 ? setShowCertificateModal(true) : setShowBadgeModal(true))}
                   className="flex items-center justify-center gap-[5px] cursor-pointer border-none"
                   style={{ width: "fit-content", padding: "0 10px", height: 22, backgroundColor: "#feab27", borderRadius: 5, boxShadow: "0px 0px 8px 1px rgba(0,0,0,0.05)", flexShrink: 0 }}
                 >
