@@ -22,17 +22,23 @@ if (!freeStudent || !paidPendingStudent) {
 // This cohort's actual last day is day 22 (free_batch_start_date 2026-06-21 + 21 days =
 // free_batch_end_date 2026-07-12) — day 21 is the day BEFORE the cutoff, an important distinction
 // confirmed against real data this session (forceDay=21 must NOT trigger the transition).
+//
+// UPDATE 2026-07-21: freeStudent's real batch has since genuinely ended (confirmed by the user:
+// raw backend status is now "14DaysCompleted") — getEffectiveStatus (src/lib/studentStatus.ts:22-23)
+// short-circuits to that raw status regardless of forceDay, so this account can no longer simulate
+// "day 21, not yet over" at all; it now shows the completed screen for every forceDay value. The
+// "day 21" test below was altered to assert the (now permanent) completed state instead of deleting
+// it, per the user's direction.
 test.describe("21-day cohort — batch-over status resolver", () => {
   test.describe("Free/unpaid student", () => {
-    test("day 21 (before the last day) — still the ongoing dashboard, tabs visible", async ({ page }) => {
+    test("day 21 — real account has genuinely completed, shows TRIAL ENDED regardless of forceDay", async ({ page }) => {
       await page.goto(`/${freeStudent.mobile}?forceDay=21&time=8.00pm`);
-      await expect(page.getByRole("tab", { name: /Live sessions/i }).or(page.getByText("Live sessions"))).toBeVisible();
-      await expect(page.getByText("TRIAL ENDED")).not.toBeVisible();
+      await expect(page.getByText("TRIAL ENDED")).toBeVisible();
     });
 
-    test("day 22 before 7:30 PM — still ongoing, not yet completed", async ({ page }) => {
+    test("day 22 before 7:30 PM — real account has genuinely completed, shows TRIAL ENDED regardless of forceDay", async ({ page }) => {
       await page.goto(`/${freeStudent.mobile}?forceDay=22&time=6.00pm`);
-      await expect(page.getByText("TRIAL ENDED")).not.toBeVisible();
+      await expect(page.getByText("TRIAL ENDED")).toBeVisible();
     });
 
     test("day 22 at 8:00 PM (after the 7:30 PM cutoff) — completed/upsell screen", async ({ page }) => {

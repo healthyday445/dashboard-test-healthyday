@@ -11,8 +11,8 @@ import { findAccount } from "./fixtures/test-accounts";
 // with a real account (week depends on today's date vs batch start, and there's no stable completed
 // account), so those tests stub the student endpoint.
 
-const registeredTelugu = findAccount("14day", "Telugu", "2026-07-20", "registered-not-started");
-const registeredEnglish = findAccount("14day", "English", "2026-07-20", "registered-not-started");
+const registeredTelugu = findAccount("14day", "Telugu", undefined, "registered-not-started");
+const registeredEnglish = findAccount("14day", "English", undefined, "registered-not-started");
 const paidEnglish = findAccount("paid", "English");
 
 if (!registeredTelugu || !registeredEnglish || !paidEnglish) {
