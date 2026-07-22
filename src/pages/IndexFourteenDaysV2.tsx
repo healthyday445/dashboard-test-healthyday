@@ -282,7 +282,8 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
               : [];
         setSessionLinks(arr);
       })
-      .catch(() => { });
+      .catch(() => { })
+      .finally(() => setSessionLinksLoaded(true));
   }, []);
 
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
@@ -300,6 +301,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
       : false
   );
   const [sessionLinks, setSessionLinks] = useState<any[]>([]);
+  const [sessionLinksLoaded, setSessionLinksLoaded] = useState(false);
   const [verifiedReferralCount, setVerifiedReferralCount] = useState<number | null>(null);
   // Completed-batch page tab — defaults to "live", or override via ?tab=journey for direct preview
   const [completedTab, setCompletedTab] = useState<FourteenDaysV2Tab>(
@@ -567,6 +569,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
             mobile={mobile}
             freeSessionCode={freeSessionCode}
             onJoin={() => {}}
+            isLoading={!sessionLinksLoaded}
           />
         )}
 
@@ -604,6 +607,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
       <IndexPaid
         studentData={studentData}
         sessionLinks={sessionLinks}
+        sessionLinksLoaded={sessionLinksLoaded}
         mobile={mobile}
         selectedPlanIdx={selectedPlanIdx}
         setSelectedPlanIdx={setSelectedPlanIdx}

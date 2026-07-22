@@ -18,6 +18,7 @@ import ReferWinCard from "@/components/ReferWinCard";
 interface IndexPaidProps {
   studentData: any;
   sessionLinks: any[];
+  sessionLinksLoaded?: boolean;
   mobile?: string;
   selectedPlanIdx: number;
   setSelectedPlanIdx: (idx: number) => void;
@@ -25,7 +26,7 @@ interface IndexPaidProps {
 }
 
 /** Paid member dashboard — subscription-gated live sessions, bonus sessions, weekly attendance, plan renewal upsell. */
-const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, mobile, selectedPlanIdx, setSelectedPlanIdx, verifiedReferralCount }) => {
+const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessionLinksLoaded = true, mobile, selectedPlanIdx, setSelectedPlanIdx, verifiedReferralCount }) => {
   const navigate = useNavigate();
   const location = useLocation();
   const searchParams = new URLSearchParams(location.search);
@@ -82,7 +83,7 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, mobile
       </header>
 
       {activeBonusCard ? (
-        <PaidBonusSessionCard bonusCard={activeBonusCard} totalMin={totalMin} mobile={mobile} />
+        <PaidBonusSessionCard bonusCard={activeBonusCard} totalMin={totalMin} mobile={mobile} isLoading={!sessionLinksLoaded} />
       ) : (
         <PaidLiveSessionCard
           isLive={isLive}
@@ -94,6 +95,7 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, mobile
           sessionCodeForNow={sessionCodeForNow}
           language={studentData?.language}
           mobile={mobile}
+          isLoading={!sessionLinksLoaded}
         />
       )}
 

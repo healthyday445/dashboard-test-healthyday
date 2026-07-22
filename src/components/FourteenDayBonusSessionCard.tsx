@@ -7,7 +7,7 @@ const PlayButton = () => (
   </svg>
 );
 
-export type BonusInfo = { name: string; fullName: string; startMin: number; videoId: string; sessionLink: string; thumbnail: string; liveDuration?: number; activeEndOffset?: number };
+export type BonusInfo = { name: string; fullName: string; startMin: number; sessionLink: string; thumbnail: string; liveDuration?: number; activeEndOffset?: number };
 
 interface BonusThumbnails {
   faceYogaTel: string;
@@ -43,7 +43,6 @@ export const getBonusInfo = (day: number, lang: string, thumbnails: BonusThumbna
         name: "Face Yoga Session",
         fullName: "Face Yoga Session at 9:00 PM",
         startMin: 21 * 60,
-        videoId: "SyjnCjDtNS8",
         sessionLink: isEnglish ? "https://start.dailyyogawithjagan.com/faceyoga_eng" : "https://start.dailyyogawithjagan.com/faceyoga",
         thumbnail: isEnglish ? thumbnails.faceYogaEng : thumbnails.faceYogaTel,
         liveDuration: 60,
@@ -55,7 +54,6 @@ export const getBonusInfo = (day: number, lang: string, thumbnails: BonusThumbna
         name,
         fullName: `${name} at 11:00 AM`,
         startMin: 11 * 60,
-        videoId: "SyjnCjDtNS8",
         sessionLink: isEnglish ? "https://start.dailyyogawithjagan.com/weightlosssession_eng" : "https://start.dailyyogawithjagan.com/weightlosssession",
         thumbnail: isEnglish ? thumbnails.weightLossEng : thumbnails.weightLossTel,
         liveDuration: 60,
@@ -67,7 +65,6 @@ export const getBonusInfo = (day: number, lang: string, thumbnails: BonusThumbna
         name: "Breath Work Session",
         fullName: "Breath Work Session at 9:00 PM",
         startMin: 21 * 60,
-        videoId: "SyjnCjDtNS8",
         sessionLink: isEnglish ? "https://start.dailyyogawithjagan.com/breathwork_eng" : "https://start.dailyyogawithjagan.com/breathwork",
         thumbnail: isEnglish ? thumbnails.breathWorkEng : thumbnails.breathWorkTel,
         liveDuration: 60,
@@ -78,7 +75,6 @@ export const getBonusInfo = (day: number, lang: string, thumbnails: BonusThumbna
         name: "Meditation Session",
         fullName: "Meditation Session at 8:30 PM",
         startMin: 20 * 60 + 30,
-        videoId: isEnglish ? "u1Hom0s7ibU" : "cXaVIxH3RKA",
         sessionLink: isEnglish ? "https://start.dailyyogawithjagan.com/meditation_eng" : "https://start.dailyyogawithjagan.com/meditation_tel",
         thumbnail: isEnglish ? thumbnails.meditationEng : thumbnails.meditationTel,
         liveDuration: 60,
@@ -89,7 +85,6 @@ export const getBonusInfo = (day: number, lang: string, thumbnails: BonusThumbna
         name: "Sleep Session",
         fullName: "Sleep Session at 11:00 AM",
         startMin: 11 * 60,
-        videoId: "SyjnCjDtNS8",
         sessionLink: isEnglish ? "https://start.dailyyogawithjagan.com/sleepsession_eng" : "https://start.dailyyogawithjagan.com/sleepsession",
         thumbnail: isEnglish ? thumbnails.sleepEng : thumbnails.sleepTel,
         liveDuration: 60,

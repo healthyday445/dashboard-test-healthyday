@@ -1,5 +1,6 @@
 import { trackSessionClick } from "@/lib/trackSessionClick";
 import NoSessionsCard from "@/components/NoSessionsCard";
+import { Skeleton } from "@/components/ui/skeleton";
 import imgLanguageEnglish from "@/assets/language_English.webp";
 import imgLanguageTelugu from "@/assets/language_Telugu.webp";
 
@@ -20,6 +21,7 @@ interface PaidLiveSessionCardProps {
   sessionCodeForNow: "daily_morning" | "daily_evening";
   language?: string;
   mobile?: string;
+  isLoading?: boolean;
 }
 
 /** The regular (non-bonus) daily session card — live video + JOIN button, or NoSessionsCard when nothing's on. */
@@ -32,6 +34,7 @@ export const PaidLiveSessionCard: React.FC<PaidLiveSessionCardProps> = ({
   sessionCodeForNow,
   language,
   mobile,
+  isLoading,
 }) => {
   const handleClick = () => trackSessionClick(mobile, sessionCodeForNow);
 
@@ -63,39 +66,45 @@ export const PaidLiveSessionCard: React.FC<PaidLiveSessionCardProps> = ({
             boxShadow: "1px 0 4px 0 rgba(0,0,0,0.25), -1px -1px 4px 0 rgba(0,0,0,0.25)",
             position: "relative",
           }}>
-            <img
-              src={sessionThumbnail}
-              alt={apiSessionName || "Yoga Session"}
-              style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
-              onLoad={(e) => {
-                // YouTube serves a tiny 120x90 gray placeholder with an HTTP 404 when no
-                // thumbnail exists for a video — the browser treats that as a successful
-                // load, so onError never fires. Catch it here by its telltale small size.
-                const img = e.target as HTMLImageElement;
-                const fallback = language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
-                if (img.naturalWidth <= 120 && img.src !== fallback) {
-                  img.src = fallback;
-                }
-              }}
-              onError={(e) => {
-                // Guard against retrying the same URL forever if the fallback itself is unreachable.
-                const img = e.target as HTMLImageElement;
-                const fallback = language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
-                if (img.src !== fallback) img.src = fallback;
-              }}
-            />
-            <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px 12px 0 0", background: "rgba(0,0,0,0.32)" }} />
-            <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-              <PlayButton />
-            </div>
-            {apiSessionName && (
-              <div style={{
-                position: "absolute", bottom: "10px", left: "12px", right: "12px",
-                color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700,
-                textShadow: "0 1px 4px rgba(0,0,0,0.6)",
-              }}>
-                {apiSessionName}
-              </div>
+            {isLoading ? (
+              <Skeleton style={{ width: "100%", height: "100%", borderRadius: 0 }} />
+            ) : (
+              <>
+                <img
+                  src={sessionThumbnail}
+                  alt={apiSessionName || "Yoga Session"}
+                  style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
+                  onLoad={(e) => {
+                    // YouTube serves a tiny 120x90 gray placeholder with an HTTP 404 when no
+                    // thumbnail exists for a video — the browser treats that as a successful
+                    // load, so onError never fires. Catch it here by its telltale small size.
+                    const img = e.target as HTMLImageElement;
+                    const fallback = language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
+                    if (img.naturalWidth <= 120 && img.src !== fallback) {
+                      img.src = fallback;
+                    }
+                  }}
+                  onError={(e) => {
+                    // Guard against retrying the same URL forever if the fallback itself is unreachable.
+                    const img = e.target as HTMLImageElement;
+                    const fallback = language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
+                    if (img.src !== fallback) img.src = fallback;
+                  }}
+                />
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px 12px 0 0", background: "rgba(0,0,0,0.32)" }} />
+                <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                  <PlayButton />
+                </div>
+                {apiSessionName && (
+                  <div style={{
+                    position: "absolute", bottom: "10px", left: "12px", right: "12px",
+                    color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700,
+                    textShadow: "0 1px 4px rgba(0,0,0,0.6)",
+                  }}>
+                    {apiSessionName}
+                  </div>
+                )}
+              </>
             )}
           </div>
         </a>

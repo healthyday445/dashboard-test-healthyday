@@ -1,4 +1,5 @@
 import { trackSessionClick } from "@/lib/trackSessionClick";
+import { Skeleton } from "@/components/ui/skeleton";
 import type { PaidBonusCard } from "@/lib/paidBonusSessions";
 
 const PlayButton = () => (
@@ -12,10 +13,11 @@ interface PaidBonusSessionCardProps {
   bonusCard: PaidBonusCard;
   totalMin: number;
   mobile?: string;
+  isLoading?: boolean;
 }
 
 /** "Face Yoga" / "Diet" / "Breath to Heal" bonus card shown to eligible paid plans near the session's start time. */
-export const PaidBonusSessionCard: React.FC<PaidBonusSessionCardProps> = ({ bonusCard, totalMin, mobile }) => {
+export const PaidBonusSessionCard: React.FC<PaidBonusSessionCardProps> = ({ bonusCard, totalMin, mobile, isLoading }) => {
   // JOIN NOW shows from 30 min before the session's actual start through 45 min after,
   // matching the card's full eligibility window (getActivePaidBonusSession's startMin-30
   // to startMin+45) — otherwise the last 15 min fell back to the non-live "Session Starts
@@ -40,14 +42,20 @@ export const PaidBonusSessionCard: React.FC<PaidBonusSessionCardProps> = ({ bonu
 
       <div style={{ width: "100%" }}>
         <a href={bonusCard.sessionLink} target="_blank" rel="noopener noreferrer" onClick={handleClick} style={{ display: "block", textDecoration: "none", width: "100%", borderRadius: "12px 12px 0 0", overflow: "hidden", background: "#000", position: "relative" }}>
-          <img
-            src={bonusCard.thumbnail}
-            alt={bonusCard.name}
-            style={{ width: "100%", height: "auto", aspectRatio: "372/204", objectFit: "cover", opacity: 0.85, display: "block" }}
-          />
-          <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <PlayButton />
-          </div>
+          {isLoading ? (
+            <Skeleton style={{ width: "100%", aspectRatio: "372/204", borderRadius: 0 }} />
+          ) : (
+            <>
+              <img
+                src={bonusCard.thumbnail}
+                alt={bonusCard.name}
+                style={{ width: "100%", height: "auto", aspectRatio: "372/204", objectFit: "cover", opacity: 0.85, display: "block" }}
+              />
+              <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <PlayButton />
+              </div>
+            </>
+          )}
         </a>
         <div style={{
           width: "100%", height: "67px",
