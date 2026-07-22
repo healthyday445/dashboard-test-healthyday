@@ -565,7 +565,6 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
             batchOrigin={batchOrigin}
             sessionLink={sessionLink}
             sessionVideoId={sessionVideoId}
-            language={studentData?.language}
             mobile={mobile}
             freeSessionCode={freeSessionCode}
             onJoin={() => {}}

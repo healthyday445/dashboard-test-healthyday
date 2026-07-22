@@ -2,8 +2,7 @@ import { useLocation } from "react-router-dom";
 import { trackSessionClick } from "@/lib/trackSessionClick";
 import NoSessionsCard from "@/components/NoSessionsCard";
 import { Skeleton } from "@/components/ui/skeleton";
-import imgLanguageEnglish from "@/assets/language_English.webp";
-import imgLanguageTelugu from "@/assets/language_Telugu.webp";
+import sessionPlaceholder from "@/assets/bonus/session_placeholder.jpg";
 
 const StartDateLabel = ({ date }: { date: Date }) => {
   const MONTHS = ["JANUARY", "FEBRUARY", "MARCH", "APRIL", "MAY", "JUNE", "JULY", "AUGUST", "SEPTEMBER", "OCTOBER", "NOVEMBER", "DECEMBER"];
@@ -69,7 +68,6 @@ interface FourteenDaySessionCardProps {
   batchOrigin: Date;
   sessionLink: string;
   sessionVideoId: string | null;
-  language?: string;
   mobile?: string;
   freeSessionCode: string;
   onJoin: () => void;
@@ -82,7 +80,6 @@ export const FourteenDaySessionCard: React.FC<FourteenDaySessionCardProps> = ({
   batchOrigin,
   sessionLink,
   sessionVideoId,
-  language,
   mobile,
   freeSessionCode,
   onJoin,
@@ -158,7 +155,7 @@ export const FourteenDaySessionCard: React.FC<FourteenDaySessionCardProps> = ({
                 ) : (
                   <>
                     <img
-                      src={sessionVideoId ? `https://img.youtube.com/vi/${sessionVideoId}/hqdefault.jpg` : language === "English" ? imgLanguageEnglish : imgLanguageTelugu}
+                      src={sessionVideoId ? `https://img.youtube.com/vi/${sessionVideoId}/hqdefault.jpg` : sessionPlaceholder}
                       alt=""
                       style={{ width: "100%", height: "100%", objectFit: "cover", display: "block" }}
                       onLoad={(e) => {
@@ -166,16 +163,14 @@ export const FourteenDaySessionCard: React.FC<FourteenDaySessionCardProps> = ({
                         // thumbnail exists for a video — the browser treats that as a successful
                         // load, so onError never fires. Catch it here by its telltale small size.
                         const img = e.target as HTMLImageElement;
-                        const fallback = language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
-                        if (img.naturalWidth <= 120 && img.src !== fallback) {
-                          img.src = fallback;
+                        if (img.naturalWidth <= 120 && img.src !== sessionPlaceholder) {
+                          img.src = sessionPlaceholder;
                         }
                       }}
                       onError={(e) => {
                         // Guard against retrying the same URL forever if the fallback itself is unreachable.
                         const img = e.target as HTMLImageElement;
-                        const fallback = language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
-                        if (img.src !== fallback) img.src = fallback;
+                        if (img.src !== sessionPlaceholder) img.src = sessionPlaceholder;
                       }}
                     />
                     <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, background: "rgba(0, 0, 0, 0.32)" }} />

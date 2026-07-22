@@ -1,8 +1,7 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import imgIngredients from "@/assets/Ingredients.png";
-import imgLanguageEnglish from "@/assets/language_English.webp";
-import imgLanguageTelugu from "@/assets/language_Telugu.webp";
+import sessionPlaceholder from "@/assets/bonus/session_placeholder.jpg";
 import { getCurrentMinutesIST } from "@/lib/utils";
 import { getActivePaidBonusSession, isRegularSessionLive } from "@/lib/paidBonusSessions";
 import { getPlanRenewalInfo } from "@/lib/planRenewal";
@@ -63,7 +62,7 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
   const sessionVideoId = ytMatch ? ytMatch[1] : null;
   const sessionThumbnail = sessionVideoId
     ? `https://img.youtube.com/vi/${sessionVideoId}/hqdefault.jpg`
-    : studentData?.language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
+    : sessionPlaceholder;
 
   // Face Yoga alternates Telugu/English by week, anchored to April 5, 2026
   const anchorDate = new Date(Date.UTC(2026, 3, 5));
@@ -93,7 +92,6 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
           apiSessionName={apiSessionName}
           paidJoinLink={paidJoinLink}
           sessionCodeForNow={sessionCodeForNow}
-          language={studentData?.language}
           mobile={mobile}
           isLoading={!sessionLinksLoaded}
         />

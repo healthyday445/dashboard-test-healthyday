@@ -1,8 +1,7 @@
 import { trackSessionClick } from "@/lib/trackSessionClick";
 import NoSessionsCard from "@/components/NoSessionsCard";
 import { Skeleton } from "@/components/ui/skeleton";
-import imgLanguageEnglish from "@/assets/language_English.webp";
-import imgLanguageTelugu from "@/assets/language_Telugu.webp";
+import sessionPlaceholder from "@/assets/bonus/session_placeholder.jpg";
 
 const PlayButton = () => (
   <svg width="68" height="48" viewBox="0 0 68 48" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -19,7 +18,6 @@ interface PaidLiveSessionCardProps {
   apiSessionName: string | null;
   paidJoinLink: string;
   sessionCodeForNow: "daily_morning" | "daily_evening";
-  language?: string;
   mobile?: string;
   isLoading?: boolean;
 }
@@ -32,7 +30,6 @@ export const PaidLiveSessionCard: React.FC<PaidLiveSessionCardProps> = ({
   apiSessionName,
   paidJoinLink,
   sessionCodeForNow,
-  language,
   mobile,
   isLoading,
 }) => {
@@ -79,16 +76,14 @@ export const PaidLiveSessionCard: React.FC<PaidLiveSessionCardProps> = ({
                     // thumbnail exists for a video — the browser treats that as a successful
                     // load, so onError never fires. Catch it here by its telltale small size.
                     const img = e.target as HTMLImageElement;
-                    const fallback = language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
-                    if (img.naturalWidth <= 120 && img.src !== fallback) {
-                      img.src = fallback;
+                    if (img.naturalWidth <= 120 && img.src !== sessionPlaceholder) {
+                      img.src = sessionPlaceholder;
                     }
                   }}
                   onError={(e) => {
                     // Guard against retrying the same URL forever if the fallback itself is unreachable.
                     const img = e.target as HTMLImageElement;
-                    const fallback = language === "English" ? imgLanguageEnglish : imgLanguageTelugu;
-                    if (img.src !== fallback) img.src = fallback;
+                    if (img.src !== sessionPlaceholder) img.src = sessionPlaceholder;
                   }}
                 />
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, borderRadius: "12px 12px 0 0", background: "rgba(0,0,0,0.32)" }} />
