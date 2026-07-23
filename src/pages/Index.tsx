@@ -1727,6 +1727,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
         <div style={{ padding: "40px 22px 0" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
             <h3 style={{ color: "#000", fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, margin: 0 }}>Your Weekly Attendance</h3>
+            <a href={`/${mobile || ""}/attendance`} style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#FEAB27", textDecoration: "none" }}>View More</a>
           </div>
         </div>
 
