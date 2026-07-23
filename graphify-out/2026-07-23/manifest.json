@@ -10,8 +10,8 @@
     "semantic_hash": "bc484741cdf3591af5da7d9f3da3a647"
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\package.json": {
-    "mtime": 1783765109.2163682,
-    "ast_hash": "ab3898b40adb355053f989496f910f66",
+    "mtime": 1782384606.280043,
+    "ast_hash": "6776be613ad43a4fbfc7bed42e80a68e",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\postcss.config.js": {
@@ -50,8 +50,8 @@
     "semantic_hash": "8800905cca6b71b675e406a15d2d5b13"
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\.claude\\settings.json": {
-    "mtime": 1784439391.8107605,
-    "ast_hash": "4e4682636a8884e0a4cb65e9c1314876",
+    "mtime": 1783230282.3779979,
+    "ast_hash": "c0b42752f8e3938cd32aa7ca5c80796b",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\netlify\\functions\\referrals.js": {
@@ -75,8 +75,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\main.tsx": {
-    "mtime": 1783704621.4511125,
-    "ast_hash": "1ac4edc49adef73fa0c06eb25c5d1620",
+    "mtime": 1781851315.5445058,
+    "ast_hash": "77f32f8566fa408b85eda1a3b04aee52",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\replacer.js": {
@@ -100,8 +100,8 @@
     "semantic_hash": "889a81fd2eb948eb406c9ccabe175918"
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\NoSessionsCard.tsx": {
-    "mtime": 1783592279.691284,
-    "ast_hash": "8050eaf7792458b52d1d279127711758",
+    "mtime": 1782796073.5616028,
+    "ast_hash": "9f196303a2801b1adaba2c09a9b6a59d",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\PricingAndComparisonSection.tsx": {
@@ -390,8 +390,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\lib\\utils.ts": {
-    "mtime": 1783948631.461423,
-    "ast_hash": "037d050e98672bf4e467383d7fb3609f",
+    "mtime": 1783417073.779974,
+    "ast_hash": "507bf2b3e371da9c96ffdb6ffedfa789",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\AllRecordings.tsx": {
@@ -405,8 +405,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\Index.tsx": {
-    "mtime": 1784786585.514521,
-    "ast_hash": "b62a1826b8c21ac86ef32624c2304bb9",
+    "mtime": 1783353866.4404242,
+    "ast_hash": "240124bf434795936360ab1466641441",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\NotFound.tsx": {
@@ -420,8 +420,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\ReferralStatus.tsx": {
-    "mtime": 1784439392.2139482,
-    "ast_hash": "ac65e21f2fb732590b97447bbdd1936f",
+    "mtime": 1783353866.4504247,
+    "ast_hash": "ff5fd310854786bff60fdb0975a98e3e",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\test\\example.test.ts": {
@@ -560,8 +560,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\BatchProgressSection.tsx": {
-    "mtime": 1783765109.2193534,
-    "ast_hash": "9321ebea67e10b9302ee5c8415d06e39",
+    "mtime": 1783417073.7759557,
+    "ast_hash": "822c8f720da6f6fb4acf5f4024cb18f1",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\DayStatusBox.tsx": {
@@ -575,23 +575,23 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\FourteenDayBonusSessionCard.tsx": {
-    "mtime": 1784786278.374246,
-    "ast_hash": "573a9a941f9555c173701a121ccf18ee",
+    "mtime": 1783417073.7759557,
+    "ast_hash": "b0543d1305bb7fcff98aff74f1a43bde",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\FourteenDaySessionCard.tsx": {
-    "mtime": 1784786278.3752415,
-    "ast_hash": "56756a9fe59bf19eb54ef714f6d55e19",
+    "mtime": 1783417073.7774506,
+    "ast_hash": "fd7903ca0c4be20942458e252aeb5cd0",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\HeroBannerWithTabs.tsx": {
-    "mtime": 1783948631.447356,
-    "ast_hash": "3de6ae86f2e4ee097c66bcc3140889ad",
+    "mtime": 1783230282.3860903,
+    "ast_hash": "d88c744ac7a857351dfc5f02277eafbd",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\LevelCard.tsx": {
-    "mtime": 1784786278.3827446,
-    "ast_hash": "40820359b67b982a72f1590089c8b89c",
+    "mtime": 1783354985.1911104,
+    "ast_hash": "539af8a58d3fa503a421373600aedb41",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\PaidActionCard.tsx": {
@@ -600,13 +600,13 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\PaidBonusSessionCard.tsx": {
-    "mtime": 1784786278.38476,
-    "ast_hash": "2c957c29b662412fab66177bba26e0a8",
+    "mtime": 1783353866.4206932,
+    "ast_hash": "001ec4cbb0833d5fa8bfa6c7e30c487c",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\PaidLiveSessionCard.tsx": {
-    "mtime": 1784786278.3857625,
-    "ast_hash": "8cb495924723113dba5c63210b0619ec",
+    "mtime": 1783417073.7774506,
+    "ast_hash": "0831484d31bc01c3a2cb744ecb2ec26a",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\PlanRenewalSection.tsx": {
@@ -625,18 +625,18 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\ReferralRewardsCard.tsx": {
-    "mtime": 1784439392.1748824,
-    "ast_hash": "ff96d2da70b518283a102c79e98d079b",
+    "mtime": 1783353866.4272146,
+    "ast_hash": "7ae126a40203a67689d350bd53713b2a",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\WeeklyAttendanceCard.tsx": {
-    "mtime": 1784786579.3758154,
-    "ast_hash": "5821c4434fd09b2909b93479820e70f1",
+    "mtime": 1783417073.779974,
+    "ast_hash": "36373cec6b7169dc5c2f67713ef55b5a",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\lib\\paidBonusSessions.ts": {
-    "mtime": 1784440525.9530408,
-    "ast_hash": "bebf2d9712a49f1ac4b31e4ca371ee9c",
+    "mtime": 1783353866.4312105,
+    "ast_hash": "04ab38d6537ae5e5aa8c68a93bd7eeae",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\lib\\planRenewal.ts": {
@@ -660,33 +660,33 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\Certificate.tsx": {
-    "mtime": 1784786278.3940065,
-    "ast_hash": "97991621f2699ee06af5d13842065fa3",
+    "mtime": 1783417965.5424252,
+    "ast_hash": "be4698954a70b4ac515ca57f1b7195f8",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\Dashboard.tsx": {
-    "mtime": 1784786278.3981543,
-    "ast_hash": "d5293e88e0813ed1a9a1638cb0fa7dfb",
+    "mtime": 1783353866.436413,
+    "ast_hash": "3c17e4c64562433725ade05ada725dd3",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\Faqs.tsx": {
-    "mtime": 1783948631.466958,
-    "ast_hash": "cf5a00fd940cf21eab573f047900495b",
+    "mtime": 1782915890.6862254,
+    "ast_hash": "a0656911391cdeb6715be8faf6f9b890",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\IndexFourteenDays.tsx": {
-    "mtime": 1784448371.360224,
-    "ast_hash": "df218f497d28714adba492c0ed0668a8",
+    "mtime": 1783417073.7820885,
+    "ast_hash": "17f67d95fb9ea4fd90c420681c100896",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\IndexPaid.tsx": {
-    "mtime": 1784786278.4097836,
-    "ast_hash": "3d8132e59526b2b6711b6e5cc5d0a451",
+    "mtime": 1783417073.7840936,
+    "ast_hash": "f9551a64ac199bb91c417ab58109ad85",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\IndexTwentyOneDay.tsx": {
-    "mtime": 1784786592.3477607,
-    "ast_hash": "937e13e123b6b7d085f56ff9cb76b3b8",
+    "mtime": 1783417073.7862055,
+    "ast_hash": "1b935c9bd841f0e8230a2bb88e23c37e",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\Leaderboard.tsx": {
@@ -705,13 +705,13 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\Pricing.tsx": {
-    "mtime": 1783592279.6965253,
-    "ast_hash": "f4bacc876118e4d094e30ba4689975cd",
+    "mtime": 1783230282.3930607,
+    "ast_hash": "c6da9aba746cecbed7a0f2cc339a1f9b",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\TwentyOneDaysProgram.tsx": {
-    "mtime": 1784786278.4178514,
-    "ast_hash": "4af22a971e8c022193baf785124e3447",
+    "mtime": 1783354965.0273435,
+    "ast_hash": "d8818408063032ee357effa1245a593d",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\BONUS_SESSIONS_ALL.md": {
@@ -725,8 +725,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\PREVIEWS.md": {
-    "mtime": 1784439391.8157818,
-    "ast_hash": "c1e0606606a7896bd68c7b156ba89ed8",
+    "mtime": 1783353866.4086854,
+    "ast_hash": "133af6d4eb973cd31fc1927bc2cadee3",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\ROUTES.md": {
@@ -737,6 +737,11 @@
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\public\\cast-button.png": {
     "mtime": 1781966077.2980633,
     "ast_hash": "737bd217e000aa68f7472d6f0e3f8437",
+    "semantic_hash": ""
+  },
+  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\public\\FINAL.jpg": {
+    "mtime": 1783353920.2267685,
+    "ast_hash": "caeb414fb890ad57f945226e2077987a",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\public\\Level Badges to be sent.jpg": {
@@ -1445,323 +1450,13 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\WeekTwoCountdownBanner.tsx": {
-    "mtime": 1783765109.222353,
-    "ast_hash": "d065cc516950634dd1c5d48b4f7fe84a",
+    "mtime": 1783417073.77846,
+    "ast_hash": "4a059a11c03bbbe0791b6aa3b4b67e32",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\bonus\\faceyoga_tel.jpg": {
     "mtime": 1783417073.77238,
     "ast_hash": "ba013a493420657b12bca407ebdd3366",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\playwright.config.ts": {
-    "mtime": 1783765109.217353,
-    "ast_hash": "c640ed75001b1b4060ffad745b24840c",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\vite.config.ts.timestamp-1783592522089-75c698edc75fd.mjs": {
-    "mtime": 1783592522.0917623,
-    "ast_hash": "0c29fcee45cf8f682c55d6fc231271b0",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\e2e\\batch-over-resolver.spec.ts": {
-    "mtime": 1784786278.330912,
-    "ast_hash": "b6905616c7fdd5bbdf2e51a726baee95",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\e2e\\faqs.spec.ts": {
-    "mtime": 1784786278.3329542,
-    "ast_hash": "71bdaa1518bd2c03bfd2d3ad1da65195",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\e2e\\free-batch-14day-jul6-completed.spec.ts": {
-    "mtime": 1784786278.336967,
-    "ast_hash": "07e999b92968441abe1b23f552af39f9",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\e2e\\free-batch-14day-regular.spec.ts": {
-    "mtime": 1784439391.8426259,
-    "ast_hash": "6a2cbf03f9b8a711b685dfa84e70d0ac",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\e2e\\paid-dashboard.spec.ts": {
-    "mtime": 1784439391.8476264,
-    "ast_hash": "87d88e19b4a20704e7e6cd65eb44ef2a",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\e2e\\referrals.spec.ts": {
-    "mtime": 1784439391.8497045,
-    "ast_hash": "cac70efe222747c8d3785db1e27fc1ca",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\e2e\\smoke.spec.ts": {
-    "mtime": 1783765109.2153542,
-    "ast_hash": "58b46749b2619c1723cbbaaef19c1346",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\e2e\\fixtures\\test-accounts.ts": {
-    "mtime": 1784786278.3359656,
-    "ast_hash": "e8ef3b79c0af1bf76957a3c26371ece1",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\e2e\\fixtures\\test.ts": {
-    "mtime": 1783697669.339218,
-    "ast_hash": "c7d36a4f2d18958a877b7f7d660356f4",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\e2e\\reporters\\matrix-reporter.ts": {
-    "mtime": 1783765109.2153542,
-    "ast_hash": "f6bea562b17c20d28e7078156cff2b99",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\netlify\\functions\\badge-logs.js": {
-    "mtime": 1784786278.339964,
-    "ast_hash": "da34d45ad9c45a986dccc1bb745eca9a",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\netlify\\functions\\certificate-logs.js": {
-    "mtime": 1784786278.3453426,
-    "ast_hash": "e02c90a63d72244a567308a682a56d4e",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\BadgeModal.tsx": {
-    "mtime": 1784786278.3689508,
-    "ast_hash": "128d17288b2b63187362cc278e2ef1cd",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\CertificateModal.tsx": {
-    "mtime": 1784786278.371994,
-    "ast_hash": "2a4f22fe8a81806357a11c71efa46d10",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\CompletedBatchTabs.tsx": {
-    "mtime": 1783515907.627621,
-    "ast_hash": "2a035f303b5165428fc186ab497ff218",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\FourteenDaysV2JourneyCompletedPage.tsx": {
-    "mtime": 1784786278.3792443,
-    "ast_hash": "fad9e151470d1005a1b897c43c23928f",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\FourteenDaysV2LevelCard.tsx": {
-    "mtime": 1784439392.1638134,
-    "ast_hash": "961ef72990e01c4e643bc837db26cbdd",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\FourteenDaysV2TabBar.tsx": {
-    "mtime": 1783765109.2213533,
-    "ast_hash": "d637f86b07f6a997452da7e547fb3983",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\YogaJourneyCompletedPage.tsx": {
-    "mtime": 1783948631.454894,
-    "ast_hash": "f8c0200b9b2ebf74cb67c99fa4ef443d",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\lib\\canvasText.ts": {
-    "mtime": 1783789303.7476308,
-    "ast_hash": "38d1bef3c4bf27f4653357b5b00899d4",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\lib\\studentStatus.ts": {
-    "mtime": 1783948631.459416,
-    "ast_hash": "ecc74f4aabca250bb74a995aa515d12f",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\lib\\trackBadgeActivity.ts": {
-    "mtime": 1784786278.3881116,
-    "ast_hash": "d46c0b475cdc66466b0f3679d3686786",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\lib\\trackCertificateActivity.ts": {
-    "mtime": 1784786278.3911035,
-    "ast_hash": "fc8026df81a3cd445f97657d83d1b269",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\FourteenDaysV2Program.tsx": {
-    "mtime": 1784786278.400148,
-    "ast_hash": "9b29890c6f4c88186bb391d5ed29da6e",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\IndexFourteenDaysV2.tsx": {
-    "mtime": 1784786278.4078069,
-    "ast_hash": "d1fc2edba8d617af67539070ba6bff01",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\.claude\\skills\\playwright-tester\\SKILL.md": {
-    "mtime": 1783697669.337217,
-    "ast_hash": "5128da357fcde1292123ccf01d24e7f1",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\journey_hero_certificate_unlocked.webp": {
-    "mtime": 1784786278.3483515,
-    "ast_hash": "bac78d42e4a9f9835be44966417a3690",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\lvl1_inprogress.jpg": {
-    "mtime": 1784439391.8676074,
-    "ast_hash": "e64e2dfbf28e9867f83853b9a9170347",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\lvl1_unlocked.jpg": {
-    "mtime": 1784439391.8763032,
-    "ast_hash": "c969867b45a3c6a401cf2e9cc176a106",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\lvl2_inprogress.jpg": {
-    "mtime": 1784439391.9438844,
-    "ast_hash": "91aaec59de22a55dc8967be9f7cc3154",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\lvl2_unlocked.jpg": {
-    "mtime": 1784439391.9509296,
-    "ast_hash": "9c14a237594ee40479f2be2a34459fa0",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\lvl3_inprogress.jpg": {
-    "mtime": 1784439391.9607275,
-    "ast_hash": "7d2631dadaeca5c5f4ad51e446687c98",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\lvl3_unlocked.jpg": {
-    "mtime": 1784439391.9672656,
-    "ast_hash": "5542b55682643cac9e1f9c7861655d1f",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\lvl4_inprogress.jpg": {
-    "mtime": 1784439391.9748292,
-    "ast_hash": "03c83aaf1d14e1b2dea76e8ccc67aed5",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\lvl4_unlocked.jpg": {
-    "mtime": 1784439391.9788282,
-    "ast_hash": "e6874ff2d5cbafb995899ca953b219be",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\lvl5_inprogress.jpg": {
-    "mtime": 1784439391.985266,
-    "ast_hash": "b396db96f9974d1a707192c4203117c7",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\lvl5_unlocked.jpg": {
-    "mtime": 1784439391.9943223,
-    "ast_hash": "b98361e459c7351894c4c894bf5beac8",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\reward_lvl1.jpg": {
-    "mtime": 1784439391.9988353,
-    "ast_hash": "cbe608f3ba4f48cd745b3e88941e9692",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\reward_lvl2.jpg": {
-    "mtime": 1784439392.0039015,
-    "ast_hash": "bb0fd14fc6e2bc20dbb16e91dbd2026f",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\reward_lvl3.jpg": {
-    "mtime": 1784439392.0099466,
-    "ast_hash": "bac1478e048c21eea23181af2889d2bc",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\reward_lvl4.jpg": {
-    "mtime": 1784439392.014974,
-    "ast_hash": "2fe4bdec28c6111d920824480587562d",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\14d-v2-dashboard-level-card\\reward_lvl5.jpg": {
-    "mtime": 1784439392.020016,
-    "ast_hash": "898196588b6883e2f4df0e8488c7c967",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\21daysprogram\\completed_journey_hero_bg.webp": {
-    "mtime": 1783515907.616443,
-    "ast_hash": "b927cfa7ed982e80ce2ae653f66b3d8b",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\21daysprogram\\journey_gift.png": {
-    "mtime": 1783515907.6211252,
-    "ast_hash": "6268231fb654fbb29e524312fbdf7251",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\21daysprogram\\journey_star.png": {
-    "mtime": 1783515907.6227393,
-    "ast_hash": "ff4fe929a8158c406cee2fe87183711a",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\badges\\1.jpg": {
-    "mtime": 1784439392.037669,
-    "ast_hash": "4f8294bf2ce456f8400d453bc3b7b8a3",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\badges\\2.jpg": {
-    "mtime": 1784439392.0515652,
-    "ast_hash": "a266ae778a26d71a10b8d0211cd15d09",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\badges\\3.jpg": {
-    "mtime": 1784439392.0614283,
-    "ast_hash": "f2f1a360d13a9bf0f3e159dcaf2a7bde",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\badges\\4.jpg": {
-    "mtime": 1784439392.0697544,
-    "ast_hash": "fc9c6ad2529346dd7977e3f5dd21cf9d",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\badges\\5.jpg": {
-    "mtime": 1784439392.0848439,
-    "ast_hash": "ff0d41ec47c1c06781f206f67f45a3b4",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\badges\\certificate_14days.jpg": {
-    "mtime": 1784786278.3549123,
-    "ast_hash": "ed92510909176ff9b14e7d6fc687fff1",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\badges\\certificate_21days.jpg": {
-    "mtime": 1784786278.362931,
-    "ast_hash": "cb9b7814795b4cb6cf0c7e79f1211b54",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\bonus\\face yoga paid.jpg": {
-    "mtime": 1784440372.0388732,
-    "ast_hash": "9ec5eb22c44a6bdc2bfab98a4f6602d0",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\bonus\\liveqa.jpg": {
-    "mtime": 1783515907.6244445,
-    "ast_hash": "8a3edbcd596913eafb61feeb2975ac8c",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\bonus\\session_cancelled.jpg": {
-    "mtime": 1784786278.3659506,
-    "ast_hash": "b0463531243649b1807a934fe63940f2",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\dashboard-level-card\\d281f4940dd82c9a590624229b414057020e91f5-removebg-preview.png": {
-    "mtime": 1783699690.9824545,
-    "ast_hash": "36e2b6d46e628bc43dd121cc806d471e",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\dashboard-level-card\\lvl7_locked.webp": {
-    "mtime": 1783765109.2193534,
-    "ast_hash": "53ce5fc20f4e4df18a1e65d3c7c13f7e",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\referral\\ten-classes-reward.webp": {
-    "mtime": 1784439392.1405826,
-    "ast_hash": "0368e8e8d64fe3ed1f5ec1bd35f7418e",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\tabs\\tab_pill_subtract.svg": {
-    "mtime": 1783515907.627621,
-    "ast_hash": "f00c684bc93bf258875d7cfd3657fc2a",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\tabs\\tab_pill_union.svg": {
-    "mtime": 1783515907.627621,
-    "ast_hash": "ecf396c6a70c0b50c09ef880b69053ec",
     "semantic_hash": ""
   }
 }
