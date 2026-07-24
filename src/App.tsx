@@ -9,6 +9,7 @@ import NotFound from "./pages/NotFound";
 import Referral from "./pages/Referral";
 import ReferralStatus from "./pages/ReferralStatus";
 import AttendancePage from "./pages/AttendancePage";
+import AttendancePageWeekly from "./pages/AttendancePageWeekly";
 import AllRecordings from "./pages/AllRecordings";
 import Leaderboard from "./pages/Leaderboard";
 import Login from "./pages/Login";
@@ -41,7 +42,7 @@ const App = () => {
           <Route path="/" element={<IndexFourteenDays />} />
           <Route path="/:mobile/referrals" element={<ReferralStatus />} />
           <Route path="/attendance-page" element={<AttendancePage />} />
-          <Route path="/:mobile/attendance" element={<AttendancePage />} />
+          <Route path="/:mobile/attendance" element={<AttendancePageWeekly />} />
           <Route path="/:mobile/recordings" element={<AllRecordings />} />
           <Route path="/leaderboard" element={<Login />} />
           <Route path="/:mobile/leaderboard" element={<Leaderboard />} />
