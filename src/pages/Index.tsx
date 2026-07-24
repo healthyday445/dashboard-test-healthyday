@@ -2108,8 +2108,10 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
       </div>
 
       {/* Introductory Session Card — one-off, July 5 2026, ahead of the July 6 batch start.
+          9:00-10:30 AM: "starts at 11:00 AM" card. 10:30 AM-midnight: session is treated as
+          live and the join link is shown (join opens 30 min ahead of the advertised 11 AM start).
           ?forceDay=0 (see isForceOnboardingPreview) + ?time=<hh.mmam/pm> lets QA preview
-          this card's live/hidden states without waiting for the real date/time. */}
+          this card's states without waiting for the real date/time. */}
       {(() => {
         const _timeParam = new URLSearchParams(location.search).get("time");
         const _totalMin = (() => {
@@ -2136,11 +2138,14 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
           if (_year !== 2026 || _month !== 6 || _date !== 5) return null;
         }
 
+        const upcomingStart = 540; // 9:00 AM IST
         const liveStart = 630; // 10:30 AM IST
-        const liveEnd = 720; // 12:00 PM IST
+        const liveEnd = 1440; // midnight IST
 
-        // Before 10:30 AM or after 12:00 PM: hide entirely
-        if (_totalMin < liveStart || _totalMin >= liveEnd) return null;
+        // Before 9:00 AM or after midnight: hide entirely
+        if (_totalMin < upcomingStart || _totalMin >= liveEnd) return null;
+
+        const isLive = _totalMin >= liveStart;
 
         const isTelugu = userLanguage !== "English";
         const videoId = isTelugu ? "M_9PsFKNshA" : "HI3myN11FKA";
@@ -2154,10 +2159,12 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
               <p style={{ color: "#202020", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "normal", margin: 0 }}>
                 Introductory Session
               </p>
-              <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
-                <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
-                <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>LIVE</span>
-              </div>
+              {isLive && (
+                <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
+                  <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
+                  <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>LIVE</span>
+                </div>
+              )}
             </div>
 
             <div style={{ borderRadius: "12px", overflow: "hidden", boxShadow: "1px 0 4px rgba(0,0,0,0.25), -1px -1px 4px rgba(0,0,0,0.25)" }}>
@@ -2172,19 +2179,25 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
 
               {/* CTA */}
               <div style={{ background: "#fff", border: "1.5px solid #E9E9E9", borderTop: "none", padding: "14px 16px", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <a
-                  href={link}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  style={{ width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none" }}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                    <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                    <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
-                  </svg>
-                  <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION NOW</span>
-                </a>
+                {isLive ? (
+                  <a
+                    href={link}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ width: "300px", height: "40px", borderRadius: "10px", background: "#FEAB27", display: "flex", alignItems: "center", justifyContent: "center", gap: "8px", textDecoration: "none" }}
+                  >
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path d="M10 2.5C8.51664 2.5 7.0666 2.93987 5.83323 3.76398C4.59986 4.58809 3.63856 5.75943 3.07091 7.12988C2.50325 8.50032 2.35472 10.0083 2.64411 11.4632C2.9335 12.918 3.64781 14.2544 4.6967 15.3033C5.7456 16.3522 7.08197 17.0665 8.53683 17.3559C9.99169 17.6453 11.4997 17.4968 12.8701 16.9291C14.2406 16.3614 15.4119 15.4001 16.236 14.1668C17.0601 12.9334 17.5 11.4834 17.5 10" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M17.5 10C17.5 8.01088 16.7098 6.10322 15.3033 4.6967C13.8968 3.29018 11.9891 2.5 10 2.5" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                      <path d="M8.33333 7.5V12.5L12.5 10L8.33333 7.5Z" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+                    </svg>
+                    <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, lineHeight: "normal" }}>JOIN SESSION NOW</span>
+                  </a>
+                ) : (
+                  <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "24px" }}>
+                    Session Starts at 11:00 AM
+                  </span>
+                )}
               </div>
             </div>
           </div>
