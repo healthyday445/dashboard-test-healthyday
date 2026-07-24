@@ -17,13 +17,14 @@ The 14-day page needs a real account (registered/active) to preview against — 
 | Param | Value | Effect |
 |---|---|---|
 | `forceDay` | integer | Simulated day-of-batch, counted from `free_batch_start_date`. `1` = batch start date, `2` = start date + 1 day, etc. `0` = the day *before* the batch starts — forces the pre-batch onboarding screen regardless of the account's real status (bypasses the active/paid/pastdue/14-day-completed branches, **including a real paid account** — see `forcePaidDay` below if you need to preview the paid dashboard itself). |
-| `time` | `"7.00PM"`, `"5.30AM"` | Overrides current time-of-day (session live/upcoming logic, bonus windows, the July 5 2026 intro session card) |
+| `time` | `"7.00PM"`, `"5.30AM"` | Overrides current time-of-day (session live/upcoming logic, bonus windows, the day-before-batch intro session card) |
 
 Examples:
 
 | URL | What it shows |
 |---|---|
-| `/9999999999?forceDay=0&time=11.00am` | Onboarding screen, intro session card live (10:30 AM–12:00 PM window) |
+| `/9999999999?forceDay=0&time=9.30am` | Onboarding screen, intro session card in "upcoming" state — "Session Starts at 11:00 AM", no LIVE badge (9:00–10:29 AM window) |
+| `/9999999999?forceDay=0&time=11.00am` | Onboarding screen, intro session card live — LIVE badge + JOIN SESSION NOW (10:30 AM–11:59 PM window) |
 | `/9999999999?forceDay=1&time=4.30am` | Active batch, day 1, 5:30 AM session live (window opens 1hr early) |
 | `/9999999999?forceDay=7&time=7.00PM` | Active batch, day 7, 7:00 PM (evening session live) |
 | `/9999999999?forceDay=14` | Active batch, last day, current real time |
