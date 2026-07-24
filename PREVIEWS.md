@@ -127,15 +127,29 @@ Overrides whether the milestone card and Rewards grid render the paid or free va
 
 Example: `/9999999999/referrals?preview_referrals=3&preview_paid=1` (paid variant, 3 referrals — the "You are here" pending state ahead of the 5-referral first milestone)
 
-## Attendance page (`/:mobile/attendance`, `/attendance-page`)
+## Attendance page (`/attendance-page`)
 
-`AttendancePage.tsx`.
+`AttendancePage.tsx` — monthly "Consistency Tracker" calendar.
 
 ### `?preview=paid`
 
 Simulates a paid student with a Thu/Fri/Sat class schedule and some attendance history.
 
 Example: `/attendance-page?preview=paid`
+
+## Weekly attendance tracker (`/:mobile/attendance`)
+
+`AttendancePageWeekly.tsx` — editable Mon-Sun checkbox tracker reached via the "Update Attendance"
+button under the Weekly Attendance card on the paid dashboard (`WeeklyAttendanceCard.tsx`). Paid
+students only — redirects away if the fetched student isn't paid.
+
+### `?preview=paid`
+
+Seeds a fixed mock week (`paid_attendance_tracker: ["mon", "wed"]`) and skips the network fetch
+entirely — used since a real account's actual attendance for "this week" can't be pinned down
+deterministically day-to-day.
+
+Example: `/9999999999/attendance?preview=paid`
 
 ## Recordings page (`/:mobile/recordings`)
 
