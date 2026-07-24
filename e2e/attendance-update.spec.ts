@@ -139,14 +139,21 @@ test.describe("Attendance page — update submission (network mocked)", () => {
     await expect(monday).toBeDisabled(); // non-interactive while submitting
     await expect(monday).toHaveCSS("background-color", "rgb(255, 255, 255)"); // still white, NOT rgb(239,239,239)
 
-    await expect(page.getByText("Attendance updated successfully!")).toBeVisible();
+    await expect(page.getByText("Your attendance was updated successfully!")).toBeVisible();
     await expect(page.getByRole("button", { name: "Update Attendance" })).toBeDisabled();
     // Server response's paid_attendance_tracker (["wed"]) no longer includes "mon" — matches
     // the toggled-off state, so isDirty is false again against the new original.
     await expect(monday).toHaveAttribute("aria-checked", "false");
   });
 
-  test("failure: shows the backend's error via toast and keeps Update enabled for retry", async ({ page }) => {
+  test("failure: shows the generic error banner and reverts the checkbox back to its last confirmed state", async ({ page }) => {
+    // The failure banner always shows the fixed Figma copy regardless of the backend's actual
+    // `detail` message (logged to console for debugging, not surfaced in this banner) — this 409
+    // (stale week_start) is just one example of a failure status that should trigger it.
+    //
+    // Nothing was actually saved on a failure, so the attempted edit is discarded — the checkbox
+    // snaps back to the original fetched state (still checked here) and Update goes disabled
+    // again, rather than lingering in the user's attempted-but-unsaved state.
     await page.route("**/.netlify/functions/update-attendance", async (route) => {
       await route.fulfill({
         status: 409,
@@ -162,8 +169,8 @@ test.describe("Attendance page — update submission (network mocked)", () => {
     await monday.click();
     await updateButton.click();
 
-    await expect(page.getByText("week_start does not match the current attendance week; refresh and try again")).toBeVisible();
-    await expect(updateButton).toBeEnabled();
-    await expect(monday).toHaveAttribute("aria-checked", "false");
+    await expect(page.getByText("Error! Couldn't update attendance. Please try again.")).toBeVisible();
+    await expect(updateButton).toBeDisabled();
+    await expect(monday).toHaveAttribute("aria-checked", "true");
   });
 });

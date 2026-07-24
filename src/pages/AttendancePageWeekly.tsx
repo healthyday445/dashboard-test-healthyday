@@ -1,6 +1,5 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
-import { toast } from "sonner";
 import logo from "@/assets/Primary_logo.svg";
 import { Skeleton } from "@/components/ui/skeleton";
 import { safeSessionStorage } from "@/lib/storage";
@@ -10,6 +9,60 @@ interface DayUpdate {
   day: string;
   attended: boolean;
 }
+
+/** Success/failure banners for the update-attendance result, rendered inline below the Update button. */
+// Below 375px, these single-line sentences no longer fit their banner width — the flex-row
+// text span hits the default flex min-width:auto and overflows instead of wrapping. Scoped to
+// max-width:375px only, so 375px and up render exactly as before.
+const BannerResponsiveStyle = () => (
+  <style>{`
+    @media (max-width: 375px) {
+      .attendance-banner-text {
+        min-width: 0;
+        flex: 1 1 auto;
+        white-space: normal;
+        word-break: break-word;
+      }
+    }
+  `}</style>
+);
+
+const UpdateSuccessBanner = () => (
+  <div style={{
+    display: "flex", alignItems: "center", gap: "10px",
+    width: "100%", minHeight: "48px", padding: "0 16px",
+    background: "#FFF", border: "1px solid #E1E8F1", borderRadius: "8px",
+    boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.25)", boxSizing: "border-box",
+  }}>
+    <BannerResponsiveStyle />
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ flexShrink: 0 }}>
+      <circle cx="8.7071" cy="8.7071" r="8.7071" fill="#0A386F" />
+      <path d="M4.5 8.90237L7.77251 11.8047L14.3175 6" stroke="#FFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+    </svg>
+    <span className="attendance-banner-text" style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#0A386F" }}>
+      Your attendance was updated successfully!
+    </span>
+  </div>
+);
+
+const UpdateFailureBanner = () => (
+  <div style={{
+    display: "flex", alignItems: "center", gap: "10px",
+    width: "100%", minHeight: "48px", padding: "0 16px",
+    background: "#FFF5F5", border: "1px solid #FFD6D5", borderRadius: "8px",
+    boxShadow: "0px 1px 4px 0px rgba(0, 0, 0, 0.25)", boxSizing: "border-box",
+  }}>
+    <BannerResponsiveStyle />
+    <svg width="18" height="18" viewBox="0 0 18 18" fill="none" style={{ flexShrink: 0 }}>
+      <circle cx="9" cy="9" r="9" fill="#C7000A" />
+      <rect x="8.1" y="4.5" width="1.8" height="6" rx="0.9" fill="#FFF" />
+      <circle cx="9" cy="12.5" r="1" fill="#FFF" />
+    </svg>
+    <span className="attendance-banner-text" style={{ fontFamily: "Outfit", fontSize: "12px", fontWeight: 600, color: "#C7000A" }}>
+      Error! Couldn't update attendance. Please try again.
+    </span>
+  </div>
+);
 
 /**
  * PATCH /.netlify/functions/update-attendance -> backend PATCH /api/internal/student/attendance
@@ -58,6 +111,26 @@ const AttendancePageWeekly = () => {
   const [checkedDays, setCheckedDays] = useState<boolean[]>([]);
   const [originalDays, setOriginalDays] = useState<boolean[]>([]);
   const [submitting, setSubmitting] = useState(false);
+  const [feedback, setFeedback] = useState<"success" | "error" | null>(null);
+  const feedbackTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+
+  useEffect(() => {
+    return () => {
+      if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current);
+    };
+  }, []);
+
+  const clearFeedback = () => {
+    if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current);
+    feedbackTimeoutRef.current = null;
+    setFeedback(null);
+  };
+
+  const showFeedback = (result: "success" | "error") => {
+    if (feedbackTimeoutRef.current) clearTimeout(feedbackTimeoutRef.current);
+    setFeedback(result);
+    feedbackTimeoutRef.current = setTimeout(() => setFeedback(null), 4000);
+  };
 
   useEffect(() => {
     if (previewMode === "paid") {
@@ -119,11 +192,13 @@ const AttendancePageWeekly = () => {
 
   const toggleDay = (i: number) => {
     if (i > todayIdx || submitting) return;
+    clearFeedback();
     setCheckedDays((prev) => prev.map((v, idx) => (idx === i ? !v : v)));
   };
 
   const handleUpdate = async () => {
     if (!isDirty || submitting) return;
+    clearFeedback();
     setSubmitting(true);
     try {
       const updates: DayUpdate[] = WEEK_DAY_LABELS
@@ -138,10 +213,12 @@ const AttendancePageWeekly = () => {
       const result = await submitAttendanceUpdate(mobile, weekStart, updates);
 
       setStudentData((prev) => ({ ...prev, paid_attendance_tracker: result.paid_attendance_tracker }));
-      toast.success("Attendance updated successfully!");
+      showFeedback("success");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to update attendance. Please try again.";
-      toast.error(message);
+      console.error("[AttendancePageWeekly] update failed:", message);
+      setCheckedDays(originalDays); // nothing was actually saved — don't show an edit that didn't happen
+      showFeedback("error");
     } finally {
       setSubmitting(false);
     }
@@ -275,6 +352,15 @@ const AttendancePageWeekly = () => {
           </button>
         )}
       </div>
+
+      {/* Update result banner */}
+      {feedback && (
+        <div style={{ padding: "0 20px 24px", display: "flex", justifyContent: "center" }}>
+          <div style={{ width: "100%", maxWidth: "358px" }}>
+            {feedback === "success" ? <UpdateSuccessBanner /> : <UpdateFailureBanner />}
+          </div>
+        </div>
+      )}
     </div>
   );
 };
