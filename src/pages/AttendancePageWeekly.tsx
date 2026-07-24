@@ -167,7 +167,7 @@ const AttendancePageWeekly = () => {
       {/* Header */}
       <header className="hd-header bg-white">
         <button
-          onClick={() => navigate(-1)}
+          onClick={() => navigate(`/${mobile}`)}
           style={{ background: "none", border: "none", cursor: "pointer", marginRight: "12px", padding: "4px" }}
         >
           <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
