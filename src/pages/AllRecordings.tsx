@@ -8,6 +8,7 @@ import img0da635 from "@/assets/0da635826ff23e34b2bf7680030cac545d32dcfb.webp";
 import img5ce328 from "@/assets/5ce32860a765bdcaeb0504ff13008eea60a6cd55.webp";
 import imgFaceYogaTelugu from "@/assets/bonus/faceyoga_tel.jpg";
 import imgFaceYogaEnglish from "@/assets/bonus/faceyoga_eng.jpg";
+import imgWhiteArrow from "@/assets/whiteArrow.svg";
 
 // classRecordings is now built dynamically inside the component based on student language & API data
 
@@ -197,6 +198,40 @@ const Thumbnail = ({ src, alt }: { src: string; alt: string }) => (
   </div>
 );
 
+const ViewAllVideosButton = ({ href }: { href: string }) => (
+  <a
+    href={href}
+    target="_blank"
+    rel="noopener noreferrer"
+    style={{
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      gap: "6px",
+      width: "100%",
+      maxWidth: "320px",
+      height: "44.275px",
+      margin: "24px auto 0",
+      borderRadius: "8px",
+      background: "#FEAB27",
+      boxShadow: "0px 0px 10px 1px rgba(0, 0, 0, 0.25)",
+      backdropFilter: "blur(2px)",
+      textDecoration: "none",
+    }}
+  >
+    <span style={{
+      color: "#FFF",
+      fontFamily: "Outfit",
+      fontSize: "20px",
+      fontWeight: 700,
+      lineHeight: "normal",
+    }}>
+      View all videos
+    </span>
+    <img src={imgWhiteArrow} alt="" style={{ width: "25px", height: "100%" }} />
+  </a>
+);
+
 const DateBadge = ({ label }: { label: string }) => (
   <div style={{
     width: "fit-content",
@@ -324,6 +359,9 @@ const AllRecordings = () => {
   const isEnglish = studentData?.language === "English";
   const youtubeVideos = isEnglish ? englishVideos : teluguVideos;
   const lang = isEnglish ? "english" : "telugu";
+  const youtubeChannelLink = isEnglish
+    ? "https://www.youtube.com/@HealthydayEnglish"
+    : "https://www.youtube.com/@healthydayyoga";
 
   // Subscription plan duration check (mirrors paid dashboard logic)
   const activeSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "active" || s.subscription_status === "ongoing") || studentData?.subscriptions?.[0];
@@ -768,6 +806,8 @@ const AllRecordings = () => {
             </a>
           ))}
         </div>
+
+        <ViewAllVideosButton href={youtubeChannelLink} />
       </div>
     </div>
   );
