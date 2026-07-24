@@ -1,6 +1,7 @@
 export interface PlanRenewalInfo {
   daysUntilPlanEnds: number | null;
   showPlanRenewal: boolean;
+  planEndDate: Date | null;
 }
 
 /**
@@ -31,5 +32,5 @@ export function getPlanRenewalInfo(studentData: any): PlanRenewalInfo {
 
   const showPlanRenewal = daysUntilPlanEnds !== null && daysUntilPlanEnds <= 7 && daysUntilPlanEnds >= 1;
 
-  return { daysUntilPlanEnds, showPlanRenewal };
+  return { daysUntilPlanEnds, showPlanRenewal, planEndDate };
 }

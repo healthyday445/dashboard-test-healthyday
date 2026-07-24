@@ -4,6 +4,7 @@ import logo from "@/assets/Primary_logo.svg";
 import { Skeleton } from "@/components/ui/skeleton";
 import { safeSessionStorage } from "@/lib/storage";
 import { getWeeklyAttendance, WEEK_DAY_LABELS } from "@/lib/weeklyAttendance";
+import { getPlanRenewalInfo } from "@/lib/planRenewal";
 
 interface DayUpdate {
   day: string;
@@ -188,10 +189,29 @@ const AttendancePageWeekly = () => {
     return dow === 0 ? 6 : dow - 1; // Mon=0 ... Sun=6
   })();
 
+  const { planEndDate } = getPlanRenewalInfo(studentData);
+
+  const weekMonday = (() => {
+    const d = new Date();
+    d.setHours(0, 0, 0, 0);
+    d.setDate(d.getDate() - todayIdx);
+    return d;
+  })();
+
+  // A day can't be marked/corrected if it hasn't happened yet, OR if it falls after the paid
+  // subscription's end date — e.g. plan ends Wednesday but the week runs through Sunday.
+  const isDayLocked = (i: number) => {
+    if (i > todayIdx) return true;
+    if (!planEndDate) return false;
+    const dayDate = new Date(weekMonday);
+    dayDate.setDate(weekMonday.getDate() + i);
+    return dayDate.getTime() > planEndDate.getTime();
+  };
+
   const isDirty = checkedDays.some((checked, i) => checked !== originalDays[i]);
 
   const toggleDay = (i: number) => {
-    if (i > todayIdx || submitting) return;
+    if (isDayLocked(i) || submitting) return;
     clearFeedback();
     setCheckedDays((prev) => prev.map((v, idx) => (idx === i ? !v : v)));
   };
@@ -284,11 +304,12 @@ const AttendancePageWeekly = () => {
               }
 
               const checked = checkedDays[i] ?? false;
-              // Future days are always non-interactive and grey. Mid-submit, every box is
-              // briefly non-interactive too, but must keep its current checked/unchecked look —
-              // reusing one flag for both meant a just-unchecked day flashed into the grey
-              // "not happened yet" style for the duration of the request.
-              const isFuture = i > todayIdx;
+              // Locked (not-yet-happened, or past the subscription's end date) days are always
+              // non-interactive and grey. Mid-submit, every box is briefly non-interactive too,
+              // but must keep its current checked/unchecked look — reusing one flag for both
+              // meant a just-unchecked day flashed into the grey "locked" style for the
+              // duration of the request.
+              const isFuture = isDayLocked(i);
               const interactionDisabled = isFuture || submitting;
               return (
                 <div key={label} style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
