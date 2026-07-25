@@ -17,6 +17,7 @@ import Faqs from "./pages/Faqs";
 import IndexFourteenDays from "./pages/IndexFourteenDays";
 import Pricing from "./pages/Pricing";
 import Certificate from "./pages/Certificate";
+import LiveSession from "./pages/LiveSession";
 
 const queryClient = new QueryClient();
 
@@ -47,6 +48,7 @@ const App = () => {
           <Route path="/leaderboard" element={<Login />} />
           <Route path="/:mobile/leaderboard" element={<Leaderboard />} />
           <Route path="/pricing" element={<Pricing />} />
+          <Route path="/:mobile/live-session" element={<LiveSession />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
