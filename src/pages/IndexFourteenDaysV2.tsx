@@ -833,7 +833,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
         const isLive = _totalMin >= liveStart;
 
         const isTelugu = userLanguage !== "English";
-        const link = isTelugu ? "https://start.dailyyogawithjagan.com/intro" : "https://start.dailyyogawithjagan.com/intro_eng";
+        const link = isTelugu ? "https://start.dailyyogawithjagan.com/intro" : "https://start.dailyyogawithjagan.com/intro_english";
         const thumbnail = isTelugu ? introThumbTel : introThumbEng;
 
         return (

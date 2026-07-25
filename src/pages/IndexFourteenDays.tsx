@@ -971,7 +971,7 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
         }
 
         const isTelugu = userLanguage !== "English";
-        const link = isTelugu ? "https://start.dailyyogawithjagan.com/intro" : "https://start.dailyyogawithjagan.com/intro_eng";
+        const link = isTelugu ? "https://start.dailyyogawithjagan.com/intro" : "https://start.dailyyogawithjagan.com/intro_english";
         const videoId = isTelugu ? "M_9PsFKNshA" : "HI3myN11FKA";
         const thumbnail = `https://img.youtube.com/vi/${videoId}/maxresdefault.jpg`;
 
