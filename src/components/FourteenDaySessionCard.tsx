@@ -136,9 +136,9 @@ export const FourteenDaySessionCard: React.FC<FourteenDaySessionCardProps> = ({
         <>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "12px" }}>
             <h2 style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, margin: 0 }}>Your Yoga Session</h2>
-            <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
-              <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
-              <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>Ongoing now</span>
+            <div style={{ display: "flex", alignItems: "center", gap: "6px", borderRadius: "60px", background: "#FFD3D3", padding: "4px 10px" }}>
+              <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#E02F2F" }} />
+              <span style={{ color: "#E02F2F", fontFamily: "Outfit", fontSize: "13px", fontWeight: 700 }}>LIVE</span>
             </div>
           </div>
 

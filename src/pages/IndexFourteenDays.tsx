@@ -220,7 +220,8 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
               : [];
         setSessionLinks(arr);
       })
-      .catch(() => { });
+      .catch(() => { })
+      .finally(() => setSessionLinksLoaded(true));
   }, []);
 
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
@@ -238,6 +239,7 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
       : false
   );
   const [sessionLinks, setSessionLinks] = useState<any[]>([]);
+  const [sessionLinksLoaded, setSessionLinksLoaded] = useState(false);
   const [verifiedReferralCount, setVerifiedReferralCount] = useState<number | null>(null);
   const [joinedDays, setJoinedDays] = useState<number[]>(() => {
     try {
@@ -653,6 +655,7 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
             mobile={mobile}
             freeSessionCode={freeSessionCode}
             onJoin={markTodayJoined}
+            isLoading={!sessionLinksLoaded}
           />
         )}
 
@@ -675,6 +678,7 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
       <IndexPaid
         studentData={studentData}
         sessionLinks={sessionLinks}
+        sessionLinksLoaded={sessionLinksLoaded}
         mobile={mobile}
         selectedPlanIdx={selectedPlanIdx}
         setSelectedPlanIdx={setSelectedPlanIdx}

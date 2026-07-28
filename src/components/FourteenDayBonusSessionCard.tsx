@@ -118,7 +118,7 @@ export const FourteenDayBonusSessionCard: React.FC<FourteenDayBonusSessionCardPr
         {isLive && (
           <div style={{ display: "flex", alignItems: "center", gap: "5px", background: "#FFF0F0", borderRadius: "20px", padding: "3px 10px" }}>
             <div style={{ width: "7px", height: "7px", borderRadius: "50%", background: "#FF3B30" }} />
-            <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>Ongoing now</span>
+            <span style={{ color: "#FF3B30", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700 }}>LIVE</span>
           </div>
         )}
       </div>
