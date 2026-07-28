@@ -91,8 +91,14 @@ const Dashboard = () => {
     );
   }
 
-  // Batch type is the first thing we check: it decides which Live Sessions
-  // component this student gets. The 21-day/22-day June-21-2026 cohort uses the dedicated
+  // Raw backend status — true only for students who have genuinely already purchased a
+  // plan, even if it hasn't started yet. Checked before the free-batch cohort variables
+  // below since an already-paid student always gets the v2 tabs, regardless of which
+  // free-batch cohort they originally joined.
+  const alreadyPaid = studentData?.status === "paid";
+
+  // Batch type is the next thing we check: it decides which Live Sessions component a
+  // still-free student gets. The 21-day/22-day June-21-2026 cohort uses the dedicated
   // IndexTwentyOneDay copy; the one-off July-6-2026 batch keeps the original IndexFourteenDays
   // (no tabs); every other batch (July-13-2026 onward) gets the new tabbed IndexFourteenDaysV2.
   const is21DayBatch =
@@ -101,7 +107,7 @@ const Dashboard = () => {
     (forceDayParam !== null && parseInt(forceDayParam, 10) > 14);
   const isLegacyFourteenDayBatch = previewProgramme === "legacy14day" || studentData?.free_batch_start_date === FREE_BATCH_DATE_OLD_14DAY;
   const isNewFourteenDayBatch = !is21DayBatch && !isLegacyFourteenDayBatch;
-  const LiveSessions = is21DayBatch ? IndexTwentyOneDay : isLegacyFourteenDayBatch ? IndexFourteenDays : IndexFourteenDaysV2;
+  const LiveSessions = alreadyPaid ? IndexFourteenDaysV2 : is21DayBatch ? IndexTwentyOneDay : isLegacyFourteenDayBatch ? IndexFourteenDays : IndexFourteenDaysV2;
   const JourneyProgram = is21DayBatch ? TwentyOneDaysProgram : FourteenDaysV2Program;
 
   // The backend can report status:"paid" before the purchased plan actually starts
@@ -111,10 +117,6 @@ const Dashboard = () => {
   const effectiveStudentData = studentData && effectiveStatus !== studentData?.status
     ? { ...studentData, status: effectiveStatus }
     : studentData;
-
-  // Raw backend status (before the ongoing-free UI override above) — true only for
-  // students who have genuinely already purchased a plan, even if it hasn't started yet.
-  const alreadyPaid = studentData?.status === "paid";
 
   // Whether a new-format 14-day batch has actually started yet — a "registered" student
   // whose batch start date is still in the future should see the plain not-started

@@ -363,9 +363,9 @@ const AllRecordings = () => {
     ? "https://www.youtube.com/@HealthydayEnglish"
     : "https://www.youtube.com/@healthydayyoga";
 
-  // Subscription plan duration check (mirrors paid dashboard logic)
-  const activeSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "active" || s.subscription_status === "ongoing") || studentData?.subscriptions?.[0];
-  const planType = activeSub?.plan_type || studentData?.current_plan || studentData?.plan_type;
+  // Subscription plan duration check — current_plan is the backend's authoritative,
+  // already-resolved field (mirrors paid dashboard logic in IndexPaid.tsx).
+  const planType = studentData?.current_plan || studentData?.plan_type;
   const is3Month = planType === "3_months" || planType === "3_months_upgrade";
   const is6Month = planType === "6_months" || planType === "6_months_upgrade";
   const is12Month = planType === "12_months" || planType === "12_months_upgrade";

@@ -869,8 +869,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
       const totalMin = (() => { if (_forceTime) { const isPM = _forceTime.toLowerCase().endsWith("pm"); const s = _forceTime.toLowerCase().replace("am", "").replace("pm", ""); const [hStr, mStr] = s.split("."); let h = parseInt(hStr, 10); const m = parseInt(mStr ?? "0", 10); if (isPM && h !== 12) h += 12; if (!isPM && h === 12) h = 0; return h * 60 + m; } return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes(); })();
       const currentDow = _forceDay !== null ? parseInt(_forceDay, 10) : nowIST.getUTCDay();
 
-      const activeSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "active" || s.subscription_status === "ongoing") || studentData?.subscriptions?.[0];
-      const planType = activeSub?.plan_type || studentData?.current_plan || studentData?.plan_type;
+      const planType = studentData?.current_plan || studentData?.plan_type;
       const is6Month = planType === "6_months" || planType === "6_months_upgrade";
       const is12Month = planType === "12_months" || planType === "12_months_upgrade";
       const paidLang = studentData?.language === "English" ? "English" : "Telugu";
