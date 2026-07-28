@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import { safeSessionStorage } from "@/lib/storage";
-import { isFreeBatchOver, getSimulatedBatchDate } from "@/lib/utils";
+import { getSimulatedBatchDate } from "@/lib/utils";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 import NoSessionsCard from "@/components/NoSessionsCard";
 
@@ -50,25 +50,25 @@ const EVENING_SLOTS = [
 ];
 const ALL_SLOTS = [...MORNING_SLOTS, ...EVENING_SLOTS];
 
-/** Day-in-batch + week calc, mirrors getActiveBatchInfo in IndexFourteenDaysV2.tsx. */
-const getActiveBatchInfo = (
-  batchDateStr: string | null | undefined,
-  batchEndDateStr: string | null | undefined,
-  today: Date
-) => {
-  if (!batchDateStr) return { isActive: false as const };
-  const batchStart = new Date(batchDateStr);
+const GRACE_DAY_MIN = 15;
+const GRACE_DAY_MAX = 17;
+
+/** Day number since free_batch_start_date (Day 1 = start date), uncapped — unlike the 14-day batch's own day calc, this needs to keep counting past Day 14 into the grace window. */
+const getDayNumber = (batchStartDateStr: string | null | undefined, today: Date): number | null => {
+  if (!batchStartDateStr) return null;
+  const batchStart = new Date(batchStartDateStr);
   batchStart.setHours(0, 0, 0, 0);
   const diffDays = Math.floor((today.getTime() - batchStart.getTime()) / 86400000);
-  if (diffDays < 0 || diffDays >= 14) return { isActive: false as const };
-  if (isFreeBatchOver(batchEndDateStr)) return { isActive: false as const };
-  const currentDay = diffDays + 1;
-  const week = currentDay <= 7 ? 1 : 2;
-  return { isActive: true as const, currentDay, week };
+  return diffDays + 1;
 };
 
-/** Standalone "live session" page for free-batch students — embeds the current live YouTube class, with pricing below. */
-const LiveSession = () => {
+/**
+ * Grace-period page (/:mobile/grace) — for students who finished the 14-day free batch without
+ * paying, this previews the actual PAID daily class live on Days 15-17 only, to nudge them into
+ * subscribing before the window closes. Outside that window (wrong status or wrong day), bounce
+ * to the regular dashboard, which already renders the correct state for them.
+ */
+const Grace = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const { mobile: urlMobile } = useParams<{ mobile: string }>();
@@ -79,7 +79,6 @@ const LiveSession = () => {
   const [error, setError] = useState<string | null>(null);
   const [studentData, setStudentData] = useState<any>(null);
   const [sessionLinks, setSessionLinks] = useState<any[]>([]);
-  const [sessionLinksLoaded, setSessionLinksLoaded] = useState(false);
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
   const [videoMeta, setVideoMeta] = useState<{ title: string; author_name: string } | null>(null);
 
@@ -94,8 +93,7 @@ const LiveSession = () => {
               : [];
         setSessionLinks(arr);
       })
-      .catch(() => {})
-      .finally(() => setSessionLinksLoaded(true));
+      .catch(() => {});
   }, []);
 
   useEffect(() => {
@@ -120,10 +118,11 @@ const LiveSession = () => {
           : (() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; })();
 
         const status = data?.status;
-        const isOngoingStatus = status === "registered" || status === "14DaysOngoing" || status === "14daysongoing";
-        const batchInfo = getActiveBatchInfo(data?.free_batch_start_date, data?.free_batch_end_date, today);
+        const isCompleted = status === "14DaysCompleted" || status === "14 day completed";
+        const dayNumber = getDayNumber(data?.free_batch_start_date, today);
+        const inGraceWindow = dayNumber !== null && dayNumber >= GRACE_DAY_MIN && dayNumber <= GRACE_DAY_MAX;
 
-        if (!isOngoingStatus || !batchInfo.isActive) {
+        if (!isCompleted || !inGraceWindow) {
           navigate(`/${mobile}`, { replace: true });
           return;
         }
@@ -140,21 +139,15 @@ const LiveSession = () => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [mobile, navigate]);
 
-  const forceDayParam = searchParams.get("forceDay");
   const timeParam = searchParams.get("time");
-  const today = forceDayParam !== null && studentData?.free_batch_start_date
-    ? getSimulatedBatchDate(studentData.free_batch_start_date, parseInt(forceDayParam, 10))
-    : (() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; })();
-  const batchInfo = getActiveBatchInfo(studentData?.free_batch_start_date, studentData?.free_batch_end_date, today);
-  const { week } = batchInfo.isActive ? batchInfo : { week: 1 };
-
   const totalMin = getCurrentTotalMin(timeParam);
   const isMorning = totalMin < 15 * 60 + 30;
   const langKey = (studentData?.language || "Telugu").toLowerCase();
-  const freeSessionCode = `14d_week${week}_${isMorning ? "morning" : "evening"}`;
+  // Grace-period students preview the actual PAID daily class, not a free-batch weekly one.
+  const paidSessionCode = isMorning ? "daily_morning" : "daily_evening";
 
-  const apiSessionEntry = sessionLinks.find((s: any) => s.session_code === freeSessionCode && s.language === langKey);
-  const sessionLink = apiSessionEntry?.link || studentData?.free_classes_joining_link || "https://www.youtube.com/c/Healthyday";
+  const apiSessionEntry = sessionLinks.find((s: any) => s.session_code === paidSessionCode && s.language === langKey);
+  const sessionLink = apiSessionEntry?.link || studentData?.paid_classes_joining_link || studentData?.classes_joining_link || "https://www.youtube.com/c/Healthyday";
   const ytMatch = sessionLink.match(YT_ID_REGEX);
 
   const previewVideoParam = searchParams.get("previewVideo");
@@ -182,7 +175,7 @@ const LiveSession = () => {
         <img src={logo} alt="Healthyday" className="h-10 mb-8" />
         <div className="flex flex-col items-center gap-4">
           <div style={{ width: "48px", height: "48px", border: "4px solid #EDF6FF", borderTop: "4px solid #FEAB27", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
-          <p style={{ color: "#888", fontSize: "14px", fontWeight: 500 }}>Loading your live session...</p>
+          <p style={{ color: "#888", fontSize: "14px", fontWeight: 500 }}>Loading your bonus session...</p>
         </div>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
@@ -210,7 +203,7 @@ const LiveSession = () => {
               width="100%"
               height="100%"
               src={`https://www.youtube.com/embed/${sessionVideoId}?autoplay=1`}
-              title="Live Yoga Session"
+              title="Bonus Yoga Session"
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="w-full h-full border-0"
@@ -231,11 +224,26 @@ const LiveSession = () => {
         </>
       ) : (
         <div style={{ padding: "24px 20px 0", display: "flex", justifyContent: "center" }}>
-          <NoSessionsCard totalMin={totalMin} isFreeBatch={true} />
+          <NoSessionsCard totalMin={totalMin} isFreeBatch={false} />
         </div>
       )}
 
-      <div style={{ marginTop: "20px" }}>
+      <div style={{ padding: "28px 20px 0", textAlign: "center" }}>
+        <p style={{ margin: "0 0 6px", color: "#000", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, lineHeight: "1.3" }}>
+          Your 14-Days FREE Classes are completed
+        </p>
+        <p style={{ margin: "0 0 14px", color: "#FE961B", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, lineHeight: "1.3" }}>
+          Today is ONE Extra Bonus Session.
+        </p>
+        <p style={{ margin: 0, color: "#7C7B7B", fontFamily: "Outfit", fontSize: "14px", fontWeight: 500 }}>
+          Join our community for
+        </p>
+        <p style={{ margin: 0, color: "#0D468B", fontFamily: "Outfit", fontSize: "20px", fontWeight: 800, letterSpacing: "0.5px" }}>
+          DAILY YOGA SESSIONS
+        </p>
+      </div>
+
+      <div style={{ marginTop: "8px" }}>
         <PricingAndComparisonSection
           selectedPlanIdx={selectedPlanIdx}
           setSelectedPlanIdx={setSelectedPlanIdx}
@@ -249,4 +257,4 @@ const LiveSession = () => {
   );
 };
 
-export default LiveSession;
+export default Grace;
