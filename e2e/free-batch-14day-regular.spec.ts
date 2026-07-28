@@ -4,14 +4,17 @@ import { findAccount } from "./fixtures/test-accounts";
 // This covers batches AFTER the 2026-07-06 cohort, which is a special one-off batch (see
 // free-batch-14day-jul6-special.spec.ts) — kept in its own file so a future change to the special
 // batch's bonus-session schedule doesn't silently affect coverage of the regular/default flow, and
-// vice versa. Uses the 2026-07-13 cohort as the "next/regular batch" stand-in.
-const telugu = findAccount("14day", "Telugu", "2026-07-13");
-const english = findAccount("14day", "English", "2026-07-13");
+// vice versa. Was using the 2026-07-13 cohort as the "next/regular batch" stand-in, but that cohort
+// genuinely completed (2026-07-28, free_batch_end_date 2026-07-26) — repointed to the 2026-07-20
+// cohort, which is still ongoing (see e2e/fixtures/test-accounts.ts for the drift note). This
+// account will itself complete around 2026-08-02 7:30 PM IST — re-verify/re-promote before then.
+const telugu = findAccount("14day", "Telugu", "2026-07-20");
+const english = findAccount("14day", "English", "2026-07-20");
 if (!telugu || !english) {
-  throw new Error("Missing 14-day (2026-07-13 cohort) account(s) in e2e/fixtures/test-accounts.ts");
+  throw new Error("Missing 14-day (2026-07-20 cohort) account(s) in e2e/fixtures/test-accounts.ts");
 }
 
-test.describe(`14-day free batch — regular/default flow (2026-07-13 cohort)`, () => {
+test.describe(`14-day free batch — regular/default flow (2026-07-20 cohort)`, () => {
   // Grouped to mirror free-batch-14day-jul6-special.spec.ts's tree shape ("Live sessions" /
   // "Special bonus sessions" / "Week-2 countdown banner") so the two cohorts sit side by side and
   // diff easily in the Playwright HTML report's test tree.
@@ -24,7 +27,9 @@ test.describe(`14-day free batch — regular/default flow (2026-07-13 cohort)`, 
     test("day 2, live in the 5:30 AM slot, shows Your Yoga Session as ongoing", async ({ page }) => {
       await page.goto(`/${english.mobile}?forceDay=2&time=5.00am`);
       await expect(page.getByRole("heading", { name: "Your Yoga Session" })).toBeVisible();
-      await expect(page.getByText("Ongoing now")).toBeVisible();
+      // exact: true — a plain substring match on "LIVE" also (case-insensitively) matches the
+      // "Live sessions" tab bar button, which is always present regardless of session state.
+      await expect(page.getByText("LIVE", { exact: true })).toBeVisible();
     });
 
     test("day 2, no session live mid-morning, shows the free-batch NoSessionsCard note", async ({ page }) => {
@@ -35,7 +40,9 @@ test.describe(`14-day free batch — regular/default flow (2026-07-13 cohort)`, 
     test("day 5, live in the 4:30 PM slot, shows Your Yoga Session as ongoing", async ({ page }) => {
       await page.goto(`/${english.mobile}?forceDay=5&time=4.45pm`);
       await expect(page.getByRole("heading", { name: "Your Yoga Session" })).toBeVisible();
-      await expect(page.getByText("Ongoing now")).toBeVisible();
+      // exact: true — a plain substring match on "LIVE" also (case-insensitively) matches the
+      // "Live sessions" tab bar button, which is always present regardless of session state.
+      await expect(page.getByText("LIVE", { exact: true })).toBeVisible();
     });
   });
 

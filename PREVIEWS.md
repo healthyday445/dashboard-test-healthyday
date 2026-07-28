@@ -59,11 +59,13 @@ Seeds mock student data so a given render state shows immediately, skipping the 
 | `coming_soon` | "English is Coming Soon!" modal (unsupported language) |
 | `onboarding` | Batch-not-started screen (registered, no active batch yet) |
 | `free_active` | Active free batch, day 1 |
-| `paid` | Paid member dashboard (12-month plan) |
+| `paid` | Paid member dashboard — **always renders via `IndexPaid.tsx`** (see below), regardless of `preview_programme` |
 | `pastdue` | Subscription expired screen |
 | `14day_completed` | "Trial ended" screen |
 
 Example: `/9999999999?preview_dashboard=onboarding&preview_programme=21day`
+
+**`preview_dashboard=paid` note:** `Dashboard.tsx` checks real/mock `status === "paid"` *before* any cohort/`preview_programme` branching — an already-paid student always renders `IndexFourteenDaysV2` → `IndexPaid.tsx`, never the 21-day-specific paid view (that separate inline paid dashboard in `IndexTwentyOneDay.tsx` was removed and consolidated into `IndexPaid.tsx` this session). So `preview_dashboard=paid&preview_programme=21day` renders the exact same `IndexPaid.tsx` as plain `preview_dashboard=paid` — `preview_programme=21day` has no effect once status is paid. Use the **paid dashboard's own `time`/`forcePaidDay` params** (documented under "Paid dashboard `IndexPaid.tsx`" above), not `forceTime`/`forceDay`/`forceLang`/`forceWeek` (those only ever applied to the now-removed 21-day-specific paid view). Prefer a real paid account from `e2e/fixtures/test-accounts.ts` (which now has one per plan type — 3/6/6-upgrade/12/12-upgrade months) over this mock-seeded path when testing plan-type-specific behavior.
 
 #### `?preview_programme=21day`
 
@@ -71,18 +73,14 @@ Example: `/9999999999?preview_dashboard=onboarding&preview_programme=21day`
 
 Example: `/anything?preview_dashboard=free_active&preview_programme=21day&forceDay=15&time=8.45pm`
 
-#### Fine-tuning params (work standalone or on top of `preview_dashboard`)
+#### Fine-tuning params (work standalone or on top of `preview_dashboard`, free-batch states only)
 
 | Param | Applies to | Value | Effect |
 |---|---|---|---|
 | `forceDay` | Free batch | integer | Overrides current day-of-batch (1–22) |
 | `time` | Free batch | `"7.00PM"`, `"5.30AM"` | Overrides current time-of-day (session live/upcoming logic, bonus windows) |
-| `forceTime` | Paid dashboard | integer (minutes since midnight IST) | Overrides current time-of-day |
-| `forceDay` | Paid dashboard | integer (0=Sun … 6=Sat) | Overrides current day-of-week |
-| `forceLang` | Paid dashboard | `"Telugu"` \| `"English"` | Overrides language |
-| `forceWeek` | Paid dashboard | integer | Overrides week number (Telugu/English Face Yoga alternation) |
 
-`forceDay` means different things on the free vs. paid path — read as day-of-batch on `free_active`, day-of-week on `paid`.
+For `preview_dashboard=paid`, use `time`/`forcePaidDay` instead (see the note above and the "Paid dashboard `IndexPaid.tsx`" section) — `forceTime`/`forceDay`(as day-of-week)/`forceLang`/`forceWeek` no longer apply to any live code path.
 
 #### Examples
 
@@ -92,13 +90,10 @@ Example: `/anything?preview_dashboard=free_active&preview_programme=21day&forceD
 | `/9999999999?preview_dashboard=onboarding&preview_programme=21day` | Batch-not-started screen |
 | `/9999999999?preview_dashboard=free_active&preview_programme=21day` | Free batch, day 1, current real time |
 | `/9999999999?preview_dashboard=free_active&preview_programme=21day&forceDay=15&time=8.45pm` | Free batch, day 15, 8:45 PM |
-| `/9999999999?preview_dashboard=paid&preview_programme=21day` | Paid dashboard, Telugu, 12-month plan |
-| `/9999999999?preview_dashboard=paid&preview_programme=21day&forceLang=English` | Paid dashboard, English |
-| `/9999999999?preview_dashboard=paid&preview_programme=21day&forceDay=0&forceTime=690&forceWeek=0` | Paid, Sunday 11:30 AM, Telugu Face Yoga week → Face Yoga bonus card |
-| `/9999999999?preview_dashboard=paid&preview_programme=21day&forceTime=1200` | Paid, 8:00 PM → Diet Session bonus card |
+| `/9999999999?preview_dashboard=paid` | Paid dashboard (`IndexPaid.tsx`), Telugu, 12-month plan — `preview_programme=21day` is a no-op here, see note above |
+| `/9999999999?preview_dashboard=paid&time=8.15pm` | Paid, 8:00 PM → Diet Session bonus card |
+| `/9999999999?preview_dashboard=paid&forcePaidDay=0&time=11.40am` | Paid, Sunday 11:30 AM → Face Yoga bonus card |
 | `/9999999999?preview_dashboard=pastdue&preview_programme=21day` | Subscription expired screen |
-
-`forceWeek` matters for Face Yoga since it alternates Telugu/English by week (`diffWeeks % 2 === 0` → Telugu week); pin it so the bonus card shows deterministically instead of depending on today's real date.
 
 ## Your Yoga Journey tab (`/:mobile`, journey tab)
 
