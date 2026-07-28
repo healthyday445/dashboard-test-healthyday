@@ -79,6 +79,7 @@ const Grace = () => {
   const [error, setError] = useState<string | null>(null);
   const [studentData, setStudentData] = useState<any>(null);
   const [sessionLinks, setSessionLinks] = useState<any[]>([]);
+  const [sessionLinksLoaded, setSessionLinksLoaded] = useState(false);
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
   const [videoMeta, setVideoMeta] = useState<{ title: string; author_name: string } | null>(null);
 
@@ -93,7 +94,8 @@ const Grace = () => {
               : [];
         setSessionLinks(arr);
       })
-      .catch(() => {});
+      .catch(() => {})
+      .finally(() => setSessionLinksLoaded(true));
   }, []);
 
   useEffect(() => {
@@ -169,13 +171,19 @@ const Grace = () => {
       .catch(() => setVideoMeta(null));
   }, [liveSlot, sessionVideoId]);
 
-  if (loading) {
+  if (loading || !sessionLinksLoaded) {
     return (
-      <div className="hd-page bg-background flex flex-col items-center justify-center" style={{ fontFamily: "Outfit, sans-serif" }}>
-        <img src={logo} alt="Healthyday" className="h-10 mb-8" />
-        <div className="flex flex-col items-center gap-4">
-          <div style={{ width: "48px", height: "48px", border: "4px solid #EDF6FF", borderTop: "4px solid #FEAB27", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
-          <p style={{ color: "#888", fontSize: "14px", fontWeight: 500 }}>Loading your bonus session...</p>
+      <div className="hd-page bg-background" style={{ fontFamily: "Outfit, sans-serif" }}>
+        {/* Reserves the same full-width 16:9 space the video/iframe will occupy once loaded, so
+            content doesn't shift (CLS) when it's replaced by the iframe or NoSessionsCard — left
+            blank on purpose, the spinner below is the only loading indicator. */}
+        <div style={{ width: "100%", aspectRatio: "16/9" }} />
+        <div className="flex flex-col items-center justify-center" style={{ padding: "32px 20px" }}>
+          <img src={logo} alt="Healthyday" className="h-10 mb-8" />
+          <div className="flex flex-col items-center gap-4">
+            <div style={{ width: "48px", height: "48px", border: "4px solid #EDF6FF", borderTop: "4px solid #FEAB27", borderRadius: "50%", animation: "spin 0.8s linear infinite" }} />
+            <p style={{ color: "#888", fontSize: "14px", fontWeight: 500 }}>Loading your bonus session...</p>
+          </div>
         </div>
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
       </div>
@@ -211,16 +219,21 @@ const Grace = () => {
             />
           </div>
 
-          {videoMeta && (
-            <div style={{ padding: "14px 20px 0" }}>
-              <p style={{ color: "#202020", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, margin: "0 0 4px", lineHeight: "1.3" }}>
-                {videoMeta.title}
-              </p>
-              <p style={{ color: "#666", fontFamily: "Outfit", fontSize: "13px", fontWeight: 500, margin: 0 }}>
-                {videoMeta.author_name}
-              </p>
-            </div>
-          )}
+          {/* Reserves 2 lines for the title + 1 for the channel name up front (via minHeight +
+              line-clamp), whether or not the oEmbed fetch has resolved yet, so that text
+              popping in later — or a longer/shorter real title — never shifts the pricing
+              section below (CLS). */}
+          <div style={{ padding: "14px 20px 0" }}>
+            <p style={{
+              color: "#202020", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, margin: "0 0 4px", lineHeight: "1.3",
+              minHeight: "calc(1.3em * 2)", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden",
+            }}>
+              {videoMeta?.title ?? " "}
+            </p>
+            <p style={{ color: "#666", fontFamily: "Outfit", fontSize: "13px", fontWeight: 500, margin: 0, minHeight: "1.3em" }}>
+              {videoMeta?.author_name ?? " "}
+            </p>
+          </div>
         </>
       ) : (
         <div style={{ padding: "24px 20px 0", display: "flex", justifyContent: "center" }}>
