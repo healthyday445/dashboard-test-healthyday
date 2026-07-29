@@ -1,0 +1,143 @@
+import { useEffect, useState } from "react";
+import { useNavigate, useLocation, useParams } from "react-router-dom";
+import logo from "@/assets/Primary_logo.svg";
+import { safeSessionStorage } from "@/lib/storage";
+import { DietDateTabBar, type DietDateTab } from "@/components/DietDateTabBar";
+import { DietMealCard, DietMealCardSkeleton } from "@/components/DietMealCard";
+import { getResolvedTabPlans, type Language } from "@/data/diet";
+
+const WEEKDAY_ABBR = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
+
+/** Paid-students-only diet page: 5 date tabs (Today/Tomorrow/+3), each a scrollable list of meals. */
+const Diet = () => {
+  const navigate = useNavigate();
+  const location = useLocation();
+  const { mobile: urlMobile } = useParams<{ mobile: string }>();
+  const searchParams = new URLSearchParams(location.search);
+  const mobile = urlMobile || searchParams.get("mobile") || safeSessionStorage.getItem("referrer_mobile") || "";
+
+  const forceDay = searchParams.get("forceDay");
+  const timeOverride = searchParams.get("time");
+  const languageOverride = searchParams.get("language");
+  const previewMode = searchParams.get("preview");
+  const initialTab = parseInt(searchParams.get("tab") ?? "0", 10);
+
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [studentData, setStudentData] = useState<any>(null);
+  const [activeTabIdx, setActiveTabIdx] = useState(Number.isFinite(initialTab) && initialTab >= 0 && initialTab <= 4 ? initialTab : 0);
+
+  useEffect(() => {
+    // Same `?preview=paid` canned-data idiom as AttendancePageWeekly.tsx — lets QA (and this
+    // page itself) be previewed without a live backend/paid account.
+    if (previewMode === "paid") {
+      setStudentData({ language: "Telugu", status: "paid" });
+      setLoading(false);
+      return;
+    }
+
+    if (!mobile) {
+      setLoading(false);
+      setError("No mobile number provided.");
+      return;
+    }
+
+    const fetchData = async () => {
+      setLoading(true);
+      setError(null);
+      try {
+        const apiMobile = `+${mobile}`;
+        const response = await fetch(`/.netlify/functions/student?mobile=${encodeURIComponent(apiMobile)}`);
+        if (!response.ok) throw new Error(`API error: ${response.status}`);
+        const data = await response.json();
+
+        if (data.status !== "paid") {
+          navigate(`/${mobile}`);
+          return;
+        }
+
+        setStudentData(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Something went wrong");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchData();
+  }, [mobile, previewMode, navigate]);
+
+  // forceDay simulates "today" as a day offset from the diet launch date — same QA-preview
+  // idiom as ?forceDay= elsewhere in this app (e.g. Grace.tsx), just anchored to the diet
+  // cycle's own launch date rather than a student's free-batch start date.
+  const todayOverride = (() => {
+    if (forceDay === null) return undefined;
+    const offset = parseInt(forceDay, 10);
+    if (!Number.isFinite(offset)) return undefined;
+    const d = new Date(2026, 7, 3);
+    d.setDate(d.getDate() + offset);
+    return d;
+  })();
+  void timeOverride; // reserved for future time-of-day-aware diet logic; not needed yet
+
+  // Matches the language resolution already used elsewhere for this student (e.g. IndexPaid.tsx),
+  // with a `?language=English|Telugu` QA-preview override that wins regardless of the real
+  // student record — lets QA check both languages without needing two different test accounts.
+  const language: Language =
+    languageOverride === "English" || languageOverride === "Telugu"
+      ? languageOverride
+      : studentData?.language === "English" ? "English" : "Telugu";
+
+  const dayPlans = getResolvedTabPlans(todayOverride, language);
+  const tabs: DietDateTab[] = dayPlans.map((plan, idx) => {
+    const [dd, mm, yyyy] = plan.displayDate.split("-");
+    const date = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+    const label = idx === 0 ? "Today" : idx === 1 ? "Tomorrow" : WEEKDAY_ABBR[(date.getDay() + 6) % 7];
+    return { dateKey: plan.dateKey, label, dayOfMonth: dd };
+  });
+
+  const activePlan = dayPlans[activeTabIdx] ?? dayPlans[0];
+
+  const buildDetailUrl = (slotId: string) => {
+    const params = new URLSearchParams();
+    params.set("tab", String(activeTabIdx));
+    if (forceDay !== null) params.set("forceDay", forceDay);
+    if (timeOverride !== null) params.set("time", timeOverride);
+    if (languageOverride !== null) params.set("language", languageOverride);
+    return `/${mobile}/diet/${activePlan.dateKey}/${slotId}?${params.toString()}`;
+  };
+
+  if (error) {
+    return (
+      <div className="hd-page bg-background flex flex-col items-center justify-center" style={{ fontFamily: "Outfit, sans-serif" }}>
+        <img src={logo} alt="Healthyday" className="h-10 mb-8" />
+        <div style={{ background: "#FFF3F3", border: "1px solid #FFD4D4", borderRadius: "12px", padding: "24px", textAlign: "center", maxWidth: "340px" }}>
+          <p style={{ color: "#D32F2F", fontSize: "16px", fontWeight: 700, marginBottom: "8px" }}>Oops!</p>
+          <p style={{ color: "#666", fontSize: "14px", fontWeight: 400 }}>{error}</p>
+        </div>
+      </div>
+    );
+  }
+
+  const showSkeleton = loading || !studentData;
+
+  return (
+    <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
+      <header className="hd-header bg-white">
+        <img src={logo} alt="Healthyday" className="h-7" />
+      </header>
+
+      <DietDateTabBar tabs={tabs} activeIdx={activeTabIdx} onChange={setActiveTabIdx} disabled={showSkeleton} />
+
+      <div style={{ paddingTop: "20px", paddingBottom: "24px" }}>
+        {showSkeleton
+          ? Array.from({ length: 8 }, (_, i) => <DietMealCardSkeleton key={i} />)
+          : activePlan.meals.map((meal) => (
+              <DietMealCard key={meal.slotId} meal={meal} onClick={() => navigate(buildDetailUrl(meal.slotId))} />
+            ))}
+      </div>
+    </div>
+  );
+};
+
+export default Diet;

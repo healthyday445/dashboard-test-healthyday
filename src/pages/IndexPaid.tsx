@@ -132,6 +132,24 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
         </div>
       )}
 
+      {is12Month && (
+        <div style={{ padding: "12px 21px 0 22px" }}>
+          <PaidActionCard
+            onClick={() => navigate(`/${mobile || ""}/diet`)}
+            background="#EAFFE5"
+            title="View Diet Plan"
+            subtitle="Your personalized meal plan"
+            icon={
+              <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
+                <circle cx="22" cy="22" r="22" fill="#3E9E1F" opacity="0.15" />
+                <circle cx="22" cy="22" r="10" fill="none" stroke="#3E9E1F" strokeWidth="2" />
+                <path d="M22 15v14M17 20a5 5 0 0 1 10 0" stroke="#3E9E1F" strokeWidth="1.6" strokeLinecap="round" />
+              </svg>
+            }
+          />
+        </div>
+      )}
+
       <WeeklyAttendanceCard weekLabel={weekLabel} weekStatus={weekStatus} viewProgressUrl={`/${mobile || ""}/attendance`} />
 
       <div style={{ padding: "28px 22px 0" }}>

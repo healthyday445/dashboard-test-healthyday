@@ -18,6 +18,8 @@ import IndexFourteenDays from "./pages/IndexFourteenDays";
 import Pricing from "./pages/Pricing";
 import Certificate from "./pages/Certificate";
 import Grace from "./pages/Grace";
+import Diet from "./pages/Diet";
+import DietMealDetail from "./pages/DietMealDetail";
 
 const queryClient = new QueryClient();
 
@@ -49,6 +51,8 @@ const App = () => {
           <Route path="/:mobile/leaderboard" element={<Leaderboard />} />
           <Route path="/pricing" element={<Pricing />} />
           <Route path="/:mobile/grace" element={<Grace />} />
+          <Route path="/:mobile/diet" element={<Diet />} />
+          <Route path="/:mobile/diet/:date/:slotId" element={<DietMealDetail />} />
           {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
           <Route path="*" element={<NotFound />} />
         </Routes>
