@@ -67,23 +67,32 @@ test.describe("Grace page (/:mobile/grace) — content", () => {
     await expect(page.getByText("Join our community for")).toBeVisible();
     await expect(page.getByText("DAILY YOGA SESSIONS")).toBeVisible();
 
+    // Scoped to the heading role — plain getByText("6 Months Plan")/("3 Months Plan") also
+    // case-insensitively match their own "JOIN X PLAN" buttons and hit Playwright's strict-mode
+    // multiple-match error (confirmed 2026-07-27).
     await expect(page.getByText("1 Year Including Diet Plan")).toBeVisible();
     await expect(page.getByText("₹2399/-")).toBeVisible();
-    await expect(page.getByText("6 Months Plan")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "6 Months Plan" })).toBeVisible();
     await expect(page.getByText("₹1899/-")).toBeVisible();
-    await expect(page.getByText("3 Months Plan")).toBeVisible();
+    await expect(page.getByRole("heading", { name: "3 Months Plan" })).toBeVisible();
     await expect(page.getByText("₹1399/-")).toBeVisible();
   });
 
-  test("?previewVideo=1 forces an iframe with the preview video id embedded", async ({ page }) => {
+  test("?previewVideo=1 forces an iframe with the preview video id embedded, plus the fixed session title", async ({ page }) => {
     await page.goto(`/${completedStudent.mobile}/grace?forceDay=15&previewVideo=1`);
     const iframe = page.locator("iframe");
     await expect(iframe).toHaveAttribute("src", /youtube\.com\/embed\/SPSwmydulxo/);
+    // Session title under the video is a fixed string (src/pages/Grace.tsx SESSION_TITLE),
+    // not the real YouTube video's own (day-varying) title fetched via oEmbed.
+    await expect(page.getByText("One Extra Bonus Session | FREE Yoga with Healthyday")).toBeVisible();
   });
 
   test("outside real class hours (no previewVideo) shows the no-session fallback, not an iframe", async ({ page }) => {
     await page.goto(`/${completedStudent.mobile}/grace?forceDay=15&time=2.00am`);
     await expect(page.locator("iframe")).toHaveCount(0);
-    await expect(page.getByText(/Next (Session|Yoga session)/)).toBeVisible();
+    // NoSessionsCard is rendered with isFreeBatch={false} on this page (it's previewing the PAID
+    // daily class), so its title reads "Next Live at X" / "Next Session is Tomorrow" — not the
+    // "Next Yoga session..." copy used on the free-batch-facing pages.
+    await expect(page.getByText(/Next (Session is Tomorrow|Live at)/)).toBeVisible();
   });
 });

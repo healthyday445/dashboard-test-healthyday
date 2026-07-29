@@ -12,6 +12,10 @@ const YT_ID_REGEX = /(?:v=|youtu\.be\/|\/live\/|\/shorts\/|\/embed\/)([a-zA-Z0-9
 // live-session windows; ?previewVideo=<link-or-id> overrides with a specific video instead.
 const PREVIEW_VIDEO_ID = "SPSwmydulxo";
 
+// Fixed session title shown under the video — intentionally not the real YouTube video title
+// (which varies day to day and used to be fetched via oEmbed).
+const SESSION_TITLE = "One Extra Bonus Session | FREE Yoga with Healthyday";
+
 const extractYoutubeId = (value: string): string | null => {
   const match = value.match(YT_ID_REGEX);
   if (match) return match[1];
@@ -81,7 +85,7 @@ const Grace = () => {
   const [sessionLinks, setSessionLinks] = useState<any[]>([]);
   const [sessionLinksLoaded, setSessionLinksLoaded] = useState(false);
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
-  const [videoMeta, setVideoMeta] = useState<{ title: string; author_name: string } | null>(null);
+  const [channelName, setChannelName] = useState<string | null>(null);
 
   useEffect(() => {
     fetch("/.netlify/functions/session-links")
@@ -162,13 +166,13 @@ const Grace = () => {
 
   useEffect(() => {
     if (!liveSlot || !sessionVideoId) {
-      setVideoMeta(null);
+      setChannelName(null);
       return;
     }
     fetch(`https://www.youtube.com/oembed?url=${encodeURIComponent(`https://www.youtube.com/watch?v=${sessionVideoId}`)}&format=json`)
       .then((r) => (r.ok ? r.json() : null))
-      .then((data) => setVideoMeta(data ? { title: data.title, author_name: data.author_name } : null))
-      .catch(() => setVideoMeta(null));
+      .then((data) => setChannelName(data?.author_name ?? null))
+      .catch(() => setChannelName(null));
   }, [liveSlot, sessionVideoId]);
 
   if (loading || !sessionLinksLoaded) {
@@ -224,14 +228,11 @@ const Grace = () => {
               popping in later — or a longer/shorter real title — never shifts the pricing
               section below (CLS). */}
           <div style={{ padding: "14px 20px 0" }}>
-            <p style={{
-              color: "#202020", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, margin: "0 0 4px", lineHeight: "1.3",
-              minHeight: "calc(1.3em * 2)", display: "-webkit-box", WebkitLineClamp: 2, WebkitBoxOrient: "vertical", overflow: "hidden",
-            }}>
-              {videoMeta?.title ?? " "}
+            <p style={{ color: "#202020", fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, margin: "0 0 4px", lineHeight: "1.3" }}>
+              {SESSION_TITLE}
             </p>
             <p style={{ color: "#666", fontFamily: "Outfit", fontSize: "13px", fontWeight: 500, margin: 0, minHeight: "1.3em" }}>
-              {videoMeta?.author_name ?? " "}
+              {channelName ?? " "}
             </p>
           </div>
         </>
