@@ -240,9 +240,9 @@ const AttendancePage = () => {
     if (!planEndDateStr) return null;
     const planEnd = new Date(planEndDateStr);
     planEnd.setHours(0, 0, 0, 0);
-    // Determine plan duration to calculate start
-    const activeSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "active" || s.subscription_status === "ongoing") || studentData?.subscriptions?.[0];
-    const planType = activeSub?.plan_type || studentData?.plan_type;
+    // Determine plan duration to calculate start — current_plan is the backend's
+    // authoritative, already-resolved field.
+    const planType = studentData?.current_plan || studentData?.plan_type;
     let durationMonths = 3; // default 3 months
     if (planType === "6_months" || planType === "6_months_upgrade") durationMonths = 6;
     else if (planType === "12_months" || planType === "12_months_upgrade") durationMonths = 12;

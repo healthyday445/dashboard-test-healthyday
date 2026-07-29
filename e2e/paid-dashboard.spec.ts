@@ -101,4 +101,101 @@ test.describe(`Paid dashboard — English account (${account.mobile})`, () => {
       await expect(page.getByText("Healthyday T-shirt")).toBeVisible();
     });
   });
+
+  test.describe("Grocery List card (12-month plan only)", () => {
+    test("shows for this 12-month account", async ({ page }) => {
+      await page.goto(`/${account.mobile}`);
+      await expect(page.getByText("This Week's Grocery List")).toBeVisible();
+    });
+  });
+});
+
+// Plan-type eligibility matrix for the three recurring bonus cards + the Grocery List card, per
+// getActivePaidBonusSession (src/lib/paidBonusSessions.ts) and IndexPaid.tsx's is12Month check:
+//   - Face Yoga: 12-month only, Sundays only (not covered per-plan below — already covered for the
+//     base 12_months account above; day-of-week/Telugu-English-week alternation makes it the
+//     flakiest of the three to pin down per extra account, so it's intentionally not repeated here).
+//   - Diet Session: 12-month only (base AND _upgrade), any day.
+//   - Breath to Heal: 6-and-12-month (base AND _upgrade), any day except English-language Sundays.
+//   - Grocery List card: 12-month only (base AND _upgrade), always visible (not time-gated).
+// The "_upgrade" suffix must behave identically to its base plan — this was a real bug fixed this
+// session (planType comparisons previously mis-picked a stale entry from subscriptions[] instead of
+// reading studentData.current_plan directly), so the *_upgrade accounts below aren't just filler,
+// they're regression coverage for that exact fix.
+test.describe("Paid dashboard — plan-type bonus-session eligibility matrix", () => {
+  const sixMonth = findAccount("paid", "Telugu", undefined, "6_months");
+  const sixMonthUpgrade = findAccount("paid", "English", undefined, "6_months_upgrade");
+  const threeMonth = findAccount("paid", "Telugu", undefined, "3_months");
+  const twelveMonthUpgrade = findAccount("paid", "Telugu", undefined, "12_months_upgrade");
+  if (!sixMonth || !sixMonthUpgrade || !threeMonth || !twelveMonthUpgrade) {
+    throw new Error("Missing a required plan-type paid account in e2e/fixtures/test-accounts.ts");
+  }
+
+  test.describe(`6_months (${sixMonth.mobile})`, () => {
+    test("Breath to Heal live at 9:10 PM (forced non-Sunday)", async ({ page }) => {
+      await page.goto(`/${sixMonth.mobile}?forcePaidDay=1&time=9.10pm`);
+      await expect(page.getByRole("heading", { name: "Breath to Heal Session - Live Now" })).toBeVisible();
+    });
+
+    test("Diet Session never shows (12-month-only)", async ({ page }) => {
+      await page.goto(`/${sixMonth.mobile}?time=8.15pm`);
+      await expect(page.getByRole("heading", { name: "Diet Session - Live Now" })).toHaveCount(0);
+    });
+
+    test("no Grocery List card (12-month-only)", async ({ page }) => {
+      await page.goto(`/${sixMonth.mobile}`);
+      await expect(page.getByText("This Week's Grocery List")).toHaveCount(0);
+    });
+  });
+
+  test.describe(`6_months_upgrade (${sixMonthUpgrade.mobile}) — must behave identically to plain 6_months`, () => {
+    test("Breath to Heal live at 9:10 PM (forced non-Sunday)", async ({ page }) => {
+      await page.goto(`/${sixMonthUpgrade.mobile}?forcePaidDay=1&time=9.10pm`);
+      await expect(page.getByRole("heading", { name: "Breath to Heal Session - Live Now" })).toBeVisible();
+    });
+
+    test("Diet Session never shows (12-month-only)", async ({ page }) => {
+      await page.goto(`/${sixMonthUpgrade.mobile}?time=8.15pm`);
+      await expect(page.getByRole("heading", { name: "Diet Session - Live Now" })).toHaveCount(0);
+    });
+
+    test("no Grocery List card (12-month-only)", async ({ page }) => {
+      await page.goto(`/${sixMonthUpgrade.mobile}`);
+      await expect(page.getByText("This Week's Grocery List")).toHaveCount(0);
+    });
+  });
+
+  test.describe(`3_months (${threeMonth.mobile}) — none of the bonus cards or Grocery List`, () => {
+    test("Diet Session never shows", async ({ page }) => {
+      await page.goto(`/${threeMonth.mobile}?time=8.15pm`);
+      await expect(page.getByRole("heading", { name: "Diet Session - Live Now" })).toHaveCount(0);
+    });
+
+    test("Breath to Heal never shows", async ({ page }) => {
+      await page.goto(`/${threeMonth.mobile}?forcePaidDay=1&time=9.10pm`);
+      await expect(page.getByRole("heading", { name: "Breath to Heal Session - Live Now" })).toHaveCount(0);
+    });
+
+    test("no Grocery List card", async ({ page }) => {
+      await page.goto(`/${threeMonth.mobile}`);
+      await expect(page.getByText("This Week's Grocery List")).toHaveCount(0);
+    });
+  });
+
+  test.describe(`12_months_upgrade (${twelveMonthUpgrade.mobile}) — must behave identically to plain 12_months`, () => {
+    test("Diet Session live at 8:40 PM", async ({ page }) => {
+      await page.goto(`/${twelveMonthUpgrade.mobile}?time=8.40pm`);
+      await expect(page.getByRole("heading", { name: "Diet Session - Live Now" })).toBeVisible();
+    });
+
+    test("Breath to Heal live at 9:30 PM (forced non-Sunday)", async ({ page }) => {
+      await page.goto(`/${twelveMonthUpgrade.mobile}?forcePaidDay=1&time=9.30pm`);
+      await expect(page.getByRole("heading", { name: "Breath to Heal Session - Live Now" })).toBeVisible();
+    });
+
+    test("Grocery List card shows", async ({ page }) => {
+      await page.goto(`/${twelveMonthUpgrade.mobile}`);
+      await expect(page.getByText("This Week's Grocery List")).toBeVisible();
+    });
+  });
 });

@@ -44,9 +44,11 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
   const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
   const currentDow = forcePaidDay !== null ? parseInt(forcePaidDay, 10) : nowIST.getUTCDay(); // 0 is Sunday
 
-  // Subscription plan duration check
-  const activeSub = studentData?.subscriptions?.find((s: any) => s.subscription_status === "active" || s.subscription_status === "ongoing") || studentData?.subscriptions?.[0];
-  const planType = activeSub?.plan_type || studentData?.current_plan || studentData?.plan_type;
+  // Subscription plan duration check — current_plan is the backend's authoritative,
+  // already-resolved field; deriving it from subscriptions[] instead is unreliable
+  // because future ref_reward entries can also carry subscription_status "active"
+  // and sort before the real current plan.
+  const planType = studentData?.current_plan || studentData?.plan_type;
   const is6Month = planType === "6_months" || planType === "6_months_upgrade";
   const is12Month = planType === "12_months" || planType === "12_months_upgrade";
   const paidLang: "Telugu" | "English" = studentData?.language === "English" ? "English" : "Telugu";

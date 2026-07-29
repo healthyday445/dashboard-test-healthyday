@@ -79,9 +79,13 @@ test.describe("21-day cohort — batch-over status resolver", () => {
 // paid-pending-start persona for this cohort needs a real test account before it can be covered
 // the same way as the 21-day side above (see report).
 test.describe("14-day-v2 cohort — batch-over status resolver (free/unpaid side only)", () => {
-  const freeStudent14 = findAccount("14day", "Telugu", "2026-07-13");
+  // Was the 2026-07-13 cohort, but that account genuinely completed (2026-07-28,
+  // free_batch_end_date 2026-07-26) — repointed to the still-ongoing 2026-07-20 cohort (see
+  // e2e/fixtures/test-accounts.ts). This account will itself complete around 2026-08-02 7:30 PM
+  // IST — re-verify/re-promote before then.
+  const freeStudent14 = findAccount("14day", "Telugu", "2026-07-20");
   if (!freeStudent14) {
-    throw new Error("Missing 14-day (2026-07-13 cohort) account in e2e/fixtures/test-accounts.ts");
+    throw new Error("Missing 14-day (2026-07-20 cohort) account in e2e/fixtures/test-accounts.ts");
   }
 
   test("day 13 (before the last day) — still the ongoing dashboard", async ({ page }) => {
