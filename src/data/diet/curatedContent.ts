@@ -75,37 +75,37 @@ const pending = same;
 export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
   "2026-08-03": {
     earlyMorning: {
-      name: t("Walnuts & Dates", "ఆక్రోట్లు & ఖర్జూరాలు"),
+      name: t("Walnuts & Dates", "Walnuts & ఖర్జూరాలు"),
       imageUrl: imgWalnutsDates,
       items: [{ label: t("2 Walnuts", "2 ఆక్రోట్లు") }, { label: t("2 Dates", "2 ఖర్జూరాలు") }],
       tips: t("Soak overnight and eat in the morning.", "రాత్రంతా నానబెట్టి, ఉదయం తినండి."),
       precautions: t(
         "For people with Diabetes, dates are high in sugar, so limit the quantity.",
-        "డయాబెటిస్ ఉన్నవారు ఖర్జూరాలు limit గా తీసుకోండి, ఎందుకంటే వీటిలో సహజ చక్కెర ఎక్కువగా ఉంటుంది."
+        "Diabetes ఉన్నవారు ఖర్జూరాలు limit గా తీసుకోండి, ఎందుకంటే వీటిలో Natural sugars ఎక్కువగా ఉంటుంది."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Walnuts"), benefits: [{ benefitLabel: t("Heart Health", "గుండె ఆరోగ్యానికి మంచిది"), iconKey: "heart" }] },
-        { ingredient: same("Dates"), benefits: [{ benefitLabel: t("Quick Energy", "శక్తిని అందిస్తుంది"), iconKey: "lightning-bolt" }] },
+        { ingredient: t("Walnuts", "ఆక్రోట్లు"), benefits: [{ benefitLabel: t("Heart Health", "Heart health కి మంచిది"), iconKey: "heart" }] },
+        { ingredient: t("Dates", "ఖర్జూరాలు"), benefits: [{ benefitLabel: t("Quick Energy", "Energy ని ఇస్తుంది"), iconKey: "lightning-bolt" }] },
       ],
       recommendedQuantity: [
-        { ingredient: t("Walnuts", "ఆక్రోట్లు"), qty: same("2 pcs") },
+        { ingredient: same("Walnuts"), qty: same("2 pcs") },
         { ingredient: t("Dates", "ఖర్జూరాలు"), qty: same("2 pcs") },
       ],
       groceryListAvailable: true,
     },
     postYogaDrink: {
-      name: t("Cucumber & Lemon Detox Juice", "దోసకాయ & నిమ్మకాయ డిటాక్స్ జ్యూస్"),
+      name: t("Cucumber & Lemon Detox Juice", "Keera & lemon డిటాక్స్ జ్యూస్"),
       imageUrl: imgCucumberLemonDetoxJuice,
       tips: t(
         "Blend cucumber with water, strain if needed, and add fresh lemon juice before drinking.",
-        "దోసకాయను నీటితో blend చేసి, అవసరమైతే strain చేసి, తాగే ముందు తాజా నిమ్మరసం కలపండి."
+        "Keera దోసకాయను water తో blend చేసి, strain చేసి, తాగే ముందు fresh lemon కలపండి."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Cucumber"), benefits: [
-          { benefitLabel: t("Hydration", "శరీరాన్ని Hydrated గా ఉంచుతుంది"), iconKey: "water" },
-          { benefitLabel: t("Cooling", "శరీరానికి Cooling అందిస్తుంది"), iconKey: "snowflake" },
+        { ingredient: t("Cucumber", "కీర దోసకాయ"), benefits: [
+          { benefitLabel: t("Hydration", "Body Hydrated గా ఉంచుతుంది"), iconKey: "water" },
+          { benefitLabel: t("Cooling", "Body న్ని cool గా ఉంచుతుంది"), iconKey: "snowflake" },
         ] },
-        { ingredient: same("Lemon"), benefits: [{ benefitLabel: t("Immunity", "రోగనిరోధక శక్తికి మద్దతు"), iconKey: "shield" }] },
+        { ingredient: t("Lemon", "నిమ్మకాయ"), benefits: [{ benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" }] },
       ],
       groceryListAvailable: true,
     },
@@ -117,33 +117,36 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
         "పాలకూరను కొద్దిగా steam చేసి, దోసకాయ & పనీర్ తో mix చేసి, నిమ్మరసం & ఉప్పు కలపండి."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Cucumber"), benefits: [
-          { benefitLabel: t("Hydration", "శరీరాన్ని Hydrated గా ఉంచుతుంది"), iconKey: "water" },
-          { benefitLabel: t("Cooling", "శరీరానికి Cooling అందిస్తుంది"), iconKey: "snowflake" },
+        { ingredient: t("Cucumber", "కీర దోసకాయ"), benefits: [
+          { benefitLabel: t("Hydration", "Body Hydrated గా ఉంచుతుంది"), iconKey: "water" },
+          { benefitLabel: t("Cooling", "Body న్ని cool గా ఉంచుతుంది"), iconKey: "snowflake" },
         ] },
-        { ingredient: same("Spinach"), benefits: [{ benefitLabel: t("Supports Hemoglobin", "హిమోగ్లోబిన్‌కు మద్దతు"), iconKey: "hemoglobin" }] },
-        { ingredient: same("Paneer"), benefits: [{ benefitLabel: t("Muscle Health", "కండరాల ఆరోగ్యానికి మంచిది"), iconKey: "muscle-health" }] },
+        { ingredient: t("Spinach", "పాలకూర"), benefits: [{ benefitLabel: t("Supports Hemoglobin", "Hemoglobin ను పెంచుతుంది"), iconKey: "hemoglobin" }] },
+        { ingredient: t("Paneer", "పనీర్"), benefits: [{ benefitLabel: t("Muscle Health", "Muscle health పెంచుతుంది"), iconKey: "muscle-health" }] },
       ],
       groceryListAvailable: true,
     },
     morningSnack: {
       name: t("Guava", "జామపండు"),
       imageUrl: imgGuava,
-      items: [{ label: t("1 medium fruit", "1 మధ్యస్థ పరిమాణం పండు") }],
+      items: [{ label: t("1 medium fruit", "1 Medium Size Fruit") }],
       precautions: t(
         "For people with Diabetes, limit to 1 medium guava (100–150g) and avoid adding salt or sugar.",
-        "Diabetes ఉన్నవారు 1 మధ్యస్థ జామపండు (100–150g) మాత్రమే తీసుకోండి. ఉప్పు లేదా చక్కెర కలపకండి."
+        "Diabetes ఉన్నవారు 1 medium fruit (100–150g) మాత్రమే తీసుకోండి. Salt లేదా sugar కలపకండి."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Guava"), benefits: [
-          { benefitLabel: t("Immunity", "రోగనిరోధక శక్తికి మద్దతు"), iconKey: "shield" },
-          { benefitLabel: t("Gut Health", "Gut ఆరోగ్యానికి మంచిది"), iconKey: "stomach" },
+        { ingredient: t("Guava", "జామపండు"), benefits: [
+          { benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
+          { benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" },
+          // NOTE: the Telugu Figma screen (970:32655) only shows 3 Guava benefit rows
+          // (Immunity, Gut Health, Keeps You Full Longer) — these two extra rows are kept
+          // to match the English design (924:21411, 5 benefits) with a hand-translated label.
           { benefitLabel: t("Healthy Blood Sugar", "ఆరోగ్యకరమైన రక్తంలో చక్కెర అందిస్తుంది"), iconKey: "sugar-cubes" },
           { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
-          { benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు కడుపు నిండుగా ఉంచుతుంది"), iconKey: "happy" },
+          { benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" },
         ] },
       ],
-      recommendedQuantity: [{ ingredient: same("Medium Guava"), qty: same("1") }],
+      recommendedQuantity: [{ ingredient: t("Medium Guava", "Medium జామపండు"), qty: same("1") }],
       groceryListAvailable: true,
     },
     lunch: {
@@ -155,16 +158,16 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       ),
       precautions: t(
         "For people with Diabetes, practice portion control with white rice.",
-        "Diabetes ఉన్నవారు తెల్ల అన్నం limit లో తీసుకోండి."
+        "Diabetes ఉన్నవారు white rice limit లో తీసుకోండి."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Steamed Rice"), benefits: [{ benefitLabel: t("Energy", "శక్తిని అందిస్తుంది"), iconKey: "lightning-bolt" }] },
-        { ingredient: same("Leafy Dal"), benefits: [
-          { benefitLabel: t("Supports Hemoglobin", "హిమోగ్లోబిన్‌కు మద్దతు"), iconKey: "hemoglobin" },
-          { benefitLabel: t("Muscle Health", "కండరాల ఆరోగ్యానికి మంచిది"), iconKey: "muscle-health" },
+        { ingredient: t("Steamed Rice", "అన్నం"), benefits: [{ benefitLabel: t("Energy", "Energy ఇస్తుంది"), iconKey: "lightning-bolt" }] },
+        { ingredient: t("Leafy Dal", "ఆకుకూర పప్పు"), benefits: [
+          { benefitLabel: t("Supports Hemoglobin", "Hemoglobin ను పెంచుతుంది"), iconKey: "hemoglobin" },
+          { benefitLabel: t("Muscle Health", "Muscle health పెంచుతుంది"), iconKey: "muscle-health" },
         ] },
-        { ingredient: same("Mixed Vegetables"), benefits: [{ benefitLabel: t("Better Digestion", "జీర్ణక్రియను మెరుగుపరుస్తుంది"), iconKey: "stomach" }] },
-        { ingredient: same("Curd"), benefits: [{ benefitLabel: t("Gut Health", "Gut ఆరోగ్యానికి మంచిది"), iconKey: "stomach" }] },
+        { ingredient: t("Mixed Vegetables", "మిక్స్‌డ్ కూరగాయలు"), benefits: [{ benefitLabel: t("Better Digestion", "Digestion ని చేస్తుంది"), iconKey: "stomach" }] },
+        { ingredient: t("Curd", "పెరుగు"), benefits: [{ benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" }] },
       ],
       groceryListAvailable: true,
     },
@@ -176,8 +179,10 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
         "మష్రూమ్స్‌ను కొద్దిగా sauté చేసి, నీరు & మసాలాలు వేసి ఉడికించి, blend చేసి, మిరియాల పొడి వేసి serve చేయండి."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Mushroom"), benefits: [
-          { benefitLabel: t("Immunity Support", "రోగనిరోధక శక్తికి మద్దతు"), iconKey: "shield" },
+        { ingredient: t("Mushroom", "మష్రూమ్"), benefits: [
+          { benefitLabel: t("Immunity Support", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
+          // NOTE: the Telugu Figma screen (970:32655) only shows this one Mushroom benefit
+          // row; Antioxidant Protection is kept to match the English design (924:21411).
           { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
         ] },
       ],
@@ -195,14 +200,14 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
         "Diabetes ఉన్నవారు రాగిని కూడా limit లో తీసుకోండి, ఎందుకంటే దీనికి moderate GI ఉంటుంది."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Ragi"), benefits: [{ benefitLabel: t("Bone Health", "ఎముకల ఆరోగ్యానికి మంచిది"), iconKey: "dog-bone" }] },
-        { ingredient: same("Curry Leaves"), benefits: [{ benefitLabel: t("Healthy Metabolism", "జీవక్రియ (మెటాబాలిజం)కు మద్దతు"), iconKey: "healthy-eating" }] },
-        { ingredient: same("Ghee"), benefits: [{ benefitLabel: t("Improves Nutrient Absorption", "పోషకాలను మెరుగుపరుస్తుంది"), iconKey: "nutrient-absorption" }] },
+        { ingredient: t("Ragi", "రాగి"), benefits: [{ benefitLabel: t("Bone Health", "Bone health కి మంచిది"), iconKey: "dog-bone" }] },
+        { ingredient: t("Curry Leaves", "కరివేపాకు"), benefits: [{ benefitLabel: t("Healthy Metabolism", "Metabolism ని పెంచుతుంది"), iconKey: "healthy-eating" }] },
+        { ingredient: t("Ghee", "నెయ్యి"), benefits: [{ benefitLabel: t("Improves Nutrient Absorption", "Healthy fats, Vitamin A & Vitamin K2 ఎక్కువగా ఉంటాయి"), iconKey: "nutrient-absorption" }] },
       ],
       groceryListAvailable: true,
     },
     nightDrink: {
-      name: t("Turmeric Milk", "పసుపు పాలు"),
+      name: t("Turmeric Milk", "Turmeric పాలు"),
       imageUrl: imgTurmericMilk,
       tips: t(
         "Heat milk with turmeric and a pinch of pepper for 3–4 minutes.",
@@ -213,8 +218,8 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
         "9:30pm తర్వాత మొబైల్ లేదా TV వాడకాన్ని తగ్గించండి. రాత్రి 10:00 - 5:00am వరకు కనీసం 7 గం నిద్రపోవడానికి ప్రయత్నించండి."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Turmeric"), benefits: [{ benefitLabel: t("Immunity", "రోగనిరోధక శక్తికి మద్దతు"), iconKey: "shield" }] },
-        { ingredient: same("Milk"), benefits: [{ benefitLabel: t("Bone Strength", "ఎముకల ఆరోగ్యానికి మంచిది"), iconKey: "dog-bone" }] },
+        { ingredient: t("Turmeric", "పసుపు"), benefits: [{ benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" }] },
+        { ingredient: t("Milk", "పాలు"), benefits: [{ benefitLabel: t("Bone Strength", "Bone health కి మంచిది"), iconKey: "dog-bone" }] },
       ],
       groceryListAvailable: true,
     },
@@ -226,25 +231,27 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       items: [{ label: t("1 tbsp in total", "1 tbsp") }],
       tips: t(
         "Enjoy them lightly roasted or soaked overnight.",
-        "స్వల్పంగా roast చేసి లేదా రాత్రంతా నానబెట్టి తీసుకోవచ్చు."
+        "రాత్రంతా నానబెట్టి తీసుకోవచ్చు."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Pumpkin Seeds"), benefits: [{ benefitLabel: t("Immunity", "రోగనిరోధక శక్తికి మద్దతు"), iconKey: "shield" }] },
-        { ingredient: same("Sunflower Seeds"), benefits: [{ benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" }] },
+        { ingredient: t("Pumpkin Seeds", "గుమ్మడికాయ గింజలు"), benefits: [{ benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" }] },
+        // NOTE: the Telugu Figma screen (970:33289) only shows a Pumpkin Seeds benefit row;
+        // Sunflower Seeds is kept to match the English design (924:21411).
+        { ingredient: t("Sunflower Seeds", "సన్‌ఫ్లవర్ గింజలు"), benefits: [{ benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" }] },
       ],
       recommendedQuantity: [{ ingredient: same("Mixed Seeds"), qty: same("1 tbsp") }],
       groceryListAvailable: true,
     },
     postYogaDrink: {
-      name: t("Moringa & Mint Vegetable Juice", "మునగాకు & పుదీనా వెజిటేబుల్ జ్యూస్"),
+      name: t("Moringa & Mint Vegetable Juice", "మునగాకు & పుదీనా vegetable juice"),
       imageUrl: imgMoringaMintVegetableJuice,
       tips: t(
         "Blend cleaned munagaku leaves with mint and water, strain, and drink fresh.",
         "శుభ్రం చేసిన మునగాకులు, పుదీనా & నీటితో blend చేసి, strain చేసి వెంటనే తాగండి."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Munagaku"), benefits: [{ benefitLabel: t("Supports Hemoglobin", "హిమోగ్లోబిన్‌కు మద్దతు"), iconKey: "hemoglobin" }] },
-        { ingredient: same("Mint"), benefits: [{ benefitLabel: t("Aids Digestion", "జీర్ణక్రియకు సహాయపడుతుంది"), iconKey: "stomach" }] },
+        { ingredient: t("Munagaku", "మునగాకు"), benefits: [{ benefitLabel: t("Supports Hemoglobin", "Hemoglobin ను పెంచుతుంది"), iconKey: "hemoglobin" }] },
+        { ingredient: t("Mint", "పుదీనా"), benefits: [{ benefitLabel: t("Aids Digestion", "Digestion ను support చేస్తుంది"), iconKey: "stomach" }] },
       ],
       groceryListAvailable: true,
     },
@@ -256,11 +263,11 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
         "కందిపప్పు, శనగపప్పు & మినప్పప్పు నానబెట్టి batter తయారు చేసి, అడై దోసె చేసి, కొబ్బరి చట్నీతో తినండి."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Adai"), benefits: [
-          { benefitLabel: t("Protein-Rich", "ప్రోటీన్ సమృద్ధిగా ఉంటుంది"), iconKey: "muscle-health" },
-          { benefitLabel: t("Sustained Energy", "ఎక్కువసేపు శక్తిని అందిస్తుంది"), iconKey: "lightning-bolt" },
+        { ingredient: t("Adai", "అడై"), benefits: [
+          { benefitLabel: t("Protein-Rich", "Protein ఎక్కువగా ఉంటుంది"), iconKey: "muscle-health" },
+          { benefitLabel: t("Sustained Energy", "ఎక్కువసేపుenergy ని ఇస్తుంది"), iconKey: "lightning-bolt" },
         ] },
-        { ingredient: same("Coconut"), benefits: [{ benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు కడుపు నిండుగా ఉంచుతుంది"), iconKey: "happy" }] },
+        { ingredient: t("Coconut", "కొబ్బరి"), benefits: [{ benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" }] },
       ],
       groceryListAvailable: true,
     },
@@ -272,12 +279,12 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
         "For people with Diabetes, limit the portion to ½ an apple per serving.",
         "Diabetes ఉన్నవారు ఒకసారి ½ Apple మాత్రమే తీసుకోండి."
       ),
-      nutritionalBenefits: [{ ingredient: same("Apple"), benefits: [{ benefitLabel: t("Immunity", "రోగనిరోధక శక్తికి మద్దతు"), iconKey: "shield" }] }],
+      nutritionalBenefits: [{ ingredient: same("Apple"), benefits: [{ benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" }] }],
       recommendedQuantity: [{ ingredient: same("Apple"), qty: same("1") }],
       groceryListAvailable: true,
     },
     lunch: {
-      name: t("Pudina Rice Bowl & Carrot Beetroot Raita", "పుదీనా రైస్ బౌల్ & క్యారెట్ బీట్‌రూట్ రైతా"),
+      name: t("Pudina Rice Bowl & Carrot Beetroot Raita", "పుదీనా రైస్ & క్యారెట్ బీట్‌రూట్ రైతా"),
       imageUrl: imgPudinaRiceBowlCarrotBeetrootRaita,
       tips: t(
         "Mix mint paste with cooked rice and prepare raita with grated carrot and beetroot in curd.",
@@ -285,13 +292,13 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       ),
       precautions: t(
         "For people with Diabetes, practice portion control with rice.",
-        "డయాబెటిస్ ఉన్నవారు అన్నం limit లో తీసుకోండి."
+        "Diabetes ఉన్నవారు rice limit లో తీసుకోండి."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Rice"), benefits: [{ benefitLabel: t("Energy", "శక్తిని అందిస్తుంది"), iconKey: "lightning-bolt" }] },
-        { ingredient: same("Mint"), benefits: [{ benefitLabel: t("Digestive Support", "జీర్ణక్రియకు మద్దతు"), iconKey: "stomach" }] },
-        { ingredient: same("Mixed Vegetables"), benefits: [{ benefitLabel: t("Gut Health", "Gut ఆరోగ్యానికి మంచిది"), iconKey: "stomach" }] },
-        { ingredient: same("Curd"), benefits: [{ benefitLabel: t("Better Digestion", "జీర్ణక్రియను మెరుగుపరుస్తుంది"), iconKey: "stomach" }] },
+        { ingredient: t("Rice", "అన్నం"), benefits: [{ benefitLabel: t("Energy", "Energy ని ఇస్తుంది"), iconKey: "lightning-bolt" }] },
+        { ingredient: t("Mint", "పుదీనా"), benefits: [{ benefitLabel: t("Digestive Support", "Digestion ను support చేస్తుంది"), iconKey: "stomach" }] },
+        { ingredient: t("Mixed Vegetables", "మిక్స్‌డ్ కూరగాయలు"), benefits: [{ benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" }] },
+        { ingredient: t("Curd", "పెరుగు"), benefits: [{ benefitLabel: t("Better Digestion", "Digestion ను support చేస్తుంది"), iconKey: "stomach" }] },
       ],
       groceryListAvailable: true,
     },
@@ -307,14 +314,16 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       ),
       precautions: t(
         "For People with Thyroid Concerns, avoid consuming excess raw sprouts regularly.",
-        "థైరాయిడ్ సమస్య ఉన్నవారు పచ్చి స్ప్రౌట్స్‌ను ఎక్కువగా, తరచుగా తీసుకోవడం నివారించండి."
+        "Thyroidడ problem ఉన్నవారు పచ్చి స్ప్రౌట్స్‌ను ఎక్కువగా తీసుకోవద్దు."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Sprouts"), benefits: [
-          { benefitLabel: t("Protein-Rich", "ప్రోటీన్ సమృద్ధిగా ఉంటుంది"), iconKey: "muscle-health" },
+        { ingredient: t("Sprouts", "స్ప్రౌట్స్"), benefits: [
+          { benefitLabel: t("Protein-Rich", "Protein ఎక్కువగా ఉంటుంది"), iconKey: "muscle-health" },
+          // NOTE: the Telugu Figma screen (970:33289) doesn't show a separate "Supports
+          // Metabolism" row for Sprouts; kept to match the English design (924:21411).
           { benefitLabel: t("Supports Metabolism", "జీవక్రియ (మెటాబాలిజం)కు మద్దతు"), iconKey: "healthy-eating" },
-          { benefitLabel: t("Better Digestion", "జీర్ణక్రియను మెరుగుపరుస్తుంది"), iconKey: "stomach" },
-          { benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు కడుపు నిండుగా ఉంచుతుంది"), iconKey: "happy" },
+          { benefitLabel: t("Better Digestion", "Digestion ను support చేస్తుంది"), iconKey: "stomach" },
+          { benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" },
         ] },
       ],
       groceryListAvailable: true,
@@ -327,25 +336,28 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
         "జొన్న పిండితో batter తయారు చేసి, కొద్దిగా ferment చేసి, అప్పం పాన్‌లో వండండి."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Jowar"), benefits: [{ benefitLabel: t("Sustained Energy", "ఎక్కువసేపు శక్తిని అందిస్తుంది"), iconKey: "lightning-bolt" }] },
-        { ingredient: same("Coconut"), benefits: [{ benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు కడుపు నిండుగా ఉంచుతుంది"), iconKey: "happy" }] },
+        { ingredient: t("Jowar", "జొన్న"), benefits: [{ benefitLabel: t("Sustained Energy", "ఎక్కువసేపు energy ని ఇస్తుంది"), iconKey: "lightning-bolt" }] },
+        { ingredient: t("Coconut", "కొబ్బరి"), benefits: [{ benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" }] },
       ],
       groceryListAvailable: true,
     },
     nightDrink: {
-      name: same("Tulasi Tea"),
+      name: t("Tulasi Tea", "తులసి టీ"),
       imageUrl: imgTulasiTea,
       tips: t(
         "Boil tulasi leaves in water for 5 minutes, strain, and drink warm.",
-        "తులసి ఆకులను నీటిలో 5 నిమిషాలు మరిగించి, strain చేసి గోరువెచ్చగా తాగండి."
+        "తులసి ఆకులను water లో 5 నిమిషాలు మరిగించి, strain చేసి గోరువెచ్చగా తాగండి."
       ),
       precautions: t(
         "Avoid using mobile phones or watching TV after 9:30 PM.",
-        "రాత్రి 9:30 తర్వాత మొబైల్ లేదా TV చూడడం నివారించండి."
+        "రాత్రి 9:30 తర్వాత మొబైల్ లేదా TV చూడకండి."
       ),
       nutritionalBenefits: [
-        { ingredient: same("Tulasi Tea"), benefits: [
-          { benefitLabel: t("Immunity", "రోగనిరోధక శక్తికి మద్దతు"), iconKey: "shield" },
+        { ingredient: t("Tulasi Tea", "తులసి టీ"), benefits: [
+          { benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
+          // NOTE: the Telugu Figma screen (970:33289) shows a "Digestion Support" row here
+          // instead of Antioxidant Protection/Relaxation; kept as originally curated to
+          // match the English design (924:21411).
           { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
           { benefitLabel: t("Relaxation", "శరీరం & మనసుకు రిలాక్సేషన్ అందిస్తుంది"), iconKey: "meditation" },
         ] },

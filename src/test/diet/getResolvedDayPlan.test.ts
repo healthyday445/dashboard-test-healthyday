@@ -52,7 +52,7 @@ describe("getResolvedDayPlan", () => {
   it("resolves curated text in Telugu when requested", () => {
     const plan = getResolvedDayPlan(new Date(2026, 7, 3), "Telugu");
     const earlyMorning = plan.meals.find((m) => m.slotId === "earlyMorning")!;
-    expect(earlyMorning.name).toBe("ఆక్రోట్లు & ఖర్జూరాలు");
+    expect(earlyMorning.name).toBe("Walnuts & ఖర్జూరాలు");
     expect(earlyMorning.tips).toBe("రాత్రంతా నానబెట్టి, ఉదయం తినండి.");
     expect(earlyMorning.items).toEqual([{ label: "2 ఆక్రోట్లు" }, { label: "2 ఖర్జూరాలు" }]);
   });
