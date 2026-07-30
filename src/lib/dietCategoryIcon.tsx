@@ -10,6 +10,8 @@ import happyIcon from "@/assets/diet/icons/happy.webp";
 import dogBoneIcon from "@/assets/diet/icons/dog-bone.webp";
 import healthyEatingIcon from "@/assets/diet/icons/healthy-eating.webp";
 import meditationIcon from "@/assets/diet/icons/meditation.webp";
+import brainHealthIcon from "@/assets/diet/icons/brain-health.webp";
+import healthySkinIcon from "@/assets/diet/icons/healthy-skin.webp";
 
 /**
  * Placeholder visuals for the diet feature until real per-dish photography exists.
@@ -103,6 +105,8 @@ const BENEFIT_ICONS: Record<string, string> = {
   "dog-bone": dogBoneIcon,
   "healthy-eating": healthyEatingIcon,
   meditation: meditationIcon,
+  "brain-health": brainHealthIcon,
+  "healthy-skin": healthySkinIcon,
 };
 
 /** Real icon asset URL for a `nutritionalBenefits[].iconKey` value — unrecognized keys

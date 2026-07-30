@@ -61,7 +61,10 @@ export const M2W2: GenericWeekBlockContent = {
     breakfast: { category: "Protein BF", detail: "Poha" },
     morningSnack: { category: "Regular Fruit", detail: "Apple" },
     lunch: { category: "Protein Lunch", detail: "Rice + Mixed Dal Curry + Cucumber Boiled Peanut Salad" },
-    eveningSnack: { category: "Complex Carbs", detail: "Sweet Potato (Boiled) + Pepper" },
+    // Updated from the sheet's "Sweet Potato (Boiled) + Pepper" per the newer 2026-08-08 Figma
+    // design (node 964:30250), which shows a different dish for this slot — design is the
+    // more current source of truth here.
+    eveningSnack: { category: "Fried Snack", detail: "Corn Pakoda" },
     // NOTE: sheet category is literally "Dinner" (not a real category label) — carried through as-authored.
     dinner: { category: "Dinner", detail: "Spinach cheela (alternative green leafy vegetable can be the option) + tomato chutney" },
     nightDrink: { category: "Herbal Teas", detail: "Ajwain (Vamu) Tea" },

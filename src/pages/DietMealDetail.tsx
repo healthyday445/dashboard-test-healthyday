@@ -98,6 +98,7 @@ const DietMealDetail = () => {
   const backUrl = (() => {
     const params = new URLSearchParams();
     if (searchParams.get("tab") !== null) params.set("tab", searchParams.get("tab")!);
+    if (searchParams.get("previewDate") !== null) params.set("previewDate", searchParams.get("previewDate")!);
     if (searchParams.get("forceDay") !== null) params.set("forceDay", searchParams.get("forceDay")!);
     if (searchParams.get("time") !== null) params.set("time", searchParams.get("time")!);
     if (searchParams.get("language") !== null) params.set("language", searchParams.get("language")!);

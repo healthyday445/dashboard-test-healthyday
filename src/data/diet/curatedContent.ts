@@ -15,12 +15,55 @@ import imgPudinaRiceBowlCarrotBeetrootRaita from "@/assets/diet/pudina-rice-bowl
 import imgSproutsChaat from "@/assets/diet/sprouts-chaat.webp";
 import imgJowarAppamCoconutChutney from "@/assets/diet/jowar-appam-coconut-chutney.webp";
 import imgTulasiTea from "@/assets/diet/tulasi-tea.webp";
+// 2026-08-05
+import imgWarmWater from "@/assets/diet/warm-water.webp";
+import imgCinnamonMilk from "@/assets/diet/cinnamon-milk.webp";
+import imgGreenMoongDosaPeanutChutney from "@/assets/diet/green-moong-dosa-peanut-chutney.webp";
+import imgChapatiPalakPaneer from "@/assets/diet/chapati-palak-paneer.webp";
+import imgBoiledSweetPotato from "@/assets/diet/boiled-sweet-potato.webp";
+import imgMushroomPeasRoll from "@/assets/diet/mushroom-peas-roll.webp";
+import imgGingerJeeraTea from "@/assets/diet/ginger-jeera-tea.webp";
+// 2026-08-06
+import imgSesameFlaxSeeds from "@/assets/diet/sesame-flax-seeds.webp";
+import imgSoakedChiaSeedsAmlaWater from "@/assets/diet/soaked-chia-seeds-amla-water.webp";
+import imgPaneerDosaVegetableSambar from "@/assets/diet/paneer-dosa-vegetable-sambar.webp";
+import imgRagiMuddaVegetableSambar from "@/assets/diet/ragi-mudda-vegetable-sambar.webp";
+import imgPeanutChikki from "@/assets/diet/peanut-chikki.webp";
+import imgCoconutRiceBowlCapsicumRaita from "@/assets/diet/coconut-rice-bowl-capsicum-raita.webp";
+import imgFennelTea from "@/assets/diet/fennel-tea.webp";
+// 2026-08-07
+import imgSoakedAlmondsBlackRaisins from "@/assets/diet/soaked-almonds-black-raisins.webp";
+import imgTenderCoconutWater from "@/assets/diet/tender-coconut-water.webp";
+import imgGodhumaRavvaUpmaPeanuts from "@/assets/diet/godhuma-ravva-upma-peanuts.webp";
+import imgSteamedRiceLeafyDalIvyGourdKundruCurryCurd from "@/assets/diet/steamed-rice-leafy-dal-ivy-gourd-kundru-curry-curd.webp";
+import imgPaneerCubesPepper from "@/assets/diet/paneer-cubes-pepper.webp";
+import imgCucumberCapsicumCurdBowl from "@/assets/diet/cucumber-capsicum-curd-bowl.webp";
+import imgCorianderSeedTea from "@/assets/diet/coriander-seed-tea.webp";
+// 2026-08-08
+import imgSoakedChiaFlaxSeeds from "@/assets/diet/soaked-chia-flax-seeds.webp";
+import imgVegetablePohaPeanuts from "@/assets/diet/vegetable-poha-peanuts.webp";
+import imgRiceMixedDalCurryCucumberBoiledPeanutSalad from "@/assets/diet/rice-mixed-dal-curry-cucumber-boiled-peanut-salad.webp";
+import imgCornPakoda from "@/assets/diet/corn-pakoda.webp";
+import imgSpinachCheelaTomatoChutney from "@/assets/diet/spinach-cheela-tomato-chutney.webp";
+import imgAjwainTea from "@/assets/diet/ajwain-tea.webp";
+// 2026-08-09
+import imgSoakedPistachiosGoldRaisins from "@/assets/diet/soaked-pistachios-gold-raisins.webp";
+import imgRagiMaltWithNutsSeeds from "@/assets/diet/ragi-malt-with-nuts-seeds.webp";
+import imgPineapple from "@/assets/diet/pineapple.webp";
+import imgRiceCarrotTomatoRasamFrenchBeansCoconutCurry from "@/assets/diet/rice-carrot-tomato-rasam-french-beans-coconut-curry.webp";
+import imgMakhanaKajuNutsIceCream from "@/assets/diet/makhana-kaju-nuts-ice-cream.webp";
+import imgMixedVegetableUttappamTomatoChutney from "@/assets/diet/mixed-vegetable-uttappam-tomato-chutney.webp";
 
 /** Shorthand for a LocalizedText where the English and Telugu Figma screens showed the
  *  exact same word (a handful of ingredient/dish names were left untranslated in the
  *  Telugu design — transcribed as-authored, not "fixed" here). */
 const same = (text: string): LocalizedText => ({ English: text, Telugu: text });
 const t = (English: string, Telugu: string): LocalizedText => ({ English, Telugu });
+/** Telugu translation not provided yet for 2026-08-05..09 (user said Telugu designs are
+ *  coming later) — English text duplicated as a placeholder so the UI never shows blank
+ *  Telugu content. Swap these for real Telugu via `t(...)` once translations arrive;
+ *  search this file for `pending` to find every call site that needs updating. */
+const pending = same;
 
 /**
  * Hand-authored overrides matching the Figma detail screens (English: node 890:8415 /
@@ -290,6 +333,486 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
         { ingredient: same("Tulasi Tea"), benefitLabel: t("Immunity", "రోగనిరోధక శక్తికి మద్దతు"), iconKey: "shield" },
         { ingredient: same("Tulasi Tea"), benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
         { ingredient: same("Tulasi Tea"), benefitLabel: t("Relaxation", "శరీరం & మనసుకు రిలాక్సేషన్ అందిస్తుంది"), iconKey: "meditation" },
+      ],
+      groceryListAvailable: true,
+    },
+  },
+  // Below: 2026-08-05 through 2026-08-09 (English only for now — see `pending` above).
+  "2026-08-05": {
+    earlyMorning: {
+      name: pending("Warm Water"),
+      imageUrl: imgWarmWater,
+      items: [{ label: pending("1 Glass") }],
+      tips: pending("Drink warm water throughout the day to help cleanse the system and kickstart digestion."),
+      nutritionalBenefits: [
+        { ingredient: pending("Warm Water"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Warm Water"), benefitLabel: pending("Healthy Metabolism"), iconKey: "healthy-eating" },
+      ],
+      recommendedQuantity: [{ ingredient: pending("Water"), qty: pending("1 Glass") }],
+      groceryListAvailable: true,
+    },
+    postYogaDrink: {
+      name: pending("Cinnamon Milk"),
+      imageUrl: imgCinnamonMilk,
+      tips: pending("Boil milk with a small cinnamon stick for 5 minutes and serve warm."),
+      precautions: pending("For People with Thyroid Concerns, avoid consuming excess cinnamon daily."),
+      nutritionalBenefits: [
+        { ingredient: pending("Milk"), benefitLabel: pending("Bone Health"), iconKey: "dog-bone" },
+        { ingredient: pending("Cinnamon"), benefitLabel: pending("Healthy Blood Sugar"), iconKey: "sugar-cubes" },
+        { ingredient: pending("Cinnamon"), benefitLabel: pending("Healthy Metabolism"), iconKey: "healthy-eating" },
+      ],
+      groceryListAvailable: true,
+    },
+    breakfast: {
+      name: pending("Green Moong Dosa & Peanut Chutney"),
+      imageUrl: imgGreenMoongDosaPeanutChutney,
+      tips: pending("Soak green gram, grind into a batter, prepare dosa, and serve with peanut chutney."),
+      nutritionalBenefits: [
+        { ingredient: pending("Green Gram"), benefitLabel: pending("Protein-Rich"), iconKey: "generic" },
+        { ingredient: pending("Green Gram"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Peanuts"), benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+      ],
+      groceryListAvailable: true,
+    },
+    morningSnack: {
+      name: pending("Apple"),
+      imageUrl: imgApple,
+      items: [{ label: pending("1 Apple") }],
+      precautions: pending("For people with Diabetes, limit the portion to ½ an apple per serving."),
+      nutritionalBenefits: [
+        { ingredient: pending("Apple"), benefitLabel: pending("Gut Health"), iconKey: "stomach" },
+        { ingredient: pending("Apple"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Apple"), benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+      ],
+      recommendedQuantity: [{ ingredient: pending("Apple"), qty: pending("1") }],
+      groceryListAvailable: true,
+    },
+    lunch: {
+      name: pending("Chapati & Palak Paneer"),
+      imageUrl: imgChapatiPalakPaneer,
+      tips: pending("Cook spinach, blend into a puree, sauté with spices, and add paneer cubes."),
+      nutritionalBenefits: [
+        { ingredient: pending("Chapati"), benefitLabel: pending("Sustained Energy"), iconKey: "lightning-bolt" },
+        { ingredient: pending("Spinach"), benefitLabel: pending("Supports Hemoglobin"), iconKey: "generic" },
+        { ingredient: pending("Paneer"), benefitLabel: pending("Muscle Health"), iconKey: "generic" },
+      ],
+      groceryListAvailable: true,
+    },
+    eveningSnack: {
+      name: pending("Boiled Sweet Potato"),
+      imageUrl: imgBoiledSweetPotato,
+      tips: pending("Boil the sweet potato until soft, peel, and sprinkle with pepper or jeera."),
+      precautions: pending("For People with Diabetes, practice portion control due to its moderate to high glycemic index."),
+      nutritionalBenefits: [
+        { ingredient: pending("Sweet Potato"), benefitLabel: pending("Sustained Energy"), iconKey: "lightning-bolt" },
+        { ingredient: pending("Sweet Potato"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+      ],
+      groceryListAvailable: true,
+    },
+    dinner: {
+      name: pending("Mushroom & Peas Roll"),
+      imageUrl: imgMushroomPeasRoll,
+      tips: pending("Sauté mushrooms and peas, fill into a chapati, and roll before serving."),
+      nutritionalBenefits: [
+        { ingredient: pending("Mushroom"), benefitLabel: pending("Immunity"), iconKey: "shield" },
+        { ingredient: pending("Mushroom"), benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
+        { ingredient: pending("Peas"), benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+      ],
+      groceryListAvailable: true,
+    },
+    nightDrink: {
+      name: pending("Ginger Jeera Tea"),
+      imageUrl: imgGingerJeeraTea,
+      tips: pending("Boil ginger and jeera in water for 5 minutes, strain, and drink warm."),
+      nutritionalBenefits: [{ ingredient: pending("Ginger & Jeera"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" }],
+      groceryListAvailable: true,
+    },
+  },
+  "2026-08-06": {
+    earlyMorning: {
+      name: pending("Sesame & Flax Seeds"),
+      imageUrl: imgSesameFlaxSeeds,
+      items: [{ label: pending("1 tbsp total") }],
+      tips: pending("Lightly roast and powder the sesame and flax seeds before consuming."),
+      nutritionalBenefits: [
+        { ingredient: pending("Sesame Seeds"), benefitLabel: pending("Bone Health"), iconKey: "dog-bone" },
+        { ingredient: pending("Flax Seeds"), benefitLabel: pending("Heart Health"), iconKey: "heart" },
+      ],
+      recommendedQuantity: [{ ingredient: pending("Total Quantity"), qty: pending("1 tbsp") }],
+      groceryListAvailable: true,
+    },
+    postYogaDrink: {
+      name: pending("Soaked Chia Seeds & Amla Water"),
+      imageUrl: imgSoakedChiaSeedsAmlaWater,
+      items: [{ label: pending("1 tbsp seeds") }],
+      tips: pending("Soak the chia seeds for 30 minutes to overnight before drinking with amla water."),
+      nutritionalBenefits: [
+        { ingredient: pending("Chia Seeds"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Chia Seeds"), benefitLabel: pending("Hydration"), iconKey: "water" },
+        { ingredient: pending("Amla"), benefitLabel: pending("Immunity"), iconKey: "shield" },
+      ],
+      recommendedQuantity: [{ ingredient: pending("Chia Seeds"), qty: pending("1 tbsp") }],
+      groceryListAvailable: true,
+    },
+    breakfast: {
+      name: pending("Paneer Dosa & Vegetable Sambar"),
+      imageUrl: imgPaneerDosaVegetableSambar,
+      tips: pending("Spread dosa batter, add grated paneer, cook until golden, and serve with vegetable sambar."),
+      nutritionalBenefits: [
+        { ingredient: pending("Paneer"), benefitLabel: pending("Muscle Health"), iconKey: "generic" },
+        { ingredient: pending("Dosa"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Sambar"), benefitLabel: pending("Protein-Rich"), iconKey: "generic" },
+        { ingredient: pending("Sambar"), benefitLabel: pending("Gut Health"), iconKey: "stomach" },
+      ],
+      groceryListAvailable: true,
+    },
+    morningSnack: {
+      name: pending("Guava"),
+      imageUrl: imgGuava,
+      items: [{ label: pending("1 Medium Fruit") }],
+      precautions: pending("For people with Diabetes, consume 1/2 guava per serving. Avoid adding salt or sugar."),
+      nutritionalBenefits: [
+        { ingredient: pending("Guava"), benefitLabel: pending("Immunity"), iconKey: "shield" },
+        { ingredient: pending("Guava"), benefitLabel: pending("Gut Health"), iconKey: "stomach" },
+        { ingredient: pending("Guava"), benefitLabel: pending("Healthy Blood Sugar"), iconKey: "sugar-cubes" },
+        { ingredient: pending("Guava"), benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
+        { ingredient: pending("Guava"), benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+      ],
+      recommendedQuantity: [{ ingredient: pending("Guava"), qty: pending("1") }],
+      groceryListAvailable: true,
+    },
+    lunch: {
+      name: pending("Ragi Mudda & Vegetable Sambar"),
+      imageUrl: imgRagiMuddaVegetableSambar,
+      tips: pending("Cook ragi flour in boiling water, shape into balls (sankati/mudde), and serve with hot sambar."),
+      nutritionalBenefits: [
+        { ingredient: pending("Ragi"), benefitLabel: pending("Bone Health"), iconKey: "dog-bone" },
+        { ingredient: pending("Sambar"), benefitLabel: pending("Protein-Rich"), iconKey: "generic" },
+        { ingredient: pending("Sambar"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+      ],
+      groceryListAvailable: true,
+    },
+    eveningSnack: {
+      name: pending("Peanut Chikki"),
+      imageUrl: imgPeanutChikki,
+      tips: pending("Melt jaggery, mix with roasted peanuts, spread the mixture, and cut into pieces once set."),
+      precautions: pending("For People with Diabetes, limit the portion due to the high sugar content."),
+      nutritionalBenefits: [
+        { ingredient: pending("Peanuts"), benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+        { ingredient: pending("Jaggery"), benefitLabel: pending("Energy"), iconKey: "lightning-bolt" },
+      ],
+      groceryListAvailable: true,
+    },
+    dinner: {
+      name: pending("Coconut Rice Bowl & Capsicum Raita"),
+      imageUrl: imgCoconutRiceBowlCapsicumRaita,
+      tips: pending("Mix grated coconut with cooked rice and prepare raita with capsicum and curd."),
+      precautions: pending("For People with Diabetes, practice portion control with rice."),
+      nutritionalBenefits: [
+        { ingredient: pending("Rice"), benefitLabel: pending("Energy"), iconKey: "lightning-bolt" },
+        { ingredient: pending("Coconut"), benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+        { ingredient: pending("Capsicum"), benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
+        { ingredient: pending("Curd"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+      ],
+      groceryListAvailable: true,
+    },
+    nightDrink: {
+      name: pending("Fennel Tea"),
+      imageUrl: imgFennelTea,
+      tips: pending("Boil fennel seeds in water for 5 minutes, strain, and drink warm."),
+      nutritionalBenefits: [{ ingredient: pending("Fennel Tea"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" }],
+      groceryListAvailable: true,
+    },
+  },
+  "2026-08-07": {
+    earlyMorning: {
+      name: pending("Soaked Almonds & Black Raisins"),
+      imageUrl: imgSoakedAlmondsBlackRaisins,
+      items: [{ label: pending("4 Almonds") }, { label: pending("4 Black Raisins") }],
+      tips: pending("Soak 4 almonds and 4 black raisins overnight and eat them in the morning."),
+      precautions: pending("For people with Diabetes, limit the quantity of raisins due to their high sugar content."),
+      nutritionalBenefits: [
+        { ingredient: pending("Almonds"), benefitLabel: pending("Brain Health"), iconKey: "brain-health" },
+        { ingredient: pending("Almonds"), benefitLabel: pending("Healthy Skin"), iconKey: "healthy-skin" },
+        { ingredient: pending("Black Raisins"), benefitLabel: pending("Supports Hemoglobin"), iconKey: "generic" },
+        { ingredient: pending("Black Raisins"), benefitLabel: pending("Energy"), iconKey: "lightning-bolt" },
+      ],
+      recommendedQuantity: [
+        { ingredient: pending("Almonds"), qty: pending("4 pcs") },
+        { ingredient: pending("Black Raisins"), qty: pending("4 pcs") },
+      ],
+      groceryListAvailable: true,
+    },
+    postYogaDrink: {
+      name: pending("Tender Coconut Water"),
+      imageUrl: imgTenderCoconutWater,
+      precautions: pending("For people with Diabetes, limit the quantity as coconut water contains natural sugars."),
+      nutritionalBenefits: [
+        { ingredient: pending("Coconut Water"), benefitLabel: pending("Energy"), iconKey: "lightning-bolt" },
+        { ingredient: pending("Coconut Water"), benefitLabel: pending("Hydration"), iconKey: "water" },
+      ],
+      groceryListAvailable: true,
+    },
+    breakfast: {
+      name: pending("Godhuma Ravva Upma with Peanuts"),
+      imageUrl: imgGodhumaRavvaUpmaPeanuts,
+      tips: pending("Roast the broken wheat (godhuma ravva), then cook with sautéed vegetables and peanuts until soft."),
+      precautions: pending("For people with Diabetes, practice portion control due to its moderate glycemic index."),
+      nutritionalBenefits: [
+        { ingredient: pending("Broken Wheat (Godhuma Ravva)"), benefitLabel: pending("Sustained Energy"), iconKey: "lightning-bolt" },
+        { ingredient: pending("Broken Wheat (Godhuma Ravva)"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Peanuts"), benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+      ],
+      groceryListAvailable: true,
+    },
+    morningSnack: {
+      name: pending("Guava"),
+      imageUrl: imgGuava,
+      items: [{ label: pending("1 Medium Fruit") }],
+      precautions: pending("For people with Diabetes, consume 1/2 guava per serving. Avoid adding salt or sugar."),
+      nutritionalBenefits: [
+        { ingredient: pending("Guava"), benefitLabel: pending("Immunity"), iconKey: "shield" },
+        { ingredient: pending("Guava"), benefitLabel: pending("Gut Health"), iconKey: "stomach" },
+        { ingredient: pending("Guava"), benefitLabel: pending("Healthy Blood Sugar"), iconKey: "sugar-cubes" },
+        { ingredient: pending("Guava"), benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
+        { ingredient: pending("Guava"), benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+      ],
+      recommendedQuantity: [{ ingredient: pending("Guava"), qty: pending("1") }],
+      groceryListAvailable: true,
+    },
+    lunch: {
+      name: pending("Steamed Rice, Leafy Dal, Ivy Gourd (Kundru) Curry & Curd"),
+      imageUrl: imgSteamedRiceLeafyDalIvyGourdKundruCurryCurd,
+      tips: pending("Cook dal with gongura, sauté ivy gourd (dondakaya) separately, and serve with rice and curd."),
+      precautions: pending("For people with Diabetes, practice portion control with white rice."),
+      nutritionalBenefits: [
+        { ingredient: pending("Rice"), benefitLabel: pending("Energy"), iconKey: "lightning-bolt" },
+        { ingredient: pending("Gongura"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Gongura"), benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
+        { ingredient: pending("Dal"), benefitLabel: pending("Muscle Health"), iconKey: "generic" },
+        { ingredient: pending("Curd"), benefitLabel: pending("Gut Health"), iconKey: "stomach" },
+      ],
+      groceryListAvailable: true,
+    },
+    eveningSnack: {
+      name: pending("Paneer Cubes & Pepper"),
+      imageUrl: imgPaneerCubesPepper,
+      tips: pending("Cut paneer into cubes, sprinkle with pepper, and lightly sauté or serve fresh."),
+      nutritionalBenefits: [
+        { ingredient: pending("Paneer"), benefitLabel: pending("Muscle Health"), iconKey: "generic" },
+        { ingredient: pending("Paneer"), benefitLabel: pending("Bone Health"), iconKey: "dog-bone" },
+        { ingredient: pending("Pepper"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+      ],
+      groceryListAvailable: true,
+    },
+    dinner: {
+      name: pending("Cucumber & Capsicum Curd Bowl"),
+      imageUrl: imgCucumberCapsicumCurdBowl,
+      tips: pending("Mix chopped cucumber and capsicum into curd, then add pepper and salt."),
+      precautions: pending("For People with Thyroid Concerns, avoid consuming this at night if sensitive."),
+      nutritionalBenefits: [
+        { ingredient: pending("Cucumber"), benefitLabel: pending("Hydration"), iconKey: "water" },
+        { ingredient: pending("Cucumber"), benefitLabel: pending("Cooling"), iconKey: "snowflake" },
+        { ingredient: pending("Capsicum"), benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
+        { ingredient: pending("Curd"), benefitLabel: pending("Gut Health"), iconKey: "stomach" },
+      ],
+      groceryListAvailable: true,
+    },
+    nightDrink: {
+      name: pending("Coriander Seed Tea"),
+      imageUrl: imgCorianderSeedTea,
+      tips: pending("Boil coriander seeds in water for 5–7 minutes, strain, and drink warm."),
+      nutritionalBenefits: [
+        { ingredient: pending("Coriander Seed Tea"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Coriander Seed Tea"), benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
+      ],
+      groceryListAvailable: true,
+    },
+  },
+  "2026-08-08": {
+    earlyMorning: {
+      name: pending("Soaked Chia & Flax Seeds"),
+      imageUrl: imgSoakedChiaFlaxSeeds,
+      items: [{ label: pending("1 tbsp total") }],
+      tips: pending("Soak the chia seeds, and lightly roast and powder the flax seeds before consuming."),
+      nutritionalBenefits: [
+        { ingredient: pending("Chia Seeds"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Chia Seeds"), benefitLabel: pending("Hydration"), iconKey: "water" },
+        { ingredient: pending("Flax Seeds"), benefitLabel: pending("Heart Health"), iconKey: "heart" },
+        { ingredient: pending("Flax Seeds"), benefitLabel: pending("Sustained Energy"), iconKey: "lightning-bolt" },
+      ],
+      recommendedQuantity: [{ ingredient: pending("Total"), qty: pending("1 tbsp") }],
+      groceryListAvailable: true,
+    },
+    postYogaDrink: {
+      name: pending("Tender Coconut Water"),
+      imageUrl: imgTenderCoconutWater,
+      precautions: pending("For people with Diabetes, limit the quantity as coconut water contains natural sugars."),
+      nutritionalBenefits: [
+        { ingredient: pending("Coconut Water"), benefitLabel: pending("Energy"), iconKey: "lightning-bolt" },
+        { ingredient: pending("Coconut Water"), benefitLabel: pending("Hydration"), iconKey: "water" },
+      ],
+      groceryListAvailable: true,
+    },
+    breakfast: {
+      name: pending("Vegetable Poha & Peanuts"),
+      imageUrl: imgVegetablePohaPeanuts,
+      tips: pending("Sauté vegetables, add soaked poha and peanuts, then mix and cook until soft."),
+      precautions: pending("For people with Diabetes, practice portion control due to its moderate to high glycemic index."),
+      nutritionalBenefits: [
+        { ingredient: pending("Poha"), benefitLabel: pending("Energy"), iconKey: "lightning-bolt" },
+        { ingredient: pending("Poha"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Peanuts"), benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+        { ingredient: pending("Vegetables"), benefitLabel: pending("Gut Health"), iconKey: "stomach" },
+      ],
+      groceryListAvailable: true,
+    },
+    morningSnack: {
+      name: pending("Apple"),
+      imageUrl: imgApple,
+      items: [{ label: pending("1 Apple") }],
+      precautions: pending("For people with Diabetes, consume 1 medium apple. Pair it with few nuts or seeds for better blood sugar balance."),
+      nutritionalBenefits: [
+        { ingredient: pending("Apple"), benefitLabel: pending("Immunity"), iconKey: "shield" },
+        { ingredient: pending("Apple"), benefitLabel: pending("Gut Health"), iconKey: "stomach" },
+        { ingredient: pending("Apple"), benefitLabel: pending("Heart Health"), iconKey: "heart" },
+        { ingredient: pending("Apple"), benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
+      ],
+      recommendedQuantity: [{ ingredient: pending("Apple"), qty: pending("1") }],
+      groceryListAvailable: true,
+    },
+    lunch: {
+      name: pending("Rice, Mixed Dal Curry & Cucumber Boiled Peanut Salad"),
+      imageUrl: imgRiceMixedDalCurryCucumberBoiledPeanutSalad,
+      tips: pending("Cook mixed dal with spices, and prepare a salad with boiled peanuts and cucumber."),
+      precautions: pending("For People with Diabetes, practice portion control with white rice."),
+      nutritionalBenefits: [
+        { ingredient: pending("Rice"), benefitLabel: pending("Energy"), iconKey: "lightning-bolt" },
+        { ingredient: pending("Mixed Dal"), benefitLabel: pending("Muscle Health"), iconKey: "generic" },
+        { ingredient: pending("Peanuts"), benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+        { ingredient: pending("Cucumber"), benefitLabel: pending("Hydration"), iconKey: "water" },
+        { ingredient: pending("Cucumber"), benefitLabel: pending("Cooling"), iconKey: "snowflake" },
+      ],
+      groceryListAvailable: true,
+    },
+    eveningSnack: {
+      name: pending("Corn Pakoda"),
+      imageUrl: imgCornPakoda,
+      tips: pending("Mix boiled corn with besan, onion, and spices, shape loosely, and shallow fry until crisp."),
+      nutritionalBenefits: [
+        { ingredient: pending("Corn"), benefitLabel: pending("Energy"), iconKey: "lightning-bolt" },
+        { ingredient: pending("Corn"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Besan"), benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+        { ingredient: pending("Spices"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+      ],
+      groceryListAvailable: true,
+    },
+    dinner: {
+      name: pending("Spinach Cheela & Tomato Chutney"),
+      imageUrl: imgSpinachCheelaTomatoChutney,
+      tips: pending("Blend spinach into the moong batter, cook like a dosa, and serve with chutney."),
+      nutritionalBenefits: [
+        { ingredient: pending("Moong Batter"), benefitLabel: pending("Protein-Rich"), iconKey: "generic" },
+        { ingredient: pending("Moong Batter"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Spinach"), benefitLabel: pending("Supports Hemoglobin"), iconKey: "generic" },
+      ],
+      groceryListAvailable: true,
+    },
+    nightDrink: {
+      name: pending("Ajwain Tea"),
+      imageUrl: imgAjwainTea,
+      tips: pending("Boil ajwain in water for 5 minutes, strain, and drink warm."),
+      nutritionalBenefits: [{ ingredient: pending("Ajwain Tea"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" }],
+      groceryListAvailable: true,
+    },
+  },
+  // 2026-08-09: the Figma design only has 7 distinct meal cards — postYogaDrink shares
+  // breakfast's dish with no separate card, and the generic sheet already matches ("Ragi
+  // Malt with nuts and seeds" for both slots), so postYogaDrink is deliberately left
+  // un-curated here and falls back to the generic layer rather than duplicating breakfast.
+  "2026-08-09": {
+    earlyMorning: {
+      name: pending("Soaked Pistachios & Gold Raisins"),
+      imageUrl: imgSoakedPistachiosGoldRaisins,
+      items: [{ label: pending("3 Pistachios") }, { label: pending("5 Gold Raisins") }],
+      tips: pending("Soak 3 pistachios and 5 raisins overnight and eat them in the morning."),
+      precautions: pending("For people with Diabetes, limit the quantity of raisins due to their high sugar content."),
+      nutritionalBenefits: [
+        { ingredient: pending("Raisins"), benefitLabel: pending("Energy"), iconKey: "lightning-bolt" },
+        { ingredient: pending("Raisins"), benefitLabel: pending("Supports Hemoglobin"), iconKey: "generic" },
+        { ingredient: pending("Pistachios"), benefitLabel: pending("Heart Health"), iconKey: "heart" },
+      ],
+      recommendedQuantity: [
+        { ingredient: pending("Soaked Pistachios"), qty: pending("3 pcs") },
+        { ingredient: pending("Soaked Raisins"), qty: pending("5 pcs") },
+      ],
+      groceryListAvailable: true,
+    },
+    breakfast: {
+      name: pending("Ragi Malt with Nuts & Seeds"),
+      imageUrl: imgRagiMaltWithNutsSeeds,
+      tips: pending("Cook ragi flour in water or milk, stir continuously, and top with crushed nuts and seeds."),
+      nutritionalBenefits: [
+        { ingredient: pending("Nuts & Seeds"), benefitLabel: pending("Sustained Energy"), iconKey: "lightning-bolt" },
+        { ingredient: pending("Ragi"), benefitLabel: pending("Bone Health"), iconKey: "dog-bone" },
+      ],
+      groceryListAvailable: true,
+    },
+    morningSnack: {
+      name: pending("Pineapple"),
+      imageUrl: imgPineapple,
+      precautions: pending("For people with Diabetes, limit the portion to 100–150 g (about 1 cup) per serving due to its natural sugar content."),
+      nutritionalBenefits: [
+        { ingredient: pending("Pineapple"), benefitLabel: pending("Immunity"), iconKey: "shield" },
+        { ingredient: pending("Pineapple"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Pineapple"), benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
+      ],
+      groceryListAvailable: true,
+    },
+    lunch: {
+      name: pending("Rice, Carrot Tomato Rasam, French Beans & Coconut Curry"),
+      imageUrl: imgRiceCarrotTomatoRasamFrenchBeansCoconutCurry,
+      tips: pending("Prepare rasam with tomato and carrot, and sauté beans with coconut and spices."),
+      precautions: pending("For People with Diabetes, practice portion control with white rice."),
+      nutritionalBenefits: [
+        { ingredient: pending("Rice"), benefitLabel: pending("Energy"), iconKey: "lightning-bolt" },
+        { ingredient: pending("Rasam"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Beans"), benefitLabel: pending("Gut Health"), iconKey: "stomach" },
+        { ingredient: pending("Coconut"), benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+      ],
+      groceryListAvailable: true,
+    },
+    eveningSnack: {
+      name: pending("Makhana Kaju Nuts Ice Cream (Home-made)"),
+      imageUrl: imgMakhanaKajuNutsIceCream,
+      tips: pending("Blend soaked makhana, cashews, and milk, then freeze until set."),
+      precautions: pending("For People with Diabetes, limit the portion as it contains natural sugars."),
+      nutritionalBenefits: [
+        { ingredient: pending("Cashews"), benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+        { ingredient: pending("Makhana"), benefitLabel: pending("Bone Health"), iconKey: "dog-bone" },
+      ],
+      groceryListAvailable: true,
+    },
+    dinner: {
+      name: pending("Mixed Vegetable Uttappam & Tomato Chutney"),
+      imageUrl: imgMixedVegetableUttappamTomatoChutney,
+      tips: pending("Pour the batter thick, add vegetables on top, cook both sides, and serve with chutney."),
+      precautions: pending("For People with Diabetes, practice portion control as uttappam has a moderate glycemic index (GI)."),
+      nutritionalBenefits: [
+        { ingredient: pending("Uttappam"), benefitLabel: pending("Gut Health"), iconKey: "stomach" },
+        { ingredient: pending("Vegetables"), benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: pending("Tomato"), benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
+      ],
+      groceryListAvailable: true,
+    },
+    nightDrink: {
+      name: pending("Tulasi Tea"),
+      imageUrl: imgTulasiTea,
+      tips: pending("Boil tulasi leaves in water for 5 minutes, strain, and drink warm."),
+      nutritionalBenefits: [
+        { ingredient: pending("Tulasi Tea"), benefitLabel: pending("Immunity"), iconKey: "shield" },
+        { ingredient: pending("Tulasi Tea"), benefitLabel: pending("Relaxation"), iconKey: "meditation" },
+        { ingredient: pending("Tulasi Tea"), benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
       ],
       groceryListAvailable: true,
     },

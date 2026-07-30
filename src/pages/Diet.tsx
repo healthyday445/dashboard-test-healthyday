@@ -4,7 +4,7 @@ import logo from "@/assets/Primary_logo.svg";
 import { safeSessionStorage } from "@/lib/storage";
 import { DietDateTabBar, type DietDateTab } from "@/components/DietDateTabBar";
 import { DietMealCard, DietMealCardSkeleton } from "@/components/DietMealCard";
-import { getResolvedTabPlans, type Language } from "@/data/diet";
+import { getResolvedTabPlans, parseIsoDateKey, type Language } from "@/data/diet";
 
 const WEEKDAY_ABBR = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -17,6 +17,7 @@ const Diet = () => {
   const mobile = urlMobile || searchParams.get("mobile") || safeSessionStorage.getItem("referrer_mobile") || "";
 
   const forceDay = searchParams.get("forceDay");
+  const previewDate = searchParams.get("previewDate");
   const timeOverride = searchParams.get("time");
   const languageOverride = searchParams.get("language");
   const previewMode = searchParams.get("preview");
@@ -67,10 +68,15 @@ const Diet = () => {
     fetchData();
   }, [mobile, previewMode, navigate]);
 
-  // forceDay simulates "today" as a day offset from the diet launch date — same QA-preview
-  // idiom as ?forceDay= elsewhere in this app (e.g. Grace.tsx), just anchored to the diet
-  // cycle's own launch date rather than a student's free-batch start date.
+  // `previewDate` sets "today" directly to a specific calendar date (e.g. ?previewDate=2026-08-08)
+  // — the most direct way to preview a specific day. `forceDay` simulates "today" as a day
+  // offset from the diet launch date instead (same QA-preview idiom as ?forceDay= elsewhere in
+  // this app, e.g. Grace.tsx). previewDate wins when both are present, since it's unambiguous.
   const todayOverride = (() => {
+    if (previewDate !== null) {
+      const parsed = parseIsoDateKey(previewDate);
+      return Number.isNaN(parsed.getTime()) ? undefined : parsed;
+    }
     if (forceDay === null) return undefined;
     const offset = parseInt(forceDay, 10);
     if (!Number.isFinite(offset)) return undefined;
@@ -101,6 +107,7 @@ const Diet = () => {
   const buildDetailUrl = (slotId: string) => {
     const params = new URLSearchParams();
     params.set("tab", String(activeTabIdx));
+    if (previewDate !== null) params.set("previewDate", previewDate);
     if (forceDay !== null) params.set("forceDay", forceDay);
     if (timeOverride !== null) params.set("time", timeOverride);
     if (languageOverride !== null) params.set("language", languageOverride);

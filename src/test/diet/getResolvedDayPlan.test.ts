@@ -62,6 +62,46 @@ describe("getResolvedDayPlan", () => {
     const earlyMorning = plan.meals.find((m) => m.slotId === "earlyMorning")!;
     expect(earlyMorning.name).toBe("Walnuts & Dates");
   });
+
+  it.each([
+    [2026, 7, 5, "Warm Water"],
+    [2026, 7, 6, "Sesame & Flax Seeds"],
+    [2026, 7, 7, "Soaked Almonds & Black Raisins"],
+    [2026, 7, 8, "Soaked Chia & Flax Seeds"],
+    [2026, 7, 9, "Soaked Pistachios & Gold Raisins"],
+  ])("resolves curated earlyMorning for %i-%i-%i (%s)", (y, m, d, expectedName) => {
+    const plan = getResolvedDayPlan(new Date(y, m, d));
+    const earlyMorning = plan.meals.find((meal) => meal.slotId === "earlyMorning")!;
+    expect(earlyMorning.isCurated).toBe(true);
+    expect(earlyMorning.name).toBe(expectedName);
+    expect(plan.meals).toHaveLength(8);
+  });
+
+  it("uses the two newly-added benefit icons (brain-health, healthy-skin) for 2026-08-07 Almonds", () => {
+    const plan = getResolvedDayPlan(new Date(2026, 7, 7));
+    const earlyMorning = plan.meals.find((meal) => meal.slotId === "earlyMorning")!;
+    const iconKeys = earlyMorning.nutritionalBenefits?.map((b) => b.iconKey);
+    expect(iconKeys).toContain("brain-health");
+    expect(iconKeys).toContain("healthy-skin");
+  });
+
+  it("leaves 2026-08-09 postYogaDrink un-curated since Figma has no distinct card for it, but the generic sheet already matches", () => {
+    const plan = getResolvedDayPlan(new Date(2026, 7, 9));
+    const postYogaDrink = plan.meals.find((meal) => meal.slotId === "postYogaDrink")!;
+    const breakfast = plan.meals.find((meal) => meal.slotId === "breakfast")!;
+    expect(postYogaDrink.isCurated).toBe(false);
+    expect(postYogaDrink.name).toBe("Ragi Malt with nuts and seeds"); // generic sheet detail
+    expect(breakfast.isCurated).toBe(true);
+    expect(breakfast.name).toBe("Ragi Malt with Nuts & Seeds"); // curated, distinct capitalization
+  });
+
+  it("reflects the corrected 2026-08-08 eveningSnack sheet data (Corn Pakoda, not Sweet Potato)", () => {
+    const plan = getResolvedDayPlan(new Date(2026, 7, 8));
+    const eveningSnack = plan.meals.find((meal) => meal.slotId === "eveningSnack")!;
+    expect(eveningSnack.category).toBe("Fried Snack");
+    expect(eveningSnack.detail).toBe("Corn Pakoda");
+    expect(eveningSnack.name).toBe("Corn Pakoda"); // curated name matches the corrected generic detail
+  });
 });
 
 describe("getResolvedTabPlans", () => {
