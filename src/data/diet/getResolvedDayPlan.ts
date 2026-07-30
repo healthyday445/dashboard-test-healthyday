@@ -1,6 +1,6 @@
 import { DIET_SLOTS_ORDERED } from "./slots";
 import { GENERIC_CYCLE_CONTENT } from "./weekBlocks";
-import { CURATED_CONTENT_BY_DATE } from "./curatedContent";
+import { CURATED_CONTENT_BY_DATE, OMITTED_SLOTS_BY_DATE } from "./curatedContent";
 import { getCyclePosition, getEffectiveToday, getTabDates, formatDateDDMMYYYY, toIsoDateKey } from "./dateMath";
 import type { ResolvedDayPlan, ResolvedMeal, Language, LocalizedText } from "./types";
 
@@ -9,13 +9,14 @@ function resolveText(text: LocalizedText | undefined, language: Language): strin
 }
 
 /**
- * Resolves one day's 8 meals for the given language, merging the generic sheet content
- * with the curated override when present. Precedence: a curated field wins whenever
- * it's present for that date+slot; otherwise fall back to the generic layer for name
- * (-> detail, which has no per-language variant — the sheet is English-only today), or
- * to `undefined` for fields with no generic equivalent (tips/precautions/benefits/etc) —
- * never coerced to "" or []. `category`/`detail` are always the raw sheet values,
- * regardless of curation, so a curated day never loses access to the original sheet text.
+ * Resolves one day's meals (normally all 8 slots, fewer if `OMITTED_SLOTS_BY_DATE` drops
+ * any for this date) for the given language, merging the generic sheet content with the
+ * curated override when present. Precedence: a curated field wins whenever it's present
+ * for that date+slot; otherwise fall back to the generic layer for name (-> detail, which
+ * has no per-language variant — the sheet is English-only today), or to `undefined` for
+ * fields with no generic equivalent (tips/precautions/benefits/etc) — never coerced to ""
+ * or []. `category`/`detail` are always the raw sheet values, regardless of curation, so
+ * a curated day never loses access to the original sheet text.
  */
 export function getResolvedDayPlan(date: Date, language: Language = "English"): ResolvedDayPlan {
   const clamped = getEffectiveToday(date); // defensive: never resolve a pre-launch date
@@ -23,8 +24,9 @@ export function getResolvedDayPlan(date: Date, language: Language = "English"): 
   const genericDay = GENERIC_CYCLE_CONTENT[weekBlockId][weekdayIndex];
   const dateKey = toIsoDateKey(clamped);
   const curatedForDate = CURATED_CONTENT_BY_DATE[dateKey]; // undefined => zero curation for this date
+  const omittedSlots = OMITTED_SLOTS_BY_DATE[dateKey]; // slots with no card at all for this date
 
-  const meals: ResolvedMeal[] = DIET_SLOTS_ORDERED.map((slot) => {
+  const meals: ResolvedMeal[] = DIET_SLOTS_ORDERED.filter((slot) => !omittedSlots?.includes(slot.id)).map((slot) => {
     const generic = genericDay[slot.id];
     const curated = curatedForDate?.[slot.id];
 

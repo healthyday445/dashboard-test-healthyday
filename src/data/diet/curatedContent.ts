@@ -1,4 +1,4 @@
-import type { CuratedContentByDate, LocalizedText } from "./types";
+import type { CuratedContentByDate, LocalizedText, MealSlotId } from "./types";
 import imgWalnutsDates from "@/assets/diet/walnuts-dates.webp";
 import imgCucumberLemonDetoxJuice from "@/assets/diet/cucumber-lemon-detox-juice.webp";
 import imgCucumberPalakuraPaneerSalad from "@/assets/diet/cucumber-palakura-paneer-salad.webp";
@@ -808,10 +808,9 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       groceryListAvailable: true,
     },
   },
-  // 2026-08-09: the Figma design only has 7 distinct meal cards — postYogaDrink shares
-  // breakfast's dish with no separate card, and the generic sheet already matches ("Ragi
-  // Malt with nuts and seeds" for both slots), so postYogaDrink is deliberately left
-  // un-curated here and falls back to the generic layer rather than duplicating breakfast.
+  // 2026-08-09: the Figma design only has 7 meal cards — there is no postYogaDrink card
+  // at all that day (see OMITTED_SLOTS_BY_DATE below, which drops it from the resolved
+  // plan entirely rather than falling back to the generic sheet layer).
   "2026-08-09": {
     earlyMorning: {
       name: pending("Soaked Pistachios & Gold Raisins"),
@@ -905,4 +904,14 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       groceryListAvailable: true,
     },
   },
+};
+
+/**
+ * Slots that don't exist at all for a given date — the Figma design has no card for
+ * them, so `getResolvedDayPlan` must drop them from the resolved meal list rather than
+ * falling back to the generic sheet layer (which would render a card the design never
+ * shows). 2026-08-09 has only 7 meal cards: postYogaDrink has no distinct card that day.
+ */
+export const OMITTED_SLOTS_BY_DATE: Partial<Record<string, MealSlotId[]>> = {
+  "2026-08-09": ["postYogaDrink"],
 };

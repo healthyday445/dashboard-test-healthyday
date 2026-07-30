@@ -64,17 +64,17 @@ describe("getResolvedDayPlan", () => {
   });
 
   it.each([
-    [2026, 7, 5, "Warm Water"],
-    [2026, 7, 6, "Sesame & Flax Seeds"],
-    [2026, 7, 7, "Soaked Almonds & Black Raisins"],
-    [2026, 7, 8, "Soaked Chia & Flax Seeds"],
-    [2026, 7, 9, "Soaked Pistachios & Gold Raisins"],
-  ])("resolves curated earlyMorning for %i-%i-%i (%s)", (y, m, d, expectedName) => {
+    [2026, 7, 5, "Warm Water", 8],
+    [2026, 7, 6, "Sesame & Flax Seeds", 8],
+    [2026, 7, 7, "Soaked Almonds & Black Raisins", 8],
+    [2026, 7, 8, "Soaked Chia & Flax Seeds", 8],
+    [2026, 7, 9, "Soaked Pistachios & Gold Raisins", 7], // postYogaDrink omitted this date
+  ])("resolves curated earlyMorning for %i-%i-%i (%s)", (y, m, d, expectedName, expectedMealCount) => {
     const plan = getResolvedDayPlan(new Date(y, m, d));
     const earlyMorning = plan.meals.find((meal) => meal.slotId === "earlyMorning")!;
     expect(earlyMorning.isCurated).toBe(true);
     expect(earlyMorning.name).toBe(expectedName);
-    expect(plan.meals).toHaveLength(8);
+    expect(plan.meals).toHaveLength(expectedMealCount);
   });
 
   it("groups the two newly-added benefit icons (brain-health, healthy-skin) under one Almonds card for 2026-08-07", () => {
@@ -94,12 +94,11 @@ describe("getResolvedDayPlan", () => {
     expect(cucumberCards?.[0].benefits.map((item) => item.iconKey)).toEqual(["water", "snowflake"]);
   });
 
-  it("leaves 2026-08-09 postYogaDrink un-curated since Figma has no distinct card for it, but the generic sheet already matches", () => {
+  it("omits 2026-08-09 postYogaDrink entirely — Figma has no card for it that day", () => {
     const plan = getResolvedDayPlan(new Date(2026, 7, 9));
-    const postYogaDrink = plan.meals.find((meal) => meal.slotId === "postYogaDrink")!;
+    expect(plan.meals).toHaveLength(7);
+    expect(plan.meals.map((meal) => meal.slotId)).not.toContain("postYogaDrink");
     const breakfast = plan.meals.find((meal) => meal.slotId === "breakfast")!;
-    expect(postYogaDrink.isCurated).toBe(false);
-    expect(postYogaDrink.name).toBe("Ragi Malt with nuts and seeds"); // generic sheet detail
     expect(breakfast.isCurated).toBe(true);
     expect(breakfast.name).toBe("Ragi Malt with Nuts & Seeds"); // curated, distinct capitalization
   });
