@@ -4,13 +4,17 @@ import mealIcon from "@/assets/diet/icons/meal.webp";
 import riceBowlIcon from "@/assets/diet/icons/rice-bowl.webp";
 
 type DietIngredientListProps =
-  | { variant: "benefits"; rows: ResolvedNutritionalBenefit[]; trailing?: React.ReactNode }
-  | { variant: "quantity"; rows: ResolvedRecommendedQuantity[]; trailing?: React.ReactNode };
+  | { variant: "benefits"; rows: ResolvedNutritionalBenefit[] }
+  | { variant: "quantity"; rows: ResolvedRecommendedQuantity[] };
 
-// Labels/icons from Figma node 890:8563 (RECOMMENDED QTY / BENEFITS section headers).
+// Labels/icons from Figma node 890:8577 (BENEFITS) / 890:8639 (RECOMMENDED QTY) headers.
+// "Meal" (quantity) is a self-contained icon — the green circle is already baked into the
+// asset. "Rice Bowl" (benefits) is a bare white glyph that needs its own circular backdrop
+// (Figma "Ellipse 70", solid #8CBF00) — that backdrop was missing before, which is why the
+// icon looked absent.
 const HEADER_CONFIG = {
-  benefits: { label: "Nutritional Benefits", icon: riceBowlIcon },
-  quantity: { label: "Recommended Quantity", icon: mealIcon },
+  benefits: { label: "Nutritional Benefits", icon: riceBowlIcon, iconBackdrop: "#8CBF00" },
+  quantity: { label: "Recommended Quantity", icon: mealIcon, iconBackdrop: null },
 } as const;
 
 /**
@@ -18,20 +22,32 @@ const HEADER_CONFIG = {
  * - "quantity" rows are a single line — ingredient name left, a green qty pill right.
  * - "benefits" rows are two lines — ingredient name on top (in green), the benefit's
  *   icon + label below it — inside a taller white card.
- * `trailing` renders inline in the header row (used to place the Grocery List button
- * next to "Nutritional Benefits" instead of floating it elsewhere on the page).
  */
-export const DietIngredientList: React.FC<DietIngredientListProps> = ({ variant, rows, trailing }) => {
-  const { label, icon } = HEADER_CONFIG[variant];
+export const DietIngredientList: React.FC<DietIngredientListProps> = ({ variant, rows }) => {
+  const { label, icon, iconBackdrop } = HEADER_CONFIG[variant];
 
   return (
     <div style={{ margin: "0 20px 16px" }}>
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "14px", gap: "12px" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-          <img src={icon} alt="" style={{ width: "23px", height: "23px" }} />
-          <span style={{ fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, color: "#202020" }}>{label}</span>
-        </div>
-        {trailing}
+      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "14px" }}>
+        {iconBackdrop ? (
+          <div
+            style={{
+              flexShrink: 0,
+              width: "23px",
+              height: "23px",
+              borderRadius: "50%",
+              background: iconBackdrop,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <img src={icon} alt="" style={{ width: "13.6px", height: "13.6px" }} />
+          </div>
+        ) : (
+          <img src={icon} alt="" style={{ width: "25px", height: "25px" }} />
+        )}
+        <span style={{ fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, color: "#000" }}>{label}</span>
       </div>
 
       <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
@@ -83,10 +99,22 @@ export const DietIngredientList: React.FC<DietIngredientListProps> = ({ variant,
                 }}
               >
                 <div style={{ fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, color: "#8CBF00", marginBottom: "10px" }}>{row.ingredient}</div>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <img src={getBenefitIcon(row.iconKey)} alt="" style={{ width: "20px", height: "20px" }} />
-                  <span style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#202020" }}>{row.benefitLabel}</span>
-                </div>
+                {row.benefits.map((benefit, benefitIdx) => (
+                  <div
+                    key={benefitIdx}
+                    style={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: "8px",
+                      paddingTop: benefitIdx > 0 ? "10px" : undefined,
+                      marginTop: benefitIdx > 0 ? "10px" : undefined,
+                      borderTop: benefitIdx > 0 ? "1px solid #EEE" : undefined,
+                    }}
+                  >
+                    <img src={getBenefitIcon(benefit.iconKey)} alt="" style={{ width: "20px", height: "20px" }} />
+                    <span style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#000" }}>{benefit.benefitLabel}</span>
+                  </div>
+                ))}
               </div>
             ))}
       </div>

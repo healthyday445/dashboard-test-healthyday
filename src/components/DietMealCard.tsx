@@ -1,6 +1,7 @@
 import { Skeleton } from "@/components/ui/skeleton";
 import { getMealPlaceholderIcon } from "@/lib/dietCategoryIcon";
 import type { ResolvedMeal } from "@/data/diet";
+import clockIcon from "@/assets/diet/icons/clock.webp";
 
 // Real pixel values from the Figma card (890:8424 / 890:8443, both on a 412px mobile frame):
 // a 100px circle, 32px of it floating outside the rectangle's left edge (68px overlapping
@@ -11,15 +12,12 @@ const THUMB_SIZE = 100;
 const THUMB_OUTSIDE = 32;
 const THUMB_INSIDE = THUMB_SIZE - THUMB_OUTSIDE;
 const THUMB_TEXT_GAP = 20;
+// The photo sits on a white "coin" backing (Figma "Ellipse 61", node 890:8429) — a 4px white
+// ring peeking out around the photo's edge, plus a soft shadow. Ring width is symmetric, so
+// it extends THUMB_OUTSIDE further left and THUMB_INSIDE further right by the same amount.
+const THUMB_RING_WIDTH = 4;
 const ARROW_SIZE = 34;
 const ARROW_INSET = 12; // distance from the rectangle's right edge to the arrow — arrow sits inside, not overlapping past it
-
-const ClockIcon = () => (
-  <svg width="14" height="14" viewBox="0 0 14 14" fill="none">
-    <circle cx="7" cy="7" r="6" stroke="#085E00" strokeWidth="1" />
-    <path d="M7 4V7L9.1 8.4" stroke="#085E00" strokeWidth="1" strokeLinecap="round" />
-  </svg>
-);
 
 /** Green circular "go to details" affordance (Figma node 890:8431 — a left-arrow asset
  *  mirrored to point right; recreated as an inline SVG pointing right directly). */
@@ -97,7 +95,7 @@ export const DietMealCard: React.FC<DietMealCardProps> = ({ meal, onClick }) => 
       <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
         <span style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 800, color: "#085E00" }}>{meal.slotLabel}</span>
         <span style={{ display: "flex", alignItems: "center", gap: "4px", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, color: "#085E00" }}>
-          <ClockIcon />
+          <img src={clockIcon} alt="" style={{ width: "14px", height: "14px" }} />
           {meal.timeRangeLabel}
         </span>
       </div>
@@ -116,28 +114,42 @@ export const DietMealCard: React.FC<DietMealCardProps> = ({ meal, onClick }) => 
           cursor: "pointer",
         }}
       >
+        {/* White "coin" backing behind the photo (Figma "Ellipse 61") — a ring peeks out
+            around the photo's edge, plus a soft shadow lifting the whole thumbnail. */}
         <div
           style={{
             position: "absolute",
-            left: `-${THUMB_OUTSIDE}px`,
+            left: `-${THUMB_OUTSIDE + THUMB_RING_WIDTH}px`,
             top: "50%",
             transform: "translateY(-50%)",
-            width: `${THUMB_SIZE}px`,
-            height: `${THUMB_SIZE}px`,
+            width: `${THUMB_SIZE + THUMB_RING_WIDTH * 2}px`,
+            height: `${THUMB_SIZE + THUMB_RING_WIDTH * 2}px`,
             borderRadius: "50%",
-            background,
-            overflow: "hidden",
-            boxShadow: "0 2px 6px 0 rgba(0,0,0,0.18)",
+            background: "#FFF",
+            boxShadow: "1px 1px 4px 0 rgba(0,0,0,0.15), -1px -1px 4px 0 rgba(0,0,0,0.15)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
           }}
         >
-          {meal.imageUrl ? (
-            <img src={meal.imageUrl} alt={meal.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-          ) : (
-            icon
-          )}
+          <div
+            style={{
+              width: `${THUMB_SIZE}px`,
+              height: `${THUMB_SIZE}px`,
+              borderRadius: "50%",
+              background,
+              overflow: "hidden",
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            {meal.imageUrl ? (
+              <img src={meal.imageUrl} alt={meal.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+            ) : (
+              icon
+            )}
+          </div>
         </div>
 
         <DietMealCardRectangle>

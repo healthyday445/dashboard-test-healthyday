@@ -77,12 +77,21 @@ describe("getResolvedDayPlan", () => {
     expect(plan.meals).toHaveLength(8);
   });
 
-  it("uses the two newly-added benefit icons (brain-health, healthy-skin) for 2026-08-07 Almonds", () => {
+  it("groups the two newly-added benefit icons (brain-health, healthy-skin) under one Almonds card for 2026-08-07", () => {
     const plan = getResolvedDayPlan(new Date(2026, 7, 7));
     const earlyMorning = plan.meals.find((meal) => meal.slotId === "earlyMorning")!;
-    const iconKeys = earlyMorning.nutritionalBenefits?.map((b) => b.iconKey);
+    const almonds = earlyMorning.nutritionalBenefits?.find((b) => b.ingredient === "Almonds");
+    const iconKeys = almonds?.benefits.map((item) => item.iconKey);
     expect(iconKeys).toContain("brain-health");
     expect(iconKeys).toContain("healthy-skin");
+  });
+
+  it("groups Cucumber's Hydration and Cooling benefits into one card for 2026-08-03 breakfast", () => {
+    const plan = getResolvedDayPlan(new Date(2026, 7, 3));
+    const breakfast = plan.meals.find((meal) => meal.slotId === "breakfast")!;
+    const cucumberCards = breakfast.nutritionalBenefits?.filter((b) => b.ingredient === "Cucumber");
+    expect(cucumberCards).toHaveLength(1);
+    expect(cucumberCards?.[0].benefits.map((item) => item.iconKey)).toEqual(["water", "snowflake"]);
   });
 
   it("leaves 2026-08-09 postYogaDrink un-curated since Figma has no distinct card for it, but the generic sheet already matches", () => {

@@ -18,25 +18,41 @@ const BackChevronIcon = () => (
   </svg>
 );
 
+/**
+ * A genuinely floating button (Figma node 890:8661 — its y-position is identical across
+ * every "Diet detailed N" frame regardless of that meal's total content height, and it has
+ * a `backdrop-blur`, both of which only make sense for something that stays fixed on screen
+ * while content scrolls underneath it — not an inline element next to a heading). Pinned to
+ * the bottom-right of the same max-412px column the rest of the page uses, matching the
+ * design's ~20px right margin.
+ */
 const GroceryListButton = () => (
-  <button
-    onClick={() => window.open(GROCERY_LIST_URL, "_blank")}
-    style={{
-      flexShrink: 0,
-      display: "flex",
-      alignItems: "center",
-      gap: "6px",
-      padding: "8px 14px",
-      borderRadius: "20px",
-      border: "none",
-      background: "#FEAB27",
-      boxShadow: "0 2px 6px 0 rgba(0,0,0,0.15)",
-      cursor: "pointer",
-    }}
-  >
-    <img src={buyingIcon} alt="" style={{ width: "16px", height: "16px" }} />
-    <span style={{ fontFamily: "Outfit", fontSize: "13px", fontWeight: 700, color: "#FFF", whiteSpace: "nowrap" }}>Grocery List</span>
-  </button>
+  <div style={{ position: "fixed", bottom: "24px", left: 0, right: 0, maxWidth: "412px", margin: "0 auto", zIndex: 20, pointerEvents: "none" }}>
+    <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: "20px" }}>
+      <button
+        onClick={() => window.open(GROCERY_LIST_URL, "_blank")}
+        style={{
+          pointerEvents: "auto",
+          flexShrink: 0,
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          gap: "8px",
+          width: "154px",
+          height: "44px",
+          borderRadius: "40px",
+          border: "none",
+          background: "#FEAB27",
+          backdropFilter: "blur(2px)",
+          boxShadow: "0 0 10px 1px rgba(0,0,0,0.25)",
+          cursor: "pointer",
+        }}
+      >
+        <img src={buyingIcon} alt="" style={{ width: "21px", height: "21px" }} />
+        <span style={{ fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, color: "#FFF", whiteSpace: "nowrap" }}>Grocery List</span>
+      </button>
+    </div>
+  </div>
 );
 
 /** Paid-students-only per-meal detail screen — hero + name, then whichever of
@@ -123,9 +139,10 @@ const DietMealDetail = () => {
   if (showSkeleton) {
     return (
       <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
-        <header className="hd-header bg-white">
+        <header className="hd-header bg-white" style={{ position: "fixed", top: 0, left: 0, right: 0, maxWidth: "412px", margin: "0 auto", zIndex: 20 }}>
           <img src={logo} alt="Healthyday" className="h-7" />
         </header>
+        <div style={{ height: "68px" }} />
         <Skeleton style={{ width: "100%", height: "300px", borderRadius: 0 }} />
         <div style={{ padding: "20px" }}>
           <Skeleton style={{ width: "60%", height: "22px", borderRadius: "4px", margin: "0 auto 16px" }} />
@@ -166,13 +183,13 @@ const DietMealDetail = () => {
   }
 
   const { background, icon } = getMealPlaceholderIcon(meal.category, meal.detail);
-  const groceryButton = meal.groceryListAvailable ? <GroceryListButton /> : null;
 
   return (
     <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
-      <header className="hd-header bg-white">
+      <header className="hd-header bg-white" style={{ position: "fixed", top: 0, left: 0, right: 0, maxWidth: "412px", margin: "0 auto", zIndex: 20 }}>
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
+      <div style={{ height: "68px" }} />
 
       {/* Hero photo, with a white-to-transparent fade at the top so the back button reads
           clearly regardless of the photo underneath (Figma 890:8570/890:8572). */}
@@ -212,17 +229,17 @@ const DietMealDetail = () => {
           )}
         </div>
 
-        <div style={{ paddingBottom: "32px" }}>
+        {/* Extra bottom padding clears the fixed Grocery List button so it never overlaps
+            the last card when scrolled all the way down. */}
+        <div style={{ paddingBottom: "90px" }}>
           {meal.tips && <DietInfoCallout variant="tips" text={meal.tips} language={language} />}
           {meal.precautions && <DietInfoCallout variant="precautions" text={meal.precautions} language={language} />}
           {meal.recommendedQuantity?.length ? <DietIngredientList variant="quantity" rows={meal.recommendedQuantity} /> : null}
-          {meal.nutritionalBenefits?.length ? (
-            <DietIngredientList variant="benefits" rows={meal.nutritionalBenefits} trailing={groceryButton} />
-          ) : (
-            groceryButton && <div style={{ margin: "0 20px 16px", display: "flex", justifyContent: "flex-end" }}>{groceryButton}</div>
-          )}
+          {meal.nutritionalBenefits?.length ? <DietIngredientList variant="benefits" rows={meal.nutritionalBenefits} /> : null}
         </div>
       </div>
+
+      {meal.groceryListAvailable && <GroceryListButton />}
     </div>
   );
 };

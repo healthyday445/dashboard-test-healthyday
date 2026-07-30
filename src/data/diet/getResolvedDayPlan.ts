@@ -43,8 +43,10 @@ export function getResolvedDayPlan(date: Date, language: Language = "English"): 
       precautions: resolveText(curated?.precautions, language),
       nutritionalBenefits: curated?.nutritionalBenefits?.map((b) => ({
         ingredient: resolveText(b.ingredient, language) ?? "",
-        benefitLabel: resolveText(b.benefitLabel, language) ?? "",
-        iconKey: b.iconKey,
+        benefits: b.benefits.map((item) => ({
+          benefitLabel: resolveText(item.benefitLabel, language) ?? "",
+          iconKey: item.iconKey,
+        })),
       })),
       recommendedQuantity: curated?.recommendedQuantity?.map((q) => ({
         ingredient: resolveText(q.ingredient, language) ?? "",

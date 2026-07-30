@@ -59,7 +59,7 @@ export const DietInfoCallout: React.FC<DietInfoCalloutProps> = ({ variant, text,
             width: "24px",
             height: "24px",
             borderRadius: "50%",
-            background: `${accent}1F`,
+            background: accent,
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
@@ -69,7 +69,9 @@ export const DietInfoCallout: React.FC<DietInfoCalloutProps> = ({ variant, text,
         </div>
         <span style={{ fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, color: accent }}>{label[language]}</span>
       </div>
-      <p style={{ margin: 0, maxWidth: "215px", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400, color: "#202020", lineHeight: 1.5 }}>{text}</p>
+      {/* Aligned with the heading text above (icon width + gap = 32px), not with the card's
+          own left padding — the two must share the same starting x. */}
+      <p style={{ margin: 0, marginLeft: "32px", maxWidth: "215px", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400, color: "#202020", lineHeight: 1.5 }}>{text}</p>
       <img
         src={decoration}
         alt=""

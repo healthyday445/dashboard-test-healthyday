@@ -59,12 +59,21 @@ export interface CuratedItem {
   label: LocalizedText;
 }
 
-export interface NutritionalBenefit {
-  ingredient: LocalizedText;
+export interface NutritionalBenefitItem {
   benefitLabel: LocalizedText;
   /** Loose lookup key into the category-icon/benefit-icon set — an unrecognized key
    *  must fall back to a generic icon, never throw or leave a gap. */
   iconKey: string;
+}
+
+/** One ingredient card in the Nutritional Benefits section (Figma 890:8577) — an ingredient
+ *  can have MULTIPLE benefits (e.g. Cucumber → Hydration + Cooling), and the design renders
+ *  all of them stacked inside a single card with a divider between rows, not one card per
+ *  benefit. Never split one ingredient's benefits across multiple `NutritionalBenefit`
+ *  entries — group them all into one `benefits` array instead. */
+export interface NutritionalBenefit {
+  ingredient: LocalizedText;
+  benefits: NutritionalBenefitItem[];
 }
 
 export interface RecommendedQuantity {
@@ -99,10 +108,14 @@ export interface ResolvedItem {
   label: string;
 }
 
-export interface ResolvedNutritionalBenefit {
-  ingredient: string;
+export interface ResolvedNutritionalBenefitItem {
   benefitLabel: string;
   iconKey: string;
+}
+
+export interface ResolvedNutritionalBenefit {
+  ingredient: string;
+  benefits: ResolvedNutritionalBenefitItem[];
 }
 
 export interface ResolvedRecommendedQuantity {

@@ -130,9 +130,11 @@ const Diet = () => {
 
   return (
     <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
-      <header className="hd-header bg-white">
+      <header className="hd-header bg-white" style={{ position: "fixed", top: 0, left: 0, right: 0, maxWidth: "412px", margin: "0 auto", zIndex: 20 }}>
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
+      {/* Spacer for the fixed header above, so content doesn't start underneath it. */}
+      <div style={{ height: "68px" }} />
 
       <DietDateTabBar tabs={tabs} activeIdx={activeTabIdx} onChange={setActiveTabIdx} disabled={showSkeleton} />
 

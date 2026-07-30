@@ -12,6 +12,12 @@ import healthyEatingIcon from "@/assets/diet/icons/healthy-eating.webp";
 import meditationIcon from "@/assets/diet/icons/meditation.webp";
 import brainHealthIcon from "@/assets/diet/icons/brain-health.webp";
 import healthySkinIcon from "@/assets/diet/icons/healthy-skin.webp";
+import muscleHealthIcon from "@/assets/diet/icons/muscle-health.webp";
+import hemoglobinIcon from "@/assets/diet/icons/hemoglobin.webp";
+import eyeHealthIcon from "@/assets/diet/icons/eye-health.webp";
+import warmthIcon from "@/assets/diet/icons/warmth.webp";
+import antiInflammatoryIcon from "@/assets/diet/icons/anti-inflammatory.webp";
+import nutrientAbsorptionIcon from "@/assets/diet/icons/nutrient-absorption.webp";
 
 /**
  * Placeholder visuals for the diet feature until real per-dish photography exists.
@@ -89,9 +95,12 @@ export function getMealPlaceholderIcon(category: string, detail: string): IconSp
   return GENERIC_SPEC;
 }
 
-// Real Figma icon assets (890:8563 and cross-referenced instances of each named icon
-// component, e.g. "Heart", "Lightning Bolt", "Coronavirus Shield" — see download notes in
-// project memory). Keyed by the same `iconKey` strings used in curatedContent.ts.
+// Real icon assets from the canonical benefit-icon pack (Figma node 875:2129, "icon-pack") —
+// the single source of truth for every benefit icon in this feature. Keyed by the same
+// `iconKey` strings used in curatedContent.ts. Note "muscle-health" covers BOTH "Muscle
+// Health" and "Protein-Rich" benefit labels (the pack itself labels this one icon
+// "Muscle Health/Protein"), and "nutrient-absorption" (an orange heart+checkmark) is a
+// distinct icon from plain "heart" (red, for "Heart Health") — don't conflate the two.
 const BENEFIT_ICONS: Record<string, string> = {
   heart: heartIcon,
   "lightning-bolt": lightningBoltIcon,
@@ -107,6 +116,12 @@ const BENEFIT_ICONS: Record<string, string> = {
   meditation: meditationIcon,
   "brain-health": brainHealthIcon,
   "healthy-skin": healthySkinIcon,
+  "muscle-health": muscleHealthIcon,
+  hemoglobin: hemoglobinIcon,
+  "eye-health": eyeHealthIcon,
+  warmth: warmthIcon,
+  "anti-inflammatory": antiInflammatoryIcon,
+  "nutrient-absorption": nutrientAbsorptionIcon,
 };
 
 /** Real icon asset URL for a `nutritionalBenefits[].iconKey` value — unrecognized keys
