@@ -64,6 +64,13 @@ export interface NutritionalBenefitItem {
   /** Loose lookup key into the category-icon/benefit-icon set — an unrecognized key
    *  must fall back to a generic icon, never throw or leave a gap. */
   iconKey: string;
+  /** Restricts this single benefit row to a subset of languages, e.g. `["English"]`
+   *  means this row exists only in the English Figma design and must be dropped when
+   *  rendering Telugu (the two languages' designs don't always show the same set of
+   *  benefit rows for an ingredient). Omit entirely (the default — true for almost every
+   *  entry) to mean "shown in every language." Never write the full language list
+   *  explicitly — omit the field instead of listing all languages. */
+  visibleLanguages?: Language[];
 }
 
 /** One ingredient card in the Nutritional Benefits section (Figma 890:8577) — an ingredient
@@ -74,6 +81,11 @@ export interface NutritionalBenefitItem {
 export interface NutritionalBenefit {
   ingredient: LocalizedText;
   benefits: NutritionalBenefitItem[];
+  /** Same meaning as `NutritionalBenefitItem.visibleLanguages`, but for the whole card —
+   *  an ingredient with no card at all in one language's Figma design (e.g. Capsicum
+   *  missing from the Telugu screen for a dish that has it in English). Omit for "shown
+   *  in every language." */
+  visibleLanguages?: Language[];
 }
 
 export interface RecommendedQuantity {
@@ -81,6 +93,9 @@ export interface RecommendedQuantity {
   /** The quantity chip (e.g. "2 pcs") — LocalizedText for future flexibility, though in
    *  every curated meal today this value happens to be identical across languages. */
   qty: LocalizedText;
+  /** Same meaning as `NutritionalBenefit.visibleLanguages`. Added for consistency; no
+   *  real-world mismatch has been found here yet. */
+  visibleLanguages?: Language[];
 }
 
 /**

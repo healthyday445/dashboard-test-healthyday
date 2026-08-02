@@ -140,11 +140,9 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
         { ingredient: t("Guava", "జామపండు"), benefits: [
           { benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
           { benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" },
-          // NOTE: the Telugu Figma screen (970:32655) only shows 3 Guava benefit rows
-          // (Immunity, Gut Health, Keeps You Full Longer) — these two extra rows are kept
-          // to match the English design (924:21411, 5 benefits) with a hand-translated label.
-          { benefitLabel: t("Healthy Blood Sugar", "ఆరోగ్యకరమైన రక్తంలో చక్కెర అందిస్తుంది"), iconKey: "sugar-cubes" },
-          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
+          // Figma 970:32655 (Telugu) has no row for these two — English-only, per 924:21411.
+          { benefitLabel: t("Healthy Blood Sugar", "ఆరోగ్యకరమైన రక్తంలో చక్కెర అందిస్తుంది"), iconKey: "sugar-cubes", visibleLanguages: ["English"] },
+          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food", visibleLanguages: ["English"] },
           { benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" },
         ] },
       ],
@@ -183,9 +181,8 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       nutritionalBenefits: [
         { ingredient: t("Mushroom", "మష్రూమ్"), benefits: [
           { benefitLabel: t("Immunity Support", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
-          // NOTE: the Telugu Figma screen (970:32655) only shows this one Mushroom benefit
-          // row; Antioxidant Protection is kept to match the English design (924:21411).
-          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
+          // Figma 970:32655 (Telugu) has no row for this — English-only, per 924:21411.
+          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food", visibleLanguages: ["English"] },
         ] },
       ],
       groceryListAvailable: true,
@@ -237,9 +234,8 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       ),
       nutritionalBenefits: [
         { ingredient: t("Pumpkin Seeds", "గుమ్మడికాయ గింజలు"), benefits: [{ benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" }] },
-        // NOTE: the Telugu Figma screen (970:33289) only shows a Pumpkin Seeds benefit row;
-        // Sunflower Seeds is kept to match the English design (924:21411).
-        { ingredient: t("Sunflower Seeds", "సన్‌ఫ్లవర్ గింజలు"), benefits: [{ benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" }] },
+        // Figma 970:33289 (Telugu) has no card for Sunflower Seeds — English-only, per 924:21411.
+        { ingredient: t("Sunflower Seeds", "సన్‌ఫ్లవర్ గింజలు"), benefits: [{ benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" }], visibleLanguages: ["English"] },
       ],
       recommendedQuantity: [{ ingredient: same("Mixed Seeds"), qty: same("1 tbsp") }],
       groceryListAvailable: true,
@@ -321,9 +317,8 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       nutritionalBenefits: [
         { ingredient: t("Sprouts", "స్ప్రౌట్స్"), benefits: [
           { benefitLabel: t("Protein-Rich", "Protein ఎక్కువగా ఉంటుంది"), iconKey: "muscle-health" },
-          // NOTE: the Telugu Figma screen (970:33289) doesn't show a separate "Supports
-          // Metabolism" row for Sprouts; kept to match the English design (924:21411).
-          { benefitLabel: t("Supports Metabolism", "జీవక్రియ (మెటాబాలిజం)కు మద్దతు"), iconKey: "healthy-eating" },
+          // Figma 970:33289 (Telugu) has no row for this — English-only, per 924:21411.
+          { benefitLabel: t("Supports Metabolism", "జీవక్రియ (మెటాబాలిజం)కు మద్దతు"), iconKey: "healthy-eating", visibleLanguages: ["English"] },
           { benefitLabel: t("Better Digestion", "Digestion ను support చేస్తుంది"), iconKey: "stomach" },
           { benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" },
         ] },
@@ -357,11 +352,11 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       nutritionalBenefits: [
         { ingredient: t("Tulasi Tea", "తులసి టీ"), benefits: [
           { benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
-          // NOTE: the Telugu Figma screen (970:33289) shows a "Digestion Support" row here
-          // instead of Antioxidant Protection/Relaxation; kept as originally curated to
-          // match the English design (924:21411).
-          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
-          { benefitLabel: t("Relaxation", "శరీరం & మనసుకు రిలాక్సేషన్ అందిస్తుంది"), iconKey: "meditation" },
+          // Figma 970:33289 (Telugu) shows a "Digestion Support" row here instead of
+          // Antioxidant Protection/Relaxation (not modeled as its own benefit entry yet) —
+          // English-only for now, per 924:21411.
+          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food", visibleLanguages: ["English"] },
+          { benefitLabel: t("Relaxation", "శరీరం & మనసుకు రిలాక్సేషన్ అందిస్తుంది"), iconKey: "meditation", visibleLanguages: ["English"] },
         ] },
       ],
       groceryListAvailable: true,
@@ -402,9 +397,8 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       nutritionalBenefits: [
         { ingredient: t("Milk", "పాలు"), benefits: [{ benefitLabel: t("Bone Health", "Bone health కి మంచిది"), iconKey: "dog-bone" }] },
         { ingredient: t("Cinnamon", "దాల్చిన చెక్క"), benefits: [
-          // NOTE: the Telugu Figma screen (970:33879) only shows a Metabolism row for
-          // Cinnamon; Healthy Blood Sugar is kept to match the English design (924:21411).
-          { benefitLabel: t("Healthy Blood Sugar", "ఆరోగ్యకరమైన రక్తంలో చక్కెర అందిస్తుంది"), iconKey: "sugar-cubes" },
+          // Figma 970:33879 (Telugu) has no row for this — English-only, per 924:21411.
+          { benefitLabel: t("Healthy Blood Sugar", "ఆరోగ్యకరమైన రక్తంలో చక్కెర అందిస్తుంది"), iconKey: "sugar-cubes", visibleLanguages: ["English"] },
           { benefitLabel: t("Healthy Metabolism", "Metabolism ను పెంచుతుంది"), iconKey: "healthy-eating" },
         ] },
       ],
@@ -487,9 +481,8 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       nutritionalBenefits: [
         { ingredient: t("Mushroom", "మష్రూమ్"), benefits: [
           { benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
-          // NOTE: the Telugu Figma screen (970:33879) only shows an Immunity row for
-          // Mushroom; Antioxidant Protection is kept to match the English design (924:21411).
-          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
+          // Figma 970:33879 (Telugu) has no row for this — English-only, per 924:21411.
+          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food", visibleLanguages: ["English"] },
         ] },
         { ingredient: t("Peas", "బఠానీ"), benefits: [{ benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" }] },
       ],
@@ -569,11 +562,10 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
         { ingredient: t("Guava", "జామపండు"), benefits: [
           { benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
           { benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" },
-          // NOTE: the Telugu Figma screen (970:34451) only shows 3 Guava benefit rows
-          // (Immunity, Gut Health, Keeps You Full Longer) — these two extra rows are kept
-          // to match the English design (924:21411), same as the other Guava dates.
-          { benefitLabel: t("Healthy Blood Sugar", "ఆరోగ్యకరమైన రక్తంలో చక్కెర అందిస్తుంది"), iconKey: "sugar-cubes" },
-          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
+          // Figma 970:34451 (Telugu) has no row for these two — English-only, per 924:21411,
+          // same as the other Guava dates.
+          { benefitLabel: t("Healthy Blood Sugar", "ఆరోగ్యకరమైన రక్తంలో చక్కెర అందిస్తుంది"), iconKey: "sugar-cubes", visibleLanguages: ["English"] },
+          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food", visibleLanguages: ["English"] },
           { benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" },
         ] },
       ],
@@ -627,9 +619,9 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       nutritionalBenefits: [
         { ingredient: t("Rice", "అన్నం"), benefits: [{ benefitLabel: t("Energy", "ఎక్కువసేపు energy ని ఇస్తుంది"), iconKey: "lightning-bolt" }] },
         { ingredient: t("Coconut", "కొబ్బరి"), benefits: [{ benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" }] },
-        // NOTE: the Telugu Figma screen (970:34451) has no Capsicum row for this dish
-        // (only Rice, Coconut, Curd) — kept to match the English design (924:21411).
-        { ingredient: t("Capsicum", "క్యాప్సికం"), benefits: [{ benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" }] },
+        // Figma 970:34451 (Telugu) has no card for Capsicum (only Rice, Coconut, Curd) —
+        // English-only, per 924:21411.
+        { ingredient: t("Capsicum", "క్యాప్సికం"), benefits: [{ benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" }], visibleLanguages: ["English"] },
         { ingredient: t("Curd", "పెరుగు"), benefits: [{ benefitLabel: t("Better Digestion", "Digestion కు support ఇస్తుంది"), iconKey: "stomach" }] },
       ],
       groceryListAvailable: true,
@@ -721,11 +713,10 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
         { ingredient: t("Guava", "జామపండు"), benefits: [
           { benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
           { benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" },
-          // NOTE: the Telugu Figma screen (970:35060) only shows 3 Guava benefit rows
-          // (Immunity, Gut Health, Keeps You Full Longer) — these two extra rows are kept
-          // to match the English design (924:21411), same as the other Guava dates.
-          { benefitLabel: t("Healthy Blood Sugar", "ఆరోగ్యకరమైన రక్తంలో చక్కెర అందిస్తుంది"), iconKey: "sugar-cubes" },
-          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
+          // Figma 970:35060 (Telugu) has no row for these two — English-only, per 924:21411,
+          // same as the other Guava dates.
+          { benefitLabel: t("Healthy Blood Sugar", "ఆరోగ్యకరమైన రక్తంలో చక్కెర అందిస్తుంది"), iconKey: "sugar-cubes", visibleLanguages: ["English"] },
+          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food", visibleLanguages: ["English"] },
           { benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" },
         ] },
       ],
@@ -747,9 +738,8 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
         { ingredient: t("Rice", "అన్నం"), benefits: [{ benefitLabel: t("Energy", "Energy ఇస్తుంది"), iconKey: "lightning-bolt" }] },
         { ingredient: t("Gongura", "గోంగూర"), benefits: [
           { benefitLabel: t("Better Digestion", "Digestion కు support ఇస్తుంది"), iconKey: "stomach" },
-          // NOTE: the Telugu Figma screen (970:35060) only shows a Digestion row for
-          // Gongura; Antioxidant Protection is kept to match the English design (924:21411).
-          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
+          // Figma 970:35060 (Telugu) has no row for this — English-only, per 924:21411.
+          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food", visibleLanguages: ["English"] },
         ] },
         { ingredient: t("Dal", "పప్పు"), benefits: [{ benefitLabel: t("Muscle Health", "Muscle strength కి మంచిది"), iconKey: "muscle-health" }] },
         { ingredient: t("Curd", "పెరుగు"), benefits: [{ benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" }] },
@@ -788,9 +778,9 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
           { benefitLabel: t("Hydration", "Body Hydrated గా ఉంచుతుంది"), iconKey: "water" },
           { benefitLabel: t("Cooling", "శరీరానికి Cooling అందిస్తుంది"), iconKey: "snowflake" },
         ] },
-        // NOTE: the Telugu Figma screen (970:35060) has no Capsicum row for this dish
-        // (only Cucumber and Curd) — kept to match the English design (924:21411).
-        { ingredient: t("Capsicum", "క్యాప్సికం"), benefits: [{ benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" }] },
+        // Figma 970:35060 (Telugu) has no card for Capsicum (only Cucumber and Curd) —
+        // English-only, per 924:21411.
+        { ingredient: t("Capsicum", "క్యాప్సికం"), benefits: [{ benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" }], visibleLanguages: ["English"] },
         { ingredient: t("Curd", "పెరుగు"), benefits: [{ benefitLabel: t("Gut Health", "Gut ఆరోగ్యానికి మంచిది"), iconKey: "stomach" }] },
       ],
       groceryListAvailable: true,
@@ -805,9 +795,8 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       nutritionalBenefits: [
         { ingredient: t("Coriander Seed Tea", "ధనియాల టీ"), benefits: [
           { benefitLabel: t("Better Digestion", "Digestion కు support ఇస్తుంది"), iconKey: "stomach" },
-          // NOTE: the Telugu Figma screen (970:35060) only shows a Digestion row for
-          // Coriander Seed Tea; Antioxidant Protection is kept to match the English design.
-          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
+          // Figma 970:35060 (Telugu) has no row for this — English-only, per 924:21411.
+          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food", visibleLanguages: ["English"] },
         ] },
       ],
       groceryListAvailable: true,

@@ -8,6 +8,11 @@ function resolveText(text: LocalizedText | undefined, language: Language): strin
   return text?.[language];
 }
 
+/** An entry with no `visibleLanguages` is shown in every language (the common case). */
+function isVisible(visibleLanguages: Language[] | undefined, language: Language): boolean {
+  return visibleLanguages === undefined || visibleLanguages.includes(language);
+}
+
 /**
  * Resolves one day's meals (normally all 8 slots, fewer if `OMITTED_SLOTS_BY_DATE` drops
  * any for this date) for the given language, merging the generic sheet content with the
@@ -43,17 +48,24 @@ export function getResolvedDayPlan(date: Date, language: Language = "English"): 
       items: curated?.items?.map((item) => ({ label: resolveText(item.label, language) ?? "" })),
       tips: resolveText(curated?.tips, language),
       precautions: resolveText(curated?.precautions, language),
-      nutritionalBenefits: curated?.nutritionalBenefits?.map((b) => ({
-        ingredient: resolveText(b.ingredient, language) ?? "",
-        benefits: b.benefits.map((item) => ({
-          benefitLabel: resolveText(item.benefitLabel, language) ?? "",
-          iconKey: item.iconKey,
+      nutritionalBenefits: curated?.nutritionalBenefits
+        ?.filter((b) => isVisible(b.visibleLanguages, language))
+        .map((b) => ({
+          ingredient: resolveText(b.ingredient, language) ?? "",
+          benefits: b.benefits
+            .filter((item) => isVisible(item.visibleLanguages, language))
+            .map((item) => ({
+              benefitLabel: resolveText(item.benefitLabel, language) ?? "",
+              iconKey: item.iconKey,
+            })),
+        }))
+        .filter((b) => b.benefits.length > 0), // defensive: never leave a card with zero rows
+      recommendedQuantity: curated?.recommendedQuantity
+        ?.filter((q) => isVisible(q.visibleLanguages, language))
+        .map((q) => ({
+          ingredient: resolveText(q.ingredient, language) ?? "",
+          qty: resolveText(q.qty, language) ?? "",
         })),
-      })),
-      recommendedQuantity: curated?.recommendedQuantity?.map((q) => ({
-        ingredient: resolveText(q.ingredient, language) ?? "",
-        qty: resolveText(q.qty, language) ?? "",
-      })),
       groceryListAvailable: curated?.groceryListAvailable ?? false,
     };
   });

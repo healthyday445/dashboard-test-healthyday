@@ -110,6 +110,28 @@ describe("getResolvedDayPlan", () => {
     expect(eveningSnack.detail).toBe("Corn Pakoda");
     expect(eveningSnack.name).toBe("Corn Pakoda"); // curated name matches the corrected generic detail
   });
+
+  it("drops English-only nutritional-benefit rows when resolving Telugu (visibleLanguages)", () => {
+    const englishPlan = getResolvedDayPlan(new Date(2026, 7, 3), "English");
+    const teluguPlan = getResolvedDayPlan(new Date(2026, 7, 3), "Telugu");
+    const englishGuava = englishPlan.meals.find((m) => m.slotId === "morningSnack")!.nutritionalBenefits!.find((b) => b.ingredient === "Guava")!;
+    const teluguGuava = teluguPlan.meals.find((m) => m.slotId === "morningSnack")!.nutritionalBenefits!.find((b) => b.ingredient === "జామపండు")!;
+    // English design (924:21411) has 5 benefit rows; the Telugu design (970:32655) only
+    // shows 3 of them — Healthy Blood Sugar and Antioxidant Protection are English-only.
+    expect(englishGuava.benefits).toHaveLength(5);
+    expect(teluguGuava.benefits).toHaveLength(3);
+    expect(teluguGuava.benefits.map((b) => b.iconKey)).toEqual(["shield", "stomach", "happy"]);
+  });
+
+  it("drops an English-only nutritional-benefit card entirely when resolving Telugu", () => {
+    const englishPlan = getResolvedDayPlan(new Date(2026, 7, 6), "English");
+    const teluguPlan = getResolvedDayPlan(new Date(2026, 7, 6), "Telugu");
+    const englishDinner = englishPlan.meals.find((m) => m.slotId === "dinner")!;
+    const teluguDinner = teluguPlan.meals.find((m) => m.slotId === "dinner")!;
+    // The Telugu design (970:34451) has no Capsicum card for this dish at all.
+    expect(englishDinner.nutritionalBenefits?.some((b) => b.ingredient === "Capsicum")).toBe(true);
+    expect(teluguDinner.nutritionalBenefits?.some((b) => b.ingredient === "క్యాప్సికం")).toBe(false);
+  });
 });
 
 describe("getResolvedTabPlans", () => {
