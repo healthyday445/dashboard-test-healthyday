@@ -1,6 +1,6 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
-import imgIngredients from "@/assets/Ingredients.png";
+import dietMealIcon from "@/assets/diet/icons/meal.webp";
 import imgLanguageEnglish from "@/assets/language_English.webp";
 import imgLanguageTelugu from "@/assets/language_Telugu.webp";
 import { getCurrentMinutesIST } from "@/lib/utils";
@@ -108,10 +108,14 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
           title="View Class Recordings"
           subtitle="Click here to see Yoga Class at anytime"
           icon={
-            <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
-              <circle cx="22" cy="22" r="22" fill="#FEAB27" opacity="0.15" />
-              <path d="M18 16V28L30 22L18 16Z" fill="#FEAB27" />
-            </svg>
+            <div style={{ width: "44px", height: "44px", borderRadius: "6px", border: "0.25px solid #BCBCBC", background: "#FFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                <rect x="4" width="14" height="14" rx="1.5" fill="#FEAB27" />
+                <path d="M9 4V10L14 7L9 4Z" fill="white" />
+                <line x1="1" y1="4" x2="1" y2="17" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" />
+                <line x1="13" y1="17" x2="1" y2="17" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" />
+              </svg>
+            </div>
           }
         />
       </div>
@@ -119,32 +123,15 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
       {is12Month && (
         <div style={{ padding: "12px 21px 0 22px" }}>
           <PaidActionCard
-            onClick={() => window.open("https://dailyyogawithjagan.com/grocery-list", "_blank")}
-            background="#EAFFE5"
-            title="This Week's Grocery List"
-            subtitle="Nutrition plan for the week"
-            icon={
-              <div style={{ width: "44px", height: "44px", borderRadius: "6px", border: "0.25px solid #BCBCBC", background: "#FFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
-                <img src={imgIngredients} alt="Ingredients" style={{ width: "24px", height: "24px", aspectRatio: "1/1", objectFit: "contain" }} />
-              </div>
-            }
-          />
-        </div>
-      )}
-
-      {is12Month && (
-        <div style={{ padding: "12px 21px 0 22px" }}>
-          <PaidActionCard
             onClick={() => navigate(`/${mobile || ""}/diet`)}
             background="#EAFFE5"
-            title="View Diet Plan"
-            subtitle="Your personalized meal plan"
+            title="View DIET Routine"
+            subtitle="Nutrition plan for the week"
+            accentColor="#7BBC6B"
             icon={
-              <svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44" fill="none">
-                <circle cx="22" cy="22" r="22" fill="#3E9E1F" opacity="0.15" />
-                <circle cx="22" cy="22" r="10" fill="none" stroke="#3E9E1F" strokeWidth="2" />
-                <path d="M22 15v14M17 20a5 5 0 0 1 10 0" stroke="#3E9E1F" strokeWidth="1.6" strokeLinecap="round" />
-              </svg>
+              <div style={{ width: "44px", height: "44px", borderRadius: "6px", border: "0.25px solid #BCBCBC", background: "#FFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
+                <img src={dietMealIcon} alt="" style={{ width: "26px", height: "26px" }} />
+              </div>
             }
           />
         </div>

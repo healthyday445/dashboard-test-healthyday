@@ -4,11 +4,14 @@ interface PaidActionCardProps {
   subtitle: string;
   background: string;
   titleColor?: string;
+  /** Subtitle text color and chevron color — Figma varies this per card (orange for
+   *  Recordings, green for Diet), unlike titleColor which is blue on every card so far. */
+  accentColor?: string;
   onClick: () => void;
 }
 
-/** A tappable icon+title+subtitle row used for dashboard shortcuts (recordings, grocery list, etc). */
-export const PaidActionCard: React.FC<PaidActionCardProps> = ({ icon, title, subtitle, background, titleColor = "#0D468B", onClick }) => (
+/** A tappable icon+title+subtitle row used for dashboard shortcuts (recordings, diet plan, etc). */
+export const PaidActionCard: React.FC<PaidActionCardProps> = ({ icon, title, subtitle, background, titleColor = "#0D468B", accentColor = "#FEAB27", onClick }) => (
   <div
     onClick={onClick}
     style={{
@@ -20,10 +23,10 @@ export const PaidActionCard: React.FC<PaidActionCardProps> = ({ icon, title, sub
     <div style={{ flexShrink: 0 }}>{icon}</div>
     <div style={{ display: "flex", flexDirection: "column", gap: "6px", flex: 1 }}>
       <span style={{ color: titleColor, fontFamily: "Outfit", fontSize: "16px", fontWeight: 700 }}>{title}</span>
-      <span style={{ color: "#FEAB27", fontFamily: "Outfit", fontSize: "12px", fontWeight: 600 }}>{subtitle}</span>
+      <span style={{ color: accentColor, fontFamily: "Outfit", fontSize: "12px", fontWeight: 600 }}>{subtitle}</span>
     </div>
     <svg xmlns="http://www.w3.org/2000/svg" width="9" height="18" viewBox="0 0 9 18" fill="none" style={{ flexShrink: 0 }}>
-      <path d="M1 1L8 9L1 17" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path d="M1 1L8 9L1 17" stroke={accentColor} strokeWidth="3" strokeLinecap="round" strokeLinejoin="round" />
     </svg>
   </div>
 );
