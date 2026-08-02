@@ -59,18 +59,20 @@ import imgMixedVegetableUttappamTomatoChutney from "@/assets/diet/mixed-vegetabl
  *  Telugu design — transcribed as-authored, not "fixed" here). */
 const same = (text: string): LocalizedText => ({ English: text, Telugu: text });
 const t = (English: string, Telugu: string): LocalizedText => ({ English, Telugu });
-/** Telugu translation not provided yet for 2026-08-05..09 (user said Telugu designs are
- *  coming later) — English text duplicated as a placeholder so the UI never shows blank
- *  Telugu content. Swap these for real Telugu via `t(...)` once translations arrive;
+/** Telugu translation not provided yet for 2026-08-08/09 (no Telugu Figma screen exists
+ *  for those dates yet) — English text duplicated as a placeholder so the UI never shows
+ *  blank Telugu content. Swap these for real Telugu via `t(...)` once translations arrive;
  *  search this file for `pending` to find every call site that needs updating. */
 const pending = same;
 
 /**
- * Hand-authored overrides matching the Figma detail screens (English: node 890:8415 /
- * 924:21411; Telugu: node 970:32655 / 970:33289), keyed by ISO date then slot id. Only
- * 2026-08-03 and 2026-08-04 are curated today — every other date has no entry here and
- * falls back entirely to the generic sheet content in weekBlocks/. Add more dates the
- * same way as more days get designed; nothing else needs to change.
+ * Hand-authored overrides matching the Figma detail screens, keyed by ISO date then slot
+ * id. Curated dates today: 2026-08-03 through 2026-08-09 (English), with real Telugu for
+ * 2026-08-03 through 2026-08-07 (Telugu screens are per-date sections under the M2W2-Telugu
+ * parent frame 970:32654 — 03: 970:32655, 04: 970:33289, 05: 970:33879, 06: 970:34451,
+ * 07: 970:35060; 08/09 have no Telugu screen yet, see `pending` above). Any date with no
+ * entry here falls back entirely to the generic sheet content in weekBlocks/. Add more
+ * dates the same way as more days get designed; nothing else needs to change.
  */
 export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
   "2026-08-03": {
@@ -365,331 +367,447 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       groceryListAvailable: true,
     },
   },
-  // Below: 2026-08-05 through 2026-08-09 (English only for now — see `pending` above).
+  // Below: 2026-08-05 through 2026-08-07 now have real Telugu (from Figma nodes
+  // 970:33879 / 970:34451 / 970:35060). 2026-08-08/09 are still English only — see
+  // `pending` above.
   "2026-08-05": {
     earlyMorning: {
-      name: pending("Warm Water"),
+      name: t("Warm Water", "గోరువెచ్చని నీరు"),
       imageUrl: imgWarmWater,
-      items: [{ label: pending("1 Glass") }],
-      tips: pending("Drink warm water throughout the day to help cleanse the system and kickstart digestion."),
+      items: [{ label: t("1 Glass", "1 గ్లాస్") }],
+      tips: t(
+        "Drink warm water throughout the day to help cleanse the system and kickstart digestion.",
+        "రోజంతా గోరువెచ్చని నీరు తాగండి. ఇది digestion కు సహాయపడుతుంది."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Warm Water"), benefits: [
-          { benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
-          { benefitLabel: pending("Healthy Metabolism"), iconKey: "healthy-eating" },
+        { ingredient: t("Warm Water", "గోరువెచ్చని నీరు"), benefits: [
+          { benefitLabel: t("Better Digestion", "Digestion ను support చేస్తుంది"), iconKey: "stomach" },
+          { benefitLabel: t("Healthy Metabolism", "Metabolism ను పెంచుతుంది"), iconKey: "healthy-eating" },
         ] },
       ],
-      recommendedQuantity: [{ ingredient: pending("Water"), qty: pending("1 Glass") }],
+      recommendedQuantity: [{ ingredient: t("Water", "గోరువెచ్చని నీరు"), qty: t("1 Glass", "1 గ్లాస్") }],
       groceryListAvailable: true,
     },
     postYogaDrink: {
-      name: pending("Cinnamon Milk"),
+      name: t("Cinnamon Milk", "దాల్చిన చెక్క పాలు"),
       imageUrl: imgCinnamonMilk,
-      tips: pending("Boil milk with a small cinnamon stick for 5 minutes and serve warm."),
-      precautions: pending("For People with Thyroid Concerns, avoid consuming excess cinnamon daily."),
+      tips: t(
+        "Boil milk with a small cinnamon stick for 5 minutes and serve warm.",
+        "పాలలో చిన్న దాల్చిన చెక్క ముక్క వేసి 5 నిమిషాలు మరిగించి గోరువెచ్చగా తాగండి."
+      ),
+      precautions: t(
+        "For People with Thyroid Concerns, avoid consuming excess cinnamon daily.",
+        "Thyroid: దాల్చిన చెక్క రోజూ ఎక్కువగా వద్దు."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Milk"), benefits: [{ benefitLabel: pending("Bone Health"), iconKey: "dog-bone" }] },
-        { ingredient: pending("Cinnamon"), benefits: [
-          { benefitLabel: pending("Healthy Blood Sugar"), iconKey: "sugar-cubes" },
-          { benefitLabel: pending("Healthy Metabolism"), iconKey: "healthy-eating" },
+        { ingredient: t("Milk", "పాలు"), benefits: [{ benefitLabel: t("Bone Health", "Bone health కి మంచిది"), iconKey: "dog-bone" }] },
+        { ingredient: t("Cinnamon", "దాల్చిన చెక్క"), benefits: [
+          // NOTE: the Telugu Figma screen (970:33879) only shows a Metabolism row for
+          // Cinnamon; Healthy Blood Sugar is kept to match the English design (924:21411).
+          { benefitLabel: t("Healthy Blood Sugar", "ఆరోగ్యకరమైన రక్తంలో చక్కెర అందిస్తుంది"), iconKey: "sugar-cubes" },
+          { benefitLabel: t("Healthy Metabolism", "Metabolism ను పెంచుతుంది"), iconKey: "healthy-eating" },
         ] },
       ],
       groceryListAvailable: true,
     },
     breakfast: {
-      name: pending("Green Moong Dosa & Peanut Chutney"),
+      name: t("Green Moong Dosa & Peanut Chutney", "పెసర దోసె & వేరుశెనగ చట్నీ"),
       imageUrl: imgGreenMoongDosaPeanutChutney,
-      tips: pending("Soak green gram, grind into a batter, prepare dosa, and serve with peanut chutney."),
+      tips: t(
+        "Soak green gram, grind into a batter, prepare dosa, and serve with peanut chutney.",
+        "పెసలను నానబెట్టి batter తయారు చేసి దోసె వేసి, వేరుశెనగ చట్నీతో తినండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Green Gram"), benefits: [
-          { benefitLabel: pending("Protein-Rich"), iconKey: "muscle-health" },
-          { benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: t("Green Gram", "పెసలు"), benefits: [
+          { benefitLabel: t("Protein-Rich", "Protein ఎక్కువగా ఉంటుంది"), iconKey: "muscle-health" },
+          { benefitLabel: t("Better Digestion", "Digestion ను support చేస్తుంది"), iconKey: "stomach" },
         ] },
-        { ingredient: pending("Peanuts"), benefits: [{ benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" }] },
+        { ingredient: t("Peanuts", "వేరుశెనగ"), benefits: [{ benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" }] },
       ],
       groceryListAvailable: true,
     },
     morningSnack: {
-      name: pending("Apple"),
+      name: same("Apple"),
       imageUrl: imgApple,
-      items: [{ label: pending("1 Apple") }],
-      precautions: pending("For people with Diabetes, limit the portion to ½ an apple per serving."),
+      items: [{ label: same("1 Apple") }],
+      precautions: t(
+        "For people with Diabetes, limit the portion to ½ an apple per serving.",
+        "డయాబెటిస్: ½ యాపిల్ మాత్రమే."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Apple"), benefits: [
-          { benefitLabel: pending("Gut Health"), iconKey: "stomach" },
-          { benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
-          { benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+        { ingredient: same("Apple"), benefits: [
+          { benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" },
+          { benefitLabel: t("Better Digestion", "Digestion ను support చేస్తుంది"), iconKey: "stomach" },
+          { benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" },
         ] },
       ],
-      recommendedQuantity: [{ ingredient: pending("Apple"), qty: pending("1") }],
+      recommendedQuantity: [{ ingredient: same("Apple"), qty: same("1") }],
       groceryListAvailable: true,
     },
     lunch: {
-      name: pending("Chapati & Palak Paneer"),
+      name: t("Chapati & Palak Paneer", "చపాతీ & పాలక్ పనీర్"),
       imageUrl: imgChapatiPalakPaneer,
-      tips: pending("Cook spinach, blend into a puree, sauté with spices, and add paneer cubes."),
+      tips: t(
+        "Cook spinach, blend into a puree, sauté with spices, and add paneer cubes.",
+        "పాలకూరను ఉడికించి puree చేసి, మసాలాలతో sauté చేసి పనీర్ cubes కలపండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Chapati"), benefits: [{ benefitLabel: pending("Sustained Energy"), iconKey: "lightning-bolt" }] },
-        { ingredient: pending("Spinach"), benefits: [{ benefitLabel: pending("Supports Hemoglobin"), iconKey: "hemoglobin" }] },
-        { ingredient: pending("Paneer"), benefits: [{ benefitLabel: pending("Muscle Health"), iconKey: "muscle-health" }] },
+        { ingredient: t("Chapati", "చపాతీ"), benefits: [{ benefitLabel: t("Sustained Energy", "ఎక్కువసేపు energy ని ఇస్తుంది"), iconKey: "lightning-bolt" }] },
+        { ingredient: t("Spinach", "పాలకూర"), benefits: [{ benefitLabel: t("Supports Hemoglobin", "Hemoglobin ని పెంచుతుంది"), iconKey: "hemoglobin" }] },
+        { ingredient: t("Paneer", "పనీర్"), benefits: [{ benefitLabel: t("Muscle Health", "Muscle strength ని పెంచుతుంది"), iconKey: "muscle-health" }] },
       ],
       groceryListAvailable: true,
     },
     eveningSnack: {
-      name: pending("Boiled Sweet Potato"),
+      name: t("Boiled Sweet Potato", "ఉడికించిన చిలగడదుంప"),
       imageUrl: imgBoiledSweetPotato,
-      tips: pending("Boil the sweet potato until soft, peel, and sprinkle with pepper or jeera."),
-      precautions: pending("For People with Diabetes, practice portion control due to its moderate to high glycemic index."),
+      tips: t(
+        "Boil the sweet potato until soft, peel, and sprinkle with pepper or jeera.",
+        "చిలగడదుంపను ఉడికించి తొక్క తీసి, మిరియాల పొడి లేదా జీలకర్ర పొడి చల్లి తినండి."
+      ),
+      precautions: t(
+        "For People with Diabetes, practice portion control due to its moderate to high glycemic index.",
+        "Diabetes: Limit గా తీసుకోండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Sweet Potato"), benefits: [
-          { benefitLabel: pending("Sustained Energy"), iconKey: "lightning-bolt" },
-          { benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: t("Sweet Potato", "చిలగడదుంప"), benefits: [
+          { benefitLabel: t("Sustained Energy", "ఎక్కువసేపు energy ని ఇస్తుంది"), iconKey: "lightning-bolt" },
+          { benefitLabel: t("Better Digestion", "Digestion support ని ఇస్తుంది"), iconKey: "stomach" },
         ] },
       ],
       groceryListAvailable: true,
     },
     dinner: {
-      name: pending("Mushroom & Peas Roll"),
+      name: t("Mushroom & Peas Roll", "మష్రూమ్ & బఠానీ రోల్"),
       imageUrl: imgMushroomPeasRoll,
-      tips: pending("Sauté mushrooms and peas, fill into a chapati, and roll before serving."),
+      tips: t(
+        "Sauté mushrooms and peas, fill into a chapati, and roll before serving.",
+        "మష్రూమ్ & బఠానీని sauté చేసి చపాతీలో పెట్టి roll చేసి తినండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Mushroom"), benefits: [
-          { benefitLabel: pending("Immunity"), iconKey: "shield" },
-          { benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
+        { ingredient: t("Mushroom", "మష్రూమ్"), benefits: [
+          { benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
+          // NOTE: the Telugu Figma screen (970:33879) only shows an Immunity row for
+          // Mushroom; Antioxidant Protection is kept to match the English design (924:21411).
+          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
         ] },
-        { ingredient: pending("Peas"), benefits: [{ benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" }] },
+        { ingredient: t("Peas", "బఠానీ"), benefits: [{ benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" }] },
       ],
       groceryListAvailable: true,
     },
     nightDrink: {
-      name: pending("Ginger Jeera Tea"),
+      name: t("Ginger Jeera Tea", "అల్లం జీలకర్ర టీ"),
       imageUrl: imgGingerJeeraTea,
-      tips: pending("Boil ginger and jeera in water for 5 minutes, strain, and drink warm."),
-      nutritionalBenefits: [{ ingredient: pending("Ginger & Jeera"), benefits: [{ benefitLabel: pending("Better Digestion"), iconKey: "stomach" }] }],
+      tips: t(
+        "Boil ginger and jeera in water for 5 minutes, strain, and drink warm.",
+        "అల్లం & జీలకర్రను నీటిలో 5 నిమిషాలు మరిగించి, strain చేసి గోరువెచ్చగా తాగండి."
+      ),
+      nutritionalBenefits: [{ ingredient: t("Ginger & Jeera", "అల్లం & జీలకర్ర"), benefits: [{ benefitLabel: t("Better Digestion", "Digestion support ని ఇస్తుంది"), iconKey: "stomach" }] }],
       groceryListAvailable: true,
     },
   },
   "2026-08-06": {
     earlyMorning: {
-      name: pending("Sesame & Flax Seeds"),
+      name: t("Sesame & Flax Seeds", "నువ్వులు & అవిసె గింజలు"),
       imageUrl: imgSesameFlaxSeeds,
-      items: [{ label: pending("1 tbsp total") }],
-      tips: pending("Lightly roast and powder the sesame and flax seeds before consuming."),
+      items: [{ label: t("1 tbsp total", "1tbsp") }],
+      tips: t(
+        "Lightly roast and powder the sesame and flax seeds before consuming.",
+        "నువ్వులు & అవిసె గింజలను light గా roast చేసి powder చేసి తీసుకోండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Sesame Seeds"), benefits: [{ benefitLabel: pending("Bone Health"), iconKey: "dog-bone" }] },
-        { ingredient: pending("Flax Seeds"), benefits: [{ benefitLabel: pending("Heart Health"), iconKey: "heart" }] },
+        { ingredient: t("Sesame Seeds", "నువ్వులు"), benefits: [{ benefitLabel: t("Bone Health", "Bone health కి మంచిది"), iconKey: "dog-bone" }] },
+        { ingredient: t("Flax Seeds", "అవిసె గింజలు"), benefits: [{ benefitLabel: t("Heart Health", "Heart health కి మంచిది"), iconKey: "heart" }] },
       ],
-      recommendedQuantity: [{ ingredient: pending("Total Quantity"), qty: pending("1 tbsp") }],
+      recommendedQuantity: [{ ingredient: t("Total Quantity", "Total"), qty: same("1 tbsp") }],
       groceryListAvailable: true,
     },
     postYogaDrink: {
-      name: pending("Soaked Chia Seeds & Amla Water"),
+      name: t("Soaked Chia Seeds & Amla Water", "నానబెట్టిన Chia seeds & Amla water"),
       imageUrl: imgSoakedChiaSeedsAmlaWater,
-      items: [{ label: pending("1 tbsp seeds") }],
-      tips: pending("Soak the chia seeds for 30 minutes to overnight before drinking with amla water."),
+      items: [{ label: t("1 tbsp seeds", "1tbsp") }],
+      tips: t(
+        "Soak the chia seeds for 30 minutes to overnight before drinking with amla water.",
+        "చియా గింజలను 30 నిమిషాల నుంచి రాత్రంతా నానబెట్టి, ఉసిరి నీటితో తాగండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Chia Seeds"), benefits: [
-          { benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
-          { benefitLabel: pending("Hydration"), iconKey: "water" },
+        { ingredient: t("Chia Seeds", "చియా గింజలు"), benefits: [
+          { benefitLabel: t("Better Digestion", "Digestion కు support ఇస్తుంది"), iconKey: "stomach" },
+          { benefitLabel: t("Hydration", "Body న్ని Hydrated గా ఉంచుతుంది"), iconKey: "water" },
         ] },
-        { ingredient: pending("Amla"), benefits: [{ benefitLabel: pending("Immunity"), iconKey: "shield" }] },
+        { ingredient: t("Amla", "ఉసిరి"), benefits: [{ benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" }] },
       ],
-      recommendedQuantity: [{ ingredient: pending("Chia Seeds"), qty: pending("1 tbsp") }],
+      recommendedQuantity: [{ ingredient: t("Chia Seeds", "Chia seeds"), qty: same("1 tbsp") }],
       groceryListAvailable: true,
     },
     breakfast: {
-      name: pending("Paneer Dosa & Vegetable Sambar"),
+      name: t("Paneer Dosa & Vegetable Sambar", "పనీర్ దోసె & వెజిటేబుల్ సాంబార్"),
       imageUrl: imgPaneerDosaVegetableSambar,
-      tips: pending("Spread dosa batter, add grated paneer, cook until golden, and serve with vegetable sambar."),
+      tips: t(
+        "Spread dosa batter, add grated paneer, cook until golden, and serve with vegetable sambar.",
+        "దోసె batter వేసి, తురిమిన పనీర్ వేసి, రెండు వైపులా కాల్చి వెజిటేబుల్ సాంబార్‌తో తినండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Paneer"), benefits: [{ benefitLabel: pending("Muscle Health"), iconKey: "muscle-health" }] },
-        { ingredient: pending("Dosa"), benefits: [{ benefitLabel: pending("Better Digestion"), iconKey: "stomach" }] },
-        { ingredient: pending("Sambar"), benefits: [
-          { benefitLabel: pending("Protein-Rich"), iconKey: "muscle-health" },
-          { benefitLabel: pending("Gut Health"), iconKey: "stomach" },
+        { ingredient: t("Paneer", "పనీర్"), benefits: [{ benefitLabel: t("Muscle Health", "Muscle strength ని పెంచుతుంది"), iconKey: "muscle-health" }] },
+        { ingredient: t("Dosa", "దోసె"), benefits: [{ benefitLabel: t("Better Digestion", "Digestion కు support ఇస్తుంది"), iconKey: "stomach" }] },
+        { ingredient: t("Sambar", "సాంబార్"), benefits: [
+          { benefitLabel: t("Protein-Rich", "Protein ఎక్కువగా ఉంటుంది"), iconKey: "muscle-health" },
+          { benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" },
         ] },
       ],
       groceryListAvailable: true,
     },
     morningSnack: {
-      name: pending("Guava"),
+      name: t("Guava", "జామపండు"),
       imageUrl: imgGuava,
-      items: [{ label: pending("1 Medium Fruit") }],
-      precautions: pending("For people with Diabetes, consume 1/2 guava per serving. Avoid adding salt or sugar."),
+      items: [{ label: same("1 Medium Fruit") }],
+      precautions: t(
+        "For people with Diabetes, consume 1/2 guava per serving. Avoid adding salt or sugar.",
+        "Diabetes: ½ జామపండు మాత్రమే. salt/sugar వద్దు."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Guava"), benefits: [
-          { benefitLabel: pending("Immunity"), iconKey: "shield" },
-          { benefitLabel: pending("Gut Health"), iconKey: "stomach" },
-          { benefitLabel: pending("Healthy Blood Sugar"), iconKey: "sugar-cubes" },
-          { benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
-          { benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+        { ingredient: t("Guava", "జామపండు"), benefits: [
+          { benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
+          { benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" },
+          // NOTE: the Telugu Figma screen (970:34451) only shows 3 Guava benefit rows
+          // (Immunity, Gut Health, Keeps You Full Longer) — these two extra rows are kept
+          // to match the English design (924:21411), same as the other Guava dates.
+          { benefitLabel: t("Healthy Blood Sugar", "ఆరోగ్యకరమైన రక్తంలో చక్కెర అందిస్తుంది"), iconKey: "sugar-cubes" },
+          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
+          { benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" },
         ] },
       ],
-      recommendedQuantity: [{ ingredient: pending("Guava"), qty: pending("1") }],
+      recommendedQuantity: [{ ingredient: t("Guava", "జామపండు"), qty: same("1") }],
       groceryListAvailable: true,
     },
     lunch: {
-      name: pending("Ragi Mudda & Vegetable Sambar"),
+      name: t("Ragi Mudda & Vegetable Sambar", "రాగి సంకటి & వెజిటేబుల్ సాంబార్"),
       imageUrl: imgRagiMuddaVegetableSambar,
-      tips: pending("Cook ragi flour in boiling water, shape into balls (sankati/mudde), and serve with hot sambar."),
+      tips: t(
+        "Cook ragi flour in boiling water, shape into balls (sankati/mudde), and serve with hot sambar.",
+        "రాగి పిండిని మరిగే నీటిలో ఉడికించి సంకటి చేసి, వేడి సాంబార్‌తో తినండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Ragi"), benefits: [{ benefitLabel: pending("Bone Health"), iconKey: "dog-bone" }] },
-        { ingredient: pending("Sambar"), benefits: [
-          { benefitLabel: pending("Protein-Rich"), iconKey: "muscle-health" },
-          { benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: t("Ragi", "రాగి"), benefits: [{ benefitLabel: t("Bone Health", "Bone health కి మంచిది"), iconKey: "dog-bone" }] },
+        { ingredient: t("Sambar", "సాంబార్"), benefits: [
+          { benefitLabel: t("Protein-Rich", "Protein ఎక్కువగా ఉంటుంది"), iconKey: "muscle-health" },
+          { benefitLabel: t("Better Digestion", "Gut health కి మంచిది"), iconKey: "stomach" },
         ] },
       ],
       groceryListAvailable: true,
     },
     eveningSnack: {
-      name: pending("Peanut Chikki"),
+      name: t("Peanut Chikki", "వేరుశెనగ చిక్కీ"),
       imageUrl: imgPeanutChikki,
-      tips: pending("Melt jaggery, mix with roasted peanuts, spread the mixture, and cut into pieces once set."),
-      precautions: pending("For People with Diabetes, limit the portion due to the high sugar content."),
+      tips: t(
+        "Melt jaggery, mix with roasted peanuts, spread the mixture, and cut into pieces once set.",
+        "బెల్లం కరిగించి, roast చేసిన వేరుశెనగ కలిపి, చల్లారిన తర్వాత ముక్కలుగా కట్ చేయండి."
+      ),
+      precautions: t(
+        "For People with Diabetes, limit the portion due to the high sugar content.",
+        "Diabetes: limit గా తీసుకోండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Peanuts"), benefits: [{ benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" }] },
-        { ingredient: pending("Jaggery"), benefits: [{ benefitLabel: pending("Energy"), iconKey: "lightning-bolt" }] },
+        { ingredient: t("Peanuts", "వేరుశెనగ"), benefits: [{ benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" }] },
+        { ingredient: t("Jaggery", "బెల్లం"), benefits: [{ benefitLabel: t("Energy", "ఎక్కువసేపు energy ని ఇస్తుంది"), iconKey: "lightning-bolt" }] },
       ],
       groceryListAvailable: true,
     },
     dinner: {
-      name: pending("Coconut Rice Bowl & Capsicum Raita"),
+      name: t("Coconut Rice Bowl & Capsicum Raita", "కొబ్బరి రైస్ & క్యాప్సికం రైతా"),
       imageUrl: imgCoconutRiceBowlCapsicumRaita,
-      tips: pending("Mix grated coconut with cooked rice and prepare raita with capsicum and curd."),
-      precautions: pending("For People with Diabetes, practice portion control with rice."),
+      tips: t(
+        "Mix grated coconut with cooked rice and prepare raita with capsicum and curd.",
+        "ఉడికిన అన్నంలో తురిమిన కొబ్బరి కలపండి. క్యాప్సికం & పెరుగుతో రైతా తయారు చేయండి."
+      ),
+      precautions: t(
+        "For People with Diabetes, practice portion control with rice.",
+        "Diabetes: Rice limit గా తీసుకోండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Rice"), benefits: [{ benefitLabel: pending("Energy"), iconKey: "lightning-bolt" }] },
-        { ingredient: pending("Coconut"), benefits: [{ benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" }] },
-        { ingredient: pending("Capsicum"), benefits: [{ benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" }] },
-        { ingredient: pending("Curd"), benefits: [{ benefitLabel: pending("Better Digestion"), iconKey: "stomach" }] },
+        { ingredient: t("Rice", "అన్నం"), benefits: [{ benefitLabel: t("Energy", "ఎక్కువసేపు energy ని ఇస్తుంది"), iconKey: "lightning-bolt" }] },
+        { ingredient: t("Coconut", "కొబ్బరి"), benefits: [{ benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" }] },
+        // NOTE: the Telugu Figma screen (970:34451) has no Capsicum row for this dish
+        // (only Rice, Coconut, Curd) — kept to match the English design (924:21411).
+        { ingredient: t("Capsicum", "క్యాప్సికం"), benefits: [{ benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" }] },
+        { ingredient: t("Curd", "పెరుగు"), benefits: [{ benefitLabel: t("Better Digestion", "Digestion కు support ఇస్తుంది"), iconKey: "stomach" }] },
       ],
       groceryListAvailable: true,
     },
     nightDrink: {
-      name: pending("Fennel Tea"),
+      name: t("Fennel Tea", "సోంపు టీ"),
       imageUrl: imgFennelTea,
-      tips: pending("Boil fennel seeds in water for 5 minutes, strain, and drink warm."),
-      nutritionalBenefits: [{ ingredient: pending("Fennel Tea"), benefits: [{ benefitLabel: pending("Better Digestion"), iconKey: "stomach" }] }],
+      tips: t(
+        "Boil fennel seeds in water for 5 minutes, strain, and drink warm.",
+        "సోంపును నీటిలో 5 నిమిషాలు మరిగించి, strain చేసి గోరువెచ్చగా తాగండి."
+      ),
+      nutritionalBenefits: [{ ingredient: t("Fennel Tea", "సోంపు టీ"), benefits: [{ benefitLabel: t("Better Digestion", "Digestion కు support ఇస్తుంది"), iconKey: "stomach" }] }],
       groceryListAvailable: true,
     },
   },
   "2026-08-07": {
     earlyMorning: {
-      name: pending("Soaked Almonds & Black Raisins"),
+      name: t("Soaked Almonds & Black Raisins", "నానబెట్టిన బాదం & నల్ల కిస్‌మిస్"),
       imageUrl: imgSoakedAlmondsBlackRaisins,
-      items: [{ label: pending("4 Almonds") }, { label: pending("4 Black Raisins") }],
-      tips: pending("Soak 4 almonds and 4 black raisins overnight and eat them in the morning."),
-      precautions: pending("For people with Diabetes, limit the quantity of raisins due to their high sugar content."),
+      items: [{ label: t("4 Almonds", "4 బాదం") }, { label: t("4 Black Raisins", "4 నల్ల కిస్‌మిస్") }],
+      tips: t(
+        "Soak 4 almonds and 4 black raisins overnight and eat them in the morning.",
+        "4 బాదం & 4 నల్ల కిస్‌మిస్ రాత్రంతా నానబెట్టి, ఉదయం తినండి."
+      ),
+      precautions: t(
+        "For people with Diabetes, limit the quantity of raisins due to their high sugar content.",
+        "Diabetes: కిస్‌మిస్ limit గా తీసుకోండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Almonds"), benefits: [
-          { benefitLabel: pending("Brain Health"), iconKey: "brain-health" },
-          { benefitLabel: pending("Healthy Skin"), iconKey: "healthy-skin" },
+        { ingredient: t("Almonds", "బాదం"), benefits: [
+          { benefitLabel: t("Brain Health", "Brain కు మంచిది"), iconKey: "brain-health" },
+          { benefitLabel: t("Healthy Skin", "Skin కు మంచిది"), iconKey: "healthy-skin" },
         ] },
-        { ingredient: pending("Black Raisins"), benefits: [
-          { benefitLabel: pending("Supports Hemoglobin"), iconKey: "hemoglobin" },
-          { benefitLabel: pending("Energy"), iconKey: "lightning-bolt" },
+        { ingredient: t("Black Raisins", "నల్ల కిస్‌మిస్"), benefits: [
+          { benefitLabel: t("Supports Hemoglobin", "Hemoglobin ను పెంచుతుంది"), iconKey: "hemoglobin" },
+          { benefitLabel: t("Energy", "Energy ఇస్తుంది"), iconKey: "lightning-bolt" },
         ] },
       ],
       recommendedQuantity: [
-        { ingredient: pending("Almonds"), qty: pending("4 pcs") },
-        { ingredient: pending("Black Raisins"), qty: pending("4 pcs") },
+        { ingredient: t("Almonds", "బాదం"), qty: same("4 pcs") },
+        { ingredient: t("Black Raisins", "నల్ల కిస్‌మిస్"), qty: same("4 pcs") },
       ],
       groceryListAvailable: true,
     },
     postYogaDrink: {
-      name: pending("Tender Coconut Water"),
+      name: t("Tender Coconut Water", "కొబ్బరి నీరు"),
       imageUrl: imgTenderCoconutWater,
-      precautions: pending("For people with Diabetes, limit the quantity as coconut water contains natural sugars."),
+      precautions: t(
+        "For people with Diabetes, limit the quantity as coconut water contains natural sugars.",
+        "డయాబెటిస్: కొబ్బరి నీరు పరిమితంగా తీసుకోండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Coconut Water"), benefits: [
-          { benefitLabel: pending("Energy"), iconKey: "lightning-bolt" },
-          { benefitLabel: pending("Hydration"), iconKey: "water" },
+        { ingredient: t("Coconut Water", "కొబ్బరి నీరు"), benefits: [
+          { benefitLabel: t("Energy", "Energy ఇస్తుంది"), iconKey: "lightning-bolt" },
+          { benefitLabel: t("Hydration", "Body ని Hydrated గా ఉంచుతుంది"), iconKey: "water" },
         ] },
       ],
       groceryListAvailable: true,
     },
     breakfast: {
-      name: pending("Godhuma Ravva Upma with Peanuts"),
+      name: t("Godhuma Ravva Upma with Peanuts", "Peanuts తో గోధుమ రవ్వ ఉప్మా"),
       imageUrl: imgGodhumaRavvaUpmaPeanuts,
-      tips: pending("Roast the broken wheat (godhuma ravva), then cook with sautéed vegetables and peanuts until soft."),
-      precautions: pending("For people with Diabetes, practice portion control due to its moderate glycemic index."),
+      tips: t(
+        "Roast the broken wheat (godhuma ravva), then cook with sautéed vegetables and peanuts until soft.",
+        "గోధుమ రవ్వను roast చేసి, sauté చేసిన కూరగాయలు & వేరుశెనగతో ఉడికించండి."
+      ),
+      precautions: t(
+        "For people with Diabetes, practice portion control due to its moderate glycemic index.",
+        "Diabetes: limit గా తీసుకోండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Broken Wheat (Godhuma Ravva)"), benefits: [
-          { benefitLabel: pending("Sustained Energy"), iconKey: "lightning-bolt" },
-          { benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
+        { ingredient: t("Broken Wheat (Godhuma Ravva)", "గోధుమ రవ్వ"), benefits: [
+          { benefitLabel: t("Sustained Energy", "Energy ఇస్తుంది"), iconKey: "lightning-bolt" },
+          { benefitLabel: t("Better Digestion", "Digestion కు support ఇస్తుంది"), iconKey: "stomach" },
         ] },
-        { ingredient: pending("Peanuts"), benefits: [{ benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" }] },
+        { ingredient: t("Peanuts", "వేరుశెనగ"), benefits: [{ benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" }] },
       ],
       groceryListAvailable: true,
     },
     morningSnack: {
-      name: pending("Guava"),
+      name: t("Guava", "జామపండు"),
       imageUrl: imgGuava,
-      items: [{ label: pending("1 Medium Fruit") }],
-      precautions: pending("For people with Diabetes, consume 1/2 guava per serving. Avoid adding salt or sugar."),
+      items: [{ label: same("1 Medium Fruit") }],
+      precautions: t(
+        "For people with Diabetes, consume 1/2 guava per serving. Avoid adding salt or sugar.",
+        "Diabetes: ½ జామపండు మాత్రమే. salt/sugar వద్దు."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Guava"), benefits: [
-          { benefitLabel: pending("Immunity"), iconKey: "shield" },
-          { benefitLabel: pending("Gut Health"), iconKey: "stomach" },
-          { benefitLabel: pending("Healthy Blood Sugar"), iconKey: "sugar-cubes" },
-          { benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
-          { benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
+        { ingredient: t("Guava", "జామపండు"), benefits: [
+          { benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
+          { benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" },
+          // NOTE: the Telugu Figma screen (970:35060) only shows 3 Guava benefit rows
+          // (Immunity, Gut Health, Keeps You Full Longer) — these two extra rows are kept
+          // to match the English design (924:21411), same as the other Guava dates.
+          { benefitLabel: t("Healthy Blood Sugar", "ఆరోగ్యకరమైన రక్తంలో చక్కెర అందిస్తుంది"), iconKey: "sugar-cubes" },
+          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
+          { benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" },
         ] },
       ],
-      recommendedQuantity: [{ ingredient: pending("Guava"), qty: pending("1") }],
+      recommendedQuantity: [{ ingredient: t("Guava", "జామపండు"), qty: same("1") }],
       groceryListAvailable: true,
     },
     lunch: {
-      name: pending("Steamed Rice, Leafy Dal, Ivy Gourd (Kundru) Curry & Curd"),
+      name: t("Steamed Rice, Leafy Dal, Ivy Gourd (Kundru) Curry & Curd", "అన్నం, ఆకుకూర పప్పు, దొండకాయ కూర & పెరుగు"),
       imageUrl: imgSteamedRiceLeafyDalIvyGourdKundruCurryCurd,
-      tips: pending("Cook dal with gongura, sauté ivy gourd (dondakaya) separately, and serve with rice and curd."),
-      precautions: pending("For people with Diabetes, practice portion control with white rice."),
+      tips: t(
+        "Cook dal with gongura, sauté ivy gourd (dondakaya) separately, and serve with rice and curd.",
+        "గోంగూర పప్పు తయారు చేసి, దొండకాయ కూరతో పాటు అన్నం & పెరుగుతో తినండి."
+      ),
+      precautions: t(
+        "For people with Diabetes, practice portion control with white rice.",
+        "Diabetes: White rice limit గా తీసుకోండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Rice"), benefits: [{ benefitLabel: pending("Energy"), iconKey: "lightning-bolt" }] },
-        { ingredient: pending("Gongura"), benefits: [
-          { benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
-          { benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
+        { ingredient: t("Rice", "అన్నం"), benefits: [{ benefitLabel: t("Energy", "Energy ఇస్తుంది"), iconKey: "lightning-bolt" }] },
+        { ingredient: t("Gongura", "గోంగూర"), benefits: [
+          { benefitLabel: t("Better Digestion", "Digestion కు support ఇస్తుంది"), iconKey: "stomach" },
+          // NOTE: the Telugu Figma screen (970:35060) only shows a Digestion row for
+          // Gongura; Antioxidant Protection is kept to match the English design (924:21411).
+          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
         ] },
-        { ingredient: pending("Dal"), benefits: [{ benefitLabel: pending("Muscle Health"), iconKey: "muscle-health" }] },
-        { ingredient: pending("Curd"), benefits: [{ benefitLabel: pending("Gut Health"), iconKey: "stomach" }] },
+        { ingredient: t("Dal", "పప్పు"), benefits: [{ benefitLabel: t("Muscle Health", "Muscle strength కి మంచిది"), iconKey: "muscle-health" }] },
+        { ingredient: t("Curd", "పెరుగు"), benefits: [{ benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" }] },
       ],
       groceryListAvailable: true,
     },
     eveningSnack: {
-      name: pending("Paneer Cubes & Pepper"),
+      name: t("Paneer Cubes & Pepper", "పనీర్ pepper క్యూబ్స్"),
       imageUrl: imgPaneerCubesPepper,
-      tips: pending("Cut paneer into cubes, sprinkle with pepper, and lightly sauté or serve fresh."),
+      tips: t(
+        "Cut paneer into cubes, sprinkle with pepper, and lightly sauté or serve fresh.",
+        "పనీర్‌ను cubes గా కట్ చేసి, మిరియాల పొడి చల్లి sauté చేసి లేదా అలాగే తినండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Paneer"), benefits: [
-          { benefitLabel: pending("Muscle Health"), iconKey: "muscle-health" },
-          { benefitLabel: pending("Bone Health"), iconKey: "dog-bone" },
+        { ingredient: t("Paneer", "పనీర్"), benefits: [
+          { benefitLabel: t("Muscle Health", "Muscle strength కి మంచిది"), iconKey: "muscle-health" },
+          { benefitLabel: t("Bone Health", "Bone health కి మంచిది"), iconKey: "dog-bone" },
         ] },
-        { ingredient: pending("Pepper"), benefits: [{ benefitLabel: pending("Better Digestion"), iconKey: "stomach" }] },
+        { ingredient: t("Pepper", "మిరియాలు"), benefits: [{ benefitLabel: t("Better Digestion", "Digestion కు support ఇస్తుంది"), iconKey: "stomach" }] },
       ],
       groceryListAvailable: true,
     },
     dinner: {
-      name: pending("Cucumber & Capsicum Curd Bowl"),
+      name: t("Cucumber & Capsicum Curd Bowl", "దోసకాయ & క్యాప్సికం పెరుగు బౌల్"),
       imageUrl: imgCucumberCapsicumCurdBowl,
-      tips: pending("Mix chopped cucumber and capsicum into curd, then add pepper and salt."),
-      precautions: pending("For People with Thyroid Concerns, avoid consuming this at night if sensitive."),
+      tips: t(
+        "Mix chopped cucumber and capsicum into curd, then add pepper and salt.",
+        "పెరుగులో దోసకాయ & క్యాప్సికం ముక్కలు వేసి, మిరియాల పొడి & ఉప్పు కలపండి."
+      ),
+      precautions: t(
+        "For People with Thyroid Concerns, avoid consuming this at night if sensitive.",
+        "Thyroid: రాత్రి తీసుకోవద్దు."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Cucumber"), benefits: [
-          { benefitLabel: pending("Hydration"), iconKey: "water" },
-          { benefitLabel: pending("Cooling"), iconKey: "snowflake" },
+        { ingredient: t("Cucumber", "కీర దోసకాయ"), benefits: [
+          { benefitLabel: t("Hydration", "Body Hydrated గా ఉంచుతుంది"), iconKey: "water" },
+          { benefitLabel: t("Cooling", "శరీరానికి Cooling అందిస్తుంది"), iconKey: "snowflake" },
         ] },
-        { ingredient: pending("Capsicum"), benefits: [{ benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" }] },
-        { ingredient: pending("Curd"), benefits: [{ benefitLabel: pending("Gut Health"), iconKey: "stomach" }] },
+        // NOTE: the Telugu Figma screen (970:35060) has no Capsicum row for this dish
+        // (only Cucumber and Curd) — kept to match the English design (924:21411).
+        { ingredient: t("Capsicum", "క్యాప్సికం"), benefits: [{ benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" }] },
+        { ingredient: t("Curd", "పెరుగు"), benefits: [{ benefitLabel: t("Gut Health", "Gut ఆరోగ్యానికి మంచిది"), iconKey: "stomach" }] },
       ],
       groceryListAvailable: true,
     },
     nightDrink: {
-      name: pending("Coriander Seed Tea"),
+      name: t("Coriander Seed Tea", "ధనియాల టీ"),
       imageUrl: imgCorianderSeedTea,
-      tips: pending("Boil coriander seeds in water for 5–7 minutes, strain, and drink warm."),
+      tips: t(
+        "Boil coriander seeds in water for 5–7 minutes, strain, and drink warm.",
+        "ధనియాలను నీటిలో 5–7 నిమిషాలు మరిగించి, strain చేసి గోరువెచ్చగా తాగండి."
+      ),
       nutritionalBenefits: [
-        { ingredient: pending("Coriander Seed Tea"), benefits: [
-          { benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
-          { benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
+        { ingredient: t("Coriander Seed Tea", "ధనియాల టీ"), benefits: [
+          { benefitLabel: t("Better Digestion", "Digestion కు support ఇస్తుంది"), iconKey: "stomach" },
+          // NOTE: the Telugu Figma screen (970:35060) only shows a Digestion row for
+          // Coriander Seed Tea; Antioxidant Protection is kept to match the English design.
+          { benefitLabel: t("Antioxidant Protection", "యాంటీఆక్సిడెంట్ల రక్షణను అందిస్తుంది"), iconKey: "healthy-food" },
         ] },
       ],
       groceryListAvailable: true,
