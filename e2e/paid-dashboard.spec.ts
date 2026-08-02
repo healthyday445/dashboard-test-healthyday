@@ -102,22 +102,44 @@ test.describe(`Paid dashboard — English account (${account.mobile})`, () => {
     });
   });
 
-  test.describe("Grocery List card (12-month plan only)", () => {
-    test("shows for this 12-month account", async ({ page }) => {
+  test.describe("Recordings card (always visible, not plan-gated)", () => {
+    test("shows and navigates to /:mobile/recordings", async ({ page }) => {
       await page.goto(`/${account.mobile}`);
-      await expect(page.getByText("This Week's Grocery List")).toBeVisible();
+      await expect(page.getByText("View Class Recordings")).toBeVisible();
+      await expect(page.getByText("Click here to see Yoga Class at anytime")).toBeVisible();
+      await page.getByText("View Class Recordings").click();
+      await expect(page).toHaveURL(new RegExp(`/${account.mobile}/recordings`));
+    });
+  });
+
+  test.describe("Diet card (12-month plan only)", () => {
+    test("shows for this 12-month account and navigates to /:mobile/diet", async ({ page }) => {
+      await page.goto(`/${account.mobile}`);
+      await expect(page.getByText("View DIET Routine")).toBeVisible();
+      await expect(page.getByText("Nutrition plan for the week")).toBeVisible();
+      await page.getByText("View DIET Routine").click();
+      await expect(page).toHaveURL(new RegExp(`/${account.mobile}/diet`));
+    });
+
+    // The Grocery List card (a separate static link to an external grocery-list page) was
+    // removed from the dashboard entirely — this pins that removal as a regression check.
+    test("no Grocery List card (removed)", async ({ page }) => {
+      await page.goto(`/${account.mobile}`);
+      await expect(page.getByText("This Week's Grocery List")).toHaveCount(0);
     });
   });
 });
 
-// Plan-type eligibility matrix for the three recurring bonus cards + the Grocery List card, per
+// Plan-type eligibility matrix for the three recurring bonus cards + the Diet card, per
 // getActivePaidBonusSession (src/lib/paidBonusSessions.ts) and IndexPaid.tsx's is12Month check:
 //   - Face Yoga: 12-month only, Sundays only (not covered per-plan below — already covered for the
 //     base 12_months account above; day-of-week/Telugu-English-week alternation makes it the
 //     flakiest of the three to pin down per extra account, so it's intentionally not repeated here).
 //   - Diet Session: 12-month only (base AND _upgrade), any day.
 //   - Breath to Heal: 6-and-12-month (base AND _upgrade), any day except English-language Sundays.
-//   - Grocery List card: 12-month only (base AND _upgrade), always visible (not time-gated).
+//   - Diet card: 12-month only (base AND _upgrade), always visible (not time-gated). This was
+//     formerly the Grocery List card's gating — the Grocery List card itself was removed from the
+//     dashboard (see the regression check above); the Diet card inherited the same is12Month gate.
 // The "_upgrade" suffix must behave identically to its base plan — this was a real bug fixed this
 // session (planType comparisons previously mis-picked a stale entry from subscriptions[] instead of
 // reading studentData.current_plan directly), so the *_upgrade accounts below aren't just filler,
@@ -142,9 +164,9 @@ test.describe("Paid dashboard — plan-type bonus-session eligibility matrix", (
       await expect(page.getByRole("heading", { name: "Diet Session - Live Now" })).toHaveCount(0);
     });
 
-    test("no Grocery List card (12-month-only)", async ({ page }) => {
+    test("no Diet card (12-month-only)", async ({ page }) => {
       await page.goto(`/${sixMonth.mobile}`);
-      await expect(page.getByText("This Week's Grocery List")).toHaveCount(0);
+      await expect(page.getByText("View DIET Routine")).toHaveCount(0);
     });
   });
 
@@ -159,13 +181,13 @@ test.describe("Paid dashboard — plan-type bonus-session eligibility matrix", (
       await expect(page.getByRole("heading", { name: "Diet Session - Live Now" })).toHaveCount(0);
     });
 
-    test("no Grocery List card (12-month-only)", async ({ page }) => {
+    test("no Diet card (12-month-only)", async ({ page }) => {
       await page.goto(`/${sixMonthUpgrade.mobile}`);
-      await expect(page.getByText("This Week's Grocery List")).toHaveCount(0);
+      await expect(page.getByText("View DIET Routine")).toHaveCount(0);
     });
   });
 
-  test.describe(`3_months (${threeMonth.mobile}) — none of the bonus cards or Grocery List`, () => {
+  test.describe(`3_months (${threeMonth.mobile}) — none of the bonus cards or Diet card`, () => {
     test("Diet Session never shows", async ({ page }) => {
       await page.goto(`/${threeMonth.mobile}?time=8.15pm`);
       await expect(page.getByRole("heading", { name: "Diet Session - Live Now" })).toHaveCount(0);
@@ -176,9 +198,9 @@ test.describe("Paid dashboard — plan-type bonus-session eligibility matrix", (
       await expect(page.getByRole("heading", { name: "Breath to Heal Session - Live Now" })).toHaveCount(0);
     });
 
-    test("no Grocery List card", async ({ page }) => {
+    test("no Diet card", async ({ page }) => {
       await page.goto(`/${threeMonth.mobile}`);
-      await expect(page.getByText("This Week's Grocery List")).toHaveCount(0);
+      await expect(page.getByText("View DIET Routine")).toHaveCount(0);
     });
   });
 
@@ -193,9 +215,9 @@ test.describe("Paid dashboard — plan-type bonus-session eligibility matrix", (
       await expect(page.getByRole("heading", { name: "Breath to Heal Session - Live Now" })).toBeVisible();
     });
 
-    test("Grocery List card shows", async ({ page }) => {
+    test("Diet card shows", async ({ page }) => {
       await page.goto(`/${twelveMonthUpgrade.mobile}`);
-      await expect(page.getByText("This Week's Grocery List")).toBeVisible();
+      await expect(page.getByText("View DIET Routine")).toBeVisible();
     });
   });
 });
