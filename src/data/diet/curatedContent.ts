@@ -941,17 +941,22 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
     breakfast: {
       name: pending("Ragi Malt with Nuts & Seeds"),
       imageUrl: imgRagiMaltWithNutsSeeds,
+      // Figma shows "06:30AM - 09:30AM" here, not the usual "07:30AM - 09:30AM" — this
+      // date has no separate Post Yoga Drink card, so Breakfast's card visually absorbs
+      // that slot's start time.
+      timeRangeLabel: "06:30AM - 09:30AM",
       tips: pending("Cook ragi flour in water or milk, stir continuously, and top with crushed nuts and seeds."),
       nutritionalBenefits: [
-        { ingredient: pending("Nuts & Seeds"), benefits: [{ benefitLabel: pending("Sustained Energy"), iconKey: "lightning-bolt" }] },
         { ingredient: pending("Ragi"), benefits: [{ benefitLabel: pending("Bone Health"), iconKey: "dog-bone" }] },
+        { ingredient: pending("Nuts & Seeds"), benefits: [{ benefitLabel: pending("Sustained Energy"), iconKey: "lightning-bolt" }] },
       ],
       groceryListAvailable: true,
     },
     morningSnack: {
       name: pending("Pineapple"),
       imageUrl: imgPineapple,
-      precautions: pending("For people with Diabetes, limit the portion to 100–150 g (about 1 cup) per serving due to its natural sugar content."),
+      items: [{ label: pending("1 small cup (100gms)") }],
+      precautions: pending("For people with Diabetes, limit the quantity to 60 - 70 gms per serving"),
       nutritionalBenefits: [
         { ingredient: pending("Pineapple"), benefits: [
           { benefitLabel: pending("Immunity"), iconKey: "shield" },
@@ -959,6 +964,7 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
           { benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
         ] },
       ],
+      recommendedQuantity: [{ ingredient: pending("Pineapple"), qty: pending("1 small cup (100gms)") }],
       groceryListAvailable: true,
     },
     lunch: {

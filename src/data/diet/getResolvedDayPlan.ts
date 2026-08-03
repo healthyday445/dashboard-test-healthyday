@@ -38,7 +38,7 @@ export function getResolvedDayPlan(date: Date, language: Language = "English"): 
     return {
       slotId: slot.id,
       slotLabel: slot.label,
-      timeRangeLabel: slot.timeRangeLabel,
+      timeRangeLabel: curated?.timeRangeLabel ?? slot.timeRangeLabel,
       order: slot.order,
       category: generic.category,
       detail: generic.detail,

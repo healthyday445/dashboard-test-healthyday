@@ -103,6 +103,23 @@ describe("getResolvedDayPlan", () => {
     expect(breakfast.name).toBe("Ragi Malt with Nuts & Seeds"); // curated, distinct capitalization
   });
 
+  it("overrides 2026-08-09 breakfast's time range since that date has no Post Yoga Drink card", () => {
+    const plan = getResolvedDayPlan(new Date(2026, 7, 9));
+    const breakfast = plan.meals.find((meal) => meal.slotId === "breakfast")!;
+    expect(breakfast.timeRangeLabel).toBe("06:30AM - 09:30AM");
+    expect(breakfast.nutritionalBenefits?.map((b) => b.ingredient)).toEqual(["Ragi", "Nuts & Seeds"]);
+    const lunch = plan.meals.find((meal) => meal.slotId === "lunch")!;
+    expect(lunch.timeRangeLabel).toBe("01:00PM - 01:30PM"); // unaffected slot keeps the default
+  });
+
+  it("resolves 2026-08-09 morningSnack's Pineapple items/recommendedQuantity/precautions", () => {
+    const plan = getResolvedDayPlan(new Date(2026, 7, 9));
+    const morningSnack = plan.meals.find((meal) => meal.slotId === "morningSnack")!;
+    expect(morningSnack.items).toEqual([{ label: "1 small cup (100gms)" }]);
+    expect(morningSnack.recommendedQuantity).toEqual([{ ingredient: "Pineapple", qty: "1 small cup (100gms)" }]);
+    expect(morningSnack.precautions).toBe("For people with Diabetes, limit the quantity to 60 - 70 gms per serving");
+  });
+
   it("reflects the corrected 2026-08-08 eveningSnack sheet data (Corn Pakoda, not Sweet Potato)", () => {
     const plan = getResolvedDayPlan(new Date(2026, 7, 8));
     const eveningSnack = plan.meals.find((meal) => meal.slotId === "eveningSnack")!;

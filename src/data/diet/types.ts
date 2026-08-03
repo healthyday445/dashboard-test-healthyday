@@ -107,6 +107,12 @@ export interface RecommendedQuantity {
 export interface CuratedMealContent {
   name: LocalizedText;
   imageUrl?: string;
+  /** Overrides the slot's default `timeRangeLabel` from `DIET_SLOTS` for this date+slot
+   *  only — e.g. 2026-08-09's Breakfast shows "06:30AM - 09:30AM" instead of the usual
+   *  "07:30AM - 09:30AM" because that date has no separate Post Yoga Drink card. A plain
+   *  `string`, not `LocalizedText`, since time ranges aren't translated. Omit to use the
+   *  slot's normal global time range (true for almost every curated meal). */
+  timeRangeLabel?: string;
   items?: CuratedItem[];
   tips?: LocalizedText;
   precautions?: LocalizedText;
