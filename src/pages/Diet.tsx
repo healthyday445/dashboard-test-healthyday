@@ -104,6 +104,17 @@ const Diet = () => {
 
   const activePlan = dayPlans[activeTabIdx] ?? dayPlans[0];
 
+  // Keeps the URL's `tab` param in sync with the selected date tab via `replace` (never a new
+  // history entry just for switching tabs). Without this, the history entry for this page keeps
+  // whatever `tab` value it had when first pushed (e.g. "today"), so returning here via the native
+  // back button after opening a meal detail would drop the user back on the wrong date tab.
+  const handleTabChange = (idx: number) => {
+    setActiveTabIdx(idx);
+    const params = new URLSearchParams(location.search);
+    params.set("tab", String(idx));
+    navigate({ pathname: location.pathname, search: params.toString() }, { replace: true });
+  };
+
   const buildDetailUrl = (slotId: string) => {
     const params = new URLSearchParams();
     params.set("tab", String(activeTabIdx));
@@ -136,7 +147,7 @@ const Diet = () => {
       {/* Spacer for the fixed header above, so content doesn't start underneath it. */}
       <div style={{ height: "68px" }} />
 
-      <DietDateTabBar tabs={tabs} activeIdx={activeTabIdx} onChange={setActiveTabIdx} disabled={showSkeleton} />
+      <DietDateTabBar tabs={tabs} activeIdx={activeTabIdx} onChange={handleTabChange} disabled={showSkeleton} />
 
       <div style={{ paddingTop: "20px", paddingBottom: "24px" }}>
         {showSkeleton

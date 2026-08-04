@@ -122,6 +122,20 @@ const DietMealDetail = () => {
     return `/${mobile}/diet${qs ? `?${qs}` : ""}`;
   })();
 
+  // Diet.tsx pushes exactly one history entry when opening a meal (see buildDetailUrl there),
+  // so going "back" here must pop that same entry (navigate(-1)) rather than push a new one —
+  // otherwise every meal opened piles up its own extra entry, and the native back button ends
+  // up walking through every previously-viewed meal instead of going straight home. `location.key`
+  // is `"default"` only when this page was the very first entry (direct link/refresh, no Diet
+  // page to pop back into) — in that case there's nothing to pop, so replace instead.
+  const handleBack = () => {
+    if (location.key !== "default") {
+      navigate(-1);
+    } else {
+      navigate(backUrl, { replace: true });
+    }
+  };
+
   if (error) {
     return (
       <div className="hd-page bg-background flex flex-col items-center justify-center" style={{ fontFamily: "Outfit, sans-serif" }}>
@@ -173,7 +187,7 @@ const DietMealDetail = () => {
           <p style={{ color: "#666", fontSize: "14px", fontWeight: 400 }}>We couldn't find that meal. It may have moved.</p>
         </div>
         <button
-          onClick={() => navigate(backUrl)}
+          onClick={handleBack}
           style={{ marginTop: "16px", background: "none", border: "none", color: "#0D468B", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
         >
           Back to Diet Plan
@@ -203,7 +217,7 @@ const DietMealDetail = () => {
         )}
         <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 35%)", pointerEvents: "none" }} />
         <button
-          onClick={() => navigate(backUrl)}
+          onClick={handleBack}
           aria-label="Back to Diet Plan"
           style={{
             position: "absolute", top: "20px", left: "16px", width: "34px", height: "34px", borderRadius: "10px",
