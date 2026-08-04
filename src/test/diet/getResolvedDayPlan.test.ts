@@ -54,7 +54,7 @@ describe("getResolvedDayPlan", () => {
     const earlyMorning = plan.meals.find((m) => m.slotId === "earlyMorning")!;
     expect(earlyMorning.name).toBe("Walnuts & ఖర్జూరాలు");
     expect(earlyMorning.tips).toBe("రాత్రంతా నానబెట్టి, ఉదయం తినండి.");
-    expect(earlyMorning.items).toEqual([{ label: "2 ఆక్రోట్లు" }, { label: "2 ఖర్జూరాలు" }]);
+    expect(earlyMorning.items).toEqual([{ label: "2 Walnuts" }, { label: "2 ఖర్జూరాలు" }]);
   });
 
   it("defaults to English when no language is passed", () => {
@@ -138,6 +138,48 @@ describe("getResolvedDayPlan", () => {
     expect(englishGuava.benefits).toHaveLength(5);
     expect(teluguGuava.benefits).toHaveLength(3);
     expect(teluguGuava.benefits.map((b) => b.iconKey)).toEqual(["shield", "stomach", "happy"]);
+  });
+
+  it("keeps loanword ingredient names in English on the Telugu screen (2026-08-03)", () => {
+    // Figma's Telugu design (970:32655) leaves "Walnuts" and "Turmeric" untranslated
+    // wherever they appear as a standalone ingredient/qty label.
+    const plan = getResolvedDayPlan(new Date(2026, 7, 3), "Telugu");
+    const earlyMorning = plan.meals.find((m) => m.slotId === "earlyMorning")!;
+    expect(earlyMorning.nutritionalBenefits?.find((b) => b.ingredient === "Walnuts")).toBeTruthy();
+    const nightDrink = plan.meals.find((m) => m.slotId === "nightDrink")!;
+    expect(nightDrink.nutritionalBenefits?.find((b) => b.ingredient === "Turmeric")).toBeTruthy();
+  });
+
+  it("keeps Warm Water's quantity in English on the Telugu screen (2026-08-05)", () => {
+    // Figma node 970:33879 shows the qty chip as "1 Glass" even on the Telugu screen.
+    const plan = getResolvedDayPlan(new Date(2026, 7, 5), "Telugu");
+    const earlyMorning = plan.meals.find((m) => m.slotId === "earlyMorning")!;
+    expect(earlyMorning.items).toEqual([{ label: "1 Glass" }]);
+    expect(earlyMorning.recommendedQuantity).toEqual([{ ingredient: "గోరువెచ్చని నీరు", qty: "1 Glass" }]);
+  });
+
+  it("orders Sprouts Chaat's Telugu-visible benefits to match Figma (2026-08-04)", () => {
+    // Figma node 970:33289 orders eveningSnack's benefits Protein-Rich, Keeps You Full
+    // Longer, Better Digestion (Supports Metabolism is an English-only row in between).
+    const plan = getResolvedDayPlan(new Date(2026, 7, 4), "Telugu");
+    const eveningSnack = plan.meals.find((m) => m.slotId === "eveningSnack")!;
+    const sprouts = eveningSnack.nutritionalBenefits?.find((b) => b.ingredient === "Sprouts");
+    expect(sprouts?.benefits.map((b) => b.iconKey)).toEqual(["muscle-health", "happy", "stomach"]);
+    expect(eveningSnack.precautions).not.toContain("Thyroidడ");
+  });
+
+  it("uses the 'ని' particle in the Energy benefit label (2026-08-07)", () => {
+    // Figma node 970:35060 consistently reads "Energy ని ఇస్తుంది" across all four
+    // slots that carry this benefit that day.
+    const plan = getResolvedDayPlan(new Date(2026, 7, 7), "Telugu");
+    const slotsWithEnergy = ["earlyMorning", "postYogaDrink", "breakfast", "lunch"];
+    for (const slotId of slotsWithEnergy) {
+      const meal = plan.meals.find((m) => m.slotId === slotId)!;
+      const energyBenefit = meal.nutritionalBenefits
+        ?.flatMap((b) => b.benefits)
+        .find((b) => b.iconKey === "lightning-bolt");
+      expect(energyBenefit?.benefitLabel).toContain("Energy ని ఇస్తుంది");
+    }
   });
 
   it("drops an English-only nutritional-benefit card entirely when resolving Telugu", () => {
