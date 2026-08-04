@@ -4,6 +4,7 @@ import logo from "@/assets/Primary_logo.svg";
 import { safeSessionStorage } from "@/lib/storage";
 import { DietDateTabBar, type DietDateTab } from "@/components/DietDateTabBar";
 import { DietMealCard, DietMealCardSkeleton } from "@/components/DietMealCard";
+import { GroceryListButton } from "@/components/GroceryListButton";
 import { getResolvedTabPlans, parseIsoDateKey, type Language } from "@/data/diet";
 
 const WEEKDAY_ABBR = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
@@ -149,13 +150,15 @@ const Diet = () => {
 
       <DietDateTabBar tabs={tabs} activeIdx={activeTabIdx} onChange={handleTabChange} disabled={showSkeleton} />
 
-      <div style={{ paddingTop: "20px", paddingBottom: "24px" }}>
+      <div style={{ paddingTop: "20px", paddingBottom: showSkeleton ? "24px" : "90px" }}>
         {showSkeleton
           ? Array.from({ length: 8 }, (_, i) => <DietMealCardSkeleton key={i} />)
           : activePlan.meals.map((meal) => (
               <DietMealCard key={meal.slotId} meal={meal} onClick={() => navigate(buildDetailUrl(meal.slotId))} />
             ))}
       </div>
+
+      {!showSkeleton && activePlan.meals.some((meal) => meal.groceryListAvailable) && <GroceryListButton />}
     </div>
   );
 };
