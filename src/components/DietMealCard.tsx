@@ -23,16 +23,8 @@ const ARROW_INSET = 12; // distance from the rectangle's right edge to the arrow
  *  mirrored to point right; recreated as an inline SVG pointing right directly). */
 const NavArrowButton = () => (
   <div
-    style={{
-      flexShrink: 0,
-      width: `${ARROW_SIZE}px`,
-      height: `${ARROW_SIZE}px`,
-      borderRadius: "50%",
-      background: "#8CBF00",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-    }}
+    className="flex flex-shrink-0 items-center justify-center rounded-full bg-[#8CBF00]"
+    style={{ width: `${ARROW_SIZE}px`, height: `${ARROW_SIZE}px` }}
   >
     <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
       <path d="M3 8h10M9 4l4 4-4 4" stroke="#FFF" strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round" />
@@ -43,8 +35,8 @@ const NavArrowButton = () => (
 // Chip color scheme alternates by item index, matching the Figma card (890:8424) where the
 // first ("2 Walnuts") is orange and the second ("2 Dates") is blue.
 const CHIP_SCHEMES = [
-  { background: "#FFF4E7", border: "#FE961B", color: "#FE961B" },
-  { background: "#EBF7FF", border: "#4F8ABF", color: "#0A386F" },
+  { className: "border-[#FE961B] bg-[#FFF4E7] text-[#FE961B]" },
+  { className: "border-[#4F8ABF] bg-[#EBF7FF] text-[#0A386F]" },
 ];
 
 interface DietMealCardRectangleProps {
@@ -60,19 +52,9 @@ interface DietMealCardRectangleProps {
  */
 const DietMealCardRectangle: React.FC<DietMealCardRectangleProps> = ({ children }) => (
   <div
-    style={{
-      boxSizing: "border-box",
-      width: "100%",
-      minHeight: `${THUMB_SIZE}px`,
-      display: "flex",
-      alignItems: "center",
-      padding: `10px ${ARROW_SIZE + ARROW_INSET + 8}px 10px ${THUMB_INSIDE + THUMB_TEXT_GAP}px`,
-      border: "1px solid rgba(69,130,185,0.35)",
-      // Top-left corner stays square so the overlapping circle tucks into the corner cleanly.
-      borderRadius: "3px 12px 12px 3px",
-      background: "#FFF",
-      boxShadow: "0 2px 8px 0 rgba(5,62,4,0.14)",
-    }}
+    // Top-left corner stays square so the overlapping circle tucks into the corner cleanly.
+    className="box-border flex w-full items-center rounded-bl-[3px] rounded-tl-[3px] rounded-br-xl rounded-tr-xl border border-[rgba(69,130,185,0.35)] bg-white shadow-[0_2px_8px_0_rgba(5,62,4,0.14)]"
+    style={{ minHeight: `${THUMB_SIZE}px`, padding: `10px ${ARROW_SIZE + ARROW_INSET + 8}px 10px ${THUMB_INSIDE + THUMB_TEXT_GAP}px` }}
   >
     {children}
   </div>
@@ -91,11 +73,11 @@ export const DietMealCard: React.FC<DietMealCardProps> = ({ meal, onClick }) => 
   const { background, icon } = getMealPlaceholderIcon(meal.category, meal.detail);
 
   return (
-    <div style={{ padding: "0 20px 16px" }}>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "8px" }}>
-        <span style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 800, color: "#085E00" }}>{meal.slotLabel}</span>
-        <span style={{ display: "flex", alignItems: "center", gap: "4px", fontFamily: "Outfit", fontSize: "12px", fontWeight: 700, color: "#085E00" }}>
-          <img src={clockIcon} alt="" style={{ width: "14px", height: "14px" }} />
+    <div className="px-5 pb-4">
+      <div className="mb-2 flex items-center justify-between">
+        <span className="text-sm font-extrabold text-[#085E00]">{meal.slotLabel}</span>
+        <span className="flex items-center gap-1 text-xs font-bold text-[#085E00]">
+          <img src={clockIcon} alt="" className="h-3.5 w-3.5" />
           {meal.timeRangeLabel}
         </span>
       </div>
@@ -107,72 +89,38 @@ export const DietMealCard: React.FC<DietMealCardProps> = ({ meal, onClick }) => 
         onKeyDown={(e) => {
           if (e.key === "Enter" || e.key === " ") onClick?.();
         }}
-        style={{
-          position: "relative",
-          marginLeft: `${THUMB_OUTSIDE}px`,
-          width: `calc(100% - ${THUMB_OUTSIDE}px)`,
-          cursor: "pointer",
-        }}
+        className="relative cursor-pointer"
+        style={{ marginLeft: `${THUMB_OUTSIDE}px`, width: `calc(100% - ${THUMB_OUTSIDE}px)` }}
       >
         {/* White "coin" backing behind the photo (Figma "Ellipse 61") — a ring peeks out
             around the photo's edge, plus a soft shadow lifting the whole thumbnail. */}
         <div
+          className="absolute top-1/2 flex -translate-y-1/2 items-center justify-center rounded-full bg-white shadow-[1px_1px_4px_0_rgba(0,0,0,0.15),-1px_-1px_4px_0_rgba(0,0,0,0.15)]"
           style={{
-            position: "absolute",
             left: `-${THUMB_OUTSIDE + THUMB_RING_WIDTH}px`,
-            top: "50%",
-            transform: "translateY(-50%)",
             width: `${THUMB_SIZE + THUMB_RING_WIDTH * 2}px`,
             height: `${THUMB_SIZE + THUMB_RING_WIDTH * 2}px`,
-            borderRadius: "50%",
-            background: "#FFF",
-            boxShadow: "1px 1px 4px 0 rgba(0,0,0,0.15), -1px -1px 4px 0 rgba(0,0,0,0.15)",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
           }}
         >
           <div
-            style={{
-              width: `${THUMB_SIZE}px`,
-              height: `${THUMB_SIZE}px`,
-              borderRadius: "50%",
-              background,
-              overflow: "hidden",
-              display: "flex",
-              alignItems: "center",
-              justifyContent: "center",
-            }}
+            className="flex items-center justify-center overflow-hidden rounded-full"
+            style={{ width: `${THUMB_SIZE}px`, height: `${THUMB_SIZE}px`, background }}
           >
-            {meal.imageUrl ? (
-              <img src={meal.imageUrl} alt={meal.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
-            ) : (
-              icon
-            )}
+            {meal.imageUrl ? <img src={meal.imageUrl} alt={meal.name} className="h-full w-full object-cover" /> : icon}
           </div>
         </div>
 
         <DietMealCardRectangle>
-          <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px", minWidth: 0 }}>
-            <span style={{ fontFamily: "Outfit", fontSize: "15px", fontWeight: 700, color: "#003677" }}>{meal.name}</span>
+          <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+            <span className="text-[15px] font-bold text-[#003677]">{meal.name}</span>
             {meal.items?.length ? (
-              <div style={{ display: "flex", gap: "4px", flexWrap: "nowrap" }}>
+              <div className="flex flex-nowrap gap-1">
                 {meal.items.map((item, idx) => {
                   const scheme = CHIP_SCHEMES[idx % CHIP_SCHEMES.length];
                   return (
                     <span
                       key={idx}
-                      style={{
-                        fontFamily: "Outfit",
-                        fontSize: "9px",
-                        fontWeight: 500,
-                        textWrap: "nowrap",
-                        color: scheme.color,
-                        background: scheme.background,
-                        border: `0.5px solid ${scheme.border}`,
-                        borderRadius: "3px",
-                        padding: "2px 4px",
-                      }}
+                      className={`whitespace-nowrap rounded-[3px] border-[0.5px] px-1 py-0.5 text-[9px] font-medium ${scheme.className}`}
                     >
                       {item.label}
                     </span>
@@ -183,7 +131,7 @@ export const DietMealCard: React.FC<DietMealCardProps> = ({ meal, onClick }) => 
           </div>
         </DietMealCardRectangle>
 
-        <div style={{ position: "absolute", right: `${ARROW_INSET}px`, top: "50%", transform: "translateY(-50%)" }}>
+        <div className="absolute top-1/2 -translate-y-1/2" style={{ right: `${ARROW_INSET}px` }}>
           <NavArrowButton />
         </div>
       </div>
@@ -193,32 +141,18 @@ export const DietMealCard: React.FC<DietMealCardProps> = ({ meal, onClick }) => 
 
 /** Skeleton-shaped placeholder for one meal row, shown while student/plan data loads. */
 export const DietMealCardSkeleton: React.FC = () => (
-  <div style={{ padding: "0 20px 16px" }}>
-    <Skeleton style={{ width: "120px", height: "12px", borderRadius: "4px", marginBottom: "8px" }} />
-    <div style={{ position: "relative", marginLeft: `${THUMB_OUTSIDE}px`, width: `calc(100% - ${THUMB_OUTSIDE}px)` }}>
+  <div className="px-5 pb-4">
+    <Skeleton className="mb-2 h-3 w-[120px] rounded" />
+    <div className="relative" style={{ marginLeft: `${THUMB_OUTSIDE}px`, width: `calc(100% - ${THUMB_OUTSIDE}px)` }}>
       <Skeleton
-        style={{
-          position: "absolute",
-          left: `-${THUMB_OUTSIDE}px`,
-          top: "50%",
-          transform: "translateY(-50%)",
-          width: `${THUMB_SIZE}px`,
-          height: `${THUMB_SIZE}px`,
-          borderRadius: "50%",
-        }}
+        className="absolute top-1/2 -translate-y-1/2 rounded-full"
+        style={{ left: `-${THUMB_OUTSIDE}px`, width: `${THUMB_SIZE}px`, height: `${THUMB_SIZE}px` }}
       />
       <div
-        style={{
-          boxSizing: "border-box",
-          minHeight: `${THUMB_SIZE}px`,
-          display: "flex",
-          alignItems: "center",
-          padding: `10px ${ARROW_SIZE + ARROW_INSET + 8}px 10px ${THUMB_INSIDE + THUMB_TEXT_GAP}px`,
-          border: "1px solid rgba(69,130,185,0.35)",
-          borderRadius: "3px 12px 12px 3px",
-        }}
+        className="box-border flex items-center rounded-bl-[3px] rounded-tl-[3px] rounded-br-xl rounded-tr-xl border border-[rgba(69,130,185,0.35)]"
+        style={{ minHeight: `${THUMB_SIZE}px`, padding: `10px ${ARROW_SIZE + ARROW_INSET + 8}px 10px ${THUMB_INSIDE + THUMB_TEXT_GAP}px` }}
       >
-        <Skeleton style={{ flex: 1, height: "16px", borderRadius: "4px" }} />
+        <Skeleton className="h-4 flex-1 rounded" />
       </div>
     </div>
   </div>

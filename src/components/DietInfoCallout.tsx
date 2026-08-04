@@ -15,17 +15,19 @@ const VARIANT_CONFIG = {
   tips: {
     // The Telugu Figma screens leave this heading in English — transcribed as-authored.
     label: { English: "Tips", Telugu: "Tips" },
-    accent: "#0A386F",
-    background: "#EBF7FF",
-    border: "#6EB1DC",
+    accentBg: "bg-[#0A386F]",
+    accentText: "text-[#0A386F]",
+    cardBg: "bg-[#EBF7FF]",
+    cardBorder: "border-[#6EB1DC]",
     icon: ideaIcon,
     decoration: tipsDecoration,
   },
   precautions: {
     label: { English: "Precautions", Telugu: "జాగ్రత్తలు" },
-    accent: "#FE961B",
-    background: "#FFF4E7",
-    border: "#F7AB51",
+    accentBg: "bg-[#FE961B]",
+    accentText: "text-[#FE961B]",
+    cardBg: "bg-[#FFF4E7]",
+    cardBorder: "border-[#F7AB51]",
     icon: protectIcon,
     decoration: precautionsDecoration,
   },
@@ -36,47 +38,22 @@ const VARIANT_CONFIG = {
  *  Either section is independently optional per meal, so this only renders when the
  *  corresponding text is present. */
 export const DietInfoCallout: React.FC<DietInfoCalloutProps> = ({ variant, text, language = "English" }) => {
-  const { label, accent, background, border, icon, decoration } = VARIANT_CONFIG[variant];
+  const { label, accentBg, accentText, cardBg, cardBorder, icon, decoration } = VARIANT_CONFIG[variant];
   return (
     <div
-      style={{
-        position: "relative",
-        margin: "0 20px 16px",
-        minHeight: "100px",
-        boxSizing: "border-box",
-        padding: "14px 88px 14px 24px",
-        background,
-        border: `0.5px solid ${border}`,
-        borderRadius: "8px",
-        overflow: "hidden",
-      }}
+      className={`relative mx-5 mb-4 box-border min-h-[100px] overflow-hidden rounded-lg border-[0.5px] pb-3.5 pl-6 pr-[88px] pt-3.5 ${cardBg} ${cardBorder}`}
     >
-      <div style={{ position: "absolute", left: 0, top: 0, bottom: 0, width: "7px", background: accent, borderRadius: "8px 0 0 8px" }} />
-      <div style={{ display: "flex", alignItems: "center", gap: "8px", marginBottom: "6px" }}>
-        <div
-          style={{
-            flexShrink: 0,
-            width: "24px",
-            height: "24px",
-            borderRadius: "50%",
-            background: accent,
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-          }}
-        >
-          <img src={icon} alt="" style={{ width: "14px", height: "14px" }} />
+      <div className={`absolute inset-y-0 left-0 w-[7px] rounded-l-lg ${accentBg}`} />
+      <div className="mb-1.5 flex items-center gap-2">
+        <div className={`flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full ${accentBg}`}>
+          <img src={icon} alt="" className="h-3.5 w-3.5" />
         </div>
-        <span style={{ fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, color: accent }}>{label[language]}</span>
+        <span className={`text-lg font-bold ${accentText}`}>{label[language]}</span>
       </div>
       {/* Aligned with the heading text above (icon width + gap = 32px), not with the card's
           own left padding — the two must share the same starting x. */}
-      <p style={{ margin: 0, marginLeft: "32px", maxWidth: "215px", fontFamily: "Outfit", fontSize: "12px", fontWeight: 400, color: "#202020", lineHeight: 1.5 }}>{text}</p>
-      <img
-        src={decoration}
-        alt=""
-        style={{ position: "absolute", right: "6px", top: "12px", width: "72px", height: "72px", objectFit: "contain", pointerEvents: "none" }}
-      />
+      <p className="ml-8 max-w-[215px] text-xs font-normal leading-normal text-[#202020]">{text}</p>
+      <img src={decoration} alt="" className="pointer-events-none absolute right-1.5 top-3 h-[72px] w-[72px] object-contain" />
     </div>
   );
 };

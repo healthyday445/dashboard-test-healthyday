@@ -11,29 +11,14 @@ const GROCERY_LIST_URL = "https://dailyyogawithjagan.com/grocery-list";
  * design's ~20px right margin.
  */
 export const GroceryListButton = () => (
-  <div style={{ position: "fixed", bottom: "24px", left: 0, right: 0, maxWidth: "412px", margin: "0 auto", zIndex: 20, pointerEvents: "none" }}>
-    <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: "20px" }}>
+  <div className="pointer-events-none fixed bottom-6 left-0 right-0 z-20 mx-auto max-w-[412px]">
+    <div className="flex justify-end pr-5">
       <button
         onClick={() => window.open(GROCERY_LIST_URL, "_blank")}
-        style={{
-          pointerEvents: "auto",
-          flexShrink: 0,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          gap: "8px",
-          width: "154px",
-          height: "44px",
-          borderRadius: "40px",
-          border: "none",
-          background: "#FEAB27",
-          backdropFilter: "blur(2px)",
-          boxShadow: "0 0 10px 1px rgba(0,0,0,0.25)",
-          cursor: "pointer",
-        }}
+        className="pointer-events-auto flex h-11 w-[154px] flex-shrink-0 cursor-pointer items-center justify-center gap-2 rounded-[40px] border-none bg-[#FEAB27] shadow-[0_0_10px_1px_rgba(0,0,0,0.25)] backdrop-blur-[2px]"
       >
-        <img src={buyingIcon} alt="" style={{ width: "21px", height: "21px" }} />
-        <span style={{ fontFamily: "Outfit", fontSize: "16px", fontWeight: 700, color: "#FFF", whiteSpace: "nowrap" }}>Grocery List</span>
+        <img src={buyingIcon} alt="" className="h-[21px] w-[21px]" />
+        <span className="whitespace-nowrap text-base font-bold text-white">Grocery List</span>
       </button>
     </div>
   </div>

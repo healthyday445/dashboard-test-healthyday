@@ -22,19 +22,9 @@ interface DietDateTabBarProps {
  * wavy hills, food icons baked into the image) rather than a CSS gradient recreation.
  */
 export const DietDateTabBar: React.FC<DietDateTabBarProps> = ({ tabs, activeIdx, onChange, disabled = false }) => (
-  <div
-    style={{
-      backgroundImage: `url(${heroBanner})`,
-      backgroundSize: "cover",
-      backgroundPosition: "center",
-      backgroundRepeat: "no-repeat",
-      padding: "16px 16px 12px",
-    }}
-  >
-    <p style={{ margin: "0 0 16px", color: "#0D468B", fontFamily: "Outfit", fontSize: "17px", fontWeight: 700, textAlign: "center" }}>
-      Your Daily Diet Routine
-    </p>
-    <div style={{ display: "flex", justifyContent: "space-between", gap: "2px" }}>
+  <div className="bg-cover bg-center bg-no-repeat px-4 pb-3 pt-4" style={{ backgroundImage: `url(${heroBanner})` }}>
+    <p className="mb-4 text-center text-[17px] font-bold text-[#0D468B]">Your Daily Diet Routine</p>
+    <div className="flex justify-between gap-[2px]">
       {tabs.map((tab, idx) => {
         const active = idx === activeIdx;
         return (
@@ -43,27 +33,13 @@ export const DietDateTabBar: React.FC<DietDateTabBarProps> = ({ tabs, activeIdx,
             type="button"
             disabled={disabled}
             onClick={() => onChange(idx)}
-            style={{
-              flex: active ? "1.15" : "1",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "3px",
-              padding: active ? "8px 6px 9px" : "8px 4px",
-              border: "none",
-              borderRadius: "12px",
-              background: active ? "#FFF" : "transparent",
-              boxShadow: active ? "0 2px 6px 0 rgba(0,0,0,0.18)" : "none",
-              cursor: disabled ? "default" : "pointer",
-            }}
+            className={`flex flex-col items-center gap-[3px] rounded-xl border-none ${
+              active ? "flex-[1.15] px-[6px] pb-[9px] pt-2 bg-white shadow-[0_2px_6px_0_rgba(0,0,0,0.18)]" : "flex-1 px-1 py-2 bg-transparent shadow-none"
+            } ${disabled ? "cursor-default" : "cursor-pointer"}`}
           >
-            <span style={{ fontFamily: "Outfit", fontSize: "12px", fontWeight: 600, color: active ? "#202020" : "#8B8B8B" }}>
-              {tab.label}
-            </span>
-            <span style={{ fontFamily: "Outfit", fontSize: "15px", fontWeight: 700, color: active ? "#202020" : "#8B8B8B" }}>
-              {tab.dayOfMonth}
-            </span>
-            {active && <span style={{ width: "22px", height: "3px", background: "#FEAB27", borderRadius: "2px" }} />}
+            <span className={`text-xs font-semibold ${active ? "text-[#202020]" : "text-[#8B8B8B]"}`}>{tab.label}</span>
+            <span className={`text-[15px] font-bold ${active ? "text-[#202020]" : "text-[#8B8B8B]"}`}>{tab.dayOfMonth}</span>
+            {active && <span className="h-[3px] w-[22px] rounded-sm bg-[#FEAB27]" />}
           </button>
         );
       })}

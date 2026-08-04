@@ -99,11 +99,11 @@ const DietMealDetail = () => {
 
   if (error) {
     return (
-      <div className="hd-page bg-background flex flex-col items-center justify-center" style={{ fontFamily: "Outfit, sans-serif" }}>
+      <div className="hd-page bg-background flex flex-col items-center justify-center font-['Outfit']">
         <img src={logo} alt="Healthyday" className="h-10 mb-8" />
-        <div style={{ background: "#FFF3F3", border: "1px solid #FFD4D4", borderRadius: "12px", padding: "24px", textAlign: "center", maxWidth: "340px" }}>
-          <p style={{ color: "#D32F2F", fontSize: "16px", fontWeight: 700, marginBottom: "8px" }}>Oops!</p>
-          <p style={{ color: "#666", fontSize: "14px", fontWeight: 400 }}>{error}</p>
+        <div className="max-w-[340px] rounded-xl border border-[#FFD4D4] bg-[#FFF3F3] p-6 text-center">
+          <p className="mb-2 text-base font-bold text-[#D32F2F]">Oops!</p>
+          <p className="text-sm font-normal text-[#666]">{error}</p>
         </div>
       </div>
     );
@@ -113,15 +113,15 @@ const DietMealDetail = () => {
 
   if (showSkeleton) {
     return (
-      <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
-        <header className="hd-header bg-white" style={{ position: "fixed", top: 0, left: 0, right: 0, maxWidth: "412px", margin: "0 auto", zIndex: 20 }}>
+      <div className="hd-page bg-white font-['Outfit']">
+        <header className="hd-header fixed left-0 right-0 top-0 z-20 mx-auto max-w-[412px] bg-white">
           <img src={logo} alt="Healthyday" className="h-7" />
         </header>
-        <div style={{ height: "68px" }} />
-        <Skeleton style={{ width: "100%", height: "300px", borderRadius: 0 }} />
-        <div style={{ padding: "20px" }}>
-          <Skeleton style={{ width: "60%", height: "22px", borderRadius: "4px", margin: "0 auto 16px" }} />
-          <Skeleton style={{ width: "100%", height: "80px", borderRadius: "8px" }} />
+        <div className="h-[68px]" />
+        <Skeleton className="h-[300px] w-full rounded-none" />
+        <div className="p-5">
+          <Skeleton className="mx-auto mb-4 h-[22px] w-[60%] rounded" />
+          <Skeleton className="h-20 w-full rounded-lg" />
         </div>
       </div>
     );
@@ -141,16 +141,13 @@ const DietMealDetail = () => {
 
   if (!meal) {
     return (
-      <div className="hd-page bg-background flex flex-col items-center justify-center" style={{ fontFamily: "Outfit, sans-serif" }}>
+      <div className="hd-page bg-background flex flex-col items-center justify-center font-['Outfit']">
         <img src={logo} alt="Healthyday" className="h-10 mb-8" />
-        <div style={{ background: "#FFF3F3", border: "1px solid #FFD4D4", borderRadius: "12px", padding: "24px", textAlign: "center", maxWidth: "340px" }}>
-          <p style={{ color: "#D32F2F", fontSize: "16px", fontWeight: 700, marginBottom: "8px" }}>Oops!</p>
-          <p style={{ color: "#666", fontSize: "14px", fontWeight: 400 }}>We couldn't find that meal. It may have moved.</p>
+        <div className="max-w-[340px] rounded-xl border border-[#FFD4D4] bg-[#FFF3F3] p-6 text-center">
+          <p className="mb-2 text-base font-bold text-[#D32F2F]">Oops!</p>
+          <p className="text-sm font-normal text-[#666]">We couldn't find that meal. It may have moved.</p>
         </div>
-        <button
-          onClick={handleBack}
-          style={{ marginTop: "16px", background: "none", border: "none", color: "#0D468B", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, cursor: "pointer" }}
-        >
+        <button onClick={handleBack} className="mt-4 cursor-pointer border-none bg-none text-sm font-semibold text-[#0D468B]">
           Back to Diet Plan
         </button>
       </div>
@@ -160,31 +157,27 @@ const DietMealDetail = () => {
   const { background, icon } = getMealPlaceholderIcon(meal.category, meal.detail);
 
   return (
-    <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
-      <header className="hd-header bg-white" style={{ position: "fixed", top: 0, left: 0, right: 0, maxWidth: "412px", margin: "0 auto", zIndex: 20 }}>
+    <div className="hd-page bg-white font-['Outfit']">
+      <header className="hd-header fixed left-0 right-0 top-0 z-20 mx-auto max-w-[412px] bg-white">
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
-      <div style={{ height: "68px" }} />
+      <div className="h-[68px]" />
 
       {/* Hero photo, with a white-to-transparent fade at the top so the back button reads
           clearly regardless of the photo underneath (Figma 890:8570/890:8572). */}
-      <div style={{ position: "relative", width: "100%", height: "300px", background, overflow: "hidden" }}>
+      <div className="relative h-[300px] w-full overflow-hidden" style={{ background }}>
         {meal.imageUrl ? (
-          <img src={meal.imageUrl} alt={meal.name} style={{ width: "100%", height: "100%", objectFit: "cover" }} />
+          <img src={meal.imageUrl} alt={meal.name} className="h-full w-full object-cover" />
         ) : (
-          <div style={{ width: "100%", height: "100%", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <div style={{ transform: "scale(3)" }}>{icon}</div>
+          <div className="flex h-full w-full items-center justify-center">
+            <div className="scale-[3]">{icon}</div>
           </div>
         )}
-        <div style={{ position: "absolute", inset: 0, background: "linear-gradient(180deg, rgba(255,255,255,0.85) 0%, rgba(255,255,255,0) 35%)", pointerEvents: "none" }} />
+        <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.85)_0%,rgba(255,255,255,0)_35%)] pointer-events-none" />
         <button
           onClick={handleBack}
           aria-label="Back to Diet Plan"
-          style={{
-            position: "absolute", top: "20px", left: "16px", width: "34px", height: "34px", borderRadius: "10px",
-            background: "#FFF", border: "none", boxShadow: "-1px -1px 4px 0 rgba(0,0,0,0.15), 1px 1px 4px 0 rgba(0,0,0,0.15)",
-            display: "flex", alignItems: "center", justifyContent: "center", cursor: "pointer",
-          }}
+          className="absolute left-4 top-5 flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-[10px] border-none bg-white shadow-[-1px_-1px_4px_0_rgba(0,0,0,0.15),1px_1px_4px_0_rgba(0,0,0,0.15)]"
         >
           <BackChevronIcon />
         </button>
@@ -192,13 +185,13 @@ const DietMealDetail = () => {
 
       {/* Content panel overlaps the bottom of the hero photo (bottom-sheet style), matching
           Figma's rounded-top white panel (890:8573). */}
-      <div style={{ position: "relative", marginTop: "-32px", background: "#FFF", borderRadius: "32px 32px 0 0", boxShadow: "0 -8px 24px 0 rgba(0,0,0,0.06)", paddingTop: "12px" }}>
-        <div style={{ width: "50px", height: "5px", borderRadius: "16px", background: "#E3EBEC", margin: "0 auto 16px" }} />
+      <div className="relative -mt-8 rounded-t-[32px] bg-white pt-3 shadow-[0_-8px_24px_0_rgba(0,0,0,0.06)]">
+        <div className="mx-auto mb-4 h-[5px] w-[50px] rounded-2xl bg-[#E3EBEC]" />
 
-        <div style={{ padding: "0 20px" }}>
-          <h1 style={{ margin: "0 0 20px", textAlign: "center", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700, color: "#0A386F" }}>{meal.name}</h1>
+        <div className="px-5">
+          <h1 className="mb-5 text-center text-xl font-bold text-[#0A386F]">{meal.name}</h1>
           {!meal.isCurated && (
-            <p style={{ margin: "-8px 0 16px", fontFamily: "Outfit", fontSize: "13px", fontWeight: 400, color: "#4A4A4A", lineHeight: 1.5, textAlign: "center" }}>
+            <p className="-mt-2 mb-4 text-center text-[13px] font-normal leading-[1.5] text-[#4A4A4A]">
               {meal.category} — {meal.detail}
             </p>
           )}
@@ -206,7 +199,7 @@ const DietMealDetail = () => {
 
         {/* Extra bottom padding clears the fixed Grocery List button so it never overlaps
             the last card when scrolled all the way down. */}
-        <div style={{ paddingBottom: "90px" }}>
+        <div className="pb-[90px]">
           {meal.tips && <DietInfoCallout variant="tips" text={meal.tips} language={language} />}
           {meal.precautions && <DietInfoCallout variant="precautions" text={meal.precautions} language={language} />}
           {meal.recommendedQuantity?.length ? <DietIngredientList variant="quantity" rows={meal.recommendedQuantity} /> : null}

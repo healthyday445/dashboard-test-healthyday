@@ -128,11 +128,11 @@ const Diet = () => {
 
   if (error) {
     return (
-      <div className="hd-page bg-background flex flex-col items-center justify-center" style={{ fontFamily: "Outfit, sans-serif" }}>
+      <div className="hd-page bg-background flex flex-col items-center justify-center font-['Outfit']">
         <img src={logo} alt="Healthyday" className="h-10 mb-8" />
-        <div style={{ background: "#FFF3F3", border: "1px solid #FFD4D4", borderRadius: "12px", padding: "24px", textAlign: "center", maxWidth: "340px" }}>
-          <p style={{ color: "#D32F2F", fontSize: "16px", fontWeight: 700, marginBottom: "8px" }}>Oops!</p>
-          <p style={{ color: "#666", fontSize: "14px", fontWeight: 400 }}>{error}</p>
+        <div className="max-w-[340px] rounded-xl border border-[#FFD4D4] bg-[#FFF3F3] p-6 text-center">
+          <p className="mb-2 text-base font-bold text-[#D32F2F]">Oops!</p>
+          <p className="text-sm font-normal text-[#666]">{error}</p>
         </div>
       </div>
     );
@@ -141,16 +141,16 @@ const Diet = () => {
   const showSkeleton = loading || !studentData;
 
   return (
-    <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
-      <header className="hd-header bg-white" style={{ position: "fixed", top: 0, left: 0, right: 0, maxWidth: "412px", margin: "0 auto", zIndex: 20 }}>
+    <div className="hd-page bg-white font-['Outfit']">
+      <header className="hd-header fixed left-0 right-0 top-0 z-20 mx-auto max-w-[412px] bg-white">
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
       {/* Spacer for the fixed header above, so content doesn't start underneath it. */}
-      <div style={{ height: "68px" }} />
+      <div className="h-[68px]" />
 
       <DietDateTabBar tabs={tabs} activeIdx={activeTabIdx} onChange={handleTabChange} disabled={showSkeleton} />
 
-      <div style={{ paddingTop: "20px", paddingBottom: showSkeleton ? "24px" : "90px" }}>
+      <div className={`pt-5 ${showSkeleton ? "pb-6" : "pb-[90px]"}`}>
         {showSkeleton
           ? Array.from({ length: 8 }, (_, i) => <DietMealCardSkeleton key={i} />)
           : activePlan.meals.map((meal) => (
