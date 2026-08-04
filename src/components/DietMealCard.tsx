@@ -156,7 +156,7 @@ export const DietMealCard: React.FC<DietMealCardProps> = ({ meal, onClick }) => 
           <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px", minWidth: 0 }}>
             <span style={{ fontFamily: "Outfit", fontSize: "15px", fontWeight: 700, color: "#003677" }}>{meal.name}</span>
             {meal.items?.length ? (
-              <div style={{ display: "flex", gap: "6px", flexWrap: "wrap" }}>
+              <div style={{ display: "flex", gap: "4px", flexWrap: "nowrap" }}>
                 {meal.items.map((item, idx) => {
                   const scheme = CHIP_SCHEMES[idx % CHIP_SCHEMES.length];
                   return (
@@ -164,13 +164,14 @@ export const DietMealCard: React.FC<DietMealCardProps> = ({ meal, onClick }) => 
                       key={idx}
                       style={{
                         fontFamily: "Outfit",
-                        fontSize: "10px",
+                        fontSize: "9px",
                         fontWeight: 500,
+                        textWrap: "nowrap",
                         color: scheme.color,
                         background: scheme.background,
                         border: `0.5px solid ${scheme.border}`,
                         borderRadius: "3px",
-                        padding: "2px 8px",
+                        padding: "2px 4px",
                       }}
                     >
                       {item.label}
