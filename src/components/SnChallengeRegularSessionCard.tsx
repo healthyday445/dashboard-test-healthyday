@@ -1,6 +1,7 @@
 import { trackSessionClick } from "@/lib/trackSessionClick";
 import img8ea326 from "@/assets/8ea326ab563adb61ccb99b953865cb3132c173ab.webp";
 import { SnChallengeSessionTile } from "@/components/SnChallengeSessionTile";
+import { SnAccentBar } from "@/components/SnAccentBar";
 
 interface SnChallengeRegularSessionCardProps {
   isLive: boolean;
@@ -46,7 +47,7 @@ export const SnChallengeRegularSessionCard: React.FC<SnChallengeRegularSessionCa
   return (
     <div className="px-5 pt-4">
       <div className="flex items-center gap-2 mb-2">
-        <div className="h-[25px] w-[10px] flex-shrink-0 rounded-sm bg-[#FE961B]" />
+        <SnAccentBar />
         <h2 className="m-0 font-['Outfit'] font-bold text-[#202020]" style={{ fontSize: "clamp(14px, 4.2vw, 18px)" }}>
           Regular Session
         </h2>

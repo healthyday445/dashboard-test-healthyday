@@ -5,7 +5,11 @@
  *  page) since the fixed px sizes overflowed/wrapped badly below ~360px viewport width. */
 interface SnChallengeSessionTileProps {
   href: string;
-  onClick?: () => void;
+  onClick?: (e: React.MouseEvent<HTMLAnchorElement>) => void;
+  /** Whether `href` opens a real external video in a new tab (default) or is an in-app route —
+   *  used by SnChallengeCard once the SN session ends, when the tile links to /recordings
+   *  instead of YouTube and should navigate in the same tab like any other internal link. */
+  external?: boolean;
   thumbnail: string;
   isLive: boolean;
   titleLines: string[];
@@ -15,6 +19,7 @@ interface SnChallengeSessionTileProps {
 export const SnChallengeSessionTile: React.FC<SnChallengeSessionTileProps> = ({
   href,
   onClick,
+  external = true,
   thumbnail,
   isLive,
   titleLines,
@@ -22,8 +27,7 @@ export const SnChallengeSessionTile: React.FC<SnChallengeSessionTileProps> = ({
 }) => (
   <a
     href={href}
-    target="_blank"
-    rel="noopener noreferrer"
+    {...(external ? { target: "_blank", rel: "noopener noreferrer" } : {})}
     onClick={onClick}
     className="flex items-center gap-3 rounded-lg border-[0.5px] border-[#E9E9E9] bg-white p-3 no-underline shadow-[0px_0px_10px_0px_rgba(0,0,0,0.25),0px_2px_4px_0px_rgba(0,0,0,0.25)]"
   >

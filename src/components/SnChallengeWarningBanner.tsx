@@ -34,9 +34,12 @@ export const SnChallengeWarningBanner: React.FC<SnChallengeWarningBannerProps> =
         className="flex-shrink-0"
         style={{ width: "clamp(22px, 7vw, 30px)", height: "clamp(22px, 7vw, 30px)" }}
       >
-        <circle cx="12" cy="12" r="10" stroke="#FE961B" strokeWidth="2" />
-        <line x1="12" y1="7" x2="12" y2="13" stroke="#FE961B" strokeWidth="2" strokeLinecap="round" />
-        <circle cx="12" cy="16.5" r="1" fill="#FE961B" />
+        {/* #C15721 sampled directly from Figma's exported "Box Important" icon (node
+            1252:18793) — matches the warning text color exactly, not the lighter #FE961B
+            accent used elsewhere on this card. */}
+        <circle cx="12" cy="12" r="10" stroke="#C15721" strokeWidth="2" />
+        <line x1="12" y1="7" x2="12" y2="13" stroke="#C15721" strokeWidth="2" strokeLinecap="round" />
+        <circle cx="12" cy="16.5" r="1" fill="#C15721" />
       </svg>
       <p className="m-0 font-['Outfit'] leading-[1.3] text-[#C15721]" style={{ fontSize: "clamp(12.5px, 3.6vw, 14px)" }}>
         Can’t do 108 Surya Namaskar?

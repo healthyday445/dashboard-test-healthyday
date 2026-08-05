@@ -111,15 +111,14 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
 
-      {snDay && <SnChallengeCard day={snDay} mobile={mobile} />}
+      {snDay && <SnChallengeCard day={snDay} totalMin={totalMin} mobile={mobile} />}
 
       {activeBonusCard ? (
         <PaidBonusSessionCard bonusCard={activeBonusCard} totalMin={totalMin} mobile={mobile} isLoading={!sessionLinksLoaded} />
       ) : snDay ? (
-        // No mx here — SnChallengeWarningBanner and SnChallengeRegularSessionCard each already
-        // supply their own horizontal inset (mx-4 / px-5), matching every other card on this
-        // page's single-padding-layer convention. Adding it here too would stack the padding.
-        <div className="mt-4 rounded-[10px] border-[0.25px] border-[#FE961B] bg-[#FFEDD7] pb-3">
+        // A small mx here (kept deliberately smaller than the children's own mx-4/px-5 inset)
+        // just gives the orange box itself a bit of breathing room from the page edge.
+        <div className="mx-2 mt-4 rounded-[10px] border-[0.25px] border-[#FE961B] bg-[#FFEDD7] pb-3">
           <SnChallengeWarningBanner totalMin={totalMin} />
           <SnChallengeRegularSessionCard
             isLive={isLive}
@@ -135,18 +134,22 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
       )}
 
       <div style={{ padding: "20px 21px 0 22px" }}>
+        {/* Blue "SN Integration" variant (Figma node 1252:18682) during the campaign window
+            only — same PaidActionCard/icon geometry, just recolored blue instead of orange.
+            Reverts automatically once snDay is null, same as the rest of this feature. */}
         <PaidActionCard
           onClick={() => navigate(`/${mobile || ""}/recordings`)}
-          background="#FFF5E5"
+          background={snDay ? "#DEEFFF" : "#FFF5E5"}
+          accentColor={snDay ? "#598ECE" : undefined}
           title="View Class Recordings"
           subtitle="Click here to see Yoga Class at anytime"
           icon={
             <div style={{ width: "44px", height: "44px", borderRadius: "6px", border: "0.25px solid #BCBCBC", background: "#FFF", display: "flex", alignItems: "center", justifyContent: "center" }}>
               <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                <rect x="4" width="14" height="14" rx="1.5" fill="#FEAB27" />
+                <rect x="4" width="14" height="14" rx="1.5" fill={snDay ? "#598ECE" : "#FEAB27"} />
                 <path d="M9 4V10L14 7L9 4Z" fill="white" />
-                <line x1="1" y1="4" x2="1" y2="17" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" />
-                <line x1="13" y1="17" x2="1" y2="17" stroke="#FEAB27" strokeWidth="2" strokeLinecap="round" />
+                <line x1="1" y1="4" x2="1" y2="17" stroke={snDay ? "#598ECE" : "#FEAB27"} strokeWidth="2" strokeLinecap="round" />
+                <line x1="13" y1="17" x2="1" y2="17" stroke={snDay ? "#598ECE" : "#FEAB27"} strokeWidth="2" strokeLinecap="round" />
               </svg>
             </div>
           }
