@@ -12,6 +12,7 @@ import { PaidBonusSessionCard } from "@/components/PaidBonusSessionCard";
 import { PaidLiveSessionCard } from "@/components/PaidLiveSessionCard";
 import { SnChallengeCard } from "@/components/SnChallengeCard";
 import { SnChallengeWarningBanner } from "@/components/SnChallengeWarningBanner";
+import { SnChallengeRegularSessionCard } from "@/components/SnChallengeRegularSessionCard";
 import { PaidActionCard } from "@/components/PaidActionCard";
 import { WeeklyAttendanceCard } from "@/components/WeeklyAttendanceCard";
 import { PlanRenewalSection } from "@/components/PlanRenewalSection";
@@ -115,9 +116,19 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
       {activeBonusCard ? (
         <PaidBonusSessionCard bonusCard={activeBonusCard} totalMin={totalMin} mobile={mobile} isLoading={!sessionLinksLoaded} />
       ) : snDay ? (
-        <div className="mx-5 mt-6 rounded-[10px] border-[0.25px] border-[#FE961B] bg-[#FFEDD7] pb-4">
+        // No mx here — SnChallengeWarningBanner and SnChallengeRegularSessionCard each already
+        // supply their own horizontal inset (mx-4 / px-5), matching every other card on this
+        // page's single-padding-layer convention. Adding it here too would stack the padding.
+        <div className="mt-4 rounded-[10px] border-[0.25px] border-[#FE961B] bg-[#FFEDD7] pb-3">
           <SnChallengeWarningBanner totalMin={totalMin} />
-          {regularSessionCard}
+          <SnChallengeRegularSessionCard
+            isLive={isLive}
+            totalMin={totalMin}
+            sessionThumbnail={sessionThumbnail}
+            paidJoinLink={paidJoinLink}
+            sessionCodeForNow={sessionCodeForNow}
+            mobile={mobile}
+          />
         </div>
       ) : (
         regularSessionCard
