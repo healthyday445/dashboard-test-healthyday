@@ -7,9 +7,9 @@ export interface SnChallengeDay {
 /** English-only, 6/12-month-only "108 Surya Namaskar Challenge" — 2026-08-06 through 2026-08-09.
  *  Purely date-gated: once real "today" moves past 2026-08-09, getSnChallengeDay returns null for
  *  every date and the dashboard reverts to its normal look with no further code changes needed.
- *  TODO: swap the placeholder youtubeLink values for the real per-day links before launch. */
+ *  TODO: swap the remaining placeholder youtubeLink values for the real per-day links before launch. */
 export const SN_CHALLENGE_DAYS: Record<string, SnChallengeDay> = {
-  "2026-08-06": { dayNumber: 1, snCount: 27, youtubeLink: "https://www.youtube.com/c/Healthyday" /* TODO_SN_DAY1_LINK */ },
+  "2026-08-06": { dayNumber: 1, snCount: 27, youtubeLink: "https://www.youtube.com/live/-pcE8cxjmPY" },
   "2026-08-07": { dayNumber: 2, snCount: 54, youtubeLink: "https://www.youtube.com/c/Healthyday" /* TODO_SN_DAY2_LINK */ },
   "2026-08-08": { dayNumber: 3, snCount: 81, youtubeLink: "https://www.youtube.com/c/Healthyday" /* TODO_SN_DAY3_LINK */ },
   "2026-08-09": { dayNumber: 4, snCount: 108, youtubeLink: "https://www.youtube.com/c/Healthyday" /* TODO_SN_DAY4_LINK */ },
