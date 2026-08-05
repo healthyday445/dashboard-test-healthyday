@@ -7,8 +7,11 @@ import { getCurrentMinutesIST } from "@/lib/utils";
 import { getActivePaidBonusSession, isRegularSessionLive } from "@/lib/paidBonusSessions";
 import { getPlanRenewalInfo } from "@/lib/planRenewal";
 import { getWeeklyAttendance } from "@/lib/weeklyAttendance";
+import { getSnChallengeDay, isSnChallengeEligible, toIstIsoDateKey } from "@/data/snChallenge";
 import { PaidBonusSessionCard } from "@/components/PaidBonusSessionCard";
 import { PaidLiveSessionCard } from "@/components/PaidLiveSessionCard";
+import { SnChallengeCard } from "@/components/SnChallengeCard";
+import { SnChallengeWarningBanner } from "@/components/SnChallengeWarningBanner";
 import { PaidActionCard } from "@/components/PaidActionCard";
 import { WeeklyAttendanceCard } from "@/components/WeeklyAttendanceCard";
 import { PlanRenewalSection } from "@/components/PlanRenewalSection";
@@ -75,8 +78,31 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
   const activeBonusCard = getActivePaidBonusSession({ is6Month, is12Month, paidLang, currentDow, totalMin, sessionLinks, isTeluguFaceYogaWeek });
   const isLive = isRegularSessionLive(totalMin);
 
+  // 108 Surya Namaskar Challenge (2026-08-06..09, English + 6/12-month only) — temporary,
+  // purely date-gated. `?previewSnDate=YYYY-MM-DD` is a QA-only override, distinct from
+  // forcePaidDay/time/Diet's previewDate per this repo's per-feature-param convention (see
+  // PREVIEWS.md) so it can't collide with those.
+  const previewSnDate = searchParams.get("previewSnDate");
+  const snDateKey = previewSnDate || toIstIsoDateKey(nowIST);
+  const snDay = isSnChallengeEligible(studentData, is6Month, is12Month) ? getSnChallengeDay(snDateKey) : null;
+
   const { daysUntilPlanEnds, showPlanRenewal } = getPlanRenewalInfo(studentData);
   const { weekLabel, weekStatus } = getWeeklyAttendance(studentData);
+
+  const regularSessionCard = (
+    <PaidLiveSessionCard
+      isLive={isLive}
+      totalMin={totalMin}
+      sessionThumbnail={sessionThumbnail}
+      sessionVideoId={sessionVideoId}
+      apiSessionName={apiSessionName}
+      paidJoinLink={paidJoinLink}
+      sessionCodeForNow={sessionCodeForNow}
+      language={studentData?.language}
+      mobile={mobile}
+      isLoading={!sessionLinksLoaded}
+    />
+  );
 
   return (
     <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
@@ -84,21 +110,17 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
 
+      {snDay && <SnChallengeCard day={snDay} mobile={mobile} />}
+
       {activeBonusCard ? (
         <PaidBonusSessionCard bonusCard={activeBonusCard} totalMin={totalMin} mobile={mobile} isLoading={!sessionLinksLoaded} />
+      ) : snDay ? (
+        <div className="mx-5 mt-6 rounded-[10px] border-[0.25px] border-[#FE961B] bg-[#FFEDD7] pb-4">
+          <SnChallengeWarningBanner totalMin={totalMin} />
+          {regularSessionCard}
+        </div>
       ) : (
-        <PaidLiveSessionCard
-          isLive={isLive}
-          totalMin={totalMin}
-          sessionThumbnail={sessionThumbnail}
-          sessionVideoId={sessionVideoId}
-          apiSessionName={apiSessionName}
-          paidJoinLink={paidJoinLink}
-          sessionCodeForNow={sessionCodeForNow}
-          language={studentData?.language}
-          mobile={mobile}
-          isLoading={!sessionLinksLoaded}
-        />
+        regularSessionCard
       )}
 
       <div style={{ padding: "20px 21px 0 22px" }}>

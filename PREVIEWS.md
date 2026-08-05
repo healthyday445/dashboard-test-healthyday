@@ -46,6 +46,21 @@ Examples:
 | `/9999999999?time=9.10pm` | Breath to Heal live (6 or 12-month plan) |
 | `/9999999999?forcePaidDay=0&time=11.40am` | Face Yoga live (12-month plan, Sunday only) |
 
+#### `?previewSnDate=<YYYY-MM-DD>` — 108 Surya Namaskar Challenge (temporary, 2026-08-06..09)
+
+Overrides the IST calendar date used to look up the SN Challenge day, without needing to wait for
+the real date. English-language + 6-month/12-month (incl. `_upgrade`) accounts only — Telugu and
+3-month accounts never see this card, at any date. Outside 2026-08-06..09 (real or previewed
+date), the SN card and its warning-banner wrapper around the regular session card don't render at
+all — the dashboard looks exactly like it does today. Distinct from `forcePaidDay`/`time`/Diet's
+`previewDate` so it can't collide with those.
+
+| URL | What it shows |
+|---|---|
+| `/9999999999?previewSnDate=2026-08-06` | Day 1 (27 SN) card + regular-session warning banner (English 6/12-month account) |
+| `/9999999999?previewSnDate=2026-08-09` | Day 4 (108 SN) card |
+| `/9999999999?previewSnDate=2026-08-09&time=8.15pm` | SN card still shown, but Diet Session bonus card renders unwrapped/unaffected below it |
+
 ### 21-day `IndexTwentyOneDay.tsx` — full preview param set (unchanged)
 
 This page still supports mock data since real June-21-2026 accounts are scarce.
