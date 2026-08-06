@@ -10,7 +10,7 @@ export interface SnChallengeDay {
  *  TODO: swap the remaining placeholder youtubeLink values for the real per-day links before launch. */
 export const SN_CHALLENGE_DAYS: Record<string, SnChallengeDay> = {
   "2026-08-06": { dayNumber: 1, snCount: 24, youtubeLink: "https://www.youtube.com/live/-pcE8cxjmPY" },
-  "2026-08-07": { dayNumber: 2, snCount: 48, youtubeLink: "https://www.youtube.com/c/Healthyday" /* TODO_SN_DAY2_LINK */ },
+  "2026-08-07": { dayNumber: 2, snCount: 48, youtubeLink: "https://youtube.com/live/N6XDoq_WsNo?feature=share" },
   "2026-08-08": { dayNumber: 3, snCount: 72, youtubeLink: "https://www.youtube.com/c/Healthyday" /* TODO_SN_DAY3_LINK */ },
   "2026-08-09": { dayNumber: 4, snCount: 108, youtubeLink: "https://www.youtube.com/c/Healthyday" /* TODO_SN_DAY4_LINK */ },
 };
