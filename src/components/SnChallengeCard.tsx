@@ -12,23 +12,25 @@ function getThumbnail(link: string): string {
   return match ? ytThumb(match[1]) : imgLanguageEnglish;
 }
 
-// 5:30 AM - 9:30 AM IST — the SN session's real live window, per product decision (supersedes
-// the earlier "LIVE all day" simplification).
-const SN_LIVE_START_MIN = 5 * 60 + 30;
-const SN_LIVE_END_MIN = 9 * 60 + 30;
-
 interface SnChallengeCardProps {
   day: SnChallengeDay;
-  totalMin: number;
+  /** Whether the SN session is in its 4:30-9:29 AM live window — computed once in IndexPaid.tsx
+   *  (via isSnLive from @/data/snChallenge) and passed down, rather than re-derived from
+   *  totalMin here, since IndexPaid also needs this exact boolean to decide section order. */
+  isLive: boolean;
   mobile?: string;
+  /** Figma node 1312:3228/1312:4138 ("View Recording") — whenever the SN card is shown below an
+   *  old, unmodified session/bonus card (i.e. some other session is live and it's not the SN
+   *  window), the not-live button reads "View Recording" with no icon instead of "JOIN NOW".
+   *  Has no effect while isLive is true. */
+  showRecordingCta?: boolean;
 }
 
-/** "108 Surya Namaskar Challenge" card — English/6-12-month-only, 2026-08-06..09. Live 5:30-9:30
+/** "108 Surya Namaskar Challenge" card — English/6-12-month-only, 2026-08-06..09. Live 4:30-9:29
  *  AM IST (LIVE badge + tapping opens the YouTube link); outside that window it links to
  *  /:mobile/recordings instead, where the session should show up once recorded. */
-export const SnChallengeCard: React.FC<SnChallengeCardProps> = ({ day, totalMin, mobile }) => {
+export const SnChallengeCard: React.FC<SnChallengeCardProps> = ({ day, isLive, mobile, showRecordingCta = false }) => {
   const navigate = useNavigate();
-  const isLive = totalMin >= SN_LIVE_START_MIN && totalMin < SN_LIVE_END_MIN;
   const recordingsPath = `/${mobile || ""}/recordings`;
 
   const handleClick = (e: React.MouseEvent<HTMLAnchorElement>) => {
@@ -56,6 +58,8 @@ export const SnChallengeCard: React.FC<SnChallengeCardProps> = ({ day, totalMin,
         isLive={isLive}
         titleLines={["108 Surya Namaskar"]}
         subtitle={`${day.snCount} Surya Namaskar - Day ${day.dayNumber}`}
+        ctaLabel={!isLive && showRecordingCta ? "View Recording" : "JOIN NOW"}
+        showCtaIcon={isLive || !showRecordingCta}
       />
     </div>
   );

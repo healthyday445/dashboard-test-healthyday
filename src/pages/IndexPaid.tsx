@@ -7,7 +7,7 @@ import { getCurrentMinutesIST } from "@/lib/utils";
 import { getActivePaidBonusSession, isRegularSessionLive } from "@/lib/paidBonusSessions";
 import { getPlanRenewalInfo } from "@/lib/planRenewal";
 import { getWeeklyAttendance } from "@/lib/weeklyAttendance";
-import { getSnChallengeDay, isSnChallengeEligible, toIstIsoDateKey } from "@/data/snChallenge";
+import { getSnChallengeDay, isSnChallengeEligible, isSnLive, toIstIsoDateKey } from "@/data/snChallenge";
 import { PaidBonusSessionCard } from "@/components/PaidBonusSessionCard";
 import { PaidLiveSessionCard } from "@/components/PaidLiveSessionCard";
 import { SnChallengeCard } from "@/components/SnChallengeCard";
@@ -86,6 +86,14 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
   const previewSnDate = searchParams.get("previewSnDate");
   const snDateKey = previewSnDate || toIstIsoDateKey(nowIST);
   const snDay = isSnChallengeEligible(studentData, is6Month, is12Month) ? getSnChallengeDay(snDateKey) : null;
+  const snIsLive = isSnLive(totalMin);
+  // Whenever some OTHER session (regular or bonus/diet) is actually live, but it's outside the
+  // SN Challenge's own 4:30-9:29 AM window, that other session's old/unmodified card goes on top
+  // and the SN card moves to the bottom (Figma nodes 1312:2971/1312:4008). Inside the SN window,
+  // or whenever nothing at all is live, the SN card stays on top with its orange-wrapped
+  // regular-session companion below (live or "no sessions", Figma nodes 1252:18631/1266:19194).
+  const anySessionLive = isLive || !!activeBonusCard;
+  const showSnAtBottom = !!snDay && !snIsLive && anySessionLive;
 
   const { daysUntilPlanEnds, showPlanRenewal } = getPlanRenewalInfo(studentData);
   const { weekLabel, weekStatus } = getWeeklyAttendance(studentData);
@@ -111,24 +119,42 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
 
-      {snDay && <SnChallengeCard day={snDay} totalMin={totalMin} mobile={mobile} />}
-
-      {activeBonusCard ? (
+      {snDay ? (
+        showSnAtBottom ? (
+          // Figma nodes 1312:2971 (regular evening session) / 1312:4008 (bonus/diet session) —
+          // the OTHER session's old, unmodified card goes first, no warning banner or orange
+          // wrapper, then the SN card second with its "View Recording" (no icon) button.
+          <>
+            {activeBonusCard ? (
+              <PaidBonusSessionCard bonusCard={activeBonusCard} totalMin={totalMin} mobile={mobile} isLoading={!sessionLinksLoaded} />
+            ) : (
+              regularSessionCard
+            )}
+            <SnChallengeCard day={snDay} isLive={snIsLive} mobile={mobile} showRecordingCta />
+          </>
+        ) : (
+          // Figma nodes 1252:18631 (SN + regular both live, morning window) / 1266:19194 (SN +
+          // "no sessions" regular, nothing live) — SN card on top, orange-wrapped regular-session
+          // companion below either way (its own isLive prop picks the live/no-sessions sub-state).
+          <>
+            <SnChallengeCard day={snDay} isLive={snIsLive} mobile={mobile} />
+            {/* A small mx here (kept deliberately smaller than the children's own mx-4/px-5
+                inset) just gives the orange box itself a bit of breathing room from the page edge. */}
+            <div className="mx-2 mt-4 rounded-[10px] border-[0.25px] border-[#FE961B] bg-[#FFEDD7] pb-3">
+              <SnChallengeWarningBanner totalMin={totalMin} />
+              <SnChallengeRegularSessionCard
+                isLive={isLive}
+                totalMin={totalMin}
+                sessionThumbnail={sessionThumbnail}
+                paidJoinLink={paidJoinLink}
+                sessionCodeForNow={sessionCodeForNow}
+                mobile={mobile}
+              />
+            </div>
+          </>
+        )
+      ) : activeBonusCard ? (
         <PaidBonusSessionCard bonusCard={activeBonusCard} totalMin={totalMin} mobile={mobile} isLoading={!sessionLinksLoaded} />
-      ) : snDay ? (
-        // A small mx here (kept deliberately smaller than the children's own mx-4/px-5 inset)
-        // just gives the orange box itself a bit of breathing room from the page edge.
-        <div className="mx-2 mt-4 rounded-[10px] border-[0.25px] border-[#FE961B] bg-[#FFEDD7] pb-3">
-          <SnChallengeWarningBanner totalMin={totalMin} />
-          <SnChallengeRegularSessionCard
-            isLive={isLive}
-            totalMin={totalMin}
-            sessionThumbnail={sessionThumbnail}
-            paidJoinLink={paidJoinLink}
-            sessionCodeForNow={sessionCodeForNow}
-            mobile={mobile}
-          />
-        </div>
       ) : (
         regularSessionCard
       )}

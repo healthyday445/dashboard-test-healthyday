@@ -39,3 +39,13 @@ export function toIstIsoDateKey(nowIST: Date): string {
 export function isSnChallengeEligible(studentData: any, is6Month: boolean, is12Month: boolean): boolean {
   return studentData?.language === "English" && (is6Month || is12Month);
 }
+
+/** 4:30 AM - 9:29 AM IST — the SN session's real live/redirect window. Exported (rather than
+ *  living only inside SnChallengeCard) so IndexPaid.tsx can compute the same boolean once and
+ *  use it to decide section order, instead of re-deriving it a second time and risking drift. */
+export const SN_LIVE_START_MIN = 4 * 60 + 30;
+export const SN_LIVE_END_MIN = 9 * 60 + 30; // exclusive bound — "< 570" already covers up to 9:29:59 AM
+
+export function isSnLive(totalMin: number): boolean {
+  return totalMin >= SN_LIVE_START_MIN && totalMin < SN_LIVE_END_MIN;
+}
