@@ -90,13 +90,14 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
   // (4:30 AM / 3:30 PM, matching the SN card's own start and the campaign's earlier broadcast)
   // — explicit product correction. Non-campaign days/students keep the real, unwidened window.
   const isLive = snDay ? isRegularSessionLiveDuringSn(totalMin) : isRegularSessionLive(totalMin);
-  // Whenever some OTHER session (regular or bonus/diet) is actually live, but it's outside the
-  // SN Challenge's own 4:30-9:29 AM window, that other session's old/unmodified card goes on top
-  // and the SN card moves to the bottom (Figma nodes 1312:2971/1312:4008). Inside the SN window,
-  // or whenever nothing at all is live, the SN card stays on top with its orange-wrapped
-  // regular-session companion below (live or "no sessions", Figma nodes 1252:18631/1266:19194).
-  const anySessionLive = isLive || !!activeBonusCard;
-  const showSnAtBottom = !!snDay && !snIsLive && anySessionLive;
+  // Outside the SN Challenge's own 4:30-9:29 AM window, the SN card always moves to the bottom
+  // — whatever else is going on up top (bonus/diet card, live regular session, or genuinely
+  // nothing at all) renders via its own normal/unmodified path, no warning banner or orange
+  // wrapper (Figma nodes 1312:2971 regular-live / 1312:4008 bonus-live / 1312:4267 nothing-live
+  // — regularSessionCard's own !isLive branch already renders the bare NoSessionsCard with no
+  // title, exactly matching that last one). Only inside the SN window does it stay on top, with
+  // its orange-wrapped regular-session companion below (Figma node 1252:18631).
+  const showSnAtBottom = !!snDay && !snIsLive;
   // Prefer the real per-day link from /session-links (108sn_day{N}, English) once the backend
   // publishes it, falling back to the static placeholder for days it hasn't reached yet.
   const resolvedSnDay = snDay ? { ...snDay, youtubeLink: getSnChallengeYoutubeLink(snDay, sessionLinks) } : null;
@@ -112,6 +113,7 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
       sessionVideoId={sessionVideoId}
       apiSessionName={apiSessionName}
       hideSessionName={!!snDay}
+      fullWidthNoSessions={!!snDay}
       paidJoinLink={paidJoinLink}
       sessionCodeForNow={sessionCodeForNow}
       language={studentData?.language}

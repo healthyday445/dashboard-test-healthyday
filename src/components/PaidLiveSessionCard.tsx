@@ -22,6 +22,8 @@ interface PaidLiveSessionCardProps {
    *  Regular Yoga Session") that reads confusingly once this card sits next to the SN card.
    *  Defaults to false so every non-campaign day is completely unaffected. */
   hideSessionName?: boolean;
+  /** Passed straight through to NoSessionsCard's own `fullWidth` — see its prop doc. */
+  fullWidthNoSessions?: boolean;
   paidJoinLink: string;
   sessionCodeForNow: "daily_morning" | "daily_evening";
   language?: string;
@@ -36,6 +38,7 @@ export const PaidLiveSessionCard: React.FC<PaidLiveSessionCardProps> = ({
   sessionThumbnail,
   apiSessionName,
   hideSessionName = false,
+  fullWidthNoSessions = false,
   paidJoinLink,
   sessionCodeForNow,
   language,
@@ -47,7 +50,7 @@ export const PaidLiveSessionCard: React.FC<PaidLiveSessionCardProps> = ({
   if (!isLive) {
     return (
       <div style={{ padding: "24px 20px 0" }}>
-        <NoSessionsCard totalMin={totalMin} />
+        <NoSessionsCard totalMin={totalMin} fullWidth={fullWidthNoSessions} />
       </div>
     );
   }

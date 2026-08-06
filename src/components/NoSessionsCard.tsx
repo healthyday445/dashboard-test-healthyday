@@ -16,9 +16,13 @@ interface NoSessionsCardProps {
   totalMin: number;
   /** Whether this is for the 14-days free batch (changes title & adds note) */
   isFreeBatch?: boolean;
+  /** Fill the parent's width exactly instead of the usual fixed-358px-centered look — used on
+   *  the SN Challenge days so this card's right edge lines up with the full-width SN card
+   *  sitting right below it. Every other call site keeps the original fixed width. */
+  fullWidth?: boolean;
 }
 
-const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin, isFreeBatch }) => {
+const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin, isFreeBatch, fullWidth }) => {
   // After evening sessions end (7:30 PM = 1170 min) until midnight → "Tomorrow"
   const isTomorrow = totalMin >= 1170;
 
@@ -56,7 +60,7 @@ const NoSessionsCard: React.FC<NoSessionsCardProps> = ({ totalMin, isFreeBatch }
   return (
     <div
       style={{
-        width: "358px",
+        width: fullWidth ? "100%" : "358px",
         height: "auto",
         minHeight: "146px",
         maxWidth: "100%",
