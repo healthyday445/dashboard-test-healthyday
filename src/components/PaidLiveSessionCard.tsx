@@ -17,6 +17,11 @@ interface PaidLiveSessionCardProps {
   sessionThumbnail: string;
   sessionVideoId: string | null;
   apiSessionName: string | null;
+  /** Hides the apiSessionName overlay on the thumbnail — used during the SN Challenge campaign,
+   *  where the backend's session_name is a hybrid string ("Day 1 108 Suryanamaskar Challenge OR
+   *  Regular Yoga Session") that reads confusingly once this card sits next to the SN card.
+   *  Defaults to false so every non-campaign day is completely unaffected. */
+  hideSessionName?: boolean;
   paidJoinLink: string;
   sessionCodeForNow: "daily_morning" | "daily_evening";
   language?: string;
@@ -30,6 +35,7 @@ export const PaidLiveSessionCard: React.FC<PaidLiveSessionCardProps> = ({
   totalMin,
   sessionThumbnail,
   apiSessionName,
+  hideSessionName = false,
   paidJoinLink,
   sessionCodeForNow,
   language,
@@ -95,7 +101,7 @@ export const PaidLiveSessionCard: React.FC<PaidLiveSessionCardProps> = ({
                 <div style={{ position: "absolute", top: 0, left: 0, right: 0, bottom: 0, display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <PlayButton />
                 </div>
-                {apiSessionName && (
+                {apiSessionName && !hideSessionName && (
                   <div style={{
                     position: "absolute", bottom: "10px", left: "12px", right: "12px",
                     color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 700,

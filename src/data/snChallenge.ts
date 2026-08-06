@@ -9,11 +9,20 @@ export interface SnChallengeDay {
  *  every date and the dashboard reverts to its normal look with no further code changes needed.
  *  TODO: swap the remaining placeholder youtubeLink values for the real per-day links before launch. */
 export const SN_CHALLENGE_DAYS: Record<string, SnChallengeDay> = {
-  "2026-08-06": { dayNumber: 1, snCount: 27, youtubeLink: "https://www.youtube.com/live/-pcE8cxjmPY" },
-  "2026-08-07": { dayNumber: 2, snCount: 54, youtubeLink: "https://www.youtube.com/c/Healthyday" /* TODO_SN_DAY2_LINK */ },
-  "2026-08-08": { dayNumber: 3, snCount: 81, youtubeLink: "https://www.youtube.com/c/Healthyday" /* TODO_SN_DAY3_LINK */ },
+  "2026-08-06": { dayNumber: 1, snCount: 24, youtubeLink: "https://www.youtube.com/live/-pcE8cxjmPY" },
+  "2026-08-07": { dayNumber: 2, snCount: 48, youtubeLink: "https://www.youtube.com/c/Healthyday" /* TODO_SN_DAY2_LINK */ },
+  "2026-08-08": { dayNumber: 3, snCount: 72, youtubeLink: "https://www.youtube.com/c/Healthyday" /* TODO_SN_DAY3_LINK */ },
   "2026-08-09": { dayNumber: 4, snCount: 108, youtubeLink: "https://www.youtube.com/c/Healthyday" /* TODO_SN_DAY4_LINK */ },
 };
+
+/** Prefers the real link from `/session-links` (session_code `108sn_day{N}`, language
+ *  "english" — confirmed live in the API as of 2026-08-06, e.g. Day 1's real link differs from
+ *  the placeholder above) over `day.youtubeLink`, mirroring the `getApiLink` fallback pattern
+ *  already used for Face Yoga/Diet/B2H in paidBonusSessions.ts. */
+export function getSnChallengeYoutubeLink(day: SnChallengeDay, sessionLinks: any[]): string {
+  const match = sessionLinks.find((s: any) => s.session_code === `108sn_day${day.dayNumber}` && s.language === "english");
+  return match?.link || day.youtubeLink;
+}
 
 /** Returns today's SN Challenge config, or null if `isoDateKey` (a "YYYY-MM-DD" IST calendar
  *  date, e.g. from `toIstIsoDateKey` or a `?previewSnDate=` override) falls outside the campaign
@@ -48,4 +57,22 @@ export const SN_LIVE_END_MIN = 9 * 60 + 30; // exclusive bound — "< 570" alrea
 
 export function isSnLive(totalMin: number): boolean {
   return totalMin >= SN_LIVE_START_MIN && totalMin < SN_LIVE_END_MIN;
+}
+
+/** During the SN Challenge campaign only, the "Regular Session" block's live windows start 15
+ *  minutes earlier than the year-round isRegularSessionLive (4:30 AM / 3:30 PM instead of 4:45
+ *  AM / 3:45 PM — explicit product correction, "morning session should also start at 4:30 am"
+ *  / "evening session should start from 3:30 pm"), so it lines up with the SN card's own start
+ *  time and the campaign's earlier-starting broadcast. End times are unchanged (9:30 AM / 7:30
+ *  PM). Only ever used when snDay is truthy — non-campaign days keep the real isRegularSessionLive. */
+const SN_REGULAR_MORNING_START_MIN = 4 * 60 + 30; // 4:30 AM
+const SN_REGULAR_MORNING_END_MIN = 9 * 60 + 30; // 9:30 AM
+const SN_REGULAR_EVENING_START_MIN = 15 * 60 + 30; // 3:30 PM
+const SN_REGULAR_EVENING_END_MIN = 19 * 60 + 30; // 7:30 PM
+
+export function isRegularSessionLiveDuringSn(totalMin: number): boolean {
+  return (
+    (totalMin >= SN_REGULAR_MORNING_START_MIN && totalMin < SN_REGULAR_MORNING_END_MIN) ||
+    (totalMin >= SN_REGULAR_EVENING_START_MIN && totalMin < SN_REGULAR_EVENING_END_MIN)
+  );
 }

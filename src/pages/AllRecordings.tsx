@@ -9,6 +9,7 @@ import img5ce328 from "@/assets/5ce32860a765bdcaeb0504ff13008eea60a6cd55.webp";
 import imgFaceYogaTelugu from "@/assets/bonus/faceyoga_tel.jpg";
 import imgFaceYogaEnglish from "@/assets/bonus/faceyoga_eng.jpg";
 import imgWhiteArrow from "@/assets/whiteArrow.svg";
+import { SN_CHALLENGE_DAYS } from "@/data/snChallenge";
 
 // classRecordings is now built dynamically inside the component based on student language & API data
 
@@ -560,6 +561,41 @@ const AllRecordings = () => {
     }
   }
 
+  // "108 Surya Namaskar Challenge" section — English, 6/12-month only (Figma node 1312:4736,
+  // "All recordings"). Unlike the Telugu card above, this is its own titled section (not merged
+  // into classRecordings) with one row per day. Rows come *only* from whatever `108sn_day{N}`
+  // entries the API actually has right now (per explicit product instruction) — no static
+  // per-day list is iterated, so a day that hasn't happened yet simply doesn't render a row.
+  // The SN count text (24/48/72/108) isn't in the API's session_name, so that one piece still
+  // comes from SN_CHALLENGE_DAYS, keyed by day number rather than date.
+  const snCountByDayNumber: Record<number, number> = Object.fromEntries(
+    Object.values(SN_CHALLENGE_DAYS).map((d) => [d.dayNumber, d.snCount])
+  );
+  const fmtMonthDaySession = (sessionDate: string): string => {
+    const [y, m, d] = sessionDate.split("-").map(Number);
+    const date = new Date(Date.UTC(y, m - 1, d));
+    return `${MONTH_NAMES_SHORT[date.getUTCMonth()]} ${date.getUTCDate()}${ordinalSuffix(date.getUTCDate())} Session`;
+  };
+  const isSnEligible = isEnglish && (is6Month || is12Month);
+  const snChallengeRecordings = isSnEligible
+    ? sessionLinks
+        .filter((s) => s.language === "english" && /^108sn_day\d+$/.test(s.session_code))
+        .map((s) => {
+          const dayNumber = parseInt(s.session_code.replace("108sn_day", ""), 10);
+          const snCount = snCountByDayNumber[dayNumber];
+          const videoId = extractYouTubeId(s.link);
+          return {
+            dayNumber,
+            title: snCount ? `${snCount} Surya Namaskar - Day ${dayNumber}` : cleanSessionName(s.session_name || `Day ${dayNumber}`),
+            subtitle: fmtMonthDaySession(s.session_date),
+            thumbnail: videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : imgLanguageEnglish,
+            link: s.link,
+            accessTill: formatExpiry(s.expiry_by) || "Always available",
+          };
+        })
+        .sort((a, b) => a.dayNumber - b.dayNumber)
+    : [];
+
   return (
     <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
       {/* Header */}
@@ -743,6 +779,54 @@ const AllRecordings = () => {
             background: "#A7A7A7",
           }} />
         </div>
+      )}
+
+      {/* 108 Surya Namaskar Challenge Section — English, 6/12-month only; only rendered once
+          the API actually has at least one 108sn_day{N} entry (see snChallengeRecordings above) */}
+      {snChallengeRecordings.length > 0 && (
+        <>
+          <div style={{ padding: "0 20px" }}>
+            <h2 style={{
+              color: "#202020",
+              fontFamily: "Outfit",
+              fontSize: "20px",
+              fontWeight: 700,
+              lineHeight: "normal",
+              margin: "0 0 16px",
+            }}>
+              108 Surya Namaskar Challenge
+            </h2>
+
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              {snChallengeRecordings.map((rec) => (
+                <a
+                  key={rec.dayNumber}
+                  href={rec.link}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{ textDecoration: "none", display: "flex", gap: "12px", alignItems: "flex-start" }}
+                >
+                  <Thumbnail src={rec.thumbnail} alt={rec.title} />
+                  <div style={{ display: "flex", flexDirection: "column", gap: "6px", flex: 1, paddingTop: "2px" }}>
+                    <span style={{ color: "#0D468B", fontFamily: "Outfit", fontSize: "15px", fontWeight: 700, lineHeight: "normal" }}>
+                      {rec.title}
+                    </span>
+                    <span style={{ color: "#7E7D7D", fontFamily: "Outfit", fontSize: "11px", fontWeight: 500, lineHeight: "normal" }}>
+                      {rec.subtitle}
+                    </span>
+                    <span style={{ color: "#B71C1C", fontFamily: "Outfit", fontSize: "11px", fontWeight: 600, lineHeight: "normal" }}>
+                      {rec.accessTill}
+                    </span>
+                  </div>
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div style={{ padding: "28px 20px" }}>
+            <div style={{ width: "100%", maxWidth: "360px", height: "1.5px", background: "#A7A7A7" }} />
+          </div>
+        </>
       )}
 
       {/* Youtube Videos Section */}

@@ -1,11 +1,11 @@
 import { describe, it, expect } from "vitest";
-import { getSnChallengeDay, isSnChallengeEligible, toIstIsoDateKey } from "@/data/snChallenge";
+import { getSnChallengeDay, isRegularSessionLiveDuringSn, isSnChallengeEligible, toIstIsoDateKey } from "@/data/snChallenge";
 
 describe("snChallenge", () => {
   it("resolves each campaign day to its dayNumber/snCount", () => {
-    expect(getSnChallengeDay("2026-08-06")).toEqual(expect.objectContaining({ dayNumber: 1, snCount: 27 }));
-    expect(getSnChallengeDay("2026-08-07")).toEqual(expect.objectContaining({ dayNumber: 2, snCount: 54 }));
-    expect(getSnChallengeDay("2026-08-08")).toEqual(expect.objectContaining({ dayNumber: 3, snCount: 81 }));
+    expect(getSnChallengeDay("2026-08-06")).toEqual(expect.objectContaining({ dayNumber: 1, snCount: 24 }));
+    expect(getSnChallengeDay("2026-08-07")).toEqual(expect.objectContaining({ dayNumber: 2, snCount: 48 }));
+    expect(getSnChallengeDay("2026-08-08")).toEqual(expect.objectContaining({ dayNumber: 3, snCount: 72 }));
     expect(getSnChallengeDay("2026-08-09")).toEqual(expect.objectContaining({ dayNumber: 4, snCount: 108 }));
   });
 
@@ -30,5 +30,15 @@ describe("snChallenge", () => {
   it("converts an IST-shifted Date to its calendar-date key via UTC getters", () => {
     const istShifted = new Date(Date.UTC(2026, 7, 6, 0, 15)); // simulates nowIST just after midnight IST
     expect(toIstIsoDateKey(istShifted)).toBe("2026-08-06");
+  });
+
+  it("widens the regular-session live window to 4:30 AM / 3:30 PM during the campaign", () => {
+    expect(isRegularSessionLiveDuringSn(4 * 60 + 29)).toBe(false); // 4:29 AM
+    expect(isRegularSessionLiveDuringSn(4 * 60 + 30)).toBe(true); // 4:30 AM
+    expect(isRegularSessionLiveDuringSn(9 * 60 + 29)).toBe(true); // 9:29 AM
+    expect(isRegularSessionLiveDuringSn(9 * 60 + 30)).toBe(false); // 9:30 AM (end unchanged)
+    expect(isRegularSessionLiveDuringSn(15 * 60 + 29)).toBe(false); // 3:29 PM
+    expect(isRegularSessionLiveDuringSn(15 * 60 + 30)).toBe(true); // 3:30 PM
+    expect(isRegularSessionLiveDuringSn(19 * 60 + 30)).toBe(false); // 7:30 PM (end unchanged)
   });
 });

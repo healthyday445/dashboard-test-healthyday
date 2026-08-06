@@ -7,7 +7,7 @@ import { getCurrentMinutesIST } from "@/lib/utils";
 import { getActivePaidBonusSession, isRegularSessionLive } from "@/lib/paidBonusSessions";
 import { getPlanRenewalInfo } from "@/lib/planRenewal";
 import { getWeeklyAttendance } from "@/lib/weeklyAttendance";
-import { getSnChallengeDay, isSnChallengeEligible, isSnLive, toIstIsoDateKey } from "@/data/snChallenge";
+import { getSnChallengeDay, getSnChallengeYoutubeLink, isRegularSessionLiveDuringSn, isSnChallengeEligible, isSnLive, toIstIsoDateKey } from "@/data/snChallenge";
 import { PaidBonusSessionCard } from "@/components/PaidBonusSessionCard";
 import { PaidLiveSessionCard } from "@/components/PaidLiveSessionCard";
 import { SnChallengeCard } from "@/components/SnChallengeCard";
@@ -77,7 +77,6 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
   const isTeluguFaceYogaWeek = diffWeeks % 2 === 0;
 
   const activeBonusCard = getActivePaidBonusSession({ is6Month, is12Month, paidLang, currentDow, totalMin, sessionLinks, isTeluguFaceYogaWeek });
-  const isLive = isRegularSessionLive(totalMin);
 
   // 108 Surya Namaskar Challenge (2026-08-06..09, English + 6/12-month only) — temporary,
   // purely date-gated. `?previewSnDate=YYYY-MM-DD` is a QA-only override, distinct from
@@ -87,6 +86,10 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
   const snDateKey = previewSnDate || toIstIsoDateKey(nowIST);
   const snDay = isSnChallengeEligible(studentData, is6Month, is12Month) ? getSnChallengeDay(snDateKey) : null;
   const snIsLive = isSnLive(totalMin);
+  // On campaign days the "Regular Session" block's live windows start 15 minutes earlier
+  // (4:30 AM / 3:30 PM, matching the SN card's own start and the campaign's earlier broadcast)
+  // — explicit product correction. Non-campaign days/students keep the real, unwidened window.
+  const isLive = snDay ? isRegularSessionLiveDuringSn(totalMin) : isRegularSessionLive(totalMin);
   // Whenever some OTHER session (regular or bonus/diet) is actually live, but it's outside the
   // SN Challenge's own 4:30-9:29 AM window, that other session's old/unmodified card goes on top
   // and the SN card moves to the bottom (Figma nodes 1312:2971/1312:4008). Inside the SN window,
@@ -94,6 +97,9 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
   // regular-session companion below (live or "no sessions", Figma nodes 1252:18631/1266:19194).
   const anySessionLive = isLive || !!activeBonusCard;
   const showSnAtBottom = !!snDay && !snIsLive && anySessionLive;
+  // Prefer the real per-day link from /session-links (108sn_day{N}, English) once the backend
+  // publishes it, falling back to the static placeholder for days it hasn't reached yet.
+  const resolvedSnDay = snDay ? { ...snDay, youtubeLink: getSnChallengeYoutubeLink(snDay, sessionLinks) } : null;
 
   const { daysUntilPlanEnds, showPlanRenewal } = getPlanRenewalInfo(studentData);
   const { weekLabel, weekStatus } = getWeeklyAttendance(studentData);
@@ -105,6 +111,7 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
       sessionThumbnail={sessionThumbnail}
       sessionVideoId={sessionVideoId}
       apiSessionName={apiSessionName}
+      hideSessionName={!!snDay}
       paidJoinLink={paidJoinLink}
       sessionCodeForNow={sessionCodeForNow}
       language={studentData?.language}
@@ -119,7 +126,7 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
 
-      {snDay ? (
+      {resolvedSnDay ? (
         showSnAtBottom ? (
           // Figma nodes 1312:2971 (regular evening session) / 1312:4008 (bonus/diet session) —
           // the OTHER session's old, unmodified card goes first, no warning banner or orange
@@ -130,14 +137,14 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
             ) : (
               regularSessionCard
             )}
-            <SnChallengeCard day={snDay} isLive={snIsLive} mobile={mobile} showRecordingCta />
+            <SnChallengeCard day={resolvedSnDay} isLive={snIsLive} mobile={mobile} showRecordingCta />
           </>
         ) : (
           // Figma nodes 1252:18631 (SN + regular both live, morning window) / 1266:19194 (SN +
           // "no sessions" regular, nothing live) — SN card on top, orange-wrapped regular-session
           // companion below either way (its own isLive prop picks the live/no-sessions sub-state).
           <>
-            <SnChallengeCard day={snDay} isLive={snIsLive} mobile={mobile} />
+            <SnChallengeCard day={resolvedSnDay} isLive={snIsLive} mobile={mobile} />
             {/* A small mx here (kept deliberately smaller than the children's own mx-4/px-5
                 inset) just gives the orange box itself a bit of breathing room from the page edge. */}
             <div className="mx-2 mt-4 rounded-[10px] border-[0.25px] border-[#FE961B] bg-[#FFEDD7] pb-3">
