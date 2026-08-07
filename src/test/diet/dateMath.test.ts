@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getEffectiveToday, getCyclePosition, getTabDates, formatDateDDMMYYYY, toIsoDateKey } from "@/data/diet/dateMath";
+import { getEffectiveToday, getCyclePosition, getTabDates, formatDateDDMMYYYY, toIsoDateKey, isDateDisabled } from "@/data/diet/dateMath";
 
 describe("diet dateMath", () => {
   it("resolves 2026-08-03 (launch day) to M2W2 Monday", () => {
@@ -46,5 +46,11 @@ describe("diet dateMath", () => {
 
   it("formats dates as DD-MM-YYYY", () => {
     expect(formatDateDDMMYYYY(new Date(2026, 7, 3))).toBe("03-08-2026");
+  });
+
+  it("disables tabs from 2026-08-10 onward, keeps 2026-08-09 and earlier enabled", () => {
+    expect(isDateDisabled("2026-08-09")).toBe(false);
+    expect(isDateDisabled("2026-08-10")).toBe(true);
+    expect(isDateDisabled("2026-08-15")).toBe(true);
   });
 });

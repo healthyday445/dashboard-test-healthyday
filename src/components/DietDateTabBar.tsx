@@ -4,6 +4,8 @@ export interface DietDateTab {
   dateKey: string;
   label: string; // "Today" | "Tomorrow" | weekday abbreviation
   dayOfMonth: string; // "03"
+  /** True once this date has no curated data yet — rendered blurred and unclickable. */
+  disabled?: boolean;
 }
 
 interface DietDateTabBarProps {
@@ -27,18 +29,19 @@ export const DietDateTabBar: React.FC<DietDateTabBarProps> = ({ tabs, activeIdx,
     <div className="flex justify-between gap-[2px]">
       {tabs.map((tab, idx) => {
         const active = idx === activeIdx;
+        const isDisabled = disabled || tab.disabled;
         return (
           <button
             key={tab.dateKey}
             type="button"
-            disabled={disabled}
+            disabled={isDisabled}
             onClick={() => onChange(idx)}
             className={`flex flex-col items-center gap-[3px] rounded-xl border-none ${
               active ? "flex-[1.15] px-[6px] pb-[9px] pt-2 bg-white shadow-[0_2px_6px_0_rgba(0,0,0,0.18)]" : "flex-1 px-1 py-2 bg-transparent shadow-none"
-            } ${disabled ? "cursor-default" : "cursor-pointer"}`}
+            } ${isDisabled ? "cursor-not-allowed" : "cursor-pointer"} ${tab.disabled ? "pointer-events-none" : ""}`}
           >
-            <span className={`text-xs font-semibold ${active ? "text-[#202020]" : "text-[#8B8B8B]"}`}>{tab.label}</span>
-            <span className={`text-[15px] font-bold ${active ? "text-[#202020]" : "text-[#8B8B8B]"}`}>{tab.dayOfMonth}</span>
+            <span className={`text-xs font-semibold ${tab.disabled ? "text-[#BFBFBF]" : active ? "text-[#202020]" : "text-[#8B8B8B]"}`}>{tab.label}</span>
+            <span className={`text-[15px] font-bold ${tab.disabled ? "text-[#BFBFBF]" : active ? "text-[#202020]" : "text-[#8B8B8B]"}`}>{tab.dayOfMonth}</span>
             {active && <span className="h-[3px] w-[22px] rounded-sm bg-[#FEAB27]" />}
           </button>
         );

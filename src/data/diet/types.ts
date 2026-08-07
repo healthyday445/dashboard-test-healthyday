@@ -174,4 +174,7 @@ export interface ResolvedDayPlan {
   weekBlockId: WeekBlockId;
   weekdayIndex: number;
   meals: ResolvedMeal[];
+  /** True once `dateKey` is on/after `DIET_DISABLED_FROM_DATE` — the tab strip should
+   *  render this date's tab blurred and unclickable instead of navigating to it. */
+  disabled: boolean;
 }

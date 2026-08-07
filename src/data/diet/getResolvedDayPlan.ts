@@ -1,7 +1,7 @@
 import { DIET_SLOTS_ORDERED } from "./slots";
 import { GENERIC_CYCLE_CONTENT } from "./weekBlocks";
 import { CURATED_CONTENT_BY_DATE, OMITTED_SLOTS_BY_DATE } from "./curatedContent";
-import { getCyclePosition, getEffectiveToday, getTabDates, formatDateDDMMYYYY, toIsoDateKey } from "./dateMath";
+import { getCyclePosition, getEffectiveToday, getTabDates, formatDateDDMMYYYY, toIsoDateKey, isDateDisabled } from "./dateMath";
 import type { ResolvedDayPlan, ResolvedMeal, Language, LocalizedText } from "./types";
 
 function resolveText(text: LocalizedText | undefined, language: Language): string | undefined {
@@ -70,7 +70,7 @@ export function getResolvedDayPlan(date: Date, language: Language = "English"): 
     };
   });
 
-  return { dateKey, displayDate: formatDateDDMMYYYY(clamped), weekBlockId, weekdayIndex, meals };
+  return { dateKey, displayDate: formatDateDDMMYYYY(clamped), weekBlockId, weekdayIndex, meals, disabled: isDateDisabled(dateKey) };
 }
 
 /** The 5 tab-strip day plans, starting at effective-today, for the given language. Pass

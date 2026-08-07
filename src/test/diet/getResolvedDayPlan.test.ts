@@ -182,6 +182,11 @@ describe("getResolvedDayPlan", () => {
     }
   });
 
+  it("marks 2026-08-09 and earlier as enabled, 2026-08-10 and later as disabled", () => {
+    expect(getResolvedDayPlan(new Date(2026, 7, 9)).disabled).toBe(false);
+    expect(getResolvedDayPlan(new Date(2026, 7, 10)).disabled).toBe(true);
+  });
+
   it("drops an English-only nutritional-benefit card entirely when resolving Telugu", () => {
     const englishPlan = getResolvedDayPlan(new Date(2026, 7, 6), "English");
     const teluguPlan = getResolvedDayPlan(new Date(2026, 7, 6), "Telugu");

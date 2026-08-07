@@ -100,7 +100,7 @@ const Diet = () => {
     const [dd, mm, yyyy] = plan.displayDate.split("-");
     const date = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
     const label = idx === 0 ? "Today" : idx === 1 ? "Tomorrow" : WEEKDAY_ABBR[(date.getDay() + 6) % 7];
-    return { dateKey: plan.dateKey, label, dayOfMonth: dd };
+    return { dateKey: plan.dateKey, label, dayOfMonth: dd, disabled: plan.disabled };
   });
 
   const activePlan = dayPlans[activeTabIdx] ?? dayPlans[0];

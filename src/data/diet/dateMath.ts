@@ -4,6 +4,17 @@ import type { WeekBlockId } from "./types";
  *  of the real calendar date. 2026-08-03 is a Monday, cycle week M2W2. */
 export const DIET_LAUNCH_DATE = new Date(2026, 7, 3);
 
+/** Curated data only exists through this date so far — any date from here onward is
+ *  disabled (blurred, unclickable) in the tab strip until the nutrition team preps more.
+ *  Push this forward as new dates get curated. */
+export const DIET_DISABLED_FROM_DATE = "2026-08-10";
+
+/** Whether a given "YYYY-MM-DD" date key falls on/after `DIET_DISABLED_FROM_DATE` — plain
+ *  string comparison works because ISO date keys sort lexicographically. */
+export function isDateDisabled(dateKey: string): boolean {
+  return dateKey >= DIET_DISABLED_FROM_DATE;
+}
+
 /** The 6 week-blocks in fixed cycle order — the cycle repeats every 42 days. */
 const WEEK_BLOCK_ORDER: WeekBlockId[] = ["M1W1", "M1W2", "M1W3", "M1W4", "M2W1", "M2W2"];
 
