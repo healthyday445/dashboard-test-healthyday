@@ -11,8 +11,8 @@ export interface SnChallengeDay {
 export const SN_CHALLENGE_DAYS: Record<string, SnChallengeDay> = {
   "2026-08-06": { dayNumber: 1, snCount: 24, youtubeLink: "https://www.youtube.com/live/-pcE8cxjmPY" },
   "2026-08-07": { dayNumber: 2, snCount: 48, youtubeLink: "https://youtube.com/live/N6XDoq_WsNo?feature=share" },
-  "2026-08-08": { dayNumber: 3, snCount: 72, youtubeLink: "https://www.youtube.com/c/Healthyday" /* TODO_SN_DAY3_LINK */ },
-  "2026-08-09": { dayNumber: 4, snCount: 108, youtubeLink: "https://www.youtube.com/c/Healthyday" /* TODO_SN_DAY4_LINK */ },
+  "2026-08-08": { dayNumber: 3, snCount: 72, youtubeLink: "https://youtube.com/live/qn0j6Oa8n0U?feature=share" },
+  "2026-08-09": { dayNumber: 4, snCount: 108, youtubeLink: "https://youtube.com/live/k5GhdzKyIss?feature=share" },
 };
 
 /** Prefers the real link from `/session-links` (session_code `108sn_day{N}`, language
