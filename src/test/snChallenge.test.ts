@@ -17,14 +17,12 @@ describe("snChallenge", () => {
     expect(getSnChallengeDay("2026-08-10")).toBeNull();
   });
 
-  it("is eligible for English 6-month and 12-month accounts, including upgrade variants", () => {
-    expect(isSnChallengeEligible({ language: "English" }, true, false)).toBe(true);
-    expect(isSnChallengeEligible({ language: "English" }, false, true)).toBe(true);
+  it("is eligible for every English paid plan (3/6/12 months)", () => {
+    expect(isSnChallengeEligible({ language: "English" })).toBe(true);
   });
 
-  it("is not eligible for Telugu or 3-month-only accounts", () => {
-    expect(isSnChallengeEligible({ language: "Telugu" }, true, false)).toBe(false);
-    expect(isSnChallengeEligible({ language: "English" }, false, false)).toBe(false);
+  it("is not eligible for Telugu accounts", () => {
+    expect(isSnChallengeEligible({ language: "Telugu" })).toBe(false);
   });
 
   it("converts an IST-shifted Date to its calendar-date key via UTC getters", () => {

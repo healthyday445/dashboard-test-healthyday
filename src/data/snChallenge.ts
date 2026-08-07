@@ -43,10 +43,11 @@ export function toIstIsoDateKey(nowIST: Date): string {
   return `${yyyy}-${mm}-${dd}`;
 }
 
-/** English + (6-month or 12-month, upgrade variants included) — same eligibility shape as the
- *  existing B2H/Diet bonus-session checks in IndexPaid.tsx. */
-export function isSnChallengeEligible(studentData: any, is6Month: boolean, is12Month: boolean): boolean {
-  return studentData?.language === "English" && (is6Month || is12Month);
+/** English-language paid students, any plan type (3/6/12 months, incl. `_upgrade` variants) —
+ *  widened from an earlier 6/12-month-only restriction per explicit product correction; every
+ *  paid English student sees the same SN Challenge dashboard now. */
+export function isSnChallengeEligible(studentData: any): boolean {
+  return studentData?.language === "English";
 }
 
 /** 4:30 AM - 9:29 AM IST — the SN session's real live/redirect window. Exported (rather than

@@ -84,7 +84,7 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
   // PREVIEWS.md) so it can't collide with those.
   const previewSnDate = searchParams.get("previewSnDate");
   const snDateKey = previewSnDate || toIstIsoDateKey(nowIST);
-  const snDay = isSnChallengeEligible(studentData, is6Month, is12Month) ? getSnChallengeDay(snDateKey) : null;
+  const snDay = isSnChallengeEligible(studentData) ? getSnChallengeDay(snDateKey) : null;
   const snIsLive = isSnLive(totalMin);
   // On campaign days the "Regular Session" block's live windows start 15 minutes earlier
   // (4:30 AM / 3:30 PM, matching the SN card's own start and the campaign's earlier broadcast)

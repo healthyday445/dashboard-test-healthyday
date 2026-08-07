@@ -57,7 +57,7 @@ export const SnChallengeCard: React.FC<SnChallengeCardProps> = ({ day, isLive, m
         thumbnail={getThumbnail(day.youtubeLink)}
         isLive={isLive}
         titleLines={["108 Surya Namaskar"]}
-        subtitle={`${day.snCount} Surya Namaskar - Day ${day.dayNumber}`}
+        subtitle={`Day ${day.dayNumber}`}
         ctaLabel={!isLive && showRecordingCta ? "View Recording" : "JOIN NOW"}
         showCtaIcon={isLive || !showRecordingCta}
       />

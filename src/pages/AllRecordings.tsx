@@ -9,7 +9,6 @@ import img5ce328 from "@/assets/5ce32860a765bdcaeb0504ff13008eea60a6cd55.webp";
 import imgFaceYogaTelugu from "@/assets/bonus/faceyoga_tel.jpg";
 import imgFaceYogaEnglish from "@/assets/bonus/faceyoga_eng.jpg";
 import imgWhiteArrow from "@/assets/whiteArrow.svg";
-import { SN_CHALLENGE_DAYS } from "@/data/snChallenge";
 
 // classRecordings is now built dynamically inside the component based on student language & API data
 
@@ -561,32 +560,29 @@ const AllRecordings = () => {
     }
   }
 
-  // "108 Surya Namaskar Challenge" section — English, 6/12-month only (Figma node 1312:4736,
+  // "108 Surya Namaskar Challenge" section — English, all plan types (Figma node 1312:4736,
   // "All recordings"). Unlike the Telugu card above, this is its own titled section (not merged
-  // into classRecordings) with one row per day. Rows come *only* from whatever `108sn_day{N}`
-  // entries the API actually has right now (per explicit product instruction) — no static
-  // per-day list is iterated, so a day that hasn't happened yet simply doesn't render a row.
-  // The SN count text (24/48/72/108) isn't in the API's session_name, so that one piece still
-  // comes from SN_CHALLENGE_DAYS, keyed by day number rather than date.
-  const snCountByDayNumber: Record<number, number> = Object.fromEntries(
-    Object.values(SN_CHALLENGE_DAYS).map((d) => [d.dayNumber, d.snCount])
-  );
+  // into classRecordings) with one row per day, titled simply "Day {N}" (no SN-count text).
+  // Rows come *only* from whatever `108sn_day{N}` entries the API actually has right now (per
+  // explicit product instruction) — no static per-day list is iterated, so a day that hasn't
+  // happened yet simply doesn't render a row.
   const fmtMonthDaySession = (sessionDate: string): string => {
     const [y, m, d] = sessionDate.split("-").map(Number);
     const date = new Date(Date.UTC(y, m - 1, d));
     return `${MONTH_NAMES_SHORT[date.getUTCMonth()]} ${date.getUTCDate()}${ordinalSuffix(date.getUTCDate())} Session`;
   };
-  const isSnEligible = isEnglish && (is6Month || is12Month);
+  // Widened from 6/12-month-only to every English paid plan (3/6/12 months) — same eligibility
+  // shape as isSnChallengeEligible in src/data/snChallenge.ts, per explicit product correction.
+  const isSnEligible = isEnglish;
   const snChallengeRecordings = isSnEligible
     ? sessionLinks
         .filter((s) => s.language === "english" && /^108sn_day\d+$/.test(s.session_code))
         .map((s) => {
           const dayNumber = parseInt(s.session_code.replace("108sn_day", ""), 10);
-          const snCount = snCountByDayNumber[dayNumber];
           const videoId = extractYouTubeId(s.link);
           return {
             dayNumber,
-            title: snCount ? `${snCount} Surya Namaskar - Day ${dayNumber}` : cleanSessionName(s.session_name || `Day ${dayNumber}`),
+            title: `Day ${dayNumber}`,
             subtitle: fmtMonthDaySession(s.session_date),
             thumbnail: videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : imgLanguageEnglish,
             link: s.link,
