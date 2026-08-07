@@ -436,9 +436,6 @@ export default function SNCertificate() {
 
       {/* Hero Banner */}
       <div className="w-full max-w-3xl px-4 mt-8 text-center">
-        <div className="inline-flex items-center gap-2 bg-[#FFF3D8] text-[#B37D00] px-4 py-1.5 rounded-full text-xs font-bold uppercase tracking-wider mb-3 border border-[#FEE3A2] shadow-xs">
-          <span>🎉 108 Surya Namaskar Challenge Certificate</span>
-        </div>
         <h1 className="text-3xl md:text-4xl font-extrabold text-[#0D468B] tracking-tight leading-tight">
           Your Official 108 Surya Namaskar Certificate
         </h1>
