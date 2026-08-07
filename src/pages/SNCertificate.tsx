@@ -469,10 +469,10 @@ export default function SNCertificate() {
       {/* Hero Banner */}
       <div className="w-full max-w-3xl px-4 mt-8 text-center">
         <h1 className="text-3xl md:text-4xl font-extrabold text-[#0D468B] tracking-tight leading-tight">
-          Congratulations
+          Congratulations !
         </h1>
         <p className="text-[#5A6577] text-base md:text-lg mt-2 max-w-xl mx-auto">
-          You have completed the 108 SN Challenge. Here's your certificate..
+          You have completed the 108 Surya Namaskar Challenge. Here's your certificate..
         </p>
       </div>
 
