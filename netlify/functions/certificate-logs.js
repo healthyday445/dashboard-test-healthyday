@@ -52,6 +52,7 @@ export async function handler(event) {
     // GET request to check existing user certificate status (for rate limiting & name locking)
     if (event.httpMethod === "GET") {
       const mobileParam = event.queryStringParameters?.mobile || "";
+      const certTypeParam = event.queryStringParameters?.certificateType || "";
       const cleanMobile = mobileParam.replace(/[^0-9]/g, "");
 
       if (!cleanMobile) {
@@ -62,7 +63,8 @@ export async function handler(event) {
         };
       }
 
-      const docRef = db.collection('certificate logs').doc(cleanMobile);
+      const docId = certTypeParam === "108_surya_namaskar" ? `${cleanMobile}_108_surya_namaskar` : cleanMobile;
+      const docRef = db.collection('certificate logs').doc(docId);
       const docSnap = await withTimeout(docRef.get(), "certificate-logs GET");
 
       if (!docSnap.exists) {
@@ -92,9 +94,9 @@ export async function handler(event) {
     // POST request to log or update activity
     if (event.httpMethod === "POST") {
       const body = JSON.parse(event.body || "{}");
-      const cleanMobile = (body.mobile || "").replace(/[^0-9]/g, "") || "anonymous";
-
-      const docRef = db.collection('certificate logs').doc(cleanMobile);
+      const certType = body.certificateType || "";
+      const docId = certType === "108_surya_namaskar" ? `${cleanMobile}_108_surya_namaskar` : cleanMobile;
+      const docRef = db.collection('certificate logs').doc(docId);
 
       const nowIST = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString();
       const activity = body.activity || "unknown";
