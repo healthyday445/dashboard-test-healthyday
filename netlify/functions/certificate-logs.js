@@ -100,6 +100,8 @@ export async function handler(event) {
       const activity = body.activity || "unknown";
 
       const historyItem = `${nowIST.replace("T", " ").substring(0, 19)} IST | ${activity}${
+        body.certificateType ? ` [${body.certificateType}]` : ""
+      }${
         body.shareType ? ` (${body.shareType})` : ""
       }`;
 
@@ -120,6 +122,9 @@ export async function handler(event) {
         activityHistory: admin.firestore.FieldValue.arrayUnion(historyItem),
       };
 
+      if (body.certificateType) {
+        updatePayload.certificateType = body.certificateType;
+      }
       if (body.name) {
         updatePayload.name = body.name;
         updatePayload.userName = body.name;

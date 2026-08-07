@@ -162,6 +162,7 @@ export async function trackCertificateActivity(params: {
   activity: "generated" | "downloaded" | "shared";
   shareType?: "general" | "whatsapp" | "status";
   daysAttended?: number | null;
+  certificateType?: string;
 }): Promise<any> {
   const payload = {
     mobile: params.mobile,
@@ -169,6 +170,7 @@ export async function trackCertificateActivity(params: {
     activity: params.activity,
     shareType: params.shareType || null,
     daysAttended: params.daysAttended ?? null,
+    certificateType: params.certificateType || null,
     clientTime: new Date().toISOString(),
   };
 
