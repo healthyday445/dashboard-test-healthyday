@@ -190,9 +190,12 @@ export default function SNCertificate() {
 
   // Load certificate template image
   useEffect(() => {
+    let active = true;
     const img = new Image();
+    img.crossOrigin = "anonymous";
     img.src = snCertificateTemplate;
     const onImgReady = () => {
+      if (!active) return;
       imgRef.current = img;
       setTemplateImg(img);
     };
@@ -203,22 +206,13 @@ export default function SNCertificate() {
     img.onerror = () => {
       console.error("Failed to load certificate template");
     };
+    return () => {
+      active = false;
+    };
   }, []);
 
-  // Synchronously draw canvas whenever templateImg loads, hasGenerated changes, or parameters change
-  useEffect(() => {
-    if (!hasGenerated || !templateImg) return;
-    renderCertificate(templateImg);
-    const id1 = setTimeout(() => renderCertificate(templateImg), 60);
-    const id2 = setTimeout(() => renderCertificate(templateImg), 250);
-    return () => {
-      clearTimeout(id1);
-      clearTimeout(id2);
-    };
-  }, [hasGenerated, templateImg, name, fontSize, yPercent, textColor, certificateDate]);
-
-  const renderCertificate = (img: HTMLImageElement) => {
-    const canvas = canvasRef.current;
+  const renderCertificate = useCallback((img: HTMLImageElement, targetCanvas?: HTMLCanvasElement | null) => {
+    const canvas = targetCanvas || canvasRef.current;
     if (!canvas || !img || !img.complete || img.naturalWidth === 0) return;
 
     const ctx = canvas.getContext("2d");
@@ -268,7 +262,45 @@ export default function SNCertificate() {
     } else {
       drawTextOverlay();
     }
-  };
+  }, [name, fontSize, yPercent, textColor]);
+
+  // Callback ref so whenever the canvas element mounts into the DOM, it immediately renders
+  const canvasCallbackRef = useCallback((node: HTMLCanvasElement | null) => {
+    canvasRef.current = node;
+    if (node && templateImg && hasGenerated) {
+      renderCertificate(templateImg, node);
+      setTimeout(() => renderCertificate(templateImg, node), 50);
+      setTimeout(() => renderCertificate(templateImg, node), 200);
+      setTimeout(() => renderCertificate(templateImg, node), 600);
+    }
+  }, [templateImg, hasGenerated, renderCertificate]);
+
+  // Synchronously draw canvas whenever templateImg loads, hasGenerated changes, or parameters change
+  useEffect(() => {
+    if (!hasGenerated || !templateImg) return;
+    renderCertificate(templateImg);
+    const id1 = setTimeout(() => renderCertificate(templateImg), 50);
+    const id2 = setTimeout(() => renderCertificate(templateImg), 200);
+    const id3 = setTimeout(() => renderCertificate(templateImg), 600);
+    const id4 = setTimeout(() => renderCertificate(templateImg), 1200);
+    return () => {
+      clearTimeout(id1);
+      clearTimeout(id2);
+      clearTimeout(id3);
+      clearTimeout(id4);
+    };
+  }, [hasGenerated, templateImg, renderCertificate]);
+
+  // Redraw when document fonts are ready
+  useEffect(() => {
+    if (document.fonts && document.fonts.ready) {
+      document.fonts.ready.then(() => {
+        if (hasGenerated && templateImg) {
+          renderCertificate(templateImg);
+        }
+      });
+    }
+  }, [hasGenerated, templateImg, renderCertificate]);
 
   const handleGenerate = async () => {
     if (isRateLimited) {
@@ -621,7 +653,7 @@ export default function SNCertificate() {
             <div className="w-full flex justify-center bg-gradient-to-b from-[#FFFDF9] via-[#FFF3D8]/60 to-[#FFFDF9] p-4 md:p-8 rounded-2xl border-2 border-[#FEE3A2] shadow-sm overflow-hidden mb-8">
               <div className="relative max-w-full overflow-auto rounded-xl shadow-2xl bg-white border border-[#F5EADC]">
                 <canvas
-                  ref={canvasRef}
+                  ref={canvasCallbackRef}
                   className="max-w-full h-auto block rounded-xl mx-auto"
                   style={{ maxHeight: "75vh", width: "auto" }}
                 />
