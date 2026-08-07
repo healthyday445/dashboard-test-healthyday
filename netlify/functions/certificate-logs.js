@@ -94,6 +94,7 @@ export async function handler(event) {
     // POST request to log or update activity
     if (event.httpMethod === "POST") {
       const body = JSON.parse(event.body || "{}");
+      const cleanMobile = (body.mobile || "").replace(/[^0-9]/g, "") || "anonymous";
       const certType = body.certificateType || "";
       const docId = certType === "108_surya_namaskar" ? `${cleanMobile}_108_surya_namaskar` : cleanMobile;
       const docRef = db.collection('certificate logs').doc(docId);
