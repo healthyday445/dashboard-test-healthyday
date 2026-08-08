@@ -52,6 +52,7 @@ export async function handler(event) {
     // GET request to check existing user certificate status (for rate limiting & name locking)
     if (event.httpMethod === "GET") {
       const mobileParam = event.queryStringParameters?.mobile || "";
+      const certTypeParam = event.queryStringParameters?.certificateType || "";
       const cleanMobile = mobileParam.replace(/[^0-9]/g, "");
 
       if (!cleanMobile) {
@@ -62,7 +63,8 @@ export async function handler(event) {
         };
       }
 
-      const docRef = db.collection('certificate logs').doc(cleanMobile);
+      const collectionName = certTypeParam === "108_surya_namaskar" ? 'sn certificate logs' : 'certificate logs';
+      const docRef = db.collection(collectionName).doc(cleanMobile);
       const docSnap = await withTimeout(docRef.get(), "certificate-logs GET");
 
       if (!docSnap.exists) {
@@ -93,13 +95,16 @@ export async function handler(event) {
     if (event.httpMethod === "POST") {
       const body = JSON.parse(event.body || "{}");
       const cleanMobile = (body.mobile || "").replace(/[^0-9]/g, "") || "anonymous";
-
-      const docRef = db.collection('certificate logs').doc(cleanMobile);
+      const certType = body.certificateType || "";
+      const collectionName = certType === "108_surya_namaskar" ? 'sn certificate logs' : 'certificate logs';
+      const docRef = db.collection(collectionName).doc(cleanMobile);
 
       const nowIST = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString();
       const activity = body.activity || "unknown";
 
       const historyItem = `${nowIST.replace("T", " ").substring(0, 19)} IST | ${activity}${
+        body.certificateType ? ` [${body.certificateType}]` : ""
+      }${
         body.shareType ? ` (${body.shareType})` : ""
       }`;
 
@@ -120,6 +125,9 @@ export async function handler(event) {
         activityHistory: admin.firestore.FieldValue.arrayUnion(historyItem),
       };
 
+      if (body.certificateType) {
+        updatePayload.certificateType = body.certificateType;
+      }
       if (body.name) {
         updatePayload.name = body.name;
         updatePayload.userName = body.name;

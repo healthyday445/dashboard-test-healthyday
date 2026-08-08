@@ -7,26 +7,34 @@ export interface CertificateStatus {
 }
 
 const getCookieKey = (mobile: string) => {
+  const isSN = (mobile || "").startsWith("sn_");
   const cleaned = (mobile || "").replace(/[^0-9]/g, "");
-  return cleaned ? `hd_cert_gen_${cleaned}` : "hd_cert_gen_anon";
+  const prefix = isSN ? "sn_" : "";
+  return cleaned ? `hd_cert_gen_${prefix}${cleaned}` : `hd_cert_gen_${prefix}anon`;
 };
 
 const getNameKey = (mobile: string) => {
+  const isSN = (mobile || "").startsWith("sn_");
   const cleaned = (mobile || "").replace(/[^0-9]/g, "");
-  return cleaned ? `hd_cert_name_${cleaned}` : "hd_cert_name_anon";
+  const prefix = isSN ? "sn_" : "";
+  return cleaned ? `hd_cert_name_${prefix}${cleaned}` : `hd_cert_name_${prefix}anon`;
 };
 
 const getDateKey = (mobile: string) => {
+  const isSN = (mobile || "").startsWith("sn_");
   const cleaned = (mobile || "").replace(/[^0-9]/g, "");
-  return cleaned ? `hd_cert_date_${cleaned}` : "hd_cert_date_anon";
+  const prefix = isSN ? "sn_" : "";
+  return cleaned ? `hd_cert_date_${prefix}${cleaned}` : `hd_cert_date_${prefix}anon`;
 };
 
 // Separate from `generated` — marks that we've asked the server at least once for this
 // mobile on this device, so a "not generated yet" answer only ever costs one network round
 // trip instead of one per modal/page open.
 const getCheckedKey = (mobile: string) => {
+  const isSN = (mobile || "").startsWith("sn_");
   const cleaned = (mobile || "").replace(/[^0-9]/g, "");
-  return cleaned ? `hd_cert_checked_${cleaned}` : "hd_cert_checked_anon";
+  const prefix = isSN ? "sn_" : "";
+  return cleaned ? `hd_cert_checked_${prefix}${cleaned}` : `hd_cert_checked_${prefix}anon`;
 };
 
 /**
@@ -133,11 +141,13 @@ export function setCertificateChecked(mobile: string): void {
  */
 export async function checkServerCertificateStatus(mobile: string): Promise<CertificateStatus | null> {
   if (!mobile) return null;
+  const isSN = mobile.startsWith("sn_");
   const cleanMobile = mobile.replace(/[^0-9]/g, "");
   if (!cleanMobile) return null;
 
   try {
-    const res = await fetch(`/.netlify/functions/certificate-logs?mobile=${encodeURIComponent(cleanMobile)}`);
+    const certTypeParam = isSN ? "&certificateType=108_surya_namaskar" : "";
+    const res = await fetch(`/.netlify/functions/certificate-logs?mobile=${encodeURIComponent(cleanMobile)}${certTypeParam}`);
     if (!res.ok) return null;
     const data = await res.json();
     if (data) {
@@ -162,6 +172,7 @@ export async function trackCertificateActivity(params: {
   activity: "generated" | "downloaded" | "shared";
   shareType?: "general" | "whatsapp" | "status";
   daysAttended?: number | null;
+  certificateType?: string;
 }): Promise<any> {
   const payload = {
     mobile: params.mobile,
@@ -169,6 +180,7 @@ export async function trackCertificateActivity(params: {
     activity: params.activity,
     shareType: params.shareType || null,
     daysAttended: params.daysAttended ?? null,
+    certificateType: params.certificateType || null,
     clientTime: new Date().toISOString(),
   };
 
