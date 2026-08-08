@@ -11,7 +11,7 @@ import {
 } from "@/lib/trackCertificateActivity";
 import logo from "@/assets/Primary_logo.svg";
 import { Skeleton } from "@/components/ui/skeleton";
-import snCertificateTemplate from "@/assets/badges/SN_Challenge_Certificate.jpg";
+import snCertificateTemplate from "@/assets/badges/SN_Challenge_Certificate.webp";
 
 function formatCertDate(iso: string | null | undefined): string {
   if (!iso) return "";
