@@ -380,9 +380,9 @@ export default function SNCertificate() {
     const filename = `Healthyday_108_Surya_Namaskar_Certificate_${safeName}.jpg`;
     const file = new File([blob], filename, { type: "image/jpeg" });
 
-    const referralLink = mobile ? `https://yoga.healthyday.co.in?ref=${mobile}` : "https://yoga.healthyday.co.in";
+    const referralLink = mobile ? `https://yoga.healthyday.co.in/?ref=${mobile}` : "https://yoga.healthyday.co.in/";
     const shareText =
-      `🌿 I just completed the 108 Surya Namaskar Challenge with Healthyday and earned my official certificate! 🧘‍♀️✨\n\nConsistency and dedication truly transform life. If I can build this healthy habit, you can do it too! 💚\n\n👇 Register for Healthyday Yoga here:\n${referralLink}`;
+      `I just completed the 108 Surya Namaskar Challenge with Healthyday! 🧘‍♀️💙\n\nIf I can do it, you can too. 😊\n\nStart your yoga journey for FREE.\nRegister Here 👇🏼\n${referralLink}\n\n🧘‍♀️ 14 Days FREE\n🗓 Starts NEXT MONDAY\nWith JAGAN 🧘‍♂️\n\n🌍 Internationally Certified Yoga Teacher\n👥 Trusted by 6,00,000+ Students`;
 
     trackCertificateActivity({
       mobile: mobile ? `sn_${mobile}` : "sn_anonymous",
@@ -394,10 +394,15 @@ export default function SNCertificate() {
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
-        await navigator.share({
+        const isIOS = typeof navigator !== "undefined" && (/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1));
+        const shareData: ShareData = {
           files: [file],
           title: `My 108 Surya Namaskar Challenge Certificate`,
-        });
+        };
+        if (!isIOS) {
+          shareData.text = shareText;
+        }
+        await navigator.share(shareData);
         showFeedback("Shared successfully! 🌿");
         return;
       } catch (err: any) {
