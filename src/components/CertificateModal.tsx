@@ -314,7 +314,6 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
         await navigator.share({
           files: [file],
           title: `My ${programDays}-Day Yoga Certificate`,
-          text: `I just completed my ${programDays}-Day Yoga Program with Healthyday! Here is my official completion certificate.\n\nJoin the next FREE Yoga Challenge here: ${referralLink}`,
         });
         trackCertificateActivity({
           mobile,
@@ -322,6 +321,9 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
           activity: "shared",
           daysAttended: daysAttended ?? undefined,
         });
+        setFeedback("Shared successfully!");
+        setTimeout(() => setFeedback(""), 3000);
+        return;
       } catch (err: any) {
         if (err.name !== "AbortError") {
           console.error("Share failed", err);

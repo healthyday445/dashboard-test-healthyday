@@ -414,16 +414,8 @@ export default function Certificate() {
 
   // Native Web Share action (for WhatsApp & WhatsApp Status)
   const handleNativeShare = async (shareType: "general" | "whatsapp" | "status" = "general") => {
-    // Open the tab synchronously, inside the click's user-gesture, so iOS Safari doesn't
-    // silently block it once we reach the fallback branch below (after the `await`s, the
-    // gesture context is gone and window.open() there gets blocked with no error thrown).
-    const fallbackTab = window.open("", "_blank");
-
     const blob = await getCanvasBlob();
-    if (!blob) {
-      fallbackTab?.close();
-      return;
-    }
+    if (!blob) return;
 
     const safeName = (name || "Student").replace(/[^a-zA-Z0-9_-]/g, "_");
     const filename = `Healthyday_Certificate_${safeName}.jpg`;
@@ -433,7 +425,6 @@ export default function Certificate() {
     const shareText =
       `🌿 I just completed the ${programDays}-Days Yoga Challenge with Healthyday and earned my official certificate! 🧘‍♀️✨\n\nConsistency and dedication truly transform life. If I can build this healthy habit, you can do it too! 💚\n\n👇 Register for the next FREE Yoga Challenge here:\n${referralLink}`;
 
-    // Log share activity to Firestore collection 'certificate logs'
     trackCertificateActivity({
       mobile,
       name: name.trim(),
@@ -442,28 +433,22 @@ export default function Certificate() {
       daysAttended,
     });
 
-    // Check if browser supports sharing files via Web Share API
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({
           files: [file],
           title: `My ${programDays}-Days Yoga Completion Certificate`,
-          text: shareText,
         });
-        fallbackTab?.close();
         showFeedback("Shared successfully! 🌿");
         return;
       } catch (err: any) {
         if (err.name === "AbortError") {
-          fallbackTab?.close();
           return;
         }
         console.error("Native share error:", err);
-        // Fall through to the WhatsApp fallback below — fallbackTab is still open for it.
       }
     }
 
-    // Fallback if file sharing is unsupported (e.g., Desktop browsers or older WebViews)
     const url = URL.createObjectURL(blob);
     const a = document.createElement("a");
     a.href = url;
@@ -473,17 +458,12 @@ export default function Certificate() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    // Open WhatsApp Web/mobile with text prompt
     const waUrl = `https://wa.me/?text=${encodeURIComponent(
       shareType === "status"
         ? `[Certificate Downloaded! Attach image to your WhatsApp Status]\n\n${shareText}`
         : shareText
     )}`;
-    if (fallbackTab) {
-      fallbackTab.location.href = waUrl;
-    } else {
-      window.open(waUrl, "_blank");
-    }
+    window.open(waUrl, "_blank");
     showFeedback("Image downloaded! Attach it to your WhatsApp Status or send to friends. ✨");
   };
 

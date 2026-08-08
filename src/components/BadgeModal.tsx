@@ -284,7 +284,6 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
         await navigator.share({
           files: [file],
           title: `My Yoga Level ${badgeLevel} Badge`,
-          text: `I just unlocked Level ${badgeLevel} of my 14-Day Yoga Challenge with Healthyday!`,
         });
         trackBadgeActivity({
           mobile: mobile || "",
@@ -292,6 +291,9 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
           level: badgeLevel,
           activity: "shared",
         });
+        setFeedback("Shared successfully!");
+        setTimeout(() => setFeedback(""), 3000);
+        return;
       } catch (err: any) {
         if (err.name !== "AbortError") {
           console.error("Share failed", err);

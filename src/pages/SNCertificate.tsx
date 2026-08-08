@@ -373,13 +373,8 @@ export default function SNCertificate() {
   };
 
   const handleNativeShare = async (shareType: "general" | "whatsapp" | "status" = "general") => {
-    const fallbackTab = window.open("", "_blank");
-
     const blob = await getCanvasBlob();
-    if (!blob) {
-      fallbackTab?.close();
-      return;
-    }
+    if (!blob) return;
 
     const safeName = (name || "Student").replace(/[^a-zA-Z0-9_-]/g, "_");
     const filename = `Healthyday_108_Surya_Namaskar_Certificate_${safeName}.jpg`;
@@ -402,14 +397,11 @@ export default function SNCertificate() {
         await navigator.share({
           files: [file],
           title: `My 108 Surya Namaskar Challenge Certificate`,
-          text: shareText,
         });
-        fallbackTab?.close();
         showFeedback("Shared successfully! 🌿");
         return;
       } catch (err: any) {
         if (err.name === "AbortError") {
-          fallbackTab?.close();
           return;
         }
         console.error("Native share error:", err);
@@ -430,11 +422,7 @@ export default function SNCertificate() {
         ? `[Certificate Downloaded! Attach image to your WhatsApp Status]\n\n${shareText}`
         : shareText
     )}`;
-    if (fallbackTab) {
-      fallbackTab.location.href = waUrl;
-    } else {
-      window.open(waUrl, "_blank");
-    }
+    window.open(waUrl, "_blank");
     showFeedback("Image downloaded! Attach it to your WhatsApp Status or send to friends. ✨");
   };
 
