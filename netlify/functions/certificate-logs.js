@@ -63,7 +63,7 @@ export async function handler(event) {
         };
       }
 
-      const collectionName = certTypeParam === "108_surya_namaskar" ? 'sn certificate logs' : 'certificate logs';
+      const collectionName = certTypeParam === "108_surya_namaskar" ? 'sn_certificate_logs' : 'certificate logs';
       const docRef = db.collection(collectionName).doc(cleanMobile);
       const docSnap = await withTimeout(docRef.get(), "certificate-logs GET");
 
@@ -96,7 +96,7 @@ export async function handler(event) {
       const body = JSON.parse(event.body || "{}");
       const cleanMobile = (body.mobile || "").replace(/[^0-9]/g, "") || "anonymous";
       const certType = body.certificateType || "";
-      const collectionName = certType === "108_surya_namaskar" ? 'sn certificate logs' : 'certificate logs';
+      const collectionName = certType === "108_surya_namaskar" ? 'sn_certificate_logs' : 'certificate logs';
       const docRef = db.collection(collectionName).doc(cleanMobile);
 
       const nowIST = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString();
