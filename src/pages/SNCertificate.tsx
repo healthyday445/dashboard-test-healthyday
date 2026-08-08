@@ -106,7 +106,7 @@ export default function SNCertificate() {
     }
     safeLocalStorage.setItem("user_mobile", finalMobile);
     safeLocalStorage.setItem("mobile", finalMobile);
-    navigate(`/${finalMobile}/SN-certificate`);
+    navigate(`/${finalMobile}/sn-certificate`);
   };
 
   // Fetch student data if mobile is present to evaluate paid status & pre-fill name
