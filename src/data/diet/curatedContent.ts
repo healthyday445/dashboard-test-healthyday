@@ -1557,15 +1557,15 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       // the established pattern, e.g. Warm Water's "Water" on 2026-08-05).
       recommendedQuantity: [{ ingredient: same("Curd"), qty: same("2 tbsp") }],
       nutritionalBenefits: [
-        // Figma 1398:34634 (Telugu) lists Rajma's card before Oats Dosa's — order kept as
-        // originally authored here since both cards are shared across languages.
-        { ingredient: t("Oats Dosa", "ఓట్స్ దోసె"), benefits: [{ benefitLabel: t("Better Digestion", "Digestion ని support చేస్తుంది"), iconKey: "stomach" }] },
+        // Both the English (1331:16734) and Telugu (1398:34634) screens list Rajma's card
+        // before Oats Dosa's — verified directly against a re-fetch of the English screen.
         { ingredient: t("Rajma", "రాజ్మా"), benefits: [
           { benefitLabel: t("Supports Hemoglobin", "Hemoglobin ని పెంచుతుంది"), iconKey: "hemoglobin" },
           { benefitLabel: t("Muscle Health", "Muscle health ని పెంచుతుంది"), iconKey: "muscle-health" },
           { benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" },
           { benefitLabel: t("Heart Health", "Heart health కి మంచిది"), iconKey: "heart" },
         ] },
+        { ingredient: t("Oats Dosa", "ఓట్స్ దోసె"), benefits: [{ benefitLabel: t("Better Digestion", "Digestion ని support చేస్తుంది"), iconKey: "stomach" }] },
         { ingredient: t("Curd", "పెరుగు"), benefits: [{ benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" }] },
       ],
       groceryListAvailable: true,
@@ -1578,7 +1578,8 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       tips: t("Avoid mobile phones or TV after 9:30 PM.", "7 గంటలు ప్రశాంతంగా నిద్రపోండి (రాత్రి 10:00 PM – ఉదయం 5:00 AM)."),
       imageUrl: imgCinnamonWarmMilk,
       nutritionalBenefits: [
-        { ingredient: same("Milk"), benefits: [{ benefitLabel: t("Bone Strength", "Bone health కి మంచిది"), iconKey: "dog-bone" }] },
+        // Both English (1331:16786) and Telugu (1398:34634) list Cinnamon's card before
+        // Milk's — verified directly against a re-fetch of the English screen.
         { ingredient: same("Cinnamon"), benefits: [
           // Figma 1398:34634 (Telugu) shows a Supports Hemoglobin row here instead of
           // Healthy Blood Sugar — the row's own frame is still named "sugar" (a stale
@@ -1587,6 +1588,7 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
           { benefitLabel: t("Supports Hemoglobin", "Hemoglobin ని పెంచుతుంది"), iconKey: "hemoglobin", visibleLanguages: ["Telugu"] },
           { benefitLabel: t("Healthy Metabolism", "Metabolism ని పెంచుతుంది"), iconKey: "healthy-eating" },
         ] },
+        { ingredient: same("Milk"), benefits: [{ benefitLabel: t("Bone Strength", "Bone health కి మంచిది"), iconKey: "dog-bone" }] },
       ],
       groceryListAvailable: true,
     },
@@ -2036,7 +2038,7 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       name: same("Elaichi Milk"),
       imageUrl: imgElaichiMilk,
       precautions: t(
-        "Use only 2 elaichi pods. Don't add sugar, especially if you have diabetes. If lactose intolerant, choose a plant-based milk.",
+        "Use only 2 elaichi pods. Don’t add sugar, especially if you have diabetes. If lactose intolerant, choose a plant-based milk.",
         "2 యాలకులు మాత్రమే వాడండి. Sugar వేయకండి, ముఖ్యంగా Diabetes ఉన్నవారు."
       ),
       nutritionalBenefits: [
