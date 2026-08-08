@@ -48,9 +48,9 @@ describe("diet dateMath", () => {
     expect(formatDateDDMMYYYY(new Date(2026, 7, 3))).toBe("03-08-2026");
   });
 
-  it("disables tabs from 2026-08-10 onward, keeps 2026-08-09 and earlier enabled", () => {
-    expect(isDateDisabled("2026-08-09")).toBe(false);
-    expect(isDateDisabled("2026-08-10")).toBe(true);
-    expect(isDateDisabled("2026-08-15")).toBe(true);
+  it("disables tabs from 2026-08-17 onward, keeps 2026-08-16 and earlier enabled", () => {
+    expect(isDateDisabled("2026-08-16")).toBe(false);
+    expect(isDateDisabled("2026-08-17")).toBe(true);
+    expect(isDateDisabled("2026-08-20")).toBe(true);
   });
 });

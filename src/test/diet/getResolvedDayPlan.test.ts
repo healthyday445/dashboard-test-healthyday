@@ -32,7 +32,7 @@ describe("getResolvedDayPlan", () => {
   });
 
   it("falls back entirely to generic sheet content for an uncurated date", () => {
-    const plan = getResolvedDayPlan(new Date(2026, 7, 10)); // a week after launch, uncurated
+    const plan = getResolvedDayPlan(new Date(2026, 7, 17)); // first date past the curated range
     for (const meal of plan.meals) {
       expect(meal.isCurated).toBe(false);
       expect(meal.name).toBe(meal.detail);
@@ -69,6 +69,13 @@ describe("getResolvedDayPlan", () => {
     [2026, 7, 7, "Soaked Almonds & Black Raisins", 8],
     [2026, 7, 8, "Soaked Chia & Flax Seeds", 8],
     [2026, 7, 9, "Soaked Pistachios & Gold Raisins", 7], // postYogaDrink omitted this date
+    [2026, 7, 10, "Soaked Almonds & Raisins", 8],
+    [2026, 7, 11, "Pumpkin, Sunflower Seeds & Soaked Walnuts", 8],
+    [2026, 7, 12, "Warm Water", 7], // postYogaDrink omitted this date
+    [2026, 7, 13, "Turmeric Jeera water", 8],
+    [2026, 7, 14, "Soaked Walnuts", 8],
+    [2026, 7, 15, "Sunflower Seeds", 8],
+    [2026, 7, 16, "Soaked Raisins", 8],
   ])("resolves curated earlyMorning for %i-%i-%i (%s)", (y, m, d, expectedName, expectedMealCount) => {
     const plan = getResolvedDayPlan(new Date(y, m, d));
     const earlyMorning = plan.meals.find((meal) => meal.slotId === "earlyMorning")!;
@@ -182,9 +189,85 @@ describe("getResolvedDayPlan", () => {
     }
   });
 
-  it("marks 2026-08-09 and earlier as enabled, 2026-08-10 and later as disabled", () => {
-    expect(getResolvedDayPlan(new Date(2026, 7, 9)).disabled).toBe(false);
-    expect(getResolvedDayPlan(new Date(2026, 7, 10)).disabled).toBe(true);
+  it("marks 2026-08-16 and earlier as enabled, 2026-08-17 and later as disabled", () => {
+    expect(getResolvedDayPlan(new Date(2026, 7, 16)).disabled).toBe(false);
+    expect(getResolvedDayPlan(new Date(2026, 7, 17)).disabled).toBe(true);
+  });
+
+  it("omits 2026-08-12 postYogaDrink entirely — Figma has no card for it that day", () => {
+    const plan = getResolvedDayPlan(new Date(2026, 7, 12));
+    expect(plan.meals).toHaveLength(7);
+    expect(plan.meals.map((meal) => meal.slotId)).not.toContain("postYogaDrink");
+  });
+
+  it("overrides 2026-08-12 breakfast's time range since that date has no Post Yoga Drink card", () => {
+    const plan = getResolvedDayPlan(new Date(2026, 7, 12));
+    const breakfast = plan.meals.find((meal) => meal.slotId === "breakfast")!;
+    expect(breakfast.timeRangeLabel).toBe("06:30AM - 09:30AM");
+  });
+
+  it("overrides 2026-08-16 breakfast's time range to match Figma even though a Post Yoga Drink card exists that day", () => {
+    const plan = getResolvedDayPlan(new Date(2026, 7, 16));
+    const postYogaDrink = plan.meals.find((meal) => meal.slotId === "postYogaDrink")!;
+    expect(postYogaDrink.isCurated).toBe(true);
+    const breakfast = plan.meals.find((meal) => meal.slotId === "breakfast")!;
+    expect(breakfast.timeRangeLabel).toBe("06:30AM - 09:30AM");
+  });
+
+  it("drops English-only nutritional-benefit rows for 2026-08-11 Telugu (asymmetric benefit screens)", () => {
+    const englishPlan = getResolvedDayPlan(new Date(2026, 7, 11), "English");
+    const teluguPlan = getResolvedDayPlan(new Date(2026, 7, 11), "Telugu");
+    const englishSalad = englishPlan.meals.find((m) => m.slotId === "dinner")!.nutritionalBenefits!.find((b) => b.ingredient === "Vegetable Salad")!;
+    const teluguSalad = teluguPlan.meals.find((m) => m.slotId === "dinner")!.nutritionalBenefits!.find((b) => b.ingredient === "Vegetable Salad")!;
+    // English design (1373:45353) has 3 benefit rows; the Telugu design (1398:34229) only
+    // shows 2 of them — Antioxidant Protection is English-only.
+    expect(englishSalad.benefits).toHaveLength(3);
+    expect(teluguSalad.benefits).toHaveLength(2);
+    expect(teluguSalad.benefits.map((b) => b.iconKey)).toEqual(["stomach", "happy"]);
+  });
+
+  it("falls back to the same English text for 2026-08-10 Telugu — no Telugu screen yet", () => {
+    const plan = getResolvedDayPlan(new Date(2026, 7, 10), "Telugu");
+    const earlyMorning = plan.meals.find((meal) => meal.slotId === "earlyMorning")!;
+    expect(earlyMorning.name).toBe("Soaked Almonds & Raisins");
+    expect(earlyMorning.items).toEqual([{ label: "5 Almonds" }, { label: "4 Raisins" }]);
+  });
+
+  it("swaps Guava's Healthy Blood Sugar row for a Telugu-only Supports Hemoglobin row (2026-08-13/16)", () => {
+    for (const [y, m, d] of [[2026, 7, 13], [2026, 7, 16]] as const) {
+      const englishPlan = getResolvedDayPlan(new Date(y, m, d), "English");
+      const teluguPlan = getResolvedDayPlan(new Date(y, m, d), "Telugu");
+      const englishGuava = englishPlan.meals.find((meal) => meal.slotId === "morningSnack")!.nutritionalBenefits!.find((b) => b.ingredient === "Guava")!;
+      const teluguGuava = teluguPlan.meals.find((meal) => meal.slotId === "morningSnack")!.nutritionalBenefits!.find((b) => b.ingredient === "జామ పండు")!;
+      expect(englishGuava.benefits.map((b) => b.iconKey)).toContain("sugar-cubes");
+      expect(teluguGuava.benefits.map((b) => b.iconKey)).toContain("hemoglobin");
+      expect(teluguGuava.benefits.map((b) => b.iconKey)).not.toContain("sugar-cubes");
+    }
+  });
+
+  it("drops a whole Tomato ingredient card for Telugu when the design has no card for it (2026-08-13/15/16)", () => {
+    const cases = [
+      [2026, 7, 13, "dinner"],
+      [2026, 7, 15, "postYogaDrink"],
+      [2026, 7, 16, "dinner"],
+    ] as const;
+    for (const [y, m, d, slotId] of cases) {
+      const englishPlan = getResolvedDayPlan(new Date(y, m, d), "English");
+      const teluguPlan = getResolvedDayPlan(new Date(y, m, d), "Telugu");
+      const englishMeal = englishPlan.meals.find((meal) => meal.slotId === slotId)!;
+      const teluguMeal = teluguPlan.meals.find((meal) => meal.slotId === slotId)!;
+      expect(englishMeal.nutritionalBenefits?.some((b) => b.ingredient === "Tomato")).toBe(true);
+      expect(teluguMeal.nutritionalBenefits?.some((b) => b.ingredient === "టమాటా")).toBe(false);
+    }
+  });
+
+  it("falls back to the same English text for 2026-08-14 nightDrink precautions — no Telugu box authored for it", () => {
+    const englishPlan = getResolvedDayPlan(new Date(2026, 7, 14), "English");
+    const teluguPlan = getResolvedDayPlan(new Date(2026, 7, 14), "Telugu");
+    const englishNightDrink = englishPlan.meals.find((meal) => meal.slotId === "nightDrink")!;
+    const teluguNightDrink = teluguPlan.meals.find((meal) => meal.slotId === "nightDrink")!;
+    expect(teluguNightDrink.precautions).toBe(englishNightDrink.precautions);
+    expect(teluguNightDrink.tips).not.toBe(englishNightDrink.tips); // tips DOES have real Telugu text
   });
 
   it("drops an English-only nutritional-benefit card entirely when resolving Telugu", () => {

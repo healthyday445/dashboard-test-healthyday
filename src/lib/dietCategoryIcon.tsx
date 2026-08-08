@@ -18,6 +18,7 @@ import eyeHealthIcon from "@/assets/diet/icons/eye-health.webp";
 import warmthIcon from "@/assets/diet/icons/warmth.webp";
 import antiInflammatoryIcon from "@/assets/diet/icons/anti-inflammatory.webp";
 import nutrientAbsorptionIcon from "@/assets/diet/icons/nutrient-absorption.webp";
+import oralHealthIcon from "@/assets/diet/icons/oral-health.webp";
 
 /**
  * Placeholder visuals for the diet feature until real per-dish photography exists.
@@ -122,6 +123,7 @@ const BENEFIT_ICONS: Record<string, string> = {
   warmth: warmthIcon,
   "anti-inflammatory": antiInflammatoryIcon,
   "nutrient-absorption": nutrientAbsorptionIcon,
+  "oral-health": oralHealthIcon,
 };
 
 /** Real icon asset URL for a `nutritionalBenefits[].iconKey` value — unrecognized keys
