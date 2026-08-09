@@ -7,7 +7,7 @@ export const DIET_LAUNCH_DATE = new Date(2026, 7, 3);
 /** Curated data only exists through the day before this date so far — any date from here
  *  onward is disabled (grayed out, unclickable) in the tab strip until the nutrition team
  *  preps more. Push this forward as new dates get curated. */
-export const DIET_DISABLED_FROM_DATE = "2026-08-17";
+export const DIET_DISABLED_FROM_DATE = "2026-08-12";
 
 /** Whether a given "YYYY-MM-DD" date key falls on/after `DIET_DISABLED_FROM_DATE` — plain
  *  string comparison works because ISO date keys sort lexicographically. */

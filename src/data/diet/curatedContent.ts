@@ -1154,134 +1154,136 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
   // 2026-08-10 — Figma node 1331:15298, English only (no Telugu screen yet, hence `pending`).
   "2026-08-10": {
     earlyMorning: {
-      name: pending("Soaked Almonds & Raisins"),
+      name: t("Soaked Almonds & Raisins", " Soaked బాదం & ఎండు ద్రాక్ష"),
       imageUrl: imgSoakedAlmondsRaisins,
       items: [{ label: pending("5 Almonds") }, { label: pending("4 Raisins") }],
-      precautions: pending(
-        "For people with Diabetes, limit the portion to 4 almonds and 2 raisins to help avoid a blood sugar spike."
+      precautions: t(
+        "For people with Diabetes, limit the portion to 4 almonds and 2 raisins to help avoid a blood sugar spike.",
+        "Diabetes ఉన్నవారు Blood sugar levels పెరగకుండా 4 బాదం & 2 ఎండు ద్రాక్షకు limit చేసుకోవాలి."
       ),
       nutritionalBenefits: [
-        { ingredient: pending("Almonds"), benefits: [
-          { benefitLabel: pending("Brain Health"), iconKey: "brain-health" },
-          { benefitLabel: pending("Healthy Skin"), iconKey: "healthy-skin" },
+        { ingredient: t("Almonds", "బాదం"), benefits: [
+          { benefitLabel: t("Brain Health", "Brain కి మంచిది"), iconKey: "brain-health" },
+          { benefitLabel: t("Healthy Skin", "Skin కు మంచిది"), iconKey: "healthy-skin" },
         ] },
-        { ingredient: pending("Raisins"), benefits: [
-          { benefitLabel: pending("Supports Hemoglobin"), iconKey: "hemoglobin" },
-          { benefitLabel: pending("Improves bone health"), iconKey: "dog-bone" },
+        { ingredient: t("Raisins", "ఎండు ద్రాక్ష"), benefits: [
+          { benefitLabel: t("Supports Hemoglobin", "Hemoglobin ని పెంచుతుంది"), iconKey: "hemoglobin" },
+          { benefitLabel: t("Improves bone health", "Bone health కి మంచిది"), iconKey: "dog-bone" },
         ] },
       ],
       recommendedQuantity: [
-        { ingredient: pending("Soaked Almonds"), qty: pending("5 pcs") },
-        { ingredient: pending("Soaked Raisins"), qty: pending("4 pcs") },
+        { ingredient: t("Soaked Almonds", "Soaked బాదం"), qty: pending("5 pcs") },
+        { ingredient: t("Soaked Raisins", "Soaked ఎండు ద్రాక్ష"), qty: pending("4 pcs") },
       ],
       groceryListAvailable: true,
     },
     postYogaDrink: {
-      name: pending("Soaked Chia Seeds Water"),
+      name: same("Soaked Chia Seeds Water"),
       imageUrl: imgSoakedChiaSeedsWater,
       items: [{ label: pending("1 tbsp") }],
-      precautions: pending("For People with Thyroid Concerns, limit the intake to 1 tbsp per serving."),
+      tips: t("Soak overnight and eat in the morning.", "రాత్రంతా నానబెట్టి, ఉదయం తినండి."),
+      precautions: t("For People with Thyroid Concerns, limit the intake to 1 tbsp per serving.", "Thyroid ఉన్నవారు 1 tbsp వరకు మాత్రమే తీసుకోవాలి."),
       nutritionalBenefits: [
-        { ingredient: pending("Chia Seeds"), benefits: [
-          { benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
-          { benefitLabel: pending("Hydration"), iconKey: "water" },
+        { ingredient: same("Chia Seeds"), benefits: [
+          { benefitLabel: t("Better Digestion", "Digestion ని support చేస్తుంది"), iconKey: "stomach" },
+          { benefitLabel: t("Hydration", "Body ని Hydrated గా ఉంచుతుంది"), iconKey: "water" },
         ] },
       ],
       recommendedQuantity: [{ ingredient: pending("Chia Seeds"), qty: pending("1 tbsp") }],
       groceryListAvailable: true,
     },
     breakfast: {
-      name: pending("Moong Dal Chilla & Coconut Chutney"),
+      name: t("Moong Dal Chilla & Coconut Chutney", "పెసరపప్పు చిల్లా & కొబ్బరి చట్నీ"),
       imageUrl: imgMoongDalChillaCoconutChutney,
-      tips: pending("Moong dal is naturally gluten-free, making it suitable for people with gluten allergy."),
-      precautions: pending("For People with Diabetes, limit the portion to 2 medium chillas."),
+      tips: t("Moong dal is naturally gluten-free, making it suitable for people with gluten allergy.", "పెసరపప్పు -  Gluten free, కాబట్టి gluten allergy ఉన్నవారికి మంచిది."),
+      precautions: t("For People with Diabetes, limit the portion to 2 medium chillas.", "Diabetes ఉన్నవారు 2 medium చిల్లా మాత్రమే తీసుకోండి"),
       nutritionalBenefits: [
-        { ingredient: pending("Moong Dal Chilla"), benefits: [
-          { benefitLabel: pending("Muscle Health"), iconKey: "muscle-health" },
-          { benefitLabel: pending("Keeps You Full Longer"), iconKey: "happy" },
-          { benefitLabel: pending("Supports Hemoglobin"), iconKey: "hemoglobin" },
+        { ingredient: same("Moong Dal Chilla"), benefits: [
+          { benefitLabel: t("Muscle Health", "Muscle health ని పెంచుతుంది"), iconKey: "muscle-health" },
+          { benefitLabel: t("Keeps You Full Longer", "ఎక్కువసేపు stomach full గా ఉంచుతుంది"), iconKey: "happy" },
+          { benefitLabel: t("Supports Hemoglobin", "Hemoglobin ని పెంచుతుంది"), iconKey: "hemoglobin" },
         ] },
-        { ingredient: pending("Coconut Chutney"), benefits: [
-          { benefitLabel: pending("Brain Health"), iconKey: "brain-health" },
-          { benefitLabel: pending("Quick Energy"), iconKey: "lightning-bolt" },
-          { benefitLabel: pending("Immunity"), iconKey: "shield" },
-          { benefitLabel: pending("Gut Health"), iconKey: "stomach" },
+        { ingredient: same("Coconut Chutney"), benefits: [
+          { benefitLabel: t("Brain Health", "Brain కి మంచిది"), iconKey: "brain-health" },
+          { benefitLabel: t("Quick Energy", "Energy ని ఇస్తుంది"), iconKey: "lightning-bolt" },
+          { benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
+          { benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" },
         ] },
       ],
       groceryListAvailable: true,
     },
     morningSnack: {
-      name: pending("Apple"),
+      name: same("Apple"),
       imageUrl: imgApple,
       items: [{ label: pending("1 Apple") }],
-      precautions: pending("For people with Diabetes, limit the portion to ½ an apple per serving."),
-      nutritionalBenefits: [{ ingredient: pending("Apple"), benefits: [{ benefitLabel: pending("Immunity"), iconKey: "shield" }] }],
+      precautions: t("For people with Diabetes, limit the portion to ½ an apple per serving.", "Diabetes ఉన్నవారు  1  medium ఆపిల్‌ మాత్రమే"),
+      nutritionalBenefits: [{ ingredient: pending("Apple"), benefits: [{ benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" }] }],
       recommendedQuantity: [{ ingredient: pending("Apple"), qty: pending("1") }],
       groceryListAvailable: true,
     },
     lunch: {
-      name: pending("Steamed Rice, Methi Dal, Ladies Finger Curry & Curd"),
+      name: t("Steamed Rice, Methi Dal, Ladies Finger Curry & Curd", "అన్నం, మెంతికూర పప్పు, బెండకాయ కూర & పెరుగు"),
       imageUrl: imgSteamedRiceMethiDalLadiesFingerCurryCurd,
-      tips: pending("Follow the 80% full rule—stop eating when you feel comfortably satisfied, not completely full."),
+      tips: t("Follow the 80% full rule—stop eating when you feel comfortably satisfied, not completely full.", "80% rule పాటించండి - కడుపు పూర్తిగా నిండే వరకు కాకుండా, 80% నిండినప్పుడు తినడం ఆపండి."),
       nutritionalBenefits: [
-        { ingredient: pending("Steamed Rice"), benefits: [{ benefitLabel: pending("Energy"), iconKey: "lightning-bolt" }] },
-        { ingredient: pending("Methi Dal"), benefits: [
-          { benefitLabel: pending("Supports Hemoglobin"), iconKey: "hemoglobin" },
-          { benefitLabel: pending("Muscle Health"), iconKey: "muscle-health" },
+        { ingredient: t("Steamed Rice", "అన్నం"), benefits: [{ benefitLabel: t("Energy", "Energy ని ఇస్తుంది"), iconKey: "lightning-bolt" }] },
+        { ingredient: t("Methi Dal", "మెంతికూర పప్పు"), benefits: [
+          { benefitLabel: t("Supports Hemoglobin", "Hemoglobin ని పెంచుతుంది"), iconKey: "hemoglobin" },
+          { benefitLabel: t("Muscle Health", "Muscle health ని పెంచుతుంది"), iconKey: "muscle-health" },
         ] },
-        { ingredient: pending("Ladies Finger (Okra)"), benefits: [{ benefitLabel: pending("Healthy Blood Sugar"), iconKey: "sugar-cubes" }] },
-        { ingredient: pending("Curd"), benefits: [{ benefitLabel: pending("Gut Health"), iconKey: "stomach" }] },
+        { ingredient: t("Ladies Finger (Okra)", "బెండకాయ కూర"), benefits: [{ benefitLabel: t("Healthy Blood Sugar", "Hemoglobin ని పెంచుతుంది"), iconKey: "sugar-cubes" }] },
+        { ingredient: t("Curd", "పెరుగు"), benefits: [{ benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" }] },
       ],
       groceryListAvailable: true,
     },
     eveningSnack: {
-      name: pending("Tomato Vegetable Soup"),
+      name: t("Tomato Vegetable Soup", "టమాటా soup"),
       imageUrl: imgTomatoVegetableSoup,
-      tips: pending("Cook tomatoes and vegetables, blend until smooth, and serve the soup warm."),
+      tips: t("Cook tomatoes and vegetables, blend until smooth, and serve the soup warm.", "టమాటాలు, కూరగాయలను మెత్తగా అయ్యే వరకు ఉడికించి, blend చేసి వెచ్చగా వడ్డించండి."),
       nutritionalBenefits: [
-        { ingredient: pending("Tomato"), benefits: [
-          { benefitLabel: pending("Heart Health"), iconKey: "heart" },
-          { benefitLabel: pending("Eye Health"), iconKey: "eye-health" },
-          { benefitLabel: pending("Immunity"), iconKey: "shield" },
-          { benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
+        { ingredient: t("Tomato", "టమాటా"), benefits: [
+          { benefitLabel: t("Heart Health", "Heart health కి మంచిది"), iconKey: "heart" },
+          { benefitLabel: t("Eye Health", "Eyes కి మంచిది"), iconKey: "eye-health" },
+          { benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
+          { benefitLabel: t("Antioxidant Protection", "Antioxidant Protection ని పెంచుతుంది"), iconKey: "healthy-food", visibleLanguages: ["English"] },
         ] },
-        { ingredient: pending("Mixed Vegetables"), benefits: [
-          { benefitLabel: pending("Gut Health"), iconKey: "stomach" },
-          { benefitLabel: pending("Supports Hemoglobin"), iconKey: "hemoglobin" },
+        { ingredient: same("Mixed Vegetables"), benefits: [
+          { benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" },
+          { benefitLabel: t("Supports Hemoglobin", "Hemoglobin ని పెంచుతుంది"), iconKey: "hemoglobin" },
         ] },
-        { ingredient: pending("Warm Soup"), benefits: [
-          { benefitLabel: pending("Better Digestion"), iconKey: "stomach" },
-          { benefitLabel: pending("Hydration"), iconKey: "water" },
+        { ingredient: t("Warm Soup", "Soup"), benefits: [
+          { benefitLabel: t("Better Digestion", "Digestion ని support చేస్తుంది"), iconKey: "stomach" },
+          { benefitLabel: t("Hydration", "Body ని Hydrated గా ఉంచుతుంది"), iconKey: "water" },
         ] },
       ],
       groceryListAvailable: true,
     },
     dinner: {
-      name: pending("Vegetable Upma with Carrot & Beans"),
+      name: t("Vegetable Upma with Carrot & Beans", "Carrot & Beans Upma"),
       imageUrl: imgVegetableUpmaCarrotBeans,
-      tips: pending("Avoid heavy spices, and try to finish dinner by 7:30 PM."),
+      tips: t("Avoid heavy spices, and try to finish dinner by 7:30 PM.", "ఎక్కువ spices వాడకండి, రాత్రి dinner 7:30 PM లోపు finish  చేయండి."),
       nutritionalBenefits: [
-        { ingredient: pending("Rava (Semolina)"), benefits: [
-          { benefitLabel: pending("Sustained Energy"), iconKey: "lightning-bolt" },
-          { benefitLabel: pending("Supports Hemoglobin"), iconKey: "hemoglobin" },
+        { ingredient: same("Rava (Semolina)"), benefits: [
+          { benefitLabel: t("Sustained Energy", "Energy ని ఇస్తుంది"), iconKey: "lightning-bolt" },
+          { benefitLabel: t("Supports Hemoglobin", "Hemoglobin ని పెంచుతుంది"), iconKey: "hemoglobin" },
         ] },
-        { ingredient: pending("Mixed Vegetables"), benefits: [
-          { benefitLabel: pending("Gut Health"), iconKey: "stomach" },
-          { benefitLabel: pending("Supports Hemoglobin"), iconKey: "hemoglobin" },
+        { ingredient: same("Mixed Vegetables"), benefits: [
+          { benefitLabel: t("Gut Health", "Gut health కి మంచిది"), iconKey: "stomach" },
+          { benefitLabel: t("Supports Hemoglobin", "Hemoglobin ని పెంచుతుంది"), iconKey: "hemoglobin" },
         ] },
       ],
       groceryListAvailable: true,
     },
     nightDrink: {
-      name: pending("Tulasi Tea"),
+      name: t("Tulasi Tea", "తులసి టీ"),
       imageUrl: imgTulasiTea,
-      tips: pending("Boil tulasi leaves in water for 5 minutes, strain, and drink warm."),
-      precautions: pending("Avoid using mobile phones or watching TV after 9:30 PM."),
+      tips: t("Boil tulasi leaves in water for 5 minutes, strain, and drink warm.", "తులసి ఆకులను నీటిలో 5 minutes మరిగించి, వడకట్టి వెచ్చగా తాగండి"),
+      precautions: t("Avoid using mobile phones or watching TV after 9:30 PM.", "రాత్రి 9:30 PM తర్వాత మొబైల్ ఫోన్ లేదా టీవీ వాడకండి.."),
       nutritionalBenefits: [
-        { ingredient: pending("Tulasi Tea"), benefits: [
-          { benefitLabel: pending("Immunity"), iconKey: "shield" },
-          { benefitLabel: pending("Antioxidant Protection"), iconKey: "healthy-food" },
-          { benefitLabel: pending("Relaxation"), iconKey: "meditation" },
+        { ingredient: same("Tulasi Tea"), benefits: [
+          { benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" },
+          { benefitLabel: same("Antioxidant Protection"), iconKey: "healthy-food" },
+          { benefitLabel: t("Relaxation", "Relax గా ఉంటుంది."), iconKey: "meditation" },
         ] },
       ],
       groceryListAvailable: true,
@@ -1297,7 +1299,7 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       precautions: t("For people with Diabetes, watch your seed portion size.", "Diabetes ఉన్నవారు quantity ని జాగ్రత్తగా చూసుకోవాలి"),
       nutritionalBenefits: [
         { ingredient: same("Pumpkin Seeds"), benefits: [{ benefitLabel: t("Immunity", "Immunity ని పెంచుతుంది"), iconKey: "shield" }] },
-        { ingredient: same("Sunflower Seeds"), benefits: [{ benefitLabel: same("Antioxidant Protection"), iconKey: "healthy-food" }] },
+        { ingredient: same("Sunflower Seeds"), benefits: [{ benefitLabel: same("Antioxidant Protection"), iconKey: "healthy-food" }], visibleLanguages: ["English"] },
         { ingredient: same("Walnuts"), benefits: [{ benefitLabel: t("Heart Health", "Heart health కి మంచిది"), iconKey: "heart" }] },
       ],
       recommendedQuantity: [
@@ -1315,7 +1317,7 @@ export const CURATED_CONTENT_BY_DATE: CuratedContentByDate = {
       ),
       // Telugu detail screen (1398:34561) has no Precautions section for this meal — reusing
       // the English text for both languages rather than dropping real English content.
-      precautions: same("For People with Lactose Intolerance, start with small sips to check your tolerance."),
+      precautions: ("For People with Lactose Intolerance, start with small sips to check your tolerance."),
       nutritionalBenefits: [
         { ingredient: same("Buttermilk"), benefits: [
           { benefitLabel: t("Muscle Recovery", "Muscle health ని పెంచుతుంది"), iconKey: "muscle-health" },
