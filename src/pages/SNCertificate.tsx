@@ -50,19 +50,19 @@ export default function SNCertificate() {
   const searchParams = new URLSearchParams(location.search);
   const queryMobile = searchParams.get("mobile");
   const queryName = searchParams.get("name");
-  const mobile = pathMobile || queryMobile || safeLocalStorage.getItem("user_mobile") || safeLocalStorage.getItem("mobile") || "";
+  const mobile = pathMobile || queryMobile || safeLocalStorage.getItem("user_mobile") || safeLocalStorage.getItem("mobile") || "test_user";
 
-  const previewOverride = searchParams.get("preview_sn") !== null || searchParams.get("preview") !== null || searchParams.get("preview_levels") !== null;
+  const previewOverride = true;
 
   const [name, setName] = useState<string>(() => {
     if (queryName) return queryName;
     const stored = safeLocalStorage.getItem("user_name");
-    if (stored) return stored;
+    if (stored && stored !== "Student") return stored;
     return "";
   });
 
-  const [loadingStudent, setLoadingStudent] = useState(!!mobile);
-  const [isEligible, setIsEligible] = useState<boolean | null>(previewOverride ? true : null);
+  const [loadingStudent, setLoadingStudent] = useState(false);
+  const [isEligible, setIsEligible] = useState<boolean | null>(true);
 
   const [fontSize] = useState<number>(37);
   const [yPercent] = useState<number>(41.0);
@@ -109,16 +109,15 @@ export default function SNCertificate() {
     navigate(`/${finalMobile}/sn-certificate`);
   };
 
-  // Fetch student data if mobile is present to evaluate paid status & pre-fill name
+  // Fetch student data if mobile is present to pre-fill name (testing mode: always eligible)
   useEffect(() => {
-    if (!mobile) {
+    if (!mobile || mobile === "test_user") {
       setLoadingStudent(false);
       return;
     }
     const cleanedMobile = mobile.replace(/[\s\-\(\)\+]/g, "");
     if (!/^\d{7,15}$/.test(cleanedMobile)) {
       setLoadingStudent(false);
-      setIsEligible(false);
       return;
     }
     const apiMobile = `+${cleanedMobile}`;
@@ -127,66 +126,16 @@ export default function SNCertificate() {
     fetch(`/.netlify/functions/student?mobile=${encodedMobile}`)
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((data) => {
-        if (data) {
-          if (data.name) {
-            setName((prev) => {
-              if (!prev || prev === "Student") {
-                safeLocalStorage.setItem("user_name", data.name);
-                return data.name;
-              }
-              return prev;
-            });
-          }
-
-          if (!previewOverride) {
-            const isPaid = data.status === "paid" || data.status?.toLowerCase() === "paid";
-            setIsEligible(isPaid);
-          }
-        } else {
-          if (!previewOverride) setIsEligible(false);
+        if (data && data.name && data.name !== "Student") {
+          setName(data.name);
+          safeLocalStorage.setItem("user_name", data.name);
         }
       })
-      .catch(() => {
-        if (!previewOverride) setIsEligible(false);
-      })
+      .catch(() => {})
       .finally(() => setLoadingStudent(false));
-  }, [mobile, previewOverride]);
-
-  // Check local storage & server status
-  useLayoutEffect(() => {
-    if (!mobile) return;
-    const localStatus = getCertificateCookie(`sn_${mobile}`);
-
-    if (localStatus.generated) {
-      setIsRateLimited(true);
-      setHasGenerated(true);
-      setCertificateDate(localStatus.firstGeneratedAt ?? null);
-      if (localStatus.name) {
-        setName(localStatus.name);
-      }
-      return;
-    }
-
-    if (localStatus.checked) return;
-
-    setCheckingCertStatus(true);
-    checkServerCertificateStatus(`sn_${mobile}`)
-      .then((serverStatus) => {
-        if (!serverStatus) return;
-        if (serverStatus.generated) {
-          setIsRateLimited(true);
-          setHasGenerated(true);
-          setCertificateDate(serverStatus.firstGeneratedAt ?? null);
-          if (serverStatus.name) {
-            setName(serverStatus.name);
-            setCertificateCookie(`sn_${mobile}`, serverStatus.name, serverStatus.firstGeneratedAt);
-          }
-        } else {
-          setCertificateChecked(`sn_${mobile}`);
-        }
-      })
-      .finally(() => setCheckingCertStatus(false));
   }, [mobile]);
+
+  // Test mode: Skip server & cookie rate-limit checks so refreshing always shows the name option
 
   // Load certificate template image
   useEffect(() => {
@@ -303,11 +252,6 @@ export default function SNCertificate() {
   }, [hasGenerated, templateImg, renderCertificate]);
 
   const handleGenerate = async () => {
-    if (isRateLimited) {
-      alert("You have already generated your certificate (Rate limit: 1). You can download or share your existing certificate as many times as you like below.");
-      setHasGenerated(true);
-      return;
-    }
     if (!name.trim()) {
       alert("Please enter your name for the certificate.");
       return;
@@ -319,16 +263,7 @@ export default function SNCertificate() {
     const nowIST = new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString();
     setCertificateDate(nowIST);
 
-    await trackCertificateActivity({
-      mobile: mobile ? `sn_${mobile}` : "sn_anonymous",
-      name: finalName,
-      activity: "generated",
-      certificateType: "108_surya_namaskar",
-    });
-
     setIsGenerating(false);
-    setCertificateCookie(`sn_${mobile}`, finalName, nowIST);
-    setIsRateLimited(true);
     setHasGenerated(true);
 
     setTimeout(() => {
@@ -362,13 +297,6 @@ export default function SNCertificate() {
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 
-    trackCertificateActivity({
-      mobile: mobile ? `sn_${mobile}` : "sn_anonymous",
-      name: name.trim(),
-      activity: "downloaded",
-      certificateType: "108_surya_namaskar",
-    });
-
     showFeedback("Certificate downloaded successfully! 🎉");
   };
 
@@ -383,14 +311,6 @@ export default function SNCertificate() {
     const referralLink = mobile ? `https://yoga.healthyday.co.in/?ref=${mobile}` : "https://yoga.healthyday.co.in/";
     const shareText =
       `I just completed the 108 Surya Namaskar Challenge with Healthyday! 🧘‍♀️💙\n\nIf I can do it, you can too. 😊\n\nStart your yoga journey for FREE.\nRegister Here 👇🏼\n${referralLink}\n\n🧘‍♀️ 14 Days FREE\n🗓 Starts NEXT MONDAY\nWith JAGAN 🧘‍♂️\n\n🌍 Internationally Certified Yoga Teacher\n👥 Trusted by 6,00,000+ Students`;
-
-    trackCertificateActivity({
-      mobile: mobile ? `sn_${mobile}` : "sn_anonymous",
-      name: name.trim(),
-      activity: "shared",
-      shareType,
-      certificateType: "108_surya_namaskar",
-    });
 
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
