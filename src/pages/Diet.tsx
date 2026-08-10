@@ -22,12 +22,12 @@ const Diet = () => {
   const timeOverride = searchParams.get("time");
   const languageOverride = searchParams.get("language");
   const previewMode = searchParams.get("preview");
+  const dateParam = searchParams.get("date");
   const initialTab = parseInt(searchParams.get("tab") ?? "0", 10);
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [studentData, setStudentData] = useState<any>(null);
-  const [activeTabIdx, setActiveTabIdx] = useState(Number.isFinite(initialTab) && initialTab >= 0 && initialTab <= 4 ? initialTab : 0);
 
   useEffect(() => {
     // Same `?preview=paid` canned-data idiom as AttendancePageWeekly.tsx — lets QA (and this
@@ -103,6 +103,20 @@ const Diet = () => {
     return { dateKey: plan.dateKey, label, dayOfMonth: dd, disabled: plan.disabled };
   });
 
+  // `?date=DD` (2-digit day-of-month, e.g. "?date=11") targets an absolute calendar date rather
+  // than a sliding-window tab index — meant for links (e.g. WhatsApp reminders) sent one day and
+  // opened another. Day-of-month alone is unambiguous here since the visible window is only 5
+  // consecutive days, so no two tabs ever share the same day-of-month. Wins over `tab` when both
+  // are present. If the target date has scrolled out of the window (link opened too late), falls
+  // straight through to the `tab` param / "Today" like a normal visit.
+  const dayParam = dateParam !== null ? parseInt(dateParam, 10) : NaN;
+  const dateTabIdx = Number.isFinite(dayParam) ? tabs.findIndex((t) => Number(t.dayOfMonth) === dayParam) : -1;
+
+  const [activeTabIdx, setActiveTabIdx] = useState(() => {
+    if (dateTabIdx !== -1) return dateTabIdx;
+    return Number.isFinite(initialTab) && initialTab >= 0 && initialTab <= 4 ? initialTab : 0;
+  });
+
   const activePlan = dayPlans[activeTabIdx] ?? dayPlans[0];
 
   // Keeps the URL's `tab` param in sync with the selected date tab via `replace` (never a new
@@ -113,6 +127,7 @@ const Diet = () => {
     setActiveTabIdx(idx);
     const params = new URLSearchParams(location.search);
     params.set("tab", String(idx));
+    params.delete("date"); // manual tab switch supersedes the one-shot `?date=` link target
     navigate({ pathname: location.pathname, search: params.toString() }, { replace: true });
   };
 
