@@ -29,7 +29,17 @@
       "Bash(git stash *)",
       "Bash(npx vitest *)",
       "mcp__netlify__netlify-project-services-reader",
-      "mcp__figma__get_metadata"
+      "mcp__figma__get_metadata",
+      "Bash(magick walnuts_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/soaked-walnuts.webp)",
+      "Bash(magick warmmilk_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/warm-milk.webp)",
+      "Bash(magick paneerbhurji_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/paneer-vegetable-bhurji-phulka.webp)",
+      "Bash(magick appleraisins_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/apple-soaked-black-raisins.webp)",
+      "Bash(magick steamedrice_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/steamed-rice-drumsticks-dal-french-beans-curry-curd.webp)",
+      "Bash(magick raisins_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/soaked-raisins.webp)",
+      "Bash(magick poha_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/vegetable-poha-peanuts-curry-leaves.webp)",
+      "Bash(magick ricerasam_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/rice-rasam-soya-chunks-curry.webp)",
+      "Bash(magick laddu_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/jaggery-nuts-laddu.webp)",
+      "Bash(magick tomatorice_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/tomato-rice-soya-chunks-curry.webp)"
     ],
     "defaultMode": "bypassPermissions",
     "additionalDirectories": [
