@@ -35,7 +35,7 @@ const getDynamicThumbnail = (link: string, fallbackUrl: string) => {
 
 /**
  * Builds the list of bonus sessions a paid student is eligible for today (Face Yoga,
- * Diet, Breath to Heal), then picks whichever one's active window (getBonusWindowStart(startMin)
+ * Breath to Heal), then picks whichever one's active window (getBonusWindowStart(startMin)
  * to startMin+45) matches the current time — or null if none are active right now.
  */
 export function getActivePaidBonusSession({
@@ -59,12 +59,6 @@ export function getActivePaidBonusSession({
       const link = getApiLink(sessionLinks, "face_yoga", langKey, "https://join.healthyday.co.in/healthyface_eng");
       eligible.push({ name: "Face Yoga Session", fullName: "Face Yoga Session at 11:30 AM", startMin: 690, sessionLink: link, thumbnail: getDynamicThumbnail(link, faceYogaPaidThumb), code: "face_yoga" });
     }
-  }
-
-  // 2. Diet Session (Daily at 8:00 PM IST -> 1200 min). Eligible: 12 months only.
-  if (is12Month) {
-    const link = getApiLink(sessionLinks, "paid_diet", langKey, paidLang === "English" ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet");
-    eligible.push({ name: "Diet Session", fullName: "Diet Session at 8:00 PM", startMin: 1200, sessionLink: link, thumbnail: getDynamicThumbnail(link, ytThumb("SyjnCjDtNS8")), code: "paid_diet" });
   }
 
   // 3. Breath to Heal (Daily at 9:00 PM IST -> 1260 min). Eligible: 6 & 12 months, excludes English on Sundays.
