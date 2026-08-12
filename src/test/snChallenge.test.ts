@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { getSnChallengeDay, isRegularSessionLiveDuringSn, toIstIsoDateKey } from "@/data/snChallenge";
+import { getPreviousIstIsoDateKey, getSnChallengeDay, isRegularSessionLiveDuringSn, toIstIsoDateKey } from "@/data/snChallenge";
 
 const sessionLinks = [
   { session_date: "2026-08-06", language: "english", session_code: "108sn_day1", link: "https://youtube.com/day1-en" },
@@ -25,6 +25,11 @@ describe("snChallenge", () => {
   it("ignores non-SN session codes", () => {
     const links = [{ session_date: "2026-08-06", language: "english", session_code: "daily_morning", link: "x" }];
     expect(getSnChallengeDay(links, "2026-08-06", "english")).toBeNull();
+  });
+
+  it("computes the previous calendar day, including across a month boundary", () => {
+    expect(getPreviousIstIsoDateKey("2026-08-07")).toBe("2026-08-06");
+    expect(getPreviousIstIsoDateKey("2026-08-01")).toBe("2026-07-31");
   });
 
   it("converts an IST-shifted Date to its calendar-date key via UTC getters", () => {

@@ -30,6 +30,13 @@ export function toIstIsoDateKey(nowIST: Date): string {
   return `${yyyy}-${mm}-${dd}`;
 }
 
+/** Returns the calendar day immediately before `dateKey` ("YYYY-MM-DD"), for looking up
+ *  yesterday's SN session before today's 4:30 AM start time. */
+export function getPreviousIstIsoDateKey(dateKey: string): string {
+  const [y, m, d] = dateKey.split("-").map(Number);
+  return toIstIsoDateKey(new Date(Date.UTC(y, m - 1, d - 1)));
+}
+
 /** 4:30 AM - 9:29 AM IST — the SN session's real live/redirect window. Exported (rather than
  *  living only inside SnChallengeCard) so IndexPaid.tsx can compute the same boolean once and
  *  use it to decide section order, instead of re-deriving it a second time and risking drift. */

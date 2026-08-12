@@ -7,7 +7,7 @@ import { getCurrentMinutesIST } from "@/lib/utils";
 import { getActivePaidBonusSession, isRegularSessionLive } from "@/lib/paidBonusSessions";
 import { getPlanRenewalInfo } from "@/lib/planRenewal";
 import { getWeeklyAttendance } from "@/lib/weeklyAttendance";
-import { getSnChallengeDay, isRegularSessionLiveDuringSn, isSnLive, toIstIsoDateKey } from "@/data/snChallenge";
+import { getPreviousIstIsoDateKey, getSnChallengeDay, isRegularSessionLiveDuringSn, isSnLive, SN_LIVE_START_MIN, toIstIsoDateKey } from "@/data/snChallenge";
 import { PaidBonusSessionCard } from "@/components/PaidBonusSessionCard";
 import { PaidLiveSessionCard } from "@/components/PaidLiveSessionCard";
 import { SnChallengeCard } from "@/components/SnChallengeCard";
@@ -85,9 +85,16 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
   // collide with those. No hardcoded dates/links on the frontend — this auto-reverts once the
   // backend stops publishing new 108sn_day entries.
   const previewSnDate = searchParams.get("previewSnDate");
-  const snDateKey = previewSnDate || toIstIsoDateKey(nowIST);
+  const todaySnDateKey = previewSnDate || toIstIsoDateKey(nowIST);
+  // Before the 4:30 AM start time, today's session hasn't happened yet, so looking it up by
+  // today's date would incorrectly show it as "not live yet" instead of not showing at all.
+  // Look up yesterday's date instead: on campaign day 2/3/4 this surfaces yesterday's session
+  // as a (non-live) recording; on day 1 there is no prior 108sn_day entry, so it naturally
+  // resolves to null and the dashboard looks completely normal, per product spec.
+  const beforeSnStart = totalMin < SN_LIVE_START_MIN;
+  const snDateKey = beforeSnStart ? getPreviousIstIsoDateKey(todaySnDateKey) : todaySnDateKey;
   const snDay = getSnChallengeDay(sessionLinks, snDateKey, langKey);
-  const snIsLive = isSnLive(totalMin);
+  const snIsLive = !beforeSnStart && isSnLive(totalMin);
   // On campaign days the "Regular Session" block's live windows start 15 minutes earlier
   // (4:30 AM / 3:30 PM, matching the SN card's own start and the campaign's earlier broadcast)
   // — explicit product correction. Non-campaign days/students keep the real, unwidened window.
