@@ -93,14 +93,6 @@ function extractYouTubeId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-/** Remove "Healthyday Yoga Telugu", "Healthyday Yoga English", etc. from session names */
-function cleanSessionName(name: string): string {
-  return name
-    .replace(/\|?\s*Healthyday\s+Yoga\s+(Telugu|English)\s*/gi, "")
-    .replace(/\|\s*$/, "")
-    .trim();
-}
-
 /**
  * Helper to determine a rough timestamp for a session based on its date and whether
  * it's a morning or evening session. Used to sort recordings by most recent.
@@ -533,64 +525,32 @@ const AllRecordings = () => {
     });
   }
 
-  // Card 5: 108 Suryanamaskar Challenge — Telugu only, only shown when API has an active session
-  if (!isEnglish) {
-    // Match any session_code starting with "108sn_"
-    const snSession = findSessionLink(
-      sessionLinks,
-      sessionLinks
-        .filter((s) => s.session_code.startsWith("108sn_") && s.language === lang)
-        .map((s) => s.session_code),
-      lang
-    );
-    if (snSession) {
-      const snVideoId = extractYouTubeId(snSession.link);
-      const snTitle = snSession.session_name
-        ? cleanSessionName(snSession.session_name)
-        : "108 Suryanamaskar Challenge";
-      classRecordings.push({
-        title: snTitle,
-        subtitle: "108 Suryanamaskar Challenge",
-        thumbnail: snVideoId
-          ? `https://img.youtube.com/vi/${snVideoId}/mqdefault.jpg`
-          : imgLanguageTelugu,
-        link: snSession.link,
-        accessTill: formatExpiry(snSession.expiry_by) || "Always available",
-      });
-    }
-  }
-
-  // "108 Surya Namaskar Challenge" section — English, all plan types (Figma node 1312:4736,
-  // "All recordings"). Unlike the Telugu card above, this is its own titled section (not merged
-  // into classRecordings) with one row per day, titled simply "Day {N}" (no SN-count text).
-  // Rows come *only* from whatever `108sn_day{N}` entries the API actually has right now (per
-  // explicit product instruction) — no static per-day list is iterated, so a day that hasn't
-  // happened yet simply doesn't render a row.
+  // "108 Surya Namaskar Challenge" section (Figma node 1312:4736, "All recordings") — shown for
+  // whichever language the student is on (English or Telugu), one row per day, titled simply
+  // "Day {N}". Rows come *only* from whatever `108sn_day{N}` entries the API actually has right
+  // now for this student's language — no static per-day list or hardcoded date/link, so a day
+  // that hasn't happened yet simply doesn't render a row, and the section disappears entirely
+  // once the backend stops publishing new entries.
   const fmtMonthDaySession = (sessionDate: string): string => {
     const [y, m, d] = sessionDate.split("-").map(Number);
     const date = new Date(Date.UTC(y, m - 1, d));
     return `${MONTH_NAMES_SHORT[date.getUTCMonth()]} ${date.getUTCDate()}${ordinalSuffix(date.getUTCDate())} Session`;
   };
-  // Widened from 6/12-month-only to every English paid plan (3/6/12 months) — same eligibility
-  // shape as isSnChallengeEligible in src/data/snChallenge.ts, per explicit product correction.
-  const isSnEligible = isEnglish;
-  const snChallengeRecordings = isSnEligible
-    ? sessionLinks
-        .filter((s) => s.language === "english" && /^108sn_day\d+$/.test(s.session_code))
-        .map((s) => {
-          const dayNumber = parseInt(s.session_code.replace("108sn_day", ""), 10);
-          const videoId = extractYouTubeId(s.link);
-          return {
-            dayNumber,
-            title: `Day ${dayNumber}`,
-            subtitle: fmtMonthDaySession(s.session_date),
-            thumbnail: videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : imgLanguageEnglish,
-            link: s.link,
-            accessTill: formatExpiry(s.expiry_by) || "Always available",
-          };
-        })
-        .sort((a, b) => a.dayNumber - b.dayNumber)
-    : [];
+  const snChallengeRecordings = sessionLinks
+    .filter((s) => s.language === lang && /^108sn_day\d+$/.test(s.session_code))
+    .map((s) => {
+      const dayNumber = parseInt(s.session_code.replace("108sn_day", ""), 10);
+      const videoId = extractYouTubeId(s.link);
+      return {
+        dayNumber,
+        title: `Day ${dayNumber}`,
+        subtitle: fmtMonthDaySession(s.session_date),
+        thumbnail: videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : (isEnglish ? imgLanguageEnglish : imgLanguageTelugu),
+        link: s.link,
+        accessTill: formatExpiry(s.expiry_by) || "Always available",
+      };
+    })
+    .sort((a, b) => a.dayNumber - b.dayNumber);
 
   return (
     <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>

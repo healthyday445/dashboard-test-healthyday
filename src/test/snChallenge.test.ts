@@ -1,28 +1,30 @@
 import { describe, it, expect } from "vitest";
-import { getSnChallengeDay, isRegularSessionLiveDuringSn, isSnChallengeEligible, toIstIsoDateKey } from "@/data/snChallenge";
+import { getSnChallengeDay, isRegularSessionLiveDuringSn, toIstIsoDateKey } from "@/data/snChallenge";
+
+const sessionLinks = [
+  { session_date: "2026-08-06", language: "english", session_code: "108sn_day1", link: "https://youtube.com/day1-en" },
+  { session_date: "2026-08-06", language: "telugu", session_code: "108sn_day1", link: "https://youtube.com/day1-te" },
+  { session_date: "2026-08-07", language: "english", session_code: "108sn_day2", link: "https://youtube.com/day2-en" },
+  { session_date: "2026-08-07", language: "telugu", session_code: "108sn_day2", link: "https://youtube.com/day2-te" },
+];
 
 describe("snChallenge", () => {
-  it("resolves each campaign day to its dayNumber/snCount", () => {
-    expect(getSnChallengeDay("2026-08-06")).toEqual(expect.objectContaining({ dayNumber: 1, snCount: 24 }));
-    expect(getSnChallengeDay("2026-08-07")).toEqual(expect.objectContaining({ dayNumber: 2, snCount: 48 }));
-    expect(getSnChallengeDay("2026-08-08")).toEqual(expect.objectContaining({ dayNumber: 3, snCount: 72 }));
-    expect(getSnChallengeDay("2026-08-09")).toEqual(expect.objectContaining({ dayNumber: 4, snCount: 108 }));
+  it("resolves the day/link for a matching date + language from /session-links", () => {
+    expect(getSnChallengeDay(sessionLinks, "2026-08-06", "english")).toEqual({ dayNumber: 1, youtubeLink: "https://youtube.com/day1-en" });
+    expect(getSnChallengeDay(sessionLinks, "2026-08-07", "telugu")).toEqual({ dayNumber: 2, youtubeLink: "https://youtube.com/day2-te" });
   });
 
-  it("returns null just before the campaign window", () => {
-    expect(getSnChallengeDay("2026-08-05")).toBeNull();
+  it("returns null when the API has no entry for that date", () => {
+    expect(getSnChallengeDay(sessionLinks, "2026-08-08", "english")).toBeNull();
   });
 
-  it("returns null just after the campaign window (auto-revert)", () => {
-    expect(getSnChallengeDay("2026-08-10")).toBeNull();
+  it("returns null when the API has no entry for that language on an otherwise-live date", () => {
+    expect(getSnChallengeDay([{ session_date: "2026-08-06", language: "telugu", session_code: "108sn_day1", link: "x" }], "2026-08-06", "english")).toBeNull();
   });
 
-  it("is eligible for every English paid plan (3/6/12 months)", () => {
-    expect(isSnChallengeEligible({ language: "English" })).toBe(true);
-  });
-
-  it("is not eligible for Telugu accounts", () => {
-    expect(isSnChallengeEligible({ language: "Telugu" })).toBe(false);
+  it("ignores non-SN session codes", () => {
+    const links = [{ session_date: "2026-08-06", language: "english", session_code: "daily_morning", link: "x" }];
+    expect(getSnChallengeDay(links, "2026-08-06", "english")).toBeNull();
   });
 
   it("converts an IST-shifted Date to its calendar-date key via UTC getters", () => {
