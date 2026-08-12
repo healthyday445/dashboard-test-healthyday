@@ -448,9 +448,6 @@ const AllRecordings = () => {
   // Card 3: Breath to Heal — look for b2h or b2h_eng
   const b2hSession = findSessionLink(sessionLinks, ["b2h", "b2h_eng"], lang);
 
-  // Card 4: Diet Routine — look for paid_diet or diet_eng
-  const dietSession = findSessionLink(sessionLinks, ["paid_diet", "diet_eng"], lang);
-
   const yesterday = new Date(nowISTFallback);
   yesterday.setUTCDate(yesterday.getUTCDate() - 1);
   const yesterdayLabel = fmtISTDate(yesterday);
@@ -462,7 +459,6 @@ const AllRecordings = () => {
   const yogaDateLabel = yogaSession ? fmtSessionDate(yogaSession.session_date) : getFallbackDate(6); // 6 AM
   const morningYogaDateLabel = morningYogaSession ? fmtSessionDate(morningYogaSession.session_date) : getFallbackDate(6);
   const b2hDateLabel = b2hSession ? fmtSessionDate(b2hSession.session_date) : getFallbackDate(21); // 9 PM
-  const dietDateLabel = dietSession ? fmtSessionDate(dietSession.session_date) : getFallbackDate(20); // 8 PM
 
   // --- Helper: get YouTube thumbnail or fallback to static ---
   const ytThumb = (link: string | undefined, fallback: string): string => {
@@ -520,7 +516,6 @@ const AllRecordings = () => {
   }
 
   const b2hFallbackSession = sessionLinks.find((s) => (s.session_code === "b2h" || s.session_code === "b2h_eng") && s.language === lang);
-  const dietFallbackSession = sessionLinks.find((s) => (s.session_code === "paid_diet" || s.session_code === "diet_eng") && s.language === lang);
 
   // Breath to Heal — 6-month & 12-month plans only
   if (hasB2hAccess) {
@@ -530,17 +525,6 @@ const AllRecordings = () => {
       thumbnail: ytThumb(b2hSession?.link || b2hFallbackSession?.link, `https://img.youtube.com/vi/SyjnCjDtNS8/hqdefault.jpg`),
       link: b2hSession?.link || b2hFallbackSession?.link || (isEnglish ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession"),
       accessTill: (b2hSession && formatExpiry(b2hSession.expiry_by)) || (b2hFallbackSession && formatExpiry(b2hFallbackSession.expiry_by)) || `Access till 8:30 PM, ${getFallbackExpiryDate(21)}`,
-    });
-  }
-
-  // Diet Session — 12-month
-  if (is12Month) {
-    classRecordings.push({
-      title: `${dietDateLabel} Healthyday Diet Routine`,
-      subtitle: "Daily at 8:00 PM",
-      thumbnail: ytThumb(dietSession?.link || dietFallbackSession?.link, `https://img.youtube.com/vi/SyjnCjDtNS8/hqdefault.jpg`),
-      link: dietSession?.link || dietFallbackSession?.link || (isEnglish ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet"),
-      accessTill: (dietSession && formatExpiry(dietSession.expiry_by)) || (dietFallbackSession && formatExpiry(dietFallbackSession.expiry_by)) || `Access till 7:30 PM, ${getFallbackExpiryDate(20)}`,
     });
   }
 
