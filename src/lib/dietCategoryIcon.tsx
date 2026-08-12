@@ -19,6 +19,9 @@ import warmthIcon from "@/assets/diet/icons/warmth.webp";
 import antiInflammatoryIcon from "@/assets/diet/icons/anti-inflammatory.webp";
 import nutrientAbsorptionIcon from "@/assets/diet/icons/nutrient-absorption.webp";
 import oralHealthIcon from "@/assets/diet/icons/oral-health.webp";
+import leafIcon from "@/assets/diet/icons/leaf.webp";
+import allergenFreeIcon from "@/assets/diet/icons/allergen-free.webp";
+import caringHandIcon from "@/assets/diet/icons/caring-hand.webp";
 
 /**
  * Placeholder visuals for the diet feature until real per-dish photography exists.
@@ -124,6 +127,9 @@ const BENEFIT_ICONS: Record<string, string> = {
   "anti-inflammatory": antiInflammatoryIcon,
   "nutrient-absorption": nutrientAbsorptionIcon,
   "oral-health": oralHealthIcon,
+  leaf: leafIcon,
+  "allergen-free": allergenFreeIcon,
+  "caring-hand": caringHandIcon,
 };
 
 /** Real icon asset URL for a `nutritionalBenefits[].iconKey` value — unrecognized keys
