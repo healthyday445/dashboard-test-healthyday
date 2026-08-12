@@ -93,14 +93,6 @@ function extractYouTubeId(url: string): string | null {
   return match ? match[1] : null;
 }
 
-/** Remove "Healthyday Yoga Telugu", "Healthyday Yoga English", etc. from session names */
-function cleanSessionName(name: string): string {
-  return name
-    .replace(/\|?\s*Healthyday\s+Yoga\s+(Telugu|English)\s*/gi, "")
-    .replace(/\|\s*$/, "")
-    .trim();
-}
-
 /**
  * Helper to determine a rough timestamp for a session based on its date and whether
  * it's a morning or evening session. Used to sort recordings by most recent.
@@ -256,6 +248,7 @@ const DateBadge = ({ label }: { label: string }) => (
 );
 
 import { safeSessionStorage } from "@/lib/storage";
+import { getCurrentMinutesIST } from "@/lib/utils";
 
 const AllRecordings = () => {
   const navigate = useNavigate();
@@ -312,11 +305,28 @@ const AllRecordings = () => {
     fetchData();
   }, [mobile, previewMode]);
 
-  // Fetch session links from API
+  // Fetch session links from API. `previewSnDate`/`time` (see PREVIEWS.md) are forwarded to the
+  // backend's `date`/`time` params, same as IndexPaid.tsx, so `/session-link/active` returns
+  // links "as of" that moment instead of real "now" — without this, previewing a future SN
+  // Challenge day here would show no rows since the backend excludes sessions whose session_date
+  // hasn't happened yet. `time` is converted from this app's "8.00am"-style format to the
+  // backend's "HH:MM" IST via getCurrentMinutesIST + a minutes-to-"HH:MM" formatter.
   useEffect(() => {
+    const previewSnDate = searchParams.get("previewSnDate");
+    const timeParam = searchParams.get("time");
+    const qs = new URLSearchParams();
+    if (previewSnDate) qs.set("date", previewSnDate);
+    if (timeParam) {
+      const totalMin = getCurrentMinutesIST(timeParam);
+      const hh = String(Math.floor(totalMin / 60) % 24).padStart(2, "0");
+      const mm = String(totalMin % 60).padStart(2, "0");
+      qs.set("time", `${hh}:${mm}`);
+    }
+    const url = `/.netlify/functions/session-links${qs.toString() ? `?${qs.toString()}` : ""}`;
+
     const fetchSessionLinks = async () => {
       try {
-        const res = await fetch("/.netlify/functions/session-links");
+        const res = await fetch(url);
         if (!res.ok) throw new Error("Failed to fetch session links");
         const json = await res.json();
         setSessionLinks(json.data || []);
@@ -329,7 +339,8 @@ const AllRecordings = () => {
       }
     };
     fetchSessionLinks();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
 
   if (loading) {
     return (
@@ -437,9 +448,6 @@ const AllRecordings = () => {
   // Card 3: Breath to Heal — look for b2h or b2h_eng
   const b2hSession = findSessionLink(sessionLinks, ["b2h", "b2h_eng"], lang);
 
-  // Card 4: Diet Routine — look for paid_diet or diet_eng
-  const dietSession = findSessionLink(sessionLinks, ["paid_diet", "diet_eng"], lang);
-
   const yesterday = new Date(nowISTFallback);
   yesterday.setUTCDate(yesterday.getUTCDate() - 1);
   const yesterdayLabel = fmtISTDate(yesterday);
@@ -451,7 +459,6 @@ const AllRecordings = () => {
   const yogaDateLabel = yogaSession ? fmtSessionDate(yogaSession.session_date) : getFallbackDate(6); // 6 AM
   const morningYogaDateLabel = morningYogaSession ? fmtSessionDate(morningYogaSession.session_date) : getFallbackDate(6);
   const b2hDateLabel = b2hSession ? fmtSessionDate(b2hSession.session_date) : getFallbackDate(21); // 9 PM
-  const dietDateLabel = dietSession ? fmtSessionDate(dietSession.session_date) : getFallbackDate(20); // 8 PM
 
   // --- Helper: get YouTube thumbnail or fallback to static ---
   const ytThumb = (link: string | undefined, fallback: string): string => {
@@ -509,7 +516,6 @@ const AllRecordings = () => {
   }
 
   const b2hFallbackSession = sessionLinks.find((s) => (s.session_code === "b2h" || s.session_code === "b2h_eng") && s.language === lang);
-  const dietFallbackSession = sessionLinks.find((s) => (s.session_code === "paid_diet" || s.session_code === "diet_eng") && s.language === lang);
 
   // Breath to Heal — 6-month & 12-month plans only
   if (hasB2hAccess) {
@@ -522,75 +528,32 @@ const AllRecordings = () => {
     });
   }
 
-  // Diet Session — 12-month
-  if (is12Month) {
-    classRecordings.push({
-      title: `${dietDateLabel} Healthyday Diet Routine`,
-      subtitle: "Daily at 8:00 PM",
-      thumbnail: ytThumb(dietSession?.link || dietFallbackSession?.link, `https://img.youtube.com/vi/SyjnCjDtNS8/hqdefault.jpg`),
-      link: dietSession?.link || dietFallbackSession?.link || (isEnglish ? "https://join.healthyday.co.in/diet_eng" : "https://join.healthyday.co.in/diet"),
-      accessTill: (dietSession && formatExpiry(dietSession.expiry_by)) || (dietFallbackSession && formatExpiry(dietFallbackSession.expiry_by)) || `Access till 7:30 PM, ${getFallbackExpiryDate(20)}`,
-    });
-  }
-
-  // Card 5: 108 Suryanamaskar Challenge — Telugu only, only shown when API has an active session
-  if (!isEnglish) {
-    // Match any session_code starting with "108sn_"
-    const snSession = findSessionLink(
-      sessionLinks,
-      sessionLinks
-        .filter((s) => s.session_code.startsWith("108sn_") && s.language === lang)
-        .map((s) => s.session_code),
-      lang
-    );
-    if (snSession) {
-      const snVideoId = extractYouTubeId(snSession.link);
-      const snTitle = snSession.session_name
-        ? cleanSessionName(snSession.session_name)
-        : "108 Suryanamaskar Challenge";
-      classRecordings.push({
-        title: snTitle,
-        subtitle: "108 Suryanamaskar Challenge",
-        thumbnail: snVideoId
-          ? `https://img.youtube.com/vi/${snVideoId}/mqdefault.jpg`
-          : imgLanguageTelugu,
-        link: snSession.link,
-        accessTill: formatExpiry(snSession.expiry_by) || "Always available",
-      });
-    }
-  }
-
-  // "108 Surya Namaskar Challenge" section — English, all plan types (Figma node 1312:4736,
-  // "All recordings"). Unlike the Telugu card above, this is its own titled section (not merged
-  // into classRecordings) with one row per day, titled simply "Day {N}" (no SN-count text).
-  // Rows come *only* from whatever `108sn_day{N}` entries the API actually has right now (per
-  // explicit product instruction) — no static per-day list is iterated, so a day that hasn't
-  // happened yet simply doesn't render a row.
+  // "108 Surya Namaskar Challenge" section (Figma node 1312:4736, "All recordings") — shown for
+  // whichever language the student is on (English or Telugu), one row per day, titled simply
+  // "Day {N}". Rows come *only* from whatever `108sn_day{N}` entries the API actually has right
+  // now for this student's language — no static per-day list or hardcoded date/link, so a day
+  // that hasn't happened yet simply doesn't render a row, and the section disappears entirely
+  // once the backend stops publishing new entries.
   const fmtMonthDaySession = (sessionDate: string): string => {
     const [y, m, d] = sessionDate.split("-").map(Number);
     const date = new Date(Date.UTC(y, m - 1, d));
     return `${MONTH_NAMES_SHORT[date.getUTCMonth()]} ${date.getUTCDate()}${ordinalSuffix(date.getUTCDate())} Session`;
   };
-  // Widened from 6/12-month-only to every English paid plan (3/6/12 months) — same eligibility
-  // shape as isSnChallengeEligible in src/data/snChallenge.ts, per explicit product correction.
-  const isSnEligible = isEnglish;
-  const snChallengeRecordings = isSnEligible
-    ? sessionLinks
-        .filter((s) => s.language === "english" && /^108sn_day\d+$/.test(s.session_code))
-        .map((s) => {
-          const dayNumber = parseInt(s.session_code.replace("108sn_day", ""), 10);
-          const videoId = extractYouTubeId(s.link);
-          return {
-            dayNumber,
-            title: `Day ${dayNumber}`,
-            subtitle: fmtMonthDaySession(s.session_date),
-            thumbnail: videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : imgLanguageEnglish,
-            link: s.link,
-            accessTill: formatExpiry(s.expiry_by) || "Always available",
-          };
-        })
-        .sort((a, b) => a.dayNumber - b.dayNumber)
-    : [];
+  const snChallengeRecordings = sessionLinks
+    .filter((s) => s.language === lang && /^108sn_day\d+$/.test(s.session_code))
+    .map((s) => {
+      const dayNumber = parseInt(s.session_code.replace("108sn_day", ""), 10);
+      const videoId = extractYouTubeId(s.link);
+      return {
+        dayNumber,
+        title: `Day ${dayNumber}`,
+        subtitle: fmtMonthDaySession(s.session_date),
+        thumbnail: videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : (isEnglish ? imgLanguageEnglish : imgLanguageTelugu),
+        link: s.link,
+        accessTill: formatExpiry(s.expiry_by) || "Always available",
+      };
+    })
+    .sort((a, b) => a.dayNumber - b.dayNumber);
 
   return (
     <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>

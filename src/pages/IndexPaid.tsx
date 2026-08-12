@@ -7,7 +7,7 @@ import { getCurrentMinutesIST } from "@/lib/utils";
 import { getActivePaidBonusSession, isRegularSessionLive } from "@/lib/paidBonusSessions";
 import { getPlanRenewalInfo } from "@/lib/planRenewal";
 import { getWeeklyAttendance } from "@/lib/weeklyAttendance";
-import { getSnChallengeDay, getSnChallengeYoutubeLink, isRegularSessionLiveDuringSn, isSnChallengeEligible, isSnLive, toIstIsoDateKey } from "@/data/snChallenge";
+import { getPreviousIstIsoDateKey, getSnChallengeDay, isRegularSessionLiveDuringSn, isSnLive, SN_LIVE_START_MIN, toIstIsoDateKey } from "@/data/snChallenge";
 import { PaidBonusSessionCard } from "@/components/PaidBonusSessionCard";
 import { PaidLiveSessionCard } from "@/components/PaidLiveSessionCard";
 import { SnChallengeCard } from "@/components/SnChallengeCard";
@@ -78,14 +78,23 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
 
   const activeBonusCard = getActivePaidBonusSession({ is6Month, is12Month, paidLang, currentDow, totalMin, sessionLinks, isTeluguFaceYogaWeek });
 
-  // 108 Surya Namaskar Challenge (2026-08-06..09, English + 6/12-month only) — temporary,
-  // purely date-gated. `?previewSnDate=YYYY-MM-DD` is a QA-only override, distinct from
-  // forcePaidDay/time/Diet's previewDate per this repo's per-feature-param convention (see
-  // PREVIEWS.md) so it can't collide with those.
+  // 108 Surya Namaskar Challenge — driven entirely by the `/session-links` API: whenever it has
+  // a `108sn_day{N}` entry for today's date and the student's language, the challenge shows.
+  // `?previewSnDate=YYYY-MM-DD` is a QA-only override, distinct from forcePaidDay/time/Diet's
+  // previewDate per this repo's per-feature-param convention (see PREVIEWS.md) so it can't
+  // collide with those. No hardcoded dates/links on the frontend — this auto-reverts once the
+  // backend stops publishing new 108sn_day entries.
   const previewSnDate = searchParams.get("previewSnDate");
-  const snDateKey = previewSnDate || toIstIsoDateKey(nowIST);
-  const snDay = isSnChallengeEligible(studentData) ? getSnChallengeDay(snDateKey) : null;
-  const snIsLive = isSnLive(totalMin);
+  const todaySnDateKey = previewSnDate || toIstIsoDateKey(nowIST);
+  // Before the 4:30 AM start time, today's session hasn't happened yet, so looking it up by
+  // today's date would incorrectly show it as "not live yet" instead of not showing at all.
+  // Look up yesterday's date instead: on campaign day 2/3/4 this surfaces yesterday's session
+  // as a (non-live) recording; on day 1 there is no prior 108sn_day entry, so it naturally
+  // resolves to null and the dashboard looks completely normal, per product spec.
+  const beforeSnStart = totalMin < SN_LIVE_START_MIN;
+  const snDateKey = beforeSnStart ? getPreviousIstIsoDateKey(todaySnDateKey) : todaySnDateKey;
+  const snDay = getSnChallengeDay(sessionLinks, snDateKey, langKey);
+  const snIsLive = !beforeSnStart && isSnLive(totalMin);
   // On campaign days the "Regular Session" block's live windows start 15 minutes earlier
   // (4:30 AM / 3:30 PM, matching the SN card's own start and the campaign's earlier broadcast)
   // — explicit product correction. Non-campaign days/students keep the real, unwidened window.
@@ -98,9 +107,8 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
   // title, exactly matching that last one). Only inside the SN window does it stay on top, with
   // its orange-wrapped regular-session companion below (Figma node 1252:18631).
   const showSnAtBottom = !!snDay && !snIsLive;
-  // Prefer the real per-day link from /session-links (108sn_day{N}, English) once the backend
-  // publishes it, falling back to the static placeholder for days it hasn't reached yet.
-  const resolvedSnDay = snDay ? { ...snDay, youtubeLink: getSnChallengeYoutubeLink(snDay, sessionLinks) } : null;
+  // snDay's youtubeLink already comes straight from the matching /session-links entry.
+  const resolvedSnDay = snDay;
 
   const { daysUntilPlanEnds, showPlanRenewal } = getPlanRenewalInfo(studentData);
   const { weekLabel, weekStatus } = getWeeklyAttendance(studentData);
