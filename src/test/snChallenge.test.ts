@@ -1,30 +1,25 @@
 import { describe, it, expect } from "vitest";
 import { getPreviousIstIsoDateKey, getSnChallengeDay, isRegularSessionLiveDuringSn, toIstIsoDateKey } from "@/data/snChallenge";
 
-const sessionLinks = [
-  { session_date: "2026-08-06", language: "english", session_code: "108sn_day1", link: "https://youtube.com/day1-en" },
-  { session_date: "2026-08-06", language: "telugu", session_code: "108sn_day1", link: "https://youtube.com/day1-te" },
-  { session_date: "2026-08-07", language: "english", session_code: "108sn_day2", link: "https://youtube.com/day2-en" },
-  { session_date: "2026-08-07", language: "telugu", session_code: "108sn_day2", link: "https://youtube.com/day2-te" },
-];
-
 describe("snChallenge", () => {
-  it("resolves the day/link for a matching date + language from /session-links", () => {
-    expect(getSnChallengeDay(sessionLinks, "2026-08-06", "english")).toEqual({ dayNumber: 1, youtubeLink: "https://youtube.com/day1-en" });
-    expect(getSnChallengeDay(sessionLinks, "2026-08-07", "telugu")).toEqual({ dayNumber: 2, youtubeLink: "https://youtube.com/day2-te" });
+  it("resolves the day/link for a matching date + language from the hardcoded table", () => {
+    expect(getSnChallengeDay([], "2026-08-13", "telugu")).toEqual({ dayNumber: 1, youtubeLink: "https://www.youtube.com/watch?v=3NMJ9zkgG70" });
+    expect(getSnChallengeDay([], "2026-08-14", "telugu")).toEqual({ dayNumber: 2, youtubeLink: "https://www.youtube.com/watch?v=5xLa643YoVM" });
+    expect(getSnChallengeDay([], "2026-08-15", "telugu")).toEqual({ dayNumber: 3, youtubeLink: "https://www.youtube.com/watch?v=Yd2fEu9QWNQ" });
+    expect(getSnChallengeDay([], "2026-08-16", "telugu")).toEqual({ dayNumber: 4, youtubeLink: "https://www.youtube.com/watch?v=K9SlPKo7qb0" });
   });
 
-  it("returns null when the API has no entry for that date", () => {
-    expect(getSnChallengeDay(sessionLinks, "2026-08-08", "english")).toBeNull();
+  it("ignores the sessionLinks argument entirely (fallback no longer reads the API)", () => {
+    const apiLinks = [{ session_date: "2026-08-13", language: "telugu", session_code: "108sn_day1", link: "https://youtube.com/should-be-ignored" }];
+    expect(getSnChallengeDay(apiLinks, "2026-08-13", "telugu")).toEqual({ dayNumber: 1, youtubeLink: "https://www.youtube.com/watch?v=3NMJ9zkgG70" });
   });
 
-  it("returns null when the API has no entry for that language on an otherwise-live date", () => {
-    expect(getSnChallengeDay([{ session_date: "2026-08-06", language: "telugu", session_code: "108sn_day1", link: "x" }], "2026-08-06", "english")).toBeNull();
+  it("returns null when there's no hardcoded entry for that date", () => {
+    expect(getSnChallengeDay([], "2026-08-17", "telugu")).toBeNull();
   });
 
-  it("ignores non-SN session codes", () => {
-    const links = [{ session_date: "2026-08-06", language: "english", session_code: "daily_morning", link: "x" }];
-    expect(getSnChallengeDay(links, "2026-08-06", "english")).toBeNull();
+  it("returns null when there's no hardcoded entry for that language on an otherwise-live date", () => {
+    expect(getSnChallengeDay([], "2026-08-13", "english")).toBeNull();
   });
 
   it("computes the previous calendar day, including across a month boundary", () => {

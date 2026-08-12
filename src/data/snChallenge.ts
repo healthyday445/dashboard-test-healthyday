@@ -5,18 +5,30 @@ export interface SnChallengeDay {
 
 const SN_SESSION_CODE_RE = /^108sn_day(\d+)$/;
 
-/** Looks up today's "108 Surya Namaskar Challenge" session directly from the `/session-links`
- *  API response — no hardcoded dates/links on the frontend. Matches on `session_date` (IST
- *  calendar date, e.g. from `toIstIsoDateKey` or a `?previewSnDate=` override) and `language`
+/** Fallback branch: `/session-links` is not reliable enough for the SN Challenge campaign, so
+ *  this table is hardcoded on the frontend instead of read from the API. Keep `session_date` in
+ *  "YYYY-MM-DD" (IST calendar date) and `language` lowercase ("english"/"telugu") to match the
+ *  keys `getSnChallengeDay` is called with. Add/update rows here for future days. */
+const HARDCODED_SN_SESSIONS: { session_date: string; language: string; session_code: string; link: string }[] = [
+  { session_date: "2026-08-13", language: "telugu", session_code: "108sn_day1", link: "https://www.youtube.com/watch?v=3NMJ9zkgG70" },
+  { session_date: "2026-08-14", language: "telugu", session_code: "108sn_day2", link: "https://www.youtube.com/watch?v=5xLa643YoVM" },
+  { session_date: "2026-08-15", language: "telugu", session_code: "108sn_day3", link: "https://www.youtube.com/watch?v=Yd2fEu9QWNQ" },
+  { session_date: "2026-08-16", language: "telugu", session_code: "108sn_day4", link: "https://www.youtube.com/watch?v=K9SlPKo7qb0" },
+];
+
+/** Looks up today's "108 Surya Namaskar Challenge" session from the hardcoded table above
+ *  (fallback for backend/API issues on `/session-links`) — `sessionLinks` is accepted for
+ *  call-site compatibility but no longer consulted. Matches on `session_date` (IST calendar
+ *  date, e.g. from `toIstIsoDateKey` or a `?previewSnDate=` override) and `language`
  *  ("english"/"telugu"), among entries whose `session_code` looks like `108sn_day{N}`. Returns
- *  null whenever the backend hasn't published a session for that date/language, which is what
- *  makes this feature auto-revert once the campaign ends — no code change needed. */
-export function getSnChallengeDay(sessionLinks: any[], dateKey: string, langKey: string): SnChallengeDay | null {
-  const match = sessionLinks.find(
-    (s: any) => s?.session_date === dateKey && s?.language === langKey && SN_SESSION_CODE_RE.test(s?.session_code)
+ *  null whenever no hardcoded session exists for that date/language, which is what makes this
+ *  feature auto-revert once the campaign's hardcoded rows run out. */
+export function getSnChallengeDay(_sessionLinks: any[], dateKey: string, langKey: string): SnChallengeDay | null {
+  const match = HARDCODED_SN_SESSIONS.find(
+    (s) => s.session_date === dateKey && s.language === langKey && SN_SESSION_CODE_RE.test(s.session_code)
   );
   if (!match) return null;
-  const dayNumber = parseInt(match.session_code.match(SN_SESSION_CODE_RE)[1], 10);
+  const dayNumber = parseInt(match.session_code.match(SN_SESSION_CODE_RE)![1], 10);
   return { dayNumber, youtubeLink: match.link };
 }
 
