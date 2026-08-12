@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { trackVisit } from "@/lib/trackVisit";
-import { isFreeBatchOver, getSimulatedBatchDate, getBonusWindowStart } from "@/lib/utils";
+import { isFreeBatchOver, getSimulatedBatchDate, getBonusWindowStart, getCurrentMinutesIST } from "@/lib/utils";
 import logo from "@/assets/Primary_logo.svg";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 import ReferWinCard from "@/components/ReferWinCard";
@@ -274,7 +274,28 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
   }, [mobile]);
 
   useEffect(() => {
-    fetch("/.netlify/functions/session-links")
+    // `?previewSnDate=YYYY-MM-DD` (SN Challenge QA preview, see PREVIEWS.md) is forwarded to the
+    // backend's `date` param so `/session-link/active` returns links "as of" that date instead of
+    // real today — without this, previewing a future campaign day would show an empty dashboard
+    // since the backend excludes any session whose session_date is still in the future.
+    // `previewSnDate`/`time` (see PREVIEWS.md) are forwarded to the backend's `date`/`time`
+    // params so `/session-link/active` returns links "as of" that exact moment instead of real
+    // "now" — this app's own `?time=` param uses a "8.00am"-style format (see
+    // getCurrentMinutesIST), so it's converted to the backend's "HH:MM" IST via
+    // getCurrentMinutesIST + a minutes-to-"HH:MM" formatter rather than forwarded raw.
+    const previewSnDate = searchParams.get("previewSnDate");
+    const timeParam = searchParams.get("time");
+    const qs = new URLSearchParams();
+    if (previewSnDate) qs.set("date", previewSnDate);
+    if (timeParam) {
+      const totalMin = getCurrentMinutesIST(timeParam);
+      const hh = String(Math.floor(totalMin / 60) % 24).padStart(2, "0");
+      const mm = String(totalMin % 60).padStart(2, "0");
+      qs.set("time", `${hh}:${mm}`);
+    }
+    const url = `/.netlify/functions/session-links${qs.toString() ? `?${qs.toString()}` : ""}`;
+
+    fetch(url)
       .then(r => r.json())
       .then(data => {
         const arr = Array.isArray(data)
@@ -286,7 +307,8 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
       })
       .catch(() => { })
       .finally(() => setSessionLinksLoaded(true));
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
 
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
   const [loading, setLoading] = useState(!effectiveInitialData);

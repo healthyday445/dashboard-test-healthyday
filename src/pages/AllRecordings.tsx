@@ -248,6 +248,7 @@ const DateBadge = ({ label }: { label: string }) => (
 );
 
 import { safeSessionStorage } from "@/lib/storage";
+import { getCurrentMinutesIST } from "@/lib/utils";
 
 const AllRecordings = () => {
   const navigate = useNavigate();
@@ -304,11 +305,28 @@ const AllRecordings = () => {
     fetchData();
   }, [mobile, previewMode]);
 
-  // Fetch session links from API
+  // Fetch session links from API. `previewSnDate`/`time` (see PREVIEWS.md) are forwarded to the
+  // backend's `date`/`time` params, same as IndexPaid.tsx, so `/session-link/active` returns
+  // links "as of" that moment instead of real "now" — without this, previewing a future SN
+  // Challenge day here would show no rows since the backend excludes sessions whose session_date
+  // hasn't happened yet. `time` is converted from this app's "8.00am"-style format to the
+  // backend's "HH:MM" IST via getCurrentMinutesIST + a minutes-to-"HH:MM" formatter.
   useEffect(() => {
+    const previewSnDate = searchParams.get("previewSnDate");
+    const timeParam = searchParams.get("time");
+    const qs = new URLSearchParams();
+    if (previewSnDate) qs.set("date", previewSnDate);
+    if (timeParam) {
+      const totalMin = getCurrentMinutesIST(timeParam);
+      const hh = String(Math.floor(totalMin / 60) % 24).padStart(2, "0");
+      const mm = String(totalMin % 60).padStart(2, "0");
+      qs.set("time", `${hh}:${mm}`);
+    }
+    const url = `/.netlify/functions/session-links${qs.toString() ? `?${qs.toString()}` : ""}`;
+
     const fetchSessionLinks = async () => {
       try {
-        const res = await fetch("/.netlify/functions/session-links");
+        const res = await fetch(url);
         if (!res.ok) throw new Error("Failed to fetch session links");
         const json = await res.json();
         setSessionLinks(json.data || []);
@@ -321,7 +339,8 @@ const AllRecordings = () => {
       }
     };
     fetchSessionLinks();
-  }, []);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [location.search]);
 
   if (loading) {
     return (
