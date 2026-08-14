@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getMealPlaceholderIcon } from "@/lib/dietCategoryIcon";
 import type { ResolvedMeal } from "@/data/diet";
@@ -71,6 +72,25 @@ interface DietMealCardProps {
  *  is a plain child that only knows how to lay out its own text content. */
 export const DietMealCard: React.FC<DietMealCardProps> = ({ meal, onClick }) => {
   const { background, icon } = getMealPlaceholderIcon(meal.category, meal.detail);
+  // Blur-up loading state: the photo renders blurred/scaled-up from the moment its `src`
+  // starts fetching, then sharpens with a fade once it finishes — a loading affordance that
+  // doesn't need a separate low-res placeholder asset per meal.
+  const [imageLoaded, setImageLoaded] = useState(false);
+  const imgRef = useRef<HTMLImageElement>(null);
+  // Cards are keyed by slotId (e.g. "breakfast"), which is the same across every date tab —
+  // so switching tabs re-uses this same component instance and just changes `meal.imageUrl`
+  // rather than mounting a fresh card. Without this, `imageLoaded` would stay stuck `true`
+  // from whichever day's photo loaded first, and the blur-up never replays for the new photo.
+  useEffect(() => {
+    setImageLoaded(false);
+    // Covers the case where the browser already has this image cached — e.g. navigating
+    // back to this list after having opened the meal detail page for it. Cached images can
+    // report `complete` (and thus never fire `load`) before React finishes attaching the
+    // onLoad handler below, which would otherwise leave the blur-up state stuck forever.
+    if (imgRef.current?.complete && imgRef.current.naturalWidth > 0) {
+      setImageLoaded(true);
+    }
+  }, [meal.imageUrl]);
 
   return (
     <div className="px-5 pb-4">
@@ -106,7 +126,19 @@ export const DietMealCard: React.FC<DietMealCardProps> = ({ meal, onClick }) => 
             className="flex items-center justify-center overflow-hidden rounded-full"
             style={{ width: `${THUMB_SIZE}px`, height: `${THUMB_SIZE}px`, background }}
           >
-            {meal.imageUrl ? <img src={meal.imageUrl} alt={meal.name} className="h-full w-full object-cover" /> : icon}
+            {meal.imageUrl ? (
+              <img
+                ref={imgRef}
+                src={meal.imageUrl}
+                alt={meal.name}
+                onLoad={() => setImageLoaded(true)}
+                className={`h-full w-full object-cover transition-all duration-500 ease-out ${
+                  imageLoaded ? "scale-100 opacity-100 blur-0" : "scale-110 opacity-60 blur-md"
+                }`}
+              />
+            ) : (
+              icon
+            )}
           </div>
         </div>
 

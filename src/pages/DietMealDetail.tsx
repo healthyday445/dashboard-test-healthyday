@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import { Skeleton } from "@/components/ui/skeleton";
@@ -31,6 +31,33 @@ const DietMealDetail = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [studentData, setStudentData] = useState<any>(null);
+
+  // Parallax drift for the hero photo: it's `position: fixed` (see the render below) so
+  // scrolling alone leaves it perfectly static, which reads as too rigid. Nudging it
+  // upward at a fraction of the real scroll speed — via a ref + direct style mutation,
+  // not React state, so this runs every scroll tick without re-rendering — gives it a
+  // sense of depth while the content panel still catches up and covers it.
+  const heroRef = useRef<HTMLDivElement>(null);
+  const HERO_HEIGHT = 300;
+  const PARALLAX_FACTOR = 0.50;
+
+  useEffect(() => {
+    let rafId: number | null = null;
+    const handleScroll = () => {
+      if (rafId !== null) return;
+      rafId = requestAnimationFrame(() => {
+        rafId = null;
+        if (!heroRef.current) return;
+        const offset = Math.min(window.scrollY * PARALLAX_FACTOR, HERO_HEIGHT);
+        heroRef.current.style.transform = `translate3d(0, ${-offset}px, 0)`;
+      });
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => {
+      window.removeEventListener("scroll", handleScroll);
+      if (rafId !== null) cancelAnimationFrame(rafId);
+    };
+  }, []);
 
   useEffect(() => {
     // Same `?preview=paid` canned-data idiom as AttendancePageWeekly.tsx — lets QA (and this
@@ -161,11 +188,17 @@ const DietMealDetail = () => {
       <header className="hd-header fixed left-0 right-0 top-0 z-20 mx-auto max-w-[412px] bg-white">
         <img src={logo} alt="Healthyday" className="h-7" />
       </header>
-      <div className="h-[68px]" />
 
-      {/* Hero photo, with a white-to-transparent fade at the top so the back button reads
-          clearly regardless of the photo underneath (Figma 890:8570/890:8572). */}
-      <div className="relative h-[300px] w-full overflow-hidden" style={{ background }}>
+      {/* Hero photo is pinned to the viewport (not the document) so it reads as a fixed
+          background: it stays put while the page scrolls, and the content panel below —
+          an ordinary in-flow, opaque element — scrolls up and over it. A white-to-transparent
+          fade at the top keeps the back button legible regardless of the photo underneath
+          (Figma 890:8570/890:8572). */}
+      <div
+        ref={heroRef}
+        className="fixed left-0 right-0 top-[68px] z-0 mx-auto h-[300px] w-full max-w-[412px] overflow-hidden will-change-transform"
+        style={{ background }}
+      >
         {meal.imageUrl ? (
           <img src={meal.imageUrl} alt={meal.name} className="h-full w-full object-cover" />
         ) : (
@@ -174,18 +207,32 @@ const DietMealDetail = () => {
           </div>
         )}
         <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(255,255,255,0.85)_0%,rgba(255,255,255,0)_35%)] pointer-events-none" />
+      </div>
+
+      {/* Back button floats independently of the hero photo — it's fixed to the viewport
+          on its own (not a child of the parallaxing hero div, and above the content panel's
+          z-index) so it stays put on screen the whole time, through the parallax drift and
+          through the panel scrolling over the hero beneath it. */}
+      <div className="pointer-events-none fixed left-0 right-0 top-[68px] z-30 mx-auto h-0 w-full max-w-[412px]">
         <button
           onClick={handleBack}
           aria-label="Back to Diet Plan"
-          className="absolute left-4 top-5 flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-[10px] border-none bg-white shadow-[-1px_-1px_4px_0_rgba(0,0,0,0.15),1px_1px_4px_0_rgba(0,0,0,0.15)]"
+          className="pointer-events-auto absolute left-4 top-5 flex h-[34px] w-[34px] cursor-pointer items-center justify-center rounded-[10px] border-none bg-white shadow-[-1px_-1px_4px_0_rgba(0,0,0,0.15),1px_1px_4px_0_rgba(0,0,0,0.15)]"
         >
           <BackChevronIcon />
         </button>
       </div>
 
-      {/* Content panel overlaps the bottom of the hero photo (bottom-sheet style), matching
-          Figma's rounded-top white panel (890:8573). */}
-      <div className="relative -mt-8 rounded-t-[32px] bg-white pt-3 shadow-[0_-8px_24px_0_rgba(0,0,0,0.06)]">
+      {/* Reserves the fixed header + hero's on-screen space in normal document flow (minus
+          the panel's overlap below) so the content panel starts scrolling from the right
+          position instead of stacking under the fixed elements. */}
+      <div className="h-[336px]" />
+
+      {/* Content panel overlaps the bottom of the hero photo (bottom-sheet style) and, being
+          a normal in-flow element with an opaque background, progressively covers the fixed
+          hero image as it scrolls up over it — matching Figma's rounded-top white panel
+          (890:8573). */}
+      <div className="relative z-10 -mt-8 rounded-t-[32px] bg-white pt-3 shadow-[0_-8px_24px_0_rgba(0,0,0,0.06)]">
         <div className="mx-auto mb-4 h-[5px] w-[50px] rounded-2xl bg-[#E3EBEC]" />
 
         <div className="px-5">
