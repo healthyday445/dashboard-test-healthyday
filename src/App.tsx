@@ -30,44 +30,40 @@ const App = () => {
   }
 
   return (
-  <QueryClientProvider client={queryClient}>
-    <TooltipProvider>
-      <Toaster />
-      <Sonner />
-      <BrowserRouter>
-        <Routes>
-          <Route path="/certificate" element={<Certificate />} />
-          <Route path="/:mobile/certificate" element={<Certificate />} />
-          <Route path="/sn-certificate" element={<SNCertificate />} />
-          <Route path="/SN-certificate" element={<SNCertificate />} />
-          <Route path="/:mobile/sn-certificate" element={<SNCertificate />} />
-          <Route path="/:mobile/SN-certificate" element={<SNCertificate />} />
-          <Route path="/testsncertificate" element={<SNCertificate />} />
-          <Route path="/TestSNCertificate" element={<SNCertificate />} />
-          <Route path="/test-sn-certificate" element={<SNCertificate />} />
-          <Route path="/Test-SN-Certificate" element={<SNCertificate />} />
-          <Route path="/faqs" element={<Faqs />} />
-          <Route path="/:mobile/faqs" element={<Faqs />} />
-          <Route path="/:mobile" element={<Dashboard />} />
-          <Route path="/referral" element={<Referral />} />
-          <Route path="/referral-status" element={<ReferralStatus />} />
-          <Route path="/" element={<IndexFourteenDays />} />
-          <Route path="/:mobile/referrals" element={<ReferralStatus />} />
-          <Route path="/attendance-page" element={<AttendancePage />} />
-          <Route path="/:mobile/attendance" element={<AttendancePageWeekly />} />
-          <Route path="/:mobile/recordings" element={<AllRecordings />} />
-          <Route path="/leaderboard" element={<Login />} />
-          <Route path="/:mobile/leaderboard" element={<Leaderboard />} />
-          <Route path="/pricing" element={<Pricing />} />
-          <Route path="/:mobile/grace" element={<Grace />} />
-          <Route path="/:mobile/diet" element={<Diet />} />
-          <Route path="/:mobile/diet/:date/:slotId" element={<DietMealDetail />} />
-          {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
-          <Route path="*" element={<NotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </TooltipProvider>
-  </QueryClientProvider>
+    <QueryClientProvider client={queryClient}>
+      <TooltipProvider>
+        <Toaster />
+        <Sonner />
+        <BrowserRouter>
+          <Routes>
+            <Route path="/certificate" element={<Certificate />} />
+            <Route path="/:mobile/certificate" element={<Certificate />} />
+            <Route path="/sn-certificate" element={<SNCertificate />} />
+            <Route path="/:mobile/sn-certificate" element={<SNCertificate />} />
+            <Route path="/testsncertificate" element={<SNCertificate />} />
+            <Route path="/test-sn-certificate" element={<SNCertificate />} />
+            <Route path="/faqs" element={<Faqs />} />
+            <Route path="/:mobile/faqs" element={<Faqs />} />
+            <Route path="/:mobile" element={<Dashboard />} />
+            <Route path="/referral" element={<Referral />} />
+            <Route path="/referral-status" element={<ReferralStatus />} />
+            <Route path="/" element={<IndexFourteenDays />} />
+            <Route path="/:mobile/referrals" element={<ReferralStatus />} />
+            <Route path="/attendance-page" element={<AttendancePage />} />
+            <Route path="/:mobile/attendance" element={<AttendancePageWeekly />} />
+            <Route path="/:mobile/recordings" element={<AllRecordings />} />
+            <Route path="/leaderboard" element={<Login />} />
+            <Route path="/:mobile/leaderboard" element={<Leaderboard />} />
+            <Route path="/pricing" element={<Pricing />} />
+            <Route path="/:mobile/grace" element={<Grace />} />
+            <Route path="/:mobile/diet" element={<Diet />} />
+            <Route path="/:mobile/diet/:date/:slotId" element={<DietMealDetail />} />
+            {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </TooltipProvider>
+    </QueryClientProvider>
   );
 };
 
