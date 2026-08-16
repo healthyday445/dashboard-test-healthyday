@@ -40,6 +40,8 @@ const App = () => {
           <Route path="/:mobile/certificate" element={<Certificate />} />
           <Route path="/sn-certificate" element={<SNCertificate />} />
           <Route path="/:mobile/sn-certificate" element={<SNCertificate />} />
+          <Route path="/testsncertificate" element={<SNCertificate />} />
+          <Route path="/test-sn-certificate" element={<SNCertificate />} />
           <Route path="/faqs" element={<Faqs />} />
           <Route path="/:mobile/faqs" element={<Faqs />} />
           <Route path="/:mobile" element={<Dashboard />} />

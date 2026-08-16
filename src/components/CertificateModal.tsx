@@ -66,7 +66,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
 
   // Pre-fill name when prop changes or from local storage
   useEffect(() => {
-    if (initialName) {
+    if (initialName && initialName !== "Student") {
       setName(initialName);
     } else {
       const storedName = safeLocalStorage.getItem("user_name");

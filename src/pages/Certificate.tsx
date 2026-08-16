@@ -158,14 +158,9 @@ export default function Certificate() {
       .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
       .then((data) => {
         if (data) {
-          if (data.name) {
-            setName((prev) => {
-              if (!prev || prev === "Student") {
-                safeLocalStorage.setItem("user_name", data.name);
-                return data.name;
-              }
-              return prev;
-            });
+          if (data.name && data.name !== "Student") {
+            setName(data.name);
+            safeLocalStorage.setItem("user_name", data.name);
           }
 
           // Only the one-off June-21-2026 cohort is the 21-day programme (see Dashboard.tsx's
