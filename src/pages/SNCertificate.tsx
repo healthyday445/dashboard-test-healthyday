@@ -249,6 +249,18 @@ export default function SNCertificate() {
 
       ctx.fillText(displayName, x, y);
       ctx.restore();
+
+      const activeDate = certificateDate || new Date(Date.now() + 5.5 * 60 * 60 * 1000).toISOString();
+      const dateStr = formatCertDate(activeDate);
+      if (dateStr) {
+        ctx.save();
+        ctx.font = `bold ${Math.round(width * 0.024)}px "Outfit", sans-serif`;
+        ctx.fillStyle = textColor;
+        ctx.textAlign = "center";
+        ctx.textBaseline = "alphabetic";
+        ctx.fillText(dateStr, width * 0.259, height * 0.865);
+        ctx.restore();
+      }
     };
 
     if (document.fonts && document.fonts.load) {
@@ -262,7 +274,7 @@ export default function SNCertificate() {
     } else {
       drawTextOverlay();
     }
-  }, [name, fontSize, yPercent, textColor]);
+  }, [name, fontSize, yPercent, textColor, certificateDate]);
 
   // Callback ref so whenever the canvas element mounts into the DOM, it immediately renders
   const canvasCallbackRef = useCallback((node: HTMLCanvasElement | null) => {
