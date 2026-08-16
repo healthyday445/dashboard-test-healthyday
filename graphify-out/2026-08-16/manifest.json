@@ -50,8 +50,8 @@
     "semantic_hash": "8800905cca6b71b675e406a15d2d5b13"
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\.claude\\settings.json": {
-    "mtime": 1786862569.2281952,
-    "ast_hash": "01412a0833b6ef91104661e284ded75d",
+    "mtime": 1784439391.8107605,
+    "ast_hash": "4e4682636a8884e0a4cb65e9c1314876",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\netlify\\functions\\referrals.js": {
@@ -60,8 +60,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\netlify\\functions\\session-links.js": {
-    "mtime": 1786862569.2291915,
-    "ast_hash": "7889b70ef4d89387d02a28ef1eacdb1b",
+    "mtime": 1781616061.8096151,
+    "ast_hash": "f5f5e244b4c2e1df4cda98ead8d3e62e",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\netlify\\functions\\student.js": {
@@ -70,7 +70,7 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\App.tsx": {
-    "mtime": 1786862550.8598309,
+    "mtime": 1786184015.100199,
     "ast_hash": "9a5f52e55304259bd096fc9192eb6445",
     "semantic_hash": ""
   },
@@ -395,8 +395,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\AllRecordings.tsx": {
-    "mtime": 1786862569.4320915,
-    "ast_hash": "05ed4ae382527e660df2d2a9e7aa284b",
+    "mtime": 1786184015.117728,
+    "ast_hash": "928a38eae53b0415b1b9ba3346ff2559",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\AttendancePage.tsx": {
@@ -635,8 +635,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\lib\\paidBonusSessions.ts": {
-    "mtime": 1786862569.429581,
-    "ast_hash": "7f6a5624f70d6dd4c91de527f056ec3c",
+    "mtime": 1784440525.9530408,
+    "ast_hash": "bebf2d9712a49f1ac4b31e4ca371ee9c",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\lib\\planRenewal.ts": {
@@ -660,7 +660,7 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\Certificate.tsx": {
-    "mtime": 1786862550.8683407,
+    "mtime": 1786202312.8286605,
     "ast_hash": "d713ff4235d56e3b7196740463fc7b57",
     "semantic_hash": ""
   },
@@ -680,8 +680,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\IndexPaid.tsx": {
-    "mtime": 1786862569.440285,
-    "ast_hash": "0a6dc524ac0fd70fac284aac8334248e",
+    "mtime": 1786184015.121738,
+    "ast_hash": "d3ffcaed396ff73c5ce343a8556206c7",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\IndexTwentyOneDay.tsx": {
@@ -1560,7 +1560,7 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\CertificateModal.tsx": {
-    "mtime": 1786862550.8631947,
+    "mtime": 1786202312.8271458,
     "ast_hash": "4b0cb90a1596bee309f6a9d675501c12",
     "semantic_hash": ""
   },
@@ -1585,8 +1585,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\DietMealCard.tsx": {
-    "mtime": 1786862569.3856819,
-    "ast_hash": "c40f8af683d89f2e5beef27f6b1e7593",
+    "mtime": 1786080008.1806042,
+    "ast_hash": "54f85a73dac18452b768af8359221482",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\components\\FourteenDaysV2JourneyCompletedPage.tsx": {
@@ -1640,18 +1640,18 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\data\\snChallenge.ts": {
-    "mtime": 1786862569.3942816,
-    "ast_hash": "e43327d615ba5d666015ef4150a423f1",
+    "mtime": 1786184015.1134508,
+    "ast_hash": "6772fd5b190f637f5de57d917eaab051",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\data\\diet\\curatedContent.ts": {
-    "mtime": 1786862569.388225,
-    "ast_hash": "edf73f6132f9d6ee0dd4ba7b2ca7421f",
+    "mtime": 1785846059.281096,
+    "ast_hash": "c79b86206e5bf14cb7b5699a2b384099",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\data\\diet\\dateMath.ts": {
-    "mtime": 1786862569.3932695,
-    "ast_hash": "5bfdda8dd405ed3234a65be95fb9bd82",
+    "mtime": 1786184015.1087441,
+    "ast_hash": "0af25e2bce305649a6735a10db5cec30",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\data\\diet\\getResolvedDayPlan.ts": {
@@ -1715,8 +1715,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\lib\\dietCategoryIcon.tsx": {
-    "mtime": 1786862569.4285805,
-    "ast_hash": "016aedbaa4f359df6157af27f9311d41",
+    "mtime": 1785842291.7036798,
+    "ast_hash": "75434833f7d689b4d5b814cb97987326",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\lib\\studentStatus.ts": {
@@ -1740,13 +1740,13 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\Diet.tsx": {
-    "mtime": 1786862569.4346373,
-    "ast_hash": "377080dcc5f5cf0e6c12940d9828ba2c",
+    "mtime": 1786184015.1197395,
+    "ast_hash": "a50de76b937d2b5d9e8381492436d669",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\DietMealDetail.tsx": {
-    "mtime": 1786862569.4362729,
-    "ast_hash": "f8aba266e3cca6868a169ef08a61858b",
+    "mtime": 1786080008.220262,
+    "ast_hash": "3dc1047f7cf9c8963901f2c6cbab51b0",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\FourteenDaysV2Program.tsx": {
@@ -1760,28 +1760,28 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\IndexFourteenDaysV2.tsx": {
-    "mtime": 1786862569.4382854,
-    "ast_hash": "f6b117e20970ac27412bdf8a1d28ab0e",
+    "mtime": 1785842291.7187927,
+    "ast_hash": "27d7785401d201ac581c250ff2a962df",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\pages\\SNCertificate.tsx": {
-    "mtime": 1786862926.2916253,
+    "mtime": 1786205361.6426935,
     "ast_hash": "6541b9b98be8f770c714e1af125b1c34",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\test\\snChallenge.test.ts": {
-    "mtime": 1786862569.4463253,
-    "ast_hash": "f657b043b61ce95881fa90e00f405d8a",
+    "mtime": 1786184015.1271462,
+    "ast_hash": "0f9047f9e04c462fd0f655d7314ccae0",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\test\\diet\\dateMath.test.ts": {
-    "mtime": 1786862569.4418018,
-    "ast_hash": "73fef3c31d8346e057c880d11ad23866",
+    "mtime": 1786184015.123553,
+    "ast_hash": "1b349df0e04c737d923ccb5da5516635",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\test\\diet\\getResolvedDayPlan.test.ts": {
-    "mtime": 1786862569.4443252,
-    "ast_hash": "4892d5c14157ec71cf4de1c6c14ca113",
+    "mtime": 1786184015.1245751,
+    "ast_hash": "d88245bf0bd58d0cf0a720418216390c",
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\.claude\\skills\\playwright-tester\\SKILL.md": {
@@ -2370,513 +2370,8 @@
     "semantic_hash": ""
   },
   "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\badges\\SN_Challenge_Certificate.webp": {
-    "mtime": 1786862924.2697127,
-    "ast_hash": "31f5a07e5d110b304029bc26258ef9dd",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\vite.config.ts.timestamp-1786862583696-d6185fc55a85e.mjs": {
-    "mtime": 1786862583.6972878,
-    "ast_hash": "0c29fcee45cf8f682c55d6fc231271b0",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\badges\\SN Challenge-Certificate 16.jpg": {
-    "mtime": 1786862706.2265413,
-    "ast_hash": "d52f72e47353ab1f25f618f8fd481c90",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\apple-soaked-black-raisins.webp": {
-    "mtime": 1786862569.2301912,
-    "ast_hash": "5791c81d82672a761d86ff9283561fb2",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\ash-gourd-juice.webp": {
-    "mtime": 1786862569.231193,
-    "ast_hash": "c4ae061e9febfa680f4fabcd9d2593d8",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\bajra-vegetable-upma.webp": {
-    "mtime": 1786862569.2332253,
-    "ast_hash": "28d0d3efbf44d3d44b773bba9123ae75",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\banana.webp": {
-    "mtime": 1786862569.2342584,
-    "ast_hash": "c8895374ea1ff98142c3ed5ec9f3228a",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\boiled-black-chana.webp": {
-    "mtime": 1786862569.2357707,
-    "ast_hash": "65990702728d6653075a9905e14adeb4",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\boiled-chana-onion-lemon.webp": {
-    "mtime": 1786862569.237322,
-    "ast_hash": "71a00b489c8c2b5dbe6597c5ab180a08",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\boiled-corn-chaat.webp": {
-    "mtime": 1786862569.2383335,
-    "ast_hash": "91c503e13755f79853dd50772d024d0e",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\boiled-rajma.webp": {
-    "mtime": 1786862569.2403328,
-    "ast_hash": "babe1f1bfd05ce6886c3bf09d8b0b877",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\boiled-sweet-potato-pepper.webp": {
-    "mtime": 1786862569.2413335,
-    "ast_hash": "fb7518f88d030f2d4fa2393fc52c6334",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\broken-wheat-upma.webp": {
-    "mtime": 1786862569.2425869,
-    "ast_hash": "66b9bb749e3d60b3394af0c3db7ce51c",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\cashews-soaked-black-raisins.webp": {
-    "mtime": 1786862569.2435887,
-    "ast_hash": "00af3415383911a7b57b5552abb1e6cb",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\chapati-moong-dal-tomato-curry-curd.webp": {
-    "mtime": 1786862569.2455866,
-    "ast_hash": "6e1017d57d06ad75b84d6c865ab2eeab",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\chapati-rajma-curry.webp": {
-    "mtime": 1786862569.2455866,
-    "ast_hash": "9d4bc8992ee712c46ac33e641c5a570a",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\chia-seeds-water-with-lemon.webp": {
-    "mtime": 1786862569.2465873,
-    "ast_hash": "f24953c1b4adfdd68183e69c24c29f13",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\chickpea-grated-coconut.webp": {
-    "mtime": 1786862569.2476017,
-    "ast_hash": "3fb23c75833bec7b428fb2ede10122e6",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\cinnamon-warm-milk.webp": {
-    "mtime": 1786862569.249585,
-    "ast_hash": "ea4d51281805b12e5a0d7a3442e0b04b",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\corn-soup-with-vegetables.webp": {
-    "mtime": 1786862569.2515888,
-    "ast_hash": "dfb2e2efe5603381957d93649be5d342",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\cucumber-carrot-salad-lemon.webp": {
-    "mtime": 1786862569.2527442,
-    "ast_hash": "d4bac46068f886c3998a58a117665ec0",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\cucumber-tomato-salad-with-lemon.webp": {
-    "mtime": 1786862569.253754,
-    "ast_hash": "d24d30b29e40b85107267c32ce7a21db",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\curd-rice-grated-carrot-pomegranate.webp": {
-    "mtime": 1786862569.254757,
-    "ast_hash": "50b1273f721063b45ed23bfc512c6f69",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\eggless-besan-chilla-mint-chutney.webp": {
-    "mtime": 1786862569.254757,
-    "ast_hash": "7f392d7fa87a6237ae278c01c39c0219",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\elaichi-milk.webp": {
-    "mtime": 1786862569.2557564,
-    "ast_hash": "1afdf29eea3405db215e1e685015cd20",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\green-grapes.webp": {
-    "mtime": 1786862569.257269,
-    "ast_hash": "f3e7b9fe8d2fa7614635bd2ddb9a37e8",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\green-juice-spinach-mint-lemon-chia.webp": {
-    "mtime": 1786862569.2582796,
-    "ast_hash": "91234ebbf8de24e90b87519878b18188",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\green-juice-with-chia.webp": {
-    "mtime": 1786862569.2592804,
-    "ast_hash": "ba0977e4159dbb85beb6d07ead95aadc",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\green-leafy-pulav-carrot-raita.webp": {
-    "mtime": 1786862569.2636776,
-    "ast_hash": "3ebf37482c6ac66405092c40a1f6e36f",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\green-salad-cucumber-sprouts.webp": {
-    "mtime": 1786862569.264681,
-    "ast_hash": "ac9f99067ed97d7095b91ef04e6ea5a6",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\grilled-tofu-paneer-cubes.webp": {
-    "mtime": 1786862569.2656822,
-    "ast_hash": "5b4b95a7d287e709858e9c87fce29015",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\jaggery-nuts-laddu.webp": {
-    "mtime": 1786862569.2712686,
-    "ast_hash": "a2c07d47e2f095c3603a0d0bb97331ad",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\jamun-mint-lemon.webp": {
-    "mtime": 1786862569.273277,
-    "ast_hash": "d1b3bbdbea57b329aa3675abc5eb8d12",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\jamun.webp": {
-    "mtime": 1786862569.2742758,
-    "ast_hash": "fbc2e61a87ac273e1ea4704e4f216ea1",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\korra-rice-moong-dal-beerakaya-curry-curd.webp": {
-    "mtime": 1786862569.2748778,
-    "ast_hash": "14608b53e48624ffba255c1602e11bab",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\korra-thotakura-kichidi-potato-fry-curd.webp": {
-    "mtime": 1786862569.2758925,
-    "ast_hash": "f811b9f28022f9f6e78b3bbdc2699b6c",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\korra-upma.webp": {
-    "mtime": 1786862569.2794156,
-    "ast_hash": "a8fb7b31c1914a013ecd914ab7a0fcf7",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\melon-seeds-chia-seeds.webp": {
-    "mtime": 1786862569.28041,
-    "ast_hash": "489fc91a71bcace1fa5e22db13c0a76c",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\mixed-dal-kichidi-ridge-gourd-curry-curd.webp": {
-    "mtime": 1786862569.2814116,
-    "ast_hash": "6011c3c41eefb9e1c4f6b071790042a3",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\mixed-millet-protein-veg-jaava.webp": {
-    "mtime": 1786862569.2835197,
-    "ast_hash": "b2bd6a287858ce2621afdeb96c322f4d",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\mixed-vegetable-soup.webp": {
-    "mtime": 1786862569.2855153,
-    "ast_hash": "24a7dfc8c2bc563f52595812dc24f1c0",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\moong-dal-chilla-coconut-chutney.webp": {
-    "mtime": 1786862569.2885127,
-    "ast_hash": "5876123d6407975a69788a9a833a494d",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\oats-dosa-rajma-curry-curd.webp": {
-    "mtime": 1786862569.2895143,
-    "ast_hash": "071f17fa0e54d2ce9579264aedfaf14e",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\onion-uthappam-peanut-chutney.webp": {
-    "mtime": 1786862569.2905154,
-    "ast_hash": "d023a5d24abbcecfe54e5de03f150371",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\pan-roasted-paneer-cubes-pepper.webp": {
-    "mtime": 1786862569.2915154,
-    "ast_hash": "319340eeb5fa5fa3d6072937fece6559",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\paneer-vegetable-bhurji-phulka.webp": {
-    "mtime": 1786862569.2927635,
-    "ast_hash": "013d2a9d4fd2f23627015fc2f3ca432a",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\pineapple-18-08.webp": {
-    "mtime": 1786862569.293763,
-    "ast_hash": "42fc30413fc7bd33bfac3be48fb91daa",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\pineapple-22-08.webp": {
-    "mtime": 1786862569.293763,
-    "ast_hash": "f66805ec1de90595a006f74cc110a851",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\plain-dosa-ginger-chutney.webp": {
-    "mtime": 1786862569.294764,
-    "ast_hash": "7658ee5d6e28451472c7020ea58350ee",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\pumpkin-flax-seeds.webp": {
-    "mtime": 1786862569.295763,
-    "ast_hash": "23c79745b769b921fbd43c92d211ca92",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\pumpkin-sunflower-seeds-soaked-walnuts.webp": {
-    "mtime": 1786862569.301286,
-    "ast_hash": "9fb60bb012b6efdca204972417cff4db",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\ragi-dosa-roti-pachadi.webp": {
-    "mtime": 1786862569.3025637,
-    "ast_hash": "3074e9e5ac754a4f6f83cd7ba80a044e",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\ragi-idli-coriander-chutney.webp": {
-    "mtime": 1786862569.3035746,
-    "ast_hash": "765cb5b7206a9a4d0f1abf85cbc372c0",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\ragi-mudda-drumsticks-dal.webp": {
-    "mtime": 1786862569.3045716,
-    "ast_hash": "ef455ffb0b29b9f3ea2025d11e71fd1b",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\rice-palak-dal-carrot-coconut-curry-curd.webp": {
-    "mtime": 1786862569.3055725,
-    "ast_hash": "568b034893be7cb9e8d13688bbad336c",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\rice-pepper-rasam-green-gram-curry.webp": {
-    "mtime": 1786862569.3075898,
-    "ast_hash": "d0ca645e14f0afd97283d8567ed88587",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\rice-pumpkin-dal-brinjal-curry-curd.webp": {
-    "mtime": 1786862569.3075898,
-    "ast_hash": "071cab335b473a224c19091ca25050b6",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\rice-rasam-soya-chunks-curry.webp": {
-    "mtime": 1786862569.3095846,
-    "ast_hash": "5a4c5f29cc0fca315553763514bef449",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\roasted-groundnuts-sprouts.webp": {
-    "mtime": 1786862569.312104,
-    "ast_hash": "18a62ba329dc39134893438463d2f914",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\roasted-soya-chunks.webp": {
-    "mtime": 1786862569.3136156,
-    "ast_hash": "83f2586dc8371d502b12b0dac38b2217",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\roti-phulka-pumpkin-dal-buttermilk.webp": {
-    "mtime": 1786862569.3156283,
-    "ast_hash": "911a6be6cb7cef11a943e0c35cdf0f66",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\sabudana-salad-with-peanuts.webp": {
-    "mtime": 1786862569.3176262,
-    "ast_hash": "197b0153067f47e0ffece30363731b35",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\sesame-sunflower-seeds.webp": {
-    "mtime": 1786862569.3186345,
-    "ast_hash": "56d43911cd5e1c72018b0cc559a8435d",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\soaked-almonds-raisins.webp": {
-    "mtime": 1786862569.3206358,
-    "ast_hash": "64e5d521260c9e80002131ecf2136179",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\soaked-chia-seeds-water.webp": {
-    "mtime": 1786862569.3236675,
-    "ast_hash": "da8ac0df255cee16c223fdaafd04941c",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\soaked-golden-raisins.webp": {
-    "mtime": 1786862569.3246863,
-    "ast_hash": "74787c39b3952af4f1625d32d66146ec",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\soaked-pistachios-dates.webp": {
-    "mtime": 1786862569.3256862,
-    "ast_hash": "f26f45a9734a7d0810352e38a3b1a903",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\soaked-raisins.webp": {
-    "mtime": 1786862569.3271945,
-    "ast_hash": "4a3cf56cbe478933dd1e189be0ad7559",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\soaked-walnuts.webp": {
-    "mtime": 1786862569.3282113,
-    "ast_hash": "a65f0fb929e42bdfa33a7884ff6bdff9",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\soaked-watermelon-seeds.webp": {
-    "mtime": 1786862569.3292553,
-    "ast_hash": "712419b4da637a4f4d4a40bc73c225cc",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\steamed-rice-drumsticks-dal-french-beans-curry-curd.webp": {
-    "mtime": 1786862569.3302066,
-    "ast_hash": "5bab7103548ec8ed3a546bd3bdd046c7",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\steamed-rice-methi-dal-ladies-finger-curry-curd.webp": {
-    "mtime": 1786862569.3345249,
-    "ast_hash": "497138a40e15751a96d9ec34c698da0d",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\sunflower-seeds.webp": {
-    "mtime": 1786862569.3360512,
-    "ast_hash": "9af3ec0cb696698e93d317ff037a8928",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\tamarind-lemon-rice-traditional-chutney.webp": {
-    "mtime": 1786862569.3376017,
-    "ast_hash": "2cf2ff82ce48cc6b42eae4db936f8f19",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\tender-coconut-water-22-08.webp": {
-    "mtime": 1786862569.3386123,
-    "ast_hash": "86c490c1524c627d8469ea765e1620f0",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\thin-buttermilk-with-curry-leaves-jeera.webp": {
-    "mtime": 1786862569.3396168,
-    "ast_hash": "defc8a2d274e8d22a7bfafe66d15bd93",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\thin-buttermilk-with-jeera.webp": {
-    "mtime": 1786862569.3421242,
-    "ast_hash": "1940575ee32c932436088b49e465f329",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\tomato-rice-cucumber-raita.webp": {
-    "mtime": 1786862569.3446536,
-    "ast_hash": "5eed5457671745eca683574d9568f980",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\tomato-rice-soya-chunks-curry.webp": {
-    "mtime": 1786862569.3446536,
-    "ast_hash": "44d918bda459bfe2888f058243a7ce73",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\tomato-vegetable-soup.webp": {
-    "mtime": 1786862569.3481736,
-    "ast_hash": "ad131193a1af50c3e51bf8b357de7643",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\tulasi-tea-20-08.webp": {
-    "mtime": 1786862569.3491778,
-    "ast_hash": "6bf16504a197ffe9f9d79784a1788d56",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\turmeric-jeera-water.webp": {
-    "mtime": 1786862569.3511758,
-    "ast_hash": "f976ba22b19974e9018e8aef4f8e4aa8",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\vegetable-chapati-roll-carrot-capsicum-beans.webp": {
-    "mtime": 1786862569.3516834,
-    "ast_hash": "51144b2e1865b50e9713941b61ae0b85",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\vegetable-juice-carrot-tomato-ginger.webp": {
-    "mtime": 1786862569.3531926,
-    "ast_hash": "906fb84214f60a74d787d0cb5fad1546",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\vegetable-poha-peanuts-curry-leaves.webp": {
-    "mtime": 1786862569.3542078,
-    "ast_hash": "cb6b8fa33999fb0ce087f0511afb89fb",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\vegetable-poha.webp": {
-    "mtime": 1786862569.3552096,
-    "ast_hash": "2494be121411be337396848e4b0d3cec",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\vegetable-salad-paneer-cubes.webp": {
-    "mtime": 1786862569.3582208,
-    "ast_hash": "2beac94cce65ad4646aff2f2b5d8d9a4",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\vegetable-sprouts-salad-cucumber-carrot-lemon.webp": {
-    "mtime": 1786862569.3592193,
-    "ast_hash": "b0481a5d2a0a3b4902e423d82b1814b3",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\vegetable-upma-carrot-beans.webp": {
-    "mtime": 1786862569.3633509,
-    "ast_hash": "2b560412b1eaa91df09606615decbc98",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\warm-cardamom-milk-19-08.webp": {
-    "mtime": 1786862569.3653507,
-    "ast_hash": "874b716a98a576271a5df19b8b5e3465",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\warm-cardamom-milk.webp": {
-    "mtime": 1786862569.3663576,
-    "ast_hash": "71bfd565ad55e39fd036032a4bd2ae2f",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\warm-chamomile-tea.webp": {
-    "mtime": 1786862569.3703506,
-    "ast_hash": "1a1d9149903c658b5c51182804bff3d7",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\warm-cinnamon-herbal-tea.webp": {
-    "mtime": 1786862569.3713553,
-    "ast_hash": "7e1567e068178758ea4e1149dfa40ada",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\warm-cinnamon-milk.webp": {
-    "mtime": 1786862569.3725176,
-    "ast_hash": "89e68d820b69454506536526250874ca",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\warm-ginger-herbal-tea.webp": {
-    "mtime": 1786862569.3735206,
-    "ast_hash": "15201a2daeec8026027a321b7bb58533",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\warm-green-tea.webp": {
-    "mtime": 1786862569.374518,
-    "ast_hash": "db2ff22044e609829c8a18e86d097dbd",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\warm-milk.webp": {
-    "mtime": 1786862569.3755188,
-    "ast_hash": "f61e2786ba04de006bd996ecc7b3c8b3",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\warm-nutmeg-milk.webp": {
-    "mtime": 1786862569.3846824,
-    "ast_hash": "098e07aa05e67ef10f6b9cc03b0cbfa6",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\icons\\allergen-free.webp": {
-    "mtime": 1786862569.2672148,
-    "ast_hash": "8027e391b0610c8cc4466074537bb46d",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\icons\\caring-hand.webp": {
-    "mtime": 1786862569.2682588,
-    "ast_hash": "a8ca6cd7d5ec37b81c4496a0f8f3bd5e",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\icons\\leaf.webp": {
-    "mtime": 1786862569.2692263,
-    "ast_hash": "5854059c71bdd0d2d582ac4654347f87",
-    "semantic_hash": ""
-  },
-  "C:\\Users\\prath\\OneDrive\\Documents\\@Downloads\\@healthyday\\@production\\dashboard-test-healthyday\\src\\assets\\diet\\icons\\oral-health.webp": {
-    "mtime": 1786862569.2707624,
-    "ast_hash": "e97df91ebf990e7137f54d896df44b29",
+    "mtime": 1786184015.103709,
+    "ast_hash": "19236ecb40a9b46701acc193bbf8ec76",
     "semantic_hash": ""
   }
 }
