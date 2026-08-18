@@ -11,6 +11,9 @@ import { isFreeBatchOver, getSimulatedBatchDate } from "./utils";
  *   future): "14DaysOngoing" while their free batch is still ongoing, "paidPendingStart" once
  *   it's over — so they see a "your classes start tomorrow" interstitial instead of either the
  *   free dashboard or the full paid dashboard.
+ * - Paid students whose subscription is currently on hold (subscription_status: "paused",
+ *   current_plan null) → "subscriptionPaused", regardless of sub_start_date, so they see the
+ *   paused-plan screen instead of the normal paid dashboard.
  *
  * `preview` lets ?forceDay=/?time= QA overrides simulate a specific day/time instead of the
  * real clock (see getSimulatedBatchDate/isFreeBatchOver).
@@ -35,6 +38,7 @@ export function getEffectiveStatus(
   const freeBatchOngoing = !!freeBatchStart && effectiveToday >= freeBatchStart && !batchOver;
 
   if (status === "paid") {
+    if (studentData?.subscription_status === "paused") return "subscriptionPaused";
     const paidNotStartedYet = !!subStart && effectiveToday < subStart;
     if (!paidNotStartedYet) return status;
     if (freeBatchOngoing) return "14DaysOngoing";

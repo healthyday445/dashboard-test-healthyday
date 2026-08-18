@@ -12,6 +12,7 @@ import { FourteenDaysV2JourneyCompletedPage } from "@/components/FourteenDaysV2J
 import { FourteenDaysV2TabBar, type FourteenDaysV2Tab } from "@/components/FourteenDaysV2TabBar";
 import completedJourneyHeroBg from "@/assets/21daysprogram/completed_journey_hero_bg.webp";
 import IndexPaid from "@/pages/IndexPaid";
+import SubscriptionPausedScreen from "@/components/SubscriptionPausedScreen";
 import { CertificateModal } from "@/components/CertificateModal";
 
 import thumbFaceYogaTel from "@/assets/bonus/faceyoga_tel.jpg";
@@ -222,6 +223,25 @@ const buildPreviewDashboardData = (key: string): any | null => {
       };
     }
 
+    case "paused": {
+      // Mirrors the effective status getEffectiveStatus() would derive from a real
+      // paid+paused API response — this preview path renders studentData.status directly
+      // rather than going through Dashboard.tsx's routing. `language` is overridden below
+      // by the generic ?previewLanguage= param when present.
+      const resumeDate = new Date(today);
+      resumeDate.setDate(resumeDate.getDate() + 30);
+      return {
+        status: "subscriptionPaused",
+        language: "English",
+        name: "Preview User",
+        mobile: "+919999999999",
+        current_plan: null,
+        subscription_status: "paused",
+        resume_date: previewToLocalDateStr(resumeDate),
+        subscriptions: [{ subscription_status: "paused", plan_type: "12_months" }],
+      };
+    }
+
     case "14day_completed":
       return { status: "14DaysCompleted", language: "Telugu", name: "Preview User", total_referral_count: 4 };
 
@@ -255,8 +275,11 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
   const mobile = pathMobile || queryMobile || undefined;
 
   const previewDashboardKey = searchParams.get("preview_dashboard");
+  const previewLanguage = searchParams.get("previewLanguage");
   const previewStudentData = previewDashboardKey ? buildPreviewDashboardData(previewDashboardKey) : null;
-  const effectiveInitialData = previewStudentData ?? initialStudentData;
+  const effectiveInitialData = previewStudentData
+    ? (previewLanguage ? { ...previewStudentData, language: previewLanguage } : previewStudentData)
+    : initialStudentData;
 
   useEffect(() => {
     if (!pathMobile && queryMobile) {
@@ -638,6 +661,11 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
         verifiedReferralCount={verifiedReferralCount  ?? 0}
       />
     );
+  }
+
+  // --- Subscription Paused Dashboard ---
+  if (studentStatus === "subscriptionPaused" && !isForceOnboardingPreview) {
+    return <SubscriptionPausedScreen studentData={studentData} />;
   }
 
   // --- Past Due / Subscription Expired Dashboard ---

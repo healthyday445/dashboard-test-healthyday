@@ -34,3 +34,30 @@ export function getPlanRenewalInfo(studentData: any): PlanRenewalInfo {
 
   return { daysUntilPlanEnds, showPlanRenewal, planEndDate };
 }
+
+const MONTH_NAMES = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+/** Formats a "YYYY-MM-DD" (or ISO) date string as an ordinal date, e.g. "29th September". */
+export function formatOrdinalDate(dateStr: string): string {
+  if (!dateStr) return "";
+  const parts = dateStr.split("T")[0].split("-");
+  const d = parts.length === 3
+    ? new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]))
+    : new Date(dateStr);
+  const day = d.getDate();
+  const suffix = day === 1 || day === 21 || day === 31 ? "st" : day === 2 || day === 22 ? "nd" : day === 3 || day === 23 ? "rd" : "th";
+  return `${day}${suffix} ${MONTH_NAMES[d.getMonth()]}`;
+}
+
+/** Days remaining from today until `dateStr` (0 if today, negative if in the past). */
+export function daysUntil(dateStr: string): number | null {
+  if (!dateStr) return null;
+  const parts = dateStr.split("T")[0].split("-");
+  const target = parts.length === 3
+    ? new Date(parseInt(parts[0]), parseInt(parts[1]) - 1, parseInt(parts[2]))
+    : new Date(dateStr);
+  target.setHours(0, 0, 0, 0);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return Math.round((target.getTime() - today.getTime()) / 86400000);
+}
