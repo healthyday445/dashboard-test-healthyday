@@ -26,6 +26,7 @@ const COPY = {
     resuming: "Resuming...",
     resumeError: "Couldn't resume your subscription. Please try again or contact support.",
     contactSupport: "Contact Support",
+    whatsappMessage: "Hi! I am unable to resume my subscription. Can you please help?",
   },
   Telugu: {
     resumesOn: (dateLabel: string) => `${dateLabel} నుండీ మీ subscription మళ్ళీ continue అవుతుంది`,
@@ -38,6 +39,7 @@ const COPY = {
     resuming: "Resume అవుతోంది...",
     resumeError: "Subscription resume అవ్వలేదు. మళ్ళీ try చేయండి లేదా మా Support Team ని contact చేయండి.",
     contactSupport: "Support ని సంప్రదించండి",
+    whatsappMessage: "Hi! నా subscription pause లో వుంది. restart చేయండి?",
   },
 } as const;
 
@@ -52,8 +54,7 @@ const SubscriptionPausedScreen: React.FC<SubscriptionPausedScreenProps> = ({ stu
   const remainingDays = resumeDateRaw ? daysUntil(resumeDateRaw) : null;
 
   const handleContactSupport = () => {
-    const message = "Hi! I am unable to resume my subscription. Can you please help?";
-    window.open(`https://wa.me/${SUPPORT_WHATSAPP}?text=${encodeURIComponent(message)}`, "_blank");
+    window.open(`https://wa.me/${SUPPORT_WHATSAPP}?text=${encodeURIComponent(copy.whatsappMessage)}`, "_blank");
   };
 
   const handleResumeNow = async () => {
