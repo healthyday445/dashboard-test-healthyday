@@ -1,11 +1,12 @@
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import { safeSessionStorage } from "@/lib/storage";
 import { DietDateTabBar, type DietDateTab } from "@/components/DietDateTabBar";
 import { DietMealCard, DietMealCardSkeleton } from "@/components/DietMealCard";
+import { DietMealFiller } from "@/components/DietMealFiller";
 import { GroceryListButton } from "@/components/GroceryListButton";
-import { getResolvedTabPlans, parseIsoDateKey, type Language } from "@/data/diet";
+import { getResolvedTabPlans, parseIsoDateKey, MEAL_FILLERS_AFTER_SLOT, type Language } from "@/data/diet";
 
 const WEEKDAY_ABBR = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -168,9 +169,15 @@ const Diet = () => {
       <div className={`pt-5 ${showSkeleton ? "pb-6" : "pb-[90px]"}`}>
         {showSkeleton
           ? Array.from({ length: 8 }, (_, i) => <DietMealCardSkeleton key={i} />)
-          : activePlan.meals.map((meal) => (
-              <DietMealCard key={meal.slotId} meal={meal} onClick={() => navigate(buildDetailUrl(meal.slotId))} />
-            ))}
+          : activePlan.meals.map((meal) => {
+              const filler = MEAL_FILLERS_AFTER_SLOT[meal.slotId];
+              return (
+                <Fragment key={meal.slotId}>
+                  <DietMealCard meal={meal} onClick={() => navigate(buildDetailUrl(meal.slotId))} />
+                  {filler && <DietMealFiller filler={filler} language={language} />}
+                </Fragment>
+              );
+            })}
       </div>
 
       {!showSkeleton && activePlan.meals.some((meal) => meal.groceryListAvailable) && <GroceryListButton />}

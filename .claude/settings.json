@@ -39,7 +39,14 @@
       "Bash(magick poha_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/vegetable-poha-peanuts-curry-leaves.webp)",
       "Bash(magick ricerasam_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/rice-rasam-soya-chunks-curry.webp)",
       "Bash(magick laddu_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/jaggery-nuts-laddu.webp)",
-      "Bash(magick tomatorice_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/tomato-rice-soya-chunks-curry.webp)"
+      "Bash(magick tomatorice_1.png -resize 412x412 -quality 82 __TRACKED_VAR__/tomato-rice-soya-chunks-curry.webp)",
+      "mcp__figma__get_screenshot",
+      "Bash(curl -sL \"https://www.figma.com/api/mcp/asset/c9d13c0a-db95-4395-8e86-1935e7598f34.png\" -o breathing_alpha.png)",
+      "Bash(magick breathing_alpha.png -format \"%wx%h alpha_mean=%[fx:mean.a]\\\\n\" info:)",
+      "Bash(magick breathing.webp -resize 100x100 breathing.webp)",
+      "Bash(magick sleeping-in-bed.webp -resize 100x100 sleeping-in-bed.webp)",
+      "Bash(magick breathing.webp -background \"#888888\" -flatten preview_breathing.png)",
+      "Bash(magick sleeping-in-bed.webp -background \"#888888\" -flatten preview_sleep.png)"
     ],
     "defaultMode": "bypassPermissions",
     "additionalDirectories": [

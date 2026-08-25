@@ -166,6 +166,34 @@ export interface ResolvedMeal {
   groceryListAvailable: boolean;
 }
 
+/** Icon glyph keys for the static activity fillers between meal cards — see
+ *  `mealFillers.ts`. "nap" and "sleep" intentionally share one glyph asset (the
+ *  Figma design reuses the same "Sleeping in Bed" icon for both). */
+export type FillerIconKey = "walking" | "nap" | "yoga" | "breathing" | "sleep";
+
+/** One "N glasses of water" reminder item inside a filler strip. */
+export interface HydrationFillerItem {
+  kind: "hydration";
+  glasses: 1 | 2;
+  label: LocalizedText;
+}
+
+/** One activity-reminder item (walk/nap/yoga/breathing/sleep) inside a filler strip. */
+export interface ActivityFillerItem {
+  kind: "activity";
+  icon: FillerIconKey;
+  label: LocalizedText;
+}
+
+export type FillerItem = HydrationFillerItem | ActivityFillerItem;
+
+/** A static strip of 1-3 reminder items rendered between two meal cards — see
+ *  `MEAL_FILLERS_AFTER_SLOT` in `mealFillers.ts`. Same every day, independent of
+ *  `CuratedContentByDate` (and unaffected by that data eventually moving to an API). */
+export interface MealFillerDef {
+  items: FillerItem[];
+}
+
 export interface ResolvedDayPlan {
   /** "YYYY-MM-DD" — internal lookup key, never shown to users. */
   dateKey: string;

@@ -10,3 +10,4 @@ export {
   parseIsoDateKey,
 } from "./dateMath";
 export { getResolvedDayPlan, getResolvedTabPlans } from "./getResolvedDayPlan";
+export { MEAL_FILLERS_AFTER_SLOT } from "./mealFillers";

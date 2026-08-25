@@ -1,4 +1,5 @@
-import type { CuratedContentByDate, LocalizedText, MealSlotId } from "./types";
+import type { CuratedContentByDate, MealSlotId } from "./types";
+import { same, t } from "./localizedText";
 import imgWalnutsDates from "@/assets/diet/walnuts-dates.webp";
 import imgCucumberLemonDetoxJuice from "@/assets/diet/cucumber-lemon-detox-juice.webp";
 import imgCucumberPalakuraPaneerSalad from "@/assets/diet/cucumber-palakura-paneer-salad.webp";
@@ -260,11 +261,6 @@ import imgM175Meal from "@/assets/diet/m1w4/m175.webp";
 import imgM176Meal from "@/assets/diet/m1w4/m176.webp";
 import imgM177Meal from "@/assets/diet/m1w4/m177.webp";
 
-/** Shorthand for a LocalizedText where the English and Telugu Figma screens showed the
- *  exact same word (a handful of ingredient/dish names were left untranslated in the
- *  Telugu design — transcribed as-authored, not "fixed" here). */
-const same = (text: string): LocalizedText => ({ English: text, Telugu: text });
-const t = (English: string, Telugu: string): LocalizedText => ({ English, Telugu });
 /** Placeholder for a date/slot with no Telugu Figma screen yet — English text duplicated
  *  so the UI never shows blank Telugu content. 2026-08-10 (Figma node 1331:15298) is the
  *  only currently-curated date that's English-only and uses `pending(...)` throughout —
