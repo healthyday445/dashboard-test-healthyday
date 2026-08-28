@@ -249,6 +249,7 @@ const DateBadge = ({ label }: { label: string }) => (
 
 import { safeSessionStorage } from "@/lib/storage";
 import { getCurrentMinutesIST } from "@/lib/utils";
+import { getNowIST } from "@/lib/serverTime";
 
 const AllRecordings = () => {
   const navigate = useNavigate();
@@ -423,7 +424,7 @@ const AllRecordings = () => {
   };
 
   // --- Define strict IST "now" for fallback dates ---
-  const nowISTFallback = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+  const nowISTFallback = getNowIST();
   const todayLabel = fmtISTDate(nowISTFallback);
 
   const tomorrow = new Date(nowISTFallback);
@@ -470,7 +471,7 @@ const AllRecordings = () => {
   const getFallbackExpiryDate = (hourIST: number) => nowISTFallback.getUTCHours() >= hourIST ? tomorrowLabel : todayLabel;
 
   // --- Build Class Recordings with same structure, using API data where available ---
-  const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+  const nowIST = getNowIST();
   const forceTime = searchParams.get("forceTime");
   const totalMin = forceTime ? parseInt(forceTime, 10) : (nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes());
   const isMorningLive = totalMin >= 330 && totalMin < 570;  // 5:30 AM - 9:30 AM IST

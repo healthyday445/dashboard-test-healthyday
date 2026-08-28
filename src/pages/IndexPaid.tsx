@@ -4,6 +4,7 @@ import dietMealIcon from "@/assets/diet/icons/meal.webp";
 import imgLanguageEnglish from "@/assets/language_English.webp";
 import imgLanguageTelugu from "@/assets/language_Telugu.webp";
 import { getCurrentMinutesIST } from "@/lib/utils";
+import { getNowIST } from "@/lib/serverTime";
 import { getActivePaidBonusSession, isRegularSessionLive } from "@/lib/paidBonusSessions";
 import { getPlanRenewalInfo } from "@/lib/planRenewal";
 import { getWeeklyAttendance } from "@/lib/weeklyAttendance";
@@ -45,7 +46,7 @@ const IndexPaid: React.FC<IndexPaidProps> = ({ studentData, sessionLinks, sessio
   // screen — reusing it here would make that check misfire for paid students too.
   const totalMin = getCurrentMinutesIST(searchParams.get("time"));
   const forcePaidDay = searchParams.get("forcePaidDay");
-  const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+  const nowIST = getNowIST();
   const currentDow = forcePaidDay !== null ? parseInt(forcePaidDay, 10) : nowIST.getUTCDay(); // 0 is Sunday
 
   // Subscription plan duration check — current_plan is the backend's authoritative,

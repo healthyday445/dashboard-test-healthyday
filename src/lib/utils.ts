@@ -1,5 +1,6 @@
 import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
+import { getNowIST } from "@/lib/serverTime";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -20,7 +21,7 @@ export function parseTimeStringToMinutes(time: string): number {
 /** Current time-of-day in IST, as minutes since midnight — or the `?time=` override when present. */
 export function getCurrentMinutesIST(timeOverride?: string | null): number {
   if (timeOverride) return parseTimeStringToMinutes(timeOverride);
-  const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+  const nowIST = getNowIST();
   return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
 }
 

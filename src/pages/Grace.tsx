@@ -3,6 +3,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import { safeSessionStorage } from "@/lib/storage";
 import { getSimulatedBatchDate } from "@/lib/utils";
+import { getNowIST } from "@/lib/serverTime";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
 import NoSessionsCard from "@/components/NoSessionsCard";
 
@@ -37,7 +38,7 @@ const parseTimeParam = (t: string | null): number | null => {
 const getCurrentTotalMin = (timeParam: string | null) => {
   const parsed = parseTimeParam(timeParam);
   if (parsed !== null) return parsed;
-  const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+  const nowIST = getNowIST();
   return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
 };
 

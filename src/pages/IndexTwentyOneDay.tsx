@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { isFreeBatchOver, getSimulatedBatchDate, getBonusWindowStart } from "@/lib/utils";
+import { getNowIST } from "@/lib/serverTime";
 import { LevelCard } from "@/components/LevelCard";
 import { CertificateModal } from "@/components/CertificateModal";
 import IndexPaid from "@/pages/IndexPaid";
@@ -676,7 +677,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
       return "yellow";
     });
 
-    const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+    const nowIST = getNowIST();
     const defaultTotalMin = nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
     const _sessionLinkTimeParam = new URLSearchParams(location.search).get("time");
     const totalMinCalc = (() => {
@@ -778,7 +779,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
       const bonusSession = getBonusInfo(currentDay, lang);
       const bonusSessionCode = `free_bonus_${bonusSession.name.toLowerCase().replace(/[^a-z0-9]+/g, "_")}`;
       const _timeParam = new URLSearchParams(location.search).get("time");
-      const totalMin = (() => { if (_timeParam) { const isPM = _timeParam.toLowerCase().endsWith("pm"); const s = _timeParam.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
+      const totalMin = (() => { if (_timeParam) { const isPM = _timeParam.toLowerCase().endsWith("pm"); const s = _timeParam.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = getNowIST(); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
       const showBonus = isOngoingStatus && totalMin >= getBonusWindowStart(bonusSession.startMin) && totalMin < bonusSession.startMin + (bonusSession.activeEndOffset ?? 30);
       if (showBonus) {
         const isLive = totalMin >= bonusSession.startMin - 30 && totalMin < bonusSession.startMin + (bonusSession.liveDuration ?? 30);
@@ -963,7 +964,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
 
     let activeRecurringBonusCard: any = null;
     if (isPaid) {
-      const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+      const nowIST = getNowIST();
       const _forceTime = new URLSearchParams(location.search).get("time");
       const _forceDay = new URLSearchParams(location.search).get("forceDay");
       const _forceWeek = new URLSearchParams(location.search).get("forceWeek");
@@ -1010,7 +1011,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
       <>
       <div>
         {activeRecurringBonusCard && (() => {
-          const rTotalMin = (() => { const _t = new URLSearchParams(location.search).get("time"); if (_t) { const isPM = _t.toLowerCase().endsWith("pm"); const s = _t.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
+          const rTotalMin = (() => { const _t = new URLSearchParams(location.search).get("time"); if (_t) { const isPM = _t.toLowerCase().endsWith("pm"); const s = _t.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = getNowIST(); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
           const bonusIsLive = rTotalMin >= activeRecurringBonusCard.startMin - 30 && rTotalMin < activeRecurringBonusCard.startMin + 30;
           const bonusTimeLabel = activeRecurringBonusCard.fullName.replace(/^.*at\s+/, '');
           return (
@@ -1049,7 +1050,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
         {/* Your Yoga Session — live/not-live */}
         {(() => {
           const _timeParam2 = new URLSearchParams(location.search).get("time");
-          const totalMin = (() => { if (_timeParam2) { const isPM = _timeParam2.toLowerCase().endsWith("pm"); const s = _timeParam2.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = new Date(new Date().getTime()+5.5*60*60*1000); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
+          const totalMin = (() => { if (_timeParam2) { const isPM = _timeParam2.toLowerCase().endsWith("pm"); const s = _timeParam2.toLowerCase().replace("am","").replace("pm",""); const [hStr,mStr] = s.split("."); let h = parseInt(hStr,10); const m = parseInt(mStr??"0",10); if(isPM && h!==12) h+=12; if(!isPM && h===12) h=0; return h*60+m; } const nowIST = getNowIST(); return nowIST.getUTCHours()*60+nowIST.getUTCMinutes(); })();
 
           // Bonus session detection for regular session card
           const BONUS_DAYS = [3, 5, 7, 10, 14];
@@ -1693,7 +1694,7 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
 
       {/* Introductory Session Card */}
       {(() => {
-        const _nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+        const _nowIST = getNowIST();
         const _totalMin = _nowIST.getUTCHours() * 60 + _nowIST.getUTCMinutes();
         const _year = _nowIST.getUTCFullYear();
         const _month = _nowIST.getUTCMonth(); // 5 = June

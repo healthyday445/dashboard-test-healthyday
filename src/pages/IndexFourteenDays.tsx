@@ -172,6 +172,7 @@ const VideoCard = ({ video }: { video: (typeof teluguVideos)[0] }) => {
 };
 
 import { safeSessionStorage, safeLocalStorage } from "@/lib/storage";
+import { getNowIST } from "@/lib/serverTime";
 
 interface IndexProps {
   initialStudentData?: any;
@@ -584,7 +585,7 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
       return "yellow";
     });
 
-    const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+    const nowIST = getNowIST();
     const defaultTotalMin = nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
     const _sessionLinkTimeParam = new URLSearchParams(location.search).get("time");
     const totalMinCalc = (() => {
@@ -967,7 +968,7 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
       {/* Introductory Session Card */}
       {(() => {
         if (!isForceOnboardingPreview) {
-          const _nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+          const _nowIST = getNowIST();
           const _nowYMD = Date.UTC(_nowIST.getUTCFullYear(), _nowIST.getUTCMonth(), _nowIST.getUTCDate());
           const _batchYMD = Date.UTC(onboardingStartDate.getFullYear(), onboardingStartDate.getMonth(), onboardingStartDate.getDate());
           const oneDayMs = 24 * 60 * 60 * 1000;

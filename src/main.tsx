@@ -4,7 +4,10 @@ import '@fontsource/playball/400.css';
 import { createRoot } from "react-dom/client";
 import App from "./App.tsx";
 import ErrorBoundary from "./components/ErrorBoundary";
+import { syncServerTime } from "./lib/serverTime";
 import "./index.css";
+
+syncServerTime();
 
 createRoot(document.getElementById("root")!).render(
   <ErrorBoundary>

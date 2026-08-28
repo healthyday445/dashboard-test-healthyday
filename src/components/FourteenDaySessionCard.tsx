@@ -1,5 +1,6 @@
 import { useLocation } from "react-router-dom";
 import { trackSessionClick } from "@/lib/trackSessionClick";
+import { getNowIST } from "@/lib/serverTime";
 import NoSessionsCard from "@/components/NoSessionsCard";
 import { Skeleton } from "@/components/ui/skeleton";
 import imgLanguageEnglish from "@/assets/language_English.webp";
@@ -47,7 +48,7 @@ const parseTimeParam = (t: string | null): number | null => {
 const getCurrentTotalMin = (timeParam: string | null) => {
   const parsed = parseTimeParam(timeParam);
   if (parsed !== null) return parsed;
-  const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+  const nowIST = getNowIST();
   return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
 };
 

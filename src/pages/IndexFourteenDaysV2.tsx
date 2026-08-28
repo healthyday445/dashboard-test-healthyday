@@ -127,6 +127,7 @@ const VideoCard = ({ video }: { video: (typeof teluguVideos)[0] }) => {
 };
 
 import { safeSessionStorage } from "@/lib/storage";
+import { getNowIST } from "@/lib/serverTime";
 
 // ?preview_dashboard=<key> seeds mock studentData so each render state of the
 // Live Sessions tab can be checked without real API data — mirrors the equivalent
@@ -554,7 +555,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
       ? Math.min(Math.max(parseInt(previewAttendedParam, 10), 0), 14)
       : Math.min(attendedDates.size, 14);
 
-    const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+    const nowIST = getNowIST();
     const defaultTotalMin = nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
     const _sessionLinkTimeParam = new URLSearchParams(location.search).get("time");
     const totalMinCalc = (() => {
@@ -851,7 +852,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
           live and the join link is shown (join opens 30 min ahead of the advertised 11 AM start). */}
       {(() => {
         if (!isForceOnboardingPreview) {
-          const _nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+          const _nowIST = getNowIST();
           const _nowYMD = Date.UTC(_nowIST.getUTCFullYear(), _nowIST.getUTCMonth(), _nowIST.getUTCDate());
           const _batchYMD = Date.UTC(onboardingStartDate.getFullYear(), onboardingStartDate.getMonth(), onboardingStartDate.getDate());
           const oneDayMs = 24 * 60 * 60 * 1000;
@@ -869,7 +870,7 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
             if (!isPM && h === 12) h = 0;
             return h * 60 + m;
           }
-          const nowIST = new Date(new Date().getTime() + 5.5 * 60 * 60 * 1000);
+          const nowIST = getNowIST();
           return nowIST.getUTCHours() * 60 + nowIST.getUTCMinutes();
         })();
 
