@@ -9,6 +9,7 @@ import img5ce328 from "@/assets/5ce32860a765bdcaeb0504ff13008eea60a6cd55.webp";
 import imgFaceYogaTelugu from "@/assets/bonus/faceyoga_tel.jpg";
 import imgFaceYogaEnglish from "@/assets/bonus/faceyoga_eng.jpg";
 import imgWhiteArrow from "@/assets/whiteArrow.svg";
+import { trackSessionClick } from "@/lib/trackSessionClick";
 
 // classRecordings is now built dynamically inside the component based on student language & API data
 
@@ -478,7 +479,7 @@ const AllRecordings = () => {
   const isEveningLive = totalMin >= 990 && totalMin < 1170; // 4:30 PM - 7:30 PM IST
   const isLiveNow = isMorningLive || isEveningLive;
 
-  const classRecordings: { title: string; subtitle: string; thumbnail: string; link: string; accessTill: string }[] = [];
+  const classRecordings: { title: string; subtitle: string; thumbnail: string; link: string; accessTill: string; sessionCode: string }[] = [];
 
   const yogaFallbackSession = sessionLinks.find((s) => (s.session_code === "daily_morning" || s.session_code === "daily_evening") && s.language === lang);
   const morningYogaFallbackSession = sessionLinks.find((s) => s.session_code === "daily_morning" && s.language === lang);
@@ -491,6 +492,7 @@ const AllRecordings = () => {
       thumbnail: ytThumb(morningYogaSession?.link || morningYogaFallbackSession?.link, isEnglish ? imgLanguageEnglish : imgLanguageTelugu),
       link: morningYogaSession?.link || morningYogaFallbackSession?.link || yogaFallbackLink,
       accessTill: (morningYogaSession && formatExpiry(morningYogaSession.expiry_by)) || (morningYogaFallbackSession && formatExpiry(morningYogaFallbackSession.expiry_by)) || `Access till 5:00 AM, ${getFallbackExpiryDate(6)}`,
+      sessionCode: morningYogaSession?.session_code || morningYogaFallbackSession?.session_code || "daily_morning",
     });
   } else if (!isMorningLive) {
     // Outside live hours: show most recent recording (morning or evening)
@@ -500,6 +502,7 @@ const AllRecordings = () => {
       thumbnail: ytThumb(yogaSession?.link || yogaFallbackSession?.link, isEnglish ? imgLanguageEnglish : imgLanguageTelugu),
       link: yogaSession?.link || yogaFallbackSession?.link || yogaFallbackLink,
       accessTill: (yogaSession && formatExpiry(yogaSession.expiry_by)) || (yogaFallbackSession && formatExpiry(yogaFallbackSession.expiry_by)) || `Access till 5:00 AM, ${getFallbackExpiryDate(6)}`,
+      sessionCode: yogaSession?.session_code || yogaFallbackSession?.session_code || "daily_morning",
     });
   }
   // During morning live: no yoga recording shown (session still in progress)
@@ -513,6 +516,7 @@ const AllRecordings = () => {
       thumbnail: isEnglish ? imgFaceYogaEnglish : imgFaceYogaTelugu,
       link: faceYogaSession?.link || (isEnglish ? "https://join.healthyday.co.in/healthyface_eng" : "https://join.healthyday.co.in/healthyface"),
       accessTill: `Access till ${plus13Label}`,
+      sessionCode: "face_yoga",
     });
   }
 
@@ -526,6 +530,7 @@ const AllRecordings = () => {
       thumbnail: ytThumb(b2hSession?.link || b2hFallbackSession?.link, `https://img.youtube.com/vi/SyjnCjDtNS8/hqdefault.jpg`),
       link: b2hSession?.link || b2hFallbackSession?.link || (isEnglish ? "https://join.healthyday.co.in/b2hsession_eng" : "https://join.healthyday.co.in/b2hsession"),
       accessTill: (b2hSession && formatExpiry(b2hSession.expiry_by)) || (b2hFallbackSession && formatExpiry(b2hFallbackSession.expiry_by)) || `Access till 8:30 PM, ${getFallbackExpiryDate(21)}`,
+      sessionCode: b2hSession?.session_code || b2hFallbackSession?.session_code || (isEnglish ? "b2h_eng" : "b2h"),
     });
   }
 
@@ -552,6 +557,7 @@ const AllRecordings = () => {
         thumbnail: videoId ? `https://img.youtube.com/vi/${videoId}/mqdefault.jpg` : (isEnglish ? imgLanguageEnglish : imgLanguageTelugu),
         link: s.link,
         accessTill: formatExpiry(s.expiry_by) || "Always available",
+        sessionCode: s.session_code,
       };
     })
     .sort((a, b) => a.dayNumber - b.dayNumber);
@@ -691,6 +697,7 @@ const AllRecordings = () => {
                 href={rec.link}
                 target="_blank"
                 rel="noopener noreferrer"
+                onClick={() => trackSessionClick(mobile, rec.sessionCode, "recording")}
                 style={{ textDecoration: "none", display: "flex", gap: "12px", alignItems: "flex-start" }}
               >
                 <Thumbnail src={rec.thumbnail} alt={rec.title} />
@@ -764,6 +771,7 @@ const AllRecordings = () => {
                   href={rec.link}
                   target="_blank"
                   rel="noopener noreferrer"
+                  onClick={() => trackSessionClick(mobile, rec.sessionCode, "recording")}
                   style={{ textDecoration: "none", display: "flex", gap: "12px", alignItems: "flex-start" }}
                 >
                   <Thumbnail src={rec.thumbnail} alt={rec.title} />

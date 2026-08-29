@@ -5,9 +5,16 @@
  * `portal-session-clicks` function, which logs it in Firestore `portal_session_clicks`
  * (same payload shape as `trackVisit`'s `portal_link_clicks` log, plus sessionCode).
  * Fires for both free and paid students, every click — no dedup.
+ *
+ * `source` distinguishes a live "Join Session" click from a recordings-page click,
+ * since both funnel into the same collection.
  */
 
-export function trackSessionClick(slug: string | undefined, sessionCode: string): void {
+export function trackSessionClick(
+  slug: string | undefined,
+  sessionCode: string,
+  source: "join_button" | "recording" = "join_button"
+): void {
   if (!slug) return;
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -16,6 +23,7 @@ export function trackSessionClick(slug: string | undefined, sessionCode: string)
   const payload = {
     slug,
     sessionCode,
+    source,
 
     url: window.location.href,
     path: window.location.pathname,
