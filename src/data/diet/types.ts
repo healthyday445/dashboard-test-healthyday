@@ -25,108 +25,22 @@ export interface MealSlotDef {
   order: number;
 }
 
-/** The 6 repeating week-blocks that make up the 42-day cycle, in fixed cycle order. */
-export type WeekBlockId = "M1W1" | "M1W2" | "M1W3" | "M1W4" | "M2W1" | "M2W2";
-
-/** The sheet's raw cell for one (week-block, weekday, slot). `detail` is an opaque
- *  freeform string written by the nutrition team — never parsed/split by rendering code. */
-export interface GenericMealContent {
-  category: string;
-  detail: string;
-}
-
-/** weekdayIndex: 0=Monday .. 6=Sunday */
-export type GenericDayContent = Record<MealSlotId, GenericMealContent>;
-export type GenericWeekBlockContent = Record<number, GenericDayContent>;
-export type GenericCycleContent = Record<WeekBlockId, GenericWeekBlockContent>;
-
 /** Student-facing language. Matches the values already used elsewhere in this app
- *  (e.g. `studentData.language` in IndexPaid.tsx) — not every value in every field
- *  actually differs by language (the Figma Telugu screens leave some words, like slot
- *  labels and numeric quantities, in English), but every curated text field is stored
- *  per-language so the data can be edited independently without code changes. */
+ *  (e.g. `studentData.language` in IndexPaid.tsx). */
 export type Language = "English" | "Telugu";
 
-/** A piece of user-facing text with one value per supported language. Resolved down to
- *  a plain string by `getResolvedDayPlan`'s `language` argument — components never see
- *  a LocalizedText, only the already-resolved string. */
+/** A piece of user-facing text with one value per supported language — used only by the
+ *  static filler-strip content (`mealFillers.ts`), which has no Telugu source yet. Real
+ *  meal content comes from the Diet Plan API already resolved to one language per call,
+ *  so it never needs this type. */
 export type LocalizedText = Record<Language, string>;
 
-export interface CuratedItem {
-  /** Full chip text, e.g. {English:"2 Walnuts", Telugu:"2 ఆక్రోట్లు"} — stored as one
-   *  complete phrase (not split into a separate qty/name) because the two languages
-   *  don't always decompose the same way (e.g. "1 medium fruit" has no separate qty). */
-  label: LocalizedText;
-}
-
-export interface NutritionalBenefitItem {
-  benefitLabel: LocalizedText;
-  /** Loose lookup key into the category-icon/benefit-icon set — an unrecognized key
-   *  must fall back to a generic icon, never throw or leave a gap. */
-  iconKey: string;
-  /** Restricts this single benefit row to a subset of languages, e.g. `["English"]`
-   *  means this row exists only in the English Figma design and must be dropped when
-   *  rendering Telugu (the two languages' designs don't always show the same set of
-   *  benefit rows for an ingredient). Omit entirely (the default — true for almost every
-   *  entry) to mean "shown in every language." Never write the full language list
-   *  explicitly — omit the field instead of listing all languages. */
-  visibleLanguages?: Language[];
-}
-
-/** One ingredient card in the Nutritional Benefits section (Figma 890:8577) — an ingredient
- *  can have MULTIPLE benefits (e.g. Cucumber → Hydration + Cooling), and the design renders
- *  all of them stacked inside a single card with a divider between rows, not one card per
- *  benefit. Never split one ingredient's benefits across multiple `NutritionalBenefit`
- *  entries — group them all into one `benefits` array instead. */
-export interface NutritionalBenefit {
-  ingredient: LocalizedText;
-  benefits: NutritionalBenefitItem[];
-  /** Same meaning as `NutritionalBenefitItem.visibleLanguages`, but for the whole card —
-   *  an ingredient with no card at all in one language's Figma design (e.g. Capsicum
-   *  missing from the Telugu screen for a dish that has it in English). Omit for "shown
-   *  in every language." */
-  visibleLanguages?: Language[];
-}
-
-export interface RecommendedQuantity {
-  ingredient: LocalizedText;
-  /** The quantity chip (e.g. "2 pcs") — LocalizedText for future flexibility, though in
-   *  every curated meal today this value happens to be identical across languages. */
-  qty: LocalizedText;
-  /** Same meaning as `NutritionalBenefit.visibleLanguages`. Added for consistency; no
-   *  real-world mismatch has been found here yet. */
-  visibleLanguages?: Language[];
-}
-
-/**
- * Hand-authored override for one slot on one specific date, matching the Figma detail
- * screens. Every field past `name` is independently optional — omit the key entirely
- * (never `""` / `[]`) to mean "not curated for this meal"; the merge layer falls back
- * to the generic sheet content for any omitted field.
- */
-export interface CuratedMealContent {
-  name: LocalizedText;
-  imageUrl?: string;
-  /** Overrides the slot's default `timeRangeLabel` from `DIET_SLOTS` for this date+slot
-   *  only — e.g. 2026-08-09's Breakfast shows "06:30AM - 09:30AM" instead of the usual
-   *  "07:30AM - 09:30AM" because that date has no separate Post Yoga Drink card. A plain
-   *  `string`, not `LocalizedText`, since time ranges aren't translated. Omit to use the
-   *  slot's normal global time range (true for almost every curated meal). */
-  timeRangeLabel?: string;
-  items?: CuratedItem[];
-  tips?: LocalizedText;
-  precautions?: LocalizedText;
-  nutritionalBenefits?: NutritionalBenefit[];
-  recommendedQuantity?: RecommendedQuantity[];
-  groceryListAvailable?: boolean;
-}
-
-/** Keyed by ISO date ("YYYY-MM-DD") then slot id. A date with no entry means zero
- *  curation — every slot for that date falls back entirely to generic content. */
-export type CuratedContentByDate = Record<string, Partial<Record<MealSlotId, CuratedMealContent>>>;
-
-export interface ResolvedItem {
-  label: string;
+/** One ingredient row in the "Recommended Quantity" section (Figma 890:8639) — sourced
+ *  from `GET /diet-meal`'s `quantity_detailed` object, converted to an array (object key
+ *  order is preserved from the API response). */
+export interface ResolvedRecommendedQuantity {
+  ingredient: string;
+  qty: string;
 }
 
 export interface ResolvedNutritionalBenefitItem {
@@ -134,36 +48,52 @@ export interface ResolvedNutritionalBenefitItem {
   iconKey: string;
 }
 
+/** One ingredient card in the "Nutritional Benefits" section (Figma 890:8577) — sourced
+ *  from `GET /diet-meal`'s `items_benefits` array. */
 export interface ResolvedNutritionalBenefit {
   ingredient: string;
   benefits: ResolvedNutritionalBenefitItem[];
 }
 
-export interface ResolvedRecommendedQuantity {
-  ingredient: string;
-  qty: string;
-}
-
-/** Fully-resolved, render-ready meal for one language — the only shape component code
- *  needs to know about. Every LocalizedText field has already been resolved to a plain
- *  string by `getResolvedDayPlan`'s `language` argument. */
-export interface ResolvedMeal {
+/** Lightweight per-slot summary for the meal LIST page — from `GET /diet-plan`. Omits
+ *  everything only the detail page needs (tips/precautions/benefits/quantity_detailed). */
+export interface ResolvedMealSummary {
   slotId: MealSlotId;
   slotLabel: string;
   timeRangeLabel: string;
   order: number;
-  category: string;
-  detail: string;
-  isCurated: boolean;
-  /** curated.name if curated, else the raw sheet detail string. Never blank. */
+  /** `diet_meals.id` — pass to `fetchDietMeal` for the full detail. */
+  mealId: string;
   name: string;
+  /** Free-text quantity phrases (display-only chips), e.g. ["4 Almonds", "1 tbsp Pumpkin Seeds"]. */
+  quantity: string[];
+  /** Resolved through `MEAL_IMAGE_BY_ID[image_id]?.sm`. Undefined if no image is set. */
   imageUrl?: string;
-  items?: ResolvedItem[];
+}
+
+/** One resolved day's meal list — from `GET /diet-plan`. A slot with no meal assigned
+ *  that day is simply absent from `meals` (the API returns `meal: null` for it). */
+export interface ResolvedDaySummary {
+  /** "YYYY-MM-DD" — internal lookup key, never shown to users. */
+  dateKey: string;
+  /** "DD-MM-YYYY" — the display format. */
+  displayDate: string;
+  meals: ResolvedMealSummary[];
+  /** True once `dateKey` is on/after `DIET_DISABLED_FROM_DATE` — the tab strip should
+   *  render this date's tab blurred and unclickable instead of navigating to it. */
+  disabled: boolean;
+}
+
+/** Full per-meal detail for the meal DETAIL page — from `GET /diet-meal`. */
+export interface ResolvedMealDetail {
+  name: string;
+  quantity: string[];
+  quantityDetailed: ResolvedRecommendedQuantity[];
+  itemsBenefits: ResolvedNutritionalBenefit[];
   tips?: string;
   precautions?: string;
-  nutritionalBenefits?: ResolvedNutritionalBenefit[];
-  recommendedQuantity?: ResolvedRecommendedQuantity[];
-  groceryListAvailable: boolean;
+  /** Resolved through `MEAL_IMAGE_BY_ID[image_id]?.lg`. Undefined if no image is set. */
+  imageUrl?: string;
 }
 
 /** Icon glyph keys for the static activity fillers between meal cards — see
@@ -188,21 +118,8 @@ export interface ActivityFillerItem {
 export type FillerItem = HydrationFillerItem | ActivityFillerItem;
 
 /** A static strip of 1-3 reminder items rendered between two meal cards — see
- *  `MEAL_FILLERS_AFTER_SLOT` in `mealFillers.ts`. Same every day, independent of
- *  `CuratedContentByDate` (and unaffected by that data eventually moving to an API). */
+ *  `MEAL_FILLERS_AFTER_SLOT` in `mealFillers.ts`. Same every day, independent of the
+ *  Diet Plan API. */
 export interface MealFillerDef {
   items: FillerItem[];
-}
-
-export interface ResolvedDayPlan {
-  /** "YYYY-MM-DD" — internal lookup key, never shown to users. */
-  dateKey: string;
-  /** "DD-MM-YYYY" — the display format. */
-  displayDate: string;
-  weekBlockId: WeekBlockId;
-  weekdayIndex: number;
-  meals: ResolvedMeal[];
-  /** True once `dateKey` is on/after `DIET_DISABLED_FROM_DATE` — the tab strip should
-   *  render this date's tab blurred and unclickable instead of navigating to it. */
-  disabled: boolean;
 }
