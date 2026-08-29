@@ -139,10 +139,14 @@ const DietMealDetail = () => {
   // Re-derives this slot's `mealId` from the same cached ["diet-plan", date, language] query
   // Diet.tsx already populated when the user navigated here — instant on the normal
   // list-then-open flow, and a single cheap refetch on a direct deep-link/page refresh.
+  // Same staleTime as Diet.tsx's identically-keyed query — without it this would silently
+  // refetch in the background every time this page mounts, even when Diet.tsx already
+  // fetched this exact date+language a moment ago (React Query's default staleTime is 0).
   const planQuery = useQuery({
     queryKey: ["diet-plan", date, language],
     queryFn: () => fetchDietPlan(date ?? "", language),
     enabled: hasStudentData && !!date,
+    staleTime: 5 * 60 * 1000,
   });
   const slotSummary = planQuery.data?.meals.find((m) => m.slotId === (slotId as MealSlotId));
   const mealId = slotSummary?.mealId;
@@ -151,6 +155,7 @@ const DietMealDetail = () => {
     queryKey: ["diet-meal", mealId],
     queryFn: () => fetchDietMeal(mealId!),
     enabled: !!mealId,
+    staleTime: 5 * 60 * 1000,
   });
 
   if (error) {

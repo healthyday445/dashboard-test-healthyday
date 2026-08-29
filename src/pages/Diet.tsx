@@ -142,6 +142,11 @@ const Diet = () => {
     queryKey: ["diet-plan", activeDateKey, language],
     queryFn: () => fetchDietPlan(activeDateKey, language),
     enabled: !showSkeleton,
+    // Without this, React Query's default staleTime (0) marks the data stale the instant
+    // it lands, so flipping back to an already-visited tab still fires a background
+    // refetch — defeating the point of caching per date. The nutrition sheet doesn't
+    // change mid-session, so 5 minutes of staleness is a safe tradeoff.
+    staleTime: 5 * 60 * 1000,
   });
   const activeMeals = planQuery.data?.meals ?? [];
   const showMealSkeleton = showSkeleton || planQuery.isLoading;
