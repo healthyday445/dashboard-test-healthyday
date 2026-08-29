@@ -38,6 +38,7 @@ export async function handler(event) {
     await db.collection('portal_session_clicks').add({
       ...body,
       date,
+      server_timestamp: nowIST.toISOString(),
     });
 
     return {
