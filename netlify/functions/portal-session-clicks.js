@@ -5,6 +5,7 @@
 
 import admin from 'firebase-admin';
 import { getFirestore } from 'firebase-admin/firestore';
+import { DateTime } from 'luxon';
 
 // Service Account Credentials (loaded from environment variable to prevent secret leaks)
 const serviceAccount = JSON.parse(process.env.FIREBASE_SERVICE_ACCOUNT);
@@ -32,13 +33,14 @@ export async function handler(event) {
     const body = JSON.parse(event.body || "{}");
 
     // Server-authoritative time (IST), independent of the client's clock
-    const nowIST = new Date(Date.now() + 5.5 * 60 * 60 * 1000);
-    const date = nowIST.toISOString().split("T")[0]; // YYYY-MM-DD
+    const nowIST = DateTime.now().setZone("Asia/Kolkata");
+    const date = nowIST.toISODate(); // YYYY-MM-DD
 
     await db.collection('portal_session_clicks').add({
       ...body,
       date,
-      click_time_ist: nowIST.toISOString(),
+      click_time_ist: nowIST.toISO(),
+      click_time_utc: nowIST.toUTC().toISO(),
     });
 
     return {
