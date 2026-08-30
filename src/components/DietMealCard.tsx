@@ -1,7 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 import { getMealPlaceholderIcon } from "@/lib/dietCategoryIcon";
-import type { ResolvedMeal } from "@/data/diet";
+import type { ResolvedMealSummary } from "@/data/diet";
 import clockIcon from "@/assets/diet/icons/clock.webp";
 
 // Real pixel values from the Figma card (890:8424 / 890:8443, both on a 412px mobile frame):
@@ -62,7 +62,7 @@ const DietMealCardRectangle: React.FC<DietMealCardRectangleProps> = ({ children 
 );
 
 interface DietMealCardProps {
-  meal: ResolvedMeal;
+  meal: ResolvedMealSummary;
   onClick?: () => void;
 }
 
@@ -71,7 +71,7 @@ interface DietMealCardProps {
  *  The parent wrapper owns the overlapping circle/arrow positioning; `DietMealCardRectangle`
  *  is a plain child that only knows how to lay out its own text content. */
 export const DietMealCard: React.FC<DietMealCardProps> = ({ meal, onClick }) => {
-  const { background, icon } = getMealPlaceholderIcon(meal.category, meal.detail);
+  const { background, icon } = getMealPlaceholderIcon(meal.name);
   // Blur-up loading state: the photo renders blurred/scaled-up from the moment its `src`
   // starts fetching, then sharpens with a fade once it finishes — a loading affordance that
   // doesn't need a separate low-res placeholder asset per meal.
@@ -145,16 +145,16 @@ export const DietMealCard: React.FC<DietMealCardProps> = ({ meal, onClick }) => 
         <DietMealCardRectangle>
           <div className="flex min-w-0 flex-1 flex-col gap-1.5">
             <span className="text-[15px] font-bold text-[#003677]">{meal.name}</span>
-            {meal.items?.length ? (
+            {meal.quantity.length ? (
               <div className="flex flex-nowrap gap-1">
-                {meal.items.map((item, idx) => {
+                {meal.quantity.map((label, idx) => {
                   const scheme = CHIP_SCHEMES[idx % CHIP_SCHEMES.length];
                   return (
                     <span
                       key={idx}
                       className={`whitespace-nowrap rounded-[3px] border-[0.5px] px-1 py-0.5 text-[9px] font-medium ${scheme.className}`}
                     >
-                      {item.label}
+                      {label}
                     </span>
                   );
                 })}

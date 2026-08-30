@@ -1,12 +1,21 @@
 import { Fragment, useEffect, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import logo from "@/assets/Primary_logo.svg";
 import { safeSessionStorage } from "@/lib/storage";
 import { DietDateTabBar, type DietDateTab } from "@/components/DietDateTabBar";
 import { DietMealCard, DietMealCardSkeleton } from "@/components/DietMealCard";
 import { DietMealFiller } from "@/components/DietMealFiller";
 import { GroceryListButton } from "@/components/GroceryListButton";
-import { getResolvedTabPlans, parseIsoDateKey, MEAL_FILLERS_AFTER_SLOT, type Language } from "@/data/diet";
+import {
+  fetchDietPlan,
+  getTabDates,
+  toIsoDateKey,
+  isDateDisabled,
+  parseIsoDateKey,
+  MEAL_FILLERS_AFTER_SLOT,
+  type Language,
+} from "@/data/diet";
 
 const WEEKDAY_ABBR = ["Mon", "Tue", "Wed", "Thu", "Fri", "Sat", "Sun"];
 
@@ -96,12 +105,18 @@ const Diet = () => {
       ? languageOverride
       : studentData?.language === "English" ? "English" : "Telugu";
 
-  const dayPlans = getResolvedTabPlans(todayOverride, language);
-  const tabs: DietDateTab[] = dayPlans.map((plan, idx) => {
-    const [dd, mm, yyyy] = plan.displayDate.split("-");
-    const date = new Date(Number(yyyy), Number(mm) - 1, Number(dd));
+  const showSkeleton = loading || !studentData;
+
+  // Tab metadata (date/label/disabled) is derived purely locally — `DIET_DISABLED_FROM_DATE`
+  // is a manually-maintained constant, not live API data — so the tab strip itself never
+  // waits on a network call. Only each tab's meal list is fetched, lazily per date.
+  const tabDates = getTabDates(todayOverride, 5);
+  const tabDateKeys = tabDates.map(toIsoDateKey);
+  const tabs: DietDateTab[] = tabDates.map((date, idx) => {
+    const dateKey = tabDateKeys[idx];
     const label = idx === 0 ? "Today" : idx === 1 ? "Tomorrow" : WEEKDAY_ABBR[(date.getDay() + 6) % 7];
-    return { dateKey: plan.dateKey, label, dayOfMonth: dd, disabled: plan.disabled };
+    const dayOfMonth = String(date.getDate()).padStart(2, "0");
+    return { dateKey, label, dayOfMonth, disabled: isDateDisabled(dateKey) };
   });
 
   // `?date=DD` (2-digit day-of-month, e.g. "?date=11") targets an absolute calendar date rather
@@ -118,7 +133,23 @@ const Diet = () => {
     return Number.isFinite(initialTab) && initialTab >= 0 && initialTab <= 4 ? initialTab : 0;
   });
 
-  const activePlan = dayPlans[activeTabIdx] ?? dayPlans[0];
+  const activeDateKey = tabDateKeys[activeTabIdx] ?? tabDateKeys[0];
+
+  // Only the active tab's date is ever fetched — switching tabs changes the query key,
+  // which react-query fetches lazily and then caches, so flipping back to a date already
+  // visited this session is instant with no refetch.
+  const planQuery = useQuery({
+    queryKey: ["diet-plan", activeDateKey, language],
+    queryFn: () => fetchDietPlan(activeDateKey, language),
+    enabled: !showSkeleton,
+    // Without this, React Query's default staleTime (0) marks the data stale the instant
+    // it lands, so flipping back to an already-visited tab still fires a background
+    // refetch — defeating the point of caching per date. The nutrition sheet doesn't
+    // change mid-session, so 5 minutes of staleness is a safe tradeoff.
+    staleTime: 5 * 60 * 1000,
+  });
+  const activeMeals = planQuery.data?.meals ?? [];
+  const showMealSkeleton = showSkeleton || planQuery.isLoading;
 
   // Keeps the URL's `tab` param in sync with the selected date tab via `replace` (never a new
   // history entry just for switching tabs). Without this, the history entry for this page keeps
@@ -139,7 +170,7 @@ const Diet = () => {
     if (forceDay !== null) params.set("forceDay", forceDay);
     if (timeOverride !== null) params.set("time", timeOverride);
     if (languageOverride !== null) params.set("language", languageOverride);
-    return `/${mobile}/diet/${activePlan.dateKey}/${slotId}?${params.toString()}`;
+    return `/${mobile}/diet/${activeDateKey}/${slotId}?${params.toString()}`;
   };
 
   if (error) {
@@ -154,8 +185,6 @@ const Diet = () => {
     );
   }
 
-  const showSkeleton = loading || !studentData;
-
   return (
     <div className="hd-page bg-white font-['Outfit']">
       <header className="hd-header fixed left-0 right-0 top-0 z-20 mx-auto max-w-[412px] bg-white">
@@ -166,10 +195,10 @@ const Diet = () => {
 
       <DietDateTabBar tabs={tabs} activeIdx={activeTabIdx} onChange={handleTabChange} disabled={showSkeleton} />
 
-      <div className={`pt-5 ${showSkeleton ? "pb-6" : "pb-[90px]"}`}>
-        {showSkeleton
+      <div className={`pt-5 ${showMealSkeleton ? "pb-6" : "pb-[90px]"}`}>
+        {showMealSkeleton
           ? Array.from({ length: 8 }, (_, i) => <DietMealCardSkeleton key={i} />)
-          : activePlan.meals.map((meal) => {
+          : activeMeals.map((meal) => {
               const filler = MEAL_FILLERS_AFTER_SLOT[meal.slotId];
               return (
                 <Fragment key={meal.slotId}>
@@ -180,7 +209,7 @@ const Diet = () => {
             })}
       </div>
 
-      {!showSkeleton && activePlan.meals.some((meal) => meal.groceryListAvailable) && <GroceryListButton />}
+      {!showMealSkeleton && <GroceryListButton />}
     </div>
   );
 };

@@ -26,8 +26,8 @@ import caringHandIcon from "@/assets/diet/icons/caring-hand.webp";
 /**
  * Placeholder visuals for the diet feature until real per-dish photography exists.
  * `getMealPlaceholderIcon` picks a background + glyph from a loose keyword match against
- * a meal's category/detail text — it's decorative only, so an unmatched meal just gets the
- * generic fallback rather than needing an exhaustive keyword list.
+ * a meal's name — it's decorative only, so an unmatched meal just gets the generic
+ * fallback rather than needing an exhaustive keyword list.
  */
 
 interface IconSpec {
@@ -91,8 +91,8 @@ const GENERIC_SPEC: IconSpec = {
   icon: CIRCLE_ICON("#868585", <circle cx="12" cy="12" r="8" fill="#868585" />),
 };
 
-export function getMealPlaceholderIcon(category: string, detail: string): IconSpec {
-  const haystack = `${category} ${detail}`.toLowerCase();
+export function getMealPlaceholderIcon(mealName: string): IconSpec {
+  const haystack = mealName.toLowerCase();
   for (const bucket of CATEGORY_BUCKETS) {
     if (bucket.keywords.some((kw) => haystack.includes(kw))) return bucket.spec;
   }

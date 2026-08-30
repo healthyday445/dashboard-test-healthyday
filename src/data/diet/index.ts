@@ -2,12 +2,14 @@ export * from "./types";
 export { DIET_SLOTS, DIET_SLOTS_ORDERED } from "./slots";
 export {
   DIET_LAUNCH_DATE,
+  DIET_DISABLED_FROM_DATE,
   getEffectiveToday,
-  getCyclePosition,
   getTabDates,
   formatDateDDMMYYYY,
   toIsoDateKey,
   parseIsoDateKey,
+  isDateDisabled,
 } from "./dateMath";
-export { getResolvedDayPlan, getResolvedTabPlans } from "./getResolvedDayPlan";
+export { fetchDietPlan, fetchDietMeal } from "./api";
+export { MEAL_IMAGE_BY_ID } from "./mealImageAssets";
 export { MEAL_FILLERS_AFTER_SLOT } from "./mealFillers";

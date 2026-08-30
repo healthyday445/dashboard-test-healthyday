@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
 import logo from "@/assets/Primary_logo.svg";
 import { Skeleton } from "@/components/ui/skeleton";
 import { safeSessionStorage } from "@/lib/storage";
@@ -7,7 +8,7 @@ import { getMealPlaceholderIcon } from "@/lib/dietCategoryIcon";
 import { DietInfoCallout } from "@/components/DietInfoCallout";
 import { DietIngredientList } from "@/components/DietIngredientList";
 import { GroceryListButton } from "@/components/GroceryListButton";
-import { getResolvedDayPlan, parseIsoDateKey } from "@/data/diet";
+import { fetchDietPlan, fetchDietMeal } from "@/data/diet";
 import type { MealSlotId, Language } from "@/data/diet";
 
 const BackChevronIcon = () => (
@@ -17,7 +18,7 @@ const BackChevronIcon = () => (
 );
 
 /** Paid-students-only per-meal detail screen — hero + name, then whichever of
- *  Tips/Precautions/Recommended-Quantity/Nutritional-Benefits sections are curated
+ *  Tips/Precautions/Recommended-Quantity/Nutritional-Benefits sections are present
  *  for this meal (all four are independently optional). */
 const DietMealDetail = () => {
   const navigate = useNavigate();
@@ -124,6 +125,39 @@ const DietMealDetail = () => {
     }
   };
 
+  // Matches the language resolution already used elsewhere for this student (e.g. IndexPaid.tsx),
+  // with a `?language=English|Telugu` QA-preview override that wins regardless of the real
+  // student record — lets QA check both languages without needing two different test accounts.
+  const languageOverride = searchParams.get("language");
+  const language: Language =
+    languageOverride === "English" || languageOverride === "Telugu"
+      ? languageOverride
+      : studentData?.language === "English" ? "English" : "Telugu";
+
+  const hasStudentData = !loading && !!studentData;
+
+  // Re-derives this slot's `mealId` from the same cached ["diet-plan", date, language] query
+  // Diet.tsx already populated when the user navigated here — instant on the normal
+  // list-then-open flow, and a single cheap refetch on a direct deep-link/page refresh.
+  // Same staleTime as Diet.tsx's identically-keyed query — without it this would silently
+  // refetch in the background every time this page mounts, even when Diet.tsx already
+  // fetched this exact date+language a moment ago (React Query's default staleTime is 0).
+  const planQuery = useQuery({
+    queryKey: ["diet-plan", date, language],
+    queryFn: () => fetchDietPlan(date ?? "", language),
+    enabled: hasStudentData && !!date,
+    staleTime: 5 * 60 * 1000,
+  });
+  const slotSummary = planQuery.data?.meals.find((m) => m.slotId === (slotId as MealSlotId));
+  const mealId = slotSummary?.mealId;
+
+  const mealQuery = useQuery({
+    queryKey: ["diet-meal", mealId],
+    queryFn: () => fetchDietMeal(mealId!),
+    enabled: !!mealId,
+    staleTime: 5 * 60 * 1000,
+  });
+
   if (error) {
     return (
       <div className="hd-page bg-background flex flex-col items-center justify-center font-['Outfit']">
@@ -136,7 +170,7 @@ const DietMealDetail = () => {
     );
   }
 
-  const showSkeleton = loading || !studentData;
+  const showSkeleton = !hasStudentData || planQuery.isLoading || (!!mealId && mealQuery.isLoading);
 
   if (showSkeleton) {
     return (
@@ -154,17 +188,7 @@ const DietMealDetail = () => {
     );
   }
 
-  // Matches the language resolution already used elsewhere for this student (e.g. IndexPaid.tsx),
-  // with a `?language=English|Telugu` QA-preview override that wins regardless of the real
-  // student record — lets QA check both languages without needing two different test accounts.
-  const languageOverride = searchParams.get("language");
-  const language: Language =
-    languageOverride === "English" || languageOverride === "Telugu"
-      ? languageOverride
-      : studentData?.language === "English" ? "English" : "Telugu";
-
-  const plan = getResolvedDayPlan(parseIsoDateKey(date ?? ""), language);
-  const meal = plan.meals.find((m) => m.slotId === (slotId as MealSlotId));
+  const meal = mealQuery.data;
 
   if (!meal) {
     return (
@@ -181,7 +205,7 @@ const DietMealDetail = () => {
     );
   }
 
-  const { background, icon } = getMealPlaceholderIcon(meal.category, meal.detail);
+  const { background, icon } = getMealPlaceholderIcon(meal.name);
 
   return (
     <div className="hd-page bg-white font-['Outfit']">
@@ -237,11 +261,6 @@ const DietMealDetail = () => {
 
         <div className="px-5">
           <h1 className="mb-5 text-center text-xl font-bold text-[#0A386F]">{meal.name}</h1>
-          {!meal.isCurated && (
-            <p className="-mt-2 mb-4 text-center text-[13px] font-normal leading-[1.5] text-[#4A4A4A]">
-              {meal.category} — {meal.detail}
-            </p>
-          )}
         </div>
 
         {/* Extra bottom padding clears the fixed Grocery List button so it never overlaps
@@ -249,12 +268,12 @@ const DietMealDetail = () => {
         <div className="pb-[90px]">
           {meal.tips && <DietInfoCallout variant="tips" text={meal.tips} language={language} />}
           {meal.precautions && <DietInfoCallout variant="precautions" text={meal.precautions} language={language} />}
-          {meal.recommendedQuantity?.length ? <DietIngredientList variant="quantity" rows={meal.recommendedQuantity} /> : null}
-          {meal.nutritionalBenefits?.length ? <DietIngredientList variant="benefits" rows={meal.nutritionalBenefits} /> : null}
+          {meal.quantityDetailed.length ? <DietIngredientList variant="quantity" rows={meal.quantityDetailed} /> : null}
+          {meal.itemsBenefits.length ? <DietIngredientList variant="benefits" rows={meal.itemsBenefits} /> : null}
         </div>
       </div>
 
-      {meal.groceryListAvailable && <GroceryListButton />}
+      <GroceryListButton />
     </div>
   );
 };
