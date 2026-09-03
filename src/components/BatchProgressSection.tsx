@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { AttendanceGrid, DayStatus } from "@/components/AttendanceGrid";
 import { ReferralRewardsCard } from "@/components/ReferralRewardsCard";
 import { ReferAndWinTeaser } from "@/components/ReferAndWinTeaser";
@@ -35,7 +36,7 @@ export const BatchProgressSection: React.FC<BatchProgressSectionProps> = ({
         <div style={{ padding: "28px 20px 0" }}>
           <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", marginBottom: "16px" }}>
             <h3 style={{ margin: 0, fontFamily: "Outfit", fontSize: "18px", fontWeight: 600, color: "#202020" }}>Your Referral Rewards</h3>
-            <a href={referralsUrl} style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#FEAB27", textDecoration: "none" }}>View More</a>
+            <Link to={referralsUrl} style={{ fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, color: "#FEAB27", textDecoration: "none" }}>View More</Link>
           </div>
           <ReferralRewardsCard verifiedRefs={verifiedReferralCount} language={language} />
         </div>
