@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import week1JourneyBg from "@/assets/21daysprogram/completed_journey_hero_bg.webp";
@@ -14,6 +14,7 @@ import IndexTwentyOneDay from "@/pages/IndexTwentyOneDay";
 import TwentyOneDaysProgram from "@/pages/TwentyOneDaysProgram";
 import FourteenDaysV2Program from "@/pages/FourteenDaysV2Program";
 import { getEffectiveStatus } from "@/lib/studentStatus";
+import { useStudentData } from "@/hooks/use-student-data";
 import { isFreeBatchOver, getSimulatedBatchDate } from "@/lib/utils";
 
 // The one-off June-21-2026 cohort runs the special 21-day (22-day) programme;
@@ -39,37 +40,19 @@ const Dashboard = () => {
   const tabParam = searchParams.get("tab");
   const startOnJourney = previewLevels !== null || tabParam === "journey" || location.hash === "#journey";
 
-  const [studentData, setStudentData] = useState<any>(null);
-  const [loading, setLoading] = useState(!previewDashboard && previewLevels === null);
   const [activeTab, setActiveTab] = useState<"dashboard" | "journey">(startOnJourney ? "journey" : "dashboard");
   const [journeyMounted, setJourneyMounted] = useState(startOnJourney);
   const [showCertificateModal, setShowCertificateModal] = useState(false);
 
-  useEffect(() => {
-    // A preview param means we want canned data, not whatever real account
-    // happens to live at this mobile number — skip the real fetch so the tab
-    // chrome/eligibility isn't decided by unrelated real account state.
-    if (previewDashboard || previewLevels !== null) {
-      setLoading(false);
-      return;
-    }
-    if (!mobile) {
-      setLoading(false);
-      return;
-    }
-    const cleanedMobile = mobile.replace(/[-\s()+]/g, "");
-    if (!/^\d{7,15}$/.test(cleanedMobile)) {
-      setLoading(false);
-      return;
-    }
-    const apiMobile = `+${cleanedMobile}`;
-    const encodedMobile = encodeURIComponent(apiMobile);
-    fetch(`/.netlify/functions/student?mobile=${encodedMobile}`)
-      .then(r => r.ok ? r.json() : Promise.reject(r.status))
-      .then(data => setStudentData(data))
-      .catch(() => {})
-      .finally(() => setLoading(false));
-  }, [mobile, previewDashboard, previewLevels]);
+  // A preview param means we want canned data, not whatever real account happens to live
+  // at this mobile number — skip the real fetch so the tab chrome/eligibility isn't decided
+  // by unrelated real account state.
+  const isPreview = !!previewDashboard || previewLevels !== null;
+  const cleanedMobile = mobile ? mobile.replace(/[-\s()+]/g, "") : "";
+  const isValidMobile = /^\d{7,15}$/.test(cleanedMobile);
+  const studentQuery = useStudentData(cleanedMobile, !isPreview && isValidMobile);
+  const studentData = studentQuery.data ?? null; // fetch failures silently fall back to null, same as the old `.catch(() => {})`
+  const loading = !isPreview && isValidMobile && studentQuery.isLoading;
 
   const handleTabChange = (tab: "dashboard" | "journey") => {
     if (tab === "journey") setJourneyMounted(true);

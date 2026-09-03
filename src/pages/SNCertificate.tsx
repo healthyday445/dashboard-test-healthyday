@@ -10,6 +10,7 @@ import {
   trackCertificateActivity,
 } from "@/lib/trackCertificateActivity";
 import logo from "@/assets/Primary_logo.svg";
+import { useStudentData } from "@/hooks/use-student-data";
 import { Skeleton } from "@/components/ui/skeleton";
 import snCertificateTemplate from "@/assets/badges/SN_Challenge_Certificate.webp";
 
@@ -61,7 +62,6 @@ export default function SNCertificate() {
     return "";
   });
 
-  const [loadingStudent, setLoadingStudent] = useState(!!mobile && !previewOverride);
   const [isEligible, setIsEligible] = useState<boolean | null>(previewOverride ? true : null);
 
   const [fontSize] = useState<number>(37);
@@ -110,47 +110,42 @@ export default function SNCertificate() {
   };
 
   // Fetch student data if mobile is present to evaluate paid status & pre-fill name
+  const skipStudentFetch = !mobile || mobile === "test_user";
+  const cleanedMobile = mobile ? mobile.replace(/[\s\-\(\)\+]/g, "") : "";
+  const isValidMobile = /^\d{7,15}$/.test(cleanedMobile);
+  const shouldFetchStudent = !skipStudentFetch && isValidMobile;
+  const studentQuery = useStudentData(cleanedMobile, shouldFetchStudent);
+
   useEffect(() => {
-    if (!mobile || mobile === "test_user") {
-      setLoadingStudent(false);
-      return;
-    }
-    const cleanedMobile = mobile.replace(/[\s\-\(\)\+]/g, "");
-    if (!/^\d{7,15}$/.test(cleanedMobile)) {
-      setLoadingStudent(false);
+    if (skipStudentFetch) return;
+    if (!isValidMobile) {
       if (!previewOverride) setIsEligible(false);
       return;
     }
-    const apiMobile = `+${cleanedMobile}`;
-    const encodedMobile = encodeURIComponent(apiMobile);
+    if (studentQuery.isLoading) return; // wait for this fetch to settle before deriving anything
 
-    fetch(`/.netlify/functions/student?mobile=${encodedMobile}`)
-      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then((data) => {
-        if (data) {
-          if (data.name && data.name !== "Student") {
-            setName((prev) => {
-              if (!prev || prev === "Student") {
-                safeLocalStorage.setItem("user_name", data.name);
-                return data.name;
-              }
-              return prev;
-            });
+    const data = studentQuery.data;
+    if (data) {
+      if (data.name && data.name !== "Student") {
+        setName((prev) => {
+          if (!prev || prev === "Student") {
+            safeLocalStorage.setItem("user_name", data.name);
+            return data.name;
           }
+          return prev;
+        });
+      }
 
-          if (!previewOverride) {
-            const isPaid = data.status === "paid" || data.status?.toLowerCase() === "paid";
-            setIsEligible(isPaid);
-          }
-        } else {
-          if (!previewOverride) setIsEligible(false);
-        }
-      })
-      .catch(() => {
-        if (!previewOverride) setIsEligible(false);
-      })
-      .finally(() => setLoadingStudent(false));
-  }, [mobile, previewOverride]);
+      if (!previewOverride) {
+        const isPaid = data.status === "paid" || data.status?.toLowerCase() === "paid";
+        setIsEligible(isPaid);
+      }
+    } else {
+      if (!previewOverride) setIsEligible(false);
+    }
+  }, [skipStudentFetch, isValidMobile, studentQuery.isLoading, studentQuery.data, previewOverride]);
+
+  const loadingStudent = shouldFetchStudent && studentQuery.isLoading;
 
   // Check local storage & server status for rate limiting in production mode
   useLayoutEffect(() => {

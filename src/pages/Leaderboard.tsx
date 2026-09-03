@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReferWinCard from "@/components/ReferWinCard";
+import { useStudentData } from "@/hooks/use-student-data";
 import logo from "@/assets/Primary_logo.svg";
 import imgBannerBg from "@/assets/leaderboard/11621406ee6eb5f29bb80937e33d2195815c78d8.webp";
 import imgMainPrize from "@/assets/leaderboard/0d0feb7c046d1e7737d4d7000c10d1cf68d8865c.webp";
@@ -201,17 +202,15 @@ const Leaderboard: React.FC = () => {
       .finally(() => setRankLoading(false));
   }, [mobile]);
 
+  const cleanedMobile = mobile ? mobile.replace(/\D/g, "") : "";
+  const studentQuery = useStudentData(cleanedMobile, !!cleanedMobile);
+
   useEffect(() => {
-    if (!mobile) return;
-    const e164 = `+${mobile.replace(/\D/g, "")}`;
-    fetch(`/.netlify/functions/student?mobile=${encodeURIComponent(e164)}`)
-      .then((r) => r.json())
-      .then((data) => {
-        if (data?.status?.toLowerCase() === "paid") setIsPaidUser(true);
-        if (data?.language) setUserLanguage(data.language);
-      })
-      .catch(() => {});
-  }, [mobile]);
+    const data = studentQuery.data;
+    if (!data) return;
+    if (data?.status?.toLowerCase() === "paid") setIsPaidUser(true);
+    if (data?.language) setUserLanguage(data.language);
+  }, [studentQuery.data]);
 
   const shareLink = mobile
     ? `https://yoga.healthyday.co.in?ref=${mobile}`

@@ -96,6 +96,7 @@ function readPaidDataFromStorage(mobile: string): { attended: Set<string>; misse
 }
 
 import { safeSessionStorage, safeLocalStorage } from "@/lib/storage";
+import { useStudentData } from "@/hooks/use-student-data";
 
 const AttendancePage = () => {
   const navigate = useNavigate();
@@ -105,16 +106,21 @@ const AttendancePage = () => {
   const mobile = urlMobile || searchParams.get("mobile") || safeSessionStorage.getItem("referrer_mobile") || "";
   const previewMode = searchParams.get("preview");
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [studentData, setStudentData] = useState<any>(null);
-
   // Calendar navigation state
   const [viewMonth, setViewMonth] = useState(new Date().getMonth());
   const [viewYear, setViewYear] = useState(new Date().getFullYear());
 
+  const isPreview = previewMode === "paid";
+  const studentQuery = useStudentData(mobile, !isPreview);
+
+  // The raw student record needs page-specific post-processing (merging
+  // `paid_attendance_tracker` day-abbreviations into full attended/missed dates,
+  // persisted to localStorage so the calendar shows history beyond what one API call
+  // returns) — this stays local to this page rather than living in the shared hook.
+  const [studentData, setStudentData] = useState<any>(null);
+
   useEffect(() => {
-    if (previewMode === "paid") {
+    if (isPreview) {
       // Preview: simulate Thu/Fri/Sat class schedule with some history
       const paidDays = ["thu", "fri", "sat"];
       const previewMobile = "preview";
@@ -127,63 +133,45 @@ const AttendancePage = () => {
         missed_tracker: Array.from(mergedData.missed),
         paid_attendance_tracker: paidDays,
       });
-      setLoading(false);
       return;
     }
 
-    if (!mobile) {
-      setLoading(false);
-      setError("No mobile number provided.");
+    const data = studentQuery.data;
+    if (!data) return;
+
+    if (data.status !== "paid") {
+      navigate(`/${mobile}`);
       return;
     }
 
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const apiMobile = `+${mobile}`;
-        const encodedMobile = encodeURIComponent(apiMobile);
-        const response = await fetch(
-          `/.netlify/functions/student?mobile=${encodedMobile}`
-        );
-        if (!response.ok) throw new Error(`API error: ${response.status}`);
-        const data = await response.json();
-
-        if (data.status !== "paid") {
-          navigate(`/${mobile}`);
-          return;
-        }
-
-        // --- Paid user: accumulate attendance in localStorage ---
-        // API gives current week's attended days as abbreviations in paid_attendance_tracker.
-        // We convert those to actual dates and merge with stored history so the full
-        // month calendar can show past weeks' attendance without re-fetching.
-        const rawPaidDays = data.paid_attendance_tracker;
-        // Even if empty, we evaluate missed days up to today as long as the array exists.
-        if (Array.isArray(rawPaidDays)) {
-          const mergedData = mergePaidDataToStorage(mobile, rawPaidDays);
-          // Inject merged dates back into data so the calendar uses full history
-          data.attendance_tracker = Array.from(mergedData.attended);
-          data.missed_tracker = Array.from(mergedData.missed);
-        } else {
-          // No paid_attendance_tracker from API — read whatever was stored before
-          const stored = readPaidDataFromStorage(mobile);
-          if (stored.attended.size > 0 || stored.missed.size > 0) {
-            data.attendance_tracker = Array.from(stored.attended);
-            data.missed_tracker = Array.from(stored.missed);
-          }
-        }
-
-        setStudentData(data);
-      } catch (err: any) {
-        setError(err.message || "Something went wrong");
-      } finally {
-        setLoading(false);
+    // --- Paid user: accumulate attendance in localStorage ---
+    // API gives current week's attended days as abbreviations in paid_attendance_tracker.
+    // We convert those to actual dates and merge with stored history so the full
+    // month calendar can show past weeks' attendance without re-fetching.
+    const rawPaidDays = data.paid_attendance_tracker;
+    const next = { ...data };
+    // Even if empty, we evaluate missed days up to today as long as the array exists.
+    if (Array.isArray(rawPaidDays)) {
+      const mergedData = mergePaidDataToStorage(mobile, rawPaidDays);
+      // Inject merged dates back into data so the calendar uses full history
+      next.attendance_tracker = Array.from(mergedData.attended);
+      next.missed_tracker = Array.from(mergedData.missed);
+    } else {
+      // No paid_attendance_tracker from API — read whatever was stored before
+      const stored = readPaidDataFromStorage(mobile);
+      if (stored.attended.size > 0 || stored.missed.size > 0) {
+        next.attendance_tracker = Array.from(stored.attended);
+        next.missed_tracker = Array.from(stored.missed);
       }
-    };
+    }
 
-    fetchData();
-  }, [mobile, previewMode, navigate]);
+    setStudentData(next);
+  }, [isPreview, studentQuery.data, mobile, navigate]);
+
+  const loading = !isPreview && (studentQuery.isLoading || (!studentQuery.error && !studentData));
+  const error = !isPreview && !mobile
+    ? "No mobile number provided."
+    : studentQuery.error instanceof Error ? studentQuery.error.message : null;
 
   // --- Loading Screen ---
   if (loading) {

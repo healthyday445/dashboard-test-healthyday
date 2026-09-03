@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
+import { useStudentData } from "@/hooks/use-student-data";
 import imgTshirt from "@/assets/referral/tshirt-reward.webp";
 import imgDietPdf from "@/assets/referral/diet-pdf.webp";
 import imgTenClasses from "@/assets/referral/ten-classes-reward.webp";
@@ -259,7 +260,6 @@ const ReferralStatus = () => {
   const [loading, setLoading] = useState(true);
   const [apiError, setApiError] = useState<string | null>(null);
   const [isPaid, setIsPaid] = useState(false);
-  const [statusLoading, setStatusLoading] = useState(true);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerClosing, setDrawerClosing] = useState(false);
 
@@ -291,20 +291,20 @@ const ReferralStatus = () => {
   // independent of `preview_referrals`, so testers can preview an arbitrary referral count
   // while still seeing the correct milestone variant for that student. `preview_paid` is an
   // explicit override for previewing a variant without a matching real account.
+  const cleanedMobile = mobile ? mobile.replace(/\D/g, "") : "";
+  const studentQuery = useStudentData(cleanedMobile, previewPaidParam === null && !!mobile);
+
   useEffect(() => {
     if (previewPaidParam !== null) {
       setIsPaid(previewPaidParam === "1" || previewPaidParam === "true");
-      setStatusLoading(false);
       return;
     }
-    if (!mobile) { setIsPaid(false); setStatusLoading(false); return; }
-    const apiMobile = `+${mobile.replace(/\D/g, "")}`;
-    fetch(`/.netlify/functions/student?mobile=${encodeURIComponent(apiMobile)}`)
-      .then((r) => r.json())
-      .then((data: { status?: string }) => setIsPaid(data?.status === "paid"))
-      .catch(() => setIsPaid(false))
-      .finally(() => setStatusLoading(false));
-  }, [mobile, previewPaidParam]);
+    if (!mobile) { setIsPaid(false); return; }
+    if (studentQuery.isLoading) return;
+    setIsPaid(studentQuery.data?.status === "paid");
+  }, [mobile, previewPaidParam, studentQuery.isLoading, studentQuery.data]);
+
+  const statusLoading = previewPaidParam === null && !!mobile && studentQuery.isLoading;
 
   // Referral rewards (both the milestone tracker and the static Rewards grid) depend on both
   // verifiedRefs and isPaid — show a skeleton until both have resolved instead of flashing a

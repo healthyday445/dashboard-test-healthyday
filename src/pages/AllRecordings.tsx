@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
+import { useStudentData } from "@/hooks/use-student-data";
+import { useSessionLinks } from "@/hooks/use-session-links";
 import imgImage12 from "@/assets/image_12.png";
 import imgLanguageEnglish from "@/assets/language_English.webp";
 import imgLanguageTelugu from "@/assets/language_Telugu.webp";
@@ -249,7 +251,6 @@ const DateBadge = ({ label }: { label: string }) => (
 );
 
 import { safeSessionStorage } from "@/lib/storage";
-import { getCurrentMinutesIST } from "@/lib/utils";
 import { getNowIST } from "@/lib/serverTime";
 
 const AllRecordings = () => {
@@ -260,89 +261,34 @@ const AllRecordings = () => {
   const mobile = urlMobile || searchParams.get("mobile") || safeSessionStorage.getItem("referrer_mobile") || "";
   const previewMode = searchParams.get("preview");
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [studentData, setStudentData] = useState<any>(null);
-
-  // Session links from API
-  const [sessionLinks, setSessionLinks] = useState<SessionLink[]>([]);
-  const [sessionLinksLoading, setSessionLinksLoading] = useState(true);
-
   // Fetch student data
-  useEffect(() => {
-    if (previewMode === "paid" || previewMode === "english" || previewMode === "3month") {
-      setStudentData({
+  const isPreview = previewMode === "paid" || previewMode === "english" || previewMode === "3month";
+  const studentQuery = useStudentData(mobile, !isPreview);
+  const studentData = isPreview
+    ? {
         language: previewMode === "english" ? "English" : "Telugu",
         status: "paid",
         plan_type: previewMode === "3month" ? "3_months" : undefined,
         paid_classes_joining_link: "https://www.youtube.com/c/Healthyday",
-      });
-      setLoading(false);
-      return;
-    }
-
-    if (!mobile) {
-      setLoading(false);
-      setError("No mobile number provided.");
-      return;
-    }
-
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const apiMobile = `+${mobile}`;
-        const encodedMobile = encodeURIComponent(apiMobile);
-        const response = await fetch(`/.netlify/functions/student?mobile=${encodedMobile}`);
-        if (!response.ok) throw new Error(`API error: ${response.status}`);
-        const data = await response.json();
-        setStudentData(data);
-      } catch (err: any) {
-        setError(err.message || "Something went wrong");
-      } finally {
-        setLoading(false);
       }
-    };
+    : studentQuery.data;
+  const loading = !isPreview && studentQuery.isLoading;
+  const error = !isPreview && !mobile
+    ? "No mobile number provided."
+    : studentQuery.error instanceof Error ? studentQuery.error.message : null;
 
-    fetchData();
-  }, [mobile, previewMode]);
-
-  // Fetch session links from API. `previewSnDate`/`time` (see PREVIEWS.md) are forwarded to the
-  // backend's `date`/`time` params, same as IndexPaid.tsx, so `/session-link/active` returns
-  // links "as of" that moment instead of real "now" — without this, previewing a future SN
-  // Challenge day here would show no rows since the backend excludes sessions whose session_date
-  // hasn't happened yet. `time` is converted from this app's "8.00am"-style format to the
-  // backend's "HH:MM" IST via getCurrentMinutesIST + a minutes-to-"HH:MM" formatter.
-  useEffect(() => {
-    const previewSnDate = searchParams.get("previewSnDate");
-    const timeParam = searchParams.get("time");
-    const qs = new URLSearchParams();
-    if (previewSnDate) qs.set("date", previewSnDate);
-    if (timeParam) {
-      const totalMin = getCurrentMinutesIST(timeParam);
-      const hh = String(Math.floor(totalMin / 60) % 24).padStart(2, "0");
-      const mm = String(totalMin % 60).padStart(2, "0");
-      qs.set("time", `${hh}:${mm}`);
-    }
-    const url = `/.netlify/functions/session-links${qs.toString() ? `?${qs.toString()}` : ""}`;
-
-    const fetchSessionLinks = async () => {
-      try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error("Failed to fetch session links");
-        const json = await res.json();
-        setSessionLinks(json.data || []);
-      } catch (err) {
-        console.error("Session links fetch error:", err);
-        // On failure, sessionLinks stays empty → static fallback links will be used
-        setSessionLinks([]);
-      } finally {
-        setSessionLinksLoading(false);
-      }
-    };
-    fetchSessionLinks();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [location.search]);
+  // `previewSnDate`/`time` (see PREVIEWS.md) are forwarded to the backend's `date`/`time`
+  // params, same as IndexPaid.tsx, so `/session-link/active` returns links "as of" that
+  // moment instead of real "now" — without this, previewing a future SN Challenge day
+  // here would show no rows since the backend excludes sessions whose session_date hasn't
+  // happened yet. The shared hook returns a looser type (all fields optional, since not
+  // every caller needs the full shape) — cast to this page's stricter local `SessionLink`
+  // since every field this page actually reads is always present in the real API payload.
+  const { sessionLinks: rawSessionLinks } = useSessionLinks({
+    previewSnDate: searchParams.get("previewSnDate"),
+    time: searchParams.get("time"),
+  });
+  const sessionLinks = rawSessionLinks as unknown as SessionLink[];
 
   if (loading) {
     return (

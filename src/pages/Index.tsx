@@ -3,6 +3,8 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { LevelCard } from "@/components/LevelCard";
 import { CertificateModal } from "@/components/CertificateModal";
 import { trackVisit } from "@/lib/trackVisit";
+import { useStudentData, StudentFetchError } from "@/hooks/use-student-data";
+import { useSessionLinks } from "@/hooks/use-session-links";
 import { getBonusWindowStart } from "@/lib/utils";
 import { trackSessionClick } from "@/lib/trackSessionClick";
 import logo from "@/assets/Primary_logo.svg";
@@ -211,25 +213,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
     }
   }, [mobile]);
 
-  // --- Fetch session links for paid users ---
-  useEffect(() => {
-    fetch("/.netlify/functions/session-links")
-      .then(r => r.json())
-      .then(data => {
-        // Handle bare array OR wrapped object { data: [...] } / { links: [...] }
-        const arr = Array.isArray(data)
-          ? data
-          : Array.isArray(data?.data) ? data.data
-            : Array.isArray(data?.links) ? data.links
-              : [];
-        setSessionLinks(arr);
-      })
-      .catch(() => { });
-  }, []);
-
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
-  const [loading, setLoading] = useState(!initialStudentData);
-  const [error, setError] = useState<string | null>(null);
   const [showCertificateModal, setShowCertificateModal] = useState(false);
   const [studentData, setStudentData] = useState<any>(initialStudentData ?? null);
   const [showComingSoon, setShowComingSoon] = useState(
@@ -242,7 +226,7 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
       ? (initialStudentData.language === "Telugu" || initialStudentData.language === "English")
       : false
   );
-  const [sessionLinks, setSessionLinks] = useState<any[]>([]);
+  const { sessionLinks } = useSessionLinks();
   const [joinedDays, setJoinedDays] = useState<number[]>(() => {
     try {
       const keys = safeLocalStorage.keys().filter(k => k.startsWith("hd_joined_"));
@@ -254,77 +238,52 @@ const Index = ({ initialStudentData, onSwitchToJourney }: IndexProps = {}) => {
     return [];
   });
 
+  // Normalize mobile number: strip spaces, dashes, parentheses, leading +
+  const rawMobile = mobile || "";
+  const cleanedMobile = rawMobile.replace(/[\s\-\(\)\+]/g, "");
+  const isValidMobile = /^\d{7,15}$/.test(cleanedMobile);
+  const isMismatchedMobile = !!rawMobile && rawMobile !== cleanedMobile;
+  const shouldFetchStudent = !initialStudentData && !!mobile && isValidMobile && !isMismatchedMobile;
+  const studentQuery = useStudentData(cleanedMobile, shouldFetchStudent);
+
   useEffect(() => {
     if (initialStudentData) return; // data already provided by parent or preview
-    // Helper: get local date string (YYYY-MM-DD) without UTC timezone shift
-    const toLocalDateStr = (d: Date) => {
-      const yyyy = d.getFullYear();
-      const mm = String(d.getMonth() + 1).padStart(2, "0");
-      const dd = String(d.getDate()).padStart(2, "0");
-      return `${yyyy}-${mm}-${dd}`;
-    };
-    if (!mobile) {
-      setLoading(false);
-      setError("No mobile number provided. Please visit /<mobile_number> to login.");
-      return;
+    const data = studentQuery.data;
+    if (!data) return;
+
+    console.log("[DEBUG] raw API language:", data.language, "| full data keys:", Object.keys(data));
+    setStudentData(data);
+
+    // Store referral data for the Referral page
+    safeSessionStorage.setItem("total_referral_count", String(data.total_referral_count ?? 0));
+    safeSessionStorage.setItem("referrer_mobile", mobile || "");
+
+    if (data.language === "Telugu" || data.language === "English") {
+      setAuthenticated(true);
+    } else {
+      setShowComingSoon(true);
     }
+  }, [initialStudentData, studentQuery.data, mobile]);
 
-    // Normalize mobile number: strip spaces, dashes, parentheses, leading +
-    const rawMobile = mobile || "";
-    const cleanedMobile = rawMobile.replace(/[\s\-\(\)\+]/g, "");
-
-    if (!/^\d{7,15}$/.test(cleanedMobile)) {
-      setLoading(false);
-      setError("Please enter a valid mobile number.");
-      return;
-    }
-
-    // If the URL had special characters (e.g. +91xxx), redirect to clean numeric URL
+  // If the URL had special characters (e.g. +91xxx), redirect to clean numeric URL — a
+  // separate concern from data fetching.
+  useEffect(() => {
+    if (initialStudentData || !mobile || !isValidMobile) return;
     if (rawMobile !== cleanedMobile) {
       navigate(`/${cleanedMobile}`, { replace: true });
-      return;
     }
+  }, [initialStudentData, mobile, rawMobile, cleanedMobile, isValidMobile, navigate]);
 
-    const fetchStudentData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        // Country code is compulsory for all users. We just prepend +
-        const apiMobile = `+${cleanedMobile}`;
-        const encodedMobile = encodeURIComponent(apiMobile);
-        const response = await fetch(
-          `/.netlify/functions/student?mobile=${encodedMobile}`
-        );
-
-        if (!response.ok) {
-          if (response.status === 404) {
-            throw new Error("This link is incorrect. Can you please recheck your WhatsApp reminder and open the correct link?");
-          }
-          throw new Error(`API error: ${response.status}`);
-        }
-
-        const data = await response.json();
-        console.log("[DEBUG] raw API language:", data.language, "| full data keys:", Object.keys(data));
-        setStudentData(data);
-
-        // Store referral data for the Referral page
-        safeSessionStorage.setItem("total_referral_count", String(data.total_referral_count ?? 0));
-        safeSessionStorage.setItem("referrer_mobile", mobile || "");
-
-        if (data.language === "Telugu" || data.language === "English") {
-          setAuthenticated(true);
-        } else {
-          setShowComingSoon(true);
-        }
-      } catch (err: any) {
-        setError(err.message || "Something went wrong");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchStudentData();
-  }, [mobile]);
+  const loading = shouldFetchStudent && studentQuery.isLoading;
+  const error = initialStudentData
+    ? null
+    : !mobile
+      ? "No mobile number provided. Please visit /<mobile_number> to login."
+      : !isValidMobile
+        ? "Please enter a valid mobile number."
+        : studentQuery.error instanceof StudentFetchError && studentQuery.error.status === 404
+          ? "This link is incorrect. Can you please recheck your WhatsApp reminder and open the correct link?"
+          : studentQuery.error instanceof Error ? studentQuery.error.message : null;
 
   // --- Join tracking via localStorage (must be before any conditional returns) ---
   const joinStorageKey = `hd_joined_${mobile}_${studentData?.free_batch_start_date}`;

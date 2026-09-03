@@ -1,15 +1,20 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import logo from "@/assets/Primary_logo.svg";
 import { Skeleton } from "@/components/ui/skeleton";
 import { safeSessionStorage } from "@/lib/storage";
+import { useStudentData } from "@/hooks/use-student-data";
 import { getMealPlaceholderIcon } from "@/lib/dietCategoryIcon";
 import { DietInfoCallout } from "@/components/DietInfoCallout";
 import { DietIngredientList } from "@/components/DietIngredientList";
 import { GroceryListButton } from "@/components/GroceryListButton";
 import { fetchDietPlan, fetchDietMeal } from "@/data/diet";
 import type { MealSlotId, Language } from "@/data/diet";
+
+// Stable object identity (not an inline literal) so the redirect useEffect below doesn't
+// see a "new" studentData on every render while in preview mode.
+const PREVIEW_STUDENT_DATA = { language: "Telugu", status: "paid" };
 
 const BackChevronIcon = () => (
   <svg width="17" height="17" viewBox="0 0 17 17" fill="none">
@@ -28,10 +33,6 @@ const DietMealDetail = () => {
   const mobile = urlMobile || searchParams.get("mobile") || safeSessionStorage.getItem("referrer_mobile") || "";
 
   const previewMode = searchParams.get("preview");
-
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [studentData, setStudentData] = useState<any>(null);
 
   // Parallax drift for the hero photo: it's `position: fixed` (see the render below) so
   // scrolling alone leaves it perfectly static, which reads as too rigid. Nudging it
@@ -60,45 +61,22 @@ const DietMealDetail = () => {
     };
   }, []);
 
+  // Same `?preview=paid` canned-data idiom as AttendancePageWeekly.tsx — lets QA (and this
+  // page itself) be previewed without a live backend/paid account, and skips the network
+  // call entirely (`enabled: !isPreview` below).
+  const isPreview = previewMode === "paid";
+  const studentQuery = useStudentData(mobile, !isPreview);
+  const studentData = isPreview ? PREVIEW_STUDENT_DATA : studentQuery.data;
+  const loading = !isPreview && studentQuery.isLoading;
+  const error = !isPreview && !mobile
+    ? "No mobile number provided."
+    : studentQuery.error instanceof Error ? studentQuery.error.message : null;
+
   useEffect(() => {
-    // Same `?preview=paid` canned-data idiom as AttendancePageWeekly.tsx — lets QA (and this
-    // page itself) be previewed without a live backend/paid account.
-    if (previewMode === "paid") {
-      setStudentData({ language: "Telugu", status: "paid" });
-      setLoading(false);
-      return;
+    if (!isPreview && studentData && studentData.status !== "paid") {
+      navigate(`/${mobile}`);
     }
-
-    if (!mobile) {
-      setLoading(false);
-      setError("No mobile number provided.");
-      return;
-    }
-
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const apiMobile = `+${mobile}`;
-        const response = await fetch(`/.netlify/functions/student?mobile=${encodeURIComponent(apiMobile)}`);
-        if (!response.ok) throw new Error(`API error: ${response.status}`);
-        const data = await response.json();
-
-        if (data.status !== "paid") {
-          navigate(`/${mobile}`);
-          return;
-        }
-
-        setStudentData(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Something went wrong");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [mobile, previewMode, navigate]);
+  }, [isPreview, studentData, mobile, navigate]);
 
   const backUrl = (() => {
     const params = new URLSearchParams();

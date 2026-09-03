@@ -1,7 +1,9 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import logo from "@/assets/Primary_logo.svg";
+import { useStudentData } from "@/hooks/use-student-data";
 import { toast } from "sonner";
 
 const teluguFaqs = [
@@ -221,51 +223,47 @@ const Faqs = () => {
   const [freeBatchStartDate, setFreeBatchStartDate] = useState<string | null>(null);
   const [isChangingLanguage, setIsChangingLanguage] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
-  const [isLoading, setIsLoading] = useState(true);
 
   const cleanedMobile = mobile ? mobile.replace(/[\s\-\(\)\+]/g, "") : "";
+  const queryClient = useQueryClient();
+  const studentQuery = useStudentData(cleanedMobile, !!cleanedMobile);
 
   useEffect(() => {
-    const fetchStudentData = async () => {
-      if (!cleanedMobile) {
-        navigate("/leaderboard");
-        return;
-      }
-      try {
-        const response = await fetch(`/.netlify/functions/student?mobile=${encodeURIComponent("+" + cleanedMobile)}`);
-        if (response.ok) {
-          const data = await response.json();
-          if (data?.name) {
-            setStudentName(data.name);
-          } else {
-            navigate("/leaderboard");
-          }
+    if (!cleanedMobile) {
+      navigate("/leaderboard");
+      return;
+    }
+    if (studentQuery.isLoading) return;
 
-          if (data?.status) {
-            setStudentStatus(data.status);
-          }
+    if (studentQuery.error) {
+      console.error("Failed to fetch student data", studentQuery.error);
+      navigate("/leaderboard");
+      return;
+    }
 
-          if (data?.free_batch_start_date) {
-            setFreeBatchStartDate(data.free_batch_start_date);
-          }
+    const data = studentQuery.data;
+    if (data?.name) {
+      setStudentName(data.name);
+    } else {
+      navigate("/leaderboard");
+    }
 
-          if (data?.language) {
-            const lowerLang = data.language.toLowerCase();
-            if (lowerLang.includes('english')) setLanguage('English');
-            else setLanguage('Telugu');
-          }
-        } else {
-          navigate("/leaderboard");
-        }
-      } catch (err) {
-        console.error("Failed to fetch student data", err);
-        navigate("/leaderboard");
-      } finally {
-        setIsLoading(false);
-      }
-    };
-    fetchStudentData();
-  }, [cleanedMobile, navigate]);
+    if (data?.status) {
+      setStudentStatus(data.status);
+    }
+
+    if (data?.free_batch_start_date) {
+      setFreeBatchStartDate(data.free_batch_start_date);
+    }
+
+    if (data?.language) {
+      const lowerLang = data.language.toLowerCase();
+      if (lowerLang.includes('english')) setLanguage('English');
+      else setLanguage('Telugu');
+    }
+  }, [cleanedMobile, studentQuery.isLoading, studentQuery.error, studentQuery.data, navigate]);
+
+  const isLoading = !!cleanedMobile && studentQuery.isLoading;
 
   const handleLanguageChange = async () => {
     setIsChangingLanguage(true);
@@ -282,6 +280,9 @@ const Faqs = () => {
       if (response.ok) {
         setLanguage(newLanguage);
         setShowSuccessPopup(true);
+        // The backend record changed — refetch the shared student query so any other
+        // page reading the same cached record picks up the new language.
+        await queryClient.invalidateQueries({ queryKey: ["student", cleanedMobile] });
       } else {
         toast.error("Failed to change language. Please try again.");
       }

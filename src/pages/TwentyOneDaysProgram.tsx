@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useLayoutEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { CertificateModal } from "@/components/CertificateModal";
+import { useStudentData, StudentFetchError } from "@/hooks/use-student-data";
 import logo from "@/assets/Primary_logo.svg";
 import heroBg from "@/assets/21daysprogram/hero-bg.webp";
 import lockIcon from "@/assets/21daysprogram/lock_icon.png";
@@ -495,9 +496,6 @@ interface TwentyOneDaysProgramProps {
 export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDaysProgramProps = {}) {
   const { mobile } = useParams<{ mobile?: string }>();
   const navigate = useNavigate();
-  const [studentData, setStudentData] = useState<any>(initialStudentData ?? null);
-  const [loading, setLoading] = useState(!initialStudentData);
-  const [error, setError] = useState<string | null>(null);
   const [showCertificateModal, setShowCertificateModal] = useState(false);
 
   const timelineContainerRef = useRef<HTMLDivElement>(null);
@@ -511,57 +509,30 @@ export default function TwentyOneDaysProgram({ initialStudentData }: TwentyOneDa
   const [lineStartTop, setLineStartTop] = useState(0);
   const [timelineEndHeight, setTimelineEndHeight] = useState(0);
 
+  const previewParams = new URLSearchParams(window.location.search);
+  const isPreviewOverride = previewParams.get("preview_levels") !== null || previewParams.get("forceDay") !== null;
+  const cleanedMobile = mobile ? mobile.replace(/[\s\-\(\)\+]/g, "") : "";
+  const isValidMobile = /^\d{7,15}$/.test(cleanedMobile);
+  const isMismatchedMobile = !!mobile && mobile !== cleanedMobile;
+  const shouldFetch = !initialStudentData && !isPreviewOverride && !!mobile && isValidMobile && !isMismatchedMobile;
+  const studentQuery = useStudentData(cleanedMobile, shouldFetch);
+  const studentData = initialStudentData ?? studentQuery.data ?? null;
+  const loading = shouldFetch && studentQuery.isLoading;
+  const error = !initialStudentData && !isPreviewOverride && !!mobile && !isValidMobile
+    ? "Please enter a valid mobile number."
+    : studentQuery.error instanceof StudentFetchError && studentQuery.error.status === 404
+      ? "This link is incorrect. Please recheck your WhatsApp reminder."
+      : studentQuery.error instanceof Error ? studentQuery.error.message : null;
+
+  // Canonicalize the URL's mobile segment (strip formatting characters) — a separate
+  // concern from data fetching, so it stays a dedicated effect rather than living inside
+  // the fetch logic above.
   useEffect(() => {
-    if (initialStudentData) return; // data already provided by parent
-    const previewParams = new URLSearchParams(window.location.search);
-    if (previewParams.get("preview_levels") !== null || previewParams.get("forceDay") !== null) {
-      setLoading(false);
-      return;
-    }
-    if (!mobile) {
-      setLoading(false);
-      return;
-    }
-
-    const cleanedMobile = mobile.replace(/[\s\-\(\)\+]/g, "");
-
-    if (!/^\d{7,15}$/.test(cleanedMobile)) {
-      setLoading(false);
-      setError("Please enter a valid mobile number.");
-      return;
-    }
-
+    if (initialStudentData || isPreviewOverride || !mobile || !isValidMobile) return;
     if (mobile !== cleanedMobile) {
       navigate(`/${cleanedMobile}/21daysprogram`, { replace: true });
-      return;
     }
-
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const apiMobile = `+${cleanedMobile}`;
-        const encodedMobile = encodeURIComponent(apiMobile);
-        const response = await fetch(`/.netlify/functions/student?mobile=${encodedMobile}`);
-        if (!response.ok) {
-          if (response.status === 404) {
-            throw new Error(
-              "This link is incorrect. Please recheck your WhatsApp reminder."
-            );
-          }
-          throw new Error(`API error: ${response.status}`);
-        }
-        const data = await response.json();
-        setStudentData(data);
-      } catch (err: any) {
-        setError(err.message || "Something went wrong");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [mobile, navigate]);
+  }, [initialStudentData, isPreviewOverride, mobile, cleanedMobile, isValidMobile, navigate]);
 
   // Derive days attended from free_batches attendance_tracker, capped at 21.
   // preview_levels or forceDay override daysAttended when simulating days.

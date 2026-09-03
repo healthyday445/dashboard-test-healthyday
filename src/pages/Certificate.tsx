@@ -10,6 +10,7 @@ import {
   trackCertificateActivity,
 } from "@/lib/trackCertificateActivity";
 import logo from "@/assets/Primary_logo.svg";
+import { useStudentData } from "@/hooks/use-student-data";
 import { FREE_BATCH_DATE } from "@/pages/Dashboard";
 import { Skeleton } from "@/components/ui/skeleton";
 import certificate14Days from "@/assets/badges/certificate_14days.jpg";
@@ -94,7 +95,6 @@ export default function Certificate() {
     return previewProgramme === "21day" ? 21 : 14;
   });
 
-  const [loadingStudent, setLoadingStudent] = useState(!!mobile && daysAttended === null);
   const [fontSize, setFontSize] = useState<number>(37); // Default size 37 as requested
   const [yPercent, setYPercent] = useState<number>(42); // Vertical positioning (~48% moves name slightly higher as requested)
   const [textColor, setTextColor] = useState<string>("#0F5132"); // Dark green default as requested
@@ -141,50 +141,43 @@ export default function Certificate() {
   };
 
   // Fetch student data if mobile is present to pre-fill name and check 7 days attendance
+  const cleanedMobile = mobile ? mobile.replace(/[\s\-\(\)\+]/g, "") : "";
+  const isValidMobile = /^\d{7,15}$/.test(cleanedMobile);
+  const studentQuery = useStudentData(cleanedMobile, !!mobile && isValidMobile);
+
   useEffect(() => {
-    if (!mobile) {
-      setLoadingStudent(false);
-      return;
+    const data = studentQuery.data;
+    if (!data) return;
+
+    if (data.name && data.name !== "Student") {
+      setName(data.name);
+      safeLocalStorage.setItem("user_name", data.name);
     }
-    const cleanedMobile = mobile.replace(/[\s\-\(\)\+]/g, "");
-    if (!/^\d{7,15}$/.test(cleanedMobile)) {
-      setLoadingStudent(false);
-      return;
+
+    // Only the one-off June-21-2026 cohort is the 21-day programme (see Dashboard.tsx's
+    // FREE_BATCH_DATE) — every other batch_start_date is a 14-days-v2 student.
+    const resolvedProgramDays = data.free_batch_start_date === FREE_BATCH_DATE ? 21 : 14;
+    if (!searchParams.get("preview_programme")) {
+      setProgramDays(resolvedProgramDays);
     }
-    const apiMobile = `+${cleanedMobile}`;
-    const encodedMobile = encodeURIComponent(apiMobile);
 
-    fetch(`/.netlify/functions/student?mobile=${encodedMobile}`)
-      .then((r) => (r.ok ? r.json() : Promise.reject(r.status)))
-      .then((data) => {
-        if (data) {
-          if (data.name && data.name !== "Student") {
-            setName(data.name);
-            safeLocalStorage.setItem("user_name", data.name);
-          }
+    // Check live attendance count
+    if (daysAttended === null) {
+      const freeBatches = (data.free_batches ?? []) as { batch_start_date: string; attendance_tracker: string[] }[];
+      const activeBatches = freeBatches.filter((b) => b.batch_start_date === data.free_batch_start_date);
+      const batchesToCheck = activeBatches.length > 0 ? activeBatches : freeBatches;
+      const allDates = new Set<string>(batchesToCheck.flatMap((b) => b.attendance_tracker ?? []));
+      setDaysAttended(Math.min(allDates.size, resolvedProgramDays));
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [studentQuery.data]);
 
-          // Only the one-off June-21-2026 cohort is the 21-day programme (see Dashboard.tsx's
-          // FREE_BATCH_DATE) — every other batch_start_date is a 14-days-v2 student.
-          const resolvedProgramDays = data.free_batch_start_date === FREE_BATCH_DATE ? 21 : 14;
-          if (!searchParams.get("preview_programme")) {
-            setProgramDays(resolvedProgramDays);
-          }
+  useEffect(() => {
+    if (studentQuery.error && daysAttended === null) setDaysAttended(programDays);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [studentQuery.error]);
 
-          // Check live attendance count
-          if (daysAttended === null) {
-            const freeBatches = (data.free_batches ?? []) as { batch_start_date: string; attendance_tracker: string[] }[];
-            const activeBatches = freeBatches.filter((b) => b.batch_start_date === data.free_batch_start_date);
-            const batchesToCheck = activeBatches.length > 0 ? activeBatches : freeBatches;
-            const allDates = new Set<string>(batchesToCheck.flatMap((b) => b.attendance_tracker ?? []));
-            setDaysAttended(Math.min(allDates.size, resolvedProgramDays));
-          }
-        }
-      })
-      .catch(() => {
-        if (daysAttended === null) setDaysAttended(programDays);
-      })
-      .finally(() => setLoadingStudent(false));
-  }, [mobile]);
+  const loadingStudent = !!mobile && isValidMobile && studentQuery.isLoading;
 
   // Check local storage first (instant, no network) — `useLayoutEffect` so a cached local
   // answer is applied before the browser paints, avoiding a flash of the name form before

@@ -2,6 +2,8 @@ import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import { safeSessionStorage } from "@/lib/storage";
+import { useStudentData } from "@/hooks/use-student-data";
+import { useSessionLinks } from "@/hooks/use-session-links";
 import { getSimulatedBatchDate } from "@/lib/utils";
 import { getNowIST } from "@/lib/serverTime";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
@@ -80,71 +82,45 @@ const Grace = () => {
   const searchParams = new URLSearchParams(location.search);
   const mobile = urlMobile || searchParams.get("mobile") || safeSessionStorage.getItem("referrer_mobile") || "";
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [studentData, setStudentData] = useState<any>(null);
-  const [sessionLinks, setSessionLinks] = useState<any[]>([]);
-  const [sessionLinksLoaded, setSessionLinksLoaded] = useState(false);
+  const { sessionLinks, isLoading: sessionLinksLoading } = useSessionLinks();
+  const sessionLinksLoaded = !sessionLinksLoading;
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
   const [channelName, setChannelName] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetch("/.netlify/functions/session-links")
-      .then((r) => r.json())
-      .then((data) => {
-        const arr = Array.isArray(data)
-          ? data
-          : Array.isArray(data?.data) ? data.data
-            : Array.isArray(data?.links) ? data.links
-              : [];
-        setSessionLinks(arr);
-      })
-      .catch(() => {})
-      .finally(() => setSessionLinksLoaded(true));
-  }, []);
+  const studentQuery = useStudentData(mobile, !!mobile);
+
+  // Grace-window eligibility check stays page-local (it's this page's own business rule,
+  // not something the shared fetch/cache layer should know about) — runs once per fetched
+  // record, same as the original effect did per completed fetch.
+  const [studentData, setStudentData] = useState<any>(null);
 
   useEffect(() => {
-    if (!mobile) {
-      setLoading(false);
-      setError("No mobile number provided.");
+    const data = studentQuery.data;
+    if (!data) return;
+
+    const forceDayParam = searchParams.get("forceDay");
+    const today = forceDayParam !== null && data?.free_batch_start_date
+      ? getSimulatedBatchDate(data.free_batch_start_date, parseInt(forceDayParam, 10))
+      : (() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; })();
+
+    const status = data?.status;
+    const isCompleted = status === "14DaysCompleted" || status === "14 day completed";
+    const dayNumber = getDayNumber(data?.free_batch_start_date, today);
+    const inGraceWindow = dayNumber !== null && dayNumber >= GRACE_DAY_MIN && dayNumber <= GRACE_DAY_MAX;
+
+    if (!isCompleted || !inGraceWindow) {
+      navigate(`/${mobile}`, { replace: true });
       return;
     }
 
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const apiMobile = `+${mobile}`;
-        const response = await fetch(`/.netlify/functions/student?mobile=${encodeURIComponent(apiMobile)}`);
-        if (!response.ok) throw new Error(`API error: ${response.status}`);
-        const data = await response.json();
-
-        const forceDayParam = searchParams.get("forceDay");
-        const today = forceDayParam !== null && data?.free_batch_start_date
-          ? getSimulatedBatchDate(data.free_batch_start_date, parseInt(forceDayParam, 10))
-          : (() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d; })();
-
-        const status = data?.status;
-        const isCompleted = status === "14DaysCompleted" || status === "14 day completed";
-        const dayNumber = getDayNumber(data?.free_batch_start_date, today);
-        const inGraceWindow = dayNumber !== null && dayNumber >= GRACE_DAY_MIN && dayNumber <= GRACE_DAY_MAX;
-
-        if (!isCompleted || !inGraceWindow) {
-          navigate(`/${mobile}`, { replace: true });
-          return;
-        }
-
-        setStudentData(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Something went wrong");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
+    setStudentData(data);
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [mobile, navigate]);
+  }, [studentQuery.data, mobile, navigate]);
+
+  const loading = !!mobile && (studentQuery.isLoading || (!studentQuery.error && !studentData));
+  const error = !mobile
+    ? "No mobile number provided."
+    : studentQuery.error instanceof Error ? studentQuery.error.message : null;
 
   const timeParam = searchParams.get("time");
   const totalMin = getCurrentTotalMin(timeParam);

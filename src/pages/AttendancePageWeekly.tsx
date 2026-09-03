@@ -1,8 +1,10 @@
 import { useState, useEffect, useRef } from "react";
 import { useNavigate, useLocation, useParams } from "react-router-dom";
+import { useQueryClient } from "@tanstack/react-query";
 import logo from "@/assets/Primary_logo.svg";
 import { Skeleton } from "@/components/ui/skeleton";
 import { safeSessionStorage } from "@/lib/storage";
+import { useStudentData } from "@/hooks/use-student-data";
 import { getWeeklyAttendance, WEEK_DAY_LABELS } from "@/lib/weeklyAttendance";
 import { getPlanRenewalInfo } from "@/lib/planRenewal";
 
@@ -10,6 +12,10 @@ interface DayUpdate {
   day: string;
   attended: boolean;
 }
+
+// Stable object identity (not an inline literal) so the redirect useEffect below doesn't
+// see a "new" studentData on every render while in preview mode.
+const PREVIEW_STUDENT_DATA = { language: "Telugu", status: "paid", paid_attendance_tracker: ["mon", "wed"] };
 
 /** Success/failure banners for the update-attendance result, rendered inline below the Update button. */
 // Below 375px, these single-line sentences no longer fit their banner width — the flex-row
@@ -104,10 +110,6 @@ const AttendancePageWeekly = () => {
   const mobile = urlMobile || searchParams.get("mobile") || safeSessionStorage.getItem("referrer_mobile") || "";
   const previewMode = searchParams.get("preview");
 
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [studentData, setStudentData] = useState<any>(null);
-
   const [weekLabel, setWeekLabel] = useState("");
   const [checkedDays, setCheckedDays] = useState<boolean[]>([]);
   const [originalDays, setOriginalDays] = useState<boolean[]>([]);
@@ -133,47 +135,20 @@ const AttendancePageWeekly = () => {
     feedbackTimeoutRef.current = setTimeout(() => setFeedback(null), 4000);
   };
 
+  const isPreview = previewMode === "paid";
+  const queryClient = useQueryClient();
+  const studentQuery = useStudentData(mobile, !isPreview);
+  const studentData = isPreview ? PREVIEW_STUDENT_DATA : studentQuery.data;
+  const loading = !isPreview && studentQuery.isLoading;
+  const error = !isPreview && !mobile
+    ? "No mobile number provided."
+    : studentQuery.error instanceof Error ? studentQuery.error.message : null;
+
   useEffect(() => {
-    if (previewMode === "paid") {
-      setStudentData({
-        language: "Telugu",
-        status: "paid",
-        paid_attendance_tracker: ["mon", "wed"],
-      });
-      setLoading(false);
-      return;
+    if (!isPreview && studentData && studentData.status !== "paid") {
+      navigate(`/${mobile}`);
     }
-
-    if (!mobile) {
-      setLoading(false);
-      setError("No mobile number provided.");
-      return;
-    }
-
-    const fetchData = async () => {
-      setLoading(true);
-      setError(null);
-      try {
-        const apiMobile = `+${mobile}`;
-        const response = await fetch(`/.netlify/functions/student?mobile=${encodeURIComponent(apiMobile)}`);
-        if (!response.ok) throw new Error(`API error: ${response.status}`);
-        const data = await response.json();
-
-        if (data.status !== "paid") {
-          navigate(`/${mobile}`);
-          return;
-        }
-
-        setStudentData(data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "Something went wrong");
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [mobile, previewMode, navigate]);
+  }, [isPreview, studentData, mobile, navigate]);
 
   useEffect(() => {
     if (!studentData) return;
@@ -230,9 +205,12 @@ const AttendancePageWeekly = () => {
       monday.setDate(today.getDate() - todayIdx);
       const weekStart = `${monday.getFullYear()}-${String(monday.getMonth() + 1).padStart(2, "0")}-${String(monday.getDate()).padStart(2, "0")}`;
 
-      const result = await submitAttendanceUpdate(mobile, weekStart, updates);
+      await submitAttendanceUpdate(mobile, weekStart, updates);
 
-      setStudentData((prev) => ({ ...prev, paid_attendance_tracker: result.paid_attendance_tracker }));
+      // The backend record changed — refetch the shared student query so this page (and
+      // any other page reading the same cached record, e.g. AttendancePage.tsx) picks up
+      // the corrected attendance instead of serving stale cached data.
+      await queryClient.invalidateQueries({ queryKey: ["student", mobile] });
       showFeedback("success");
     } catch (err) {
       const message = err instanceof Error ? err.message : "Failed to update attendance. Please try again.";
