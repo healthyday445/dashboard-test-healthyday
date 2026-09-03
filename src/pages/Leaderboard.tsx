@@ -2,6 +2,7 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReferWinCard from "@/components/ReferWinCard";
 import { useStudentData } from "@/hooks/use-student-data";
+import { useReferrals } from "@/hooks/use-referrals";
 import logo from "@/assets/Primary_logo.svg";
 import imgBannerBg from "@/assets/leaderboard/11621406ee6eb5f29bb80937e33d2195815c78d8.webp";
 import imgMainPrize from "@/assets/leaderboard/0d0feb7c046d1e7737d4d7000c10d1cf68d8865c.webp";
@@ -131,8 +132,19 @@ const Leaderboard: React.FC = () => {
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerClosing, setDrawerClosing] = useState(false);
-  const [referralsData, setReferralsData] = useState<{ language?: string; total_referrals: number; referrals: { referred_mobile: string; referred_name: string; referral_confirmation_status: string }[] } | null>(null);
-  const [referralsLoading, setReferralsLoading] = useState(false);
+  // Gates the query so the contest referrals aren't fetched until the drawer is opened at
+  // least once — react-query's own cache (keyed by mobile+dates+include_contest) replaces
+  // the old manual `if (referralsData) return` short-circuit for subsequent opens.
+  const [hasOpenedReferralsDrawer, setHasOpenedReferralsDrawer] = useState(false);
+  const cleanedMobile = mobile.replace(/\D/g, "");
+  const referralsQuery = useReferrals(cleanedMobile, {
+    includeContest: true,
+    startDate: CONTEST_START,
+    endDate: CONTEST_END,
+    enabled: hasOpenedReferralsDrawer,
+  });
+  const referralsData = referralsQuery.data ?? null;
+  const referralsLoading = referralsQuery.isLoading;
   const [isPaidUser, setIsPaidUser] = useState(false);
   const [userLanguage, setUserLanguage] = useState("");
 
@@ -146,14 +158,7 @@ const Leaderboard: React.FC = () => {
 
   const openReferralsDrawer = () => {
     setDrawerOpen(true);
-    if (referralsData) return;
-    setReferralsLoading(true);
-    const e164 = `+${mobile.replace(/\D/g, "")}`;
-    fetch(`/.netlify/functions/referrals?mobile=${encodeURIComponent(e164)}&start_date=${CONTEST_START}&end_date=${CONTEST_END}&include_contest=true`)
-      .then((r) => r.json())
-      .then((data) => setReferralsData(data))
-      .catch(() => {})
-      .finally(() => setReferralsLoading(false));
+    setHasOpenedReferralsDrawer(true);
   };
 
   useEffect(() => {
@@ -202,7 +207,6 @@ const Leaderboard: React.FC = () => {
       .finally(() => setRankLoading(false));
   }, [mobile]);
 
-  const cleanedMobile = mobile ? mobile.replace(/\D/g, "") : "";
   const studentQuery = useStudentData(cleanedMobile, !!cleanedMobile);
 
   useEffect(() => {

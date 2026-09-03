@@ -3,6 +3,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { trackVisit } from "@/lib/trackVisit";
 import { useStudentData, StudentFetchError } from "@/hooks/use-student-data";
 import { useSessionLinks } from "@/hooks/use-session-links";
+import { useReferrals } from "@/hooks/use-referrals";
 import { isFreeBatchOver, getSimulatedBatchDate, getBonusWindowStart } from "@/lib/utils";
 import logo from "@/assets/Primary_logo.svg";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
@@ -224,7 +225,6 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
   );
   const { sessionLinks, isLoading: sessionLinksLoading } = useSessionLinks();
   const sessionLinksLoaded = !sessionLinksLoading;
-  const [verifiedReferralCount, setVerifiedReferralCount] = useState<number | null>(null);
   const [joinedDays, setJoinedDays] = useState<number[]>(() => {
     try {
       const keys = safeLocalStorage.keys().filter(k => k.startsWith("hd_joined_"));
@@ -286,16 +286,8 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
   // Verified referral count (from /referrals, distinct from studentData.total_referral_count)
   // — fetched independently of the effect above, since that one no-ops when a parent
   // (Dashboard.tsx) already supplied initialStudentData.
-  useEffect(() => {
-    if (!mobile) return;
-    const cleanedMobile = mobile.replace(/[\s()+-]/g, "");
-    if (!/^\d{7,15}$/.test(cleanedMobile)) return;
-    const encodedMobile = encodeURIComponent(`+${cleanedMobile}`);
-    fetch(`/.netlify/functions/referrals?mobile=${encodedMobile}&include_contest=false`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((refData) => setVerifiedReferralCount(refData?.verified_referrals ?? null))
-      .catch(() => {});
-  }, [mobile]);
+  const referralsQuery = useReferrals(cleanedMobile, { enabled: isValidMobile });
+  const verifiedReferralCount = referralsQuery.data?.verified_referrals ?? null;
 
   // --- Join tracking via localStorage (must be before any conditional returns) ---
   const joinStorageKey = `hd_joined_${mobile}_${studentData?.free_batch_start_date}`;

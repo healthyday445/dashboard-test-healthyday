@@ -3,6 +3,7 @@ import { useNavigate, useParams, useLocation } from "react-router-dom";
 import { trackVisit } from "@/lib/trackVisit";
 import { useStudentData, StudentFetchError } from "@/hooks/use-student-data";
 import { useSessionLinks } from "@/hooks/use-session-links";
+import { useReferrals } from "@/hooks/use-referrals";
 import { isFreeBatchOver, getSimulatedBatchDate, getBonusWindowStart } from "@/lib/utils";
 import logo from "@/assets/Primary_logo.svg";
 import { PricingAndComparisonSection } from "@/components/PricingAndComparisonSection";
@@ -327,7 +328,6 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
     time: searchParams.get("time"),
   });
   const sessionLinksLoaded = !sessionLinksLoading;
-  const [verifiedReferralCount, setVerifiedReferralCount] = useState<number | null>(null);
   // Completed-batch page tab — defaults to "live", or override via ?tab=journey for direct preview
   const [completedTab, setCompletedTab] = useState<FourteenDaysV2Tab>(
     searchParams.get("tab") === "journey" ? "journey" : "live"
@@ -378,16 +378,8 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
   // Verified referral count (from /referrals, distinct from studentData.total_referral_count)
   // — fetched independently of the effect above, since that one no-ops when a parent
   // (Dashboard.tsx) already supplied initialStudentData.
-  useEffect(() => {
-    if (!mobile) return;
-    const cleanedMobile = mobile.replace(/[\s()+-]/g, "");
-    if (!/^\d{7,15}$/.test(cleanedMobile)) return;
-    const encodedMobile = encodeURIComponent(`+${cleanedMobile}`);
-    fetch(`/.netlify/functions/referrals?mobile=${encodedMobile}&include_contest=false`)
-      .then((r) => (r.ok ? r.json() : null))
-      .then((refData) => setVerifiedReferralCount(refData?.verified_referrals ?? null))
-      .catch(() => {});
-  }, [mobile]);
+  const referralsQuery = useReferrals(cleanedMobile, { enabled: isValidMobile });
+  const verifiedReferralCount = referralsQuery.data?.verified_referrals ?? null;
 
   if (loading) {
     return (

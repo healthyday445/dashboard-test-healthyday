@@ -2,32 +2,12 @@ import { useState, useEffect } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import { useStudentData } from "@/hooks/use-student-data";
+import { useReferrals, type ApiReferral, type ReferralsApiData } from "@/hooks/use-referrals";
 import imgTshirt from "@/assets/referral/tshirt-reward.webp";
 import imgDietPdf from "@/assets/referral/diet-pdf.webp";
 import imgTenClasses from "@/assets/referral/ten-classes-reward.webp";
 import { ReferralRewardsCard, ReferralRewardsCardSkeleton, DIET_PDF_REFS, TSHIRT_REFS, PAID_FREE_CLASSES_REFS } from "@/components/ReferralRewardsCard";
 import { safeSessionStorage } from "@/lib/storage";
-
-// ── Types ─────────────────────────────────────────────────────────────────────
-
-interface ApiReferral {
-  referred_mobile: string;
-  referred_name: string;
-  referral_date: string;
-  is_redeemed_for_free_classes: boolean;
-  is_redeemed_for_gift: boolean;
-  referral_confirmation_status: "pending" | "verified";
-}
-
-interface ReferralsApiData {
-  total_referrals: number;
-  pending_referrals: number;
-  verified_referrals: number;
-  referrals_required_for_next_free_classes: number;
-  referrals_required_for_next_gift: number;
-  language?: string;
-  referrals: ApiReferral[];
-}
 
 // ── Helpers ───────────────────────────────────────────────────────────────────
 
@@ -256,9 +236,6 @@ const ReferralStatus = () => {
     previewParam !== null && /^\d+$/.test(previewParam) ? Number(previewParam) : null;
   const previewPaidParam = searchParams.get("preview_paid");
 
-  const [apiData, setApiData] = useState<ReferralsApiData | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [apiError, setApiError] = useState<string | null>(null);
   const [isPaid, setIsPaid] = useState(false);
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerClosing, setDrawerClosing] = useState(false);
@@ -272,26 +249,16 @@ const ReferralStatus = () => {
     ? `https://yoga.healthyday.co.in?ref=${mobile}`
     : "https://yoga.healthyday.co.in";
 
-  useEffect(() => {
-    if (previewCount !== null) {
-      setApiData(buildPreviewData(previewCount));
-      setLoading(false);
-      return;
-    }
-    if (!mobile) { setLoading(false); return; }
-    const apiMobile = `+${mobile.replace(/\D/g, "")}`;
-    fetch(`/.netlify/functions/referrals?mobile=${encodeURIComponent(apiMobile)}&include_contest=false`)
-      .then((r) => r.json())
-      .then((data: ReferralsApiData) => setApiData(data))
-      .catch((err) => setApiError(String(err)))
-      .finally(() => setLoading(false));
-  }, [mobile, previewCount]);
+  const cleanedMobile = mobile ? mobile.replace(/\D/g, "") : "";
+  const referralsQuery = useReferrals(cleanedMobile, { enabled: previewCount === null && !!mobile });
+  const apiData = previewCount !== null ? buildPreviewData(previewCount) : referralsQuery.data ?? null;
+  const loading = previewCount === null && !!mobile && referralsQuery.isLoading;
+  const apiError = referralsQuery.error instanceof Error ? referralsQuery.error.message : null;
 
   // Paid/free status is always resolved from the real student record for a given mobile —
   // independent of `preview_referrals`, so testers can preview an arbitrary referral count
   // while still seeing the correct milestone variant for that student. `preview_paid` is an
   // explicit override for previewing a variant without a matching real account.
-  const cleanedMobile = mobile ? mobile.replace(/\D/g, "") : "";
   const studentQuery = useStudentData(cleanedMobile, previewPaidParam === null && !!mobile);
 
   useEffect(() => {
