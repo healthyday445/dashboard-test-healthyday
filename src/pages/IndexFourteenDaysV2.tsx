@@ -1,6 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { trackVisit } from "@/lib/trackVisit";
 import { useStudentData, StudentFetchError } from "@/hooks/use-student-data";
 import { useSessionLinks } from "@/hooks/use-session-links";
 import { useReferrals } from "@/hooks/use-referrals";
@@ -298,12 +297,6 @@ const IndexFourteenDaysV2 = ({ initialStudentData, onSwitchToJourney }: IndexPro
       navigate(`/${queryMobile}${qs ? `?${qs}` : ""}`, { replace: true });
     }
   }, [pathMobile, queryMobile, navigate, location.search]);
-
-  useEffect(() => {
-    if (mobile) {
-      trackVisit(mobile);
-    }
-  }, [mobile]);
 
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
   const [studentData, setStudentData] = useState<any>(effectiveInitialData ?? null);

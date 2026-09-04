@@ -5,7 +5,6 @@ import { getNowIST } from "@/lib/serverTime";
 import { LevelCard } from "@/components/LevelCard";
 import { CertificateModal } from "@/components/CertificateModal";
 import IndexPaid from "@/pages/IndexPaid";
-import { trackVisit } from "@/lib/trackVisit";
 import { useStudentData, StudentFetchError } from "@/hooks/use-student-data";
 import { useSessionLinks } from "@/hooks/use-session-links";
 import { trackSessionClick } from "@/lib/trackSessionClick";
@@ -306,13 +305,6 @@ const IndexTwentyOneDay = ({ initialStudentData, onSwitchToJourney }: IndexTwent
       navigate(`/${queryMobile}${qs ? `?${qs}` : ""}`, { replace: true });
     }
   }, [pathMobile, queryMobile, navigate, location.search]);
-
-  // --- Link tracking: log visit to Supabase attendance_logs ---
-  useEffect(() => {
-    if (mobile) {
-      trackVisit(mobile);
-    }
-  }, [mobile]);
 
   const [studentData, setStudentData] = useState<any>(effectiveInitialData ?? null);
   const [showCertificateModal, setShowCertificateModal] = useState(false);

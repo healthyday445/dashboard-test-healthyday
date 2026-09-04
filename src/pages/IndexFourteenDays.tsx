@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate, useParams, useLocation } from "react-router-dom";
-import { trackVisit } from "@/lib/trackVisit";
 import { useStudentData, StudentFetchError } from "@/hooks/use-student-data";
 import { useSessionLinks } from "@/hooks/use-session-links";
 import { useReferrals } from "@/hooks/use-referrals";
@@ -203,13 +202,6 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
       navigate(`/${queryMobile}${qs ? `?${qs}` : ""}`, { replace: true });
     }
   }, [pathMobile, queryMobile, navigate, location.search]);
-
-  // --- Link tracking: log visit to Supabase attendance_logs ---
-  useEffect(() => {
-    if (mobile) {
-      trackVisit(mobile);
-    }
-  }, [mobile]);
 
   const [selectedPlanIdx, setSelectedPlanIdx] = useState(0);
   const [studentData, setStudentData] = useState<any>(initialStudentData ?? null);

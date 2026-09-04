@@ -2,8 +2,7 @@
  * trackSessionClick — Fire-and-forget log of live session JOIN clicks.
  *
  * Sends the mobile number and the clicked session's code to the Netlify
- * `portal-session-clicks` function, which logs it in Firestore `portal_session_clicks`
- * (same payload shape as `trackVisit`'s `portal_link_clicks` log, plus sessionCode).
+ * `portal-session-clicks` function, which logs it in Firestore `portal_session_clicks`.
  * Fires for both free and paid students, every click — no dedup.
  *
  * `source` distinguishes a live "Join Session" click from a recordings-page click,
