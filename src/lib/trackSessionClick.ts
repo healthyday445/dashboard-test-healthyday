@@ -7,7 +7,13 @@
  *
  * `source` distinguishes a live "Join Session" click from a recordings-page click,
  * since both funnel into the same collection.
+ *
+ * Also logs this device's clock drift/sync state vs the server (see lib/serverTime.ts)
+ * so a "student saw the wrong session" report can be diagnosed from Firestore alone,
+ * without needing to reproduce a skewed device clock.
  */
+
+import { getNowIST, getDriftMs, isServerTimeSynced } from "@/lib/serverTime";
 
 export function trackSessionClick(
   slug: string | undefined,
@@ -38,6 +44,9 @@ export function trackSessionClick(
     downlink: nav.connection?.downlink ?? null,
 
     clientTime: new Date().toISOString(),
+    clientTimeIST: getNowIST().toISOString(),
+    clockDriftMs: getDriftMs(),
+    serverTimeSynced: isServerTimeSynced(),
   };
 
   fetch("/.netlify/functions/portal-session-clicks", {

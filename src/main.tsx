@@ -7,7 +7,7 @@ import ErrorBoundary from "./components/ErrorBoundary";
 import { syncServerTime } from "./lib/serverTime";
 import "./index.css";
 
-syncServerTime();
+await syncServerTime();
 
 createRoot(document.getElementById("root")!).render(
   <ErrorBoundary>
