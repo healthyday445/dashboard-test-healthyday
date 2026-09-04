@@ -12,7 +12,11 @@ export async function handler(event) {
   const body = await res.text();
   return {
     statusCode: res.status,
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "Netlify-CDN-Cache-Control": "public, max-age=86400, stale-while-revalidate=3600",
+      "Cache-Tag": `diet-meal-${mealId}`,
+    },
     body,
   };
 }
