@@ -13,8 +13,8 @@ import logo from "@/assets/Primary_logo.svg";
 import { useStudentData } from "@/hooks/use-student-data";
 import { FREE_BATCH_DATE } from "@/pages/Dashboard";
 import { Skeleton } from "@/components/ui/skeleton";
-import certificate14Days from "@/assets/badges/certificate_14days.jpg";
-import certificate21Days from "@/assets/badges/certificate_21days.jpg";
+import certificate14Days from "@/assets/badges/certificate_14days.webp";
+import certificate21Days from "@/assets/badges/certificate_21days.webp";
 
 const CERTIFICATE_TEMPLATES: Record<14 | 21, string> = {
   14: certificate14Days,

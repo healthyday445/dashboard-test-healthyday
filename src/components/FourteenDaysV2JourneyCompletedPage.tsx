@@ -1,13 +1,13 @@
 import { LEVEL_REWARDS_V2, getLevelRewardLinkV2 } from "@/components/FourteenDaysV2LevelCard";
-import journeyGift from "@/assets/21daysprogram/journey_gift.png";
-import journeyStar from "@/assets/21daysprogram/journey_star.png";
+import journeyGift from "@/assets/21daysprogram/journey_gift.webp";
+import journeyStar from "@/assets/21daysprogram/journey_star.webp";
 import circledPlayButton from "@/assets/21daysprogram/circled_play_button.png";
 import downloadIcon from "@/assets/21daysprogram/download_icon.png";
-import rewardLvl1 from "@/assets/14d-v2-dashboard-level-card/reward_lvl1.jpg";
-import rewardLvl2 from "@/assets/14d-v2-dashboard-level-card/reward_lvl2.jpg";
-import rewardLvl3 from "@/assets/14d-v2-dashboard-level-card/reward_lvl3.jpg";
-import rewardLvl4 from "@/assets/14d-v2-dashboard-level-card/reward_lvl4.jpg";
-import rewardLvl5 from "@/assets/14d-v2-dashboard-level-card/reward_lvl5.jpg";
+import rewardLvl1 from "@/assets/14d-v2-dashboard-level-card/reward_lvl1.webp";
+import rewardLvl2 from "@/assets/14d-v2-dashboard-level-card/reward_lvl2.webp";
+import rewardLvl3 from "@/assets/14d-v2-dashboard-level-card/reward_lvl3.webp";
+import rewardLvl4 from "@/assets/14d-v2-dashboard-level-card/reward_lvl4.webp";
+import rewardLvl5 from "@/assets/14d-v2-dashboard-level-card/reward_lvl5.webp";
 
 const REWARD_THUMBS_V2 = [rewardLvl1, rewardLvl2, rewardLvl3, rewardLvl4, rewardLvl5];
 

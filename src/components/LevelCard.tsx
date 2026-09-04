@@ -4,7 +4,7 @@ import lvl3Inprogress from "@/assets/dashboard-level-card/lvl3_inprogress.webp";
 import lvl4Inprogress from "@/assets/dashboard-level-card/lvl4_inprogress.webp";
 import lvl5Inprogress from "@/assets/dashboard-level-card/lvl5_inprogress.webp";
 import lvl6Inprogress from "@/assets/dashboard-level-card/lvl6_inprogress.webp";
-import lvl7Inprogress from "@/assets/dashboard-level-card/d281f4940dd82c9a590624229b414057020e91f5-removebg-preview.png";
+import lvl7Inprogress from "@/assets/dashboard-level-card/d281f4940dd82c9a590624229b414057020e91f5-removebg-preview.webp";
 import lvl7Locked from "@/assets/dashboard-level-card/lvl7_locked.webp";
 import lvl1Unlocked from "@/assets/dashboard-level-card/lvl1_unlocked.webp";
 import lvl2Unlocked from "@/assets/dashboard-level-card/lvl2_unlocked.webp";

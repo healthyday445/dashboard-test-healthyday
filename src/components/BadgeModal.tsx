@@ -10,11 +10,11 @@ import { safeLocalStorage } from "@/lib/storage";
 import { fitFontSizeToWidth } from "@/lib/canvasText";
 import { Skeleton } from "@/components/ui/skeleton";
 
-import badge1 from "@/assets/badges/1.jpg";
-import badge2 from "@/assets/badges/2.jpg";
-import badge3 from "@/assets/badges/3.jpg";
-import badge4 from "@/assets/badges/4.jpg";
-import badge5 from "@/assets/badges/certificate_14days.jpg";
+import badge1 from "@/assets/badges/1.webp";
+import badge2 from "@/assets/badges/2.webp";
+import badge3 from "@/assets/badges/3.webp";
+import badge4 from "@/assets/badges/4.webp";
+import badge5 from "@/assets/badges/certificate_14days.webp";
 
 const BADGES: Record<number, string> = {
   1: badge1,

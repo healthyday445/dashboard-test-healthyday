@@ -22,7 +22,7 @@ import rewardLvl4 from "@/assets/21daysprogram/reward_lvl4.webp";
 import rewardLvl5 from "@/assets/21daysprogram/reward_lvl5.webp";
 import rewardLvl6 from "@/assets/21daysprogram/reward_lvl6.webp";
 import rewardLvl7 from "@/assets/21daysprogram/reward_lvl7.webp";
-import rewardCardBgUnlocked from "@/assets/21daysprogram/reward_card_bg_unlocked.png";
+import rewardCardBgUnlocked from "@/assets/21daysprogram/reward_card_bg_unlocked.webp";
 import circledPlayButton from "@/assets/21daysprogram/circled_play_button.png";
 import padlockIcon from "@/assets/21daysprogram/padlock_icon.png";
 import pathLineIcon from "@/assets/21daysprogram/path_line_icon.png";

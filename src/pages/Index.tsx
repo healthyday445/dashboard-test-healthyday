@@ -16,14 +16,14 @@ import { ShareReferralActions } from "@/components/ShareReferralActions";
 import NoSessionsCard from "@/components/NoSessionsCard";
 import ReferWinCard from "@/components/ReferWinCard";
 
-import thumbFaceYogaTel from "@/assets/bonus/Face Yoga Thumbnail.jpg";
-import thumbFaceYogaEng from "@/assets/bonus/Face Yoga Thumbnail.jpg";
-import thumbWeightLossTel from "@/assets/bonus/weightlosssession.jpg";
-import thumbWeightLossEng from "@/assets/bonus/weightlosssession_eng.jpg";
-import thumbMeditationTel from "@/assets/bonus/meditation_tel.jpg";
-import thumbMeditationEng from "@/assets/bonus/meditation_eng.jpg";
-import thumbBreathWorkTel from "@/assets/bonus/breathwork.jpg";
-import thumbBreathWorkEng from "@/assets/bonus/bw_eng.jpg";
+import thumbFaceYogaTel from "@/assets/bonus/Face Yoga Thumbnail.webp";
+import thumbFaceYogaEng from "@/assets/bonus/Face Yoga Thumbnail.webp";
+import thumbWeightLossTel from "@/assets/bonus/weightlosssession.webp";
+import thumbWeightLossEng from "@/assets/bonus/weightlosssession_eng.webp";
+import thumbMeditationTel from "@/assets/bonus/meditation_tel.webp";
+import thumbMeditationEng from "@/assets/bonus/meditation_eng.webp";
+import thumbBreathWorkTel from "@/assets/bonus/breathwork.webp";
+import thumbBreathWorkEng from "@/assets/bonus/bw_eng.webp";
 
 const ytThumb = (id: string) => `https://img.youtube.com/vi/${id}/hqdefault.jpg`;
 

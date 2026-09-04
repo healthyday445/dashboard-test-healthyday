@@ -9,8 +9,8 @@ import {
 import { safeLocalStorage } from "@/lib/storage";
 import { fitFontSizeToWidth } from "@/lib/canvasText";
 import { Skeleton } from "@/components/ui/skeleton";
-import certificate14Days from "@/assets/badges/certificate_14days.jpg";
-import certificate21Days from "@/assets/badges/certificate_21days.jpg";
+import certificate14Days from "@/assets/badges/certificate_14days.webp";
+import certificate21Days from "@/assets/badges/certificate_21days.webp";
 
 const CERTIFICATE_TEMPLATES: Record<14 | 21, string> = {
   14: certificate14Days,
