@@ -18,3 +18,10 @@
   for = "/favicon.ico"
   [headers.values]
     Cache-Control = "public, max-age=31536000, immutable"
+
+# Vite content-hashes every file under /assets/*, so a change always produces
+# a new filename — safe to cache forever without a staleness risk.
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
