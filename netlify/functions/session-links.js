@@ -13,7 +13,11 @@ export async function handler(event) {
   const body = await res.text();
   return {
     statusCode: res.status,
-    headers: { "Content-Type": "application/json" },
+    headers: {
+      "Content-Type": "application/json",
+      "Netlify-CDN-Cache-Control": "public, max-age=1800, stale-while-revalidate=600",
+      "Cache-Tag": date || time ? `session-links-${date || "today"}-${time || "now"}` : "session-links",
+    },
     body,
   };
 }
