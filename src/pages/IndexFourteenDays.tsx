@@ -277,8 +277,10 @@ const IndexFourteenDays = ({ initialStudentData, onSwitchToJourney }: IndexProps
 
   // Verified referral count (from /referrals, distinct from studentData.total_referral_count)
   // — fetched independently of the effect above, since that one no-ops when a parent
-  // (Dashboard.tsx) already supplied initialStudentData.
-  const referralsQuery = useReferrals(cleanedMobile, { enabled: isValidMobile });
+  // (Dashboard.tsx) already supplied initialStudentData. Only paid students need this live
+  // value; free-batch students fall back to studentData.total_referral_count below, so skip
+  // the fetch for them.
+  const referralsQuery = useReferrals(cleanedMobile, { enabled: isValidMobile && studentData?.status === "paid" });
   const verifiedReferralCount = referralsQuery.data?.verified_referrals ?? null;
 
   // --- Join tracking via localStorage (must be before any conditional returns) ---
