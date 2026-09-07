@@ -106,8 +106,11 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
     }
   }, [isOpen, mobile, badgeLevel, checkedPrior]);
 
-  // Load template image
+  // Load template image — gated on isOpen since this component can be mounted (and its
+  // effects run) well before the user ever opens the modal; without the guard the template
+  // was fetched unconditionally on mount.
   useEffect(() => {
+    if (!isOpen) return;
     const badgeSrc = BADGES[badgeLevel];
     if (!badgeSrc) return;
 
@@ -120,7 +123,7 @@ export const BadgeModal: React.FC<BadgeModalProps> = ({
     img.onerror = () => {
       console.error(`Failed to load badge template for level ${badgeLevel}`);
     };
-  }, [badgeLevel]);
+  }, [isOpen, badgeLevel]);
 
   const isCertificate = badgeLevel === 5;
   const fontSize = 37;

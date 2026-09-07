@@ -123,8 +123,11 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     }
   }, [isOpen, mobile, checkedPrior]);
 
-  // Load template image
+  // Load template image — gated on isOpen since this component can be mounted (and its
+  // effects run) well before the user ever opens the modal; without the guard the template
+  // was fetched unconditionally on mount.
   useEffect(() => {
+    if (!isOpen) return;
     const templateSrc = CERTIFICATE_TEMPLATES[programDays];
     const img = new Image();
     img.crossOrigin = "anonymous";
@@ -135,7 +138,7 @@ export const CertificateModal: React.FC<CertificateModalProps> = ({
     img.onerror = () => {
       console.error(`Failed to load certificate template ${templateSrc}`);
     };
-  }, [programDays]);
+  }, [isOpen, programDays]);
 
   const fontSize = 37;
   const yPercent = 42;

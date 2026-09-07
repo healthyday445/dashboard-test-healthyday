@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, lazy, Suspense } from "react";
 import { useParams, useLocation } from "react-router-dom";
 import logo from "@/assets/Primary_logo.svg";
 import week1JourneyBg from "@/assets/21daysprogram/completed_journey_hero_bg.webp";
@@ -7,15 +7,17 @@ import HeroBannerWithTabs from "@/components/HeroBannerWithTabs";
 import { FourteenDaysV2TabBar } from "@/components/FourteenDaysV2TabBar";
 import { WeekTwoCountdownBanner } from "@/components/WeekTwoCountdownBanner";
 import { YogaJourneyCompletedPage } from "@/components/YogaJourneyCompletedPage";
-import { CertificateModal } from "@/components/CertificateModal";
-import IndexFourteenDays from "@/pages/IndexFourteenDays";
-import IndexFourteenDaysV2 from "@/pages/IndexFourteenDaysV2";
-import IndexTwentyOneDay from "@/pages/IndexTwentyOneDay";
-import TwentyOneDaysProgram from "@/pages/TwentyOneDaysProgram";
-import FourteenDaysV2Program from "@/pages/FourteenDaysV2Program";
+import { LoadingScreen } from "@/components/LoadingScreen";
 import { getEffectiveStatus } from "@/lib/studentStatus";
 import { useStudentData } from "@/hooks/use-student-data";
 import { isFreeBatchOver, getSimulatedBatchDate } from "@/lib/utils";
+
+const CertificateModal = lazy(() => import("@/components/CertificateModal").then((m) => ({ default: m.CertificateModal })));
+const IndexFourteenDays = lazy(() => import("@/pages/IndexFourteenDays"));
+const IndexFourteenDaysV2 = lazy(() => import("@/pages/IndexFourteenDaysV2"));
+const IndexTwentyOneDay = lazy(() => import("@/pages/IndexTwentyOneDay"));
+const TwentyOneDaysProgram = lazy(() => import("@/pages/TwentyOneDaysProgram"));
+const FourteenDaysV2Program = lazy(() => import("@/pages/FourteenDaysV2Program"));
 
 // The one-off June-21-2026 cohort runs the special 21-day (22-day) programme;
 // the one-off July-6-2026 cohort keeps the original 14-day (no-tabs) experience;
@@ -43,6 +45,14 @@ const Dashboard = () => {
   const [activeTab, setActiveTab] = useState<"dashboard" | "journey">(startOnJourney ? "journey" : "dashboard");
   const [journeyMounted, setJourneyMounted] = useState(startOnJourney);
   const [showCertificateModal, setShowCertificateModal] = useState(false);
+  // Mirrors journeyMounted: the modal (and its template image) is only mounted once the
+  // user actually asks to see the certificate, never eagerly on dashboard load.
+  const [certificateModalMounted, setCertificateModalMounted] = useState(false);
+
+  const openCertificateModal = () => {
+    setCertificateModalMounted(true);
+    setShowCertificateModal(true);
+  };
 
   // A preview param means we want canned data, not whatever real account happens to live
   // at this mobile number — skip the real fetch so the tab chrome/eligibility isn't decided
@@ -61,17 +71,7 @@ const Dashboard = () => {
 
   // Show a loading screen while we determine which experience to show
   if (loading) {
-    return (
-      <div className="hd-page bg-background flex flex-col items-center justify-center" style={{ fontFamily: "Outfit, sans-serif" }}>
-        <img src={logo} alt="Healthyday" className="h-10 mb-8" />
-        <div style={{
-          width: "48px", height: "48px",
-          border: "4px solid #EDF6FF", borderTop: "4px solid #FEAB27",
-          borderRadius: "50%", animation: "spin 0.8s linear infinite",
-        }} />
-        <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-      </div>
-    );
+    return <LoadingScreen />;
   }
 
   // Raw backend status — true only for students who have genuinely already purchased a
@@ -127,7 +127,11 @@ const Dashboard = () => {
 
   // Not eligible for journey tab → render the Live Sessions component standalone (it owns its own layout)
   if (!isEligibleForJourneyTab) {
-    return <LiveSessions initialStudentData={effectiveStudentData} />;
+    return (
+      <Suspense fallback={<LoadingScreen />}>
+        <LiveSessions initialStudentData={effectiveStudentData} />
+      </Suspense>
+    );
   }
 
   // For the new 14-day-v2 batch's ongoing week, derive which week (1 or 2) the student is
@@ -188,30 +192,36 @@ const Dashboard = () => {
           alreadyPaid={alreadyPaid}
         />
 
-        <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
-          <LiveSessions initialStudentData={effectiveStudentData} onSwitchToJourney={() => handleTabChange("journey")} />
-        </div>
-        {journeyMounted && (
-          <div style={{
-            display: activeTab === "journey" ? "block" : "none",
-            ...(batchOverNow ? { backgroundImage: `url(${week1JourneyBg})`, backgroundSize: "100% auto", backgroundPosition: "top center", backgroundRepeat: "no-repeat" } : {}),
-          }}>
-            <YogaJourneyCompletedPage
-              studentName={studentData?.name}
-              language={studentData?.language}
-              joinLink={sessionJoinLink || ""}
-              onCertificateClick={() => setShowCertificateModal(true)}
-            />
+        <Suspense fallback={<LoadingScreen />}>
+          <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
+            <LiveSessions initialStudentData={effectiveStudentData} onSwitchToJourney={() => handleTabChange("journey")} />
           </div>
+          {journeyMounted && (
+            <div style={{
+              display: activeTab === "journey" ? "block" : "none",
+              ...(batchOverNow ? { backgroundImage: `url(${week1JourneyBg})`, backgroundSize: "100% auto", backgroundPosition: "top center", backgroundRepeat: "no-repeat" } : {}),
+            }}>
+              <YogaJourneyCompletedPage
+                studentName={studentData?.name}
+                language={studentData?.language}
+                joinLink={sessionJoinLink || ""}
+                onCertificateClick={openCertificateModal}
+              />
+            </div>
+          )}
+        </Suspense>
+        {certificateModalMounted && (
+          <Suspense fallback={null}>
+            <CertificateModal
+              isOpen={showCertificateModal}
+              onClose={() => setShowCertificateModal(false)}
+              initialName={studentData?.name}
+              mobile={mobile || studentData?.mobile}
+              daysAttended={21}
+              programDays={21}
+            />
+          </Suspense>
         )}
-        <CertificateModal
-          isOpen={showCertificateModal}
-          onClose={() => setShowCertificateModal(false)}
-          initialName={studentData?.name}
-          mobile={mobile || studentData?.mobile}
-          daysAttended={21}
-          programDays={21}
-          />
       </div>
     );
   }
@@ -242,7 +252,7 @@ const Dashboard = () => {
   );
 
   const content = (
-    <>
+    <Suspense fallback={<LoadingScreen />}>
       <div style={{ display: activeTab === "dashboard" ? "block" : "none" }}>
         <LiveSessions initialStudentData={effectiveStudentData} onSwitchToJourney={() => handleTabChange("journey")} />
       </div>
@@ -251,7 +261,7 @@ const Dashboard = () => {
           <JourneyProgram initialStudentData={effectiveStudentData} />
         </div>
       )}
-    </>
+    </Suspense>
   );
 
   return (

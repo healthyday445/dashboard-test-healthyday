@@ -5,7 +5,7 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Maintenance from "./pages/Maintenance";
-import logo from "@/assets/Primary_logo.svg";
+import { LoadingScreen } from "@/components/LoadingScreen";
 
 const Dashboard = lazy(() => import("./pages/Dashboard"));
 const NotFound = lazy(() => import("./pages/NotFound"));
@@ -27,18 +27,6 @@ const DietMealDetail = lazy(() => import("./pages/DietMealDetail"));
 
 const queryClient = new QueryClient();
 
-const RouteFallback = () => (
-  <div className="hd-page bg-background flex flex-col items-center justify-center" style={{ fontFamily: "Outfit, sans-serif" }}>
-    <img src={logo} alt="Healthyday" className="h-10 mb-8" />
-    <div style={{
-      width: "48px", height: "48px",
-      border: "4px solid #EDF6FF", borderTop: "4px solid #FEAB27",
-      borderRadius: "50%", animation: "spin 0.8s linear infinite",
-    }} />
-    <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-  </div>
-);
-
 const App = () => {
   if (import.meta.env.VITE_MAINTENANCE_MODE === "true") {
     return <Maintenance />;
@@ -50,7 +38,7 @@ const App = () => {
         <Toaster />
         <Sonner />
         <BrowserRouter>
-          <Suspense fallback={<RouteFallback />}>
+          <Suspense fallback={<LoadingScreen />}>
             <Routes>
               <Route path="/certificate" element={<Certificate />} />
               <Route path="/:mobile/certificate" element={<Certificate />} />
