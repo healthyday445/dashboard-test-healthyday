@@ -9,7 +9,8 @@ import { WeekTwoCountdownBanner } from "@/components/WeekTwoCountdownBanner";
 import { YogaJourneyCompletedPage } from "@/components/YogaJourneyCompletedPage";
 import { LoadingScreen } from "@/components/LoadingScreen";
 import { getEffectiveStatus } from "@/lib/studentStatus";
-import { useStudentData } from "@/hooks/use-student-data";
+import { useStudentData, StudentFetchError } from "@/hooks/use-student-data";
+import { useSessionLinks } from "@/hooks/use-session-links";
 import { isFreeBatchOver, getSimulatedBatchDate } from "@/lib/utils";
 
 const CertificateModal = lazy(() => import("@/components/CertificateModal").then((m) => ({ default: m.CertificateModal })));
@@ -62,7 +63,19 @@ const Dashboard = () => {
   const isValidMobile = /^\d{7,15}$/.test(cleanedMobile);
   const studentQuery = useStudentData(cleanedMobile, !isPreview && isValidMobile);
   const studentData = studentQuery.data ?? null; // fetch failures silently fall back to null, same as the old `.catch(() => {})`
+  // Session links don't depend on student data at all, but LiveSessions (IndexFourteenDaysV2
+  // et al.) — which is the actual consumer — can't mount until studentQuery above resolves
+  // (we don't know which variant to render yet). Firing the same query here, with the same
+  // params IndexFourteenDaysV2 uses, starts the fetch in parallel with studentQuery instead
+  // of waterfalling behind it; react-query dedupes by query key, so whichever LiveSessions
+  // variant mounts later just reuses this in-flight/cached result instead of re-fetching.
+  useSessionLinks({ previewSnDate: searchParams.get("previewSnDate"), time: timeParam });
   const loading = !isPreview && isValidMobile && studentQuery.isLoading;
+  const error = isPreview || !isValidMobile
+    ? null
+    : studentQuery.error instanceof StudentFetchError && studentQuery.error.status === 404
+      ? "This link is incorrect. Can you please recheck your WhatsApp reminder and open the correct link?"
+      : studentQuery.error instanceof Error ? studentQuery.error.message : null;
 
   const handleTabChange = (tab: "dashboard" | "journey") => {
     if (tab === "journey") setJourneyMounted(true);
@@ -72,6 +85,22 @@ const Dashboard = () => {
   // Show a loading screen while we determine which experience to show
   if (loading) {
     return <LoadingScreen />;
+  }
+
+  // Same convention every other page using useStudentData follows (IndexFourteenDaysV2,
+  // IndexTwentyOneDay, Index, etc.) — without this, a fetch failure silently fell through
+  // to `studentData: null` and the free-batch onboarding screen, hiding a real "student not
+  // found" from the user behind what looked like a normal registration state.
+  if (error) {
+    return (
+      <div className="hd-page bg-background flex flex-col items-center justify-center" style={{ fontFamily: "Outfit, sans-serif" }}>
+        <img src={logo} alt="Healthyday" className="h-10 mb-8" />
+        <div style={{ background: "#FFF3F3", border: "1px solid #FFD4D4", borderRadius: "12px", padding: "24px", textAlign: "center", maxWidth: "340px" }}>
+          <p style={{ color: "#D32F2F", fontSize: "16px", fontWeight: 700, marginBottom: "8px" }}>Oops!</p>
+          <p style={{ color: "#666", fontSize: "14px", fontWeight: 400 }}>{error}</p>
+        </div>
+      </div>
+    );
   }
 
   // Raw backend status — true only for students who have genuinely already purchased a

@@ -30,5 +30,8 @@ export function useStudentData(mobile: string, enabled = true) {
     queryFn: () => fetchStudent(mobile),
     enabled: enabled && !!mobile,
     staleTime: 5 * 60 * 1000,
+    // A 404 here means "this mobile has no student record" — a definitive answer, not a
+    // transient failure, so retrying it just repeats the same 404 against the backend.
+    retry: (failureCount, error) => !(error instanceof StudentFetchError) && failureCount < 3,
   });
 }
