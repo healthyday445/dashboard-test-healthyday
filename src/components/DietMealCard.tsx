@@ -3,6 +3,8 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { getMealPlaceholderIcon } from "@/lib/dietCategoryIcon";
 import type { ResolvedMealSummary } from "@/data/diet";
 import clockIcon from "@/assets/diet/icons/clock.webp";
+import ideaTagIcon from "@/assets/diet/icons/idea-tag.webp";
+import cautionTagIcon from "@/assets/diet/icons/caution-tag.webp";
 
 // Real pixel values from the Figma card (890:8424 / 890:8443, both on a 412px mobile frame):
 // a 100px circle, 32px of it floating outside the rectangle's left edge (68px overlapping
@@ -54,7 +56,7 @@ interface DietMealCardRectangleProps {
 const DietMealCardRectangle: React.FC<DietMealCardRectangleProps> = ({ children }) => (
   <div
     // Top-left corner stays square so the overlapping circle tucks into the corner cleanly.
-    className="box-border flex w-full items-center rounded-bl-[3px] rounded-tl-[3px] rounded-br-xl rounded-tr-xl border border-[rgba(69,130,185,0.35)] bg-white shadow-[0_2px_8px_0_rgba(5,62,4,0.14)]"
+    className="box-border flex w-full items-center rounded-bl-[40px] rounded-tl-[40px] rounded-br-xl rounded-tr-xl border border-[rgba(69,130,185,0.35)] bg-white shadow-[0_2px_8px_0_rgba(5,62,4,0.14)]"
     style={{ minHeight: `${THUMB_SIZE}px`, padding: `10px ${ARROW_SIZE + ARROW_INSET + 8}px 10px ${THUMB_INSIDE + THUMB_TEXT_GAP}px` }}
   >
     {children}
@@ -158,6 +160,26 @@ export const DietMealCard: React.FC<DietMealCardProps> = ({ meal, onClick }) => 
                     </span>
                   );
                 })}
+              </div>
+            ) : null}
+            {meal.tipsTag || meal.precautionsTag ? (
+              // Extends past the rectangle's own right padding (reserved for the nav arrow)
+              // so the tag row can run all the way to the card's edge, matching Figma
+              // (890:8563 "extras"). No z-index needed: the arrow sits in its own absolutely
+              // positioned wrapper, which already paints above this row's static-flow parent.
+              <div className="flex flex-nowrap items-center gap-x-6" >
+                {meal.tipsTag && (
+                  <span className="flex min-w-0 flex-1 items-center gap-0.5 text-[10px] font-medium text-[#838383]">
+                    <img src={ideaTagIcon} alt="" className="h-[11px] w-[11px] flex-shrink-0" />
+                    <span className="text-nowrap">{meal.tipsTag}</span>
+                  </span>
+                )}
+                {meal.precautionsTag && (
+                  <span className="flex min-w-0 flex-1 items-center gap-0.5 text-[10px] font-medium text-[#838383]">
+                    <img src={cautionTagIcon} alt="" className="h-[11px] w-[11px] flex-shrink-0" />
+                    <span className="text-nowrap">{meal.precautionsTag}</span>
+                  </span>
+                )}
               </div>
             ) : null}
           </div>

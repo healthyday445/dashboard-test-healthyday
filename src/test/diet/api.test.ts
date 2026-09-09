@@ -22,8 +22,18 @@ describe("fetchDietPlan", () => {
         language: "english",
         plan: [
           { slot: "early_morning", meal: null },
-          { slot: "breakfast", meal: { meal_id: "1", name: "Upma", quantity: ["1 bowl"], image_id: "img_1" } },
-          { slot: "lunch", meal: { meal_id: "2", name: "Rice", quantity: [], image_id: null } },
+          {
+            slot: "breakfast",
+            meal: {
+              meal_id: "1",
+              name: "Upma",
+              quantity: ["1 bowl"],
+              image_id: "img_1",
+              tips_tag: "Soak Overnight",
+              precautions_tag: "Control rice for diabetes",
+            },
+          },
+          { slot: "lunch", meal: { meal_id: "2", name: "Rice", quantity: [], image_id: null, tips_tag: null, precautions_tag: null } },
         ],
       },
     });
@@ -32,7 +42,11 @@ describe("fetchDietPlan", () => {
       expect(result.dateKey).toBe("2026-08-27");
       expect(result.meals.map((m) => m.slotId)).toEqual(["breakfast", "lunch"]);
       expect(result.meals[0].mealId).toBe("1");
+      expect(result.meals[0].tipsTag).toBe("Soak Overnight");
+      expect(result.meals[0].precautionsTag).toBe("Control rice for diabetes");
       expect(result.meals[1].imageUrl).toBeUndefined();
+      expect(result.meals[1].tipsTag).toBe("Soak chia overnight");
+      expect(result.meals[1].precautionsTag).toBe("Avoid extra handfuls");
     });
   });
 });

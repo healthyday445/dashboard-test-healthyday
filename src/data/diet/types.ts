@@ -69,6 +69,10 @@ export interface ResolvedMealSummary {
   quantity: string[];
   /** Resolved through `MEAL_IMAGE_BY_ID[image_id]?.sm`. Undefined if no image is set. */
   imageUrl?: string;
+  /** Short one-line tip shown with an idea icon under the quantity chips, e.g. "Soak Overnight". */
+  tipsTag?: string;
+  /** Short one-line caution shown with a warning icon under the quantity chips, e.g. "Control rice for diabetes". */
+  precautionsTag?: string;
 }
 
 /** One resolved day's meal list — from `GET /diet-plan`. A slot with no meal assigned

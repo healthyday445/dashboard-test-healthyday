@@ -24,6 +24,8 @@ interface ApiDietPlanMeal {
   name: string;
   quantity: string[];
   image_id: string | null;
+  tips_tag: string | null;
+  precautions_tag: string | null;
 }
 
 interface ApiDietPlanResponse {
@@ -72,6 +74,8 @@ export async function fetchDietPlan(dateKey: string, language: Language): Promis
         name: entry.meal.name,
         quantity: entry.meal.quantity,
         imageUrl: entry.meal.image_id ? MEAL_IMAGE_BY_ID[entry.meal.image_id]?.sm : undefined,
+        tipsTag: entry.meal.tips_tag ?? undefined,
+        precautionsTag: entry.meal.precautions_tag ?? undefined,
       };
     })
     .sort((a, b) => a.order - b.order);
