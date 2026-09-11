@@ -113,10 +113,12 @@ const Dashboard = () => {
   // still-free student gets. The 21-day/22-day June-21-2026 cohort uses the dedicated
   // IndexTwentyOneDay copy; the one-off July-6-2026 batch keeps the original IndexFourteenDays
   // (no tabs); every other batch (July-13-2026 onward) gets the new tabbed IndexFourteenDaysV2.
+  // Note: forceDay>14 does NOT imply the 21-day cohort — a 14-day-batch account previewed with
+  // forceDay>14 should fall through to getEffectiveStatus's "14DaysCompleted" branch instead;
+  // use ?preview_programme=21day to explicitly preview the 21-day cohort's later days.
   const is21DayBatch =
     previewProgramme === "21day" ||
-    studentData?.free_batch_start_date === FREE_BATCH_DATE ||
-    (forceDayParam !== null && parseInt(forceDayParam, 10) > 14);
+    studentData?.free_batch_start_date === FREE_BATCH_DATE;
   const isLegacyFourteenDayBatch = previewProgramme === "legacy14day" || studentData?.free_batch_start_date === FREE_BATCH_DATE_OLD_14DAY;
   const isNewFourteenDayBatch = !is21DayBatch && !isLegacyFourteenDayBatch;
   const LiveSessions = alreadyPaid ? IndexFourteenDaysV2 : is21DayBatch ? IndexTwentyOneDay : isLegacyFourteenDayBatch ? IndexFourteenDays : IndexFourteenDaysV2;

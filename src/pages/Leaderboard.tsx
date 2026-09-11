@@ -48,10 +48,12 @@ import imgGiftIcon from "@/assets/leaderboard/gift-icon.png";
 import imgDownloadIcon from "@/assets/referral/downloading-updates.png";
 
 /** Formats an ISO "YYYY-MM-DD" date as "1st JUNE" for contest-window copy. */
-function formatContestDate(iso: string): string {
+function formatContestDate(iso: string, style: "long" | "short" = "long"): string {
   const d = new Date(iso + "T00:00:00");
   const day = d.getDate();
-  const month = d.toLocaleString("en-US", { month: "long" }).toUpperCase();
+  const month = style === "short"
+    ? d.toLocaleString("en-US", { month: "short" })
+    : d.toLocaleString("en-US", { month: "long" }).toUpperCase();
   const suffix = day % 10 === 1 && day !== 11 ? "st" : day % 10 === 2 && day !== 12 ? "nd" : day % 10 === 3 && day !== 13 ? "rd" : "th";
   return `${day}${suffix} ${month}`;
 }
@@ -402,7 +404,7 @@ const Leaderboard: React.FC = () => {
                 lineHeight: "normal",
               }}
             >
-              Referral Contest Dates :{" "}
+              Referral Contest Ends on :{" "}
               <span
                 style={{
                   color: "#012755",
@@ -413,20 +415,21 @@ const Leaderboard: React.FC = () => {
                   lineHeight: "normal",
                 }}
               >
-                {contestSummary ? `From ${formatContestDate(contestSummary.startDate)} to ${formatContestDate(contestSummary.endDate)}` : "…"}
+                {contestSummary ? formatContestDate(contestSummary.endDate, "short") : "…"}
               </span>
             </span>
           </div>
 
-          {/* PRIZE TIER — single tier, driven by gift_eligible_rank from the contest API.
-              (The old 3-column Top1-25/25-100/100-500 breakdown doesn't have an equivalent in
-              the new contest API — it only returns one gift_eligible_rank, not per-band prizes —
-              see leaderboard_contest_plan.md Step 3.3 for the open question on restoring tiers.) */}
+          {/* PRIZE TIERS — 3 fixed sub-divisions of the winner pool (Top 1-3 / 4-10 / 11-N),
+              per Figma node 1871-10358. The last tier's upper bound follows the contest's own
+              gift_eligible_rank rather than a hardcoded 100, in case a future contest's cutoff
+              differs from this one. */}
           <div
             style={{
               width: "calc(100% - 32px)",
               display: "flex",
-              justifyContent: "center",
+              justifyContent: "space-between",
+              alignItems: "flex-start",
               marginTop: "18px",
               padding: "0 10px",
               boxSizing: "border-box",
@@ -434,7 +437,17 @@ const Leaderboard: React.FC = () => {
           >
             <PrizeTierCard
               image={PRIZE_IMAGES.tier1}
-              label={`Top ${contestSummary?.giftEligibleRank ?? "—"}`}
+              label="Top 1 - 3"
+              prizes="Yoga Mat + T Shirt + Water Bottle + Weight Scale + Face Towel"
+            />
+            <PrizeTierCard
+              image={PRIZE_IMAGES.tier2}
+              label="Top 4 - 10"
+              prizes="Yoga Mat + T Shirt + Water Bottle + Face Towel"
+            />
+            <PrizeTierCard
+              image={PRIZE_IMAGES.tier3}
+              label={`Top 11 - ${contestSummary?.giftEligibleRank ?? 100}`}
               prizes="Yoga Mat + T Shirt + Water Bottle"
             />
           </div>
