@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
-import ReferWinCard from "@/components/ReferWinCard";
 import { useStudentData } from "@/hooks/use-student-data";
 import { useContestSummary, useContestRank, useContestReferrals } from "@/hooks/use-contest";
 import { fetchContestLeaderboard } from "@/data/contest/api";
@@ -102,6 +101,20 @@ const ReferralNameNumber: React.FC<{ name: string; mobile: string }> = ({ name, 
   </div>
 );
 
+const WhatsAppIcon = () => (
+  <svg width="11" height="11" viewBox="0 0 24 24" fill="none">
+    <path
+      d="M12.04 2C6.58 2 2.13 6.45 2.13 11.91C2.13 13.66 2.59 15.36 3.45 16.86L2.05 22L7.3 20.62C8.75 21.41 10.38 21.83 12.04 21.83C17.5 21.83 21.95 17.38 21.95 11.92C21.95 9.27 20.92 6.78 19.05 4.91C17.18 3.03 14.69 2 12.04 2Z"
+      fill="#40C351"
+    />
+    <path
+      d="M9.53 7.33C9.33 6.88 9.12 6.87 8.93 6.87H8.4C8.22 6.87 7.93 6.94 7.68 7.2C7.44 7.47 6.75 8.12 6.75 9.45C6.75 10.78 7.71 12.06 7.84 12.24C7.98 12.42 9.71 15.22 12.44 16.31C14.71 17.21 15.17 17.03 15.66 16.99C16.15 16.94 17.25 16.34 17.47 15.71C17.7 15.09 17.7 14.55 17.63 14.44C17.56 14.33 17.38 14.26 17.11 14.13C16.84 14 15.53 13.35 15.28 13.26C15.03 13.17 14.85 13.13 14.68 13.4C14.5 13.66 13.98 14.26 13.83 14.44C13.67 14.62 13.51 14.64 13.24 14.51C12.98 14.37 12.11 14.09 11.09 13.18C10.29 12.47 9.75 11.6 9.6 11.33C9.44 11.07 9.58 10.93 9.71 10.79C9.83 10.67 9.98 10.47 10.11 10.32C10.25 10.16 10.29 10.05 10.38 9.87C10.47 9.7 10.42 9.54 10.36 9.41C10.29 9.28 9.77 7.96 9.53 7.33Z"
+      fill="white"
+    />
+  </svg>
+);
+
+/** Copy shown only for an ended contest, per a student's own pending/unverified referral. */
 const PendingNote: React.FC<{ language?: string }> = ({ language }) => (
   <p style={{ margin: 0, color: "#FF3E3E", fontFamily: "Outfit", fontSize: "10px", fontWeight: 400, lineHeight: "1.4" }}>
     {language === "Telugu"
@@ -109,6 +122,45 @@ const PendingNote: React.FC<{ language?: string }> = ({ language }) => (
       : "This user neither verified their number nor attended any class. So, not eligible for the contest"}
   </p>
 );
+
+/** Copy + "Remind" button shown per pending/unverified referral while the contest is still
+ *  live — the referral can still convert, so this nudges the referrer to remind them instead
+ *  of writing them off (that's what PendingNote above is for, post-contest only). */
+const PendingReminderRow: React.FC<{ language?: string; referredName: string }> = ({ language, referredName }) => {
+  const isTelugu = language === "Telugu";
+  const message = isTelugu
+    ? `Hi! Healthyday Free Yoga registration లో WhatsApp Confirm button click చేయడం మర్చిపోయావా? దయచేసి ఇప్పుడే click చేయి 🙏`
+    : `Hi! Looks like you haven't clicked the confirm button on your Healthyday Free Yoga registration WhatsApp message yet. Please click it now so your referral counts 🙏`;
+
+  return (
+    <div style={{ display: "flex", alignItems: "flex-start", justifyContent: "space-between", gap: "8px" }}>
+      <p style={{ margin: 0, color: "#FF3E3E", fontFamily: "Outfit", fontSize: "10px", fontWeight: 400, lineHeight: "1.4", maxWidth: "185px" }}>
+        {isTelugu
+          ? "ఈ person ఇంకా whatsapp లో confirm button నొక్కలేదు"
+          : "Verify Button in the WhatsApp Reminder is not clicked by this person"}
+      </p>
+      <button
+        onClick={() => window.open(`https://wa.me/?text=${encodeURIComponent(message)}`, "_blank")}
+        style={{
+          flexShrink: 0,
+          display: "flex",
+          alignItems: "center",
+          gap: "4px",
+          height: "21px",
+          padding: "0 8px",
+          background: "#FFF",
+          border: "0.7px solid #40C351",
+          borderRadius: "4px",
+          cursor: "pointer",
+        }}
+        aria-label={`Remind ${referredName}`}
+      >
+        <WhatsAppIcon />
+        <span style={{ color: "#40C351", fontFamily: "Outfit", fontSize: "10px", fontWeight: 600 }}>Remind</span>
+      </button>
+    </div>
+  );
+};
 
 /* ────────────────────────────────────────────
    Leaderboard Page Component
@@ -200,8 +252,6 @@ const Leaderboard: React.FC = () => {
   const shareLink = mobile
     ? `https://yoga.healthyday.co.in?ref=${mobile}`
     : "https://yoga.healthyday.co.in?ref=demo";
-  const referralsUrl = mobile ? `/${mobile}/leaderboard` : "/leaderboard";
-
   // Resolving which contest (if any) this student belongs to — nothing contest-specific can
   // render yet.
   if (studentLoading) {
@@ -616,24 +666,6 @@ const Leaderboard: React.FC = () => {
         </div>
       </div>
 
-      {/* ═══════════════════════════════════════
-          BOTTOM SHEET (ReferWinCard) — live contest only
-         ═══════════════════════════════════════ */}
-      {!isContestOver && mobile && <div
-        style={{
-          position: "sticky",
-          bottom: 0,
-          width: "90%",
-          display: "flex",
-          justifyContent: "center",
-          padding: "16px 0 32px",
-          background: "#FFF",
-          boxSizing: "border-box",
-        }}
-      >
-        <ReferWinCard shareLink={shareLink} referralsUrl={referralsUrl} showViewMore={false} />
-      </div>}
-
       {/* ═══ REFERRALS DRAWER ═══ */}
       {drawerOpen && (
         <>
@@ -737,10 +769,16 @@ const Leaderboard: React.FC = () => {
                           )}
                         </div>
                       </div>
-                      {/* Pending error text — below the full row */}
+                      {/* Pending note — below the full row. Ineligibility copy only applies
+                          once the contest has ended; while it's still live, a pending referral
+                          can still convert, so show the Remind CTA instead. */}
                       {!isVerified && (
                         <div style={{ padding: "0 21px 10px" }}>
-                          <PendingNote language={userLanguage} />
+                          {isContestOver ? (
+                            <PendingNote language={userLanguage} />
+                          ) : (
+                            <PendingReminderRow language={userLanguage} referredName={displayName} />
+                          )}
                         </div>
                       )}
                       {!isLast && <div style={{ height: "1px", background: "#E0E0E0" }} />}

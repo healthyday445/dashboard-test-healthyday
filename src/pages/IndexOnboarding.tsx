@@ -148,6 +148,18 @@ const IndexOnboarding: React.FC<IndexOnboardingProps> = ({
   const contestSummaryQuery = useContestSummary(contestId);
   const contestSummary = contestSummaryQuery.data ?? null;
 
+  // The "you'll receive the joining link on WhatsApp on <date>" note only makes sense while
+  // that date is still in the future — once we're within a day of the batch starting, the
+  // Introductory Session card below takes over (and forceDay=0 always simulates that same
+  // "day before/live" window), so the note is hidden in both cases rather than going stale.
+  const daysUntilBatchStart = (() => {
+    const _nowIST = getNowIST();
+    const _nowYMD = Date.UTC(_nowIST.getUTCFullYear(), _nowIST.getUTCMonth(), _nowIST.getUTCDate());
+    const _batchYMD = Date.UTC(onboardingStartDate.getFullYear(), onboardingStartDate.getMonth(), onboardingStartDate.getDate());
+    return Math.round((_batchYMD - _nowYMD) / (24 * 60 * 60 * 1000));
+  })();
+  const showJoiningLinkNote = !isForceOnboardingPreview && daysUntilBatchStart > 1;
+
   return (
     <div className="hd-page bg-white" style={{ fontFamily: "Outfit, sans-serif" }}>
       <header className="hd-header bg-white">
@@ -187,6 +199,27 @@ const IndexOnboarding: React.FC<IndexOnboardingProps> = ({
             EVE - 4:30PM | 5:30PM | 6:30PM IST
           </span>
         </div>
+
+        {/* Joining link goes out the day before the batch starts — same day the
+            Introductory Session card below starts showing. */}
+        {showJoiningLinkNote && (
+          <div style={{ maxWidth: "342px", display: "flex", alignItems: "center", gap: "2px", marginTop: "8px" }}>
+            <svg width="11" height="11" viewBox="0 0 11 11" fill="none">
+              <path d="M0.5 5.5C0.5 6.15661 0.629329 6.80679 0.880602 7.41342C1.13188 8.02005 1.50017 8.57124 1.96447 9.03553C2.42876 9.49983 2.97996 9.86813 3.58658 10.1194C4.19321 10.3707 4.84339 10.5 5.5 10.5C6.15661 10.5 6.80679 10.3707 7.41342 10.1194C8.02005 9.86813 8.57124 9.49983 9.03553 9.03553C9.49983 8.57124 9.86813 8.02005 10.1194 7.41342C10.3707 6.80679 10.5 6.15661 10.5 5.5C10.5 4.17392 9.97322 2.90215 9.03553 1.96447C8.09785 1.02678 6.82608 0.5 5.5 0.5C4.17392 0.5 2.90215 1.02678 1.96447 1.96447C1.02678 2.90215 0.5 4.17392 0.5 5.5Z" fill="#9D9D9D" />
+              <path d="M5.5 3.83333H5.50556M4.94444 5.5H5.5V7.72222H6.05556M0.5 5.5C0.5 6.15661 0.629329 6.80679 0.880602 7.41342C1.13188 8.02005 1.50017 8.57124 1.96447 9.03553C2.42876 9.49983 2.97996 9.86813 3.58658 10.1194C4.19321 10.3707 4.84339 10.5 5.5 10.5C6.15661 10.5 6.80679 10.3707 7.41342 10.1194C8.02005 9.86813 8.57124 9.49983 9.03553 9.03553C9.49983 8.57124 9.86813 8.02005 10.1194 7.41342C10.3707 6.80679 10.5 6.15661 10.5 5.5C10.5 4.17392 9.97322 2.90215 9.03553 1.96447C8.09785 1.02678 6.82608 0.5 5.5 0.5C4.17392 0.5 2.90215 1.02678 1.96447 1.96447C1.02678 2.90215 0.5 4.17392 0.5 5.5Z" stroke="white" strokeLinecap="round" strokeLinejoin="round" />
+            </svg>
+            <span style={{ color: "#747474", fontFamily: "Outfit", fontSize: "8px", fontWeight: 400, lineHeight: "normal" }}>
+              {(() => {
+                const joiningLinkDate = new Date(onboardingStartDate);
+                joiningLinkDate.setDate(joiningLinkDate.getDate() - 1);
+                const day = joiningLinkDate.getDate();
+                const month = joiningLinkDate.toLocaleString("en-US", { month: "long" });
+                const suffix = getOrdinalSuffix(day).toLowerCase();
+                return <>Note: You will receive Joining Link on WhatsApp on {month} {day}<sup>{suffix}</sup></>;
+              })()}
+            </span>
+          </div>
+        )}
       </div>
 
       {/* Introductory Session Card — shown the day before the batch starts.
@@ -295,6 +328,8 @@ const IndexOnboarding: React.FC<IndexOnboardingProps> = ({
           <br />
           <span style={{ color: "#000", fontFamily: "Outfit", fontSize: "20px", fontStyle: "normal", fontWeight: 700, lineHeight: "25px" }}>Try these 15 Minutes Yoga</span>
         </div>
+
+        <div style={{ height: "1px", background: "#E0E0E0", marginBottom: "20px" }} />
 
         <div className="flex flex-col gap-5">
           {currentVideos.map((video, index) => (

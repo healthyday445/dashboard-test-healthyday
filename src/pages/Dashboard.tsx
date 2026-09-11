@@ -12,10 +12,16 @@ import { getEffectiveStatus } from "@/lib/studentStatus";
 import { useStudentData, StudentFetchError } from "@/hooks/use-student-data";
 import { useSessionLinks } from "@/hooks/use-session-links";
 import { isFreeBatchOver, getSimulatedBatchDate } from "@/lib/utils";
+// Eager: every free batch from July-13-2026 onward (every following Monday, indefinitely)
+// renders through this component — it's the default path for virtually all current and
+// future free-batch students, not a rare/legacy cohort, so it shouldn't cost an extra
+// lazy-chunk fetch on the most common render. IndexTwentyOneDay/IndexFourteenDays below stay
+// lazy since they're one-off cohorts (June-21-2026, July-6-2026) that will eventually see
+// zero traffic.
+import IndexFourteenDaysV2 from "@/pages/IndexFourteenDaysV2";
 
 const CertificateModal = lazy(() => import("@/components/CertificateModal").then((m) => ({ default: m.CertificateModal })));
 const IndexFourteenDays = lazy(() => import("@/pages/IndexFourteenDays"));
-const IndexFourteenDaysV2 = lazy(() => import("@/pages/IndexFourteenDaysV2"));
 const IndexTwentyOneDay = lazy(() => import("@/pages/IndexTwentyOneDay"));
 const TwentyOneDaysProgram = lazy(() => import("@/pages/TwentyOneDaysProgram"));
 const FourteenDaysV2Program = lazy(() => import("@/pages/FourteenDaysV2Program"));

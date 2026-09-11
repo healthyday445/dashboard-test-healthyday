@@ -5,9 +5,9 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Maintenance from "./pages/Maintenance";
+import Dashboard from "./pages/Dashboard";
 import { LoadingScreen } from "@/components/LoadingScreen";
 
-const Dashboard = lazy(() => import("./pages/Dashboard"));
 const NotFound = lazy(() => import("./pages/NotFound"));
 const Referral = lazy(() => import("./pages/Referral"));
 const ReferralStatus = lazy(() => import("./pages/ReferralStatus"));
