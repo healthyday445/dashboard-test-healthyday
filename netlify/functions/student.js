@@ -5,7 +5,7 @@ export async function handler(event) {
   }
 
   const res = await fetch(
-    `https://healthyday-backend-v2-773381060399.asia-south1.run.app/api/internal/student?mobile=${encodeURIComponent(mobile)}`,
+    `https://test-healthyday-backend-773381060399.asia-south1.run.app/api/internal/student?mobile=${encodeURIComponent(mobile)}`,
     { headers: { "X-API-KEY": "HDB@020205" } }
   );
 

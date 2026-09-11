@@ -10,7 +10,7 @@ export async function handler(event) {
   if (include_contest !== undefined) params.set("include_contest", include_contest);
 
   const res = await fetch(
-    `https://healthyday-backend-v2-773381060399.asia-south1.run.app/api/internal/student/referrals?${params.toString()}`,
+    `https://test-healthyday-backend-773381060399.asia-south1.run.app/api/internal/student/referrals?${params.toString()}`,
     { headers: { "X-API-KEY": "HDB@020205" } }
   );
 

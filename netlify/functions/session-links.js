@@ -6,7 +6,7 @@ export async function handler(event) {
   const suffix = qs.toString() ? `?${qs.toString()}` : "";
 
   const res = await fetch(
-    `https://healthyday-backend-v2-773381060399.asia-south1.run.app/api/internal/session-link/active${suffix}`,
+    `https://test-healthyday-backend-773381060399.asia-south1.run.app/api/internal/session-link/active${suffix}`,
     { headers: { "X-API-KEY": "HDB@020205" } }
   );
 

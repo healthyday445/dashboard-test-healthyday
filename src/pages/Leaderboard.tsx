@@ -2,7 +2,9 @@ import React, { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import ReferWinCard from "@/components/ReferWinCard";
 import { useStudentData } from "@/hooks/use-student-data";
-import { useReferrals } from "@/hooks/use-referrals";
+import { useContestSummary, useContestRank, useContestReferrals } from "@/hooks/use-contest";
+import { fetchContestLeaderboard } from "@/data/contest/api";
+import type { ContestLeaderboardEntry, ContestRank } from "@/data/contest/types";
 import logo from "@/assets/Primary_logo.svg";
 import imgBannerBg from "@/assets/leaderboard/11621406ee6eb5f29bb80937e33d2195815c78d8.webp";
 import imgMainPrize from "@/assets/leaderboard/0d0feb7c046d1e7737d4d7000c10d1cf68d8865c.webp";
@@ -45,21 +47,13 @@ import imgWinnersConfetti from "@/assets/leaderboard/winners-confetti.png";
 import imgGiftIcon from "@/assets/leaderboard/gift-icon.png";
 import imgDownloadIcon from "@/assets/referral/downloading-updates.png";
 
-const CONTEST_START = "2026-06-01";
-const CONTEST_END = "2026-06-30";
-const isContestOver = new Date().toISOString().slice(0, 10) >= CONTEST_END;
-
-interface LeaderboardEntry {
-  rank: number;
-  name: string;
-  mobile: string;
-  referral_count: number;
-}
-
-interface UserRank {
-  rank: number;
-  name: string;
-  referral_count: number;
+/** Formats an ISO "YYYY-MM-DD" date as "1st JUNE" for contest-window copy. */
+function formatContestDate(iso: string): string {
+  const d = new Date(iso + "T00:00:00");
+  const day = d.getDate();
+  const month = d.toLocaleString("en-US", { month: "long" }).toUpperCase();
+  const suffix = day % 10 === 1 && day !== 11 ? "st" : day % 10 === 2 && day !== 12 ? "nd" : day % 10 === 3 && day !== 13 ? "rd" : "th";
+  return `${day}${suffix} ${month}`;
 }
 
 /* ────────────────────────────────────────────
@@ -122,31 +116,32 @@ const Leaderboard: React.FC = () => {
   const { mobile: pathMobile } = useParams<{ mobile: string }>();
   const mobile = pathMobile || "";
 
-  const [leaderboard, setLeaderboard] = useState<LeaderboardEntry[]>([]);
-  const [userRank, setUserRank] = useState<UserRank | null>(null);
+  const cleanedMobile = mobile.replace(/\D/g, "");
+  const studentQuery = useStudentData(cleanedMobile, !!cleanedMobile);
+  const studentLoading = studentQuery.isLoading;
+  // last_referral_contest_id resolves to the most recent contest (live or ended) this student
+  // was ever enrolled in via any free batch — null means either "batch has no contest attached"
+  // or "no batch enrollment at all"; both mean "no contest UI to show" (see leaderboard_contest_plan.md).
+  const contestId: string | null = studentQuery.data?.last_referral_contest_id ?? null;
+
+  const [leaderboard, setLeaderboard] = useState<ContestLeaderboardEntry[]>([]);
   const [leaderboardLoading, setLeaderboardLoading] = useState(true);
-  const [rankLoading, setRankLoading] = useState(!!mobile);
   const [currentPage, setCurrentPage] = useState(1);
+  const [resultDeclared, setResultDeclared] = useState(false);
   const isFetchingRef = useRef(false);
   const scrollContainerRef = useRef<HTMLDivElement>(null);
 
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [drawerClosing, setDrawerClosing] = useState(false);
   // Gates the query so the contest referrals aren't fetched until the drawer is opened at
-  // least once — react-query's own cache (keyed by mobile+dates+include_contest) replaces
-  // the old manual `if (referralsData) return` short-circuit for subsequent opens.
+  // least once — react-query's own cache (keyed by contestId+mobile) replaces the old manual
+  // `if (referralsData) return` short-circuit for subsequent opens.
   const [hasOpenedReferralsDrawer, setHasOpenedReferralsDrawer] = useState(false);
-  const cleanedMobile = mobile.replace(/\D/g, "");
-  const referralsQuery = useReferrals(cleanedMobile, {
-    includeContest: true,
-    startDate: CONTEST_START,
-    endDate: CONTEST_END,
-    enabled: hasOpenedReferralsDrawer,
-  });
+  const referralsQuery = useContestReferrals(contestId, cleanedMobile, hasOpenedReferralsDrawer);
   const referralsData = referralsQuery.data ?? null;
   const referralsLoading = referralsQuery.isLoading;
-  const [isPaidUser, setIsPaidUser] = useState(false);
-  const [userLanguage, setUserLanguage] = useState("");
+  const isPaidUser = studentQuery.data?.status?.toLowerCase?.() === "paid";
+  const userLanguage = studentQuery.data?.language ?? "";
 
   const closeDrawer = () => {
     setDrawerClosing(true);
@@ -162,23 +157,24 @@ const Leaderboard: React.FC = () => {
   };
 
   useEffect(() => {
-    const controller = new AbortController();
+    if (!contestId) { setLeaderboardLoading(false); return; }
+    let cancelled = false;
     const page = currentPage;
     isFetchingRef.current = true;
     if (page === 1) {
       setLeaderboardLoading(true);
       setLeaderboard([]);
     }
-    fetch(`/.netlify/functions/leaderboard?start_date=${CONTEST_START}&end_date=${CONTEST_END}&page_size=100&page=${page}&include_contest=true`, { signal: controller.signal })
-      .then((r) => r.json())
+    fetchContestLeaderboard(contestId, page, 100)
       .then((data) => {
-        const rows: LeaderboardEntry[] = data.leaderboard ?? [];
-        setLeaderboard((prev) => page === 1 ? rows : [...prev, ...rows]);
+        if (cancelled) return;
+        setResultDeclared(data.resultDeclared);
+        setLeaderboard((prev) => page === 1 ? data.entries : [...prev, ...data.entries]);
       })
-      .catch((e) => { if (e.name !== "AbortError") console.error(e); })
-      .finally(() => { setLeaderboardLoading(false); isFetchingRef.current = false; });
-    return () => controller.abort();
-  }, [currentPage]);
+      .catch((e) => console.error(e))
+      .finally(() => { if (!cancelled) { setLeaderboardLoading(false); isFetchingRef.current = false; } });
+    return () => { cancelled = true; };
+  }, [contestId, currentPage]);
 
   const handleScroll = useCallback(() => {
     const el = scrollContainerRef.current;
@@ -191,35 +187,49 @@ const Leaderboard: React.FC = () => {
     }
   }, [leaderboardLoading, currentPage]);
 
-  useEffect(() => {
-    if (!mobile) { setRankLoading(false); return; }
-    const e164 = `+${mobile.replace(/\D/g, "")}`;
-    fetch(`/.netlify/functions/leaderboard-rank?mobile=${encodeURIComponent(e164)}&start_date=${CONTEST_START}&end_date=${CONTEST_END}&include_contest=true`)
-      .then((r) => r.json())
-      .then((data) => {
-        if (data?.detail?.status === "not_ranked") {
-          setUserRank({ rank: 0, name: "", referral_count: 0 });
-        } else {
-          setUserRank(data);
-        }
-      })
-      .catch(() => {})
-      .finally(() => setRankLoading(false));
-  }, [mobile]);
+  const contestSummaryQuery = useContestSummary(contestId);
+  const contestSummary = contestSummaryQuery.data ?? null;
+  const isContestOver = contestSummary ? !contestSummary.isLive : resultDeclared;
 
-  const studentQuery = useStudentData(cleanedMobile, !!cleanedMobile);
-
-  useEffect(() => {
-    const data = studentQuery.data;
-    if (!data) return;
-    if (data?.status?.toLowerCase() === "paid") setIsPaidUser(true);
-    if (data?.language) setUserLanguage(data.language);
-  }, [studentQuery.data]);
+  const rankQuery = useContestRank(contestId, cleanedMobile);
+  const userRank = rankQuery.data ?? null;
+  const rankLoading = !!contestId && !!cleanedMobile && rankQuery.isLoading;
 
   const shareLink = mobile
     ? `https://yoga.healthyday.co.in?ref=${mobile}`
     : "https://yoga.healthyday.co.in?ref=demo";
   const referralsUrl = mobile ? `/${mobile}/leaderboard` : "/leaderboard";
+
+  // Resolving which contest (if any) this student belongs to — nothing contest-specific can
+  // render yet.
+  if (studentLoading) {
+    return (
+      <div className="hd-page" style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: "60vh" }}>
+        <span style={{ color: "#888", fontFamily: "Outfit", fontSize: "14px" }}>Loading…</span>
+      </div>
+    );
+  }
+
+  // No contest attached to this student's batch (or no batch enrollment at all) — per the
+  // contest API, there is no "current contest" lookup independent of a student, so this is
+  // also what an anonymous visit (no mobile in the URL) resolves to.
+  if (!contestId) {
+    return (
+      <div className="hd-page" style={{ fontFamily: "Outfit, sans-serif", background: "#FFFFFF", display: "flex", flexDirection: "column", alignItems: "center", minHeight: "60vh" }}>
+        <header className="hd-header" style={{ background: "#FFF" }}>
+          <img src={logo} alt="Healthyday" className="h-7" />
+        </header>
+        <div style={{ flex: 1, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", padding: "32px", textAlign: "center" }}>
+          <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "18px", fontWeight: 700, marginBottom: "8px" }}>
+            No Active Contest
+          </span>
+          <span style={{ color: "#888", fontFamily: "Outfit", fontSize: "14px", maxWidth: "280px" }}>
+            There's no referral contest running for your batch right now. Check back when a new one starts!
+          </span>
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div
@@ -308,7 +318,7 @@ const Leaderboard: React.FC = () => {
                   whiteSpace: "nowrap",
                 }}
               >
-                TOP 500
+                TOP {contestSummary?.giftEligibleRank ?? "—"}
               </span>
               <span
                 style={{
@@ -403,18 +413,20 @@ const Leaderboard: React.FC = () => {
                   lineHeight: "normal",
                 }}
               >
-                From 1<sup style={{ fontSize: "7.74px" }}>st</sup> JUNE to 30<sup style={{ fontSize: "7.74px" }}>th</sup> JUNE
+                {contestSummary ? `From ${formatContestDate(contestSummary.startDate)} to ${formatContestDate(contestSummary.endDate)}` : "…"}
               </span>
             </span>
           </div>
 
-          {/* PRIZE TIERS — 3 columns */}
+          {/* PRIZE TIER — single tier, driven by gift_eligible_rank from the contest API.
+              (The old 3-column Top1-25/25-100/100-500 breakdown doesn't have an equivalent in
+              the new contest API — it only returns one gift_eligible_rank, not per-band prizes —
+              see leaderboard_contest_plan.md Step 3.3 for the open question on restoring tiers.) */}
           <div
             style={{
               width: "calc(100% - 32px)",
               display: "flex",
-              justifyContent: "space-between",
-              alignItems: "flex-start",
+              justifyContent: "center",
               marginTop: "18px",
               padding: "0 10px",
               boxSizing: "border-box",
@@ -422,28 +434,18 @@ const Leaderboard: React.FC = () => {
           >
             <PrizeTierCard
               image={PRIZE_IMAGES.tier1}
-              label="Top 1 - 25"
-              prizes="Yoga Mat + T Shirt + Water Bottle + Weight Scale + Towel"
-            />
-            <PrizeTierCard
-              image={PRIZE_IMAGES.tier2}
-              label="Top 25 - 100"
-              prizes="Yoga Mat + T Shirt + Water Bottle + Towel"
-            />
-            <PrizeTierCard
-              image={PRIZE_IMAGES.tier3}
-              label="Top 100 - 500"
+              label={`Top ${contestSummary?.giftEligibleRank ?? "—"}`}
               prizes="Yoga Mat + T Shirt + Water Bottle"
             />
           </div>
 
           {/* RANK CARD + REFER & WIN + VIEW REFERRALS */}
           <div style={{ display: "flex", flexDirection: "column", alignItems: "center", width: "100%" }}>
-            <div style={{ order: userRank?.referral_count === 0 ? 1 : 2, width: "100%", display: "flex", justifyContent: "center" }}>
+            <div style={{ order: userRank?.referralCount === 0 ? 1 : 2, width: "100%", display: "flex", justifyContent: "center" }}>
               <CurrentUserRankCard userRank={userRank} loading={rankLoading} />
             </div>
 
-            <div style={{ order: userRank?.referral_count === 0 ? 2 : 1, width: "calc(100% - 32px)", marginTop: "18px", marginBottom: "8px" }}>
+            <div style={{ order: userRank?.referralCount === 0 ? 2 : 1, width: "calc(100% - 32px)", marginTop: "18px", marginBottom: "8px" }}>
               <button
                 onClick={() => {
                   if (!mobile) {
@@ -472,27 +474,6 @@ const Leaderboard: React.FC = () => {
                 Refer &amp; Win Yoga Kit
               </button>
             </div>
-
-            {mobile && (
-              <div style={{ order: 3, width: "calc(100% - 32px)", display: "flex", justifyContent: "center", marginTop: "10px" }}>
-                <span
-                  onClick={openReferralsDrawer}
-                  style={{
-                    color: "#012755",
-                    fontFamily: "Outfit",
-                    fontSize: "16px",
-                    fontWeight: 500,
-                    lineHeight: "normal",
-                    whiteSpace: "nowrap",
-                    cursor: "pointer",
-                    display: "flex",
-                    alignItems: "center",
-                  }}
-                >
-                  View Your Referrals <img src={imgBlueArrow} alt="" style={{ width: "18px", height: "18px", marginLeft: "4px", marginTop: "4px" }} />
-                </span>
-              </div>
-            )}
           </div>
         </>
       )}
@@ -502,17 +483,19 @@ const Leaderboard: React.FC = () => {
          ═══════════════════════════════════════ */}
       {isContestOver && (() => {
         const rank = userRank?.rank ?? 0;
-        const refCount = userRank?.referral_count ?? 0;
+        const refCount = userRank?.referralCount ?? 0;
         const userName = userRank?.name ?? "";
-        const isTop500 = !!mobile && rank > 0 && rank <= 500;
-        const hasRefs = !!mobile && refCount >= 1 && !isTop500;
+        // isWinner comes straight from the contest API (rank <= gift_eligible_rank) — don't
+        // recompute the cutoff client-side, it varies per contest.
+        const isWinner = !!mobile && !!userRank?.isWinner;
+        const hasRefs = !!mobile && refCount >= 1 && !isWinner;
 
         return (
           <>
             <PostContestBanner />
 
-            {/* State 1: Top 500 */}
-            {isTop500 && (
+            {/* State 1: winner (rank <= gift_eligible_rank) */}
+            {isWinner && (
               <>
                 <CongratulationsCard userName={userName} rank={rank} referralCount={refCount} />
                 <AddressDetailsCard />
@@ -608,8 +591,7 @@ const Leaderboard: React.FC = () => {
                 <LeaderboardRow
                   rank={entry.rank}
                   name={entry.name}
-                  mobile={entry.mobile}
-                  referrals={entry.referral_count}
+                  referrals={entry.referralCount}
                   isCurrentUser={userRank?.rank === entry.rank}
                 />
               </div>
@@ -670,7 +652,7 @@ const Leaderboard: React.FC = () => {
             {/* Header */}
             <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "20px 26px 16px", flexShrink: 0 }}>
               <span style={{ color: "#202020", fontFamily: "Outfit", fontSize: "16px", fontWeight: 600, lineHeight: "normal" }}>
-                Your Referrals from June 1<sup style={{ fontSize: "0.65em" }}>st</sup> – June 30<sup style={{ fontSize: "0.65em" }}>th</sup>
+                {contestSummary ? `Your Referrals from ${formatContestDate(contestSummary.startDate)} – ${formatContestDate(contestSummary.endDate)}` : "Your Referrals"}
               </span>
               <button
                 onClick={closeDrawer}
@@ -701,8 +683,8 @@ const Leaderboard: React.FC = () => {
                   <div style={{ textAlign: "center", padding: "32px 0", color: "#888", fontFamily: "Outfit", fontSize: "14px" }}>Loading…</div>
                 )}
                 {!referralsLoading && referralsData?.referrals?.map((ref, i) => {
-                  const isVerified = ref.referral_confirmation_status === "verified";
-                  const displayName = (!ref.referred_name || ref.referred_name === "None") ? ref.referred_mobile : ref.referred_name;
+                  const isVerified = ref.status === "verified";
+                  const displayName = (!ref.referredName || ref.referredName === "None") ? ref.referredMobile : ref.referredName;
                   const isLast = i === (referralsData?.referrals?.length ?? 0) - 1;
                   return (
                     <div key={i}>
@@ -725,7 +707,7 @@ const Leaderboard: React.FC = () => {
                               <path d="M6.62 10.79C8.06 13.62 10.38 15.93 13.21 17.38L15.41 15.18C15.68 14.91 16.08 14.82 16.43 14.94C17.55 15.31 18.76 15.51 20 15.51C20.55 15.51 21 15.96 21 16.51V20C21 20.55 20.55 21 20 21C10.61 21 3 13.39 3 4C3 3.45 3.45 3 4 3H7.5C8.05 3 8.5 3.45 8.5 4C8.5 5.25 8.7 6.45 9.07 7.57C9.18 7.92 9.1 8.31 8.82 8.59L6.62 10.79Z" fill="#A2A2A2"/>
                             </svg>
                             <span style={{ color: "#A2A2A2", fontFamily: "Outfit", fontSize: "12px", fontWeight: 500 }}>
-                              {ref.referred_mobile}
+                              {ref.referredMobile}
                             </span>
                           </div>
                         </div>
@@ -745,7 +727,7 @@ const Leaderboard: React.FC = () => {
                       {/* Pending error text — below the full row */}
                       {!isVerified && (
                         <div style={{ padding: "0 21px 10px" }}>
-                          <PendingNote language={referralsData?.language} />
+                          <PendingNote language={userLanguage} />
                         </div>
                       )}
                       {!isLast && <div style={{ height: "1px", background: "#E0E0E0" }} />}
@@ -774,7 +756,7 @@ const Leaderboard: React.FC = () => {
                 <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "18px", fontWeight: 800 }}>Your Total Referrals</span>
                 <div style={{ background: "#FFF", borderRadius: "8px", width: "44px", height: "30px", display: "flex", alignItems: "center", justifyContent: "center" }}>
                   <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "20px", fontWeight: 700 }}>
-                    {referralsData?.total_referrals ?? referralsData?.referrals?.length ?? 0}
+                    {referralsData?.totalReferrals ?? referralsData?.referrals?.length ?? 0}
                   </span>
                 </div>
               </div>
@@ -913,10 +895,9 @@ const LeaderboardRowSkeleton: React.FC<{ delay?: number }> = ({ delay = 0 }) => 
 const LeaderboardRow: React.FC<{
   rank: number;
   name: string;
-  mobile: string;
   referrals: number;
   isCurrentUser?: boolean;
-}> = ({ rank, name, mobile, referrals, isCurrentUser }) => (
+}> = ({ rank, name, referrals, isCurrentUser }) => (
   <div
     style={{
       width: "100%",
@@ -972,7 +953,7 @@ const LeaderboardRow: React.FC<{
         whiteSpace: "nowrap",
       }}
     >
-      {isCurrentUser ? "You" : (!name || name === "None") ? mobile.slice(0, 5) + "XXX" + mobile.slice(8) : name}
+      {isCurrentUser ? "You" : name}
     </span>
 
     {/* Referral count */}
@@ -1028,7 +1009,7 @@ const RankReferralsTab: React.FC<{ rank: number; referralCount: number; ellipseI
   </div>
 );
 
-const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolean }> = ({ userRank, loading }) => {
+const CurrentUserRankCard: React.FC<{ userRank: ContestRank | null; loading: boolean }> = ({ userRank, loading }) => {
   if (loading) return (
     <div style={{ width: "calc(100% - 32px)", height: "123px", borderRadius: "12px", border: "1.5px solid #FEAB27", background: "linear-gradient(0deg, rgba(0,0,0,0.20) 0%, rgba(0,0,0,0.20) 100%), #0D468B", marginTop: "18px", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <span style={{ color: "rgba(255,255,255,0.6)", fontFamily: "Outfit", fontSize: "13px" }}>Loading…</span>
@@ -1051,7 +1032,7 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
   };
 
   /* ── Zero referrals ── "Start Referring Today!" */
-  if (userRank.referral_count === 0) {
+  if (userRank.referralCount === 0) {
     return (
       <div style={{ ...CARD_BASE, border: "1.5px solid #7AB6ED", background: "radial-gradient(ellipse at 80% 55%, #F7FFFF 2%, #E7F7FF 60%, #DCF4FF 100%)" }}>
         <div style={{ display: "flex", flexDirection: "column", gap: "4px", zIndex: 2, flex: 1 }}>
@@ -1098,7 +1079,7 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
               <div style={{ position: "absolute", top: "50%", left: "50%", transform: "translate(-50%,-50%)", width: "10.385px", height: "10.962px", backgroundImage: `url(${imgStarSmall})`, backgroundSize: "contain", backgroundPosition: "50%", backgroundRepeat: "no-repeat" }} />
             </div>
             <span style={{ color: "#D2D2D2", fontFamily: "Outfit", fontSize: "8px", fontWeight: 500, flex: 1 }}>Total Referrals</span>
-            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600 }}>{userRank.referral_count}</span>
+            <span style={{ color: "#FFF", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600 }}>{userRank.referralCount}</span>
           </div>
         </div>
         {/* Shield badge */}
@@ -1147,7 +1128,7 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
             </div>
             <div style={{ display: "flex", flexDirection: "column" }}>
               <span style={{ color: "#494949", fontFamily: "Outfit", fontSize: "8px", fontWeight: 500, lineHeight: "normal" }}>Your Referrals</span>
-              <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, lineHeight: "normal" }}>{userRank.referral_count}</span>
+              <span style={{ color: "#0A386F", fontFamily: "Outfit", fontSize: "14px", fontWeight: 600, lineHeight: "normal" }}>{userRank.referralCount}</span>
             </div>
           </div>
         </div>
@@ -1226,7 +1207,7 @@ const CurrentUserRankCard: React.FC<{ userRank: UserRank | null; loading: boolea
         </span>
         <RankReferralsTab
           rank={userRank.rank}
-          referralCount={userRank.referral_count}
+          referralCount={userRank.referralCount}
           ellipseImg={tier.ellipse}
           starImg={tier.star}
           lineImg={tier.line}

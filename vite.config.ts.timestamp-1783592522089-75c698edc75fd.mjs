@@ -22,7 +22,7 @@ var vite_config_default = defineConfig(({ mode }) => {
       },
       proxy: {
         "/.netlify/functions/student": {
-          target: "https://healthyday-backend-v2-773381060399.asia-south1.run.app",
+          target: "https://test-healthyday-backend-773381060399.asia-south1.run.app",
           changeOrigin: true,
           secure: true,
           rewrite: (path2) => path2.replace("/.netlify/functions/student", "/api/internal/student"),
@@ -35,7 +35,7 @@ var vite_config_default = defineConfig(({ mode }) => {
           }
         },
         "/.netlify/functions/referrals": {
-          target: "https://healthyday-backend-v2-773381060399.asia-south1.run.app",
+          target: "https://test-healthyday-backend-773381060399.asia-south1.run.app",
           changeOrigin: true,
           secure: true,
           rewrite: (path2) => path2.replace("/.netlify/functions/referrals", "/api/internal/student/referrals"),
@@ -48,7 +48,7 @@ var vite_config_default = defineConfig(({ mode }) => {
           }
         },
         "/.netlify/functions/session-links": {
-          target: "https://healthyday-backend-v2-773381060399.asia-south1.run.app",
+          target: "https://test-healthyday-backend-773381060399.asia-south1.run.app",
           changeOrigin: true,
           secure: true,
           rewrite: (path2) => path2.replace("/.netlify/functions/session-links", "/api/internal/session-link/active"),
@@ -61,7 +61,7 @@ var vite_config_default = defineConfig(({ mode }) => {
           }
         },
         "/.netlify/functions/leaderboard-rank": {
-          target: "https://healthyday-backend-v2-773381060399.asia-south1.run.app",
+          target: "https://test-healthyday-backend-773381060399.asia-south1.run.app",
           changeOrigin: true,
           secure: true,
           rewrite: (path2) => path2.replace("/.netlify/functions/leaderboard-rank", "/api/internal/referrals/leaderboard/rank"),
@@ -74,7 +74,7 @@ var vite_config_default = defineConfig(({ mode }) => {
           }
         },
         "/.netlify/functions/leaderboard": {
-          target: "https://healthyday-backend-v2-773381060399.asia-south1.run.app",
+          target: "https://test-healthyday-backend-773381060399.asia-south1.run.app",
           changeOrigin: true,
           secure: true,
           rewrite: (path2) => path2.replace("/.netlify/functions/leaderboard", "/api/internal/referrals/leaderboard"),
